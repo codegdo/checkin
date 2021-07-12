@@ -1,12 +1,9 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthRouter } from './views';
-import { Login } from './views/auth/login/login.component';
+import { BrowserRouter } from 'react-router-dom';
+import { AppRoute } from './app.route';
 
 export const App: React.FC = (): JSX.Element | null => {
   return <BrowserRouter>
-    <Routes>
-      <Route path="auth" element={<AuthRouter />} children={<Login />} />
-    </Routes>
+    <AppRoute />
   </BrowserRouter>;
 }

@@ -5,7 +5,9 @@ import { App } from './app.component';
 
 ((_window: Window): void => {
   ReactDOM.render(
-    <App />,
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
     document.getElementById('root') as HTMLElement
   );
 })(window);
