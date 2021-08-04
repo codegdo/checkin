@@ -7,6 +7,6 @@ export default {
   database: 'main',
   name: 'default',
   entities: [__dirname + '/../models/main/**/*.entity{.ts,.js}'],
-  synchronize: true,
+  synchronize: false,
   logging: true,
 }

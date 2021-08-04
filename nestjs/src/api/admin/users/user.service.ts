@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from 'src/models/main/user/user.entity';
@@ -9,7 +9,10 @@ export class UserService {
 
   constructor(
     @InjectRepository(UserRepository)
-    private userRepository: UserRepository
+    private userRepository: UserRepository,
+
+    //@Inject(MainRepository)
+    //private repo: MainRepository
   ) { }
 
   async getUsers(): Promise<User[]> {

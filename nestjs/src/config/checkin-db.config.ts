@@ -7,6 +7,6 @@ export default {
   database: 'checkin',
   name: 'checkin',
   entities: [__dirname + '/../models/checkin/**/*.entity{.ts,.js}'],
-  synchronize: true,
+  synchronize: false,
   logging: true,
 }
