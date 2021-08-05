@@ -5,6 +5,7 @@ import { createConnection, getConnection } from "typeorm";
 export default (async () => {
 
   try {
+
     await createConnection({
       type: 'postgres',
       host: process.env.POSTGRES_HOST,
