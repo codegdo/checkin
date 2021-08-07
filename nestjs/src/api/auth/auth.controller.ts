@@ -1,14 +1,16 @@
-import { Controller, Get, Post, Session } from '@nestjs/common';
+import { Body, Controller, Get, Post, Session } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UserDto } from '../../models/main/dtos'
+import { CreateUserDto, UserDto } from '../../models/main/dtos'
+import { Serialize } from 'src/interceptors';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
   @Post('signup')
-  signup(): string {
-    return this.authService.signup();
+  @Serialize(UserDto)
+  signup(@Body() createUserDto: CreateUserDto) {
+    return this.authService.signup(createUserDto);
   }
 
   @Post('login')
@@ -17,14 +19,14 @@ export class AuthController {
   }
 
   @Get('login')
-  getLogin(@Session() session: any): string {
+  getLogin(@Session() session: any) {
     session.user = "hello";
     console.log('SESSION', session);
     return this.authService.getLogin();
   }
 
   @Get('logout')
-  getLogout(@Session() session: any): string {
+  getLogout(@Session() session: any) {
     session.destroy();
     console.log('SESSION', session);
     return this.authService.getLogout();

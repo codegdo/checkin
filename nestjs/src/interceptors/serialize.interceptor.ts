@@ -11,7 +11,7 @@ export function Serialize(dto: ClassConstructor) {
   return UseInterceptors(new SerializeInterceptor(dto));
 }
 
-export class SerializeInterceptor implements NestInterceptor {
+class SerializeInterceptor implements NestInterceptor {
   constructor(private dto: any) { }
   intercept(context: ExecutionContext, handler: CallHandler): Observable<any> {
     // before request

@@ -1,4 +1,5 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
+import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from 'nestjs-config';
 import * as path from 'path';
@@ -8,17 +9,15 @@ import { AuthModule } from './api/auth/auth.module';
 import { UserModule } from './api/admin/users/user.module';
 import { NestSessionOptions, SessionModule } from './middlewares/session-module.middleware';
 
-
-
 @Module({
   imports: [
     ConfigModule.load(path.resolve(__dirname, 'configs', '**/!(*.d).{ts,js}')),
     TypeOrmModule.forRootAsync({
-      useFactory: (config: ConfigService) => config.get('main-db.config'),
+      useFactory: (config: ConfigService) => config.get('typeorm.config')[0],
       inject: [ConfigService],
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: (config: ConfigService) => config.get('checkin-db.config'),
+      useFactory: (config: ConfigService) => config.get('typeorm.config')[1],
       inject: [ConfigService],
     }),
     SessionModule.forRootAsync({
@@ -33,12 +32,22 @@ import { NestSessionOptions, SessionModule } from './middlewares/session-module.
     UserModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({
+        whitelist: true,
+        transform: true,
+        forbidNonWhitelisted: true,
+        transformOptions: {
+          enableImplicitConversion: true
+        }
+      })
+    }
+  ],
 })
 export class AppModule {
-  constructor() {
-    console.log('CONSTRUTOR');
-  }
+  constructor() { }
 
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');

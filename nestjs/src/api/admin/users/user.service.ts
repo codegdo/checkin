@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from 'src/models/main/user/user.entity';
@@ -15,7 +15,37 @@ export class UserService {
     //private repo: MainRepository
   ) { }
 
-  async getUsers(): Promise<User[]> {
-    return this.userRepository.find();
+  findAll(paginationQueryDto) {
+    const { limit, offset } = paginationQueryDto;
+
+    return this.userRepository.find({
+      skip: offset,
+      take: limit
+    });
   }
+
+  async findOne(id) {
+    const user = await this.userRepository.findOne(id);
+
+    if (!user) {
+      throw new NotFoundException(`User #${id} not found`);
+    }
+
+    return user;
+  }
+
+  async create(createUserDto) {
+    const user = this.userRepository.create(createUserDto);
+
+    try {
+      return this.userRepository.save(user);
+    } catch (err) {
+      throw new ConflictException('Duplicate username');
+    }
+
+  }
+
+  async update(id, updateUserDto) { }
+
+  async delete(id) { }
 }

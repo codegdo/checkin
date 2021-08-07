@@ -1,3 +1,4 @@
+import { InternalServerErrorException } from "@nestjs/common";
 import { TypeormStore } from "connect-typeorm/out";
 import { Session } from "src/models/main/entities";
 import { createConnection, getConnection } from "typeorm";
@@ -30,7 +31,7 @@ export default (async () => {
     }
 
   } catch (err) {
-    console.log('SESSION', err);
+    new InternalServerErrorException('Cannot connect session')
   }
 
 })()

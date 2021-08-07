@@ -4,6 +4,16 @@
 @contentType = application/json
 @baseurl = http://{{host}}/api
 
+### signup
+POST {{baseurl}}/auth/signup
+Content-Type: {{contentType}}
+
+{
+  "username": "gdo",
+  "password": "123456",
+  "emailAddress": 123123
+}
+
 ### login
 POST {{baseurl}}/auth/login
 Content-Type: {{contentType}}

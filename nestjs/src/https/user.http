@@ -10,9 +10,13 @@ Content-Type: {{contentType}}
 
 {
   "username": "gdo",
-  "password": "123456"
+  "password": "123456",
+  "emailAddress": "gdo@gmail.com"
 }
 
 ### get users
-GET {{baseurl}}/admin/users
+GET {{baseurl}}/admin/users?offset=1
+
+### get user
+GET {{baseurl}}/admin/users/1
 
