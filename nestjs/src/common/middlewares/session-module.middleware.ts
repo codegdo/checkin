@@ -1,10 +1,14 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import { Request, Response, NextFunction, RequestHandler } from 'express';
 import * as session from 'express-session';
-import { AsyncOptions, createModule, SyncOptions } from 'create-nestjs-middleware-module';
+import {
+  AsyncOptions,
+  createModule,
+  SyncOptions,
+} from 'create-nestjs-middleware-module';
 
 interface ConfigSession {
-  options: session.SessionOptions,
+  options: session.SessionOptions;
   retries?: number;
   retriesStrategy?: Parameters<typeof createRetriesMiddleware>[2];
 }
@@ -17,7 +21,7 @@ export type NestSessionAsyncOptions = AsyncOptions<ConfigSession>;
 function createRetriesMiddleware(
   middleware: RequestHandler,
   retries: number,
-  retriesStrategy: WaitingStrategy
+  retriesStrategy: WaitingStrategy,
 ): RequestHandler {
   return (req: Request, res: Response, next: NextFunction) => {
     let attempt = 0;
@@ -36,17 +40,17 @@ function createRetriesMiddleware(
       }
 
       if (attempt !== 0) {
-        await new Promise(r => setTimeout(r, retriesStrategy(attempt)));
+        await new Promise((r) => setTimeout(r, retriesStrategy(attempt)));
       }
 
       attempt++;
     }
 
     lookupSession();
-  }
+  };
 }
 
-export const SessionModule = createModule<ConfigSession>(config => {
+export const SessionModuleMiddleware = createModule<ConfigSession>((config) => {
   const { options, retries, retriesStrategy } = config;
 
   let middleware = session(options);

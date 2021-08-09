@@ -1,13 +1,17 @@
 import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from 'nestjs-config';
 import * as path from 'path';
 
-import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { AuthModule } from './api/auth/auth.module';
 import { UserModule } from './api/admin/users/user.module';
-import { NestSessionOptions, SessionModule } from './middlewares/session-module.middleware';
+import {
+  CommonModule,
+  SessionModule,
+  ApiKeyGuard,
+  LoggerMiddleware,
+} from './common';
 
 @Module({
   imports: [
@@ -21,13 +25,14 @@ import { NestSessionOptions, SessionModule } from './middlewares/session-module.
       inject: [ConfigService],
     }),
     SessionModule.forRootAsync({
-      useFactory: async (config: ConfigService): Promise<NestSessionOptions> => {
+      useFactory: async (config: ConfigService) => {
         return {
           options: await config.get('session.config'),
-        }
+        };
       },
       inject: [ConfigService],
     }),
+    CommonModule,
     AuthModule,
     UserModule,
   ],
@@ -40,14 +45,18 @@ import { NestSessionOptions, SessionModule } from './middlewares/session-module.
         transform: true,
         forbidNonWhitelisted: true,
         transformOptions: {
-          enableImplicitConversion: true
-        }
-      })
-    }
+          enableImplicitConversion: true,
+        },
+      }),
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ApiKeyGuard,
+    },
   ],
 })
 export class AppModule {
-  constructor() { }
+  constructor() {}
 
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');

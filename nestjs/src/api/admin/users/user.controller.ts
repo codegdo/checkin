@@ -1,12 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto, UserDto } from 'src/models/main/dtos';
-import { Serialize } from 'src/interceptors';
-import { PaginationQueryDto } from 'src/commons';
+import { Serialize, PaginationQueryDto, Public } from 'src/common';
 
 @Controller('admin')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Get('users')
   @Serialize(UserDto)
@@ -14,6 +22,7 @@ export class UserController {
     return this.userService.findAll(paginationQuery);
   }
 
+  @Public()
   @Get('users/:id')
   @Serialize(UserDto)
   getOneUser(@Param('id') id: number) {
@@ -31,5 +40,5 @@ export class UserController {
   }
 
   @Delete('users/:id')
-  deleteUser(@Param('id') id: number) { }
+  deleteUser(@Param('id') id: number) {}
 }

@@ -19,4 +19,5 @@ GET {{baseurl}}/admin/users?offset=1
 
 ### get user
 GET {{baseurl}}/admin/users/1
+Authorization: 'hello'
 
