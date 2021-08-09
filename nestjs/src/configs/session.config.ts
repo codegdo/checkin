@@ -17,7 +17,7 @@ export default (async () => {
     });
 
     return {
-      secret: 'my-secret',
+      secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
       store: new TypeormStore({

@@ -19,5 +19,5 @@ GET {{baseurl}}/admin/users?offset=1
 
 ### get user
 GET {{baseurl}}/admin/users/1
-Authorization: 'hello'
+Authorization: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJoZWxsbyI6Im1lIiwiaWF0IjoxNjI4NTQ4NzQzLCJleHAiOjE2Mjg1NTQ3NDN9.gZEpeJBybs-cGAWLeehWpcmmyTlYGQCkA2UfBpKrN9_vSuCwn7qp20Kv2CrbkutJg832px-ut5Qdg-akfMDN6g'
 

@@ -12,6 +12,7 @@ import {
   ApiKeyGuard,
   LoggerMiddleware,
 } from './common';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -31,6 +32,10 @@ import {
         };
       },
       inject: [ConfigService],
+    }),
+    JwtModule.registerAsync({
+      useFactory: async (config: ConfigService) => config.get('jwt.config'),
+      inject: [ConfigService]
     }),
     CommonModule,
     AuthModule,
@@ -53,10 +58,10 @@ import {
       provide: APP_GUARD,
       useClass: ApiKeyGuard,
     },
-  ],
+  ]
 })
 export class AppModule {
-  constructor() {}
+  constructor() { }
 
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');

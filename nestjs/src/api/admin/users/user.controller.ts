@@ -14,7 +14,7 @@ import { Serialize, PaginationQueryDto, Public } from 'src/common';
 
 @Controller('admin')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Get('users')
   @Serialize(UserDto)
@@ -22,7 +22,6 @@ export class UserController {
     return this.userService.findAll(paginationQuery);
   }
 
-  @Public()
   @Get('users/:id')
   @Serialize(UserDto)
   getOneUser(@Param('id') id: number) {
@@ -40,5 +39,5 @@ export class UserController {
   }
 
   @Delete('users/:id')
-  deleteUser(@Param('id') id: number) {}
+  deleteUser(@Param('id') id: number) { }
 }
