@@ -17,13 +17,10 @@ export default {
   ) => {
     switch (requestType) {
       case JwtSecretRequestType.SIGN:
-        // retrieve signing key dynamically
         return JSON.parse(`"${process.env.JWT_PRIVATE_KEY}"`);
       case JwtSecretRequestType.VERIFY:
-        // retrieve public key for verification dynamically
         return JSON.parse(`"${process.env.JWT_PUBLIC_KEY}"`);
       default:
-        // retrieve secret dynamically
         return process.env.JWT_SECRET;
     }
   },

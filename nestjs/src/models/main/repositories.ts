@@ -1,4 +1,5 @@
 export * from './user/user.repository'
+export * from './session/session.repository';
 
 /* import { Injectable } from '@nestjs/common';
 import { Connection, getConnection } from 'typeorm';

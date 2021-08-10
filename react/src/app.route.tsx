@@ -8,7 +8,7 @@ import { AuthRoute, AdminRoute, HomeRoute, notfound } from './views';
 export const AppRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
     {
-      path: '/',
+      path: '//*',
       element: <RouteGuard path='/' element={<HomeRoute />} />
     },
     {

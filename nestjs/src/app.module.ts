@@ -1,5 +1,5 @@
 import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
-import { APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from 'nestjs-config';
 import * as path from 'path';
@@ -7,12 +7,10 @@ import * as path from 'path';
 import { AuthModule } from './api/auth/auth.module';
 import { UserModule } from './api/admin/users/user.module';
 import {
-  CommonModule,
+  GuardModule,
   SessionModule,
-  ApiKeyGuard,
   LoggerMiddleware,
 } from './common';
-import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -33,11 +31,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
       },
       inject: [ConfigService],
     }),
-    JwtModule.registerAsync({
-      useFactory: async (config: ConfigService) => config.get('jwt.config'),
-      inject: [ConfigService]
-    }),
-    CommonModule,
+    GuardModule,
     AuthModule,
     UserModule,
   ],
@@ -53,11 +47,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
           enableImplicitConversion: true,
         },
       }),
-    },
-    {
-      provide: APP_GUARD,
-      useClass: ApiKeyGuard,
-    },
+    }
   ]
 })
 export class AppModule {

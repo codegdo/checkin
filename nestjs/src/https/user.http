@@ -19,5 +19,6 @@ GET {{baseurl}}/admin/users?offset=1
 
 ### get user
 GET {{baseurl}}/admin/users/1
-Authorization: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJoZWxsbyI6Im1lIiwiaWF0IjoxNjI4NTQ4NzQzLCJleHAiOjE2Mjg1NTQ3NDN9.gZEpeJBybs-cGAWLeehWpcmmyTlYGQCkA2UfBpKrN9_vSuCwn7qp20Kv2CrbkutJg832px-ut5Qdg-akfMDN6g'
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaWQiOiIzSVVFcmc3Y3RXVElCMUxmNHBzbS1Pa1d2T0NjZE5PWiIsImlhdCI6MTYyODYyODEwMSwiZXhwIjoxNjI4NjM0MTAxfQ.YR-9urJM1ES3ARklVR2Nj8Z32MCx5O1uoW9oB61mCuRCIsV4StgY-8v8C69OzXhC5FgPdPQj_R_LG47YyVIfMQ
+x-api-key: 123
 
