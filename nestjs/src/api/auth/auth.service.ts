@@ -5,11 +5,10 @@ import { UserRepository } from 'src/models/main/user/user.repository';
 
 @Injectable()
 export class AuthService {
-
   constructor(
     @InjectRepository(UserRepository)
-    private userRepository: UserRepository
-  ) { }
+    private userRepository: UserRepository,
+  ) {}
 
   signup(createUserDto) {
     return this.userRepository.createUser(createUserDto);
@@ -19,8 +18,8 @@ export class AuthService {
     return 'Login';
   }
 
-  getLogin(): string {
-    return 'Get Login';
+  getLogin(): { [x: string]: string } {
+    return { message: 'Get Login' };
   }
 
   getLogout(): string {
