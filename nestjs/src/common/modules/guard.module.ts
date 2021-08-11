@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { ApiKeyGuard } from '../guards/api-key.guard';
+import { ApiGuard } from '../guards/api.guard';
+import { AuthGuard } from '../guards/auth.guard';
 import { SessionRepository } from 'src/models/main/repositories';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -18,8 +19,13 @@ import { ConfigService } from 'nestjs-config';
   providers: [
     {
       provide: APP_GUARD,
-      useClass: ApiKeyGuard,
+      useClass: ApiGuard,
       inject: [SessionRepository]
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+      inject: []
     }
   ]
 })

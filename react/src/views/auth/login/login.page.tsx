@@ -10,22 +10,36 @@ const Login: React.FC = (): JSX.Element => {
   const { loggedIn } = useSelector((state: AppState) => state.session);
   const { updateSession } = useAction();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    const result = await http.get('http://localhost:5000/api/auth/login');
+    console.log(result);
     updateSession({ loggedIn: true, user: null, orgId: null });
   };
 
+  const handleLogin = async () => {
+    const result = await http.post('http://localhost:5000/api/auth/login', {
+      body: JSON.stringify({
+        username: "gdo",
+        password: "1234567"
+      })
+    });
+    console.log(result);
+  };
+
+  const handleLogout = async () => {
+    const result = await http.get('http://localhost:5000/api/auth/logout');
+    console.log(result);
+  };
+
   const handleFetch = async () => {
-    try {
-      const result = await http.get('http://localhost:5000/api/auth/login');
-      console.log(result);
-    } catch (err) {
-      console.log(err);
-    }
+    const result = await http.get('http://localhost:5000/api/admin/users/1');
+    console.log(result);
   }
 
   return loggedIn ? <Navigate to="/" /> : <div>
     LOGIN
-    <button onClick={handleSubmit}>Login</button>
+    <button onClick={handleLogin}>Login</button>
+    <button onClick={handleLogout}>Logout</button>
     <button onClick={handleFetch}>Fetch</button>
   </div>;
 };

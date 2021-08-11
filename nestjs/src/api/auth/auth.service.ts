@@ -8,21 +8,19 @@ export class AuthService {
   constructor(
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
-  ) {}
+  ) { }
 
-  signup(createUserDto) {
+  async signup(createUserDto) {
     return this.userRepository.createUser(createUserDto);
   }
 
-  login(): string {
-    return 'Login';
-  }
+  async login(loginUserDto) {
+    const user = await this.userRepository.loginUser(loginUserDto);
 
-  getLogin(): { [x: string]: string } {
-    return { message: 'Get Login' };
-  }
+    if (!user) {
+      throw new BadRequestException();
+    }
 
-  getLogout(): string {
-    return 'Get Logout';
+    return user;
   }
 }

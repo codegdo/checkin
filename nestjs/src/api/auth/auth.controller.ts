@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Session, UnauthorizedException } from '@ne
 import { JwtService } from '@nestjs/jwt';
 
 import { AuthService } from './auth.service';
-import { CreateUserDto, UserDto } from '../../models/main/dtos';
+import { CreateUserDto, UserDto, LoginUserDto } from '../../models/main/dtos';
 import { Public, Serialize, CurrentUser } from 'src/common';
 
 @Controller('auth')
@@ -21,11 +21,11 @@ export class AuthController {
 
   @Public()
   @Post('login')
-  login(): string {
-    return this.authService.login();
+  login(@Body() loginUserDto: LoginUserDto) {
+    return this.authService.login(loginUserDto);
   }
 
-  @Public()
+  /* @Public()
   @Get('login')
   getLogin(@Session() session: any) {
 
@@ -37,10 +37,9 @@ export class AuthController {
     return this.authService.getLogin();
   }
 
-  @Public()
   @Get('logout')
   async getLogout(@Session() session: any, @CurrentUser() user: string) {
     session.destroy();
     return this.authService.getLogout();
-  }
+  } */
 }

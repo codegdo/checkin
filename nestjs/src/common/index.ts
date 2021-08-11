@@ -1,5 +1,6 @@
 export * from './dtos/pagination-query.dto';
-export * from './guards/api-key.guard';
+export * from './guards/api.guard';
+export * from './guards/auth.guard';
 export * from './interceptors/serialize.interceptor';
 export * from './middlewares/logger.middleware';
 export * from './decorators/public.decorator';

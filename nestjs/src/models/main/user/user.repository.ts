@@ -8,4 +8,21 @@ export class UserRepository extends Repository<User> {
     const user = await this.create(createUserDto);
     return this.save(user);
   }
+
+  async loginUser(loginUserDto) {
+    const { username, password } = loginUserDto;
+    const query = this.createQueryBuilder('user');
+    const user = await query
+      .addSelect(['user.password'])
+      .where('user.username = :username', { username })
+      .getOne();
+
+    if (!user) {
+      return undefined;
+    }
+
+    const { password: _password, ..._user } = user;
+
+    return await user.validatePassword(password) ? _user : null;
+  }
 }
