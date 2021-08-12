@@ -10,7 +10,8 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto, UserDto } from 'src/models/main/dtos';
-import { Serialize, PaginationQueryDto, Public } from 'src/common';
+import { Serialize, PaginationQueryDto, CurrentUser } from 'src/common';
+import { User } from 'src/models/main/entities';
 
 @Controller('admin')
 export class UserController {
@@ -18,26 +19,28 @@ export class UserController {
 
   @Get('users')
   @Serialize(UserDto)
-  getAllUsers(@Query() paginationQuery: PaginationQueryDto) {
+  getAllUsers(@CurrentUser() user: User, @Query() paginationQuery: PaginationQueryDto) {
+
     return this.userService.findAll(paginationQuery);
   }
 
   @Get('users/:id')
   @Serialize(UserDto)
-  getOneUser(@Param('id') id: number) {
+  getOneUser(@CurrentUser() user: User, @Param('id') id: number) {
+    console.log('GET_CURRENT_USER', user);
     return this.userService.findOne(id);
   }
 
   @Post('users')
-  createUser(@Body() createUserDto: CreateUserDto) {
+  createUser(@CurrentUser() user: User, @Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
   @Patch('users/:id')
-  updateUser(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+  updateUser(@CurrentUser() user: User, @Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
   }
 
   @Delete('users/:id')
-  deleteUser(@Param('id') id: number) { }
+  deleteUser(@CurrentUser() user: User, @Param('id') id: number) { }
 }

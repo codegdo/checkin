@@ -18,10 +18,10 @@ const Login: React.FC = (): JSX.Element => {
 
   const handleLogin = async () => {
     const result = await http.post('http://localhost:5000/api/auth/login', {
-      body: JSON.stringify({
+      body: {
         username: "gdo",
-        password: "1234567"
-      })
+        password: "123456"
+      }
     });
     console.log(result);
   };

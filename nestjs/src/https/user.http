@@ -19,6 +19,6 @@ GET {{baseurl}}/admin/users?offset=1
 
 ### get user
 GET {{baseurl}}/admin/users/1
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaWQiOiIzSVVFcmc3Y3RXVElCMUxmNHBzbS1Pa1d2T0NjZE5PWiIsImlhdCI6MTYyODYyODEwMSwiZXhwIjoxNjI4NjM0MTAxfQ.YR-9urJM1ES3ARklVR2Nj8Z32MCx5O1uoW9oB61mCuRCIsV4StgY-8v8C69OzXhC5FgPdPQj_R_LG47YyVIfMQ
-x-api-key: 123
+Authorization: Bearer 70Rh6b3UbZuWZHmpneOoJKqMtNZuslUn
+x-sid: 70Rh6b3UbZuWZHmpneOoJKqMtNZuslUn
 

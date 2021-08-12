@@ -1,9 +1,15 @@
-import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { JwtService } from '@nestjs/jwt';
 import { SessionRepository } from 'src/models/main/repositories';
+
+declare module 'express' {
+  export interface Request {
+    currentUser: any;
+  }
+}
 
 @Injectable()
 export class ApiGuard implements CanActivate {
@@ -26,15 +32,26 @@ export class ApiGuard implements CanActivate {
     if (!isPublish) {
       //
       if (currentUser) {
+        request.currentUser = currentUser;
         return true;
       }
       //
       if (authHeader) {
-        const token = await this.jwtService.verify(authHeader.split(' ')[1]);
-        const currentTimestamp = new Date().getTime() / 1000;
-        const isNotExpired = token.exp > currentTimestamp;
+        //const token = await this.jwtService.verify(authHeader.split(' ')[1]);
+        //const currentTimestamp = new Date().getTime() / 1000;
+        //const isNotExpired = token.exp > currentTimestamp;
 
-        if (isNotExpired) {
+        const sid = authHeader.split(' ')[1];
+
+        const found = await this.sessionRepository.findOne({ id: sid });
+
+        if (!found) {
+          return false;
+        }
+
+        return true;
+
+        /* if (isNotExpired) {
           const found = await this.sessionRepository.findOne({ id: token.sid });
 
           if (!found) {
@@ -42,7 +59,7 @@ export class ApiGuard implements CanActivate {
           }
 
           return true;
-        }
+        } */
       }
 
       return false;

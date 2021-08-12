@@ -23,4 +23,8 @@ export class AuthService {
 
     return user;
   }
+
+  async logout() {
+
+  }
 }

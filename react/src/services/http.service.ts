@@ -24,7 +24,7 @@ class HttpService {
     this.contentType = 'application/json';
   }
 
-  request<T>(url: string, option: RequestOption): Promise<HttpResponse<T>> {
+  async request<T>(url: string, option: RequestOption): Promise<HttpResponse<T>> {
     const { headers, params, ...args } = option || {};
 
     url = params ? queryString.stringifyUrl({ url, query: params }) : url;
@@ -54,7 +54,7 @@ class HttpService {
     return this._fetch(new Request(url, option));
   }
 
-  post<T>(url: string, option: RequestOption): Promise<HttpResponse<T>> {
+  async post<T>(url: string, option: RequestOption): Promise<HttpResponse<T>> {
     const { body, headers, ...args } = option || {};
 
     option = {
@@ -68,7 +68,7 @@ class HttpService {
     return this._fetch(new Request(url, option));
   }
 
-  patch<T>(url: string, option: RequestOption): Promise<HttpResponse<T>> {
+  async patch<T>(url: string, option: RequestOption): Promise<HttpResponse<T>> {
     const { body, headers, ...args } = option || {};
 
     option = {
@@ -82,7 +82,7 @@ class HttpService {
     return this._fetch(new Request(url, option));
   }
 
-  delete<T>(url: string, option: RequestOption): Promise<HttpResponse<T>> {
+  async delete<T>(url: string, option: RequestOption): Promise<HttpResponse<T>> {
     const { body, headers, ...args } = option || {};
 
     option = {
