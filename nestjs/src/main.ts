@@ -8,8 +8,8 @@ async function bootstrap() {
   app.enableCors({
     origin: 'http://localhost:3000',
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'Expiry'],
-    exposedHeaders: ['Authorization ', 'Expiry'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Expiry', 'X-Auth-Token'],
+    exposedHeaders: ['Authorization ', 'Expiry', 'X-Auth-Token'],
   });
   /* app.use(
     session({

@@ -18,10 +18,12 @@ export type RequestOption = {
 class HttpService {
   private credentials: RequestCredentials;
   private contentType: string;
+  private withCredentials: boolean;
 
   constructor() {
-    this.credentials = 'include';
     this.contentType = 'application/json';
+    this.credentials = 'include';
+    this.withCredentials = true;
   }
 
   async request<T>(url: string, option: RequestOption): Promise<HttpResponse<T>> {
@@ -33,6 +35,7 @@ class HttpService {
       method: params ? 'GET' : 'POST',
       headers: { 'Content-Type': this.contentType, ...headers },
       credentials: this.credentials,
+      withCredentials: this.withCredentials,
       ...args,
     };
 
@@ -48,6 +51,7 @@ class HttpService {
       method: 'GET',
       headers: { 'Content-Type': this.contentType, ...headers },
       credentials: this.credentials,
+      withCredentials: this.withCredentials,
       ...args,
     };
 
@@ -61,6 +65,7 @@ class HttpService {
       method: 'POST',
       headers: { 'Content-Type': this.contentType, ...headers },
       credentials: this.credentials,
+      withCredentials: this.withCredentials,
       body: JSON.stringify(body),
       ...args,
     };
@@ -75,6 +80,7 @@ class HttpService {
       method: 'PATCH',
       headers: { 'Content-Type': this.contentType, ...headers },
       credentials: this.credentials,
+      withCredentials: this.withCredentials,
       body: JSON.stringify(body),
       ...args,
     };
@@ -89,6 +95,7 @@ class HttpService {
       method: 'DELETE',
       headers: { 'Content-Type': this.contentType, ...headers },
       credentials: this.credentials,
+      withCredentials: this.withCredentials,
       body: JSON.stringify(body),
       ...args,
     };

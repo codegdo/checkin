@@ -3,7 +3,8 @@ import { Body, Controller, Get, Post, Session, UnauthorizedException } from '@ne
 
 import { AuthService } from './auth.service';
 import { CreateUserDto, UserDto, LoginUserDto } from '../../models/main/dtos';
-import { Public, Serialize } from 'src/common';
+import { CurrentUser, Public, Serialize } from 'src/common';
+import { User } from 'src/models/main/entities';
 
 @Controller('auth')
 export class AuthController {
@@ -30,8 +31,14 @@ export class AuthController {
 
   @Public()
   @Get('logout')
-  logout(@Session() session: any,) {
-    session.destroy();
+  logout(@Session() session: any, @CurrentUser() user: User) {
+
+    console.log(session.id);
+
+    if (session.user) {
+      session.destroy();
+    }
+
     return {};
   }
 

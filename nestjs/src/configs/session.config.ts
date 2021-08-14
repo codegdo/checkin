@@ -20,6 +20,9 @@ export default (async () => {
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
+      cookie: {
+        secure: false
+      },
       store: new TypeormStore({
         cleanupLimit: 0,
         limitSubquery: false, // If using MariaDB.

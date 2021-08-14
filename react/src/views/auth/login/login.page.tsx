@@ -23,6 +23,8 @@ const Login: React.FC = (): JSX.Element => {
         password: "123456"
       }
     });
+    localStorage.setItem("session_id", result?.data?.sid);
+    sessionStorage.setItem("session_id", result?.data?.sid);
     console.log(result);
   };
 
