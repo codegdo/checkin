@@ -1,14 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-import { useAction } from '../../../hooks';
+import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 import { http } from '../../../services/http.service';
+
+import { Form } from '../../../components/form/form.component';
 
 const Login: React.FC = (): JSX.Element => {
   const { loggedIn } = useSelector((state: AppState) => state.session);
   const { updateSession } = useAction();
+  const [login, fetchLogin] = useFetch('/api/auth/login');
+  const [logout, fetchLogout] = useFetch('/api/auth/logout');
+  const [user, fetchUser] = useFetch('/api/admin/users/1');
+
+  useEffect(() => {
+    console.log(login);
+  }, [login]);
+
+  useEffect(() => {
+    console.log(logout);
+  }, [logout]);
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
 
   const handleSubmit = async () => {
     const result = await http.get('http://localhost:5000/api/auth/login');
@@ -16,26 +33,20 @@ const Login: React.FC = (): JSX.Element => {
     updateSession({ loggedIn: true, user: null, orgId: null });
   };
 
-  const handleLogin = async () => {
-    const result = await http.post('http://localhost:5000/api/auth/login', {
-      body: {
-        username: "gdo",
-        password: "123456"
-      }
-    });
-    localStorage.setItem("session_id", result?.data?.sid);
-    sessionStorage.setItem("session_id", result?.data?.sid);
-    console.log(result);
+  const handleLogin = () => {
+    const body = {
+      username: "gdo",
+      password: "123456"
+    };
+    fetchLogin({ body });
   };
 
-  const handleLogout = async () => {
-    const result = await http.get('http://localhost:5000/api/auth/logout');
-    console.log(result);
+  const handleLogout = () => {
+    fetchLogout();
   };
 
-  const handleFetch = async () => {
-    const result = await http.get('http://localhost:5000/api/admin/users/1');
-    console.log(result);
+  const handleFetch = () => {
+    fetchUser();
   }
 
   return loggedIn ? <Navigate to="/" /> : <div>
@@ -43,6 +54,11 @@ const Login: React.FC = (): JSX.Element => {
     <button onClick={handleLogin}>Login</button>
     <button onClick={handleLogout}>Logout</button>
     <button onClick={handleFetch}>Fetch</button>
+
+    <Form>
+      <Form.Button>Click Me</Form.Button>
+    </Form>
+
   </div>;
 };
 

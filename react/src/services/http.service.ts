@@ -26,14 +26,15 @@ class HttpService {
     this.withCredentials = true;
   }
 
-  async request<T>(url: string, option: RequestOption): Promise<HttpResponse<T>> {
-    const { headers, params, ...args } = option || {};
+  async request<T>(url: string, option?: RequestOption): Promise<HttpResponse<T>> {
+    const { headers, method, body, params, ...args } = option || {};
 
     url = params ? queryString.stringifyUrl({ url, query: params }) : url;
 
     option = {
-      method: params ? 'GET' : 'POST',
       headers: { 'Content-Type': this.contentType, ...headers },
+      method: method || (body ? 'POST' : 'GET'),
+      body: JSON.stringify(body),
       credentials: this.credentials,
       withCredentials: this.withCredentials,
       ...args,
@@ -48,8 +49,8 @@ class HttpService {
     url = params ? queryString.stringifyUrl({ url, query: params }) : url;
 
     option = {
-      method: 'GET',
       headers: { 'Content-Type': this.contentType, ...headers },
+      method: 'GET',
       credentials: this.credentials,
       withCredentials: this.withCredentials,
       ...args,
@@ -59,14 +60,14 @@ class HttpService {
   }
 
   async post<T>(url: string, option: RequestOption): Promise<HttpResponse<T>> {
-    const { body, headers, ...args } = option || {};
+    const { headers, body, ...args } = option || {};
 
     option = {
-      method: 'POST',
       headers: { 'Content-Type': this.contentType, ...headers },
+      method: 'POST',
+      body: JSON.stringify(body),
       credentials: this.credentials,
       withCredentials: this.withCredentials,
-      body: JSON.stringify(body),
       ...args,
     };
 
@@ -74,14 +75,14 @@ class HttpService {
   }
 
   async patch<T>(url: string, option: RequestOption): Promise<HttpResponse<T>> {
-    const { body, headers, ...args } = option || {};
+    const { headers, body, ...args } = option || {};
 
     option = {
-      method: 'PATCH',
       headers: { 'Content-Type': this.contentType, ...headers },
+      method: 'PATCH',
+      body: JSON.stringify(body),
       credentials: this.credentials,
       withCredentials: this.withCredentials,
-      body: JSON.stringify(body),
       ...args,
     };
 
@@ -89,14 +90,14 @@ class HttpService {
   }
 
   async delete<T>(url: string, option: RequestOption): Promise<HttpResponse<T>> {
-    const { body, headers, ...args } = option || {};
+    const { headers, body, ...args } = option || {};
 
     option = {
-      method: 'DELETE',
       headers: { 'Content-Type': this.contentType, ...headers },
+      method: 'DELETE',
+      body: JSON.stringify(body),
       credentials: this.credentials,
       withCredentials: this.withCredentials,
-      body: JSON.stringify(body),
       ...args,
     };
 
