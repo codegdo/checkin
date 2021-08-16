@@ -6,7 +6,7 @@ import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 import { http } from '../../../services/http.service';
 
-import { Form } from '../../../components/form/form.component';
+import { Form, Field, Label, Input, Button } from '../../../components/form';
 
 const Login: React.FC = (): JSX.Element => {
   const { loggedIn } = useSelector((state: AppState) => state.session);
@@ -49,14 +49,24 @@ const Login: React.FC = (): JSX.Element => {
     fetchUser();
   }
 
+  const onSubmit = () => {
+    console.log('SUBMIT');
+  }
+
   return loggedIn ? <Navigate to="/" /> : <div>
     LOGIN
     <button onClick={handleLogin}>Login</button>
     <button onClick={handleLogout}>Logout</button>
     <button onClick={handleFetch}>Fetch</button>
 
-    <Form>
-      <Form.Button>Click Me</Form.Button>
+    <Form onSubmit={onSubmit}>
+      <Field value="hello">
+        <Label></Label>
+        <Input></Input>
+      </Field>
+      <Field>
+        <Button>Button</Button>
+      </Field>
     </Form>
 
   </div>;

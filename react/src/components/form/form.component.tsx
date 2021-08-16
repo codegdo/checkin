@@ -1,22 +1,17 @@
 import React, { useCallback } from 'react';
 
-import { FormButton } from './button/form.button';
+export const FormContext = React.createContext<{ handleSubmit: () => void } | undefined>(undefined);
 
-interface FormExtends {
-  Button: typeof FormButton;
-}
+export const Form: React.FC<{ onSubmit: () => void }> = ({ onSubmit, children }): JSX.Element => {
 
-export const FormContext = React.createContext<{ onClick: () => void } | undefined>(undefined);
-
-export const Form: React.FC & FormExtends = ({ children }): JSX.Element => {
-
-  const onClick = useCallback(() => {
-    console.log('click');
+  const handleSubmit = useCallback(() => {
+    console.log('Form handleSubmit()');
+    onSubmit();
   }, []);
 
   return (
     <form>
-      <FormContext.Provider value={{ onClick }}>
+      <FormContext.Provider value={{ handleSubmit }}>
         {
           children
         }
@@ -25,5 +20,4 @@ export const Form: React.FC & FormExtends = ({ children }): JSX.Element => {
   )
 }
 
-Form.Button = FormButton;
 
