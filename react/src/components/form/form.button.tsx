@@ -1,19 +1,24 @@
 import React, { useContext } from 'react';
-import { FieldContext } from './form.field';
+import { FormContext } from './form.component';
 
-export const Button: React.FC = ({ children }): JSX.Element => {
-  const context = useContext(FieldContext);
+type ButtonProps = {
+  name?: string;
+  text?: string;
+}
+
+export const Button: React.FC<ButtonProps> = ({ name = '', text = 'Button', children }): JSX.Element => {
+  const context = useContext(FormContext);
 
   if (context == undefined) {
     throw new Error();
   }
 
-  const { handleClick } = context;
+  const { handleSubmit } = context;
 
   return (
-    <button onClick={handleClick} type="button">
+    <button name={name} type="button" onClick={() => handleSubmit(name)}>
       {
-        children
+        children || text
       }
     </button>
   )

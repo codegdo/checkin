@@ -10,10 +10,12 @@ export const Label: React.FC = ({ children }): JSX.Element => {
     throw new Error();
   }
 
+  const { label } = context;
+
   return (
     <span>
       {
-        children
+        children || label
       }
     </span>
   )

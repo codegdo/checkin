@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
+import { TextBox } from '../input';
 import { FieldContext } from './form.field';
-
-
 
 export const Input: React.FC = (): JSX.Element => {
   const context = useContext(FieldContext);
@@ -10,11 +9,20 @@ export const Input: React.FC = (): JSX.Element => {
     throw new Error();
   }
 
-  const { value, handleChange } = context;
+  const { type } = context;
+
+  const render = () => {
+    switch (type) {
+      case 'text':
+        return <TextBox />;
+      default:
+        return <TextBox />
+    }
+  }
 
   return (
     <div>
-      <input value={value} onChange={handleChange} />
+      {render()}
     </div>
   )
 }

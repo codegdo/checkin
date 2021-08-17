@@ -1,17 +1,28 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 
-export const FormContext = React.createContext<{ handleSubmit: () => void } | undefined>(undefined);
+type FormProps = {
+  onSubmit: (values: Record<string, unknown>) => void;
+}
 
-export const Form: React.FC<{ onSubmit: () => void }> = ({ onSubmit, children }): JSX.Element => {
+type FormContextProps = {
+  values: Record<string, unknown>;
+  handleSubmit: (name: string) => void;
+} | undefined;
 
-  const handleSubmit = useCallback(() => {
-    console.log('Form handleSubmit()');
-    onSubmit();
+export const FormContext = React.createContext<FormContextProps>(undefined);
+
+export const Form: React.FC<FormProps> = ({ onSubmit, children }): JSX.Element => {
+
+  const { current: values } = useRef({});
+
+  const handleSubmit = useCallback((name: string) => {
+    console.log('Form handleSubmit()', name);
+    onSubmit(values);
   }, []);
 
   return (
     <form>
-      <FormContext.Provider value={{ handleSubmit }}>
+      <FormContext.Provider value={{ values, handleSubmit }}>
         {
           children
         }

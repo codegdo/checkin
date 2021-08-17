@@ -1,75 +1,58 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
-import { http } from '../../../services/http.service';
 
-import { Form, Field, Label, Input, Button } from '../../../components/form';
+import { Form, Block, Field, Button } from '../../../components/form';
 
 const Login: React.FC = (): JSX.Element => {
   const { loggedIn } = useSelector((state: AppState) => state.session);
   const { updateSession } = useAction();
   const [login, fetchLogin] = useFetch('/api/auth/login');
-  const [logout, fetchLogout] = useFetch('/api/auth/logout');
-  const [user, fetchUser] = useFetch('/api/admin/users/1');
+  const [form, setForm] = useState<any>();
+
+  // load form
+  useEffect(() => {
+    void (async () => {
+      const json = (await import('./login.json')).default;
+      setForm(json);
+    })();
+  }, [])
 
   useEffect(() => {
-    console.log(login);
+    if (login.status === 'success') {
+      const { user } = login?.result?.data;
+      updateSession({ loggedIn: true, user, orgId: null });
+    }
   }, [login]);
 
-  useEffect(() => {
-    console.log(logout);
-  }, [logout]);
-
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
-  const handleSubmit = async () => {
-    const result = await http.get('http://localhost:5000/api/auth/login');
-    console.log(result);
-    updateSession({ loggedIn: true, user: null, orgId: null });
+  const handleSubmit = (values: Record<string, unknown>) => {
+    console.log(values);
+    fetchLogin({ body: values });
   };
 
-  const handleLogin = () => {
-    const body = {
-      username: "gdo",
-      password: "123456"
-    };
-    fetchLogin({ body });
-  };
-
-  const handleLogout = () => {
-    fetchLogout();
-  };
-
-  const handleFetch = () => {
-    fetchUser();
-  }
-
-  const onSubmit = () => {
-    console.log('SUBMIT');
-  }
-
-  return loggedIn ? <Navigate to="/" /> : <div>
-    LOGIN
-    <button onClick={handleLogin}>Login</button>
-    <button onClick={handleLogout}>Logout</button>
-    <button onClick={handleFetch}>Fetch</button>
-
-    <Form onSubmit={onSubmit}>
-      <Field value="hello">
-        <Label></Label>
-        <Input></Input>
-      </Field>
-      <Field>
-        <Button>Button</Button>
-      </Field>
-    </Form>
-
-  </div>;
+  return loggedIn ? <Navigate to="/" /> : (
+    form ? <div>
+      LOGIN
+      <Form onSubmit={handleSubmit}>
+        <Block>
+          <Field
+            label="Username"
+            name="username"
+            type="text"
+          />
+          <Field
+            label="Password"
+            name="password"
+            type="password"
+          />
+          <Button name="submit" />
+        </Block>
+      </Form>
+    </div> : <div>loadding...</div>
+  );
 };
 
 export default Login;

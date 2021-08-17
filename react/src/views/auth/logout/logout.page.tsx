@@ -7,10 +7,10 @@ import { AppState } from '../../../store/reducers';
 
 const Logout: React.FC = (): JSX.Element => {
   const { loggedIn } = useSelector((state: AppState) => state.session);
-  const { updateSession } = useAction();
+  const { deleteSession } = useAction();
 
   useEffect(() => {
-    loggedIn && updateSession({ loggedIn: false, user: null, orgId: null });
+    loggedIn && deleteSession();
   }, []);
 
   return loggedIn ? <div>logout</div> : <Navigate to="/" />;
