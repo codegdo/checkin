@@ -1,14 +1,10 @@
 import { useCallback, useReducer } from 'react';
 import { http, RequestOption } from '../services';
 
-enum ActionType {
-  IDLE = 'IDLE',
-  REQUEST = 'REQUEST',
-  SUCCESS = 'SUCCESS',
-  FAILURE = 'FAILURE',
-}
-
-type Action = { type: ActionType; payload?: any };
+type Action = {
+  type: 'IDLE' | 'REQUEST' | 'SUCCESS' | 'FAILURE';
+  payload?: any
+};
 
 type State = {
   status: string;
@@ -22,11 +18,11 @@ const initialState = {
 
 const reducer = (state: State, { type, payload }: Action) => {
   switch (type) {
-    case ActionType.REQUEST:
+    case 'REQUEST':
       return { ...state, status: 'loading' };
-    case ActionType.SUCCESS:
+    case 'SUCCESS':
       return { ...state, status: 'success', result: payload };
-    case ActionType.FAILURE:
+    case 'FAILURE':
       return { ...state, status: 'error', result: payload };
     default:
       return state;
@@ -46,13 +42,13 @@ export const useFetch = (
       }
 
       try {
-        dispatch({ type: ActionType.REQUEST });
+        dispatch({ type: 'REQUEST' });
         //
         const result = await http.request(url, option);
         //
-        dispatch({ type: ActionType.SUCCESS, payload: result });
+        dispatch({ type: 'SUCCESS', payload: result });
       } catch (err) {
-        dispatch({ type: ActionType.FAILURE, payload: err });
+        dispatch({ type: 'FAILURE', payload: err });
       }
     },
     [url]

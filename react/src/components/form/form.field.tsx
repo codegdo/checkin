@@ -3,28 +3,42 @@ import { FormContext } from './form.component';
 import { Input } from './form.input';
 import { Label } from './form.label';
 
-type FieldProps = {
+export type FieldData = {
+  id?: string | number;
   label?: string;
-  name: string;
+  name?: string;
 
-  type: "text" | "number" | "currency" | "date" | "password" | undefined;
+  type?: "text" | "number" | "currency" | "date" | "password" | undefined;
+  role?: 'block' | 'field';
+
+  data?: FieldData[];
 
   value?: string;
   defaultValue?: string;
 }
 
+type FieldProps = {
+  field?: FieldData;
+} & FieldData;
+
 type FieldContextProps = {
+  data: FieldData,
+  value: string | undefined,
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-} & FieldProps | undefined;
+} | undefined;
 
 export const FieldContext = React.createContext<FieldContextProps>(undefined);
 
-export const Field: React.FC<FieldProps> = ({ label, name, type, value: initialValue, defaultValue = '', children }): JSX.Element => {
+export const Field: React.FC<FieldProps> = (props): JSX.Element => {
   const context = useContext(FormContext);
 
   if (!context) {
     throw new Error();
   }
+
+  const { children, field, ..._props } = props;
+  const data = field ? field : _props;
+  const { name = '', value: initialValue, defaultValue = '' } = field || _props;
 
   const { values } = context;
   const [value, setValue] = useState(initialValue || defaultValue);
@@ -40,7 +54,7 @@ export const Field: React.FC<FieldProps> = ({ label, name, type, value: initialV
 
   return (
     <div>
-      <FieldContext.Provider value={{ label, name, type, value, handleChange }}>
+      <FieldContext.Provider value={{ data, value, handleChange }}>
         {
           children || <><Label /><Input /></>
         }

@@ -9,10 +9,10 @@ export const Input: React.FC = (): JSX.Element => {
     throw new Error();
   }
 
-  const { type } = context;
+  const { data } = context;
 
   const render = () => {
-    switch (type) {
+    switch (data?.type) {
       case 'text':
         return <TextBox />;
       default:

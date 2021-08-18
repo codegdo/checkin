@@ -8,11 +8,11 @@ export const TextBox: React.FC = (): JSX.Element => {
     throw new Error();
   }
 
-  const { type, value, handleChange } = context;
+  const { data, value, handleChange } = context;
 
   return (
     <span>
-      <input type={type} value={value} onChange={handleChange} />
+      <input type={data?.type} value={value} onChange={handleChange} />
     </span>
   )
 }

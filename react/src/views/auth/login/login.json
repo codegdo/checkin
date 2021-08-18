@@ -1,38 +1,39 @@
 {
+  "id": "1",
   "label": "Login",
   "name": "login",
   "data": [
     {
+      "id": "2",
       "type": "div",
-      
       "role": "block",
       "data": []
     }
   ],
   "fields": [
     {
+      "id": "3",
       "label": "Username",
       "name": "username",
       "type": "text",
-
       "role": "field",
       "data": []
     },
     {
+      "id": "4",
       "label": "Password",
       "name": "password",
       "type": "password",
-      
       "role": "field",
       "data": []
     }
   ],
   "buttons": [
     {
+      "id": "5",
       "label": "Login",
       "name": "submit",
       "type": "button",
-
       "role": "element",
       "data": []
     }

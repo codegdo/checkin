@@ -5,13 +5,13 @@ import { Navigate } from 'react-router-dom';
 import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 
-import { Form, Block, Field, Button } from '../../../components/form';
+import { Form, Block, Field, Button, FormData } from '../../../components/form';
 
 const Login: React.FC = (): JSX.Element => {
   const { loggedIn } = useSelector((state: AppState) => state.session);
   const { updateSession } = useAction();
   const [login, fetchLogin] = useFetch('/api/auth/login');
-  const [form, setForm] = useState<any>();
+  const [form, setForm] = useState<FormData>();
 
   // load form
   useEffect(() => {
@@ -37,11 +37,12 @@ const Login: React.FC = (): JSX.Element => {
     form ? <div>
       LOGIN
       <Form onSubmit={handleSubmit}>
-        <Block>
-          <Field
-            label="Username"
-            name="username"
-            type="text"
+        <Block type="section">
+          <Field field={{
+            label: "Username",
+            name: "username",
+            type: "text"
+          }}
           />
           <Field
             label="Password"
@@ -55,6 +56,7 @@ const Login: React.FC = (): JSX.Element => {
           />
         </Block>
       </Form>
+      <Form form={form} onSubmit={handleSubmit}></Form>
     </div> : <div>loadding...</div>
   );
 };
