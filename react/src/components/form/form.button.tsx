@@ -2,11 +2,12 @@ import React, { useContext } from 'react';
 import { FormContext } from './form.component';
 
 type ButtonProps = {
+  label?: string;
   name?: string;
-  text?: string;
+  type?: "button" | "submit" | "reset" | undefined;
 }
 
-export const Button: React.FC<ButtonProps> = ({ name = '', text = 'Button', children }): JSX.Element => {
+export const Button: React.FC<ButtonProps> = ({ label = 'Button', name = '', type = 'button', children }): JSX.Element => {
   const context = useContext(FormContext);
 
   if (context == undefined) {
@@ -16,9 +17,9 @@ export const Button: React.FC<ButtonProps> = ({ name = '', text = 'Button', chil
   const { handleSubmit } = context;
 
   return (
-    <button name={name} type="button" onClick={() => handleSubmit(name)}>
+    <button name={name} type={type} onClick={() => handleSubmit(name)}>
       {
-        children || text
+        children || label
       }
     </button>
   )

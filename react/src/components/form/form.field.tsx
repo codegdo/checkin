@@ -7,7 +7,7 @@ type FieldProps = {
   label?: string;
   name: string;
 
-  type: string;
+  type: "text" | "number" | "currency" | "date" | "password" | undefined;
 
   value?: string;
   defaultValue?: string;

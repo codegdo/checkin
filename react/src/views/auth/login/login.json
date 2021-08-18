@@ -1,15 +1,40 @@
 {
-  "name": "Login",
+  "label": "Login",
+  "name": "login",
+  "data": [
+    {
+      "type": "div",
+      
+      "role": "block",
+      "data": []
+    }
+  ],
   "fields": [
     {
       "label": "Username",
       "name": "username",
-      "type": "text"
+      "type": "text",
+
+      "role": "field",
+      "data": []
     },
     {
       "label": "Password",
       "name": "password",
-      "type": "password"
+      "type": "password",
+      
+      "role": "field",
+      "data": []
+    }
+  ],
+  "buttons": [
+    {
+      "label": "Login",
+      "name": "submit",
+      "type": "button",
+
+      "role": "element",
+      "data": []
     }
   ]
 }

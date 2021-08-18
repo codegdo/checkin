@@ -48,7 +48,11 @@ const Login: React.FC = (): JSX.Element => {
             name="password"
             type="password"
           />
-          <Button name="submit" />
+          <Button
+            label="Login"
+            name="submit"
+            type="button"
+          />
         </Block>
       </Form>
     </div> : <div>loadding...</div>

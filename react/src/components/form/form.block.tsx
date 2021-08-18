@@ -1,5 +1,7 @@
 import React from 'react';
-
-export const Block: React.FC = ({ children }): JSX.Element => {
-  return React.createElement('div', null, children)
+type BlockProps = {
+  type?: "div"
+}
+export const Block: React.FC<BlockProps> = ({ type, children }): JSX.Element => {
+  return React.createElement(`${type}`, null, children)
 }
