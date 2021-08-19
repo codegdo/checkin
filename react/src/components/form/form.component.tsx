@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from 'react';
-import { BlockData } from './form.block';
+import { normalizeForm } from '../../helpers';
 
 import { Render } from './form.render';
 
@@ -10,7 +10,7 @@ type FieldData = {
 }
 
 export type FormData = {
-  data?: BlockData[],
+  data?: any,
   fields?: FieldData[]
 }
 
@@ -21,7 +21,7 @@ type FormProps = {
 
 type FormContextProps = {
   data: FormData | undefined;
-  values: Record<string, unknown>;
+  values: any;
   handleSubmit: (name: string) => void;
 } | undefined;
 
@@ -29,7 +29,7 @@ export const FormContext = React.createContext<FormContextProps>(undefined);
 
 export const Form: React.FC<FormProps> = ({ form, onSubmit, children }): JSX.Element => {
 
-  const data = form;
+  const data = form && normalizeForm(form);
   const { current: values } = useRef({});
 
   const handleSubmit = useCallback((name: string) => {

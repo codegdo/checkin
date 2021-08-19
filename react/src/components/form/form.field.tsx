@@ -4,7 +4,7 @@ import { Input } from './form.input';
 import { Label } from './form.label';
 
 export type FieldData = {
-  id?: string | number;
+  id?: number;
   label?: string;
   name?: string;
 
@@ -39,6 +39,8 @@ export const Field: React.FC<FieldProps> = (props): JSX.Element => {
   const { children, field, ..._props } = props;
   const data = field ? field : _props;
   const { name = '', value: initialValue, defaultValue = '' } = field || _props;
+
+  console.log('FIELD', field)
 
   const { values } = context;
   const [value, setValue] = useState(initialValue || defaultValue);

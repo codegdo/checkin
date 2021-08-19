@@ -1,41 +1,53 @@
 {
-  "id": "1",
+  "id": 1,
   "label": "Login",
   "name": "login",
   "data": [
     {
-      "id": "2",
+      "id": 2,
       "type": "div",
       "role": "block",
-      "data": []
+      "data": [],
+
+      "index": 0,
+      "indexParent": null
     }
   ],
   "fields": [
     {
-      "id": "3",
+      "id": 3,
       "label": "Username",
       "name": "username",
       "type": "text",
       "role": "field",
-      "data": []
+      "data": [],
+
+      "index": 1,
+      "indexParent": 0
     },
     {
-      "id": "4",
+      "id": 4,
       "label": "Password",
       "name": "password",
       "type": "password",
       "role": "field",
-      "data": []
+      "data": [],
+
+      "index": 2,
+      "indexParent": 0
     }
   ],
   "buttons": [
     {
-      "id": "5",
+      "id": 5,
       "label": "Login",
       "name": "submit",
       "type": "button",
       "role": "element",
-      "data": []
+      "data": [],
+
+      "index": 3,
+      "indexParent": 0
     }
   ]
 }

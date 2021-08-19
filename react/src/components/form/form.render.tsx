@@ -14,6 +14,7 @@ export const Render: React.FC<RenderProps> = ({ data }): JSX.Element | null => {
     <>
       {
         data.map((item) => {
+          console.log('ITEM', item);
           switch (item?.role) {
             case 'block': return <Block key={item.id} block={item} />;
             case 'field': return <Field key={item.id} field={item} />;
