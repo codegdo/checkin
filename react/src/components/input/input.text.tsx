@@ -1,18 +1,19 @@
 import React, { useContext } from 'react';
-import { FieldContext } from '../form/form.field';
+import { InputContext } from './input.component';
 
 export const TextBox: React.FC = (): JSX.Element => {
-  const context = useContext(FieldContext);
+  const context = useContext(InputContext);
 
   if (!context) {
-    throw new Error();
+    throw new Error('Require TEXTBOX Nested In INPUTCONTEXT');
   }
 
   const { data, value, handleChange } = context;
+  const { type = 'text' } = data;
 
   return (
     <span>
-      <input type={data?.type} value={value} onChange={handleChange} />
+      <input type={type} value={value} onChange={handleChange} />
     </span>
   )
 }

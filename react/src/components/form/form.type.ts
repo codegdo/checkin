@@ -1,11 +1,13 @@
 type InputType = 'text' | 'number' | 'currency' | 'date' | 'password';
-type ElementType = 'div' | 'section' | 'header' | 'main' | 'footer';
+type BlockElementType = 'div' | 'section' | 'header' | 'main' | 'footer' | 'button';
+type InlineElementType = 'button';
 type RoleType = 'block' | 'field' | 'element';
 
 // FIELD
 export type FieldType = {
   id: number;
   label: string;
+  description: string;
   name: string;
 
   type: InputType;
@@ -35,8 +37,11 @@ export type FieldContextProps = {
 // BLOCK
 export type BlockType = {
   id: number;
+  label: string;
+  description: string;
+  name: string;
 
-  type: ElementType;
+  type: BlockElementType;
   role: RoleType;
 
   data: any;
@@ -52,7 +57,22 @@ export type BlockProps = {
 } & BlockData
 
 // ELEMENT
-export type ElementData = Partial<BlockType>
+export type ElementType = {
+  id: number;
+  label: string;
+  description: string;
+  name: string;
+
+  type: InlineElementType;
+  role: RoleType;
+
+  data: any;
+
+  index: number;
+  indexParent: number;
+}
+
+export type ElementData = Partial<ElementType>
 
 export type ElementProps = {
   element?: ElementData;

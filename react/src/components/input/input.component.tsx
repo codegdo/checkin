@@ -1,19 +1,30 @@
-import React from 'react';
-
-export const InputContext = React.createContext<any>(undefined);
-
-export const InputComponent: React.FC<any> = ({ data, onChange, children }): JSX.Element => {
+import React, { useEffect, useState } from 'react';
+import { InputRender as render } from './input.render';
+import { InputContextProps, InputProps } from './input.type';
 
 
-  const handleChange = () => {
-    onChange && onChange();
+export const InputContext = React.createContext<InputContextProps | undefined>(undefined);
+
+export const Input: React.FC<InputProps> = ({ input, onChange, ...props }): JSX.Element => {
+
+  const data = input || props;
+  const { type, value: initialValue, defaultValue = '' } = data;
+
+  const [value, setValue] = useState(initialValue || defaultValue);
+
+  useEffect(() => {
+    onChange && onChange(value);
+  }, [value]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value);
   };
 
   return (
     <div>
-      <InputContext.Provider value={{}}>
+      <InputContext.Provider value={{ data, value, handleChange }}>
         {
-          children
+          render({ type })
         }
       </InputContext.Provider>
     </div>

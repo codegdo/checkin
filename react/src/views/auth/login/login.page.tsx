@@ -5,7 +5,8 @@ import { Navigate } from 'react-router-dom';
 import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 
-import { Form, Block, Field, Button, FormData } from '../../../components/form';
+import { Form, FormData } from '../../../components/form';
+
 
 const Login: React.FC = (): JSX.Element => {
   const { loggedIn } = useSelector((state: AppState) => state.session);
@@ -22,16 +23,17 @@ const Login: React.FC = (): JSX.Element => {
   }, [])
 
   useEffect(() => {
-    if (status === 'success' && result) {
+    if (status === 'success' && result.ok) {
       const { user } = result?.data;
       updateSession({ loggedIn: true, user, orgId: null });
     }
   }, [status]);
 
   const handleSubmit = (values: any) => {
-    console.log(values);
+    console.log('SUBMIT VALUES', values);
     void fetchLogin({ body: values });
   };
+
 
   if (loggedIn) {
     return <Navigate to="/" />;
@@ -43,9 +45,11 @@ const Login: React.FC = (): JSX.Element => {
 
   return (
     <div>
-      LOGIN
-      <Form onSubmit={handleSubmit}>
-        <Block type="section">
+      {/* <Form onSubmit={handleSubmit}>
+        <Block type="header">
+          LOGIN
+        </Block>
+        <Block type="main">
           <Field field={{
             label: "Username",
             name: "username",
@@ -57,13 +61,16 @@ const Login: React.FC = (): JSX.Element => {
             name="password"
             type="password"
           />
-          <Button
+        </Block>
+        <Block type="footer">
+          <Element
             label="Login"
             name="submit"
             type="button"
           />
         </Block>
-      </Form>
+      </Form> */}
+      <Form form={form} onSubmit={handleSubmit} />
     </div>
   );
 };

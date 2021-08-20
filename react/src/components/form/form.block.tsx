@@ -3,7 +3,7 @@ import React from 'react';
 import { FormRender as render } from './form.render';
 import { BlockProps } from './form.type';
 
-export const Block: React.FC<BlockProps> = ({ children, block, ...options }): JSX.Element | null => {
+export const FormBlock: React.FC<BlockProps> = ({ children, block, ...options }): JSX.Element | null => {
 
   const data = block || options;
   const { type = 'div' } = data;

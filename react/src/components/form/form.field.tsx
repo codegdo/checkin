@@ -1,43 +1,39 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { Input } from '../input';
+import { Label } from '../element';
 import { FormContext } from './form.component';
-import { Input } from './form.input';
-import { Label } from './form.label';
-import { FieldContextProps, FieldProps } from './form.type';
+import { FieldProps } from './form.type';
 
-export const FieldContext = React.createContext<FieldContextProps>(undefined);
-
-export const Field: React.FC<FieldProps> = ({ children, field, ...options }): JSX.Element => {
+export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Element => {
   const context = useContext(FormContext);
 
   if (!context) {
-    throw new Error();
+    throw new Error('Require FIELD Nested In FORMCONTEXT');
   }
 
   const { values } = context;
 
-  const data = field || options;
-  const { name = '', value: initialValue, defaultValue = '' } = data;
+  const data = field || props;
+  const { label, description, type, name = '', value: initialValue, defaultValue = '' } = data;
 
   console.log('FIELD', data)
 
-  const [value, setValue] = useState(initialValue || defaultValue);
-
   useEffect(() => {
+    values[name] = initialValue || defaultValue;
+  }, [])
+
+  const handleChange = (value?: string) => {
     values[name] = value;
-  }, [value])
-
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
   }
 
   return (
     <div>
-      <FieldContext.Provider value={{ data, value, handleChange }}>
-        {
-          children || <><Label /><Input /></>
-        }
-      </FieldContext.Provider>
+      <Label label={label} description={description} />
+      <Input
+        type={type}
+        value={initialValue || defaultValue}
+        onChange={handleChange}
+      />
     </div>
   )
 }

@@ -11,13 +11,14 @@ export type TemplateProps = {
 export const Template: React.FC<TemplateProps> = (props): JSX.Element => {
 
   const Content = (props: any) => <props.component {...props} />;
+  const components: any = { Content, ...Navs };
 
   const jsxTemplate = useMemo(() => {
     return <JsxParser
       allowUnknownElements={false}
       renderInWrapper={false}
       bindings={{ props }}
-      components={{ Content, ...Navs }}
+      components={{ ...components }}
       jsx={'<NavMain {...props}/><Content {...props} />'} />
   }, []);
 
