@@ -1,23 +1,12 @@
 import React from 'react';
 
-import { Render as render } from './form.render';
+import { FormRender as render } from './form.render';
+import { BlockProps } from './form.type';
 
-export type BlockData = {
-  id?: number;
-  type?: 'div' | 'section';
-  role?: 'block' | 'field';
-  data?: any;
-}
+export const Block: React.FC<BlockProps> = ({ children, block, ...options }): JSX.Element | null => {
 
-type BlockProps = {
-  block?: BlockData;
-} & BlockData
-
-export const Block: React.FC<BlockProps> = (props): JSX.Element | null => {
-
-  const { children, block, ..._props } = props;
-  const _block = block ? block : _props;
-  const { type = 'div', data } = _block;
+  const data = block || options;
+  const { type = 'div' } = data;
 
   console.log('BLOCKS', data);
 

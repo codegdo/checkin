@@ -1,6 +1,5 @@
 {
   "id": 1,
-  "label": "Login",
   "name": "login",
   "data": [
     {
@@ -8,7 +7,6 @@
       "type": "div",
       "role": "block",
       "data": [],
-
       "index": 0,
       "indexParent": null
     }
@@ -21,7 +19,8 @@
       "type": "text",
       "role": "field",
       "data": [],
-
+      "value": "",
+      "defaultValue": "",
       "index": 1,
       "indexParent": 0
     },
@@ -32,7 +31,8 @@
       "type": "password",
       "role": "field",
       "data": [],
-
+      "value": "",
+      "defaultValue": "",
       "index": 2,
       "indexParent": 0
     }
@@ -45,7 +45,6 @@
       "type": "button",
       "role": "element",
       "data": [],
-
       "index": 3,
       "indexParent": 0
     }

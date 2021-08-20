@@ -1,9 +1,6 @@
 import React from 'react';
+import { ElementProps } from './form.type';
 
-type ElementProps = {
-  type?: 'div'
-}
-
-export const Element: React.FC<ElementProps> = ({ type = 'div', children }): JSX.Element => {
+export const Element: React.FC<ElementProps> = ({ type = 'span', children }): JSX.Element => {
   return React.createElement(`${type}`, null, children)
 }

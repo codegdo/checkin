@@ -10,31 +10,39 @@ import { Form, Block, Field, Button, FormData } from '../../../components/form';
 const Login: React.FC = (): JSX.Element => {
   const { loggedIn } = useSelector((state: AppState) => state.session);
   const { updateSession } = useAction();
-  const [login, fetchLogin] = useFetch('/api/auth/login');
+  const [{ status, result }, fetchLogin] = useFetch('/api/auth/login');
   const [form, setForm] = useState<FormData>();
 
   // load form
   useEffect(() => {
     void (async () => {
-      const json = (await import('./login.json')).default;
+      const json: any = (await import('./login.json')).default;
       setForm(json);
     })();
   }, [])
 
   useEffect(() => {
-    if (login.status === 'success') {
-      const { user } = login?.result?.data;
+    if (status === 'success' && result) {
+      const { user } = result?.data;
       updateSession({ loggedIn: true, user, orgId: null });
     }
-  }, [login]);
+  }, [status]);
 
-  const handleSubmit = (values: Record<string, unknown>) => {
+  const handleSubmit = (values: any) => {
     console.log(values);
-    fetchLogin({ body: values });
+    void fetchLogin({ body: values });
   };
 
-  return loggedIn ? <Navigate to="/" /> : (
-    form ? <div>
+  if (loggedIn) {
+    return <Navigate to="/" />;
+  }
+
+  if (!form) {
+    return <div>loadding...</div>;
+  }
+
+  return (
+    <div>
       LOGIN
       <Form onSubmit={handleSubmit}>
         <Block type="section">
@@ -56,8 +64,7 @@ const Login: React.FC = (): JSX.Element => {
           />
         </Block>
       </Form>
-      <Form form={form} onSubmit={handleSubmit}></Form>
-    </div> : <div>loadding...</div>
+    </div>
   );
 };
 
