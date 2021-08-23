@@ -2,15 +2,14 @@ import React, { useCallback, useRef } from 'react';
 import { normalizeForm } from '../../helpers';
 
 import { FormRender as render } from './form.render';
-import { FormHeader } from './form.header';
-import { FormFooter } from './form.footer';
 import { FormContextProps, FormProps } from './form.type';
 
 export const FormContext = React.createContext<FormContextProps>(undefined);
 
-export const Form: React.FC<FormProps> = ({ form, onSubmit, children }): JSX.Element => {
+export const Form: React.FC<FormProps> = ({ form, onSubmit, children, ...props }): JSX.Element => {
 
-  const data = form && normalizeForm(form);
+
+  const data = form && normalizeForm(form) || props;
   const { current: values } = useRef({});
 
   const handleSubmit = useCallback((name: string) => {
@@ -23,7 +22,7 @@ export const Form: React.FC<FormProps> = ({ form, onSubmit, children }): JSX.Ele
     <form>
       <FormContext.Provider value={{ data, values, handleSubmit }}>
         {
-          children || <><FormHeader /> {render({ data })} <FormFooter /></>
+          children || render({ data })
         }
       </FormContext.Provider>
     </form>

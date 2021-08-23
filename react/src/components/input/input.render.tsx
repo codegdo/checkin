@@ -1,12 +1,12 @@
 import React from 'react';
-import { TextBox } from "./input.text";
+import { InputText } from "./input.text";
 
 export const InputRender: React.FC<any> = ({ type }): JSX.Element | null => {
   switch (type) {
-    case 'checkbox': return <TextBox />;
-    case 'radio': return <TextBox />;
-    case 'select': return <TextBox />;
-    case 'textarea': return <TextBox />;
-    default: return <TextBox />
+    case 'checkbox': return <InputText />;
+    case 'radio': return <InputText />;
+    case 'select': return <InputText />;
+    case 'textarea': return <InputText />;
+    default: return <InputText />
   }
 }

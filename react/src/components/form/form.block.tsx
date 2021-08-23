@@ -8,7 +8,7 @@ export const FormBlock: React.FC<BlockProps> = ({ children, block, ...options })
   const data = block || options;
   const { type = 'div' } = data;
 
-  console.log('BLOCKS', data);
+  console.log('BLOCK', data);
 
   return React.createElement(`${type}`, null, (block ? render({ data }) : children));
 }

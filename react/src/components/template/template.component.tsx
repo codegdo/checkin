@@ -9,7 +9,7 @@ export type TemplateProps = {
 }
 
 export const Template: React.FC<TemplateProps> = (props): JSX.Element => {
-
+  const { name } = props;
   const Content = (props: any) => <props.component {...props} />;
   const components: any = { Content, ...Navs };
 
@@ -20,7 +20,7 @@ export const Template: React.FC<TemplateProps> = (props): JSX.Element => {
       bindings={{ props }}
       components={{ ...components }}
       jsx={'<NavMain {...props}/><Content {...props} />'} />
-  }, []);
+  }, [name]);
 
   return <Suspense fallback={''}>{jsxTemplate}</Suspense>;
 };

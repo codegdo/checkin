@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { InputContext } from './input.component';
 
-export const TextBox: React.FC = (): JSX.Element => {
+export const InputText: React.FC = (): JSX.Element => {
   const context = useContext(InputContext);
 
   if (!context) {
-    throw new Error('Require TEXTBOX Nested In INPUTCONTEXT');
+    throw new Error('Require INPUTTEXT Nested In INPUTCONTEXT');
   }
 
   const { data, value, handleChange } = context;

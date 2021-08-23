@@ -5,7 +5,7 @@ import { Navigate } from 'react-router-dom';
 import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 
-import { Form, FormData } from '../../../components/form';
+import { Form, FormBlock, FormField, FormElement, FormData } from '../../../components/form';
 
 
 const Login: React.FC = (): JSX.Element => {
@@ -45,32 +45,41 @@ const Login: React.FC = (): JSX.Element => {
 
   return (
     <div>
-      {/* <Form onSubmit={handleSubmit}>
-        <Block type="header">
-          LOGIN
-        </Block>
-        <Block type="main">
-          <Field field={{
+      <Form onSubmit={handleSubmit}>
+        <FormBlock type="header">
+          <FormElement
+            name="Login"
+            type="title"
+          />
+        </FormBlock>
+        <FormBlock type="main">
+          <FormField field={{
             label: "Username",
             name: "username",
-            type: "text"
+            type: "text",
+            isRequired: true
           }}
           />
-          <Field
+          <FormField
             label="Password"
             name="password"
             type="password"
           />
-        </Block>
-        <Block type="footer">
-          <Element
+        </FormBlock>
+        <FormBlock type="footer">
+          <FormElement
             label="Login"
             name="submit"
             type="button"
           />
-        </Block>
-      </Form> */}
-      <Form form={form} onSubmit={handleSubmit} />
+          <FormElement
+            label="Signup"
+            type="link"
+            value="/auth/signup"
+          />
+        </FormBlock>
+      </Form>
+
     </div>
   );
 };

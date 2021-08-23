@@ -8,13 +8,13 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
   const context = useContext(FormContext);
 
   if (!context) {
-    throw new Error('Require FIELD Nested In FORMCONTEXT');
+    throw new Error('Require FORMFIELD Nested In FORMCONTEXT');
   }
 
   const { values } = context;
 
   const data = field || props;
-  const { label, description, type, name = '', value: initialValue, defaultValue = '' } = data;
+  const { label, description, name = '', value: initialValue, defaultValue = '' } = data;
 
   console.log('FIELD', data)
 
@@ -30,8 +30,7 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
     <div>
       <Label label={label} description={description} />
       <Input
-        type={type}
-        value={initialValue || defaultValue}
+        input={data}
         onChange={handleChange}
       />
     </div>
