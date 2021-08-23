@@ -1,8 +1,11 @@
 import React, { useContext, useEffect } from 'react';
+import Joi from 'joi';
+
 import { Input } from '../input';
 import { Label } from '../element';
 import { FormContext } from './form.component';
 import { FieldProps } from './form.type';
+import { joiSchema } from '../../helpers';
 
 export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Element => {
   const context = useContext(FormContext);
@@ -11,7 +14,7 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
     throw new Error('Require FORMFIELD Nested In FORMCONTEXT');
   }
 
-  const { values } = context;
+  const { values, validateSchema } = context;
 
   const data = field || props;
   const { label, description, name = '', value: initialValue, defaultValue = '' } = data;
@@ -20,9 +23,13 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
 
   useEffect(() => {
     values[name] = initialValue || defaultValue;
+    validateSchema[name] = joiSchema(data);
   }, [])
 
   const handleChange = (value?: string) => {
+    const { error } = joiSchema(data).validate(value);
+    console.log(error);
+
     values[name] = value;
   }
 

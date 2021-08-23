@@ -4,7 +4,7 @@ import { mapToParent } from '../utils';
 export const normalizeForm = (form: FormData): FormData => {
   const { data = [], fields = [] } = JSON.parse(JSON.stringify(form));
 
-  let list: any[] = [];
+  const list: any = [];
 
   [...data, ...fields].forEach((item) => {
     let { data } = item;

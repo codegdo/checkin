@@ -1,12 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
+import Joi from 'joi';
 
 import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 
 import { Form, FormBlock, FormField, FormElement, FormData } from '../../../components/form';
 
+//const u = Joi.object().pattern(/^/, [Joi.string(), Joi.required()])
+// const f = {
+//   isRequired: true
+// }
+
+// let u = Joi.string();
+// u = u.required();
+
+// let p = Joi.string();
+// p = p.required();
+
+// const loginSchema = Joi.object({
+//   username: u,
+//   password: p
+// })
+
+// const login = { username: '', password: '' }
 
 const Login: React.FC = (): JSX.Element => {
   const { loggedIn } = useSelector((state: AppState) => state.session);
@@ -28,6 +46,14 @@ const Login: React.FC = (): JSX.Element => {
       updateSession({ loggedIn: true, user, orgId: null });
     }
   }, [status]);
+
+  // useEffect(() => {
+
+  //   const { error, value } = loginSchema.validate(login, { abortEarly: false });
+  //   console.log('JOI ERROR', error);
+  //   console.log('JOI VALUE', value);
+
+  // }, [])
 
   const handleSubmit = (values: any) => {
     console.log('SUBMIT VALUES', values);
@@ -64,6 +90,7 @@ const Login: React.FC = (): JSX.Element => {
             label="Password"
             name="password"
             type="password"
+            isRequired={true}
           />
         </FormBlock>
         <FormBlock type="footer">

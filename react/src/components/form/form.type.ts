@@ -1,4 +1,4 @@
-type InputElementType = 'text' | 'number' | 'currency' | 'date' | 'password';
+type InputElementType = 'text' | 'number' | 'currency' | 'date' | 'password' | 'email';
 type BlockElementType = 'div' | 'section' | 'header' | 'main' | 'footer' | 'nav';
 type InlineElementType = 'button' | 'link' | 'label' | 'title';
 type RoleElementType = 'block' | 'field' | 'element';
@@ -31,10 +31,10 @@ export type FieldProps = {
 
 export type FieldContextProps =
   | {
-      data?: FieldData;
-      value: string;
-      handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    }
+    data?: FieldData;
+    value: string;
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  }
   | undefined;
 
 // BLOCK
@@ -101,10 +101,11 @@ export type FormProps = {
 
 export type FormContextProps =
   | {
-      data?: FormData;
-      values: any;
-      handleSubmit: (name: string) => void;
-    }
+    data?: FormData;
+    values: any;
+    validateSchema: any;
+    handleSubmit: (name: string) => void;
+  }
   | undefined;
 
 export type NormalizeData = Partial<FormData & BlockData & FieldData>;
