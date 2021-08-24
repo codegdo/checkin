@@ -12,7 +12,7 @@ export const FormElement: React.FC<ElementProps> = ({ element, ...props }): JSX.
     throw new Error('Require ELEMENT Nested In FORMCONTEXT');
   }
 
-  const { data: form, handleSubmit } = context;
+  const { data: form, status, handleSubmit } = context;
 
   const data = element || props;
   const { label, name, type, value } = data;
@@ -20,7 +20,7 @@ export const FormElement: React.FC<ElementProps> = ({ element, ...props }): JSX.
   console.log('ELEMENT', data);
 
   switch (type) {
-    case 'button': return <Button type={type} name={name} label={label} onClick={handleSubmit} />;
+    case 'button': return <Button type={type} name={name} label={label} status={status} onClick={handleSubmit} />;
     case 'link': return <Link to={value || '../not-found'}>{label}</Link>;
     case 'label': return <Label label={label} />;
     case 'title': return name === form?.name ? <Title name={form?.label} /> : <Title name={name} />;

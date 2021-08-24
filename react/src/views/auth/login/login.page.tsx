@@ -71,7 +71,7 @@ const Login: React.FC = (): JSX.Element => {
 
   return (
     <div>
-      <Form onSubmit={handleSubmit}>
+      <Form status={status} onSubmit={handleSubmit}>
         <FormBlock type="header">
           <FormElement
             name="Login"

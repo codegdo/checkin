@@ -96,14 +96,18 @@ export type FormData = Partial<FormType>;
 
 export type FormProps = {
   form?: FormData;
+  status?: string;
   onSubmit?: (values: any) => void;
 };
 
 export type FormContextProps =
   | {
     data?: FormData;
-    values: any;
-    validateSchema: any;
+    values?: any;
+    errors?: any;
+    submit?: string;
+    status?: string;
+    formSchema?: any;
     handleSubmit: (name: string) => void;
   }
   | undefined;

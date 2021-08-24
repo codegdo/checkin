@@ -1,3 +1,3 @@
 export * from './form.helper';
-export * from './joi.helper';
+export * from './validation.helper';
 

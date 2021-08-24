@@ -1,10 +1,11 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import Joi from 'joi';
 
 import { Input } from '../input';
 import { Label } from '../element';
 import { FormContext } from './form.component';
 import { FieldProps } from './form.type';
-import { joiSchema } from '../../helpers';
+import { formValidationSchema } from '../../helpers';
 
 export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Element => {
   const context = useContext(FormContext);
@@ -13,28 +14,44 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
     throw new Error('Require FORMFIELD Nested In FORMCONTEXT');
   }
 
-  const { values, validateSchema } = context;
+  const { values, errors, submit, formSchema } = context;
 
   const data = field || props;
   const { label, description, name = '', value: initialValue, defaultValue = '' } = data;
-  const fieldValidateSchema = joiSchema(data);
+  const fieldSchema = formValidationSchema(data);
 
-  console.log('FIELD', data)
+  console.log('FIELD', data);
+
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     values[name] = initialValue || defaultValue;
-    validateSchema[name] = fieldValidateSchema;
-  }, [])
+    formSchema[name] = fieldSchema;
+  }, []);
+
+  useEffect(() => {
+    setIsError(errors[name] ? true : false);
+  }, [submit]);
 
   const handleChange = (value?: string) => {
-    const { error } = fieldValidateSchema.validate(value);
-    console.log(error);
+
+    const { error } = Joi.object({ [name]: fieldSchema }).validate({ [name]: value });
+
+    if (error) {
+      errors[name] = error.details[0].message;
+      setIsError(true);
+    } else {
+      delete errors[name];
+      setIsError(false);
+    }
+
+    console.log('ERRORS', errors);
 
     values[name] = value;
   }
 
   return (
-    <div>
+    <div className={isError ? 'field -error' : 'field'}>
       <Label label={label} description={description} />
       <Input
         input={data}

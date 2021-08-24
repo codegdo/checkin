@@ -1,6 +1,7 @@
 import Joi from 'joi';
+import { FieldData } from '../components/form';
 
-export const joiSchema = (data): any => {
+export const formValidationSchema = (data: FieldData): any => {
   let schema: any = Joi;
 
   if (data.isRequired) {
@@ -8,7 +9,7 @@ export const joiSchema = (data): any => {
   }
 
   if (data.type === 'email') {
-    schema = Joi.string().email({ tlds: { allow: false } });
+    schema = Joi.string().email({ tlds: { allow: false } }).allow('');
   }
 
   return schema.optional();
