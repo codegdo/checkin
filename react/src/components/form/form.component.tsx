@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from 'react';
-import Joi from 'joi';
+import joi from 'joi';
 
 import { normalizeForm } from '../../helpers';
 
@@ -17,7 +17,7 @@ export const Form: React.FC<FormProps> = ({ form, onSubmit, children, ...props }
 
   const handleSubmit = useCallback((name: string) => {
     if (name === 'submit') {
-      const { error, value } = Joi.object(validateSchema).validate(values, { abortEarly: false });
+      const { error, value } = joi.object(validateSchema).validate(values, { abortEarly: false });
 
       console.log(error);
       console.log(value);

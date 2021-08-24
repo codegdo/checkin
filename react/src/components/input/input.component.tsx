@@ -12,12 +12,9 @@ export const Input: React.FC<InputProps> = ({ input, onChange, ...props }): JSX.
 
   const [value, setValue] = useState(initialValue || defaultValue);
 
-  useEffect(() => {
-    onChange && onChange(value);
-  }, [value]);
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
+    onChange && onChange(event.target.value);
   };
 
   return (

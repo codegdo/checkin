@@ -1,5 +1,4 @@
 import React, { useContext, useEffect } from 'react';
-import Joi from 'joi';
 
 import { Input } from '../input';
 import { Label } from '../element';
@@ -18,16 +17,17 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
 
   const data = field || props;
   const { label, description, name = '', value: initialValue, defaultValue = '' } = data;
+  const fieldValidateSchema = joiSchema(data);
 
   console.log('FIELD', data)
 
   useEffect(() => {
     values[name] = initialValue || defaultValue;
-    validateSchema[name] = joiSchema(data);
+    validateSchema[name] = fieldValidateSchema;
   }, [])
 
   const handleChange = (value?: string) => {
-    const { error } = joiSchema(data).validate(value);
+    const { error } = fieldValidateSchema.validate(value);
     console.log(error);
 
     values[name] = value;
