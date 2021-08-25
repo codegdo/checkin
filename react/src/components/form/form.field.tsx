@@ -39,15 +39,13 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
 
     if (error) {
       errors[name] = error.details[0].message;
-      setIsError(true);
     } else {
       delete errors[name];
-      setIsError(false);
     }
 
-    console.log('ERRORS', errors);
-
     values[name] = value;
+
+    setIsError(error ? true : false);
   }
 
   return (

@@ -75,6 +75,7 @@
       "data": null,
       "value": "",
       "defaultValue": "",
+      "isRequired": true,
       "position": 0,
       "positionParent": 1
     },
@@ -88,6 +89,7 @@
       "data": null,
       "value": "",
       "defaultValue": "",
+      "isRequired": true,
       "position": 0,
       "positionParent": 1
     }

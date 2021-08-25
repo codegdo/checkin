@@ -5,9 +5,9 @@ export type HttpResponse<T> = Response & {
 };
 
 export type RequestOption = {
+  baseUrl?: string;
   url?: string;
   method?: string;
-  baseUrl?: string;
   headers?: any;
   params?: any;
   body?: any;

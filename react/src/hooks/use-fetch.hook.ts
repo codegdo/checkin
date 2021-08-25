@@ -2,28 +2,28 @@ import { useCallback, useReducer } from 'react';
 import { http, RequestOption } from '../services';
 
 type Action = {
-  type: 'IDLE' | 'REQUEST' | 'SUCCESS' | 'FAILURE';
+  type: 'IDLE' | 'LOADING' | 'SUCCESS' | 'FAILURE';
   payload?: any
 };
 
 type State = {
-  status: string;
+  loading: string;
   result?: any;
 };
 
 const initialState = {
-  status: 'idle',
+  loading: 'idle',
   result: undefined,
 };
 
 const reducer = (state: State, { type, payload }: Action) => {
   switch (type) {
-    case 'REQUEST':
-      return { ...state, status: 'loading' };
+    case 'LOADING':
+      return { ...state, loading: 'pending' };
     case 'SUCCESS':
-      return { ...state, status: 'success', result: payload };
+      return { ...state, loading: 'success', result: payload };
     case 'FAILURE':
-      return { ...state, status: 'error', result: payload };
+      return { ...state, loading: 'error', result: payload };
     default:
       return state;
   }
@@ -42,7 +42,7 @@ export const useFetch = (
       }
 
       try {
-        dispatch({ type: 'REQUEST' });
+        dispatch({ type: 'LOADING' });
         //
         const result = await http.request(url, option);
         //

@@ -1,18 +1,18 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Joi from 'joi';
 
-import { normalizeForm } from '../../helpers';
-
 import { FormRender as render } from './form.render';
 import { FormContextProps, FormProps } from './form.type';
+import { setDetailsToErrors } from '../../utils';
+import { normalizeForm } from '../../helpers';
 
 export const FormContext = React.createContext<FormContextProps>(undefined);
 
-export const Form: React.FC<FormProps> = ({ form, status, onSubmit, children, ...props }): JSX.Element => {
+export const Form: React.FC<FormProps> = ({ form, loading, onSubmit, children, ...props }): JSX.Element => {
 
   const data = form && normalizeForm(form) || props;
   const { current: values } = useRef({});
-  const { current: errors } = useRef({});
+  const { current: errors } = useRef<{ [k: string]: string }>({});
   const { current: formSchema } = useRef({});
 
   const [submit, setSubmit] = useState<string | undefined>();
@@ -23,21 +23,14 @@ export const Form: React.FC<FormProps> = ({ form, status, onSubmit, children, ..
       const { error } = Joi.object(formSchema).validate(values, { abortEarly: false });
 
       if (error) {
-        error.details.forEach(e => {
-          const key = e.context?.key;
-          const message = e.message;
-
-          if (key) {
-            errors[key] = message;
-          }
-        });
+        setDetailsToErrors(error.details, errors)
       }
 
       if (Object.keys(errors).length === 0) {
         onSubmit && onSubmit(values);
       }
     }
-    console.log(status);
+
     return () => setSubmit(undefined);
   }, [submit]);
 
@@ -47,7 +40,7 @@ export const Form: React.FC<FormProps> = ({ form, status, onSubmit, children, ..
 
   return (
     <form>
-      <FormContext.Provider value={{ data, values, errors, status, submit, formSchema, handleSubmit }}>
+      <FormContext.Provider value={{ data, values, errors, loading, submit, formSchema, handleSubmit }}>
         {
           children || render({ data })
         }

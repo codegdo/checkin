@@ -1,4 +1,4 @@
-type InputElementType = 'text' | 'number' | 'currency' | 'date' | 'password' | 'email';
+export type InputElementType = 'text' | 'number' | 'currency' | 'date' | 'password' | 'email';
 type BlockElementType = 'div' | 'section' | 'header' | 'main' | 'footer' | 'nav';
 type InlineElementType = 'button' | 'link' | 'label' | 'title';
 type RoleElementType = 'block' | 'field' | 'element';
@@ -96,7 +96,7 @@ export type FormData = Partial<FormType>;
 
 export type FormProps = {
   form?: FormData;
-  status?: string;
+  loading?: string;
   onSubmit?: (values: any) => void;
 };
 
@@ -106,7 +106,7 @@ export type FormContextProps =
     values?: any;
     errors?: any;
     submit?: string;
-    status?: string;
+    loading?: string;
     formSchema?: any;
     handleSubmit: (name: string) => void;
   }

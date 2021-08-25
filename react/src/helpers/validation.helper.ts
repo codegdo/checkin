@@ -1,16 +1,16 @@
 import Joi from 'joi';
 import { FieldData } from '../components/form';
 
-export const formValidationSchema = (data: FieldData): any => {
-  let schema: any = Joi;
+export const formValidationSchema = ({ isRequired, type }: FieldData): any => {
+  let schema: any = (type == 'number') ? Joi.number() : Joi.string();
 
-  if (data.isRequired) {
-    schema = schema.string().required();
+  switch (type) {
+    case 'email':
+      schema = schema.email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } });
+      break;
   }
 
-  if (data.type === 'email') {
-    schema = Joi.string().email({ tlds: { allow: false } }).allow('');
-  }
+  schema = isRequired ? schema.required() : schema.allow('');
 
-  return schema.optional();
+  return schema;
 }

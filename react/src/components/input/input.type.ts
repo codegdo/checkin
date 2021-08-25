@@ -1,9 +1,11 @@
+import { InputElementType } from "../form/form.type";
+
 // INPUT
 export type InputType = {
   id: number;
   name: string;
 
-  type: 'text' | 'number' | 'currency' | 'date' | 'password';
+  type: InputElementType;
 
   data: any;
   value: string;

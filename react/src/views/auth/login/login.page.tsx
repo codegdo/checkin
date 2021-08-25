@@ -1,35 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import Joi from 'joi';
 
 import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 
 import { Form, FormBlock, FormField, FormElement, FormData } from '../../../components/form';
 
-//const u = Joi.object().pattern(/^/, [Joi.string(), Joi.required()])
-// const f = {
-//   isRequired: true
-// }
-
-// let u = Joi.string();
-// u = u.required();
-
-// let p = Joi.string();
-// p = p.required();
-
-// const loginSchema = Joi.object({
-//   username: u,
-//   password: p
-// })
-
-// const login = { username: '', password: '' }
-
 const Login: React.FC = (): JSX.Element => {
   const { loggedIn } = useSelector((state: AppState) => state.session);
   const { updateSession } = useAction();
-  const [{ status, result }, fetchLogin] = useFetch('/api/auth/login');
+  const [{ loading, result }, fetchLogin] = useFetch('/api/auth/login');
   const [form, setForm] = useState<FormData>();
 
   // load form
@@ -41,25 +22,16 @@ const Login: React.FC = (): JSX.Element => {
   }, [])
 
   useEffect(() => {
-    if (status === 'success' && result.ok) {
+    if (loading === 'success' && result.ok) {
       const { user } = result?.data;
       updateSession({ loggedIn: true, user, orgId: null });
     }
-  }, [status]);
-
-  // useEffect(() => {
-
-  //   const { error, value } = loginSchema.validate(login, { abortEarly: false });
-  //   console.log('JOI ERROR', error);
-  //   console.log('JOI VALUE', value);
-
-  // }, [])
+  }, [loading]);
 
   const handleSubmit = (values: any) => {
     console.log('SUBMIT VALUES', values);
     void fetchLogin({ body: values });
   };
-
 
   if (loggedIn) {
     return <Navigate to="/" />;
@@ -71,7 +43,7 @@ const Login: React.FC = (): JSX.Element => {
 
   return (
     <div>
-      <Form status={status} onSubmit={handleSubmit}>
+      {/* <Form loading={loading} onSubmit={handleSubmit}>
         <FormBlock type="header">
           <FormElement
             name="Login"
@@ -87,11 +59,18 @@ const Login: React.FC = (): JSX.Element => {
           }}
           />
           <FormField
+            label="Email"
+            name="email"
+            type="email"
+            isRequired={true}
+          />
+          <FormField
             label="Password"
             name="password"
             type="password"
             isRequired={true}
           />
+
         </FormBlock>
         <FormBlock type="footer">
           <FormElement
@@ -105,8 +84,8 @@ const Login: React.FC = (): JSX.Element => {
             value="/auth/signup"
           />
         </FormBlock>
-      </Form>
-
+      </Form> */}
+      <Form form={form} loading={loading} onSubmit={handleSubmit} />
     </div>
   );
 };
