@@ -1,6 +1,7 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
+import { Role } from "../role/role.entity";
 
 const scrypt = promisify(_scrypt);
 
@@ -24,6 +25,13 @@ export class User {
 
   @Column({ name: 'is_active', default: false })
   isActive!: boolean;
+
+  @OneToOne(() => Role, (role) => role.id)
+  @JoinColumn({ name: 'role_id' })
+  role!: Role;
+
+  @Column({ name: 'business_id', nullable: true })
+  businessId!: number;
 
   @CreateDateColumn({
     name: 'created_at',

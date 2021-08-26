@@ -5,7 +5,7 @@ import { Navigate } from 'react-router-dom';
 import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 
-import { Form, FormBlock, FormField, FormElement, FormData } from '../../../components/form';
+import { Form, FormData } from '../../../components/form';
 
 const Login: React.FC = (): JSX.Element => {
   const { loggedIn } = useSelector((state: AppState) => state.session);
@@ -38,56 +38,58 @@ const Login: React.FC = (): JSX.Element => {
   }
 
   if (!form) {
-    return <div>loadding...</div>;
+    return <div>loading...</div>;
   }
 
   return (
     <div>
-      {/* <Form loading={loading} onSubmit={handleSubmit}>
-        <FormBlock type="header">
-          <FormElement
-            name="Login"
-            type="title"
-          />
-        </FormBlock>
-        <FormBlock type="main">
-          <FormField field={{
-            label: "Username",
-            name: "username",
-            type: "text",
-            isRequired: true
-          }}
-          />
-          <FormField
-            label="Email"
-            name="email"
-            type="email"
-            isRequired={true}
-          />
-          <FormField
-            label="Password"
-            name="password"
-            type="password"
-            isRequired={true}
-          />
-
-        </FormBlock>
-        <FormBlock type="footer">
-          <FormElement
-            label="Login"
-            name="submit"
-            type="button"
-          />
-          <FormElement
-            label="Signup"
-            type="link"
-            value="/auth/signup"
-          />
-        </FormBlock>
-      </Form> */}
       <Form form={form} loading={loading} onSubmit={handleSubmit} />
     </div>
   );
 };
 
 export default Login;
+
+/*
+<Form loading={loading} onSubmit={handleSubmit}>
+  <FormBlock type="header">
+    <FormElement
+      name="Login"
+      type="title"
+    />
+  </FormBlock>
+  <FormBlock type="main">
+    <FormField field={{
+      label: "Username",
+      name: "username",
+      type: "text",
+      isRequired: true
+    }}
+    />
+    <FormField
+      label="Email"
+      name="email"
+      type="email"
+      isRequired={true}
+    />
+    <FormField
+      label="Password"
+      name="password"
+      type="password"
+      isRequired={true}
+    />
+  </FormBlock>
+  <FormBlock type="footer">
+    <FormElement
+      label="Login"
+      name="submit"
+      type="button"
+    />
+    <FormElement
+      label="Signup"
+      type="link"
+      value="/auth/signup"
+    />
+  </FormBlock>
+</Form>
+*/

@@ -3,13 +3,12 @@ import JsxParser from 'react-jsx-parser';
 
 import * as Navs from '../nav';
 
-export type TemplateProps = {
+type TemplateProps = {
   page: string;
 }
 
-export const Template = (Content: React.FC<TemplateProps>) => (props: JSX.IntrinsicAttributes & { children?: React.ReactNode; } & TemplateProps): JSX.Element => {
+export const Template = (Content: React.FC<TemplateProps>) => (props: TemplateProps): JSX.Element => {
   const { page } = props;
-  //const Content = (props: any) => <props.component {...props} />;
   const components: any = { Content, ...Navs };
 
   const jsxTemplate = useMemo(() => {

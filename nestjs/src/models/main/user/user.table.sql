@@ -5,12 +5,12 @@ CREATE TABLE IF NOT EXISTS sec.user (
   password VARCHAR(75),
   email_address VARCHAR(45),
 
-  json TEXT,
+  data TEXT,
   
   location_id INT,
   contact_id INT,
   role_id INT,
-  bus_id INT,
+  business_id INT,
 
   is_new_password BOOLEAN DEFAULT FALSE,
   is_active BOOLEAN DEFAULT FALSE,

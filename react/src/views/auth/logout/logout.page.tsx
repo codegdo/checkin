@@ -13,7 +13,7 @@ const Logout: React.FC = (): JSX.Element => {
     loggedIn && deleteSession();
   }, []);
 
-  return loggedIn ? <div>logout</div> : <Navigate to="/" />;
+  return loggedIn ? <div>logout...</div> : <Navigate to="/" />;
 };
 
 export default Logout;
