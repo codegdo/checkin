@@ -20,7 +20,7 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
   const { label, description, name = '', value: initialValue, defaultValue = '' } = data;
   const fieldSchema = formValidationSchema(data);
 
-  console.log('FIELD', data);
+  //console.log('FIELD', data);
 
   const [isError, setIsError] = useState(false);
 

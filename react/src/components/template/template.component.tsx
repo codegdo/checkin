@@ -4,13 +4,12 @@ import JsxParser from 'react-jsx-parser';
 import * as Navs from '../nav';
 
 export type TemplateProps = {
-  component: React.ExoticComponent<any>;
-  name: string;
+  page: string;
 }
 
-export const Template: React.FC<TemplateProps> = (props): JSX.Element => {
-  const { name } = props;
-  const Content = (props: any) => <props.component {...props} />;
+export const Template = (Content: React.FC<TemplateProps>) => (props: JSX.IntrinsicAttributes & { children?: React.ReactNode; } & TemplateProps): JSX.Element => {
+  const { page } = props;
+  //const Content = (props: any) => <props.component {...props} />;
   const components: any = { Content, ...Navs };
 
   const jsxTemplate = useMemo(() => {
@@ -20,7 +19,7 @@ export const Template: React.FC<TemplateProps> = (props): JSX.Element => {
       bindings={{ props }}
       components={{ ...components }}
       jsx={'<NavMain {...props}/><Content {...props} />'} />
-  }, [name]);
+  }, [page]);
 
   return <Suspense fallback={''}>{jsxTemplate}</Suspense>;
 };

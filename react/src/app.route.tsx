@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { useRoutes } from 'react-router-dom';
 
 import { RouteGuard } from './components/route/route.guard';
 import { Template } from './components/template/template.component';
-import { AuthRoute, AdminRoute, HomeRoute, notfound } from './views';
+import { AuthRoute, AdminRoute, HomeRoute } from './views';
+const NotFound = Template(lazy(() => import('./views/notfound.component')));
 
 export const AppRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
@@ -21,7 +22,7 @@ export const AppRoute: React.FC = (): JSX.Element => {
     },
     {
       path: '*',
-      element: <Template name="not-found" component={notfound} />
+      element: <NotFound page="not-found" />
     },
   ]);
 

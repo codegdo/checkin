@@ -2,23 +2,23 @@ import React, { lazy } from 'react';
 import { useRoutes } from 'react-router-dom';
 import { Template } from '../../components/template/template.component';
 
-const admin = lazy(() => import('./admin.index'));
-const user = lazy(() => import('./user/user.page'));
-const notfound = lazy(() => import('../notfound.component'));
+const Admin = Template(lazy(() => import('./admin.index')));
+const User = Template(lazy(() => import('./user/user.page')));
+const NotFound = Template(lazy(() => import('../notfound.component')));
 
 export const AdminRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
     {
       path: '/',
-      element: <Template name="admin" component={admin} />
+      element: <Admin page="admin" />
     },
     {
       path: 'users',
-      element: <Template name="users" component={user} />
+      element: <User page="users" />
     },
     {
       path: '*',
-      element: <Template name="not-found" component={notfound} />
+      element: <NotFound page="not-found" />
     },
   ]);
 

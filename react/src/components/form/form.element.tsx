@@ -17,7 +17,7 @@ export const FormElement: React.FC<ElementProps> = ({ element, ...props }): JSX.
   const data = element || props;
   const { label, name, type, value } = data;
 
-  console.log('ELEMENT', data);
+  //console.log('ELEMENT', data);
 
   switch (type) {
     case 'button':
