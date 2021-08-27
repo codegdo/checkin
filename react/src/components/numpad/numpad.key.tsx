@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { NumPadContext } from './numpad.component';
+import { NumPadKeyPros } from './numpad.type';
 
-export const NumPadKey: React.FC = (): JSX.Element => {
+export const NumPadKey: React.FC<NumPadKeyPros> = ({ className = 'numpad-key' }): JSX.Element => {
   const context = useContext(NumPadContext);
 
   if (!context) {
@@ -10,7 +11,7 @@ export const NumPadKey: React.FC = (): JSX.Element => {
 
   const { handleClick } = context;
 
-  return <div>
+  return <div className={className}>
     <div>
       <button type="button" name="key" value="1" onClick={e => handleClick(e)}>1</button>
       <button type="button" name="key" value="2" onClick={e => handleClick(e)}>2</button>

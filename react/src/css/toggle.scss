@@ -1,0 +1,47 @@
+.toggle {
+  position: relative;
+}
+
+.toggle-menu {
+  position: absolute;
+  left: 0;
+  z-index: 100;
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  background: #fff;
+  border-radius: 8px;
+  min-width: 240px;
+
+  box-shadow: rgb(0 0 0 / 8%) 0px 1px 12px;
+  transition: 150ms opacity ease;
+
+  display: none;
+
+  &.-right {
+    left: auto;
+    right: 0;
+  }
+
+  &.-full {
+    position: fixed;
+    top: 70px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  &[aria-expanded='true'] {
+    display: block;
+  }
+
+  & li:first-child {
+    margin-top: 0.5rem;
+  }
+
+  & li:last-child {
+    margin-bottom: 0.5rem;
+  }
+}

@@ -17,7 +17,7 @@ export const Template = (Content: React.FC<TemplateProps>) => (props: TemplatePr
       renderInWrapper={false}
       bindings={{ props }}
       components={{ ...components }}
-      jsx={'<NavMain {...props}/><Content {...props} />'} />
+      jsx={'<div class="admin"><NavMain {...props}/><Content {...props} /></div>'} />
   }, [page]);
 
   return <Suspense fallback={''}>{jsxTemplate}</Suspense>;

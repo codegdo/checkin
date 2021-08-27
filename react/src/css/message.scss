@@ -1,0 +1,15 @@
+.message {
+  padding: 1rem;
+  text-align: center;
+
+  @include transition();
+
+  &.-error {
+    background-color: $red;
+    color: $white;
+  }
+  &.-success {
+    background-color: $green;
+    color: $white;
+  }
+}

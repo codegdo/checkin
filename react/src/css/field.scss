@@ -1,0 +1,75 @@
+// FIELD COMPONENT
+
+.field {
+  margin-bottom: 1rem;
+}
+
+// ITEMS
+.label {
+  margin-bottom: 0.3rem;
+
+  label:after {
+    content: ' ';
+  }
+}
+
+//.input {}
+
+.description,
+.text {
+  color: $gray;
+}
+
+// INPUT ELEMENTS
+.input-password {
+  //
+  &.-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    // childrens
+    input {
+      width: 48%;
+    }
+  }
+}
+
+.input-description {
+  margin-top: 0.5rem;
+
+  //
+  &.-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.input-hint {
+  display: block;
+}
+
+.input-message {
+  display: none;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+// MODIFIER
+.field {
+  &.-error {
+    input {
+      border-color: $red-light;
+    }
+
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus {
+      border-color: $red-light;
+    }
+  }
+}
+
+// MEDIA
+@media (min-width: 400px) {
+}

@@ -1,0 +1,76 @@
+*,
+:after,
+:before {
+  box-sizing: border-box;
+}
+html {
+  height: 100%;
+}
+body {
+  color: $base-font-color;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  background: $white;
+  padding: 0;
+  margin: 0;
+}
+a {
+  text-decoration: none;
+  color: $purple;
+  cursor: pointer;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  color: inherit;
+  font-family: inherit;
+  font-size: 100%;
+}
+
+[type='button'],
+[type='reset'],
+[type='submit'],
+button {
+  text-transform: none;
+  overflow: visible;
+  -webkit-appearance: button;
+}
+
+select {
+  text-transform: none;
+}
+
+input {
+  overflow: visible;
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+h2 {
+  font-size: 1.5em;
+  margin: 0.75em 0;
+}
+h3 {
+  font-size: 1.17em;
+  margin: 0.83em 0;
+}
+h5 {
+  font-size: 0.83em;
+  margin: 1.5em 0;
+}
+h6 {
+  font-size: 0.75em;
+  margin: 1.67em 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: bolder;
+}
