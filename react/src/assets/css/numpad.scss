@@ -5,11 +5,13 @@
 
 .numpad-input i {
   display: inline-block;
-  margin: 1rem;
+  margin: 2rem 1rem;
   width: 15px;
   height: 15px;
-  border: 1px solid #ddd;
+  border: 1px solid $silver;
   border-radius: 100px;
+
+  @include transition();
 
   &.checked {
     background-color: $gray;
@@ -27,13 +29,23 @@
 
 .numpad-key button {
   font-size: 18px;
-  border: none;
+  background: $shade;
   width: 80px;
   height: 80px;
+  border: none;
   border-radius: 800px;
   margin: 1rem;
 
   &[name='key'] {
     font-size: 24px;
+  }
+
+  @include transition();
+
+  &:hover {
+    background: darken($shade, 10);
+  }
+  &:active {
+    background: $shade;
   }
 }

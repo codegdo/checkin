@@ -6,7 +6,7 @@ import { NumPadContextProps, NumPadProps } from './numpad.type';
 
 export const NumPadContext = React.createContext<NumPadContextProps | undefined>(undefined);
 
-export const NumPad: React.FC<NumPadProps> = ({ value: initialValue = '', className = 'numpad', type = 'input', focus = false, keypress = false, digit = 4, onClick, children }): JSX.Element => {
+export const NumPad: React.FC<NumPadProps> = ({ value: initialValue = '', className = 'numpad', type = 'passcode', focus = false, keypress = false, digit = 4, onSubmit, children }): JSX.Element => {
 
   const { current } = useRef<{ [x: string]: string }>({ value: initialValue });
   const [value, setValue] = useState(initialValue || '');
@@ -45,7 +45,7 @@ export const NumPad: React.FC<NumPadProps> = ({ value: initialValue = '', classN
   }
 
   const enterNum = () => {
-    onClick && onClick(current.value);
+    onSubmit && onSubmit(current.value);
     console.log('SUBMIT', current.value);
   }
 

@@ -16,7 +16,7 @@ export type NumPadProps = {
   focus?: boolean;
   keypress?: boolean;
   digit?: number;
-  onClick?: (value: string | undefined) => void;
+  onSubmit?: (value: string | undefined) => void;
 }
 
 export type NumPadInputProps = {
