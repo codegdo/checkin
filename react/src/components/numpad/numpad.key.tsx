@@ -9,7 +9,7 @@ export const NumPadKey: React.FC<NumPadKeyPros> = ({ className = 'numpad-key' })
     throw new Error('Require NUMPADKEY Nested In NUMPADCONTEXT');
   }
 
-  const { counter = 0, handleClick } = context;
+  const { type, counter = 0, handleClick } = context;
 
   return <div className={className}>
     <div>
@@ -29,10 +29,13 @@ export const NumPadKey: React.FC<NumPadKeyPros> = ({ className = 'numpad-key' })
     </div>
     <div>
       {
-        <button className={counter > 0 ? '' : 'invisible'} type="button" name="clear" onClick={e => handleClick(e)}>clear</button>
+        <button className={type == 'passcode' ? (counter > 0 ? '' : 'invisible') : ''} type="button" name="clear" onClick={e => handleClick(e)}>clear</button>
       }
       <button type="button" name="key" value="0" onClick={e => handleClick(e)}>0</button>
-      <button className={'invisible'} type="button" name="enter" onClick={e => handleClick(e)}>enter</button>
+      {
+        <button className={type == 'passcode' ? 'invisible' : ''} type="button" name="enter" onClick={e => handleClick(e)}>enter</button>
+      }
+
     </div>
   </div>
 }

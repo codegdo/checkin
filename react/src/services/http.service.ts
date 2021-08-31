@@ -114,7 +114,7 @@ class HttpService {
           })
         )
         .then((res) => {
-          resolve(res);
+          res.ok ? resolve(res) : reject(res);
         })
         .catch((err) => reject(err));
     });

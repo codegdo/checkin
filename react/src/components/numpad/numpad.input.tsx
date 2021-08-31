@@ -11,23 +11,15 @@ export const NumPadInput: React.FC<NumPadInputProps> = ({ className = 'numpad-in
     throw new Error('Require NUMPADINPUT Nested In NUMPADCONTEXT');
   }
 
-  const { ref, type, value, digit, counter = 0, keypress, handleKeyDown } = context;
+  const { ref, value, placeholder, keypress, handleKeyDown } = context;
 
   return <div className={className}>
-    {
-      type === 'passcode' ? <span>
-        {
-          [...Array(digit)].map((_x, i) => {
-            return <i key={i} className={((i + 1) <= counter) ? 'checked' : ''}></i>
-          })
-        }
-      </span> : <input
-        ref={ref}
-        value={value}
-        placeholder="••••"
-        readOnly={!keypress}
-        onChange={() => null}
-        onKeyDown={(event) => { if (keypress) handleKeyDown(event) }} />
-    }
+    <input
+      ref={ref}
+      value={value}
+      placeholder={placeholder}
+      readOnly={!keypress}
+      onChange={() => null}
+      onKeyDown={(event) => { if (keypress) handleKeyDown(event) }} />
   </div>
 }
