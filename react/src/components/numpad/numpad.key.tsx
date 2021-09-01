@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { NumPadContext } from './numpad.component';
-import { NumPadKeyPros } from './numpad.type';
+import { NumPadKeyProps } from './numpad.type';
 
-export const NumPadKey: React.FC<NumPadKeyPros> = ({ className = 'numpad-key' }): JSX.Element => {
+export const NumPadKey: React.FC<NumPadKeyProps> = ({ className = 'numpad-key' }): JSX.Element => {
   const context = useContext(NumPadContext);
 
   if (!context) {
@@ -29,7 +29,7 @@ export const NumPadKey: React.FC<NumPadKeyPros> = ({ className = 'numpad-key' })
     </div>
     <div>
       {
-        <button className={type == 'passcode' ? (counter > 0 ? '' : 'invisible') : ''} type="button" name="clear" onClick={e => handleClick(e)}>clear</button>
+        <button className={type == 'passcode' ? (counter > 0 ? '' : 'invisible') : ''} type="button" name="clear" onClick={e => handleClick(e)}>delete</button>
       }
       <button type="button" name="key" value="0" onClick={e => handleClick(e)}>0</button>
       {

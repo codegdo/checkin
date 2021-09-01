@@ -3,6 +3,7 @@ export type NumPadContextProps = {
   type?: 'input' | 'passcode' | 'phone';
   value: string;
   placeholder?: string;
+  message?: string;
   digit?: number;
   counter?: number;
   keypress: boolean;
@@ -16,9 +17,11 @@ export type NumPadProps = {
   className?: string;
   loading?: string;
   placeholder?: string;
+  message?: string;
   focus?: boolean;
   keypress?: boolean;
   masked?: boolean;
+  reset?: boolean;
   digit?: number;
   onSubmit?: (value: string | undefined) => void;
 }
@@ -27,6 +30,10 @@ export type NumPadInputProps = {
   className?: string;
 }
 
-export type NumPadKeyPros = {
+export type NumPadMessageProps = {
+  className?: string;
+}
+
+export type NumPadKeyProps = {
   className?: string;
 }

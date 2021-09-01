@@ -16,7 +16,7 @@ const Checkout: React.FC = (): JSX.Element => {
     void fetchLogin({ body: { passcode: value } });
   };
 
-  return <NumPad type="passcode" loading={loading} onSubmit={handleSubmit} />;
+  return <NumPad type="passcode" loading={loading} reset={true} onSubmit={handleSubmit} />;
 };
 
 export default Checkout;

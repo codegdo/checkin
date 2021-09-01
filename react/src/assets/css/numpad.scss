@@ -1,4 +1,5 @@
 .numpad-input,
+.numpad-message,
 .numpad-key {
   text-align: center;
 }
@@ -22,9 +23,9 @@
 .numpad-input input {
   border: none;
   text-align: center;
-  font-size: 24px;
+  font-size: 29px;
   height: 60px;
-  letter-spacing: 0.6rem;
+  letter-spacing: 0.3rem;
   background: none;
 
   &:hover {
@@ -33,6 +34,10 @@
   &::placeholder {
     letter-spacing: 0;
   }
+}
+
+.numpad-message p {
+  padding: 1rem 0;
 }
 
 .numpad-key button {

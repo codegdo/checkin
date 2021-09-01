@@ -3,22 +3,36 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useFocus, useReset } from '../../hooks';
 import { formatPhone } from '../../utils';
 import { NumPadKey } from './numpad.key';
+import { NumPadMessage } from './numpad.message';
 import { NumPadRender } from './numpad.render';
 import { NumPadContextProps, NumPadProps } from './numpad.type';
 
 export const NumPadContext = React.createContext<NumPadContextProps | undefined>(undefined);
 
-export const NumPad: React.FC<NumPadProps> = ({ value: initialValue = '', className = 'numpad', type = 'input', placeholder = '', focus = false, keypress = false, masked = false, digit = 4, loading = 'idle', onSubmit }): JSX.Element => {
+export const NumPad: React.FC<NumPadProps> = ({
+  value: initialValue = '',
+  className = 'numpad',
+  type = 'input',
+  placeholder = '',
+  message = '',
+  focus = false,
+  keypress = false,
+  masked = false,
+  reset = false,
+  digit = 4,
+  loading = 'idle',
+  children,
+  onSubmit }): JSX.Element => {
 
   const { current } = useRef<{ [x: string]: string }>({ value: initialValue });
   const [ref, setFocus] = useFocus(null);
   const [value, setValue] = useState(initialValue || '');
   const [counter, setCounter] = useState(0);
-  const reset = useReset(loading);
+  const error = useReset(loading);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      masked && setValue(value => value.replace(/./g, "•"));
+      masked && setValue(value => value.replace(/[0-9]/g, "•"));
     }, 300);
 
     return () => {
@@ -28,12 +42,12 @@ export const NumPad: React.FC<NumPadProps> = ({ value: initialValue = '', classN
 
   // reset
   useEffect(() => {
-    if (reset) {
+    if (error && reset) {
       current.value = '';
       setValue('');
       setCounter(0);
     }
-  }, [reset])
+  }, [error])
 
   // focus
   useEffect(() => {
@@ -44,7 +58,17 @@ export const NumPad: React.FC<NumPadProps> = ({ value: initialValue = '', classN
     if (current.value.length <= digit - 1) {
       current.value = current.value + val;
       type === 'input' && setValue(value + val);
-      type === 'phone' && setValue(formatPhone(current.value));
+
+      if (type === 'phone') {
+        masked ?
+          setValue(
+            current.value.length > 3 ?
+              formatPhone(current.value).replace(/[0-9](?!$)/g, "•") :
+              formatPhone(current.value).replace(/[0-9](?!\D$)/g, "•")
+          ) :
+          setValue(formatPhone(current.value));
+      }
+
       setCounter(counter + 1);
     }
     if (type === 'passcode' && current.value.length === digit) {
@@ -55,7 +79,13 @@ export const NumPad: React.FC<NumPadProps> = ({ value: initialValue = '', classN
   const clearNum = () => {
     current.value = current.value.substring(0, current.value.length - 1);
     type === 'input' && setValue(value.substring(0, value.length - 1));
-    type === 'phone' && setValue(formatPhone(current.value));
+
+    if (type === 'phone') {
+      masked ?
+        setValue(formatPhone(current.value).replace(/[0-9]/g, "•")) :
+        setValue(formatPhone(current.value));
+    }
+
     counter > 0 && setCounter(counter - 1);
   }
 
@@ -96,9 +126,15 @@ export const NumPad: React.FC<NumPadProps> = ({ value: initialValue = '', classN
   }
 
   return <div className={className}>
-    <NumPadContext.Provider value={{ ref, type, value, placeholder, digit, counter, keypress, handleClick, handleKeyDown }}>
-      <NumPadRender type={type} />
-      <NumPadKey />
+    <NumPadContext.Provider value={{ ref, type, value, placeholder, message, digit, counter, keypress, handleClick, handleKeyDown }}>
+      {
+        children ||
+        <>
+          <NumPadRender type={type} />
+          <NumPadMessage />
+          <NumPadKey />
+        </>
+      }
     </NumPadContext.Provider>
   </div>
 }
