@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { NumPadContext } from './numpad.component';
 import { NumPadInputProps } from './numpad.type';

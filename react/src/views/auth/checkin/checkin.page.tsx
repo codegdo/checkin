@@ -16,7 +16,7 @@ const Checkin: React.FC = (): JSX.Element => {
     void fetchLogin({ body: { passcode: value } });
   };
 
-  return <NumPad type="phone" digit={10} loading={loading} onSubmit={handleSubmit} />;
+  return <NumPad type="phone" digit={10} placeholder="Enter Phone Number" loading={loading} onSubmit={handleSubmit} />;
 };
 
 export default Checkin;

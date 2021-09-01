@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 import { useFocus, useReset } from '../../hooks';
+import { formatPhone } from '../../utils';
 import { NumPadKey } from './numpad.key';
 import { NumPadRender } from './numpad.render';
 import { NumPadContextProps, NumPadProps } from './numpad.type';
@@ -16,27 +17,13 @@ export const NumPad: React.FC<NumPadProps> = ({ value: initialValue = '', classN
   const reset = useReset(loading);
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      masked && setValue(value => value.replace(/./g, "•"));
+    }, 300);
 
-    setValue(value => {
-      if (current.value.length > 0 && current.value.length <= 3) {
-        return `(${current.value})`;
-      } else if (current.value.length > 3 && current.value.length <= 6) {
-        return `(${current.value.substring(0, 3)})${current.value.substring(3, 6)}`
-      } else if (current.value.length > 6) {
-        return `(${current.value.substring(0, 3)})${current.value.substring(3, 6)}-${current.value.substring(6, 10)}`
-      }
-    });
-    /*
-        const timer = setTimeout(() => {
-    
-          //setValue(value => v);
-          setValue(value => value.replace(/./g, "•"));
-        }, 300);
-    
-        return () => {
-          clearTimeout(timer);
-        }
-        */
+    return () => {
+      clearTimeout(timer);
+    }
   }, [value]);
 
   // reset
@@ -56,7 +43,8 @@ export const NumPad: React.FC<NumPadProps> = ({ value: initialValue = '', classN
   const setNum = (val: string) => {
     if (current.value.length <= digit - 1) {
       current.value = current.value + val;
-      setValue(value + val);
+      type === 'input' && setValue(value + val);
+      type === 'phone' && setValue(formatPhone(current.value));
       setCounter(counter + 1);
     }
     if (type === 'passcode' && current.value.length === digit) {
@@ -66,7 +54,8 @@ export const NumPad: React.FC<NumPadProps> = ({ value: initialValue = '', classN
 
   const clearNum = () => {
     current.value = current.value.substring(0, current.value.length - 1);
-    setValue(value.substring(0, value.length - 1));
+    type === 'input' && setValue(value.substring(0, value.length - 1));
+    type === 'phone' && setValue(formatPhone(current.value));
     counter > 0 && setCounter(counter - 1);
   }
 
