@@ -18,7 +18,7 @@ export class ApiGuard implements CanActivate {
     private reflector: Reflector,
     private jwtService: JwtService,
     private sessionRepository: SessionRepository,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
@@ -37,12 +37,20 @@ export class ApiGuard implements CanActivate {
     }
 
     if (isRestricted) {
+
       if (!apiToken) {
         return false;
       }
 
-      const api = await this.jwtService.verify(apiToken);
-      console.log(api);
+      try {
+        const api = await this.jwtService.verify(apiToken);
+        console.log('API GUARD', api);
+
+        return true;
+
+      } catch (err) {
+        return false;
+      }
     }
 
     const { user } = request.session;

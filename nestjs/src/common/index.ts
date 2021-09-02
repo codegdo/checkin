@@ -4,6 +4,7 @@ export * from './guards/auth.guard';
 export * from './interceptors/serialize.interceptor';
 export * from './middlewares/logger.middleware';
 export * from './decorators/public.decorator';
+export * from './decorators/restricted.decorator';
 export * from './decorators/serialize.decorator';
 export * from './decorators/current-user.decorator';
 export * from './modules/session.module';

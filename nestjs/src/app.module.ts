@@ -11,9 +11,10 @@ import {
   SessionModule,
   LoggerMiddleware,
 } from './common';
-import { CustomerModule } from './src/api/customer/customer.module';
 import { CustomerModule } from './api/customer/customer.module';
 import { EmployeeModule } from './api/employee/employee.module';
+import { CheckinModule } from './api/checkin/checkin.module';
+import { CheckoutModule } from './api/checkout/checkout.module';
 
 @Module({
   imports: [
@@ -39,6 +40,8 @@ import { EmployeeModule } from './api/employee/employee.module';
     UserModule,
     CustomerModule,
     EmployeeModule,
+    CheckinModule,
+    CheckoutModule,
   ],
   controllers: [],
   providers: [
