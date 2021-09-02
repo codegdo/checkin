@@ -1,4 +1,11 @@
-import { Body, Controller, Get, Post, Session, UnauthorizedException } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Session,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { AuthService } from './auth.service';
@@ -10,8 +17,8 @@ import { User } from 'src/models/main/entities';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly jwtService: JwtService
-  ) { }
+    private readonly jwtService: JwtService,
+  ) {}
 
   @Public()
   @Post('signup')
@@ -23,18 +30,16 @@ export class AuthController {
   @Public()
   @Post('login')
   async login(@Session() session: any, @Body() loginUserDto: LoginUserDto) {
-
     const user = await this.authService.login(loginUserDto);
-    const apikey = this.jwtService.sign({ bid: user.businessId });
+    const authKey = this.jwtService.sign({ bid: user.businessId });
     session.user = user;
 
-    return { user, sid: session.id, apikey };
+    return { user, sid: session.id, authKey };
   }
 
   @Public()
   @Get('logout')
   logout(@Session() session: any, @CurrentUser() user: User) {
-
     console.log(session.id);
 
     if (session.user) {

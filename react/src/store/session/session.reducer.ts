@@ -4,7 +4,7 @@ import { SessionState, UPDATE_SESSION, DELETE_SESSION } from './session.type';
 const initialState: SessionState = {
   loggedIn: false,
   user: null,
-  apikey: null,
+  authKey: null,
 };
 
 export const sessionReducer = (

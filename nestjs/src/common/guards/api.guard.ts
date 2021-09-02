@@ -4,6 +4,7 @@ import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { JwtService } from '@nestjs/jwt';
 import { SessionRepository } from 'src/models/main/repositories';
+import { IS_RESTRICTED_KEY } from '../decorators/restricted.decorator';
 
 declare module 'express' {
   export interface Request {
@@ -16,46 +17,58 @@ export class ApiGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,
-    private sessionRepository: SessionRepository
-  ) { }
+    private sessionRepository: SessionRepository,
+  ) {}
 
-  async canActivate(
-    context: ExecutionContext,
-  ): Promise<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
-    const authHeader = request.header('Authorization');
-    const sid = request.header('X-Auth-Token');
+    const authToken = request.header('Authorization');
+    const apiToken = request.header('X-Api-Token');
     const refererHeader = request.header('Referer');
-    const { user } = request.session;
+
     const isPublish = this.reflector.get(IS_PUBLIC_KEY, context.getHandler());
+    const isRestricted = this.reflector.get(
+      IS_RESTRICTED_KEY,
+      context.getHandler(),
+    );
 
-    console.log('API_GUARD', isPublish);
-    console.log(request.header('Referer'));
+    if (isPublish) {
+      return true;
+    }
 
-    if (!isPublish) {
-
-      //
-      if (user) {
-        request.currentUser = user;
-        return true;
+    if (isRestricted) {
+      if (!apiToken) {
+        return false;
       }
 
-      //
-      if (sid) {
-        //const token = await this.jwtService.verify(authHeader.split(' ')[1]);
-        //const currentTimestamp = new Date().getTime() / 1000;
-        //const isNotExpired = token.exp > currentTimestamp;
-        //const sid = authHeader.split(' ')[1];
+      const api = await this.jwtService.verify(apiToken);
+      console.log(api);
+    }
 
-        const found = await this.sessionRepository.findOne({ id: sid });
+    const { user } = request.session;
 
-        if (!found) {
-          return false;
-        }
+    //
+    if (user) {
+      request.currentUser = user;
+      return true;
+    }
 
-        return true;
+    //
+    if (authToken) {
+      //const token = await this.jwtService.verify(authHeader.split(' ')[1]);
+      //const currentTimestamp = new Date().getTime() / 1000;
+      //const isNotExpired = token.exp > currentTimestamp;
+      //const sid = authHeader.split(' ')[1];
 
-        /* if (isNotExpired) {
+      const found = await this.sessionRepository.findOne({ id: authToken });
+
+      if (!found) {
+        return false;
+      }
+
+      return true;
+
+      /* if (isNotExpired) {
           const found = await this.sessionRepository.findOne({ id: token.sid });
 
           if (!found) {
@@ -64,11 +77,8 @@ export class ApiGuard implements CanActivate {
 
           return true;
         } */
-      }
-
-      return false;
     }
 
-    return true;
+    return false;
   }
 }
