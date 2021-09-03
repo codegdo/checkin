@@ -3,16 +3,16 @@ import { Navigate, Routes, Route } from 'react-router-dom';
 
 import { Partial } from '../../components/template/partial.component';
 
-const Client = Partial(lazy(() => import('./client/client.page')));
+const Employee = Partial(lazy(() => import('./employee/employee.page')));
 const NotFound = Partial(lazy(() => import('../notfound.component')));
 
-const CheckinLocation: React.FC = (): JSX.Element => {
+const CheckoutLocation: React.FC = (): JSX.Element => {
 
   return <Routes>
-    <Route path="/" element={<Navigate to="clients" />} />
-    <Route path="clients" element={<Client page="clients" />} />
+    <Route path="/" element={<Navigate to="employees" />} />
+    <Route path="employees" element={<Employee page="employees" />} />
     <Route path="*" element={<NotFound page="not-found" />} />
   </Routes>;
 };
 
-export default CheckinLocation;
+export default CheckoutLocation;

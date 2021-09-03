@@ -7,6 +7,5 @@ import { AppState } from '../../store/reducers';
 
 export const RouteGuard: React.FC<RouteProps> = (props): JSX.Element => {
   const { loggedIn } = useSelector((state: AppState) => state.session);
-
   return loggedIn ? <Route {...props} /> : <Navigate to="/auth/login" />
 };

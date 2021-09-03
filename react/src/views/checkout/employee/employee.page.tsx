@@ -3,8 +3,8 @@ import { NumPad } from '../../../components/numpad/numpad.component';
 import { useFetch } from '../../../hooks';
 import { localStore } from '../../../services';
 
-const Client: React.FC = (): JSX.Element => {
-  const [{ loading, result }, fetchCheckin] = useFetch('/api/checkin/clients');
+const Employee: React.FC = (): JSX.Element => {
+  const [{ loading, result }, fetchCheckout] = useFetch('/api/checkout/employees');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const Client: React.FC = (): JSX.Element => {
 
 
   const handleSubmit = (value: any) => {
-    void fetchCheckin({
+    void fetchCheckout({
       headers: {
         'X-Api-Token': localStore.getItem('access_token')
       },
@@ -27,7 +27,7 @@ const Client: React.FC = (): JSX.Element => {
     });
   };
 
-  return <NumPad type="phone" digit={10} placeholder="Enter Phone Number" message={message} loading={loading} onSubmit={handleSubmit} />;
+  return <NumPad type="passcode" loading={loading} reset={true} onSubmit={handleSubmit} />;
 };
 
-export default Client;
+export default Employee;

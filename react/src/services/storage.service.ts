@@ -1,34 +1,34 @@
 export interface StorageItem {
-  key: string;
+  name: string;
   value: string | null;
 }
 
 class LocalStorageService {
-  private set(key: string, item: string): void {
+  private set(name: string, value: string): void {
     if (localStorage) {
-      localStorage.setItem(key, item);
+      localStorage.setItem(name, value);
     } else {
       new Error('Browser does not support the localStorage API');
     }
   }
 
-  private get(key: string): string | null {
-    return localStorage.getItem(key);
+  private get(name: string): string | null {
+    return localStorage.getItem(name);
   }
 
-  setItem(key: string, item: string): void {
-    this.set(key, item);
+  setItem(name: string, value: string): void {
+    this.set(name, value);
   }
 
   getAllItems(): StorageItem[] {
     const list: StorageItem[] = [];
 
     for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i) || '';
-      const value = localStorage.getItem(key);
+      const name = localStorage.key(i) || '';
+      const value = localStorage.getItem(name);
 
       list.push({
-        key,
+        name,
         value,
       });
     }
@@ -36,12 +36,12 @@ class LocalStorageService {
     return list;
   }
 
-  getItem(key: string): string | null {
-    return this.get(key);
+  getItem(name: string): string | null {
+    return this.get(name);
   }
 
-  removeItem(key: string): void {
-    localStorage.removeItem(key);
+  removeItem(name: string): void {
+    localStorage.removeItem(name);
   }
 
   clear(): void {
@@ -49,4 +49,88 @@ class LocalStorageService {
   }
 }
 
-export const storage = new LocalStorageService();
+class SessionStorageService {
+  private set(name: string, value: string): void {
+    if (sessionStorage) {
+      sessionStorage.setItem(name, value);
+    } else {
+      new Error('Browser does not support the sessionStorage API');
+    }
+  }
+
+  private get(name: string): string | null {
+    return sessionStorage.getItem(name);
+  }
+
+  setItem(name: string, value: string): void {
+    this.set(name, value);
+  }
+
+  getAllItems(): StorageItem[] {
+    const list: StorageItem[] = [];
+
+    for (let i = 0; i < sessionStorage.length; i++) {
+      const name = sessionStorage.key(i) || '';
+      const value = sessionStorage.getItem(name);
+
+      list.push({
+        name,
+        value,
+      });
+    }
+
+    return list;
+  }
+
+  getItem(name: string): string | null {
+    return this.get(name);
+  }
+
+  removeItem(name: string): void {
+    sessionStorage.removeItem(name);
+  }
+
+  clear(): void {
+    sessionStorage.clear();
+  }
+}
+
+class CookieStorageService {
+  setCookie(name: string, value: string, days: number) {
+    const d = new Date();
+    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+  }
+
+  getCookie(name: string) {
+    let key = name + "=";
+    let cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      let c = cookies[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(key) == 0) {
+        return c.substring(key.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  checkCookie() {
+    let user = this.getCookie("username");
+    if (user != "") {
+      alert("Welcome again " + user);
+    } else {
+      user = prompt("Please enter your name:", "");
+      if (user != "" && user != null) {
+        this.setCookie("username", user, 365);
+      }
+    }
+  }
+}
+
+export const cookieStore = new CookieStorageService();
+export const localStore = new LocalStorageService();
+export const sessionStore = new SessionStorageService();

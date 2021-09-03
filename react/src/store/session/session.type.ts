@@ -4,5 +4,5 @@ export const DELETE_SESSION = 'session/DELETE_SESSION';
 export interface SessionState {
   loggedIn: boolean;
   user: { [x: string]: string | number | boolean } | null;
-  authKey: string | null;
+  accessToken: string | null;
 }

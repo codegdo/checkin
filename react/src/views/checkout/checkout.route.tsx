@@ -4,15 +4,15 @@ import { useNavigate, useRoutes } from 'react-router-dom';
 import { ACCESS_TOKEN } from '../../app.config';
 
 import { Template } from '../../components/template/template.component';
-import { useAction, useAuth, useFetch, useLogout } from '../../hooks';
-import { cookieStore, sessionStore } from '../../services';
+import { useAuth, useLogout } from '../../hooks';
+import { sessionStore } from '../../services';
 import { AppState } from '../../store/reducers';
 
-const Index = Template(lazy(() => import('./checkin.index')));
-const Location = Template(lazy(() => import('./checkin.location')));
+const Index = Template(lazy(() => import('./checkout.index')));
+const Location = Template(lazy(() => import('./checkout.location')));
 const NotFound = Template(lazy(() => import('../notfound.component')));
 
-export const CheckinRoute: React.FC = (): JSX.Element => {
+export const CheckoutRoute: React.FC = (): JSX.Element => {
   const { loggedIn, accessToken } = useSelector((state: AppState) => state.session);
   const navigate = useNavigate();
   const logout = useLogout();
@@ -21,12 +21,7 @@ export const CheckinRoute: React.FC = (): JSX.Element => {
   useEffect(() => {
 
     if (loggedIn) {
-
-      if (accessToken) {
-        sessionStore.setItem(ACCESS_TOKEN, accessToken);
-        cookieStore.setCookie(ACCESS_TOKEN, accessToken, 1);
-      }
-
+      accessToken && sessionStore.setItem(ACCESS_TOKEN, accessToken);
       logout();
     }
 
