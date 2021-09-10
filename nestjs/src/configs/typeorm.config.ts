@@ -6,11 +6,11 @@ const options: ConnectionOptions = {
   username: process.env.POSTGRES_USERNAME,
   password: process.env.POSTGRES_PASSWORD,
   port: 5432,
-  synchronize: true,
+  synchronize: false,
   logging: true,
   cli: {
     migrationsDir: 'src/database/migrations',
-  }
+  },
 };
 
 const main: ConnectionOptions = {

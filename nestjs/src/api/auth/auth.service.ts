@@ -3,9 +3,11 @@ import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 
 import { CreateUserDto } from 'src/models/main/dtos';
-import { BusinessRepository, UserRepository } from 'src/models/main/repositories';
+import {
+  BusinessRepository,
+  UserRepository,
+} from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/schedule/repositories';
-
 
 @Injectable()
 export class AuthService {
@@ -23,14 +25,16 @@ export class AuthService {
     private userRepository: UserRepository,
 
     @InjectRepository(CalendarRepository, 'schedule')
-    private calendarRepository: CalendarRepository
-  ) { }
+    private calendarRepository: CalendarRepository,
+  ) {}
 
   async signup(createUserDto: CreateUserDto) {
     //const user = this.userRepository.createUser(createUserDto);
-    const business = await this.businessRepository.create({ subdomain: createUserDto.username });
+    const business = await this.businessRepository.create({
+      subdomain: createUserDto.username,
+    });
     const user = await this.userRepository.create(createUserDto);
-    //const calendar = await this.calendarRepository.create();
+    const calendar = await this.calendarRepository.create();
 
     try {
       await this.connection.transaction(async (manager) => {
@@ -42,9 +46,9 @@ export class AuthService {
       console.log(err);
     }
 
-    //await this.connection2.transaction(async (manager) => {
-    //await manager.save(calendar);
-    //});
+    await this.connection2.transaction(async (manager) => {
+      await manager.save(calendar);
+    });
 
     return {};
   }
@@ -59,9 +63,7 @@ export class AuthService {
     return user;
   }
 
-  async logout() {
-
-  }
+  async logout() {}
 }
 
 /*

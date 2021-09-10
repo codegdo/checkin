@@ -18,7 +18,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   @Public()
   @Post('signup')
