@@ -19,6 +19,7 @@ export const NumPad: React.FC<NumPadProps> = ({
   keypress = false,
   masked = false,
   reset = false,
+  autoSubmit = false,
   digit = 4,
   loading = 'idle',
   children,
@@ -71,8 +72,8 @@ export const NumPad: React.FC<NumPadProps> = ({
 
       setCounter(counter + 1);
     }
-    if (type === 'passcode' && current.value.length === digit) {
-      enterNum();
+    if (autoSubmit) {
+      current.value.length === digit && enterNum();
     }
   }
 
@@ -126,7 +127,7 @@ export const NumPad: React.FC<NumPadProps> = ({
   }
 
   return <div className={className}>
-    <NumPadContext.Provider value={{ ref, type, value, placeholder, message, digit, counter, keypress, handleClick, handleKeyDown }}>
+    <NumPadContext.Provider value={{ ref, type, value, placeholder, message, digit, counter, keypress, autoSubmit, handleClick, handleKeyDown }}>
       {
         children ||
         <>

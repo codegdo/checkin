@@ -3,11 +3,9 @@ CREATE TABLE IF NOT EXISTS sec.user (
   id SERIAL NOT NULL,
   username VARCHAR(45),
   password VARCHAR(75),
-  email_address VARCHAR(45),
 
   data TEXT,
   
-  location_id INT,
   contact_id INT,
   role_id INT,
   business_id INT,

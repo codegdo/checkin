@@ -5,11 +5,13 @@ import { ConfigService } from 'nestjs-config';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { UserRepository } from 'src/models/main/user/user.repository';
+import { BusinessRepository, UserRepository } from 'src/models/main/repositories';
+import { CalendarRepository } from 'src/models/schedule/repositories';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserRepository]),
+    TypeOrmModule.forFeature([BusinessRepository, UserRepository]),
+    TypeOrmModule.forFeature([CalendarRepository], 'schedule'),
     JwtModule.registerAsync({
       useFactory: async (config: ConfigService) => {
         return config.get('jwt.config')

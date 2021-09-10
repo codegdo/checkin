@@ -20,11 +20,11 @@ const main: ConnectionOptions = {
   entities: [__dirname + '/../models/main/**/*.entity{.ts,.js}'],
 };
 
-const checkin: ConnectionOptions = {
+const schedule: ConnectionOptions = {
   ...options,
-  database: 'checkin',
-  name: 'sales',
-  entities: [__dirname + '/../models/checkin/**/*.entity{.ts,.js}'],
+  database: 'schedule',
+  name: 'schedule',
+  entities: [__dirname + '/../models/schedule/**/*.entity{.ts,.js}'],
 };
 
-export default [main, checkin];
+export default { main, schedule };

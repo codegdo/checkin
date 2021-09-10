@@ -7,6 +7,7 @@ export type NumPadContextProps = {
   digit?: number;
   counter?: number;
   keypress: boolean;
+  autoSubmit?: boolean;
   handleClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   handleKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
@@ -21,6 +22,7 @@ export type NumPadProps = {
   focus?: boolean;
   keypress?: boolean;
   masked?: boolean;
+  autoSubmit?: boolean;
   reset?: boolean;
   digit?: number;
   onSubmit?: (value: string | undefined) => void;

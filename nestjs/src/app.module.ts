@@ -20,11 +20,11 @@ import { CheckoutModule } from './api/checkout/checkout.module';
   imports: [
     ConfigModule.load(path.resolve(__dirname, 'configs', '**/!(*.d).{ts,js}')),
     TypeOrmModule.forRootAsync({
-      useFactory: (config: ConfigService) => config.get('typeorm.config')[0],
+      useFactory: (config: ConfigService) => config.get('typeorm.config')['main'],
       inject: [ConfigService],
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: (config: ConfigService) => config.get('typeorm.config')[1],
+      useFactory: (config: ConfigService) => config.get('typeorm.config')['schedule'],
       inject: [ConfigService],
     }),
     SessionModule.forRootAsync({

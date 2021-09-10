@@ -16,7 +16,7 @@ export const CheckinRoute: React.FC = (): JSX.Element => {
   const { loggedIn, accessToken } = useSelector((state: AppState) => state.session);
   const navigate = useNavigate();
   const logout = useLogout();
-  const auth = useAuth();
+  //const auth = useAuth();
 
   useEffect(() => {
 
@@ -30,7 +30,7 @@ export const CheckinRoute: React.FC = (): JSX.Element => {
       logout();
     }
 
-    if (!auth) {
+    if (!sessionStore.getItem(ACCESS_TOKEN)) {
       navigate('/auth/login');
     }
 

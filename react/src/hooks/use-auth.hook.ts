@@ -10,7 +10,5 @@ export const useAuth = (): boolean => {
     auth = false;
   }
 
-
-
   return auth;
 }

@@ -1,6 +1,15 @@
 
 admin
   users
+  clients
+  locations
+  business
+
 account
 checkin
+checkout
 pos
+schedule
+  appointment
+
+marketing

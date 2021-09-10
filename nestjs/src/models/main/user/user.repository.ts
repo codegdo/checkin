@@ -4,10 +4,6 @@ import { User } from './user.entity';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-  async createUser(createUserDto) {
-    const user = await this.create(createUserDto);
-    return this.save(user);
-  }
 
   async loginUser(loginUserDto) {
     const { username, password } = loginUserDto;

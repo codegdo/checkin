@@ -1,0 +1,19 @@
+// RDS - Easy
+Engine: PostgresSQL
+DB Size: Dev/Test
+DB Id: db-dev | db-stage | db-prod
+
+Additional configuration: Public
+Security group: sec-dev
+Backup retention period: 0 days
+
+// SECURITY GROUP
+sec-dev | sec-stage | sec-prod
+Inbound Rules: PostgresSQL
+
+// ELASTIC BEANTALK
+eb-dev | eb-stage | eb-prod
+
+
+
+

@@ -27,7 +27,7 @@ const Employee: React.FC = (): JSX.Element => {
     });
   };
 
-  return <NumPad type="passcode" loading={loading} reset={true} onSubmit={handleSubmit} />;
+  return <NumPad type="passcode" loading={loading} reset={true} autoSubmit={true} onSubmit={handleSubmit} />;
 };
 
 export default Employee;
