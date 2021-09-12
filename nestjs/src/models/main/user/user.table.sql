@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS sec.user (
   data TEXT,
   
   contact_id INT,
+  location_id INT,
   role_id INT,
   business_id INT,
 

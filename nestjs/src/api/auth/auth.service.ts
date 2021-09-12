@@ -26,7 +26,7 @@ export class AuthService {
 
     @InjectRepository(CalendarRepository, 'schedule')
     private calendarRepository: CalendarRepository,
-  ) {}
+  ) { }
 
   async signup(createUserDto: CreateUserDto) {
     //const user = this.userRepository.createUser(createUserDto);
@@ -34,21 +34,33 @@ export class AuthService {
       subdomain: createUserDto.username,
     });
     const user = await this.userRepository.create(createUserDto);
-    const calendar = await this.calendarRepository.create();
+    const calendar = await this.calendarRepository.create({ name: createUserDto.username });
+
+    const queryRunner = this.connection.createQueryRunner();
+    const query2Runner = this.connection2.createQueryRunner();
+    await queryRunner.startTransaction();
+    await query2Runner.startTransaction();
 
     try {
-      await this.connection.transaction(async (manager) => {
-        const bus = await manager.save(business);
-        user.businessId = bus.id;
-        await manager.save(user);
-      });
-    } catch (err) {
-      console.log(err);
-    }
 
-    await this.connection2.transaction(async (manager) => {
-      await manager.save(calendar);
-    });
+      const bus = await queryRunner.manager.save(business);
+      user.businessId = bus.id;
+      await queryRunner.manager.save(user);
+      await query2Runner.manager.save(calendar);
+
+      // commit
+      await queryRunner.commitTransaction();
+      await query2Runner.commitTransaction();
+
+    } catch (err) {
+      // rollback
+      await queryRunner.rollbackTransaction();
+      await query2Runner.rollbackTransaction();
+    } finally {
+      // release
+      await queryRunner.release();
+      await query2Runner.release();
+    }
 
     return {};
   }
@@ -63,26 +75,41 @@ export class AuthService {
     return user;
   }
 
-  async logout() {}
+  async logout() { }
 }
 
 /*
+// Multiple transactions
 const queryRunner = this.connection.createQueryRunner();
-await queryRunner.startTransaction();
+  const query2Runner = this.connection2.createQueryRunner();
+  await queryRunner.startTransaction();
+  await query2Runner.startTransaction();
 
-try {
+  try {
 
-  const bus = await queryRunner.manager.save(business);
-  user.businessId = bus.id;
-  await queryRunner.manager.save(user);
+    const bus = await queryRunner.manager.save(business);
+    user.businessId = bus.id;
+    await queryRunner.manager.save(user);
+    await query2Runner.manager.save(calendar);
 
-  // commit
-  await queryRunner.commitTransaction();
-} catch (err) {
-  // rollback
-  await queryRunner.rollbackTransaction();
-} finally {
-  // release
-  await queryRunner.release();
-}
+    // commit
+    await queryRunner.commitTransaction();
+    await query2Runner.commitTransaction();
+
+  } catch (err) {
+    // rollback
+    await queryRunner.rollbackTransaction();
+    await query2Runner.rollbackTransaction();
+  } finally {
+    // release
+    await queryRunner.release();
+    await query2Runner.release();
+  }
+
+  // Single transaction
+  await this.connection.transaction(async (manager) => {
+    const bus = await manager.save(business);
+    user.businessId = bus.id;
+    await manager.save(user);
+  });
 */

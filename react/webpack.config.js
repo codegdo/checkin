@@ -44,8 +44,8 @@ module.exports = (env) => {
     module: {
       rules: [
         {
-          test: /\.(eot|ttf|otf|woff|woff2|png|jpe?g|gif)$/,
-          use: 'file-loader',
+          test: /\.(jpe?g|svg|png|gif|ico|eot|ttf|woff2?)(\?v=\d+\.\d+\.\d+)?$/i,
+          type: 'asset/resource',
         },
         {
           test: /\.(js|jsx|ts|tsx)$/,

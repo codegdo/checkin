@@ -1,13 +1,15 @@
 
-admin
+setup
   users
-  clients
   locations
-  business
+  calendars
+
 
 account
+support
 checkin
 checkout
+clients
 pos
 schedule
   appointment
