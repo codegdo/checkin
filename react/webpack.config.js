@@ -15,16 +15,16 @@ module.exports = (env) => {
     devServer: {
       host: '0.0.0.0',
       port: 3000,
-      inline: true,
+      //inline: true,
       hot: true,
       historyApiFallback: true,
       compress: true,
-      disableHostCheck: true,
-      watchOptions: {
-        ignored: /node_modules/,
-        aggregateTimeout: 300,
-        poll: 1000,
-      },
+      //disableHostCheck: true,
+      //watchOptions: {
+      //ignored: /node_modules/,
+      //aggregateTimeout: 300,
+      //poll: 1000,
+      //},
       proxy: {
         '/api/**': {
           target: 'http://localhost:5000',

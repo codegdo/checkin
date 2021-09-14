@@ -1,16 +1,20 @@
 
 setup
   users
+  clients
+  sevices
   locations
   calendars
 
 
 account
 support
+
 checkin
 checkout
-clients
+
 pos
+
 schedule
   appointment
 
