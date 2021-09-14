@@ -1,25 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
+import { NumPadPhone } from "./numpad.phone";
+import { NumPadPasscode } from './numpad.passcode';
 
-import { NumPadContext } from './numpad.component';
-import { NumPadInputProps } from './numpad.type';
+export const NumPadInput: React.FC<any> = ({ type }): JSX.Element | null => {
 
-export const NumPadInput: React.FC<NumPadInputProps> = ({ className = 'numpad-input' }): JSX.Element => {
-
-  const context = useContext(NumPadContext);
-
-  if (!context) {
-    throw new Error('Require NUMPADINPUT Nested In NUMPADCONTEXT');
+  switch (type) {
+    case 'phone': return <NumPadPhone />;
+    case 'passcode': return <NumPadPasscode />;
+    default: return null;
   }
-
-  const { ref, value, placeholder, keypress, handleKeyDown } = context;
-
-  return <div className={className}>
-    <input
-      ref={ref}
-      value={value}
-      placeholder={placeholder}
-      readOnly={!keypress}
-      onChange={() => null}
-      onKeyDown={(event) => { if (keypress) handleKeyDown(event) }} />
-  </div>
 }

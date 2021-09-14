@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { NumPad } from '../../../components/numpad/numpad.component';
+import { NumPad } from '../../../components/numpad';
 import { useFetch } from '../../../hooks';
 import { localStore } from '../../../services';
 

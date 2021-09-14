@@ -4,7 +4,7 @@ import { useFocus, useReset } from '../../hooks';
 import { formatPhone } from '../../utils';
 import { NumPadKey } from './numpad.key';
 import { NumPadMessage } from './numpad.message';
-import { NumPadRender } from './numpad.render';
+import { NumPadInput } from './numpad.input';
 import { NumPadContextProps, NumPadProps } from './numpad.type';
 
 export const NumPadContext = React.createContext<NumPadContextProps | undefined>(undefined);
@@ -29,7 +29,7 @@ export const NumPad: React.FC<NumPadProps> = ({
   const [ref, setFocus] = useFocus(null);
   const [value, setValue] = useState(initialValue || '');
   const [counter, setCounter] = useState(0);
-  const error = useReset(loading);
+  const { error } = useReset(loading);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -131,7 +131,7 @@ export const NumPad: React.FC<NumPadProps> = ({
       {
         children ||
         <>
-          <NumPadRender type={type} />
+          <NumPadInput type={type} />
           <NumPadMessage />
           <NumPadKey />
         </>

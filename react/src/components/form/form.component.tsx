@@ -12,7 +12,7 @@ export const Form: React.FC<FormProps> = ({ form, loading, onSubmit, children, .
 
   const data = form && normalizeForm(form) || props;
   const { current: values } = useRef({});
-  const { current: errors } = useRef<{ [k: string]: string }>({});
+  const { current: errors } = useRef({});
   const { current: formSchema } = useRef({});
 
   const [submit, setSubmit] = useState<string | undefined>();
