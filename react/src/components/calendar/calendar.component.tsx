@@ -1,4 +1,5 @@
 import React from 'react';
+import { CalendarBody } from './calendar.body';
 import { CalendarHeader } from './calendar.header';
 
 import { CalendarContextProps } from './calendar.type';
@@ -12,6 +13,7 @@ export const Calendar: React.FC = (): JSX.Element => {
     <div>
       <CalendarContext.Provider value={{}}>
         <CalendarHeader />
+        <CalendarBody />
       </CalendarContext.Provider>
     </div>
   )

@@ -1,21 +1,25 @@
-import React, { useState } from 'react';
-import { addDays, format, startOfWeek } from "date-fns";
-
+import React from 'react';
+import { format } from "date-fns";
+import { getWeekDays } from '../../helpers';
 
 export const CalendarHeader: React.FC = (): JSX.Element => {
-  const dateFormat = "ddd";
-  const currentDate = new Date();
-  const startDate = startOfWeek(currentDate);
 
-  return <div>
-    {
-      [...Array(7)].map((_x, i) => {
-        return <div>
-          {
-            format(addDays(startDate, i), dateFormat)
-          }
-        </div>
-      })
-    }
-  </div>
+  const currentDate = new Date();
+  const weekDays = getWeekDays(currentDate)
+
+  return (
+    <div>
+      <table>
+        <thead>
+          <tr>
+            {
+              weekDays.map((day, i) => {
+                return <th key={i}>{format(day, 'eee')}</th>
+              })
+            }
+          </tr>
+        </thead>
+      </table>
+    </div>
+  )
 }
