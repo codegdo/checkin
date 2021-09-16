@@ -1,6 +1,6 @@
 import React from 'react';
-import { format, subMinutes, subHours, addHours, startOfDay, endOfDay } from "date-fns";
-import { getMonthDays } from '../../helpers';
+import { format } from "date-fns";
+import { getMonthDays, getIntervalTimes } from '../../helpers';
 import { splitChunks } from '../../utils';
 
 export const CalendarBody: React.FC = (): JSX.Element => {
@@ -8,14 +8,10 @@ export const CalendarBody: React.FC = (): JSX.Element => {
   const currentDate = new Date();
   const monthDays = getMonthDays(currentDate);
   const chunkDays = splitChunks(monthDays, 7);
+  const timeIntervals = getIntervalTimes('8:00 AM', '8:00 PM', 15);
 
   console.log(format(currentDate, "p"));
-
-  console.log(subMinutes(currentDate, 15));
-
-  console.log(addHours(startOfDay(currentDate), 9));
-
-  console.log(endOfDay(currentDate));
+  console.log(timeIntervals);
 
   return (
     <div>

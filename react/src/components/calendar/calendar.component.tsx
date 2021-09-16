@@ -8,10 +8,15 @@ export const CalendarContext = React.createContext<CalendarContextProps>(undefin
 
 export const Calendar: React.FC = (): JSX.Element => {
 
+  const view = React.useMemo(() => {
+    return {
+      schedule: { type: 'day' }
+    };
+  }, []);
 
   return (
     <div>
-      <CalendarContext.Provider value={{}}>
+      <CalendarContext.Provider value={{ view }}>
         <CalendarHeader />
         <CalendarBody />
       </CalendarContext.Provider>
