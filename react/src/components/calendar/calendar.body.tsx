@@ -1,38 +1,20 @@
 import React from 'react';
-import { format } from "date-fns";
-import { getMonthDays, getIntervalTimes } from '../../helpers';
-import { splitChunks } from '../../utils';
+import { CalendarEvent } from './calendar.event';
+
 
 export const CalendarBody: React.FC = (): JSX.Element => {
 
-  const currentDate = new Date();
-  const monthDays = getMonthDays(currentDate);
-  const chunkDays = splitChunks(monthDays, 7);
-  const timeIntervals = getIntervalTimes('8:00 AM', '8:00 PM', 15);
-
-  console.log(format(currentDate, "p"));
-  console.log(timeIntervals);
 
   return (
     <div>
-      <table>
-        <tbody>
-          {
-            chunkDays.map((row: any, i: number) => {
-              return <tr key={i}>
-                {
-                  row.map((day: any, j: number) => {
-                    return <td key={j}>{format(day, 'd')}</td>
-                  })
-                }
-              </tr>
-            })
-          }
-        </tbody>
-      </table>
+      <CalendarEvent />
     </div>
   )
 }
+
+
+
+
 /*
 const currentDate = new Date();
   const startMonth = startOfMonth(currentDate);
