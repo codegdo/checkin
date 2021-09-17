@@ -1,6 +1,5 @@
 import {
   addMinutes,
-  addHours,
   addDays,
   startOfDay,
   startOfWeek,
@@ -41,9 +40,8 @@ export const getMonthDays = (currentDate = new Date()): Date[] => {
 export const getIntervalTimes = (start: string, end: string, interval = 15): Date[] => {
   const currentDate = new Date();
   const startOfTime = startOfDay(currentDate);
-  const midOfTime = addHours(startOfTime, 12);
   const startTime = addMinutes(startOfTime, hourToMinutes(start));
-  const endTime = addMinutes(midOfTime, hourToMinutes(end));
+  const endTime = addMinutes(startOfTime, hourToMinutes(end));
 
   const slots: Date[] = [];
   let slot = startTime;

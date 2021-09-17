@@ -5,6 +5,7 @@ calendar
    calendar-nav
    calendar-title
    calendar-filter
+   calendar-button
 
  calendar-body
   calendar-week

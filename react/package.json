@@ -16,6 +16,7 @@
   "author": "gdo",
   "license": "ISC",
   "dependencies": {
+    "date-fns": "^2.24.0",
     "history": "^5.0.1",
     "joi": "^17.4.2",
     "query-string": "^7.0.1",
