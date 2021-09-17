@@ -11,7 +11,6 @@ export const CalendarEvent: React.FC = (): JSX.Element => {
 
   return (
     <div>
-
       {
         chunkDays.map((row: any, i: number) => {
           return <div key={i} className="calendar-row">

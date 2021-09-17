@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { CalendarContext } from './calendar.component';
 import { CalendarEvent } from './calendar.event';
+import { CalendarSchedule } from './calendar.schedule';
 
+export const CalendarBody: React.FC = (): JSX.Element | null => {
+  const context = useContext(CalendarContext);
 
-export const CalendarBody: React.FC = (): JSX.Element => {
+  if (!context) {
+    throw new Error('Require FORMFIELD Nested In FORMCONTEXT');
+  }
 
+  const { view } = context;
 
   return (
-    <div>
-      <CalendarEvent />
-    </div>
+    <>
+      {
+        view.agenda && <CalendarEvent />
+      }
+      {
+        view.event && <CalendarEvent />
+      }
+      {
+        view.schedule && <CalendarSchedule />
+      }
+    </>
   )
 }
 
