@@ -12,7 +12,9 @@ calendar
    calendar-day
 
   calendar-row
-   calendar-cell
+   caledar-column
+
+  calendar-cell
 
   calendar-profile
    calendar-staff
@@ -20,10 +22,14 @@ calendar
 
 view
  schedule
+  month
   week
   day
- calendar
+ event
   month
   week
   day
  agenda
+  month
+  week
+  day

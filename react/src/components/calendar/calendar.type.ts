@@ -1,6 +1,7 @@
 
 type ViewOption = {
   type: string;
+  allDay: boolean;
   startTime: string;
   endTime: string;
 }
@@ -16,10 +17,14 @@ type CalendarView = {
 }
 
 export type CalendarContextProps = {
+  setCurrentDate?: React.Dispatch<React.SetStateAction<Date>>;
+  currentDate?: Date;
   theme?: string;
   view?: any;
   events?: any;
   resources?: any;
+  invalid?: any;
+  values?: any;
 } | undefined
 
 export type CalendarProps = {
@@ -27,4 +32,21 @@ export type CalendarProps = {
   view?: CalendarView;
   events?: any;
   resources?: any;
+  invalid?: any;
+}
+
+export type CalendarCellProps = {
+  className?: string;
+  label?: boolean;
+}
+
+export type CalendarTimelineProps = {
+  className?: string;
+  label?: boolean;
+  timelines?: any;
+}
+
+export type CalendarWeekProps = {
+  className?: string;
+  pattern?: string;
 }

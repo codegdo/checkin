@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import { format, subMonths, addMonths, addDays, subDays } from "date-fns";
+
 import { CalendarBody } from './calendar.body';
 import { CalendarHeader } from './calendar.header';
 
@@ -8,12 +10,18 @@ export const CalendarContext = React.createContext<CalendarContextProps>(undefin
 
 export const Calendar: React.FC = (): JSX.Element => {
 
+  const { current: values } = useRef({ day: 0 });
+
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+
   const view = React.useMemo(() => {
     return {
       schedule: {
         type: 'day',
-        startTime: '6:00',
-        endTime: '20:00'
+        startTime: '8:00',
+        endTime: '16:00'
       }
     };
   }, []);
@@ -32,7 +40,7 @@ export const Calendar: React.FC = (): JSX.Element => {
 
   return (
     <div>
-      <CalendarContext.Provider value={{ view, resources }}>
+      <CalendarContext.Provider value={{ view, resources, values, currentDate, setCurrentDate }}>
         <CalendarHeader />
         <CalendarBody />
       </CalendarContext.Provider>
