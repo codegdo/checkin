@@ -8,8 +8,13 @@
 .calendar-row {
   display: flex;
 }
-.calendar-cell {
+.calendar-column {
   flex: 1;
+}
+.calendar-cell {
+  height: 20px;
+  box-shadow: 1px 0 0 0 #ddd, 0 1px 0 0 #ddd, 1px 0 0 0 #ddd,
+    /* Just to fix the corner */ 1px 0 0 0 #ddd inset, 0 1px 0 0 #ddd inset;
 }
 
 .schedule-row {
