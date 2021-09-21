@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { CalendarAgenda } from './calendar.agenda';
 import { CalendarContext } from './calendar.component';
 import { CalendarEvent } from './calendar.event';
 import { CalendarSchedule } from './calendar.schedule';
@@ -13,9 +14,9 @@ export const CalendarBody: React.FC = (): JSX.Element | null => {
   const { view } = context;
 
   return (
-    <>
+    <div className="calendar-body">
       {
-        view.agenda && <CalendarEvent />
+        view.agenda && <CalendarAgenda />
       }
       {
         view.event && <CalendarEvent />
@@ -23,7 +24,7 @@ export const CalendarBody: React.FC = (): JSX.Element | null => {
       {
         view.schedule && <CalendarSchedule />
       }
-    </>
+    </div>
   )
 }
 

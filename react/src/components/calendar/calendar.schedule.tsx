@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
 import { format } from "date-fns";
 
-import { getTimelines, getWeekDays } from '../../helpers';
+import { getTimelines, getTimeIntervals, getWeekDays } from '../../helpers';
 import { CalendarContext } from './calendar.component';
 import { CalendarHeader } from './calendar.header';
 import { CalendarTimeline } from './calendar.timeline';
 import { CalendarWeek } from './calendar.week';
+import { CalendarTimer } from './calendar.timer';
 
 export const CalendarSchedule: React.FC = (): JSX.Element => {
   const context = useContext(CalendarContext);
@@ -14,73 +15,81 @@ export const CalendarSchedule: React.FC = (): JSX.Element => {
     throw new Error('Require FORMFIELD Nested In FORMCONTEXT');
   }
 
-  const { view = {}, resources, currentDate } = context;
+  const { view = {}, resources, currentDate = new Date() } = context;
   const { schedule } = view;
   const { type, startTime, endTime } = schedule;
 
   const timelines = getTimelines(startTime, endTime, 15);
+  const [offset, remaining, total] = getTimeIntervals(startTime, endTime);
   const weekDays = getWeekDays(currentDate);
 
   return (
-    <>
-      {
-        type == 'day' && <div>{format(currentDate, "dd MMMM yyyy")}</div>
-      }
-      <div className="calendar-row">
-        <div className="calendar-column"><div className="calendar-cell">.</div></div>
+    <div className="schedule">
+      <div className="schedule-header">
         {
           type == 'day' &&
-          resources.map((resource: any, i: number) => {
-            return <div key={i} className="calendar-column">{resource.name}</div>
-          })
+          <div>{format(currentDate, "dd MMMM yyyy")}</div>
         }
-        {
-          type == 'week' &&
-          resources.map((resource: any, i: number) => {
-            return <div key={i} className="calendar-column">
-              {resource.name}
-              <div className="calendar-row">
-                <CalendarWeek pattern={"dayname"} />
+
+        <div className="flex">
+          <div className="flex-col flex-1-1"></div>
+          {
+            type == 'day' &&
+            resources.map((resource: any, i: number) => {
+              return <div key={i} className="flex-col flex-1-1">{resource.name}</div>
+            })
+          }
+          {
+            type == 'week' &&
+            resources.map((resource: any, i: number) => {
+              return <div key={i} className="flex-col flex-1-1">
+                {resource.name}
+                <div className="flex">
+                  <CalendarWeek pattern={"dayname"} />
+                </div>
               </div>
-            </div>
-          })
-        }
-      </div>
-
-      <div className="calendar-row">
-
-        <div className="calendar-column">
-          <CalendarTimeline timelines={timelines} />
+            })
+          }
         </div>
-
-        {
-          type == 'day' &&
-          resources.map((resource: any) => {
-            return <div key={resource.name} className="calendar-column">
-              <CalendarTimeline timelines={timelines} label={false} />
-            </div>;
-          })
-        }
-        {
-          type == 'week' &&
-          resources.map((resource: any) => {
-            return <div key={resource.name} className="calendar-column">
-              <div className="calendar-row">
-                {
-                  weekDays.map((_day, i) => {
-                    return <div key={i} className="calendar-column">
-                      <CalendarTimeline timelines={timelines} label={false} />
-                    </div>
-                  })
-                }
-              </div>
-            </div>;
-          })
-        }
-
       </div>
 
-    </>
+      <div className="schedule-body">
+
+        <CalendarTimer offset={offset} remaining={remaining} total={total} />
+        <div className="flex">
+
+          <div className="flex-col flex-1-1">
+            <CalendarTimeline timelines={timelines} />
+          </div>
+
+          {
+            type == 'day' &&
+            resources.map((resource: any) => {
+              return <div key={resource.name} className="flex-col flex-1-1">
+                <CalendarTimeline timelines={timelines} label={false} />
+              </div>;
+            })
+          }
+          {
+            type == 'week' &&
+            resources.map((resource: any) => {
+              return <div key={resource.name} className="flex-col flex-1-1">
+                <div className="flex">
+                  {
+                    weekDays.map((_day, i) => {
+                      return <div key={i} className="flex-col flex-1-1">
+                        <CalendarTimeline timelines={timelines} label={false} />
+                      </div>
+                    })
+                  }
+                </div>
+              </div>;
+            })
+          }
+
+        </div>
+      </div>
+    </div>
   )
 }
 

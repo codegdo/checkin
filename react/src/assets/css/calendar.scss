@@ -5,21 +5,23 @@
 .calendar-body {
 }
 
-.calendar-row {
-  display: flex;
-}
-.calendar-column {
-  flex: 1;
-}
 .calendar-cell {
-  height: 20px;
+  height: 30px;
   box-shadow: 1px 0 0 0 #ddd, 0 1px 0 0 #ddd, 1px 0 0 0 #ddd,
     /* Just to fix the corner */ 1px 0 0 0 #ddd inset, 0 1px 0 0 #ddd inset;
 }
 
-.schedule-row {
-  display: flex;
+.schedule {
 }
-.schedule-cell {
-  flex: 1;
+.schedule-header {
+}
+.schedule-body {
+  position: relative;
+}
+.schedule-timer {
+  position: absolute;
+  border-top: 1px solid blue;
+  width: 100%;
+  top: 0;
+  left: 0;
 }

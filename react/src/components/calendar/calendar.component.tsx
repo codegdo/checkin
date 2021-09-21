@@ -39,7 +39,7 @@ export const Calendar: React.FC = (): JSX.Element => {
   }, []);
 
   return (
-    <div>
+    <div className="calendar">
       <CalendarContext.Provider value={{ view, resources, values, currentDate, setCurrentDate }}>
         <CalendarHeader />
         <CalendarBody />

@@ -13,8 +13,8 @@ export const CalendarHeader: React.FC = (): JSX.Element => {
   }
 
   const { view, currentDate = new Date(), setCurrentDate } = context;
-  const { schedule } = view;
-  const { type } = schedule;
+  const { schedule, event, agenda } = view;
+  const { type } = schedule || event || agenda;
 
   const handleNext = () => {
     switch (type) {
@@ -43,10 +43,10 @@ export const CalendarHeader: React.FC = (): JSX.Element => {
   }
 
   return (
-    <div className="calendar-row">
+    <div className="calendar-header">
       <div className="calendar-buttons">
         <button type="button" onClick={handlePrevious}>previous</button>
-        <span>Today</span>
+        <span onClick={() => setCurrentDate && setCurrentDate(new Date())}>Today</span>
         <button type="button" onClick={handleNext}>next</button>
       </div>
     </div>

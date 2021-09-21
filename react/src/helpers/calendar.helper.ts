@@ -1,4 +1,7 @@
 import {
+  differenceInMinutes,
+  getMinutes,
+  getHours,
   addMinutes,
   addDays,
   startOfDay,
@@ -52,4 +55,18 @@ export const getTimelines = (start: string, end: string, interval = 15): Date[] 
   }
 
   return slots;
+}
+
+export const getTimeIntervals = (start: string, end: string): number[] => {
+  const currentDate = new Date();
+  const startOfTime = startOfDay(currentDate);
+  const startTime = addMinutes(startOfTime, hourToMinutes(start));
+  const endTime = addMinutes(startOfTime, hourToMinutes(end));
+
+  const offset = Math.abs(differenceInMinutes(startTime, currentDate));
+  const remaining = Math.abs(differenceInMinutes(currentDate, endTime));
+  const total = Math.abs(differenceInMinutes(startTime, endTime));
+
+  return [offset, remaining, total]
+
 }
