@@ -48,9 +48,8 @@ export type CalendarTimelineProps = {
 
 export type CalendarTimerProps = {
   className?: string;
-  offset?: number;
-  remaining?: number;
-  total?: number;
+  startTime?: string;
+  endTime?: string;
 }
 
 export type CalendarWeekProps = {

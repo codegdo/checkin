@@ -57,7 +57,7 @@ export const getTimelines = (start: string, end: string, interval = 15): Date[] 
   return slots;
 }
 
-export const getTimeIntervals = (start: string, end: string): number[] => {
+export const getTimeIntervals = (start: string, end: string): { [key: string]: number } => {
   const currentDate = new Date();
   const startOfTime = startOfDay(currentDate);
   const startTime = addMinutes(startOfTime, hourToMinutes(start));
@@ -67,6 +67,31 @@ export const getTimeIntervals = (start: string, end: string): number[] => {
   const remaining = Math.abs(differenceInMinutes(currentDate, endTime));
   const total = Math.abs(differenceInMinutes(startTime, endTime));
 
-  return [offset, remaining, total]
+  return { offset, remaining, total }
 
+}
+
+export const calculateTimeOffset = (start: string): number => {
+  const currentDate = new Date();
+  const startOfTime = startOfDay(currentDate);
+  const startTime = addMinutes(startOfTime, hourToMinutes(start));
+
+  return Math.abs(differenceInMinutes(startTime, currentDate));
+}
+
+export const calculateTimeRemaining = (end: string): number => {
+  const currentDate = new Date();
+  const startOfTime = startOfDay(currentDate);
+  const endTime = addMinutes(startOfTime, hourToMinutes(end));
+
+  return Math.abs(differenceInMinutes(currentDate, endTime));
+}
+
+export const calculateTimeInterval = (start: string, end: string): number => {
+  const currentDate = new Date();
+  const startOfTime = startOfDay(currentDate);
+  const startTime = addMinutes(startOfTime, hourToMinutes(start));
+  const endTime = addMinutes(startOfTime, hourToMinutes(end));
+
+  return Math.abs(differenceInMinutes(startTime, endTime));
 }

@@ -6,6 +6,7 @@ import { CalendarHeader } from './calendar.header';
 
 import { CalendarContextProps } from './calendar.type';
 
+
 export const CalendarContext = React.createContext<CalendarContextProps>(undefined);
 
 export const Calendar: React.FC = (): JSX.Element => {
@@ -15,12 +16,11 @@ export const Calendar: React.FC = (): JSX.Element => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
 
-
   const view = React.useMemo(() => {
     return {
       schedule: {
         type: 'day',
-        startTime: '8:00',
+        startTime: '12:00',
         endTime: '16:00'
       }
     };

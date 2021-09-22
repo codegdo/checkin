@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
-import { format } from "date-fns";
+import { format, isToday } from "date-fns";
 
-import { getTimelines, getTimeIntervals, getWeekDays } from '../../helpers';
+import { getTimelines, getWeekDays } from '../../helpers';
 import { CalendarContext } from './calendar.component';
-import { CalendarHeader } from './calendar.header';
+
 import { CalendarTimeline } from './calendar.timeline';
 import { CalendarWeek } from './calendar.week';
 import { CalendarTimer } from './calendar.timer';
+
 
 export const CalendarSchedule: React.FC = (): JSX.Element => {
   const context = useContext(CalendarContext);
@@ -20,7 +21,6 @@ export const CalendarSchedule: React.FC = (): JSX.Element => {
   const { type, startTime, endTime } = schedule;
 
   const timelines = getTimelines(startTime, endTime, 15);
-  const [offset, remaining, total] = getTimeIntervals(startTime, endTime);
   const weekDays = getWeekDays(currentDate);
 
   return (
@@ -55,7 +55,10 @@ export const CalendarSchedule: React.FC = (): JSX.Element => {
 
       <div className="schedule-body">
 
-        <CalendarTimer offset={offset} remaining={remaining} total={total} />
+        {
+          isToday(currentDate) && <CalendarTimer startTime={startTime} endTime={endTime} />
+        }
+
         <div className="flex">
 
           <div className="flex-col flex-1-1">
