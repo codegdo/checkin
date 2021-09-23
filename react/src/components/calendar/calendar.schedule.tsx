@@ -28,7 +28,10 @@ export const CalendarSchedule: React.FC = (): JSX.Element => {
       <div className="schedule-header">
         {
           type == 'day' &&
-          <div>{format(currentDate, "dd MMMM yyyy")}</div>
+          <div>
+            <span>{format(currentDate, "eeee")}</span>
+            <span className={`${isToday(currentDate) ? '-selected' : ''}`}>{format(currentDate, "dd")}</span>
+          </div>
         }
 
         <div className="flex">

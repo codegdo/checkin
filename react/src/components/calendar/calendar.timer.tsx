@@ -1,14 +1,9 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useState } from 'react';
 import { format } from "date-fns";
 
 import { CalendarTimerProps } from './calendar.type';
 import { useWindowFocus } from '../../hooks';
 import { calculateTimeInterval, calculateTimeOffset } from '../../helpers';
-
-type Action = {
-  type: 'COUNTING' | 'UPDATING';
-  payload?: any
-};
 
 type State = {
   currentTime: string;
@@ -17,56 +12,42 @@ type State = {
   position: number;
 }
 
-const init = (initialState: State) => initialState;
-
-const reducer = (state: State, action: Action) => {
-  switch (action.type) {
-    case 'COUNTING':
-      return { ...state, ...action.payload };
-    case 'UPDATING':
-      return { ...state, ...action.payload };
-    default:
-      return state;
-  }
-}
-
-export const CalendarTimer: React.FC<CalendarTimerProps> = ({ startTime = '0:00', endTime = '0:00' }): JSX.Element => {
+export const CalendarTimer: React.FC<CalendarTimerProps> = ({ startTime = '0:00', endTime = '0:00' }): JSX.Element | null => {
 
   const today = new Date();
   const offset = calculateTimeOffset(startTime);
   const total = calculateTimeInterval(startTime, endTime);
 
-  const initialState = {
+  const focused = useWindowFocus();
+
+  if (offset < 0 || offset > total) {
+    return null;
+  }
+
+  const [state, setState] = useState<State>({
     currentTime: format(today, 'h:mm a'),
     minutes: offset,
     seconds: today.getSeconds(),
-    position: offset * 2
-  }
+    position: offset
+  });
 
-  const [{ currentTime, minutes, seconds, position }, dispatch] = useReducer(reducer, initialState, init);
-
-  const focused = useWindowFocus();
+  const { currentTime, minutes, seconds, position } = state;
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (seconds < 60) {
-        dispatch({
-          type: 'COUNTING',
-          payload: { seconds: +seconds + 1 }
-        });
+        setState({ ...state, seconds: +seconds + 1 });
       }
       if (seconds === 60) {
         if (minutes === total) {
           clearInterval(interval);
         } else {
-          dispatch({
-            type: 'UPDATING',
-            payload: {
-              currentTime: format(today, 'h:mm a'),
-              minutes: +minutes + 1,
-              seconds: 0,
-              position: +position + 2
-            }
+          setState({
+            ...state,
+            currentTime: format(today, 'h:mm a'),
+            minutes: +minutes + 1,
+            seconds: 0,
+            position: +position + 1
           });
         }
       }
@@ -83,18 +64,16 @@ export const CalendarTimer: React.FC<CalendarTimerProps> = ({ startTime = '0:00'
 
     const offset = calculateTimeOffset(startTime);
 
-    dispatch({
-      type: 'UPDATING',
-      payload: {
-        currentTime: format(today, 'h:mm a'),
-        seconds: today.getSeconds(),
-        position: offset * 2
-      }
+    setState({
+      ...state,
+      currentTime: format(today, 'h:mm a'),
+      seconds: today.getSeconds(),
+      position: offset
     });
 
   }, [focused]);
 
-  return <div className="schedule-timer" style={{ top: position }}>{currentTime}{seconds}</div>
+  return <div className="schedule-timer" style={{ top: position }}>{currentTime}</div>
 }
 
 /*

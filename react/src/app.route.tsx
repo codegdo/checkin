@@ -3,7 +3,7 @@ import { useRoutes } from 'react-router-dom';
 
 import { RouteGuard } from './components/route/route.guard';
 import { Template } from './components/template/template.component';
-import { AuthRoute, CheckinRoute, CheckoutRoute, SetupRoute, ScheduleRoute, HomeRoute } from './views';
+import { AuthRoute, CheckinRoute, CheckoutRoute, SetupRoute, SchedulerRoute, HomeRoute } from './views';
 const NotFound = Template(lazy(() => import('./views/notfound.component')));
 
 export const AppRoute: React.FC = (): JSX.Element => {
@@ -17,8 +17,8 @@ export const AppRoute: React.FC = (): JSX.Element => {
       element: <RouteGuard path='//*' element={<SetupRoute />} />
     },
     {
-      path: '/schedule*',
-      element: <RouteGuard path='//*' element={<ScheduleRoute />} />
+      path: '/scheduler*',
+      element: <RouteGuard path='//*' element={<SchedulerRoute />} />
     },
     {
       path: '/auth*',

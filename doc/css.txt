@@ -5,9 +5,26 @@ calendar
    calendar-nav
    calendar-title
    calendar-filter
+   calendar-picker
    calendar-button
 
  calendar-body
+  
+  schedule
+    schedule-header
+
+  event
+    event-header
+
+  agenda
+    agenda-header
+  
+  
+  
+  
+  
+  
+  
   calendar-week
    calendar-day
 
@@ -25,10 +42,12 @@ view
   month
   week
   day
+
  event
   month
   week
   day
+
  agenda
   month
   week

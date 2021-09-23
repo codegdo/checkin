@@ -6,9 +6,17 @@
 }
 
 .calendar-cell {
-  height: 30px;
-  box-shadow: 1px 0 0 0 #ddd, 0 1px 0 0 #ddd, 1px 0 0 0 #ddd,
-    /* Just to fix the corner */ 1px 0 0 0 #ddd inset, 0 1px 0 0 #ddd inset;
+  height: 15px;
+
+  /*
+  box-shadow: 1px 0 0 0 #ddd, 0 1px 0 0 #ddd, 1px 0 0 0 #ddd, 1px 0 0 0 #ddd inset,
+    0 1px 0 0 #ddd inset;
+  */
+}
+
+.cell-border {
+  box-shadow: 0 1px 0 0 #ddd, 0 0 0 0 #ddd, 0 0 0 0 #ddd, 0 0 0 0 #ddd inset,
+    0 0 0 0 #ddd inset;
 }
 
 .schedule {
@@ -24,4 +32,13 @@
   width: 100%;
   top: 0;
   left: 0;
+}
+
+.calendar .-selected {
+  color: blue;
+}
+
+.calendar .flex-col {
+  box-shadow: 0 0 0 0 #ddd, 0 0 0 0 #ddd, 1px 0 0 0 #ddd, 0 0 0 0 #ddd inset,
+    0 0 0 0 #ddd inset;
 }

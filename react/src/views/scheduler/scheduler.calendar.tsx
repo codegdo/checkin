@@ -6,7 +6,7 @@ import { Partial } from '../../components/template/partial.component';
 const Appointment = Partial(lazy(() => import('./appointment/appointment.page')));
 const NotFound = Partial(lazy(() => import('../notfound.component')));
 
-const ScheduleCalendar: React.FC = (): JSX.Element => {
+const SchedulerCalendar: React.FC = (): JSX.Element => {
 
   return <Routes>
     <Route path="/" element={<Navigate to="appointments" />} />
@@ -15,4 +15,4 @@ const ScheduleCalendar: React.FC = (): JSX.Element => {
   </Routes>;
 };
 
-export default ScheduleCalendar;
+export default SchedulerCalendar;

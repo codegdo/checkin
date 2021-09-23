@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { format } from "date-fns";
+import { format, isToday } from "date-fns";
 
 import { getWeekDays } from '../../helpers';
 
@@ -13,16 +13,14 @@ export const CalendarWeek: React.FC<CalendarWeekProps> = ({ pattern = 'dayname' 
     throw new Error('Require FORMFIELD Nested In FORMCONTEXT');
   }
 
-  const { currentDate } = context;
-
-
+  const { currentDate = new Date() } = context;
 
   const weekDays = getWeekDays(currentDate);
 
   return <>
     {
       weekDays.map((day, i) => {
-        return <div key={i} className="calendar-column">
+        return <div key={i} className="flex-col flex-1-1">
           {
             pattern == 'name' &&
             <div>{format(day, 'eee')}</div>
@@ -34,7 +32,7 @@ export const CalendarWeek: React.FC<CalendarWeekProps> = ({ pattern = 'dayname' 
           {
             pattern == 'dayname' && <>
               <div>{format(day, 'eeeeee')}</div>
-              <div>{format(day, 'dd')}</div>
+              <div className={`${isToday(day) ? '-selected' : ''}`}>{format(day, 'dd')}</div>
             </>
           }
         </div>

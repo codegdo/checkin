@@ -44,10 +44,11 @@ export const CalendarHeader: React.FC = (): JSX.Element => {
 
   return (
     <div className="calendar-header">
+      <div></div>
       <div className="calendar-buttons">
-        <button type="button" onClick={handlePrevious}>previous</button>
+        <button type="button" onClick={handlePrevious}><i className="icon">navigate_before</i></button>
         <span onClick={() => setCurrentDate && setCurrentDate(new Date())}>Today</span>
-        <button type="button" onClick={handleNext}>next</button>
+        <button type="button" onClick={handleNext}><i className="icon">navigate_next</i></button>
       </div>
     </div>
   )

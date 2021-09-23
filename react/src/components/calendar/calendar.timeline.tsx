@@ -8,7 +8,7 @@ export const CalendarTimeline: React.FC<CalendarTimelineProps> = ({ timelines = 
     {
       timelines.map((timeline: any, i: number) => {
 
-        return (getMinutes(timeline) == 0) ? <div key={i} className={className}>
+        return (getMinutes(timeline) == 0) ? <div key={i} className={className + ' cell-border'}>
           {
             format(timeline, 'h a')
           }
@@ -17,8 +17,8 @@ export const CalendarTimeline: React.FC<CalendarTimelineProps> = ({ timelines = 
     }
   </> : <>
     {
-      timelines.map((_timeline: any, i: number) => {
-        return <div key={i} className={className}></div>
+      timelines.map((timeline: any, i: number) => {
+        return <div key={i} className={className + `${(getMinutes(timeline) == 0) ? ' cell-border' : ''}`}></div>
       })
     }
   </>

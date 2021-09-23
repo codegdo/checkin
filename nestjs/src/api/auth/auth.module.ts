@@ -9,7 +9,7 @@ import {
   BusinessRepository,
   UserRepository,
 } from 'src/models/main/repositories';
-import { CalendarRepository } from 'src/models/schedule/repositories';
+import { CalendarRepository } from 'src/models/scheduler/repositories';
 
 @Module({
   imports: [
@@ -26,4 +26,4 @@ import { CalendarRepository } from 'src/models/schedule/repositories';
   controllers: [AuthController],
   providers: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

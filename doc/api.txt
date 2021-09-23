@@ -14,7 +14,7 @@ checkout
 
 pos
 
-schedule
-  appointment
+calendar
+  appointments
 
 marketing

@@ -5,10 +5,9 @@ import { ConfigModule, ConfigService } from 'nestjs-config';
 import * as path from 'path';
 
 import { AuthModule } from './api/auth/auth.module';
-import { UserModule } from './api/admin/users/user.module';
+import { UserModule } from './api/admin/user/user.module';
 import { GuardModule, SessionModule, LoggerMiddleware } from './common';
 import { CustomerModule } from './api/customer/customer.module';
-import { EmployeeModule } from './api/employee/employee.module';
 import { CheckinModule } from './api/checkin/checkin.module';
 import { CheckoutModule } from './api/checkout/checkout.module';
 
@@ -38,7 +37,6 @@ import { CheckoutModule } from './api/checkout/checkout.module';
     AuthModule,
     UserModule,
     CustomerModule,
-    EmployeeModule,
     CheckinModule,
     CheckoutModule,
   ],
@@ -58,7 +56,7 @@ import { CheckoutModule } from './api/checkout/checkout.module';
   ],
 })
 export class AppModule {
-  constructor() {}
+  constructor() { }
 
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');

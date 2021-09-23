@@ -24,7 +24,7 @@ const schedule: ConnectionOptions = {
   ...options,
   database: 'schedule',
   name: 'schedule',
-  entities: [__dirname + '/../models/schedule/**/*.entity{.ts,.js}'],
+  entities: [__dirname + '/../models/scheduler/**/*.entity{.ts,.js}'],
 };
 
 export default { main, schedule };

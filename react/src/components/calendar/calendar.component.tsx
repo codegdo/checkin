@@ -14,14 +14,15 @@ export const Calendar: React.FC = (): JSX.Element => {
   const { current: values } = useRef({ day: 0 });
 
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  //const [selectedDate, setSelectedDate] = useState(new Date());
+  //const [view, setView] = useState();
 
   const view = React.useMemo(() => {
     return {
       schedule: {
         type: 'day',
-        startTime: '12:00',
-        endTime: '16:00'
+        startTime: '7:00',
+        endTime: '12:00'
       }
     };
   }, []);
