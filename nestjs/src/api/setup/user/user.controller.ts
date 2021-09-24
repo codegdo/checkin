@@ -13,7 +13,7 @@ import { CreateUserDto, UpdateUserDto, UserDto } from 'src/models/main/dtos';
 import { Serialize, PaginationQueryDto, CurrentUser } from 'src/common';
 import { User } from 'src/models/main/entities';
 
-@Controller('admin')
+@Controller('setup')
 export class UserController {
   constructor(private readonly userService: UserService) { }
 

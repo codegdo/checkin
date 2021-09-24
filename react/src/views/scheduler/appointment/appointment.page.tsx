@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Scheduler } from '../../../components/scheduler/scheduler.component';
+import { Calendar } from '../../../components/calendar/calendar.component';
 import { useFetch } from '../../../hooks';
 
 const Appointment: React.FC = (): JSX.Element => {
@@ -19,7 +19,7 @@ const Appointment: React.FC = (): JSX.Element => {
 
   return (
     <div>
-      <Scheduler
+      <Calendar
         loading={loading}
         view={view}
         events={events}

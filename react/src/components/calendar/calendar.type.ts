@@ -1,58 +1,26 @@
-
-type ViewOption = {
-  type: string;
+type ViewOptions = {
+  type: 'month' | 'week' | 'day' | 'list';
   allDay: boolean;
   startTime: string;
   endTime: string;
 }
 
-type AgendaView = ViewOption;
-type EventView = ViewOption;
-type ScheduleView = ViewOption;
-
-type CalendarView = {
-  agenda: AgendaView;
-  event: EventView;
-  schedule: ScheduleView;
-}
-
 export type CalendarContextProps = {
-  setCurrentDate?: React.Dispatch<React.SetStateAction<Date>>;
-  currentDate?: Date;
   theme?: string;
-  view?: any;
+  view?: ViewOptions;
   events?: any;
   resources?: any;
   invalid?: any;
-  values?: any;
 } | undefined
 
 export type CalendarProps = {
-  theme?: string;
-  view?: CalendarView;
+  loading?: string;
+  view?: ViewOptions;
   events?: any;
   resources?: any;
   invalid?: any;
-}
-
-export type CalendarCellProps = {
-  className?: string;
-  label?: boolean;
-}
-
-export type CalendarTimelineProps = {
-  className?: string;
-  label?: boolean;
-  timelines?: any;
-}
-
-export type CalendarTimerProps = {
-  className?: string;
-  startTime?: string;
-  endTime?: string;
-}
-
-export type CalendarWeekProps = {
-  className?: string;
-  pattern?: string;
+  setView?: React.Dispatch<React.SetStateAction<any>>,
+  setEvents?: React.Dispatch<React.SetStateAction<any>>,
+  setResources?: React.Dispatch<React.SetStateAction<any>>,
+  setInvalid?: React.Dispatch<React.SetStateAction<any>>
 }

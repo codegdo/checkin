@@ -4,12 +4,22 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from 'nestjs-config';
 import * as path from 'path';
 
-import { AuthModule } from './api/auth/auth.module';
-import { UserModule } from './api/admin/user/user.module';
-import { GuardModule, SessionModule, LoggerMiddleware } from './common';
-import { CustomerModule } from './api/customer/customer.module';
-import { CheckinModule } from './api/checkin/checkin.module';
-import { CheckoutModule } from './api/checkout/checkout.module';
+import {
+  GuardModule,
+  SessionModule,
+  LoggerMiddleware
+} from './common';
+
+import {
+  AuthModule,
+  UserModule,
+  CheckinModule,
+  CheckoutModule,
+  ClientModule,
+  SchedulerModule,
+  CalendarModule,
+  LocationModule
+} from './api';
 
 @Module({
   imports: [
@@ -36,9 +46,12 @@ import { CheckoutModule } from './api/checkout/checkout.module';
     GuardModule,
     AuthModule,
     UserModule,
-    CustomerModule,
     CheckinModule,
     CheckoutModule,
+    ClientModule,
+    SchedulerModule,
+    CalendarModule,
+    LocationModule,
   ],
   controllers: [],
   providers: [

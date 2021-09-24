@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { useRoutes } from 'react-router-dom';
+import { Navigate, useRoutes } from 'react-router-dom';
 import { Template } from '../../components/template/template.component';
 
 const Index = Template(lazy(() => import('./scheduler.index')));
@@ -10,10 +10,14 @@ export const SchedulerRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
     {
       path: '/',
+      element: <Navigate to="calendars" />
+    },
+    {
+      path: '/calendars',
       element: <Index page="scheduler" />
     },
     {
-      path: ':calendarId*',
+      path: '/calendars/:calendarId*',
       element: <Calendar page="calendar" />
     },
     {
