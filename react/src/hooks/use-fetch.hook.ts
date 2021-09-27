@@ -3,7 +3,7 @@ import { http, RequestOption } from '../services';
 
 type Action = {
   type: 'IDLE' | 'LOADING' | 'SUCCESS' | 'FAILURE';
-  payload?: any
+  payload?: any;
 };
 
 type State = {
@@ -36,6 +36,8 @@ export const useFetch = (
 
   const callback = useCallback(
     async (option?: RequestOption) => {
+      url = url || option?.url;
+
       if (!url) {
         console.warn('Invalid fetch url');
         return;

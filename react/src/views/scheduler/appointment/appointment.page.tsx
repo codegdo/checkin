@@ -1,21 +1,34 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { Calendar } from '../../../components/calendar/calendar.component';
 import { useFetch } from '../../../hooks';
 
 const Appointment: React.FC = (): JSX.Element => {
 
-  const [{ loading, result }, fetchAppointment] = useFetch('/api/auth/login');
+  const [{ loading, result }, fetchAppointments] = useFetch();
 
   const [view, setView] = useState();
   const [events, setEvents] = useState();
   const [resources, setResources] = useState();
   const [invalid, setInvalid] = useState();
-
+  const { calendarId } = useParams();
 
   // load data
   useEffect(() => {
-    //void (async () => {})();
+    void fetchAppointments({
+      url: `/api/scheduler/calendars/${calendarId}/appointments?employeeId=2`
+    });
   }, []);
+
+  useEffect(() => {
+    if (loading === 'success') {
+      console.log(result);
+    }
+  }, [loading]);
+
+  if (loading === 'pending') {
+    return <div>loading...</div>
+  }
 
   return (
     <div>
