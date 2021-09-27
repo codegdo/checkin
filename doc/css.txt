@@ -35,7 +35,10 @@ calendar
 
   calendar-profile
    calendar-staff
-   
+
+calendar-nav
+calendar-header
+calendar-body   
 
 view
  schedule

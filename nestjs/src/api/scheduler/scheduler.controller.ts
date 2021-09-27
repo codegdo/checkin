@@ -12,11 +12,11 @@ export class SchedulerController {
     return { calendars: [] };
   }
 
-  @Get('calendars/:calendarId/appointments')
+  @Get('appointments')
   getAllAppointments(
     @Session() session: any,
     @CurrentUser() user: User,
-    @Param('calendarId') calendarId: number,
+    @Query('calendarId') calendarId: number,
     @Query('employeeId') employeeId: number,
   ) {
     console.log(session.id);
@@ -26,15 +26,13 @@ export class SchedulerController {
     return { appointments: [] };
   }
 
-  @Get('calendars/:calendarId/appointments/:appointmentId')
+  @Get('appointments/:appointmentId')
   getOneAppointments(
     @Session() session: any,
     @CurrentUser() user: User,
-    @Param('calendarId') calendarId: number,
     @Param('appointmentId') appointmentId: number,
   ) {
     console.log(session.id);
-    console.log(calendarId);
     console.log(appointmentId);
 
     return { appointment: {} };

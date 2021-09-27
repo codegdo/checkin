@@ -24,6 +24,9 @@ scheduler/calendars
 scheduler/appointments?calendar=1
 scheduler/appointments?appointment=1&calendar=1
 
+
+
+
 scheduler/calendars
 scheduler/calendars/1/appointments
 scheduler/calendars/1/appointments/1

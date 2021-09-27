@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useFetch } from '../../hooks';
+import { useFetch } from '../../../hooks';
 
-const SchedulerIndex: React.FC = (): JSX.Element => {
+const Calendar: React.FC = (): JSX.Element => {
 
   const [{ loading, result }, fetchCalendars] = useFetch('/api/scheduler/calendars');
 
@@ -20,7 +20,7 @@ const SchedulerIndex: React.FC = (): JSX.Element => {
     return <div>loading...</div>
   }
 
-  return <Link to="1">Calendar</Link>;
+  return <Link to="../appointments?calendarId=1">Calendar</Link>;
 };
 
-export default SchedulerIndex;
+export default Calendar;
