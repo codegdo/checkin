@@ -1,15 +1,23 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar } from '../../../components/calendar/calendar.component';
 import { ViewOptions } from '../../../components/calendar/calendar.type';
 import { useFetch, useQuery } from '../../../hooks';
+
+const defaultView: ViewOptions = {
+  type: 'week',
+  className: 'calendar',
+  allDay: false,
+  startTime: '',
+  endTime: ''
+}
 
 const Appointment: React.FC = (): JSX.Element => {
 
   const [{ loading, result }, fetchAppointments] = useFetch();
 
-  const [view, setView] = useState<ViewOptions>();
+  const [view, setView] = useState(defaultView);
   const [events, setEvents] = useState();
-  const [resources, setResources] = useState();
+  const [resources, setResources] = useState<any>();
   const [invalid, setInvalid] = useState();
   const { calendarId } = useQuery();
 
@@ -25,12 +33,20 @@ const Appointment: React.FC = (): JSX.Element => {
       console.log(result);
 
       setView({
-        type: 'week',
-        className: 'schedule',
-        allDay: false,
+        ...view,
         startTime: '',
         endTime: ''
       });
+
+      setResources([{
+        id: 1,
+        name: 'Thanh',
+        color: '#f7c4b4'
+      }, {
+        id: 2,
+        name: 'Mana',
+        color: '#c6f1c9'
+      }]);
     }
   }, [loading]);
 

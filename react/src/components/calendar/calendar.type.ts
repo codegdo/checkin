@@ -12,12 +12,37 @@ export type CalendarProps = {
   events?: any;
   resources?: any;
   invalid?: any;
-  currentDate: Date;
-  setCurrentDate: React.Dispatch<React.SetStateAction<any>>,
+
   setView?: React.Dispatch<React.SetStateAction<any>>,
   setEvents?: React.Dispatch<React.SetStateAction<any>>,
   setResources?: React.Dispatch<React.SetStateAction<any>>,
   setInvalid?: React.Dispatch<React.SetStateAction<any>>
 }
 
-export type CalendarContextProps = CalendarProps | undefined
+export type CalendarContextProps = {
+  currentDate: Date;
+  setCurrentDate: React.Dispatch<React.SetStateAction<any>>
+} & CalendarProps | undefined
+
+export type CalendarControlProps = {
+  className?: string;
+}
+
+export type HeaderDayProps = {
+  resources?: any;
+  currentDate?: Date;
+}
+
+export type HeaderWeekProps = {
+  resources?: any;
+  currentDate?: Date;
+}
+
+export type HeaderMonthProps = {
+  currentDate?: Date;
+}
+
+export type DayLabelProps = {
+  pattern?: string;
+  day?: Date;
+}
