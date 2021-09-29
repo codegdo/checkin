@@ -5,10 +5,7 @@ import { useFetch, useQuery } from '../../../hooks';
 
 const defaultView: ViewOptions = {
   type: 'week',
-  className: 'calendar',
-  allDay: false,
-  startTime: '',
-  endTime: ''
+  className: 'calendar'
 }
 
 const Appointment: React.FC = (): JSX.Element => {
@@ -34,8 +31,8 @@ const Appointment: React.FC = (): JSX.Element => {
 
       setView({
         ...view,
-        startTime: '',
-        endTime: ''
+        startTime: '8:00',
+        endTime: '14:00'
       });
 
       setResources([{

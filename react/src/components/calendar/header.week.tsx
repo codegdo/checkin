@@ -3,13 +3,12 @@ import { format, isToday } from "date-fns";
 
 import { getWeekDays } from '../../helpers';
 import { HeaderWeekProps } from './calendar.type';
-import { DayLabel } from './day.label';
 
-export const HeaderWeek: React.FC<HeaderWeekProps> = ({ resources = [], currentDate = new Date() }): JSX.Element => {
+export const HeaderWeek: React.FC<HeaderWeekProps> = ({ resources, currentDate = new Date() }): JSX.Element => {
 
   const weekDays = getWeekDays(currentDate);
 
-  return (
+  return resources ?
     <div className="flex">
       {
         resources.map((resource: any, i: number) => {
@@ -21,14 +20,30 @@ export const HeaderWeek: React.FC<HeaderWeekProps> = ({ resources = [], currentD
               {
                 weekDays.map((day, j) => {
                   return <div key={j} className="flex-col flex-1">
-                    <DayLabel day={day} pattern="weekname" />
+                    <div>
+                      <span>{format(day, 'eee')}</span>
+                      <span>{format(day, 'd')}</span>
+                    </div>
                   </div>
                 })
               }
+            </div>
+
+          </div>
+        })
+      }
+    </div>
+    :
+    <div className="flex">
+      {
+        weekDays.map((day, i) => {
+          return <div key={i} className="flex-col flex-1">
+            <div>
+              <span>{format(day, 'eee')}</span>
+              <span>{format(day, 'd')}</span>
             </div>
           </div>
         })
       }
     </div>
-  )
 }

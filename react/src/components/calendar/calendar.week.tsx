@@ -1,42 +1,51 @@
 import React, { useContext } from 'react';
-import { format, isToday } from "date-fns";
-
-import { getWeekDays } from '../../helpers';
 
 import { CalendarContext } from './calendar.component';
-import { CalendarWeekProps } from './calendar.type';
+import { CalendarTimeline } from './calendar.timeline';
+import { getTimelines, getWeekDays } from '../../helpers';
 
-export const CalendarWeek: React.FC<CalendarWeekProps> = ({ pattern = 'dayname' }): JSX.Element => {
+export const CalendarWeek: React.FC = (): JSX.Element => {
   const context = useContext(CalendarContext);
 
   if (!context) {
     throw new Error('Require FORMFIELD Nested In FORMCONTEXT');
   }
 
-  const { currentDate = new Date() } = context;
-
+  const { view, resources, currentDate = new Date() } = context;
+  const { startTime = '0:00', endTime = '24:00' } = view || {};
   const weekDays = getWeekDays(currentDate);
+  const timelines = getTimelines(startTime, endTime, 15);
 
   return <>
     {
-      weekDays.map((day, i) => {
-        return <div key={i} className="flex-col flex-1">
+      resources ?
+        <div className="flex">
           {
-            pattern == 'day' &&
-            <div>{format(day, 'dd')}</div>
-          }
-          {
-            pattern == 'name' &&
-            <div>{format(day, 'eee')}</div>
-          }
-          {
-            pattern == 'dayname' && <>
-              <div>{format(day, 'eeeeee')}</div>
-              <div className={`${isToday(day) ? '-selected' : ''}`}>{format(day, 'dd')}</div>
-            </>
+            resources.map((resource: any) => {
+              return <div key={resource.name} className="flex-col flex-1">
+                <div className="flex">
+                  {
+                    weekDays.map((_day, i) => {
+                      return <div key={i} className="flex-col flex-1">
+                        <CalendarTimeline timelines={timelines} label={false} />
+                      </div>
+                    })
+                  }
+                </div>
+              </div>;
+            })
           }
         </div>
-      })
+        :
+        <div className="flex">
+          {
+            weekDays.map((_day, i) => {
+              return <div key={i} className="flex-col flex-1">
+                <CalendarTimeline timelines={timelines} label={false} />
+              </div>
+            })
+          }
+        </div>
     }
   </>
 }

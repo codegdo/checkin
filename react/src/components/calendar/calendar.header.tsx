@@ -12,7 +12,7 @@ export const CalendarHeader: React.FC = (): JSX.Element => {
     throw new Error('Require CALENDAR HEADER Nested In CALENDAR CONTEXT');
   }
 
-  const { view, resources = [], currentDate } = context;
+  const { view, resources, currentDate } = context;
   const { type } = view || {};
 
   return (
