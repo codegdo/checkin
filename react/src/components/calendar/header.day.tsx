@@ -13,6 +13,7 @@ export const HeaderDay: React.FC<HeaderDayProps> = ({ resources, currentDate = n
       </div>
       {
         resources && <div className="flex">
+          <div className="flex-col flex-1"></div>
           {
             resources.map((resource: any, i: number) => {
               return <div key={i} className="flex-col flex-1">

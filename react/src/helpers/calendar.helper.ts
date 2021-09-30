@@ -49,7 +49,7 @@ export const getTimelines = (start: string, end: string, interval = 15): Date[] 
   const slots: Date[] = [];
   let slot = startTime;
 
-  while (slot <= endTime) {
+  while (slot < endTime) {
     slots.push(slot);
     slot = addMinutes(slot, interval)
   }

@@ -16,20 +16,52 @@ export const CalendarWeek: React.FC = (): JSX.Element => {
   const weekDays = getWeekDays(currentDate);
   const timelines = getTimelines(startTime, endTime, 15);
 
-  return <>
+  return <div className="flex">
+    <div className="flex-col flex-1">
+      <CalendarTimeline timelines={timelines} />
+    </div>
+    {
+      resources ?
+        resources.map((resource: any) => {
+          return <div key={resource.name} className="flex-col flex-1">
+            <div className="flex">
+              {
+                weekDays.map((_day, i) => {
+                  return <div key={i} className="flex-col flex-1">
+                    <CalendarTimeline timelines={timelines} label={false} />
+                  </div>
+                })
+              }
+            </div>
+          </div>;
+        }) :
+        weekDays.map((_day, i) => {
+          return <div key={i} className="flex-col flex-1">
+            <CalendarTimeline timelines={timelines} label={false} />
+          </div>
+        })
+    }
+  </div>
+}
+
+/*
+return <>
     {
       resources ?
         <div className="flex">
+          <div className="flex-col flex-1"><CalendarTimeline timelines={timelines} /></div>
           {
             resources.map((resource: any) => {
               return <div key={resource.name} className="flex-col flex-1">
                 <div className="flex">
                   {
+
                     weekDays.map((_day, i) => {
                       return <div key={i} className="flex-col flex-1">
                         <CalendarTimeline timelines={timelines} label={false} />
                       </div>
                     })
+
                   }
                 </div>
               </div>;
@@ -38,14 +70,17 @@ export const CalendarWeek: React.FC = (): JSX.Element => {
         </div>
         :
         <div className="flex">
+          <div className="flex-col flex-1"><CalendarTimeline timelines={timelines} /></div>
           {
+
             weekDays.map((_day, i) => {
               return <div key={i} className="flex-col flex-1">
                 <CalendarTimeline timelines={timelines} label={false} />
               </div>
             })
+
           }
         </div>
     }
   </>
-}
+*/

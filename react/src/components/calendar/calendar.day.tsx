@@ -12,28 +12,23 @@ export const CalendarDay: React.FC = (): JSX.Element => {
   }
 
   const { view, resources } = context;
-  const { startTime = '8:00', endTime = '20:00' } = view || {};
+  const { startTime = '0:00', endTime = '24:00' } = view || {};
 
   const timelines = getTimelines(startTime, endTime, 15);
 
-  return <>
+  return <div className="flex">
+    <div className="flex-col flex-1">
+      <CalendarTimeline timelines={timelines} />
+    </div>
     {
-      resources ?
-        <div className="flex">
-          {
-            resources.map((resource: any) => {
-              return <div key={resource.name} className="flex-col flex-1">
-                <CalendarTimeline timelines={timelines} label={false} />
-              </div>
-            })
-          }
+      resources ? resources.map((resource: any) => {
+        return <div key={resource.name} className="flex-col flex-1">
+          <CalendarTimeline timelines={timelines} label={false} />
         </div>
-        :
-        <div className="flex">
-          <div className="flex-col flex-1">
-            <CalendarTimeline timelines={timelines} label={false} />
-          </div>
+      }) :
+        <div className="flex-col flex-1">
+          <CalendarTimeline timelines={timelines} label={false} />
         </div>
     }
-  </>
+  </div>
 }

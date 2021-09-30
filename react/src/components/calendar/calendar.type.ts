@@ -8,7 +8,7 @@ export type ViewOptions = {
 
 export type CalendarProps = {
   loading?: string;
-  view?: ViewOptions;
+  view: ViewOptions;
   events?: any;
   resources?: any;
   invalid?: any;
@@ -58,5 +58,22 @@ export type DayNameProps = {
   name?: string;
   day?: Date;
   isCurrent?: boolean;
+}
+
+export type ControlButtonProps = {
+  handlePrevious: () => void;
+  handleNext: () => void;
+  handleToday: () => void;
+}
+
+export type ControlPickerProps = {
+  handleMonth: () => void;
+  handleWeek: () => void;
+  handleDay: () => void;
+  handleList: () => void;
+}
+
+export type ControlMonthProps = {
+  day: Date;
 }
 

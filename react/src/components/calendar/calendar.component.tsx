@@ -7,12 +7,12 @@ import { CalendarContextProps, CalendarProps } from './calendar.type';
 
 export const CalendarContext = React.createContext<CalendarContextProps>(undefined);
 
-export const Calendar: React.FC<CalendarProps> = ({ view, resources }): JSX.Element => {
+export const Calendar: React.FC<CalendarProps> = ({ view, resources, setView }): JSX.Element => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   return (
     <div className="calendar">
-      <CalendarContext.Provider value={{ currentDate, view, resources, setCurrentDate }}>
+      <CalendarContext.Provider value={{ currentDate, view, resources, setCurrentDate, setView }}>
         <CalendarControl />
         <CalendarHeader />
         <CalendarBody />

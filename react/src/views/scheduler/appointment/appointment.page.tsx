@@ -4,7 +4,7 @@ import { ViewOptions } from '../../../components/calendar/calendar.type';
 import { useFetch, useQuery } from '../../../hooks';
 
 const defaultView: ViewOptions = {
-  type: 'week',
+  type: 'month',
   className: 'calendar'
 }
 
