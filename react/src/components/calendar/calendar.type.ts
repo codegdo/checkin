@@ -74,6 +74,7 @@ export type ControlPickerProps = {
 }
 
 export type ControlMonthProps = {
+  handleDate: (date: Date) => void
   day: Date;
 }
 

@@ -40,6 +40,38 @@ export const getMonthDays = (currentDate = new Date()): Date[] => {
   return days;
 }
 
+export const getYearsRange = (year): [] => {
+
+  const years = [];
+  let start = year;
+  let end = year + 12;
+
+  while (start < end) {
+    years.push(start);
+    start = start + 1;
+  }
+
+  return years;
+
+}
+
+export const getAllMonths = (): string[] => {
+  return [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec'
+  ]
+}
+
 export const getTimelines = (start: string, end: string, interval = 15): Date[] => {
   const currentDate = new Date();
   const startOfTime = startOfDay(currentDate);

@@ -69,9 +69,16 @@ export const CalendarControl: React.FC<CalendarControlProps> = ({ className = "c
     setCurrentDate(new Date());
   }
 
+  const handleDate = (date: Date) => {
+    setCurrentDate(date);
+  }
+
   return (
     <div className={className}>
-      <ControlMonth day={currentDate} />
+      <ControlMonth
+        handleDate={handleDate}
+        day={currentDate}
+      />
       <ControlPicker
         handleMonth={handleMonth}
         handleWeek={handleWeek}
