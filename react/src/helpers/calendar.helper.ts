@@ -8,9 +8,9 @@ import {
   startOfWeek,
   endOfWeek,
   startOfMonth,
-  endOfMonth
-} from "date-fns";
-import { hourToMinutes } from "../utils";
+  endOfMonth,
+} from 'date-fns';
+import { hourToMinutes } from '../utils';
 
 export const getWeekDays = (currentDate = new Date()): Date[] => {
   const days: Date[] = [];
@@ -21,7 +21,7 @@ export const getWeekDays = (currentDate = new Date()): Date[] => {
   }
 
   return days;
-}
+};
 
 export const getMonthDays = (currentDate = new Date()): Date[] => {
   const startMonth = startOfMonth(currentDate);
@@ -38,10 +38,9 @@ export const getMonthDays = (currentDate = new Date()): Date[] => {
   }
 
   return days;
-}
+};
 
-export const getYearsRange = (year): [] => {
-
+export const getYearsRange = (year: number): number[] => {
   const years = [];
   let start = year;
   let end = year + 12;
@@ -52,8 +51,7 @@ export const getYearsRange = (year): [] => {
   }
 
   return years;
-
-}
+};
 
 export const getAllMonths = (): string[] => {
   return [
@@ -68,9 +66,9 @@ export const getAllMonths = (): string[] => {
     'Sep',
     'Oct',
     'Nov',
-    'Dec'
-  ]
-}
+    'Dec',
+  ];
+};
 
 export const getTimelines = (start: string, end: string, interval = 15): Date[] => {
   const currentDate = new Date();
@@ -83,11 +81,11 @@ export const getTimelines = (start: string, end: string, interval = 15): Date[] 
 
   while (slot < endTime) {
     slots.push(slot);
-    slot = addMinutes(slot, interval)
+    slot = addMinutes(slot, interval);
   }
 
   return slots;
-}
+};
 
 export const calculateTimeOffset = (start: string): number => {
   const currentDate = new Date();
@@ -95,7 +93,7 @@ export const calculateTimeOffset = (start: string): number => {
   const startTime = addMinutes(startOfTime, hourToMinutes(start));
 
   return differenceInMinutes(currentDate, startTime);
-}
+};
 
 export const calculateTimeRemaining = (end: string): number => {
   const currentDate = new Date();
@@ -103,7 +101,7 @@ export const calculateTimeRemaining = (end: string): number => {
   const endTime = addMinutes(startOfTime, hourToMinutes(end));
 
   return differenceInMinutes(currentDate, endTime);
-}
+};
 
 export const calculateTimeInterval = (start: string, end: string): number => {
   const currentDate = new Date();
@@ -112,4 +110,4 @@ export const calculateTimeInterval = (start: string, end: string): number => {
   const endTime = addMinutes(startOfTime, hourToMinutes(end));
 
   return differenceInMinutes(endTime, startTime);
-}
+};

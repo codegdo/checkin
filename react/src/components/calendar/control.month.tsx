@@ -10,7 +10,7 @@ export const ControlMonth: React.FC<ControlMonthProps> = ({ day, handleDate }): 
 
   const ddRef = useRef(null);
 
-  const yrRef = useRef({
+  const { current } = useRef({
     month: format(day, 'M'),
     year: format(day, 'yyyy')
   });
@@ -18,60 +18,62 @@ export const ControlMonth: React.FC<ControlMonthProps> = ({ day, handleDate }): 
   const [isToggle, setIsToggle] = useToggle(ddRef, false);
   const onToggle = () => setIsToggle(!isToggle);
 
-  const [months, setMonths] = useState(getAllMonths());
-  const [years, setYears] = useState([]);
+  const [months, setMonths] = useState<string[]>([]);
+  const [years, setYears] = useState<number[]>([]);
 
 
   useEffect(() => {
     const yearsRange = getYearsRange(getYear(subYears(day, 6)));
+    const monthsRange = getAllMonths();
     setYears(yearsRange);
+    setMonths(monthsRange);
   }, [day])
 
   const handleMonth = (event: React.MouseEvent) => {
     const target = event.target as HTMLButtonElement;
-    yrRef.current.month = target.value;
+    current.month = target.value;
 
-    handleDate(new Date(+yrRef.current.year, +yrRef.current.month, +format(day, 'dd')));
-    console.log(yrRef.current);
+    handleDate(new Date(+current.year, +current.month, +format(day, 'dd')));
+    console.log(current);
   }
 
   const handleYear = (event: React.MouseEvent) => {
     const target = event.target as HTMLButtonElement;
-    yrRef.current.year = target.value;
+    current.year = target.value;
 
-    console.log(yrRef.current);
+    console.log(current);
   }
 
   const handlePrevious = (): void => {
-    //subYears();
-    setYears(getYearsRange(years.at(0) - 12));
+    const year = years.at(0);
+    year && setYears(getYearsRange(year - 12));
   };
 
   const handleNext = (): void => {
-    //addYears()
-    setYears(getYearsRange(years.at(-1) + 1));
+    const year = years.at(-1);
+    year && setYears(getYearsRange(year + 1));
   };
 
   return (
-    <div ref={ddRef} aria-expanded={isToggle}>
+    <div ref={ddRef} className={`${isToggle ? '-open' : ''}`}>
       <button type="button" onClick={onToggle}>{format(day, 'MMMM')} {format(day, 'yyyy')}</button>
 
-      <div>
+      <div aria-expanded={isToggle}>
         <span>{years.at(0)} - {years.at(-1)}</span>
         <button type="button" onClick={handlePrevious}>Pre</button>
         <button type="button" onClick={handleNext}>Next</button>
         <div>
           <div>
             {
-              months.map((month, i) => {
-                return <button key={month} type="button" value={i} onClick={handleMonth}>{month}</button>
+              years.map((year) => {
+                return <button key={year} type="button" value={year} onClick={handleYear}>{year}</button>
               })
             }
           </div>
           <div>
             {
-              years.map((year) => {
-                return <button key={year} type="button" value={year} onClick={handleYear}>{year}</button>
+              months.map((month, i) => {
+                return <button key={month} type="button" value={i} onClick={handleMonth}>{month}</button>
               })
             }
           </div>
