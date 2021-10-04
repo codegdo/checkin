@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { format } from "date-fns";
+import { format, isToday, isThisMonth } from "date-fns";
 
 import { getMonthDays } from '../../helpers';
 import { splitChunks } from '../../utils';
@@ -18,12 +18,16 @@ export const CalendarMonth: React.FC = (): JSX.Element => {
   const chunkDays = splitChunks(monthDays, 7);
 
   return (
-    <>
+    <div className="calendar-month">
       {
-        chunkDays.map((row: any, i: number) => {
+        chunkDays.map((row: Date[], i: number) => {
           return <div key={i} className="flex">
             {
-              row.map((day: any, j: number) => {
+              row.map((day: Date, j: number) => {
+
+                //const isCurrent = isToday(day);
+                //const isCurrentMonth = isThisMonth(day);
+
                 return <div key={j} className="flex-col flex-1">
                   <div>
                     <span>{format(day, 'd')}</span>
@@ -34,6 +38,6 @@ export const CalendarMonth: React.FC = (): JSX.Element => {
           </div>
         })
       }
-    </>
+    </div>
   )
 }

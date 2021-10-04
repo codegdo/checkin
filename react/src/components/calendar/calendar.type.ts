@@ -36,8 +36,8 @@ export type CalendarTimelineProps = {
 
 export type CalendarTimerProps = {
   className?: string;
-  startTime?: string;
-  endTime?: string;
+  startTime: string;
+  endTime: string;
 }
 
 export type HeaderDayProps = {

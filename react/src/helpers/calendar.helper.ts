@@ -43,7 +43,7 @@ export const getMonthDays = (currentDate = new Date()): Date[] => {
 export const getYearsRange = (year: number): number[] => {
   const years = [];
   let start = year;
-  let end = year + 12;
+  const end = year + 12;
 
   while (start < end) {
     years.push(start);

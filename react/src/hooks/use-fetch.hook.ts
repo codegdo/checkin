@@ -1,4 +1,5 @@
 import { useCallback, useReducer } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { http, RequestOption } from '../services';
 
 type Action = {
@@ -33,6 +34,7 @@ export const useFetch = (
   url?: string
 ): [State, (option?: RequestOption) => Promise<void>] => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const navigate = useNavigate();
 
   const callback = useCallback(
     async (option?: RequestOption) => {
@@ -49,8 +51,12 @@ export const useFetch = (
         const result = await http.request(url, option);
         //
         dispatch({ type: 'SUCCESS', payload: result });
-      } catch (err) {
+      } catch (err: any) {
         dispatch({ type: 'FAILURE', payload: err });
+        //
+        if (err.data?.message === 'Session Timeout') {
+          navigate('/auth/logout');
+        }
       }
     },
     [url]

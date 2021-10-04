@@ -34,14 +34,11 @@ export const ControlMonth: React.FC<ControlMonthProps> = ({ day, handleDate }): 
     current.month = target.value;
 
     handleDate(new Date(+current.year, +current.month, +format(day, 'dd')));
-    console.log(current);
   }
 
   const handleYear = (event: React.MouseEvent) => {
     const target = event.target as HTMLButtonElement;
     current.year = target.value;
-
-    console.log(current);
   }
 
   const handlePrevious = (): void => {
@@ -59,9 +56,13 @@ export const ControlMonth: React.FC<ControlMonthProps> = ({ day, handleDate }): 
       <button type="button" onClick={onToggle}>{format(day, 'MMMM')} {format(day, 'yyyy')}</button>
 
       <div aria-expanded={isToggle}>
-        <span>{years.at(0)} - {years.at(-1)}</span>
-        <button type="button" onClick={handlePrevious}>Pre</button>
-        <button type="button" onClick={handleNext}>Next</button>
+        <div>
+          <span>{years.at(0)} - {years.at(-1)}</span>
+          <span>
+            <button type="button" onClick={handlePrevious}>Pre</button>
+            <button type="button" onClick={handleNext}>Next</button>
+          </span>
+        </div>
         <div>
           <div>
             {

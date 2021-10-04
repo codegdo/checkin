@@ -13,7 +13,7 @@ const Appointment: React.FC = (): JSX.Element => {
   const [{ loading, result }, fetchAppointments] = useFetch();
 
   const [view, setView] = useState(defaultView);
-  const [events, setEvents] = useState();
+  const [events, setEvents] = useState<any>();
   const [resources, setResources] = useState<any>();
   const [invalid, setInvalid] = useState();
   const { calendarId } = useQuery();
@@ -43,6 +43,11 @@ const Appointment: React.FC = (): JSX.Element => {
         id: 2,
         name: 'Mana',
         color: '#c6f1c9'
+      }]);
+
+      setEvents([{
+        start: '',
+        end: '',
       }]);
     }
   }, [loading]);
