@@ -1,6 +1,7 @@
 -- TABLE
 CREATE TABLE IF NOT EXISTS sec.user (
   id SERIAL NOT NULL,
+  email_address VARCHAR(45),
   username VARCHAR(45),
   password VARCHAR(75),
 
