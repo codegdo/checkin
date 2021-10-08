@@ -9,27 +9,27 @@ const NotFound = Template(lazy(() => import('./views/notfound.component')));
 export const AppRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
     {
-      path: '//*',
-      element: <RouteGuard path='//*' element={<HomeRoute />} />
+      path: '/',
+      element: <RouteGuard path='/*' element={<HomeRoute />} />
     },
     {
-      path: '/setup*',
-      element: <RouteGuard path='//*' element={<SetupRoute />} />
+      path: '/setup/*',
+      element: <RouteGuard path='/*' element={<SetupRoute />} />
     },
     {
-      path: '/scheduler*',
-      element: <RouteGuard path='//*' element={<SchedulerRoute />} />
+      path: '/scheduler/*',
+      element: <RouteGuard path='/*' element={<SchedulerRoute />} />
     },
     {
-      path: '/auth*',
+      path: '/auth/*',
       element: <AuthRoute />
     },
     {
-      path: '/checkin*',
+      path: '/checkin/*',
       element: <CheckinRoute />
     },
     {
-      path: '/checkout*',
+      path: '/checkout/*',
       element: <CheckoutRoute />
     },
     {
