@@ -12,25 +12,25 @@ import { Role } from '../role/role.entity';
 @Entity({ database: 'portal', schema: 'sec', name: 'policy' })
 export class Policy extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
-  id!: number;
+  id: number;
 
   @Column({ name: 'name', nullable: true })
-  name!: string;
+  name: string;
 
   @Column({ name: 'description', nullable: true })
-  description!: string;
+  description: string;
 
   @Column({ name: 'data', nullable: true })
-  data!: string;
+  data: string;
 
   @Column({ name: 'is_active', default: false })
-  isActive!: boolean;
+  isActive: boolean;
 
-  @Column({ name: 'business_id', nullable: true })
-  businessId!: number;
+  @Column({ name: 'org_id', nullable: true })
+  orgId!: number;
 
   @ManyToMany(() => Role, (role: Role) => role.policies)
-  roles!: Role[];
+  roles: Role[];
 
   @CreateDateColumn({
     name: 'created_at',

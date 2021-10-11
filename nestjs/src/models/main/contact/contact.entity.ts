@@ -4,10 +4,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
   JoinColumn,
-  ManyToOne,
-  ManyToMany,
-  JoinTable,
-  Unique,
   CreateDateColumn,
   UpdateDateColumn,
   OneToOne,
@@ -36,13 +32,13 @@ export class Contact extends BaseEntity {
 
   @OneToOne(() => Territory, (territory) => territory.id)
   @JoinColumn({ name: 'territory_id' })
-  territory!: Territory;
+  territory: Territory;
 
-  @Column({ name: 'phone' })
-  phone: string;
+  @Column({ name: 'phone_number' })
+  phoneNumber: string;
 
   @Column({ name: 'owner_id', nullable: true })
-  ownerId!: number;
+  ownerId: number;
 
   @CreateDateColumn({
     name: 'created_at',

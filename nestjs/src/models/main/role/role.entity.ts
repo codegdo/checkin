@@ -16,36 +16,36 @@ export enum RoleTypeEnum {
   EXTERNAL = 'external',
 }
 
-@Entity({ database: 'main', schema: 'dbo', name: 'roletype' })
+@Entity({ database: 'main', schema: 'dbo', name: 'role_type' })
 export class RoleType extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
-  id!: number;
+  id: number;
 
   @Column({
     name: 'name',
     type: 'enum',
     enum: RoleTypeEnum,
   })
-  name!: RoleTypeEnum;
+  name: RoleTypeEnum;
 }
 
 @Entity({ database: 'main', schema: 'sec', name: 'role' })
 export class Role extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
-  id!: number;
+  id: number;
 
   @Column({ name: 'name', nullable: true })
-  name!: string;
+  name: string;
 
   @Column({ name: 'description', nullable: true })
-  description!: string;
+  description: string;
 
   @Column({ name: 'is_owner', default: false })
-  isOwner!: boolean;
+  isOwner: boolean;
 
-  @ManyToOne(() => RoleType, (roletype) => roletype.id)
-  @JoinColumn({ name: 'roletype_id' })
-  roletype!: RoleType;
+  @ManyToOne(() => RoleType, (role_type) => role_type.id)
+  @JoinColumn({ name: 'role_type_id' })
+  roleType: RoleType;
 
   @ManyToMany(() => Policy, (policy: Policy) => policy.roles)
   @JoinTable({
@@ -59,8 +59,8 @@ export class Role extends BaseEntity {
       referencedColumnName: 'id',
     },
   })
-  policies!: Policy[];
+  policies: Policy[];
 
-  @Column({ name: 'business_id', nullable: true })
-  businessId!: number;
+  @Column({ name: 'org_id', nullable: true })
+  orgId!: number;
 }

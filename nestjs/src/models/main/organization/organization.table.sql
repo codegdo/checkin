@@ -1,19 +1,19 @@
--- CREATE TABLE LOCATION
-CREATE TABLE IF NOT EXISTS org.location (
+CREATE TABLE IF NOT EXISTS sec.organization (
   id SERIAL NOT NULL,
+  name VARCHAR(45) NOT NULL,
 
-  name VARCHAR(95),
-
-  street_address VARCHAR(95),
-  city VARCHAR(95),
-  postal_code VARCHAR(18),
+  street_address VARCHAR(45),
+  city VARCHAR(45),
+  postal_code VARCHAR(15),
   territory_id INT,
+  phone_number VARCHAR(15),
+  fax_number VARCHAR(15),
+  website VARCHAR(45),
+  subdomain VARCHAR(45) NOT NULL,
 
-  phone_number VARCHAR(20),
-  fax_number VARCHAR(20),
+  data JSONB,
 
   owner_id INT,
-  org_id INT,
 
   is_active BOOLEAN DEFAULT TRUE,
 
@@ -23,6 +23,6 @@ CREATE TABLE IF NOT EXISTS org.location (
   updated_by VARCHAR(45) DEFAULT CURRENT_USER,
   --
   PRIMARY KEY(id),
-  FOREIGN KEY(territory_id) REFERENCES dbo.territory(id),
+  UNIQUE(subdomain, owner_id),
   FOREIGN KEY(owner_id) REFERENCES sec.user(id)
 );

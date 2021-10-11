@@ -6,14 +6,14 @@ import { ConfigService } from 'nestjs-config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import {
-  BusinessRepository,
+  OrganizationRepository,
   UserRepository,
 } from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/scheduler/repositories';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([BusinessRepository, UserRepository]),
+    TypeOrmModule.forFeature([OrganizationRepository, UserRepository]),
     TypeOrmModule.forFeature([CalendarRepository], 'schedule'),
 
     JwtModule.registerAsync({
@@ -26,4 +26,4 @@ import { CalendarRepository } from 'src/models/scheduler/repositories';
   controllers: [AuthController],
   providers: [AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

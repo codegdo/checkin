@@ -4,7 +4,7 @@ import { Connection } from 'typeorm';
 
 import { CreateUserDto } from 'src/models/main/dtos';
 import {
-  BusinessRepository,
+  OrganizationRepository,
   UserRepository,
 } from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/scheduler/repositories';
@@ -18,23 +18,25 @@ export class AuthService {
     @InjectConnection('schedule')
     private connection2: Connection,
 
-    @InjectRepository(BusinessRepository)
-    private businessRepository: BusinessRepository,
+    @InjectRepository(OrganizationRepository)
+    private orgRepository: OrganizationRepository,
 
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
 
     @InjectRepository(CalendarRepository, 'schedule')
     private calendarRepository: CalendarRepository,
-  ) { }
+  ) {}
 
   async signup(createUserDto: CreateUserDto) {
     //const user = this.userRepository.createUser(createUserDto);
-    const business = await this.businessRepository.create({
+    const organization = await this.orgRepository.create({
       subdomain: createUserDto.username,
     });
     const user = await this.userRepository.create(createUserDto);
-    const calendar = await this.calendarRepository.create({ name: createUserDto.username });
+    const calendar = await this.calendarRepository.create({
+      name: createUserDto.username,
+    });
 
     const queryRunner = this.connection.createQueryRunner();
     const query2Runner = this.connection2.createQueryRunner();
@@ -42,16 +44,14 @@ export class AuthService {
     await query2Runner.startTransaction();
 
     try {
-
-      const bus = await queryRunner.manager.save(business);
-      user.businessId = bus.id;
+      const org = await queryRunner.manager.save(organization);
+      user.orgId = org.id;
       await queryRunner.manager.save(user);
       await query2Runner.manager.save(calendar);
 
       // commit
       await queryRunner.commitTransaction();
       await query2Runner.commitTransaction();
-
     } catch (err) {
       // rollback
       await queryRunner.rollbackTransaction();
@@ -75,7 +75,7 @@ export class AuthService {
     return user;
   }
 
-  async logout() { }
+  async logout() {}
 }
 
 /*

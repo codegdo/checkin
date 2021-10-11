@@ -1,7 +1,18 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from "typeorm";
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
-import { Role } from "../role/role.entity";
+import { Role } from '../role/role.entity';
 
 const scrypt = promisify(_scrypt);
 
@@ -20,6 +31,9 @@ export class User {
   @Column({ name: 'email_address' })
   emailAddress: string;
 
+  @Column({ name: 'data', nullable: true })
+  data: JSON;
+
   @Column({ name: 'is_new_password', default: false })
   isNewPassword!: boolean;
 
@@ -30,15 +44,27 @@ export class User {
   @JoinColumn({ name: 'role_id' })
   role!: Role;
 
-  @Column({ name: 'business_id', nullable: true })
-  businessId!: number;
+  @Column({ name: 'org_id', nullable: true })
+  orgId!: number;
+
+  @Column({
+    name: 'created_by',
+    default: () => 'CURRENT_USER',
+  })
+  createdBy: string;
+
+  @Column({
+    name: 'updated_by',
+    default: () => 'CURRENT_USER',
+  })
+  updatedBy: string;
 
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  createdAt!: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
@@ -46,19 +72,19 @@ export class User {
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
   })
-  updatedAt!: Date;
+  updatedAt: Date;
 
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
     const salt = randomBytes(8).toString('hex');
-    const hash = await (scrypt(this.password, salt, 32)) as Buffer;
+    const hash = (await scrypt(this.password, salt, 32)) as Buffer;
     this.password = hash.toString('hex') + '.' + salt;
   }
 
   async validatePassword(password: string) {
     const [hashPassword, salt] = this.password.split('.');
-    const hash = await (scrypt(password, salt, 32)) as Buffer;
+    const hash = (await scrypt(password, salt, 32)) as Buffer;
     return hashPassword === hash.toString('hex');
   }
 }

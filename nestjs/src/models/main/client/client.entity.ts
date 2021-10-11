@@ -27,8 +27,8 @@ export class Client extends BaseEntity {
   @Column({ name: 'email_address' })
   emailAddress: string;
 
-  @Column({ name: 'phone' })
-  phone: string;
+  @Column({ name: 'phone_number' })
+  phoneNumber: string;
 
   @CreateDateColumn({
     name: 'created_at',

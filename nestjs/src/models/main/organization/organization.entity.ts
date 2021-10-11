@@ -3,19 +3,17 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
+  OneToOne,
   JoinColumn,
-  ManyToOne,
-  ManyToMany,
-  JoinTable,
   Unique,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
 } from 'typeorm';
-import { Territory } from '../territory/territory.entity';
+import { User } from '../user/user.entity';
 
-@Entity({ database: 'main', schema: 'org', name: 'location' })
-export class Location extends BaseEntity {
+@Entity({ database: 'main', schema: 'sec', name: 'organization' })
+@Unique(['subdomain'])
+export class Organization extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
@@ -31,21 +29,30 @@ export class Location extends BaseEntity {
   @Column({ name: 'postal_code', nullable: true })
   postalCode: number;
 
-  @OneToOne(() => Territory, (territory) => territory.id)
-  @JoinColumn({ name: 'territory_id' })
-  territory: Territory;
+  @Column({ name: 'territory_id', nullable: true })
+  territoryId: number;
 
-  @Column({ name: 'phone_number' })
-  phoneNumber: string;
+  @Column({ name: 'website', nullable: true })
+  website: string;
 
-  @Column({ name: 'fax_number' })
-  faxNumber: string;
+  @Column({ name: 'phone_number', nullable: true })
+  phoneNumber: number;
 
-  @Column({ name: 'owner_id', nullable: true })
-  ownerId: number;
+  @Column({ name: 'fax_number', nullable: true })
+  faxNumber: number;
 
-  @Column({ name: 'org_id', nullable: true })
-  orgId: number;
+  @Column({ name: 'subdomain', nullable: false })
+  subdomain: string;
+
+  @Column({ name: 'data', nullable: true })
+  data: JSON;
+
+  @Column({ name: 'is_active', default: true })
+  isActive: boolean;
+
+  @OneToOne(() => User, (user) => user.id)
+  @JoinColumn({ name: 'owner_id' })
+  owner: User;
 
   @Column({
     name: 'created_by',
@@ -64,7 +71,7 @@ export class Location extends BaseEntity {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  createdAt!: Date;
+  createdAt: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
@@ -72,5 +79,5 @@ export class Location extends BaseEntity {
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
   })
-  updatedAt!: Date;
+  updatedAt: Date;
 }
