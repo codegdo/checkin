@@ -13,7 +13,6 @@ import {
 } from 'typeorm';
 
 @Entity({ database: 'main', schema: 'sec', name: 'client' })
-@Unique(['phone'])
 export class Client extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id!: number;

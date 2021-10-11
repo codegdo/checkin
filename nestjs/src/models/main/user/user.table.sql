@@ -3,12 +3,9 @@ CREATE TABLE IF NOT EXISTS sec.user (
   id SERIAL NOT NULL,
   email_address VARCHAR(45),
   username VARCHAR(45),
-  password VARCHAR(75),
+  password VARCHAR(85),
 
-  data JSONB,
-  
-  contact_id INT,
-  location_id INT,
+  employee_id INT,
   role_id INT,
   org_id INT,
 

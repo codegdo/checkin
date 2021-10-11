@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS dbo.territory (
   PRIMARY KEY(id)
 );
 
--- US
+-- INSERT
 INSERT
 INTO dbo.territory (id, country, country_code, state, state_code, region)
 VALUES
@@ -73,8 +73,6 @@ VALUES
 ('22956', 'United States', 'USA', 'West Virginia', 'WV', 'Americas'),
 ('22957', 'United States', 'USA', 'Wyoming', 'WY', 'Americas');
 
-SELECT * FROM dbo.territory;
-
 -- CREATE TABLE ROLE TYPE
 CREATE TYPE dbo.role_type_enum AS ENUM ('system', 'internal', 'external');
 
@@ -92,10 +90,7 @@ VALUES
 ('internal'),
 ('external');
 
-SELECT * FROM dbo.role_type;
-
 -- CREATE TABLE ROLE
-
 CREATE TABLE IF NOT EXISTS sec.role (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
@@ -124,19 +119,75 @@ VALUES
 ('Manager User', null, '0', null, '2'),
 ('Employee User', null, '0', null, '3');
 
+-- CREATE TABLE POLICY
+CREATE TABLE IF NOT EXISTS sec.policy (
+  id SERIAL NOT NULL,
+  name VARCHAR(45) NOT NULL,
+  description VARCHAR(255),
+
+  data JSONB,
+
+  role_type_id INT,
+  org_id INT,
+
+  is_active BOOLEAN DEFAULT TRUE,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45) DEFAULT CURRENT_USER,
+  --
+  PRIMARY KEY(id),
+  FOREIGN KEY(role_type_id) REFERENCES dbo.role_type(id) ON DELETE SET NULL
+);
+
+-- CREATE JOIN TABLE ROLE_POLICY
+CREATE TABLE IF NOT EXISTS sec.role_policy (
+  role_id INT NOT NULL,
+  policy_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  --
+  PRIMARY KEY(role_id, policy_id),
+  FOREIGN KEY(role_id) REFERENCES sec.role(id) ON DELETE CASCADE,
+  FOREIGN KEY(policy_id) REFERENCES sec.policy(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
+
 SELECT * FROM sec.role;
 
--- CREATE TABLE USER
+-- CREATE TABLE EMPLOYEE
+CREATE TABLE IF NOT EXISTS sec.employee (
+  id SERIAL NOT NULL,
 
+  first_name VARCHAR(45),
+  last_name VARCHAR(45),
+  passcode VARCHAR(20),
+
+  street_address VARCHAR(95),
+  city VARCHAR(95),
+  postal_code VARCHAR(18),
+  territory_id INT,
+  phone_number VARCHAR(20),
+
+  is_active BOOLEAN DEFAULT TRUE,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  --
+  PRIMARY KEY(id),
+  UNIQUE(passcode),
+  FOREIGN KEY(territory_id) REFERENCES dbo.territory(id)
+);
+
+-- CREATE TABLE USER
 CREATE TABLE IF NOT EXISTS sec.user (
   id SERIAL NOT NULL,
   email_address VARCHAR(45),
   username VARCHAR(45),
-  password VARCHAR(75),
+  password VARCHAR(85),
 
-  data JSONB,
-
-  contact_id INT,
+  employee_id INT,
   role_id INT,
   org_id INT,
 
@@ -150,10 +201,9 @@ CREATE TABLE IF NOT EXISTS sec.user (
   --
   PRIMARY KEY(id),
   UNIQUE(username),
-  FOREIGN KEY(role_id) REFERENCES sec.role(id)
+  FOREIGN KEY(role_id) REFERENCES sec.role(id),
+  FOREIGN KEY(employee_id) REFERENCES sec.employee(id)
 );
-
-SELECT * FROM sec.user;
 
 -- CREATE TABLE CLIENT
 CREATE TABLE IF NOT EXISTS sec.client (
@@ -161,13 +211,12 @@ CREATE TABLE IF NOT EXISTS sec.client (
   first_name VARCHAR(45),
   last_name VARCHAR(45),
   email_address VARCHAR(45),
-  phone VARCHAR(20),
+  phone_number VARCHAR(20),
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
-  PRIMARY KEY(id),
-  UNIQUE(phone)
+  PRIMARY KEY(id)
 );
 
 -- CREATE TABLE ORGANIZATION
@@ -201,7 +250,6 @@ CREATE TABLE IF NOT EXISTS sec.organization (
   FOREIGN KEY(owner_id) REFERENCES sec.user(id)
 );
 
-SELECT * FROM sec.organization;
 
 -- CREATE TABLE LOCATION
 CREATE TABLE IF NOT EXISTS org.location (
@@ -232,6 +280,24 @@ CREATE TABLE IF NOT EXISTS org.location (
   FOREIGN KEY(owner_id) REFERENCES sec.user(id)
 );
 
+-- CREATE TABLE SESSION
+CREATE TABLE IF NOT EXISTS sec.session (
+  id TEXT NOT NULL,
+  json TEXT,
+  expired_at BIGINT,
+  --
+  PRIMARY KEY(id)
+);
+
+-- CREATE TABLE TOKEN
+CREATE TABLE IF NOT EXISTS sec.token (
+    id TEXT NOT NULL,
+    data JSONB,
+    expired_at BIGINT,
+    --
+    PRIMARY KEY(id)
+);
+
 --
 
 DROP TABLE IF EXISTS
@@ -242,10 +308,13 @@ org.location,
 --
 sec.role,
 sec.role_policy,
+sec.policy,
 sec.user,
+sec.employee,
 sec.client,
 sec.organization,
-
+sec.session,
+sec.token,
 CASCADE;
 
 DROP TYPE IF EXISTS

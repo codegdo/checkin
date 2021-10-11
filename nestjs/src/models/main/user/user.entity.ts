@@ -13,6 +13,7 @@ import {
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { Role } from '../role/role.entity';
+import { Employee } from '../employee/employee.entity';
 
 const scrypt = promisify(_scrypt);
 
@@ -31,21 +32,22 @@ export class User {
   @Column({ name: 'email_address' })
   emailAddress: string;
 
-  @Column({ name: 'data', nullable: true })
-  data: JSON;
-
   @Column({ name: 'is_new_password', default: false })
-  isNewPassword!: boolean;
+  isNewPassword: boolean;
 
   @Column({ name: 'is_active', default: false })
-  isActive!: boolean;
+  isActive: boolean;
+
+  @OneToOne(() => Employee, (employee) => employee.id)
+  @JoinColumn({ name: 'employee_id' })
+  employee: Employee;
 
   @OneToOne(() => Role, (role) => role.id)
   @JoinColumn({ name: 'role_id' })
-  role!: Role;
+  role: Role;
 
   @Column({ name: 'org_id', nullable: true })
-  orgId!: number;
+  orgId: number;
 
   @Column({
     name: 'created_by',

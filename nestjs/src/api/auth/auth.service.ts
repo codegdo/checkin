@@ -26,13 +26,12 @@ export class AuthService {
 
     @InjectRepository(CalendarRepository, 'schedule')
     private calendarRepository: CalendarRepository,
-  ) {}
+  ) { }
 
   async signup(createUserDto: CreateUserDto) {
-    //const user = this.userRepository.createUser(createUserDto);
-    const organization = await this.orgRepository.create({
-      subdomain: createUserDto.username,
-    });
+    //const organization = await this.orgRepository.create({
+    //subdomain: createUserDto.username,
+    //});
     const user = await this.userRepository.create(createUserDto);
     const calendar = await this.calendarRepository.create({
       name: createUserDto.username,
@@ -44,8 +43,8 @@ export class AuthService {
     await query2Runner.startTransaction();
 
     try {
-      const org = await queryRunner.manager.save(organization);
-      user.orgId = org.id;
+      //const org = await queryRunner.manager.save(organization);
+      //user.orgId = org.id;
       await queryRunner.manager.save(user);
       await query2Runner.manager.save(calendar);
 
@@ -75,7 +74,7 @@ export class AuthService {
     return user;
   }
 
-  async logout() {}
+  async logout() { }
 }
 
 /*

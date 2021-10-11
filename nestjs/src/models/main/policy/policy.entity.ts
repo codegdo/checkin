@@ -32,6 +32,18 @@ export class Policy extends BaseEntity {
   @ManyToMany(() => Role, (role: Role) => role.policies)
   roles: Role[];
 
+  @Column({
+    name: 'created_by',
+    default: () => 'CURRENT_USER',
+  })
+  createdBy: string;
+
+  @Column({
+    name: 'updated_by',
+    default: () => 'CURRENT_USER',
+  })
+  updatedBy: string;
+
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',

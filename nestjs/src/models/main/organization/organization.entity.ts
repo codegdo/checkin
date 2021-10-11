@@ -45,7 +45,7 @@ export class Organization extends BaseEntity {
   subdomain: string;
 
   @Column({ name: 'data', nullable: true })
-  data: JSON;
+  data: string;
 
   @Column({ name: 'is_active', default: true })
   isActive: boolean;
