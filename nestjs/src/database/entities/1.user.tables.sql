@@ -290,8 +290,10 @@ CREATE TABLE IF NOT EXISTS sec.session (
 );
 
 -- CREATE TABLE TOKEN
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 CREATE TABLE IF NOT EXISTS sec.token (
-    id TEXT NOT NULL,
+    id UUID DEFAULT uuid_generate_v4() NOT NULL,
     data JSONB,
     expired_at BIGINT,
     --

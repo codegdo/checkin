@@ -2,6 +2,7 @@ import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from 'nestjs-config';
+import { MailerModule } from '@nestjs-modules/mailer';
 import * as path from 'path';
 
 import {
@@ -42,6 +43,10 @@ import {
         };
       },
       inject: [ConfigService],
+    }),
+    MailerModule.forRootAsync({
+      useFactory: async (config: ConfigService) => config.get('mailer.config'),
+      inject: [ConfigService]
     }),
     GuardModule,
     AuthModule,

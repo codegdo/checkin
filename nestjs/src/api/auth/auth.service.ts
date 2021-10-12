@@ -1,11 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
+import { MailerService } from '@nestjs-modules/mailer';
 
 import { CreateUserDto } from 'src/models/main/dtos';
 import {
   OrganizationRepository,
   UserRepository,
+  TokenRepository
 } from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/scheduler/repositories';
 
@@ -24,41 +26,80 @@ export class AuthService {
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
 
+    @InjectRepository(TokenRepository)
+    private tokenRepository: TokenRepository,
+
     @InjectRepository(CalendarRepository, 'schedule')
     private calendarRepository: CalendarRepository,
+
+    private readonly mailerService: MailerService
   ) { }
 
   async signup(createUserDto: CreateUserDto) {
     //const organization = await this.orgRepository.create({
     //subdomain: createUserDto.username,
     //});
+    //const tokenDto = 
     const user = await this.userRepository.create(createUserDto);
+    const token = await this.tokenRepository.create();
     const calendar = await this.calendarRepository.create({
       name: createUserDto.username,
     });
 
     const queryRunner = this.connection.createQueryRunner();
-    const query2Runner = this.connection2.createQueryRunner();
+    const queryRunner2 = this.connection2.createQueryRunner();
+
     await queryRunner.startTransaction();
-    await query2Runner.startTransaction();
+    await queryRunner2.startTransaction();
 
     try {
       //const org = await queryRunner.manager.save(organization);
       //user.orgId = org.id;
       await queryRunner.manager.save(user);
-      await query2Runner.manager.save(calendar);
+      await queryRunner.manager.save(token);
+      await queryRunner2.manager.save(calendar);
 
       // commit
       await queryRunner.commitTransaction();
-      await query2Runner.commitTransaction();
+      await queryRunner2.commitTransaction();
     } catch (err) {
       // rollback
       await queryRunner.rollbackTransaction();
-      await query2Runner.rollbackTransaction();
+      await queryRunner2.rollbackTransaction();
+
+      // errors
+      let message = 'Internal server error';
+
+      if (err.code === '23505') {
+        message = 'Username already exists';
+      }
+
+      throw new InternalServerErrorException(message);
+
     } finally {
       // release
       await queryRunner.release();
-      await query2Runner.release();
+      await queryRunner2.release();
+    }
+
+    console.log('TOKEN', token.id);
+
+    try {
+      const send = await this.mailerService.sendMail({
+        from: 'noreply@checkin.com',
+        to: `${user.emailAddress}`,
+        subject: 'Activate Your Account',
+        html: `<a href="/auth/verify/${token.id}">Activate Your Account</a>`,
+      });
+
+      console.log(send);
+      //'250 Accepted [STATUS=new MSGID=YWXy.TtTVk.ToNJbYWX6ftPxNAyMUpIRAAAAA1fY7.ae9u2U-JkOgvSw0r0]'
+      //https://ethereal.email/message/YWXy.TtTVk.ToNJbYWX6ftPxNAyMUpIRAAAAA1fY7.ae9u2U-JkOgvSw0r0
+
+      //const msgId = send.detail.split('=').slice(-1).join().replace(/]$/, '');
+
+    } catch (err) {
+      console.log(err);
     }
 
     return {};

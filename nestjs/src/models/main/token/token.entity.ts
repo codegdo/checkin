@@ -1,4 +1,4 @@
-import { BaseEntity, Entity, PrimaryColumn, Column } from 'typeorm';
+import { BaseEntity, Entity, PrimaryColumn, Column, PrimaryGeneratedColumn } from 'typeorm';
 import crypto from 'crypto';
 import { TokenDto } from './dtos/token.dto';
 
@@ -9,7 +9,7 @@ export interface TokenData {
 
 @Entity({ database: 'main', schema: 'sec', name: 'token' })
 export class Token extends BaseEntity {
-  @PrimaryColumn({ name: 'id' })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column({ name: 'expired_at' })
@@ -19,13 +19,11 @@ export class Token extends BaseEntity {
   data: string;
 
   create({ data = '{}', maxAge = 86400 }: TokenData): TokenDto {
-    const token: TokenDto = {
+    return {
       id: crypto.randomBytes(16).toString('hex'),
       expiredAt: Math.floor(new Date().getTime() / 1000 + maxAge),
       data: data,
     };
-
-    return token;
   }
 
   //validate() {}
