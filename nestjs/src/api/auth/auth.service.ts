@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { ConfigService } from 'nestjs-config';
 import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -7,7 +12,7 @@ import { CreateUserDto } from 'src/models/main/dtos';
 import {
   OrganizationRepository,
   UserRepository,
-  TokenRepository
+  TokenRepository,
 } from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/scheduler/repositories';
 
@@ -32,14 +37,15 @@ export class AuthService {
     @InjectRepository(CalendarRepository, 'schedule')
     private calendarRepository: CalendarRepository,
 
-    private readonly mailerService: MailerService
-  ) { }
+    private readonly mailerService: MailerService,
+    private configService: ConfigService,
+  ) {}
 
   async signup(createUserDto: CreateUserDto) {
     //const organization = await this.orgRepository.create({
     //subdomain: createUserDto.username,
     //});
-    //const tokenDto = 
+    //const tokenDto =
     const user = await this.userRepository.create(createUserDto);
     const token = await this.tokenRepository.create();
     const calendar = await this.calendarRepository.create({
@@ -51,6 +57,8 @@ export class AuthService {
 
     await queryRunner.startTransaction();
     await queryRunner2.startTransaction();
+
+    console.log('CONFIG', this.configService.get('MAILER_HOST'));
 
     try {
       //const org = await queryRunner.manager.save(organization);
@@ -75,7 +83,6 @@ export class AuthService {
       }
 
       throw new InternalServerErrorException(message);
-
     } finally {
       // release
       await queryRunner.release();
@@ -85,19 +92,19 @@ export class AuthService {
     console.log('TOKEN', token.id);
 
     try {
-      const send = await this.mailerService.sendMail({
+      const { response } = await this.mailerService.sendMail({
         from: 'noreply@checkin.com',
         to: `${user.emailAddress}`,
         subject: 'Activate Your Account',
         html: `<a href="/auth/verify/${token.id}">Activate Your Account</a>`,
       });
 
-      console.log(send);
       //'250 Accepted [STATUS=new MSGID=YWXy.TtTVk.ToNJbYWX6ftPxNAyMUpIRAAAAA1fY7.ae9u2U-JkOgvSw0r0]'
       //https://ethereal.email/message/YWXy.TtTVk.ToNJbYWX6ftPxNAyMUpIRAAAAA1fY7.ae9u2U-JkOgvSw0r0
 
-      //const msgId = send.detail.split('=').slice(-1).join().replace(/]$/, '');
+      const msgId = response.split('=').slice(-1).join().replace(/]$/, '');
 
+      console.log(`https://ethereal.email/message/${msgId}`);
     } catch (err) {
       console.log(err);
     }
@@ -115,7 +122,7 @@ export class AuthService {
     return user;
   }
 
-  async logout() { }
+  async logout() {}
 }
 
 /*

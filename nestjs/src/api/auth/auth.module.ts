@@ -14,7 +14,11 @@ import { CalendarRepository } from 'src/models/scheduler/repositories';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([OrganizationRepository, UserRepository, TokenRepository]),
+    TypeOrmModule.forFeature([
+      OrganizationRepository,
+      UserRepository,
+      TokenRepository,
+    ]),
     TypeOrmModule.forFeature([CalendarRepository], 'schedule'),
 
     JwtModule.registerAsync({
@@ -27,4 +31,4 @@ import { CalendarRepository } from 'src/models/scheduler/repositories';
   controllers: [AuthController],
   providers: [AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}
