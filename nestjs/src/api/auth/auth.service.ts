@@ -3,7 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { ConfigService } from 'nestjs-config';
+import { ConfigService } from '@nestjs/config';
 import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 import { MailerService } from '@nestjs-modules/mailer';
@@ -22,7 +22,7 @@ export class AuthService {
     @InjectConnection()
     private connection: Connection,
 
-    @InjectConnection('schedule')
+    @InjectConnection('scheduler')
     private connection2: Connection,
 
     @InjectRepository(OrganizationRepository)
@@ -34,12 +34,13 @@ export class AuthService {
     @InjectRepository(TokenRepository)
     private tokenRepository: TokenRepository,
 
-    @InjectRepository(CalendarRepository, 'schedule')
+    @InjectRepository(CalendarRepository, 'scheduler')
     private calendarRepository: CalendarRepository,
 
     private readonly mailerService: MailerService,
+
     private configService: ConfigService,
-  ) {}
+  ) { }
 
   async signup(createUserDto: CreateUserDto) {
     //const organization = await this.orgRepository.create({
@@ -58,7 +59,7 @@ export class AuthService {
     await queryRunner.startTransaction();
     await queryRunner2.startTransaction();
 
-    console.log('CONFIG', this.configService.get('MAILER_HOST'));
+    console.log('CONFIG', this.configService.get('app.host'));
 
     try {
       //const org = await queryRunner.manager.save(organization);
@@ -122,7 +123,7 @@ export class AuthService {
     return user;
   }
 
-  async logout() {}
+  async logout() { }
 }
 
 /*

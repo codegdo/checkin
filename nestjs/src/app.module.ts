@@ -1,9 +1,8 @@
 import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from 'nestjs-config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
-import * as path from 'path';
 
 import {
   GuardModule,
@@ -21,31 +20,33 @@ import {
   CalendarModule,
   LocationModule
 } from './api';
+import { appConfig, dbConfig, jwtConfig, mailerConfig, sessionConfig } from './configs';
 
 @Module({
   imports: [
-    ConfigModule.load(path.resolve(__dirname, 'configs', '**/!(*.d).{ts,js}')),
+    ConfigModule.forRoot({
+      load: [appConfig, dbConfig, sessionConfig, mailerConfig, jwtConfig],
+      isGlobal: true
+    }),
     TypeOrmModule.forRootAsync({
-      useFactory: (config: ConfigService) =>
-        config.get('typeorm.config')['main'],
+      useFactory: (configService: ConfigService) => configService.get('database.main'),
       inject: [ConfigService],
     }),
     TypeOrmModule.forRootAsync({
-      name: 'schedule',
-      useFactory: (config: ConfigService) =>
-        config.get('typeorm.config')['schedule'],
+      name: 'scheduler',
+      useFactory: (configService: ConfigService) => configService.get('database.scheduler'),
       inject: [ConfigService],
     }),
     SessionModule.forRootAsync({
-      useFactory: async (config: ConfigService) => {
+      useFactory: async (configService: ConfigService) => {
         return {
-          options: await config.get('session.config'),
+          options: await configService.get('session')(),
         };
       },
       inject: [ConfigService],
     }),
     MailerModule.forRootAsync({
-      useFactory: async (config: ConfigService) => config.get('mailer.config'),
+      useFactory: async (configService: ConfigService) => configService.get('mailer'),
       inject: [ConfigService]
     }),
     GuardModule,

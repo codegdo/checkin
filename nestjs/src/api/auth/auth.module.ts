@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from 'nestjs-config';
+import { ConfigService } from '@nestjs/config';
 
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -11,6 +11,7 @@ import {
   UserRepository,
 } from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/scheduler/repositories';
+import { appConfig } from 'src/configs';
 
 @Module({
   imports: [
@@ -18,12 +19,11 @@ import { CalendarRepository } from 'src/models/scheduler/repositories';
       OrganizationRepository,
       UserRepository,
       TokenRepository,
-    ]),
-    TypeOrmModule.forFeature([CalendarRepository], 'schedule'),
-
+    ], 'default'),
+    TypeOrmModule.forFeature([CalendarRepository], 'scheduler'),
     JwtModule.registerAsync({
-      useFactory: async (config: ConfigService) => {
-        return config.get('jwt.config');
+      useFactory: async (configService: ConfigService) => {
+        return configService.get('jwt');
       },
       inject: [ConfigService],
     }),
@@ -31,4 +31,4 @@ import { CalendarRepository } from 'src/models/scheduler/repositories';
   controllers: [AuthController],
   providers: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

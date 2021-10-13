@@ -1,7 +1,8 @@
+import { registerAs } from "@nestjs/config";
 import { JwtSecretRequestType } from "@nestjs/jwt";
 import * as jwt from 'jsonwebtoken';
 
-export default {
+export const jwtConfig = registerAs('jwt', () => ({
   secret: process.env.JWT_SECRET,
   signOptions: {
     expiresIn: 6000,
@@ -24,4 +25,4 @@ export default {
         return process.env.JWT_SECRET;
     }
   },
-}
+}))
