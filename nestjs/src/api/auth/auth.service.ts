@@ -15,6 +15,7 @@ import {
   TokenRepository,
 } from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/scheduler/repositories';
+import { MailService } from 'src/common';
 
 @Injectable()
 export class AuthService {
@@ -37,16 +38,15 @@ export class AuthService {
     @InjectRepository(CalendarRepository, 'scheduler')
     private calendarRepository: CalendarRepository,
 
-    private readonly mailerService: MailerService,
-
-    private configService: ConfigService,
+    private readonly mailService: MailService,
+    private readonly configService: ConfigService,
   ) { }
 
   async signup(createUserDto: CreateUserDto) {
     //const organization = await this.orgRepository.create({
     //subdomain: createUserDto.username,
     //});
-    //const tokenDto =
+
     const user = await this.userRepository.create(createUserDto);
     const token = await this.tokenRepository.create();
     const calendar = await this.calendarRepository.create({
@@ -59,8 +59,6 @@ export class AuthService {
     await queryRunner.startTransaction();
     await queryRunner2.startTransaction();
 
-    console.log('CONFIG', this.configService.get('app.host'));
-
     try {
       //const org = await queryRunner.manager.save(organization);
       //user.orgId = org.id;
@@ -71,44 +69,36 @@ export class AuthService {
       // commit
       await queryRunner.commitTransaction();
       await queryRunner2.commitTransaction();
+
     } catch (err) {
       // rollback
       await queryRunner.rollbackTransaction();
       await queryRunner2.rollbackTransaction();
 
-      // errors
-      let message = 'Internal server error';
-
-      if (err.code === '23505') {
-        message = 'Username already exists';
-      }
-
-      throw new InternalServerErrorException(message);
+      throw new InternalServerErrorException(err.code);
     } finally {
       // release
       await queryRunner.release();
       await queryRunner2.release();
     }
 
-    console.log('TOKEN', token.id);
+    const send = await this.mailService.sendUserConfirmation();
 
-    try {
+    console.log(send);
+
+    /* try {
       const { response } = await this.mailerService.sendMail({
         from: 'noreply@checkin.com',
         to: `${user.emailAddress}`,
         subject: 'Activate Your Account',
-        html: `<a href="/auth/verify/${token.id}">Activate Your Account</a>`,
+        html: `<a href="${this.configService.get('app.host')}/auth/verify/${token.id}">Activate Your Account</a>`,
       });
 
-      //'250 Accepted [STATUS=new MSGID=YWXy.TtTVk.ToNJbYWX6ftPxNAyMUpIRAAAAA1fY7.ae9u2U-JkOgvSw0r0]'
-      //https://ethereal.email/message/YWXy.TtTVk.ToNJbYWX6ftPxNAyMUpIRAAAAA1fY7.ae9u2U-JkOgvSw0r0
-
       const msgId = response.split('=').slice(-1).join().replace(/]$/, '');
-
-      console.log(`https://ethereal.email/message/${msgId}`);
+      console.log(`${this.configService.get('app.mailerUrl')}/message/${msgId}`);
     } catch (err) {
       console.log(err);
-    }
+    } */
 
     return {};
   }

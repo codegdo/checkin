@@ -7,7 +7,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import {
   GuardModule,
   SessionModule,
-  LoggerMiddleware
+  LoggerMiddleware,
+  MailModule
 } from './common';
 
 import {
@@ -20,7 +21,14 @@ import {
   CalendarModule,
   LocationModule
 } from './api';
-import { appConfig, dbConfig, jwtConfig, mailerConfig, sessionConfig } from './configs';
+
+import {
+  appConfig,
+  dbConfig,
+  jwtConfig,
+  mailerConfig,
+  sessionConfig
+} from './configs';
 
 @Module({
   imports: [
@@ -45,10 +53,7 @@ import { appConfig, dbConfig, jwtConfig, mailerConfig, sessionConfig } from './c
       },
       inject: [ConfigService],
     }),
-    MailerModule.forRootAsync({
-      useFactory: async (configService: ConfigService) => configService.get('mailer'),
-      inject: [ConfigService]
-    }),
+    MailModule,
     GuardModule,
     AuthModule,
     UserModule,

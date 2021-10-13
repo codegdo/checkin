@@ -11,7 +11,6 @@ import {
   UserRepository,
 } from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/scheduler/repositories';
-import { appConfig } from 'src/configs';
 
 @Module({
   imports: [
