@@ -23,6 +23,7 @@ export const CheckinRoute: React.FC = (): JSX.Element => {
     if (loggedIn) {
 
       if (accessToken) {
+        alert();
         sessionStore.setItem(ACCESS_TOKEN, accessToken);
         cookieStore.setCookie(ACCESS_TOKEN, accessToken, 1);
       }

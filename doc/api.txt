@@ -10,14 +10,25 @@ account
 support
 
 checkin
-checkout
+  bookings
+
+clockin
+  tasks
+
+checkin
+
+  calendar
+
+  bookings
+  --
+  tasks
+  --
+  orders
+  
 
 pos
 
 marketing
-
-scheduler
-  appointments
 
 timeclock
   activities

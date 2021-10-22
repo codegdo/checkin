@@ -22,12 +22,12 @@ export const dbConfig = registerAs('database', () => {
     entities: [__dirname + '/../models/main/**/*.entity{.ts,.js}'],
   };
 
-  const scheduler: ConnectionOptions = {
+  const checkin: ConnectionOptions = {
     ...options,
-    database: 'scheduler',
-    name: 'scheduler',
-    entities: [__dirname + '/../models/scheduler/**/*.entity{.ts,.js}'],
+    database: 'checkin',
+    name: 'checkin',
+    entities: [__dirname + '/../models/checkin/**/*.entity{.ts,.js}'],
   };
 
-  return { main, scheduler }
+  return { main, checkin }
 });

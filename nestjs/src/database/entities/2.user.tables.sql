@@ -154,8 +154,6 @@ CREATE TABLE IF NOT EXISTS sec.role_policy (
 
 CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
 
-SELECT * FROM sec.role;
-
 -- CREATE TABLE EMPLOYEE
 CREATE TABLE IF NOT EXISTS sec.employee (
   id SERIAL NOT NULL,

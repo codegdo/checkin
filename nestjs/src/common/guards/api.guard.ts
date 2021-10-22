@@ -49,6 +49,7 @@ export class ApiGuard implements CanActivate {
         return true;
 
       } catch (err) {
+        console.log('API TOKEN ERROR', err);
         return false;
       }
     }

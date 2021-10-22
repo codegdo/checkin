@@ -10,15 +10,14 @@ export class CheckinController {
 
   @Restricted()
   @Get('/')
-  getAllLocations(@Query('phone') phone: string) {
-    console.log('PHONE', phone);
-    return { id: phone };
+  getAllLocations() {
+    return {};
   }
 
   @Restricted()
   @Get('clients')
-  getOneClient(@Query('phone') phone: string) {
-    console.log('PHONE', phone);
-    return { id: phone };
+  getOneClient(@Query() { location, phone }) {
+    console.log('PHONE', location);
+    return {};
   }
 }

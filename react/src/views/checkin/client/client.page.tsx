@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NumPad } from '../../../components/numpad';
 import { useFetch } from '../../../hooks';
-import { localStore } from '../../../services';
+import { sessionStore } from '../../../services';
 
 const Client: React.FC = (): JSX.Element => {
   const [{ loading, result }, fetchCheckin] = useFetch('/api/checkin/clients');
@@ -21,13 +21,22 @@ const Client: React.FC = (): JSX.Element => {
   const handleSubmit = (value: any) => {
     void fetchCheckin({
       headers: {
-        'X-Api-Token': localStore.getItem('access_token')
+        'X-Api-Token': sessionStore.getItem('access_token')
       },
-      params: { phone: value }
+      params: {
+        phone: value,
+        location: 1
+      }
     });
   };
 
-  return <NumPad type="phone" digit={10} placeholder="Enter Phone Number" message={message} loading={loading} onSubmit={handleSubmit} />;
+  return <NumPad
+    type="phone"
+    digit={10}
+    placeholder="Enter Phone Number"
+    message={message}
+    loading={loading}
+    onSubmit={handleSubmit} />;
 };
 
 export default Client;

@@ -14,7 +14,7 @@ import {
   UserRepository,
   TokenRepository,
 } from 'src/models/main/repositories';
-import { CalendarRepository } from 'src/models/scheduler/repositories';
+import { CalendarRepository } from 'src/models/checkin/repositories';
 import { MailService } from 'src/common';
 
 @Injectable()

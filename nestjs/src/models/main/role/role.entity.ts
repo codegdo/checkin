@@ -62,5 +62,5 @@ export class Role extends BaseEntity {
   policies: Policy[];
 
   @Column({ name: 'org_id', nullable: true })
-  orgId!: number;
+  orgId: number;
 }

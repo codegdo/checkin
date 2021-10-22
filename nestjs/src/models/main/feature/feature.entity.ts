@@ -10,27 +10,32 @@ import {
   Unique,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
 
-@Entity({ database: 'main', schema: 'sec', name: 'client' })
-export class Client extends BaseEntity {
+
+@Entity({ database: 'main', schema: 'dbo', name: 'feature' })
+export class Feature extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
-  id!: number;
+  id: number;
 
-  @Column({ name: 'first_name', nullable: true })
-  firstName!: string;
+  @Column({ name: 'name' })
+  name: string;
 
-  @Column({ name: 'last_name', nullable: true })
-  lastName!: string;
+  @Column({ name: 'price' })
+  streetAddress: number;
 
-  @Column({ name: 'email_address' })
-  emailAddress: string;
+  @Column({
+    name: 'created_by',
+    default: () => 'CURRENT_USER',
+  })
+  createdBy: string;
 
-  @Column({ name: 'phone_number' })
-  phoneNumber: string;
-
-  @Column({ name: 'day_of_birth' })
-  dayOfBirth: Date;
+  @Column({
+    name: 'updated_by',
+    default: () => 'CURRENT_USER',
+  })
+  updatedBy: string;
 
   @CreateDateColumn({
     name: 'created_at',

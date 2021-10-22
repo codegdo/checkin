@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NumPad } from '../../../components/numpad';
 import { useFetch } from '../../../hooks';
-import { localStore } from '../../../services';
+import { sessionStore } from '../../../services';
 
 const Employee: React.FC = (): JSX.Element => {
   const [{ loading, result }, fetchCheckout] = useFetch('/api/checkout/employees');
@@ -21,7 +21,7 @@ const Employee: React.FC = (): JSX.Element => {
   const handleSubmit = (value: any) => {
     void fetchCheckout({
       headers: {
-        'X-Api-Token': localStore.getItem('access_token')
+        'X-Api-Token': sessionStore.getItem('access_token')
       },
       params: { phone: value }
     });
