@@ -4,6 +4,7 @@ import { SessionState, UPDATE_SESSION, DELETE_SESSION } from './session.type';
 const initialState: SessionState = {
   loggedIn: false,
   user: null,
+  orgId: null,
   accessToken: null,
 };
 

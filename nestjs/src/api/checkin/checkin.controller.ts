@@ -4,9 +4,7 @@ import { CheckinService } from './checkin.service';
 
 @Controller('checkin')
 export class CheckinController {
-  constructor(
-    private readonly checkinService: CheckinService,
-  ) { }
+  constructor(private readonly checkinService: CheckinService) {}
 
   @Restricted()
   @Get('/')
@@ -15,8 +13,8 @@ export class CheckinController {
   }
 
   @Restricted()
-  @Get('clients')
-  getOneClient(@Query() { location, phone }) {
+  @Get('/:locationId')
+  getOneLocation(@Query() { location, phone }) {
     console.log('PHONE', location);
     return {};
   }

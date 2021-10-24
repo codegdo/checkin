@@ -16,13 +16,13 @@ clockin
   tasks
 
 checkin
-
   calendar
-
   bookings
-  --
+
+timeclock
   tasks
-  --
+
+pos
   orders
   
 

@@ -8,18 +8,16 @@ import {
   GuardModule,
   SessionModule,
   LoggerMiddleware,
-  MailModule
+  MailModule,
 } from './common';
 
 import {
   AuthModule,
   UserModule,
   CheckinModule,
-  CheckoutModule,
   ClientModule,
-  SchedulerModule,
   CalendarModule,
-  LocationModule
+  LocationModule,
 } from './api';
 
 import {
@@ -27,22 +25,24 @@ import {
   dbConfig,
   jwtConfig,
   mailerConfig,
-  sessionConfig
+  sessionConfig,
 } from './configs';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [appConfig, dbConfig, sessionConfig, mailerConfig, jwtConfig],
-      isGlobal: true
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: (configService: ConfigService) => configService.get('database.main'),
+      useFactory: (configService: ConfigService) =>
+        configService.get('database.main'),
       inject: [ConfigService],
     }),
     TypeOrmModule.forRootAsync({
-      name: 'scheduler',
-      useFactory: (configService: ConfigService) => configService.get('database.scheduler'),
+      name: 'checkin',
+      useFactory: (configService: ConfigService) =>
+        configService.get('database.checkin'),
       inject: [ConfigService],
     }),
     SessionModule.forRootAsync({
@@ -53,14 +53,13 @@ import {
       },
       inject: [ConfigService],
     }),
-    MailModule,
     GuardModule,
+    MailModule,
     AuthModule,
     UserModule,
+
     CheckinModule,
-    CheckoutModule,
     ClientModule,
-    SchedulerModule,
     CalendarModule,
     LocationModule,
   ],
@@ -80,7 +79,7 @@ import {
   ],
 })
 export class AppModule {
-  constructor() { }
+  constructor() {}
 
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
@@ -8,10 +8,11 @@ import { AppState } from '../../../store/reducers';
 import { Form, FormData } from '../../../components/form';
 
 const Login: React.FC = (): JSX.Element => {
-  const { loggedIn } = useSelector((state: AppState) => state.session);
+  const { loggedIn, orgId } = useSelector((state: AppState) => state.session);
   const { updateSession } = useAction();
-  const [{ loading, result }, fetchLogin] = useFetch('/api/auth/login');
   const [form, setForm] = useState<FormData>();
+  const navigate = useNavigate();
+  const [{ loading, result }, fetchLogin] = useFetch('/api/auth/login');
 
   // load form
   useEffect(() => {
@@ -24,18 +25,21 @@ const Login: React.FC = (): JSX.Element => {
   useEffect(() => {
     if (loading === 'success' && result.ok) {
       const { user, accessToken } = result?.data;
-      updateSession({ loggedIn: true, user, accessToken });
+      updateSession({ loggedIn: true, user, orgId: user.orgId, accessToken });
     }
+
   }, [loading]);
+
+  useEffect(() => {
+    if (loggedIn) {
+      orgId ? navigate('/') : navigate('../trial');
+    }
+  }, [loggedIn, orgId]);
 
   const handleSubmit = (values: any) => {
     console.log('SUBMIT VALUES', values);
     void fetchLogin({ body: values });
   };
-
-  if (loggedIn) {
-    return <Navigate to="/" />;
-  }
 
   if (!form) {
     return <div>loading...</div>;

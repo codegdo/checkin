@@ -14,12 +14,11 @@ import { CalendarRepository } from 'src/models/checkin/repositories';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      OrganizationRepository,
-      UserRepository,
-      TokenRepository,
-    ], 'default'),
-    TypeOrmModule.forFeature([CalendarRepository], 'scheduler'),
+    TypeOrmModule.forFeature(
+      [OrganizationRepository, UserRepository, TokenRepository],
+      'default',
+    ),
+    TypeOrmModule.forFeature([CalendarRepository], 'checkin'),
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => {
         return configService.get('jwt');
@@ -30,4 +29,4 @@ import { CalendarRepository } from 'src/models/checkin/repositories';
   controllers: [AuthController],
   providers: [AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

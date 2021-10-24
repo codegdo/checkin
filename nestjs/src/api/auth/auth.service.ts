@@ -23,7 +23,7 @@ export class AuthService {
     @InjectConnection()
     private connection: Connection,
 
-    @InjectConnection('scheduler')
+    @InjectConnection('checkin')
     private connection2: Connection,
 
     @InjectRepository(OrganizationRepository)
@@ -35,12 +35,12 @@ export class AuthService {
     @InjectRepository(TokenRepository)
     private tokenRepository: TokenRepository,
 
-    @InjectRepository(CalendarRepository, 'scheduler')
+    @InjectRepository(CalendarRepository, 'checkin')
     private calendarRepository: CalendarRepository,
 
     private readonly mailService: MailService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   async signup(createUserDto: CreateUserDto) {
     //const organization = await this.orgRepository.create({
@@ -69,7 +69,6 @@ export class AuthService {
       // commit
       await queryRunner.commitTransaction();
       await queryRunner2.commitTransaction();
-
     } catch (err) {
       // rollback
       await queryRunner.rollbackTransaction();
@@ -113,7 +112,7 @@ export class AuthService {
     return user;
   }
 
-  async logout() { }
+  async logout() {}
 }
 
 /*
