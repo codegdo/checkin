@@ -22,9 +22,6 @@ export class Page extends BaseEntity {
   @Column({ name: 'type' })
   type: string;
 
-  @Column({ name: 'parent_id' })
-  parentId: number;
-
   @Column({ name: 'sort_order', default: 0 })
   sortOrder: number;
 

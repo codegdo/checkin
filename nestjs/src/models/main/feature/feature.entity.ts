@@ -12,7 +12,7 @@ import {
   UpdateDateColumn,
   OneToOne,
 } from 'typeorm';
-
+import { Module } from '../module/module.entity';
 
 @Entity({ database: 'main', schema: 'dbo', name: 'feature' })
 export class Feature extends BaseEntity {
@@ -23,7 +23,22 @@ export class Feature extends BaseEntity {
   name: string;
 
   @Column({ name: 'price' })
-  streetAddress: number;
+  price: number;
+
+  // Use middle table to join
+  @ManyToMany(() => Module, (module: Module) => module.features)
+  @JoinTable({
+    name: 'feature_module',
+    joinColumn: {
+      name: 'feature_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'module_id',
+      referencedColumnName: 'id',
+    },
+  })
+  modules: Module[];
 
   @Column({
     name: 'created_by',

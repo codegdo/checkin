@@ -1,58 +1,3 @@
--- CREATE TABLE MODULE_TYPE
-CREATE TABLE IF NOT EXISTS dbo.module_type (
-  id SERIAL NOT NULL,
-  name VARCHAR(45) NOT NULL,
-
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP,
-  created_by VARCHAR(45) DEFAULT CURRENT_USER,
-  updated_by VARCHAR(45),
-  --
-  PRIMARY KEY(id)
-);
-
-INSERT
-INTO dbo.module_type(id, name)
-VALUES
-('1','admin'),
-('2','solution'),
-('3','user');
-
--- CREATE TABLE MODULE
-CREATE TABLE IF NOT EXISTS dbo.module (
-  id SERIAL NOT NULL,
-  name VARCHAR(45) NOT NULL,
-  sort_order INTEGER DEFAULT 0,
-  module_type_id INTEGER DEFAULT 0,
-
-  is_external BOOLEAN DEFAULT FALSE,
-  is_internal BOOLEAN DEFAULT FALSE,
-  is_subscription BOOLEAN DEFAULT FALSE,
-  is_active BOOLEAN DEFAULT TRUE,
-
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP,
-  created_by VARCHAR(45) DEFAULT CURRENT_USER,
-  updated_by VARCHAR(45),
-  --
-  PRIMARY KEY(id),
-  FOREIGN KEY(module_type_id) REFERENCES dbo.module_type(id) ON DELETE SET NULL
-);
-
-INSERT
-INTO dbo.module(id, name, sort_order, module_type_id, is_external, is_internal, is_subscription, is_active)
-VALUES
-('1', 'System',     '0', '1', '0', '0', '0', '1'),
-('2', 'Setup',      '1', '1', '0', '1', '0', '1'),
-
-('3', 'Account',    '2', '2', '1', '1', '0', '1'),
-('4', 'Help',       '3', '2', '1', '1', '0', '1'),
-
-('11', 'Checkin',   '11', '3', '1', '1', '1', '1'),
-('12', 'Timeclock', '12', '3', '1', '1', '1', '1'),
-('13', 'POS',       '13', '3', '1', '1', '1', '1'),
-('14', 'Marketing', '14', '3', '1', '1', '1', '1');
-
 -- CREATE TABLE FEATURE
 CREATE TABLE IF NOT EXISTS dbo.feature (
   id SERIAL NOT NULL,
@@ -74,17 +19,66 @@ VALUES
 ('2', 'Rewards', '100'),
 ('3', 'Reminders', '100'),
 ('4', 'Reviews', '100'),
-('5', 'Refferals', '100'),
-
-('6', 'Customize Templates', '100'),
+('5', 'Customize Templates', '100'),
+('6', 'Customize Forms', '100'),
 ('7', 'Customize Reports', '100'),
 ('8', 'Customize Rules', '100'),
+('9', 'Notifications', '100');
 
-('9', 'Appointment Booking', '100'),
-('10', 'Walkin Booking', '100'),
+-- CREATE TABLE MODULE_GROUP
+CREATE TABLE IF NOT EXISTS dbo.module_group (
+  id SERIAL NOT NULL,
+  name VARCHAR(45) NOT NULL,
 
-('11', 'Staffs Assignment', '100'),
-('12', 'Staffs Clockin', '100');
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
+  --
+  PRIMARY KEY(id)
+);
+
+INSERT
+INTO dbo.module_group(id, name)
+VALUES
+('1','admin'),
+('2','solution'),
+('3','user');
+
+-- CREATE TABLE MODULE
+CREATE TABLE IF NOT EXISTS dbo.module (
+  id SERIAL NOT NULL,
+  name VARCHAR(45) NOT NULL,
+  sort_order INTEGER DEFAULT 0,
+  module_group_id INTEGER DEFAULT 0,
+
+  is_external BOOLEAN DEFAULT FALSE,
+  is_internal BOOLEAN DEFAULT FALSE,
+  is_subscription BOOLEAN DEFAULT FALSE,
+  is_active BOOLEAN DEFAULT TRUE,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
+  --
+  PRIMARY KEY(id),
+  FOREIGN KEY(module_group_id) REFERENCES dbo.module_group(id) ON DELETE SET NULL
+);
+
+INSERT
+INTO dbo.module(id, name, sort_order, module_group_id, is_external, is_internal, is_subscription, is_active)
+VALUES
+('1', 'System',     '0', '1', '0', '0', '0', '1'),
+('2', 'Setup',      '1', '1', '0', '1', '0', '1'),
+
+('3', 'Account',    '2', '2', '1', '1', '0', '1'),
+('4', 'Help',       '3', '2', '1', '1', '0', '1'),
+
+('11', 'Checkin',   '11', '3', '1', '1', '1', '1'),
+('12', 'Timeclock', '12', '3', '1', '1', '1', '1'),
+('13', 'POS',       '13', '3', '1', '1', '1', '1'),
+('14', 'Marketing', '14', '3', '1', '1', '1', '1');
 
 -- CREATE TABLE FEATURE_MODULE
 CREATE TABLE IF NOT EXISTS dbo.feature_module (
@@ -135,7 +129,6 @@ CREATE TABLE IF NOT EXISTS dbo.page (
   id SERIAL,
   name TEXT,
   type VARCHAR(45) CHECK(type in ('view', 'form')),
-  parent_id INT,
   sort_order INTEGER DEFAULT 0,
   is_external BOOLEAN DEFAULT TRUE,
   is_internal BOOLEAN DEFAULT TRUE,
@@ -150,46 +143,46 @@ CREATE TABLE IF NOT EXISTS dbo.page (
 );
 
 INSERT
-INTO dbo.page(id, name, type, parent_id, sort_order, is_external, is_internal, is_active)
+INTO dbo.page(id, name, type, sort_order, is_external, is_internal, is_active)
 VALUES
 --Setup
-('200', 'Managers',     'view', null, '0', '1', '1', '1'),
-('201', 'Staffs',       'view', null, '1', '1', '1', '1'),
-('202', 'Clients',      'view', null, '2', '1', '1', '1'),
-('203', 'Roles',        'view', null, '3', '1', '1', '1'),
+('200', 'Managers',     'view', '0', '0', '1', '1'),
+('201', 'Staffs',       'view', '1', '0', '1', '1'),
+('202', 'Clients',      'view', '2', '0', '1', '1'),
+('203', 'Roles',        'view', '3', '0', '1', '1'),
 
-('204', 'Languages',    'view', null, '5', '1', '1', '1'),
-('205', 'Locations',    'view', null, '6', '1', '1', '1'),
-('206', 'Services',     'view', null, '7', '1', '1', '1'),
-('207', 'Prices',       'view', null, '8', '1', '1', '1'),
+('204', 'Languages',    'view', '5', '0', '1', '1'),
+('205', 'Locations',    'view', '6', '0', '1', '1'),
+('206', 'Services',     'view', '7', '0', '1', '1'),
+('207', 'Prices',       'view', '8', '0', '1', '1'),
 
-('208', 'Forms',        'view', null, '9', '1', '1', '1'),
-('209', 'Templates',    'view', null, '10', '1', '1', '1'),
+('208', 'Forms',        'view', '9', '0', '1', '1'),
+('209', 'Templates',    'view', '10', '0', '1', '1'),
 
-('210', 'Checkin',      'view', null, '12', '1', '1', '1'),
-('211', 'Timeclock',    'view', null, '13', '1', '1', '1'),
-('212', 'POS',          'view', null, '14', '1', '1', '1'),
-('213', 'Marketing',    'view', null, '15', '1', '1', '1'),
+('210', 'Checkin',      'view', '12', '0', '1', '1'),
+('211', 'Timeclock',    'view', '13', '0', '1', '1'),
+('212', 'POS',          'view', '14', '0', '1', '1'),
+('213', 'Marketing',    'view', '15', '0', '1', '1'),
 --Account
-('300', 'Profile',      'form', null, '0', '1', '1', '1'),
-('301', 'Subscription', 'form', null, '1', '1', '1', '1'),
+('300', 'Profile',      'form', '0', '1', '1', '1'),
+('301', 'Subscription', 'form', '1', '1', '1', '1'),
 --Help
-('400', 'Supports',     'view', null, '0', '1', '1', '1'),
-('401', 'Guides',       'view', null, '1', '1', '1', '1'),
+('400', 'Supports',     'view', '0', '1', '1', '1'),
+('401', 'Guides',       'view', '1', '1', '1', '1'),
 --Checkin
-('1100', 'Dashboard',   'view', null, '0', '1', '1', '1'),
-('1101', 'Calendar',    'view', null, '1', '1', '1', '1'),
-('1102', 'Bookings',    'view', null, '2', '1', '1', '1'),
+('1100', 'Dashboard',   'view', '0', '1', '1', '1'),
+('1101', 'Calendar',    'view', '1', '1', '1', '1'),
+('1102', 'Bookings',    'view', '2', '1', '1', '1'),
 --Timeclock
-('1200', 'Dashboard',   'view', null, '0', '1', '1', '1'),
-('1201', 'Tasks',       'view', null, '1', '1', '1', '1'),
+('1200', 'Dashboard',   'view', '0', '1', '1', '1'),
+('1201', 'Tasks',       'view', '1', '1', '1', '1'),
 --POS
-('1300', 'Dashboard',   'view', null, '0', '1', '1', '1'),
-('1301', 'Orders',      'view', null, '1', '1', '1', '1'),
+('1300', 'Dashboard',   'view', '0', '1', '1', '1'),
+('1301', 'Orders',      'view', '1', '1', '1', '1'),
 --Marketing
-('1400', 'Reminder',    'view', null, '0', '1', '1', '1'),
-('1401', 'Reward',      'view', null, '1', '1', '1', '1'),
-('1402', 'Reviews',     'view', null, '2', '1', '1', '1');
+('1400', 'Reminder',    'view', '0', '1', '1', '1'),
+('1401', 'Reward',      'view', '1', '1', '1', '1'),
+('1402', 'Reviews',     'view', '2', '1', '1', '1');
 
 -- CREATE TABLE MODULE_PAGE
 CREATE TABLE IF NOT EXISTS dbo.module_page (
@@ -245,23 +238,18 @@ VALUES
 -- SELECT
 SELECT * FROM dbo.feature;
 SELECT * FROM dbo.feature_module;
-SELECT * FROM dbo.module_type;
+SELECT * FROM dbo.module_group;
 SELECT * FROM dbo.module;
 SELECT * FROM dbo.module_page;
 SELECT * FROM dbo.page;
+
 
 -- DROP
 DROP TABLE IF EXISTS
 dbo.feature,
 dbo.feature_module,
-dbo.module_type,
+dbo.module_group,
 dbo.module,
 dbo.module_page,
 dbo.page
-CASCADE;
-
-DROP SEQUENCE IF EXISTS
-dbo.module_group_id_seq,
-dbo.module_id_seq,
-dbo.page_id_seq
 CASCADE;

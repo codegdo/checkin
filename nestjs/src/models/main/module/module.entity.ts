@@ -12,10 +12,11 @@ import {
   OneToOne,
   //OneToMany,
 } from 'typeorm';
+import { Feature } from '../feature/feature.entity';
 import { Page } from '../page/page.entity';
 
-@Entity({ database: 'main', schema: 'dbo', name: 'module_type' })
-export class ModuleType extends BaseEntity {
+@Entity({ database: 'main', schema: 'dbo', name: 'module_group' })
+export class ModuleGroup extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id!: number;
 
@@ -65,9 +66,12 @@ export class Module extends BaseEntity {
   //@JoinColumn({ name: 'module_group_id', referencedColumnName: 'id' })
   //moduleGroup: ModuleGroup;
 
-  @OneToOne(() => ModuleType, (moduleType) => moduleType.id)
-  @JoinColumn({ name: 'module_typep_id' })
-  moduleType: ModuleType;
+  @OneToOne(() => ModuleGroup, (moduleGroup) => moduleGroup.id)
+  @JoinColumn({ name: 'module_group_id' })
+  moduleGroup: ModuleGroup;
+
+  @ManyToMany(() => Feature, (feature: Feature) => feature.modules)
+  features: Feature[];
 
   @Column({ name: 'is_external', default: false })
   isExternal: boolean;
