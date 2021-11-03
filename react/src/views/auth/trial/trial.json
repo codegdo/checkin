@@ -1,0 +1,111 @@
+{
+  "id": 1,
+  "label": "Signup",
+  "name": "Signup",
+  "description": null,
+  "data": [
+    {
+      "id": 2,
+      "type": "header",
+      "role": "block",
+      "data": [],
+      "position": 0,
+      "positionParent": null
+    },
+    {
+      "id": 3,
+      "type": "main",
+      "role": "block",
+      "data": [],
+      "position": 1,
+      "positionParent": null
+    },
+    {
+      "id": 4,
+      "type": "footer",
+      "role": "block",
+      "data": [],
+      "position": 2,
+      "positionParent": null
+    },
+    {
+      "id": 5,
+      "label": null,
+      "name": "Singup",
+      "description": null,
+      "type": "title",
+      "role": "element",
+      "data": [],
+      "value": null,
+      "position": 0,
+      "positionParent": 0
+    },
+    {
+      "id": 6,
+      "label": "Signup",
+      "name": "submit",
+      "type": "button",
+      "role": "element",
+      "data": [],
+      "value": null,
+      "position": 0,
+      "positionParent": 2
+    },
+    {
+      "id": 7,
+      "label": "Login",
+      "name": null,
+      "description": null,
+      "type": "link",
+      "role": "element",
+      "data": null,
+      "value": "/auth/login",
+      "position": 0,
+      "positionParent": 2
+    }
+  ],
+  "fields": [
+    {
+      "id": 3,
+      "label": "Username",
+      "name": "username",
+      "description": null,
+      "type": "text",
+      "role": "field",
+      "data": null,
+      "value": "",
+      "defaultValue": "",
+      "isRequired": true,
+      "position": 0,
+      "positionParent": 1
+    },
+    {
+      "id": 4,
+      "label": "Password",
+      "name": "password",
+      "description": null,
+      "type": "password",
+      "role": "field",
+      "data": null,
+      "value": "",
+      "defaultValue": "",
+      "isRequired": true,
+      "position": 0,
+      "positionParent": 1
+    },
+    {
+      "id": 5,
+      "label": "Email Address",
+      "name": "emailAddress",
+      "description": null,
+      "type": "email",
+      "role": "field",
+      "data": null,
+      "value": "",
+      "defaultValue": "",
+      "isRequired": true,
+      "position": 0,
+      "positionParent": 1
+    }
+  ]
+}

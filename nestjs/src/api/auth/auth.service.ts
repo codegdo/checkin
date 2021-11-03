@@ -12,6 +12,7 @@ import { CreateUserDto } from 'src/models/main/dtos';
 import {
   OrganizationRepository,
   UserRepository,
+  RoleRepository,
   TokenRepository,
 } from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/checkin/repositories';
@@ -32,6 +33,9 @@ export class AuthService {
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
 
+    @InjectRepository(UserRepository)
+    private roleRepository: RoleRepository,
+
     @InjectRepository(TokenRepository)
     private tokenRepository: TokenRepository,
 
@@ -48,6 +52,7 @@ export class AuthService {
     //});
 
     const user = await this.userRepository.create(createUserDto);
+    const role = await this.roleRepository.create();
     const token = await this.tokenRepository.create();
     const calendar = await this.calendarRepository.create({
       name: createUserDto.username,
@@ -62,6 +67,8 @@ export class AuthService {
     try {
       //const org = await queryRunner.manager.save(organization);
       //user.orgId = org.id;
+      role.id = 2;
+      user.role = role;
       await queryRunner.manager.save(user);
       await queryRunner.manager.save(token);
       await queryRunner2.manager.save(calendar);
