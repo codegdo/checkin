@@ -1,6 +1,6 @@
 import React, { Suspense, useMemo } from 'react';
 import JsxParser from 'react-jsx-parser';
-import { useTemplate } from '../../hooks/use-template';
+import { useTemplate } from '../../hooks/use-template.hook';
 
 import * as Navs from '../nav';
 

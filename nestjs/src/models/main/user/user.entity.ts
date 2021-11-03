@@ -13,12 +13,13 @@ import {
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { Role } from '../role/role.entity';
-import { Employee } from '../employee/employee.entity';
+import { Contact } from '../contact/contact.entity';
 
 const scrypt = promisify(_scrypt);
 
 @Entity({ database: 'main', schema: 'sec', name: 'user' })
 @Unique(['username'])
+@Unique(['passcode'])
 export class User {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
@@ -29,6 +30,9 @@ export class User {
   @Column({ name: 'password', select: false })
   password: string;
 
+  @Column({ name: 'passcode', select: false })
+  passcode: string;
+
   @Column({ name: 'email_address' })
   emailAddress: string;
 
@@ -38,15 +42,18 @@ export class User {
   @Column({ name: 'is_active', default: false })
   isActive: boolean;
 
-  @OneToOne(() => Employee, (employee) => employee.id)
-  @JoinColumn({ name: 'employee_id' })
-  employee: Employee;
+  @OneToOne(() => Contact, (contact) => contact.id)
+  @JoinColumn({ name: 'contact_id' })
+  contact: Contact;
 
   @OneToOne(() => Role, (role) => role.id)
   @JoinColumn({ name: 'role_id' })
   role: Role;
 
-  @Column({ name: 'org_id', nullable: true })
+  @Column({ name: 'form_id' })
+  formId: number;
+
+  @Column({ name: 'org_id' })
   orgId: number;
 
   @Column({

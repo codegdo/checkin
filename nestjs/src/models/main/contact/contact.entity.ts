@@ -10,8 +10,8 @@ import {
 } from 'typeorm';
 import { Territory } from '../territory/territory.entity';
 
-@Entity({ database: 'main', schema: 'sec', name: 'employee' })
-export class Employee extends BaseEntity {
+@Entity({ database: 'main', schema: 'sec', name: 'contact' })
+export class Contact extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
@@ -20,9 +20,6 @@ export class Employee extends BaseEntity {
 
   @Column({ name: 'last_name', nullable: true })
   lastName: string;
-
-  @Column({ name: 'passcode', nullable: true })
-  passcode: string;
 
   @Column({ name: 'street_address', nullable: true })
   streetAddress: string;

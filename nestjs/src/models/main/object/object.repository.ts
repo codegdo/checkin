@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { Object } from './object.entity';
+import { DBObject } from './object.entity';
 
-@EntityRepository(Object)
-export class ObjectRepository extends Repository<Object> { }
+@EntityRepository(DBObject)
+export class ObjectRepository extends Repository<DBObject> { }

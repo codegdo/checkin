@@ -1,5 +1,5 @@
 export * from './client/client.repository';
-export * from './employee/employee.repository';
+export * from './contact/contact.repository';
 export * from './location/location.repository';
 export * from './organization/organization.repository';
 export * from './policy/policy.repository';

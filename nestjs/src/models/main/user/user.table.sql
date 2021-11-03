@@ -4,9 +4,11 @@ CREATE TABLE IF NOT EXISTS sec.user (
   email_address VARCHAR(45),
   username VARCHAR(45),
   password VARCHAR(85),
+  passcode VARCHAR(45),
 
-  employee_id INT,
+  contact_id INT,
   role_id INT,
+  form_id INT,
   org_id INT,
 
   is_new_password BOOLEAN DEFAULT FALSE,
@@ -15,9 +17,10 @@ CREATE TABLE IF NOT EXISTS sec.user (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
   created_by VARCHAR(45) DEFAULT CURRENT_USER,
-  updated_by VARCHAR(45)
+  updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
   UNIQUE(username),
+  UNIQUE(passcode),
   FOREIGN KEY(role_id) REFERENCES sec.role(id)
 );

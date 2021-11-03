@@ -5,29 +5,38 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany,
+  ManyToOne,
+  JoinColumn
 } from 'typeorm';
 
+import { DBObject } from '../object/object.entity';
 
-@Entity({ database: 'main', schema: 'dbo', name: 'object' })
-export class DBObject extends BaseEntity {
+@Entity({ database: 'main', schema: 'dbo', name: 'field' })
+export class Field extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
   @Column({ name: 'name', nullable: false })
   name: string;
 
-  @Column({ name: 'mapping', nullable: false })
-  mapping: string;
+  @Column({ name: 'description' })
+  description: string;
 
-  @Column({ name: 'is_external', default: false })
-  isExternal: boolean;
+  @Column({ name: 'role' })
+  role: string;
 
-  @Column({ name: 'is_internal', default: false })
-  isInternal: boolean;
+  @Column({ name: 'type' })
+  type: string;
 
-  @Column({ name: 'is_active', default: false })
-  isActive: boolean;
+  @Column({ name: 'data' })
+  data: string;
+
+  @Column({ name: 'is_required', default: false })
+  isRequired: boolean;
+
+  @ManyToOne(() => DBObject)
+  @JoinColumn({ name: 'object_id', referencedColumnName: 'id' })
+  object: DBObject;
 
   @Column({
     name: 'created_by',

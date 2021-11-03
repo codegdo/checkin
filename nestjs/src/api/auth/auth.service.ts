@@ -44,7 +44,7 @@ export class AuthService {
 
     private readonly mailService: MailService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   async signup(createUserDto: CreateUserDto) {
     //const organization = await this.orgRepository.create({
@@ -67,8 +67,14 @@ export class AuthService {
     try {
       //const org = await queryRunner.manager.save(organization);
       //user.orgId = org.id;
+
+      // assign role = owner
       role.id = 2;
       user.role = role;
+
+      token.data = JSON.stringify({ username: user.username });
+      token.expiredAt = Math.floor((new Date().getTime() / 1000) + (60 * 1000));
+
       await queryRunner.manager.save(user);
       await queryRunner.manager.save(token);
       await queryRunner2.manager.save(calendar);
@@ -76,6 +82,7 @@ export class AuthService {
       // commit
       await queryRunner.commitTransaction();
       await queryRunner2.commitTransaction();
+
     } catch (err) {
       // rollback
       await queryRunner.rollbackTransaction();
@@ -88,9 +95,12 @@ export class AuthService {
       await queryRunner2.release();
     }
 
-    const send = await this.mailService.sendUserConfirmation();
-
-    console.log(send);
+    try {
+      const send = await this.mailService.sendUserConfirmation();
+      //console.log(send);
+    } catch (err) {
+      //throw new InternalServerErrorException(err);
+    }
 
     /* try {
       const { response } = await this.mailerService.sendMail({
@@ -119,7 +129,7 @@ export class AuthService {
     return user;
   }
 
-  async logout() {}
+  async logout() { }
 }
 
 /*

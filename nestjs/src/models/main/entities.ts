@@ -1,5 +1,5 @@
 export * from './client/client.entity';
-export * from './employee/employee.entity';
+export * from './contact/contact.entity';
 export * from './location/location.entity';
 export * from './organization/organization.entity';
 export * from './policy/policy.entity';

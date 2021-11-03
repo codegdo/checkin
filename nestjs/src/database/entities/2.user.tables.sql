@@ -103,9 +103,9 @@ CREATE TABLE IF NOT EXISTS sec.role (
   is_active BOOLEAN DEFAULT TRUE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   created_by VARCHAR(45) DEFAULT CURRENT_USER,
-  updated_by VARCHAR(45),
+  updated_by VARCHAR(45) DEFAULT CURRENT_USER,
   --
   PRIMARY KEY(id),
   FOREIGN KEY(role_type_id) REFERENCES dbo.role_type(id) ON DELETE SET NULL
@@ -154,13 +154,14 @@ CREATE TABLE IF NOT EXISTS sec.role_policy (
 
 CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
 
--- CREATE TABLE EMPLOYEE
-CREATE TABLE IF NOT EXISTS sec.employee (
+SELECT * FROM sec.role;
+
+-- CREATE TABLE CONTACT
+CREATE TABLE IF NOT EXISTS sec.contact (
   id SERIAL NOT NULL,
 
   first_name VARCHAR(45),
   last_name VARCHAR(45),
-  passcode VARCHAR(20),
 
   street_address VARCHAR(95),
   city VARCHAR(95),
@@ -174,33 +175,34 @@ CREATE TABLE IF NOT EXISTS sec.employee (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY(id),
-  UNIQUE(passcode),
   FOREIGN KEY(territory_id) REFERENCES dbo.territory(id)
 );
 
--- CREATE TABLE USER
+-- TABLE
 CREATE TABLE IF NOT EXISTS sec.user (
   id SERIAL NOT NULL,
   email_address VARCHAR(45),
   username VARCHAR(45),
   password VARCHAR(85),
+  passcode VARCHAR(45),
 
-  employee_id INT,
+  contact_id INT,
   role_id INT,
+  form_id INT,
   org_id INT,
 
   is_new_password BOOLEAN DEFAULT FALSE,
   is_active BOOLEAN DEFAULT FALSE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
   created_by VARCHAR(45) DEFAULT CURRENT_USER,
-  updated_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
   UNIQUE(username),
-  FOREIGN KEY(role_id) REFERENCES sec.role(id),
-  FOREIGN KEY(employee_id) REFERENCES sec.employee(id)
+  UNIQUE(passcode),
+  FOREIGN KEY(role_id) REFERENCES sec.role(id)
 );
 
 -- CREATE TABLE CLIENT
@@ -218,7 +220,6 @@ CREATE TABLE IF NOT EXISTS sec.client (
 );
 
 -- CREATE TABLE ORGANIZATION
-
 CREATE TABLE IF NOT EXISTS sec.organization (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
@@ -247,7 +248,6 @@ CREATE TABLE IF NOT EXISTS sec.organization (
   UNIQUE(subdomain, owner_id),
   FOREIGN KEY(owner_id) REFERENCES sec.user(id)
 );
-
 
 -- CREATE TABLE LOCATION
 CREATE TABLE IF NOT EXISTS org.location (
@@ -299,6 +299,8 @@ CREATE TABLE IF NOT EXISTS sec.token (
 );
 
 --
+SELECT * FROM sec.token;
+--
 
 DROP TABLE IF EXISTS
 dbo.territory,
@@ -310,7 +312,7 @@ sec.role,
 sec.role_policy,
 sec.policy,
 sec.user,
-sec.employee,
+sec.contact,
 sec.client,
 sec.organization,
 sec.session,
