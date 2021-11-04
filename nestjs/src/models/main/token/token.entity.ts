@@ -3,8 +3,7 @@ import crypto from 'crypto';
 import { TokenDto } from './dtos/token.dto';
 
 export interface TokenData {
-  maxAge?: number;
-  data?: string;
+  username?: string;
 }
 
 @Entity({ database: 'main', schema: 'sec', name: 'token' })
@@ -15,16 +14,16 @@ export class Token extends BaseEntity {
   @Column({ name: 'expired_at' })
   expiredAt: number;
 
-  @Column({ name: 'data' })
-  data: string;
+  @Column({ type: 'jsonb', name: 'data' })
+  data?: TokenData;
 
-  create({ data = '{}', maxAge = 86400 }: TokenData): TokenDto {
-    return {
-      id: crypto.randomBytes(16).toString('hex'),
-      expiredAt: Math.floor(new Date().getTime() / 1000 + maxAge),
-      data: data,
-    };
-  }
+  // create({ data = '{}', maxAge = 86400 }: TokenData): TokenDto {
+  //   return {
+  //     id: crypto.randomBytes(16).toString('hex'),
+  //     expiredAt: Math.floor(new Date().getTime() / 1000 + maxAge),
+  //     data: data,
+  //   };
+  // }
 
   //validate() {}
 

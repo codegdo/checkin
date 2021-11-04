@@ -1,5 +1,8 @@
 import {
   BadRequestException,
+  NotFoundException,
+  ConflictException,
+  UnauthorizedException,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -72,7 +75,7 @@ export class AuthService {
       role.id = 2;
       user.role = role;
 
-      token.data = JSON.stringify({ username: user.username });
+      token.data = { username: user.username };
       token.expiredAt = Math.floor((new Date().getTime() / 1000) + (60 * 1000));
 
       await queryRunner.manager.save(user);
@@ -96,7 +99,7 @@ export class AuthService {
     }
 
     try {
-      const send = await this.mailService.sendUserConfirmation();
+      const send = this.mailService.sendUserConfirmation();
       //console.log(send);
     } catch (err) {
       //throw new InternalServerErrorException(err);
@@ -130,6 +133,60 @@ export class AuthService {
   }
 
   async logout() { }
+
+  async verify(id: string) {
+    const token = await this.tokenRepository.findOne({
+      where: [{ id }],
+    });
+
+    if (!token) {
+      throw new NotFoundException(404, 'Not Found')
+    }
+
+    const date = new Date();
+    const now = Math.round(date.getTime() / 1000);
+
+    if (token.expiredAt < now) {
+      throw new UnauthorizedException(401, 'Unauthorized')
+    }
+
+    const { username } = token.data;
+
+    const query = await this.userRepository.createQueryBuilder('user');
+    const user = await query.addSelect(['user.password', 'user.passcode']).where('user.username = :username', { username }).getOne();
+    //const user = await this.userRepository.findOne({select: ['id', 'password'], where: [{ username }]});
+
+    if (user.isActive) {
+      throw new ConflictException(409, 'Activated')
+    }
+
+    user.isActive = true;
+    await this.userRepository.save(user);
+    await this.tokenRepository.delete(token);
+    //await this.userRepository.update(user.id, user);
+
+    /*
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.startTransaction();
+
+    try {
+      user.isActive = true;
+      await queryRunner.manager.save(user);
+
+      // commit
+      await queryRunner.commitTransaction();
+
+    } catch (err) {
+      // rollback
+      await queryRunner.rollbackTransaction();
+
+      throw new InternalServerErrorException(err.code);
+    } finally {
+      // release
+      await queryRunner.release();
+    }
+    */
+  }
 }
 
 /*

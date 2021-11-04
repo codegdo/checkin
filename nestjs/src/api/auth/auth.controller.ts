@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Session,
   UnauthorizedException,
@@ -46,6 +47,13 @@ export class AuthController {
       session.destroy();
     }
 
+    return {};
+  }
+
+  @Public()
+  @Get('verify/:token')
+  async verify(@Param('token') token: string) {
+    await this.authService.verify(token);
     return {};
   }
 
