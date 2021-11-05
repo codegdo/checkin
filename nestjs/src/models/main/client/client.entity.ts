@@ -12,6 +12,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { Location } from '../entities';
+
 @Entity({ database: 'main', schema: 'sec', name: 'client' })
 export class Client extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
@@ -31,6 +33,20 @@ export class Client extends BaseEntity {
 
   @Column({ name: 'day_of_birth' })
   dayOfBirth: Date;
+
+  @ManyToMany(() => Location, (location: Location) => location.clients)
+  @JoinTable({
+    name: 'client_location',
+    joinColumn: {
+      name: 'client_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'location_id',
+      referencedColumnName: 'id',
+    },
+  })
+  locations: Location[];
 
   @CreateDateColumn({
     name: 'created_at',

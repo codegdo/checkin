@@ -141,44 +141,7 @@ CREATE TABLE IF NOT EXISTS sec.policy (
   FOREIGN KEY(role_type_id) REFERENCES dbo.role_type(id) ON DELETE SET NULL
 );
 
--- CREATE JOIN TABLE ROLE_POLICY
-CREATE TABLE IF NOT EXISTS sec.role_policy (
-  role_id INT NOT NULL,
-  policy_id INT NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  --
-  PRIMARY KEY(role_id, policy_id),
-  FOREIGN KEY(role_id) REFERENCES sec.role(id) ON DELETE CASCADE,
-  FOREIGN KEY(policy_id) REFERENCES sec.policy(id) ON DELETE CASCADE
-);
-
-CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
-
-SELECT * FROM sec.role;
-
--- CREATE TABLE CONTACT
-CREATE TABLE IF NOT EXISTS sec.contact (
-  id SERIAL NOT NULL,
-
-  first_name VARCHAR(45),
-  last_name VARCHAR(45),
-
-  street_address VARCHAR(95),
-  city VARCHAR(95),
-  postal_code VARCHAR(18),
-  territory_id INT,
-  phone_number VARCHAR(20),
-
-  is_active BOOLEAN DEFAULT TRUE,
-
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  --
-  PRIMARY KEY(id),
-  FOREIGN KEY(territory_id) REFERENCES dbo.territory(id)
-);
-
--- TABLE
+-- CREATE TABLE USER
 CREATE TABLE IF NOT EXISTS sec.user (
   id SERIAL NOT NULL,
   email_address VARCHAR(45),
@@ -249,6 +212,30 @@ CREATE TABLE IF NOT EXISTS sec.organization (
   FOREIGN KEY(owner_id) REFERENCES sec.user(id)
 );
 
+-- CREATE TABLE CONTACT
+CREATE TABLE IF NOT EXISTS org.contact (
+  id SERIAL NOT NULL,
+
+  first_name VARCHAR(45),
+  last_name VARCHAR(45),
+
+  street_address VARCHAR(95),
+  city VARCHAR(95),
+  postal_code VARCHAR(18),
+  territory_id INT,
+  phone_number VARCHAR(20),
+
+  is_active BOOLEAN DEFAULT TRUE,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
+  --
+  PRIMARY KEY(id),
+  FOREIGN KEY(territory_id) REFERENCES dbo.territory(id)
+);
+
 -- CREATE TABLE LOCATION
 CREATE TABLE IF NOT EXISTS org.location (
   id SERIAL NOT NULL,
@@ -269,9 +256,9 @@ CREATE TABLE IF NOT EXISTS org.location (
   is_active BOOLEAN DEFAULT TRUE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
   created_by VARCHAR(45) DEFAULT CURRENT_USER,
-  updated_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
   FOREIGN KEY(territory_id) REFERENCES dbo.territory(id),
@@ -298,6 +285,45 @@ CREATE TABLE IF NOT EXISTS sec.token (
     PRIMARY KEY(id)
 );
 
+-- CREATE JOIN TABLE ROLE_POLICY
+CREATE TABLE IF NOT EXISTS sec.role_policy (
+  role_id INT NOT NULL,
+  policy_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  --
+  PRIMARY KEY(role_id, policy_id),
+  FOREIGN KEY(role_id) REFERENCES sec.role(id) ON DELETE CASCADE,
+  FOREIGN KEY(policy_id) REFERENCES sec.policy(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
+
+-- CREATE JOIN TABLE CLIENT_LOCATION
+CREATE TABLE IF NOT EXISTS sec.client_location (
+  client_id INT NOT NULL,
+  location_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  --
+  PRIMARY KEY(client_id, location_id),
+  FOREIGN KEY(client_id) REFERENCES sec.client(id) ON DELETE CASCADE,
+  FOREIGN KEY(location_id) REFERENCES org.location(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_client_location ON sec.client_location(client_id, location_id);
+
+-- CREATE JOIN TABLE USER_LOCATION
+CREATE TABLE IF NOT EXISTS sec.user_location (
+  user_id INT NOT NULL,
+  location_id INT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  --
+  PRIMARY KEY(user_id, location_id),
+  FOREIGN KEY(user_id) REFERENCES sec.user(id) ON DELETE CASCADE,
+  FOREIGN KEY(location_id) REFERENCES org.location(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_user_location ON sec.user_location(user_id, location_id);
+
 --
 SELECT * FROM sec.token;
 --
@@ -307,13 +333,15 @@ dbo.territory,
 dbo.role_type,
 --
 org.location,
+org.contact,
 --
 sec.role,
 sec.role_policy,
 sec.policy,
 sec.user,
-sec.contact,
+sec.user_location,
 sec.client,
+sec.client_location,
 sec.organization,
 sec.session,
 sec.token,

@@ -1,5 +1,5 @@
 -- CREATE TABLE CONTACT
-CREATE TABLE IF NOT EXISTS sec.contact (
+CREATE TABLE IF NOT EXISTS org.contact (
   id SERIAL NOT NULL,
 
   first_name VARCHAR(45),
@@ -14,7 +14,9 @@ CREATE TABLE IF NOT EXISTS sec.contact (
   is_active BOOLEAN DEFAULT TRUE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
   FOREIGN KEY(territory_id) REFERENCES dbo.territory(id)

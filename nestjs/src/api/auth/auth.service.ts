@@ -98,6 +98,7 @@ export class AuthService {
       await queryRunner2.release();
     }
 
+    // no await
     try {
       const send = this.mailService.sendUserConfirmation();
       //console.log(send);
@@ -152,18 +153,22 @@ export class AuthService {
 
     const { username } = token.data;
 
-    const query = await this.userRepository.createQueryBuilder('user');
-    const user = await query.addSelect(['user.password', 'user.passcode']).where('user.username = :username', { username }).getOne();
-    //const user = await this.userRepository.findOne({select: ['id', 'password'], where: [{ username }]});
+    //const query = await this.userRepository.createQueryBuilder('user');
+    //const user = await query.addSelect(['user.password', 'user.passcode']).where('user.username = :username', { username }).getOne();
+    const user = await this.userRepository.findOne({ where: [{ username }] });
 
     if (user.isActive) {
       throw new ConflictException(409, 'Activated')
     }
 
     user.isActive = true;
+
     await this.userRepository.save(user);
     await this.tokenRepository.delete(token);
     //await this.userRepository.update(user.id, user);
+    //await this.connection.transaction(async (manager) => {
+    //await manager.save(user);
+    //});
 
     /*
     const queryRunner = this.connection.createQueryRunner();

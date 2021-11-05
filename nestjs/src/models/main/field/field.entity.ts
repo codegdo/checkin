@@ -11,6 +11,8 @@ import {
 
 import { DBObject } from '../object/object.entity';
 
+interface FieldData { };
+
 @Entity({ database: 'main', schema: 'dbo', name: 'field' })
 export class Field extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
@@ -28,8 +30,8 @@ export class Field extends BaseEntity {
   @Column({ name: 'type' })
   type: string;
 
-  @Column({ name: 'data' })
-  data: string;
+  @Column({ type: 'jsonb', name: 'data' })
+  data: FieldData;
 
   @Column({ name: 'is_required', default: false })
   isRequired: boolean;

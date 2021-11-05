@@ -1,13 +1,18 @@
+-- TABLE
 CREATE TABLE IF NOT EXISTS org.subscription (
   module_id INT NOT NULL,
   org_id INT NOT NULL,
   plan_id INT,
   is_renewed BOOLEAN,
   is_trial BOOLEAN,
+
   start_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   end_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
   --
   PRIMARY KEY(module_id, org_id),
   FOREIGN KEY(module_id) REFERENCES dbo.module(id) ON DELETE CASCADE,

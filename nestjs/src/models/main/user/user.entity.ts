@@ -9,11 +9,12 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
   Unique,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
-import { Role } from '../role/role.entity';
-import { Contact } from '../contact/contact.entity';
+import { Role, Contact, Location } from '../entities';
 
 const scrypt = promisify(_scrypt);
 
@@ -56,6 +57,20 @@ export class User {
   @Column({ name: 'org_id' })
   orgId: number;
 
+  @ManyToMany(() => Location, (location: Location) => location.users)
+  @JoinTable({
+    name: 'user_location',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'location_id',
+      referencedColumnName: 'id',
+    },
+  })
+  locations: Location[];
+
   @Column({
     name: 'created_by',
     default: () => 'CURRENT_USER',
@@ -86,9 +101,11 @@ export class User {
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword() {
-    const salt = randomBytes(8).toString('hex');
-    const hash = (await scrypt(this.password, salt, 32)) as Buffer;
-    this.password = hash.toString('hex') + '.' + salt;
+    if (this.password) {
+      const salt = randomBytes(8).toString('hex');
+      const hash = (await scrypt(this.password, salt, 32)) as Buffer;
+      this.password = hash.toString('hex') + '.' + salt;
+    }
   }
 
   async validatePassword(password: string) {

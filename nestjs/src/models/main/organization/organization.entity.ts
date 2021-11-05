@@ -11,41 +11,43 @@ import {
 } from 'typeorm';
 import { User } from '../user/user.entity';
 
+interface OrgData { };
+
 @Entity({ database: 'main', schema: 'sec', name: 'organization' })
 @Unique(['subdomain'])
 export class Organization extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'name', nullable: true })
+  @Column({ name: 'name' })
   name: string;
 
-  @Column({ name: 'street_address', nullable: true })
+  @Column({ name: 'street_address' })
   streetAddress: string;
 
-  @Column({ name: 'city', nullable: true })
+  @Column({ name: 'city' })
   city: string;
 
-  @Column({ name: 'postal_code', nullable: true })
+  @Column({ name: 'postal_code' })
   postalCode: number;
 
-  @Column({ name: 'territory_id', nullable: true })
+  @Column({ name: 'territory_id' })
   territoryId: number;
 
-  @Column({ name: 'website', nullable: true })
+  @Column({ name: 'website' })
   website: string;
 
-  @Column({ name: 'phone_number', nullable: true })
+  @Column({ name: 'phone_number' })
   phoneNumber: number;
 
-  @Column({ name: 'fax_number', nullable: true })
+  @Column({ name: 'fax_number' })
   faxNumber: number;
 
   @Column({ name: 'subdomain', nullable: false })
   subdomain: string;
 
-  @Column({ name: 'data', nullable: true })
-  data: string;
+  @Column({ name: 'data', type: 'jsonb' })
+  data: OrgData;
 
   @Column({ name: 'is_active', default: true })
   isActive: boolean;

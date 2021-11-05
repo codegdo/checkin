@@ -12,7 +12,8 @@ import {
   UpdateDateColumn,
   OneToOne,
 } from 'typeorm';
-import { Territory } from '../territory/territory.entity';
+
+import { Client, User, Territory } from '../entities';
 
 @Entity({ database: 'main', schema: 'org', name: 'location' })
 export class Location extends BaseEntity {
@@ -46,6 +47,12 @@ export class Location extends BaseEntity {
 
   @Column({ name: 'org_id', nullable: true })
   orgId: number;
+
+  @ManyToMany(() => Client, (client: Client) => client.locations)
+  clients: Client[];
+
+  @ManyToMany(() => User, (user: User) => user.locations)
+  users: User[];
 
   @Column({
     name: 'created_by',
