@@ -14,36 +14,42 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
     throw new Error('Require FORMFIELD Nested In FORMCONTEXT');
   }
 
-  const { values, errors, submit, formSchema } = context;
+  const { values, errors, submit, formSchema, isKey, isMap } = context;
 
   const data = field || props;
-  const { label, description, name = '', value: initialValue, defaultValue = '' } = data;
+  const { id, label, description, name, mapTable = '', value: initialValue, defaultValue = '' } = data;
   const fieldSchema = formValidationSchema(data);
 
-  //console.log('FIELD', data);
+  const key = (isKey ? id : name) || '';
 
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    values[name] = initialValue || defaultValue;
-    formSchema[name] = fieldSchema;
+
+    isMap ?
+      values[mapTable] = { ...values[mapTable], [key]: initialValue || defaultValue } :
+      values[key] = initialValue || defaultValue;
+
+    formSchema[key] = fieldSchema;
   }, []);
 
   useEffect(() => {
-    setIsError(errors[name] ? true : false);
+    setIsError(errors[key] ? true : false);
   }, [submit]);
 
   const handleChange = (value?: string) => {
 
-    const { error } = Joi.object({ [name]: fieldSchema }).validate({ [name]: value });
+    const { error } = Joi.object({ [key]: fieldSchema }).validate({ [key]: value });
 
     if (error) {
-      errors[name] = error.details[0].message;
+      errors[key] = error.details[0].message;
     } else {
-      delete errors[name];
+      delete errors[key];
     }
 
-    values[name] = value;
+    isMap ?
+      values[mapTable] = { ...values[mapTable], [key]: value } :
+      values[key] = value;
 
     setIsError(error ? true : false);
   }

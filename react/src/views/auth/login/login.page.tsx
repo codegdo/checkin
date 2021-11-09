@@ -24,8 +24,15 @@ const Login: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     if (loading === 'success' && result.ok) {
-      const { user, accessToken } = result?.data;
-      updateSession({ loggedIn: true, user, orgId: user.orgId, accessToken });
+      const { user, orgId, locationId, accessToken } = result?.data;
+
+      updateSession({
+        loggedIn: true,
+        user,
+        orgId,
+        locationId,
+        accessToken
+      });
     }
 
   }, [loading]);

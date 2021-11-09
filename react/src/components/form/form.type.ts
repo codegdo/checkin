@@ -21,6 +21,10 @@ export type FieldType = {
   positionParent: number;
 
   isRequired: boolean;
+
+  mapSchema: string;
+  mapTable: string;
+  mapColumn: string;
 };
 
 export type FieldData = Partial<FieldType>;
@@ -97,6 +101,8 @@ export type FormData = Partial<FormType>;
 export type FormProps = {
   form?: FormData;
   loading?: string;
+  isKey?: boolean;
+  isMap?: boolean;
   onSubmit?: (values: any) => void;
 };
 
@@ -108,6 +114,8 @@ export type FormContextProps =
     submit?: string;
     loading?: string;
     formSchema?: any;
+    isKey?: boolean;
+    isMap?: boolean;
     handleSubmit: (name: string) => void;
   }
   | undefined;

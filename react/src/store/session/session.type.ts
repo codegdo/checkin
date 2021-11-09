@@ -5,5 +5,6 @@ export interface SessionState {
   loggedIn: boolean;
   user: { [x: string]: string | number | boolean } | null;
   orgId: number | null;
+  locationId: number | null;
   accessToken: string | null;
 }

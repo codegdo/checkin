@@ -18,9 +18,9 @@ CREATE TABLE IF NOT EXISTS sec.organization (
   is_active BOOLEAN DEFAULT TRUE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
   created_by VARCHAR(45) DEFAULT CURRENT_USER,
-  updated_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
   UNIQUE(subdomain, owner_id),

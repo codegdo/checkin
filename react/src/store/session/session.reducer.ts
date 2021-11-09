@@ -5,6 +5,7 @@ const initialState: SessionState = {
   loggedIn: false,
   user: null,
   orgId: null,
+  locationId: null,
   accessToken: null,
 };
 

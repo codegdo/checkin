@@ -43,12 +43,13 @@ export class Field extends BaseEntity {
   @Column({
     name: 'created_by',
     default: () => 'CURRENT_USER',
+    select: false
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
-    default: () => 'CURRENT_USER',
+    select: false
   })
   updatedBy: string;
 
@@ -56,14 +57,15 @@ export class Field extends BaseEntity {
     name: 'created_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
+    select: false
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
     type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
+    select: false
   })
   updatedAt: Date;
 }

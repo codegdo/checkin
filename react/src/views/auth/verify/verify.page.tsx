@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useFetch } from '../../../hooks';
 
 
@@ -16,9 +16,15 @@ const Verify: React.FC = (): JSX.Element => {
 
   switch (loading) {
     case 'success':
-      return <div>success</div>
+      return <div>
+        success
+        <Link to="../login">Login</Link>
+      </div>
     case 'error':
-      return <div>error</div>
+      return <div>
+        error
+        <Link to="../login">Login</Link>
+      </div>
     default:
       return <div>loading...</div>
   }

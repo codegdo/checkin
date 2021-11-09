@@ -8,7 +8,7 @@ import { normalizeForm } from '../../helpers';
 
 export const FormContext = React.createContext<FormContextProps>(undefined);
 
-export const Form: React.FC<FormProps> = ({ form, loading, onSubmit, children, ...props }): JSX.Element => {
+export const Form: React.FC<FormProps> = ({ form, loading, isKey = false, isMap = false, onSubmit, children, ...props }): JSX.Element => {
 
   const data = form && normalizeForm(form) || props;
   const { current: values } = useRef({});
@@ -20,6 +20,7 @@ export const Form: React.FC<FormProps> = ({ form, loading, onSubmit, children, .
   useEffect(() => {
 
     if (submit === 'submit') {
+      console.log(values);
       const { error } = Joi.object(formSchema).validate(values, { abortEarly: false });
 
       if (error) {
@@ -38,9 +39,13 @@ export const Form: React.FC<FormProps> = ({ form, loading, onSubmit, children, .
     setSubmit(name)
   }, []);
 
+  useEffect(() => {
+    console.log(data);
+  }, []);
+
   return (
     <form>
-      <FormContext.Provider value={{ data, values, errors, loading, submit, formSchema, handleSubmit }}>
+      <FormContext.Provider value={{ data, values, errors, loading, submit, formSchema, isKey, isMap, handleSubmit }}>
         {
           children || render({ data })
         }

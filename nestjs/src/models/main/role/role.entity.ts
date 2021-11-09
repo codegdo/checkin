@@ -7,6 +7,8 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Policy } from '../policy/policy.entity';
 
@@ -63,4 +65,33 @@ export class Role extends BaseEntity {
 
   @Column({ name: 'org_id', nullable: true })
   orgId: number;
+
+  @Column({
+    name: 'created_by',
+    default: () => 'CURRENT_USER',
+    select: false
+  })
+  createdBy: string;
+
+  @Column({
+    name: 'updated_by',
+    select: false
+  })
+  updatedBy: string;
+
+  @CreateDateColumn({
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    select: false
+  })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    name: 'updated_at',
+    type: 'timestamp',
+    onUpdate: 'CURRENT_TIMESTAMP',
+    select: false
+  })
+  updatedAt: Date;
 }

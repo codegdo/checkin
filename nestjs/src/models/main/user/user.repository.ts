@@ -5,6 +5,14 @@ import { User } from './user.entity';
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
 
+  async singupUser() {
+    /* return await this.manager.query(`SELECT sp_signupuser($1, $2, $3)`, [
+      email,
+      username,
+      password
+    ]); */
+  }
+
   async loginUser(loginUserDto) {
     const { username, password } = loginUserDto;
     const query = this.createQueryBuilder('user');

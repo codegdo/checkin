@@ -77,7 +77,10 @@
       "defaultValue": "",
       "isRequired": true,
       "position": 0,
-      "positionParent": 1
+      "positionParent": 1,
+      "mapSchema": "sec",
+      "mapTable": "user",
+      "mapColumn": "username"
     },
     {
       "id": 4,
@@ -91,7 +94,10 @@
       "defaultValue": "",
       "isRequired": true,
       "position": 0,
-      "positionParent": 1
+      "positionParent": 1,
+      "mapSchema": "sec",
+      "mapTable": "user",
+      "mapColumn": "password"
     },
     {
       "id": 5,
@@ -105,7 +111,10 @@
       "defaultValue": "",
       "isRequired": true,
       "position": 0,
-      "positionParent": 1
+      "positionParent": 1,
+      "mapSchema": "sec",
+      "mapTable": "user",
+      "mapColumn": "email_address"
     }
   ]
 }
