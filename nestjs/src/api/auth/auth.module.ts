@@ -6,7 +6,9 @@ import { ConfigService } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import {
+  ContactRepository,
   OrganizationRepository,
+  RoleRepository,
   TokenRepository,
   UserRepository,
 } from 'src/models/main/repositories';
@@ -15,7 +17,7 @@ import { CalendarRepository } from 'src/models/checkin/repositories';
 @Module({
   imports: [
     TypeOrmModule.forFeature(
-      [OrganizationRepository, UserRepository, TokenRepository],
+      [OrganizationRepository, UserRepository, ContactRepository, RoleRepository, TokenRepository],
       'default',
     ),
     TypeOrmModule.forFeature([CalendarRepository], 'checkin'),
@@ -29,4 +31,4 @@ import { CalendarRepository } from 'src/models/checkin/repositories';
   controllers: [AuthController],
   providers: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule { }

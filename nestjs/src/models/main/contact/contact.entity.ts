@@ -21,6 +21,9 @@ export class Contact extends BaseEntity {
   @Column({ name: 'last_name', nullable: true })
   lastName: string;
 
+  @Column({ name: 'email_address' })
+  emailAddress: string;
+
   @Column({ name: 'street_address', nullable: true })
   streetAddress: string;
 

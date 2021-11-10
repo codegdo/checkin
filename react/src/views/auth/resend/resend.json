@@ -1,0 +1,74 @@
+{
+  "id": 1,
+  "label": "Verification",
+  "name": "Resend",
+  "description": null,
+  "data": [
+    {
+      "id": 2,
+      "type": "header",
+      "role": "block",
+      "data": [],
+      "position": 0,
+      "positionParent": null
+    },
+    {
+      "id": 3,
+      "type": "main",
+      "role": "block",
+      "data": [],
+      "position": 1,
+      "positionParent": null
+    },
+    {
+      "id": 4,
+      "type": "footer",
+      "role": "block",
+      "data": [],
+      "position": 2,
+      "positionParent": null
+    },
+    {
+      "id": 5,
+      "label": null,
+      "name": "Verification",
+      "description": null,
+      "type": "title",
+      "role": "element",
+      "data": [],
+      "value": null,
+      "position": 0,
+      "positionParent": 0
+    },
+    {
+      "id": 6,
+      "label": "Resend",
+      "name": "submit",
+      "type": "button",
+      "role": "element",
+      "data": [],
+      "value": null,
+      "position": 0,
+      "positionParent": 2
+    }
+  ],
+  "fields": [
+    {
+      "id": 6,
+      "label": "Username",
+      "name": "username",
+      "description": null,
+      "type": "text",
+      "role": "field",
+      "data": null,
+      "value": "",
+      "defaultValue": "",
+      "isRequired": true,
+      "position": 0,
+      "positionParent": 1,
+      "mapSchema": "sec",
+      "mapTable": "user",
+      "mapColumn": "username"
+    }
+  ]
+}

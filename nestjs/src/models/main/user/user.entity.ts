@@ -34,9 +34,6 @@ export class User {
   @Column({ name: 'passcode', select: false })
   passcode: string;
 
-  @Column({ name: 'email_address' })
-  emailAddress: string;
-
   @Column({ name: 'is_new_password', default: false })
   isNewPassword: boolean;
 

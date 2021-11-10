@@ -9,17 +9,17 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
-import { MailerService } from '@nestjs-modules/mailer';
 
-import { CreateUserDto } from 'src/models/main/dtos';
 import {
   OrganizationRepository,
   UserRepository,
   RoleRepository,
   TokenRepository,
+  ContactRepository,
 } from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/checkin/repositories';
 import { MailService } from 'src/common';
+import { ISignup } from './auth.interface';
 
 @Injectable()
 export class AuthService {
@@ -36,7 +36,10 @@ export class AuthService {
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
 
-    @InjectRepository(UserRepository)
+    @InjectRepository(ContactRepository)
+    private contactRepository: ContactRepository,
+
+    @InjectRepository(RoleRepository)
     private roleRepository: RoleRepository,
 
     @InjectRepository(TokenRepository)
@@ -49,16 +52,17 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) { }
 
-  async signup(createUserDto: CreateUserDto) {
+  async signup(body: ISignup) {
     //const organization = await this.orgRepository.create({
     //subdomain: createUserDto.username,
     //});
 
-    const user = await this.userRepository.create(createUserDto);
+    const contact = await this.contactRepository.create(body.contact);
+    const user = await this.userRepository.create(body.user);
     const role = await this.roleRepository.create();
     const token = await this.tokenRepository.create();
     const calendar = await this.calendarRepository.create({
-      name: createUserDto.username,
+      name: user.username,
     });
 
     const queryRunner = this.connection.createQueryRunner();
@@ -70,6 +74,9 @@ export class AuthService {
     try {
       //const org = await queryRunner.manager.save(organization);
       //user.orgId = org.id;
+
+      const saveContact = await queryRunner.manager.save(contact);
+      user.contact = saveContact;
 
       // assign role = owner
       role.id = 2;
@@ -120,7 +127,7 @@ export class AuthService {
       console.log(err);
     } */
 
-    return {};
+    return { username: user.username };
   }
 
   async login(loginUserDto) {

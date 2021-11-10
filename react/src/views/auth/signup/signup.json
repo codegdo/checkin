@@ -67,6 +67,57 @@
   "fields": [
     {
       "id": 3,
+      "label": "First Name",
+      "name": "firstName",
+      "description": null,
+      "type": "text",
+      "role": "field",
+      "data": null,
+      "value": "",
+      "defaultValue": "",
+      "isRequired": true,
+      "position": 0,
+      "positionParent": 1,
+      "mapSchema": "org",
+      "mapTable": "contact",
+      "mapColumn": "first_name"
+    },
+    {
+      "id": 4,
+      "label": "Last Name",
+      "name": "lastName",
+      "description": null,
+      "type": "text",
+      "role": "field",
+      "data": null,
+      "value": "",
+      "defaultValue": "",
+      "isRequired": true,
+      "position": 0,
+      "positionParent": 1,
+      "mapSchema": "org",
+      "mapTable": "contact",
+      "mapColumn": "last_name"
+    },
+    {
+      "id": 5,
+      "label": "Email Address",
+      "name": "emailAddress",
+      "description": null,
+      "type": "email",
+      "role": "field",
+      "data": null,
+      "value": "",
+      "defaultValue": "",
+      "isRequired": true,
+      "position": 0,
+      "positionParent": 1,
+      "mapSchema": "org",
+      "mapTable": "contact",
+      "mapColumn": "email_address"
+    },
+    {
+      "id": 6,
       "label": "Username",
       "name": "username",
       "description": null,
@@ -83,7 +134,7 @@
       "mapColumn": "username"
     },
     {
-      "id": 4,
+      "id": 7,
       "label": "Password",
       "name": "password",
       "description": null,
@@ -98,23 +149,6 @@
       "mapSchema": "sec",
       "mapTable": "user",
       "mapColumn": "password"
-    },
-    {
-      "id": 5,
-      "label": "Email Address",
-      "name": "emailAddress",
-      "description": null,
-      "type": "email",
-      "role": "field",
-      "data": null,
-      "value": "",
-      "defaultValue": "",
-      "isRequired": true,
-      "position": 0,
-      "positionParent": 1,
-      "mapSchema": "sec",
-      "mapTable": "user",
-      "mapColumn": "email_address"
     }
   ]
 }

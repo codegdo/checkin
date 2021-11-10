@@ -4,13 +4,14 @@ CREATE TABLE IF NOT EXISTS org.contact (
 
   first_name VARCHAR(45),
   last_name VARCHAR(45),
+  email_address VARCHAR(45),
+  phone_number VARCHAR(20),
 
   street_address VARCHAR(95),
   city VARCHAR(95),
   postal_code VARCHAR(18),
   territory_id INT,
-  phone_number VARCHAR(20),
-
+  
   is_active BOOLEAN DEFAULT TRUE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

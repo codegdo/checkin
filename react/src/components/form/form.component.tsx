@@ -3,7 +3,7 @@ import Joi from 'joi';
 
 import { FormRender as render } from './form.render';
 import { FormContextProps, FormProps } from './form.type';
-import { setDetailsToErrors } from '../../utils';
+import { flattenObject, setDetailsToErrors } from '../../utils';
 import { normalizeForm } from '../../helpers';
 
 export const FormContext = React.createContext<FormContextProps>(undefined);
@@ -20,8 +20,8 @@ export const Form: React.FC<FormProps> = ({ form, loading, isKey = false, isMap 
   useEffect(() => {
 
     if (submit === 'submit') {
-      console.log(values);
-      const { error } = Joi.object(formSchema).validate(values, { abortEarly: false });
+
+      const { error } = Joi.object(formSchema).validate((isMap ? flattenObject(values) : values), { abortEarly: false });
 
       if (error) {
         setDetailsToErrors(error.details, errors)

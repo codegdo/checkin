@@ -13,6 +13,7 @@ import { AuthService } from './auth.service';
 import { CreateUserDto, UserDto, LoginUserDto } from '../../models/main/dtos';
 import { CurrentUser, Public, Serialize } from 'src/common';
 import { User } from 'src/models/main/entities';
+import { ISignup } from './auth.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -24,8 +25,8 @@ export class AuthController {
   @Public()
   @Post('signup')
   @Serialize(UserDto)
-  signup(@Body() createUserDto: CreateUserDto) {
-    return this.authService.signup(createUserDto);
+  signup(@Body() body: ISignup) {
+    return this.authService.signup(body);
   }
 
   @Public()

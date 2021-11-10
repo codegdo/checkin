@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 
 import { useFetch } from '../../../hooks';
 import { Form, FormData } from '../../../components/form';
-import SignupSuccess from './signup.success';
 
-const Signup: React.FC = (): JSX.Element => {
+const Resend: React.FC = (): JSX.Element => {
 
   //const { updateSession } = useAction();
   const [{ loading, result }, fetchSignup] = useFetch('/api/auth/signup');
@@ -13,7 +12,7 @@ const Signup: React.FC = (): JSX.Element => {
   // Load form
   useEffect(() => {
     void (async () => {
-      const json: any = (await import('./signup.json')).default;
+      const json: any = (await import('./resend.json')).default;
       setForm(json);
     })();
   }, [])
@@ -34,8 +33,8 @@ const Signup: React.FC = (): JSX.Element => {
   }
 
   return (
-    loading === 'success' ? <SignupSuccess data={result.data} /> : <Form form={form} loading={loading} isMap={true} onSubmit={handleSubmit} />
+    <Form form={form} loading={loading} isMap={true} onSubmit={handleSubmit} />
   );
 };
 
-export default Signup;
+export default Resend;
