@@ -1,10 +1,5 @@
 import { BaseEntity, Entity, PrimaryColumn, Column, PrimaryGeneratedColumn } from 'typeorm';
-import crypto from 'crypto';
-import { TokenDto } from './dtos/token.dto';
-
-export interface TokenData {
-  username?: string;
-}
+import { TokenData } from '../interfaces';
 
 @Entity({ database: 'main', schema: 'sec', name: 'token' })
 export class Token extends BaseEntity {
@@ -17,23 +12,4 @@ export class Token extends BaseEntity {
   @Column({ type: 'jsonb', name: 'data' })
   data?: TokenData;
 
-  // create({ data = '{}', maxAge = 86400 }: TokenData): TokenDto {
-  //   return {
-  //     id: crypto.randomBytes(16).toString('hex'),
-  //     expiredAt: Math.floor(new Date().getTime() / 1000 + maxAge),
-  //     data: data,
-  //   };
-  // }
-
-  //validate() {}
-
-  //hash() {}
-
-  //encypt() {}
-
-  //decrypt() {}
-
-  //encode() {}
-
-  //decode() {}
 }

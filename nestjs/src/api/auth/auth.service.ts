@@ -20,6 +20,7 @@ import {
 import { CalendarRepository } from 'src/models/checkin/repositories';
 import { MailService } from 'src/common';
 import { ISignup } from './auth.interface';
+import { SignupUserDto } from 'src/models/main/user/dtos/signup-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -53,6 +54,28 @@ export class AuthService {
   ) { }
 
   async signup(body: ISignup) {
+    /*
+        const { contact, user } = body;
+    
+        try {
+          const signupUserDto: SignupUserDto = {
+            ...contact,
+            ...user,
+            data: { username: user.username },
+            expiredAt: Math.floor((new Date().getTime() / 1000) + (60 * 1000))
+          }
+    
+          const tokenId = await this.userRepository.singupUser(signupUserDto);
+    
+          console.log(tokenId);
+        } catch (err) {
+          console.log(err);
+        }
+    
+        return {};
+    */
+
+
     //const organization = await this.orgRepository.create({
     //subdomain: createUserDto.username,
     //});
@@ -112,6 +135,8 @@ export class AuthService {
     } catch (err) {
       //throw new InternalServerErrorException(err);
     }
+    return { username: user.username };
+
 
     /* try {
       const { response } = await this.mailerService.sendMail({
@@ -126,8 +151,6 @@ export class AuthService {
     } catch (err) {
       console.log(err);
     } */
-
-    return { username: user.username };
   }
 
   async login(loginUserDto) {
