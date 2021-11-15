@@ -3,7 +3,7 @@ import Joi from 'joi';
 
 import { FormRender as render } from './form.render';
 import { FormContextProps, FormProps } from './form.type';
-import { flattenObject, setDetailsToErrors } from '../../utils';
+import { flattenObject, setDetailsToErrors, trimValues } from '../../utils';
 import { normalizeForm } from '../../helpers';
 
 export const FormContext = React.createContext<FormContextProps>(undefined);
@@ -28,6 +28,8 @@ export const Form: React.FC<FormProps> = ({ form, loading, isKey = false, isMap 
       }
 
       if (Object.keys(errors).length === 0) {
+        console.log(values);
+        console.log('TRIM', trimValues(values))
         onSubmit && onSubmit(values);
       }
     }

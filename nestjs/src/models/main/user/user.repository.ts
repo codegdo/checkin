@@ -7,10 +7,8 @@ import { SignupUserDto } from './dtos/signup-user.dto';
 
 const scrypt = promisify(_scrypt);
 
-
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-
   async hashPassword(password) {
     const salt = randomBytes(8).toString('hex');
     const hash = (await scrypt(password, salt, 32)) as Buffer;
@@ -24,22 +22,34 @@ export class UserRepository extends Repository<User> {
    }
   */
   async singupUser(signupUserDto: SignupUserDto) {
-    const { firstName, lastName, emailAddress, username, password, data, expiredAt } = signupUserDto;
-    const hashedPassword = await this.hashPassword(password);
-
-    const result = await this.manager.query(`SELECT sec.fn_signupuser($1, $2, $3, $4, $5, $6, $7)`, [
+    const {
       firstName,
       lastName,
       emailAddress,
-
       username,
-      hashedPassword,
-
+      password,
       data,
-      expiredAt
-    ]);
+      expiredAt,
+    } = signupUserDto;
+    const hashedPassword = await this.hashPassword(password);
 
-    return result[0].fn_signupuser;
+    const [result] = await this.manager.query(
+      `SELECT * FROM sec.fn_user_signup($1, $2, $3, $4, $5, $6, $7)`,
+      [
+        firstName,
+        lastName,
+        emailAddress,
+
+        username,
+        hashedPassword,
+
+        data,
+        expiredAt,
+      ],
+    );
+
+    //return result[0].fn_signupuser;
+    return result;
   }
 
   async loginUser(loginUserDto) {
@@ -56,7 +66,6 @@ export class UserRepository extends Repository<User> {
 
     const { password: _password, ..._user } = user;
 
-    return await user.validatePassword(password) ? _user : null;
+    return (await user.validatePassword(password)) ? _user : null;
   }
 }
-

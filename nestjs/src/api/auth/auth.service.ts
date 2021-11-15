@@ -51,30 +51,29 @@ export class AuthService {
 
     private readonly mailService: MailService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   async signup(body: ISignup) {
-    /*
-        const { contact, user } = body;
-    
-        try {
-          const signupUserDto: SignupUserDto = {
-            ...contact,
-            ...user,
-            data: { username: user.username },
-            expiredAt: Math.floor((new Date().getTime() / 1000) + (60 * 1000))
-          }
-    
-          const tokenId = await this.userRepository.singupUser(signupUserDto);
-    
-          console.log(tokenId);
-        } catch (err) {
-          console.log(err);
-        }
-    
-        return {};
-    */
+    /*   
+    const { contact, user } = body;
 
+    try {
+      const signupUserDto: SignupUserDto = {
+        ...contact,
+        ...user,
+        data: { username: user.username },
+        expiredAt: Math.floor(new Date().getTime() / 1000 + 60 * 1000),
+      };
+
+      const { id } = await this.userRepository.singupUser(signupUserDto);
+
+      console.log(id);
+    } catch (err) {
+      console.log(err);
+    }
+
+    return {username: user.username};
+*/
 
     //const organization = await this.orgRepository.create({
     //subdomain: createUserDto.username,
@@ -106,7 +105,7 @@ export class AuthService {
       user.role = role;
 
       token.data = { username: user.username };
-      token.expiredAt = Math.floor((new Date().getTime() / 1000) + (60 * 1000));
+      token.expiredAt = Math.floor(new Date().getTime() / 1000 + 60 * 1000);
 
       await queryRunner.manager.save(user);
       await queryRunner.manager.save(token);
@@ -115,7 +114,6 @@ export class AuthService {
       // commit
       await queryRunner.commitTransaction();
       await queryRunner2.commitTransaction();
-
     } catch (err) {
       // rollback
       await queryRunner.rollbackTransaction();
@@ -136,7 +134,6 @@ export class AuthService {
       //throw new InternalServerErrorException(err);
     }
     return { username: user.username };
-
 
     /* try {
       const { response } = await this.mailerService.sendMail({
@@ -163,7 +160,7 @@ export class AuthService {
     return user;
   }
 
-  async logout() { }
+  async logout() {}
 
   async verify(id: string) {
     const token = await this.tokenRepository.findOne({
@@ -171,14 +168,14 @@ export class AuthService {
     });
 
     if (!token) {
-      throw new NotFoundException(404, 'Not Found')
+      throw new NotFoundException(404, 'Not Found');
     }
 
     const date = new Date();
     const now = Math.round(date.getTime() / 1000);
 
     if (token.expiredAt < now) {
-      throw new UnauthorizedException(401, 'Unauthorized')
+      throw new UnauthorizedException(401, 'Unauthorized');
     }
 
     const { username } = token.data;
@@ -188,7 +185,7 @@ export class AuthService {
     const user = await this.userRepository.findOne({ where: [{ username }] });
 
     if (user.isActive) {
-      throw new ConflictException(409, 'Activated')
+      throw new ConflictException(409, 'Activated');
     }
 
     user.isActive = true;
