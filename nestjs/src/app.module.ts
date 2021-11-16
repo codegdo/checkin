@@ -2,7 +2,9 @@ import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MailerModule } from '@nestjs-modules/mailer';
+import { LoggerModule } from 'nestjs-pino';
+import { WinstonModule } from 'nest-winston';
+import * as winston from 'winston';
 
 import {
   GuardModule,
@@ -25,13 +27,16 @@ import {
   dbConfig,
   jwtConfig,
   mailerConfig,
+  pinoConfig,
   sessionConfig,
+  winstonConfig,
 } from './configs';
+
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [appConfig, dbConfig, sessionConfig, mailerConfig, jwtConfig],
+      load: [appConfig, dbConfig, sessionConfig, mailerConfig, jwtConfig, pinoConfig, winstonConfig],
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
@@ -53,6 +58,31 @@ import {
       },
       inject: [ConfigService],
     }),
+    WinstonModule.forRootAsync({
+      useFactory: async (configService: ConfigService) =>
+        configService.get('winston'),
+      inject: [ConfigService],
+    }),
+    LoggerModule.forRootAsync({
+      useFactory: async (configService: ConfigService) =>
+        configService.get('pino'),
+      inject: [ConfigService],
+    }),
+    // LoggerModule.forRoot({
+    //   pinoHttp: [
+    //     {
+    //       transport: process.env.NODE_ENV !== 'production' ?
+    //         {
+    //           target: 'pino-pretty',
+    //           options: {
+    //             colorize: true,
+    //             levelFirst: true,
+    //             translateTime: 'UTC:mm/dd/yyyy, h:MM:ss TT Z'
+    //           }
+    //         } : {}
+    //     }
+    //   ]
+    // }),
     GuardModule,
     MailModule,
     AuthModule,
@@ -79,7 +109,7 @@ import {
   ],
 })
 export class AppModule {
-  constructor() {}
+  constructor() { }
 
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');

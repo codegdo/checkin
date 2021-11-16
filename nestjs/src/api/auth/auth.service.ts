@@ -5,10 +5,15 @@ import {
   UnauthorizedException,
   Injectable,
   InternalServerErrorException,
+  Inject,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
+import { PinoLogger, InjectPinoLogger } from 'nestjs-pino';
+
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
 
 import {
   OrganizationRepository,
@@ -49,9 +54,15 @@ export class AuthService {
     @InjectRepository(CalendarRepository, 'checkin')
     private calendarRepository: CalendarRepository,
 
+    //@InjectPinoLogger(AuthService.name)
+    //private readonly logger: PinoLogger,
+
+    @Inject(WINSTON_MODULE_PROVIDER)
+    private readonly logger: Logger,
+
     private readonly mailService: MailService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   async signup(body: ISignup) {
     /*   
@@ -114,10 +125,16 @@ export class AuthService {
       // commit
       await queryRunner.commitTransaction();
       await queryRunner2.commitTransaction();
+
     } catch (err) {
       // rollback
       await queryRunner.rollbackTransaction();
       await queryRunner2.rollbackTransaction();
+
+      // log error
+      this.logger.error(`${err.message}`, err);
+
+      //console.log('ERRRRR', log.);
 
       throw new InternalServerErrorException(err.code);
     } finally {
@@ -126,13 +143,9 @@ export class AuthService {
       await queryRunner2.release();
     }
 
-    // no await
-    try {
-      const send = this.mailService.sendUserConfirmation();
-      //console.log(send);
-    } catch (err) {
-      //throw new InternalServerErrorException(err);
-    }
+    // send mail
+    this.mailService.sendUserConfirmation();
+
     return { username: user.username };
 
     /* try {
@@ -160,7 +173,7 @@ export class AuthService {
     return user;
   }
 
-  async logout() {}
+  async logout() { }
 
   async verify(id: string) {
     const token = await this.tokenRepository.findOne({
