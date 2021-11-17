@@ -8,5 +8,6 @@ export * from './session/session.entity';
 export * from './territory/territory.entity';
 export * from './token/token.entity';
 export * from './user/user.entity';
+export * from './error/error.entity';
 
 

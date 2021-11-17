@@ -1,6 +1,6 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { Injectable, Logger } from '@nestjs/common';
-import { PinoLogger, InjectPinoLogger } from 'nestjs-pino';
+import { Inject, Injectable, Logger, LoggerService } from '@nestjs/common';
+//import { PinoLogger, InjectPinoLogger } from 'nestjs-pino';
 import handlebars from 'handlebars';
 
 @Injectable()
@@ -12,6 +12,9 @@ export class MailService {
 
     //@InjectPinoLogger(MailService.name)
     //private readonly logger: PinoLogger
+
+    @Inject(Logger)
+    private readonly logger: LoggerService,
   ) { }
 
   async sendUserConfirmation() {
@@ -29,7 +32,7 @@ export class MailService {
       return result;
     } catch (err) {
 
-      //this.logger.error(`Failed to send confirmation email`);
+      this.logger.error(`Failed to send confirmation email`);
     }
   }
 }

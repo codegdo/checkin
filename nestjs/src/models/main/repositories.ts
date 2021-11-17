@@ -8,4 +8,5 @@ export * from './session/session.repository';
 export * from './territory/territory.repository';
 export * from './token/token.repository';
 export * from './user/user.repository';
+export * from './error/error.repository';
 

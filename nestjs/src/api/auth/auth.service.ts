@@ -6,14 +6,16 @@ import {
   Injectable,
   InternalServerErrorException,
   Inject,
+  Logger,
+  LoggerService,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
-import { PinoLogger, InjectPinoLogger } from 'nestjs-pino';
 
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { Logger } from 'winston';
+//import { PinoLogger, InjectPinoLogger } from 'nestjs-pino';
+//import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+//import { Logger } from 'winston';
 
 import {
   OrganizationRepository,
@@ -57,8 +59,11 @@ export class AuthService {
     //@InjectPinoLogger(AuthService.name)
     //private readonly logger: PinoLogger,
 
-    @Inject(WINSTON_MODULE_PROVIDER)
-    private readonly logger: Logger,
+    // @Inject(WINSTON_MODULE_PROVIDER)
+    // private readonly logger: Logger,
+
+    @Inject(Logger)
+    private readonly logger: LoggerService,
 
     private readonly mailService: MailService,
     private readonly configService: ConfigService,

@@ -34,6 +34,7 @@
     "connect-typeorm": "^1.1.4",
     "create-nestjs-middleware-module": "^0.2.1",
     "express-session": "^1.17.2",
+    "express-winston": "^4.2.0",
     "handlebars": "^4.7.7",
     "nest-winston": "^1.6.1",
     "nestjs-pino": "^2.3.0",
