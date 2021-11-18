@@ -1,69 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { WinstonModule } from 'nest-winston';
-import * as winston from 'winston';
-import * as session from 'express-session';
 import * as expressWinston from 'express-winston';
-import * as Transport from 'winston-transport';
-import WinstonTransport from './common/utils/transport.util';
-
-export default class PgTransport extends Transport {
-  private detail;
-
-  constructor(connection) {
-    super(connection);
-    this.detail = {};
-  }
-
-  private async insert() {
-    //console.log('CONNECTION', await getConnection().getRepository(Token).find());
-  }
-
-  log(info, callback) {
-    setImmediate(() => {
-      this.emit('logged', info);
-    });
-
-    // Perform the writing to the remote service
-    //this.insert();
-
-    this.detail = { ...this.detail, ...info };
-
-    console.log(this.detail);
-
-    callback();
-  }
-}
-
+import { logger } from './common';
 
 async function bootstrap() {
 
-  const logger = winston.createLogger({
-    exitOnError: false,
-    transports: [
-      new winston.transports.File({
-        filename: 'error.log',
-        level: 'error',
-        format: winston.format.json()
-      }),
-      new winston.transports.Http({
-        level: 'warn',
-        format: winston.format.json()
-      }),
-      new winston.transports.Console({
-        level: 'info',
-        format: winston.format.combine(
-          winston.format.colorize(),
-          winston.format.simple()
-        )
-      }),
-      new WinstonTransport()
-    ]
-  });
-
-  const app = await NestFactory.create(AppModule, { logger });
-
   //const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { logger });
 
   app.setGlobalPrefix('api');
   app.enableCors({
@@ -78,14 +21,6 @@ async function bootstrap() {
       winstonInstance: logger
     })
   );
-
-  /* app.use(
-    session({
-      secret: 'my-secret',
-      resave: false,
-      saveUninitialized: false,
-    }),
-  ); */
 
   await app.listen(5000);
 }

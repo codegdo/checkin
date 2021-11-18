@@ -1,8 +1,7 @@
-import { Logger, MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
+import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-//import { LoggerModule } from 'nestjs-pino';
 //import { WinstonModule } from 'nest-winston';
 
 import {
@@ -10,7 +9,6 @@ import {
   SessionModule,
   LoggerMiddleware,
   MailModule,
-  LoggerModule,
 } from './common';
 
 import {
@@ -58,21 +56,13 @@ import {
       },
       inject: [ConfigService],
     }),
-    LoggerModule.forRootAsync({
-      useFactory: async (configService: ConfigService) =>
-        configService.get('winston'),
-      inject: [ConfigService],
-    }),
+
     // WinstonModule.forRootAsync({
     //   useFactory: async (configService: ConfigService) =>
     //     configService.get('winston'),
     //   inject: [ConfigService],
     // }),
-    // LoggerModule.forRootAsync({
-    //   useFactory: async (configService: ConfigService) =>
-    //     configService.get('pino'),
-    //   inject: [ConfigService],
-    // }),
+
     GuardModule,
     MailModule,
     AuthModule,
@@ -95,8 +85,7 @@ import {
           enableImplicitConversion: true,
         },
       }),
-    },
-    Logger
+    }
   ],
 })
 export class AppModule {

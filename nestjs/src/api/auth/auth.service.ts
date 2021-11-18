@@ -136,10 +136,12 @@ export class AuthService {
       await queryRunner.rollbackTransaction();
       await queryRunner2.rollbackTransaction();
 
-      // log error
-      this.logger.error(`${err.message}`, err);
-
-      //console.log('ERRRRR', log.);
+      // 23505 = duplicate
+      if (err.code == 23505) {
+        this.logger.warn(`${err.message}`, err);
+      } else {
+        this.logger.error(`${err.message}`, err);
+      }
 
       throw new InternalServerErrorException(err.code);
     } finally {

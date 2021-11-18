@@ -15,9 +15,7 @@ export * from './decorators/current-user.decorator';
 export * from './modules/session/session.module';
 export * from './modules/guard/guard.module';
 export * from './modules/mail/mail.module';
-export * from './modules/logger/logger.module';
 
 export * from './modules/mail/mail.service';
 
-
-export * from './utils/transport.util';
+export * from './utils/logger.util';
