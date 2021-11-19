@@ -19,8 +19,8 @@ const Signup: React.FC = (): JSX.Element => {
   }, [])
 
   useEffect(() => {
-    if (loading === 'success' && result.ok) {
-      //
+    if (loading === 'error') {
+      console.log(result);
     }
   }, [loading]);
 
@@ -33,8 +33,15 @@ const Signup: React.FC = (): JSX.Element => {
     return <div>loading...</div>;
   }
 
+  if (loading === 'success') {
+    return <SignupSuccess data={result.data} />;
+  }
+
   return (
-    loading === 'success' ? <SignupSuccess data={result.data} /> : <Form form={form} loading={loading} isMap={true} onSubmit={handleSubmit} />
+    <>
+      {loading === 'error' && <div>Error</div>}
+      <Form form={form} loading={loading} isMap={true} onSubmit={handleSubmit} />
+    </>
   );
 };
 
