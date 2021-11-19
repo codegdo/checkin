@@ -136,14 +136,15 @@ export class AuthService {
       await queryRunner.rollbackTransaction();
       await queryRunner2.rollbackTransaction();
 
-      // 23505 = duplicate
+      // 23505 = conflict
       if (err.code == 23505) {
         this.logger.warn(`${err.message}`, err);
+        throw new ConflictException('Username already exists.');
       } else {
         this.logger.error(`${err.message}`, err);
+        throw new InternalServerErrorException(err.code);
       }
 
-      throw new InternalServerErrorException(err.code);
     } finally {
       // release
       await queryRunner.release();

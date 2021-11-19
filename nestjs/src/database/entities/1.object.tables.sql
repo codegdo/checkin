@@ -1,3 +1,20 @@
+-- INSTALL EXTENSIONS
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- CREATE TABLE ERROR
+CREATE TABLE IF NOT EXISTS log.error (
+    id UUID DEFAULT uuid_generate_v4() NOT NULL,
+
+    message VARCHAR(255),
+    host VARCHAR(45),
+    url VARCHAR(45),
+    stack TEXT,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    --
+    PRIMARY KEY(id)
+);
+
 -- CREATE TABLE FEATURE
 CREATE TABLE IF NOT EXISTS dbo.feature (
   id SERIAL NOT NULL,
@@ -195,7 +212,7 @@ CREATE TABLE IF NOT EXISTS dbo.module_page (
   FOREIGN KEY(module_id) REFERENCES dbo.module(id) ON DELETE CASCADE,
   FOREIGN KEY(page_id) REFERENCES dbo.page(id) ON DELETE CASCADE
 );
-CREATE INDEX idx_module_page ON dbo.module_page(module_id, page_id);
+
 
 INSERT
 INTO dbo.module_page(module_id, page_id, org_id)
@@ -270,7 +287,6 @@ CREATE TABLE IF NOT EXISTS dbo.page_object (
   FOREIGN KEY(page_id) REFERENCES dbo.page(id) ON DELETE CASCADE,
   FOREIGN KEY(object_id) REFERENCES dbo.object(id) ON DELETE CASCADE
 );
-CREATE INDEX idx_page_object ON dbo.page_object(page_id, object_id);
 
 INSERT
 INTO dbo.page_object(page_id, object_id, org_id)
@@ -278,6 +294,12 @@ VALUES
 --Manager
 ('200', '1', null),
 ('200', '2', null);
+
+-- CREATE INDEX
+CREATE INDEX idx_module_page ON dbo.module_page(module_id, page_id);
+CREATE INDEX idx_page_object ON dbo.page_object(page_id, object_id);
+
+
 
 -- SELECT
 SELECT * FROM dbo.feature;
@@ -292,6 +314,7 @@ SELECT * FROM dbo.object;
 
 -- DROP
 DROP TABLE IF EXISTS
+log.error,
 dbo.feature,
 dbo.feature_module,
 dbo.module_group,

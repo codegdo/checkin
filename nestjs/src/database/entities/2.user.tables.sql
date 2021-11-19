@@ -1,3 +1,6 @@
+-- INSTALL EXTENSIONS
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- CREATE TABLE TERRITORY
 CREATE TABLE IF NOT EXISTS dbo.territory (
   id SERIAL NOT NULL,
@@ -268,7 +271,7 @@ CREATE TABLE IF NOT EXISTS org.location (
 
 -- CREATE TABLE SESSION
 CREATE TABLE IF NOT EXISTS sec.session (
-  id TEXT NOT NULL,
+  id CHARACTER VARYING NOT NULL,
   json TEXT,
   expired_at BIGINT,
   --
@@ -276,8 +279,6 @@ CREATE TABLE IF NOT EXISTS sec.session (
 );
 
 -- CREATE TABLE TOKEN
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 CREATE TABLE IF NOT EXISTS sec.token (
     id UUID DEFAULT uuid_generate_v4() NOT NULL,
     data JSONB,
@@ -297,7 +298,6 @@ CREATE TABLE IF NOT EXISTS sec.role_policy (
   FOREIGN KEY(policy_id) REFERENCES sec.policy(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
 
 -- CREATE JOIN TABLE CLIENT_LOCATION
 CREATE TABLE IF NOT EXISTS sec.client_location (
@@ -310,7 +310,6 @@ CREATE TABLE IF NOT EXISTS sec.client_location (
   FOREIGN KEY(location_id) REFERENCES org.location(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_client_location ON sec.client_location(client_id, location_id);
 
 -- CREATE JOIN TABLE USER_LOCATION
 CREATE TABLE IF NOT EXISTS sec.user_location (
@@ -323,7 +322,11 @@ CREATE TABLE IF NOT EXISTS sec.user_location (
   FOREIGN KEY(location_id) REFERENCES org.location(id) ON DELETE CASCADE
 );
 
+
+-- CREATE INDEX
+CREATE INDEX idx_client_location ON sec.client_location(client_id, location_id);
 CREATE INDEX idx_user_location ON sec.user_location(user_id, location_id);
+CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
 
 --
 SELECT * FROM sec.token;

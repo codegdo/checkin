@@ -1,10 +1,10 @@
-import { InternalServerErrorException } from '@nestjs/common';
 import { TypeormStore } from 'connect-typeorm/out';
 import { Session } from 'src/models/main/entities';
 import { createConnection, getConnection } from 'typeorm';
 import { registerAs } from "@nestjs/config";
 
 export const sessionConfig = registerAs('session', () => ((async () => {
+
   await createConnection({
     type: 'postgres',
     host: process.env.POSTGRES_HOST,
@@ -14,6 +14,7 @@ export const sessionConfig = registerAs('session', () => ((async () => {
     database: 'main',
     name: 'default',
     synchronize: true,
+    entities: [__dirname + '/../models/main/session/*.entity{.ts,.js}']
   });
 
   return {
@@ -29,4 +30,5 @@ export const sessionConfig = registerAs('session', () => ((async () => {
       ttl: 360,
     }).connect(getConnection().getRepository(Session)),
   };
+
 })));

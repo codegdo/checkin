@@ -17,8 +17,8 @@ export class DBObject extends BaseEntity {
   @Column({ name: 'name', nullable: false })
   name: string;
 
-  @Column({ name: 'mapping', nullable: false })
-  mapping: string;
+  // @Column({ name: 'mapping', nullable: false })
+  // mapping: string;
 
   @Column({ name: 'is_external', default: false })
   isExternal: boolean;

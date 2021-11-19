@@ -5,3 +5,58 @@
 {"code":"23505","constraint":"user_username_key","detail":"Key (username)=(gdo) already exists.","driverError":{"code":"23505","constraint":"user_username_key","detail":"Key (username)=(gdo) already exists.","file":"nbtinsert.c","length":198,"line":"656","name":"error","routine":"_bt_check_unique","schema":"sec","severity":"ERROR","table":"user"},"file":"nbtinsert.c","length":198,"level":"error","line":"656","message":"duplicate key value violates unique constraint \"user_username_key\" duplicate key value violates unique constraint \"user_username_key\"","parameters":["gdo","0c6b3d53d7d4b27130f24d400e9dd6f27debefe8a2cd3b73d68990b6d97a3dc4.7c78876a83b1e08b",206,2],"query":"INSERT INTO \"sec\".\"user\"(\"username\", \"password\", \"passcode\", \"is_new_password\", \"is_active\", \"form_id\", \"org_id\", \"created_by\", \"updated_by\", \"created_at\", \"updated_at\", \"contact_id\", \"role_id\") VALUES ($1, $2, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, $3, $4) RETURNING \"id\", \"is_new_password\", \"is_active\", \"created_by\", \"created_at\", \"updated_at\"","routine":"_bt_check_unique","schema":"sec","severity":"ERROR","stack":"QueryFailedError: duplicate key value violates unique constraint \"user_username_key\"\n    at QueryFailedError.TypeORMError [as constructor] (C:\\CMR\\gdo\\checkin\\nestjs\\src\\error\\TypeORMError.ts:7:9)\n    at new QueryFailedError (C:\\CMR\\gdo\\checkin\\nestjs\\src\\error\\QueryFailedError.ts:9:9)\n    at PostgresQueryRunner.<anonymous> (C:\\CMR\\gdo\\checkin\\nestjs\\src\\driver\\postgres\\PostgresQueryRunner.ts:247:19)\n    at step (C:\\CMR\\gdo\\checkin\\nestjs\\node_modules\\tslib\\tslib.js:143:27)\n    at Object.throw (C:\\CMR\\gdo\\checkin\\nestjs\\node_modules\\tslib\\tslib.js:124:57)\n    at rejected (C:\\CMR\\gdo\\checkin\\nestjs\\node_modules\\tslib\\tslib.js:115:69)\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)","table":"user"}
 {"level":"error","message":"Cannot create property 'Symbol(level)' on string 'duplicate key value violates unique constraint \"user_username_key\"'"}
 {"level":"error","message":"Cannot create property 'Symbol(level)' on string 'duplicate key value violates unique constraint \"user_username_key\"'"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"main\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No metadata for \"Session\" was found."}
+{"level":"error","message":"No metadata for \"Session\" was found."}
+{"level":"error","message":"No metadata for \"Session\" was found."}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"secret option required for sessions"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No metadata for \"Session\" was found."}
+{"level":"error","message":"No metadata for \"Session\" was found."}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"code":"42P01","driverError":{"code":"42P01","file":"d:\\pginstaller.auto\\postgres.windows-x64\\src\\backend\\parser\\parse_relation.c","length":171,"line":"1159","name":"error","position":"13","routine":"parserOpenTable","severity":"ERROR"},"file":"d:\\pginstaller.auto\\postgres.windows-x64\\src\\backend\\parser\\parse_relation.c","length":171,"level":"error","line":"1159","message":"relation \"org.calendar\" does not exist relation \"org.calendar\" does not exist","parameters":["gdo"],"position":"13","query":"INSERT INTO \"org\".\"calendar\"(\"name\", \"location_id\", \"org_id\") VALUES ($1, DEFAULT, DEFAULT) RETURNING \"id\"","routine":"parserOpenTable","severity":"ERROR","stack":"QueryFailedError: relation \"org.calendar\" does not exist\n    at QueryFailedError.TypeORMError [as constructor] (C:\\CMR\\gdo\\checkin\\nestjs\\src\\error\\TypeORMError.ts:7:9)\n    at new QueryFailedError (C:\\CMR\\gdo\\checkin\\nestjs\\src\\error\\QueryFailedError.ts:9:9)\n    at PostgresQueryRunner.<anonymous> (C:\\CMR\\gdo\\checkin\\nestjs\\src\\driver\\postgres\\PostgresQueryRunner.ts:247:19)\n    at step (C:\\CMR\\gdo\\checkin\\nestjs\\node_modules\\tslib\\tslib.js:143:27)\n    at Object.throw (C:\\CMR\\gdo\\checkin\\nestjs\\node_modules\\tslib\\tslib.js:124:57)\n    at rejected (C:\\CMR\\gdo\\checkin\\nestjs\\node_modules\\tslib\\tslib.js:115:69)\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"column \"mapping\" contains null values"}
+{"level":"error","message":"constraint \"PK_f55da76ac1c3ac420f444d2ff11\" of relation \"session\" does not exist"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"constraint \"PK_f55da76ac1c3ac420f444d2ff11\" of relation \"session\" does not exist"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
