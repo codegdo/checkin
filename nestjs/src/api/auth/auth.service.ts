@@ -67,7 +67,7 @@ export class AuthService {
 
     private readonly mailService: MailService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   async signup(body: ISignup) {
     /*   
@@ -130,7 +130,6 @@ export class AuthService {
       // commit
       await queryRunner.commitTransaction();
       await queryRunner2.commitTransaction();
-
     } catch (err) {
       // rollback
       await queryRunner.rollbackTransaction();
@@ -139,12 +138,11 @@ export class AuthService {
       // 23505 = conflict
       if (err.code == 23505) {
         this.logger.warn(`${err.message}`, err);
-        throw new ConflictException('Username already exists.');
+        throw new ConflictException(409, 'Username already exists.');
       } else {
         this.logger.error(`${err.message}`, err);
-        throw new InternalServerErrorException(err.code);
+        throw new InternalServerErrorException(500, err.code);
       }
-
     } finally {
       // release
       await queryRunner.release();
@@ -181,7 +179,7 @@ export class AuthService {
     return user;
   }
 
-  async logout() { }
+  async logout() {}
 
   async verify(id: string) {
     const token = await this.tokenRepository.findOne({
@@ -200,9 +198,6 @@ export class AuthService {
     }
 
     const { username } = token.data;
-
-    //const query = await this.userRepository.createQueryBuilder('user');
-    //const user = await query.addSelect(['user.password', 'user.passcode']).where('user.username = :username', { username }).getOne();
     const user = await this.userRepository.findOne({ where: [{ username }] });
 
     if (user.isActive) {
@@ -211,24 +206,31 @@ export class AuthService {
 
     user.isActive = true;
 
-    await this.userRepository.save(user);
-    await this.tokenRepository.delete(token);
-    //await this.userRepository.update(user.id, user);
-    //await this.connection.transaction(async (manager) => {
-    //await manager.save(user);
-    //});
+    // try {
+    //   await this.userRepository.save(user);
+    //   await this.tokenRepository.delete(token);
+    // } catch (err) {
+    //   throw new InternalServerErrorException(err.code);
+    // }
 
-    /*
-    const queryRunner = this.connection.createQueryRunner();
+    await this.connection.transaction(async (manager) => {
+      try {
+        await manager.save(user);
+        await manager.remove(token);
+      } catch (err) {
+        throw new InternalServerErrorException(err.code);
+      }
+    });
+
+    /* const queryRunner = this.connection.createQueryRunner();
     await queryRunner.startTransaction();
 
     try {
-      user.isActive = true;
       await queryRunner.manager.save(user);
+      await queryRunner.manager.remove(token);
 
       // commit
       await queryRunner.commitTransaction();
-
     } catch (err) {
       // rollback
       await queryRunner.rollbackTransaction();
@@ -237,8 +239,7 @@ export class AuthService {
     } finally {
       // release
       await queryRunner.release();
-    }
-    */
+    } */
   }
 }
 

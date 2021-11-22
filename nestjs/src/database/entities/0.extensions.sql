@@ -1,2 +1,5 @@
+
+SHOW rds.extensions;
+
 -- INSTALL EXTENSIONS
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
