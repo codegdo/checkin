@@ -60,3 +60,18 @@
 {"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
 {"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
 {"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"Unable to connect to the database. Retrying (1)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (1)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (1)..."}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"Unable to connect to the database. Retrying (1)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (1)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (1)..."}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"Unable to connect to the database. Retrying (1)..."}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
+{"level":"error","message":"Failed to send confirmation email"}
+{"level":"error","message":"Failed to send confirmation email"}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}

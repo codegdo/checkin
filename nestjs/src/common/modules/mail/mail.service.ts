@@ -4,14 +4,12 @@ import handlebars from 'handlebars';
 
 @Injectable()
 export class MailService {
-  //private readonly logger = new Logger(this.constructor.name)
-
   constructor(
     private readonly mailerService: MailerService,
 
     @Inject(Logger)
     private readonly logger: LoggerService,
-  ) {}
+  ) { }
 
   async sendUserConfirmation() {
     const template = handlebars.compile('<div>{{name}}</div>');
@@ -19,7 +17,7 @@ export class MailService {
 
     try {
       const result = await this.mailerService.sendMail({
-        to: 'example@gmail.com',
+        to: 'giangd@gmail.com',
         from: 'support@checkin.com',
         subject: 'Welcome to Nice App! Confirm your Email',
         html: htmlToSend,
