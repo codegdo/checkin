@@ -67,7 +67,7 @@ export class AuthService {
 
     private readonly mailService: MailService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   async signup(body: ISignup) {
     /*   
@@ -150,6 +150,8 @@ export class AuthService {
     }
 
     // send mail
+    // api/auth/signup
+
     this.mailService.sendUserConfirmation();
 
     return { username: user.username };
@@ -179,7 +181,7 @@ export class AuthService {
     return user;
   }
 
-  async logout() {}
+  async logout() { }
 
   async verify(id: string) {
     const token = await this.tokenRepository.findOne({
