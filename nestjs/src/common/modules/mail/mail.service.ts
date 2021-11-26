@@ -1,17 +1,25 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Inject, Injectable, Logger, LoggerService } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import handlebars from 'handlebars';
+import { EmailRepository } from 'src/models/main/repositories';
 
 @Injectable()
 export class MailService {
   constructor(
     private readonly mailerService: MailerService,
 
+    @InjectRepository(EmailRepository)
+    private emailRepository: EmailRepository,
+
     @Inject(Logger)
     private readonly logger: LoggerService,
   ) { }
 
   async sendUserConfirmation() {
+
+    const signupEmail = await this.emailRepository.getSingupEmail();
+
     const template = handlebars.compile('<div>{{name}}</div>');
     const htmlToSend = template({ name: 'hello' });
 

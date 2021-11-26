@@ -11,13 +11,14 @@ import {
   RoleRepository,
   TokenRepository,
   UserRepository,
+  EmailRepository
 } from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/checkin/repositories';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature(
-      [OrganizationRepository, UserRepository, ContactRepository, RoleRepository, TokenRepository],
+      [OrganizationRepository, UserRepository, ContactRepository, RoleRepository, TokenRepository, EmailRepository],
       'default',
     ),
     TypeOrmModule.forFeature([CalendarRepository], 'checkin'),

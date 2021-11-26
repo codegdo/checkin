@@ -23,6 +23,7 @@ import {
   RoleRepository,
   TokenRepository,
   ContactRepository,
+  EmailRepository,
 } from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/checkin/repositories';
 import { MailService } from 'src/common';
@@ -52,6 +53,9 @@ export class AuthService {
 
     @InjectRepository(TokenRepository)
     private tokenRepository: TokenRepository,
+
+    @InjectRepository(EmailRepository)
+    private emailRepository: EmailRepository,
 
     @InjectRepository(CalendarRepository, 'checkin')
     private calendarRepository: CalendarRepository,
@@ -151,6 +155,7 @@ export class AuthService {
 
     // send mail
     // api/auth/signup
+    // get emails
 
     this.mailService.sendUserConfirmation();
 

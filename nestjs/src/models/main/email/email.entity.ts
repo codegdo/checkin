@@ -1,18 +1,13 @@
 import {
-  BeforeInsert,
-  BeforeUpdate,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
   Entity,
   JoinColumn,
-  OneToOne,
   PrimaryGeneratedColumn,
-  Unique,
-  ManyToMany,
-  JoinTable,
   ManyToOne,
 } from 'typeorm';
+import { Recipient } from '../entities';
 import { Module } from '../module/module.entity';
 
 export enum EmailTypeEnum {
@@ -31,9 +26,16 @@ export class EmailType {
   })
   name: EmailTypeEnum;
 
+  @Column({ name: 'type' })
+  type: string;
+
   @ManyToOne(() => Module, (module) => module.id)
   @JoinColumn({ name: 'module_id' })
   moduleId: Module;
+
+  @ManyToOne(() => Recipient, (recipient) => recipient.id)
+  @JoinColumn({ name: 'recipient_id' })
+  recipientId: Recipient;
 
   @Column({
     name: 'created_by',
