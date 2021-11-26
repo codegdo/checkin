@@ -11,10 +11,12 @@ import {
   Unique,
   ManyToMany,
   JoinTable,
+  ManyToOne,
 } from 'typeorm';
+import { Module } from '../module/module.entity';
 
 export enum EmailTypeEnum {
-  SIGNUP = 'signup'
+  SIGNUP = 'signup',
 }
 
 @Entity({ database: 'main', schema: 'dbo', name: 'email_type' })
@@ -29,31 +31,32 @@ export class EmailType {
   })
   name: EmailTypeEnum;
 
-  @Column({ name: 'module_id' })
-  moduleId: number;
+  @ManyToOne(() => Module, (module) => module.id)
+  @JoinColumn({ name: 'module_id' })
+  moduleId: Module;
 
   @Column({
     name: 'created_by',
-    default: () => 'CURRENT_USER'
+    default: () => 'CURRENT_USER',
   })
   createdBy: string;
 
   @Column({
-    name: 'updated_by'
+    name: 'updated_by',
   })
   updatedBy: string;
 
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP'
+    default: () => 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
     type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP'
+    onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
 }
@@ -75,34 +78,35 @@ export class Email {
   @Column({ name: 'is_active', default: true })
   isActive: boolean;
 
-  @Column({ name: 'email_type_id' })
-  emailTypeId: number;
+  @ManyToOne(() => EmailType, (email_type) => email_type.id)
+  @JoinColumn({ name: 'email_type_id' })
+  emailType: EmailType;
 
   @Column({ name: 'org_id' })
   orgId: number;
 
   @Column({
     name: 'created_by',
-    default: () => 'CURRENT_USER'
+    default: () => 'CURRENT_USER',
   })
   createdBy: string;
 
   @Column({
-    name: 'updated_by'
+    name: 'updated_by',
   })
   updatedBy: string;
 
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP'
+    default: () => 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
     type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP'
+    onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
 }

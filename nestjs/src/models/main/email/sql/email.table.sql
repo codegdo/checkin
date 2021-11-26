@@ -1,3 +1,4 @@
+-- CREATE TABLE EMAIL_TYPE
 CREATE TYPE dbo.email_type_enum AS ENUM ('signup');
 
 CREATE TABLE IF NOT EXISTS dbo.email_type (
@@ -11,8 +12,15 @@ CREATE TABLE IF NOT EXISTS dbo.email_type (
   updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
+  FOREIGN KEY(module_id) REFERENCES dbo.module(id) ON DELETE SET NULL
 );
 
+INSERT
+INTO dbo.email_type (id, name, module_id)
+VALUES
+('1', 'signup', '0');
+
+-- CREATE TABLE EMAIL
 CREATE TABLE IF NOT EXISTS org.email (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
@@ -32,3 +40,8 @@ CREATE TABLE IF NOT EXISTS org.email (
   PRIMARY KEY(id),
   FOREIGN KEY(email_type_id) REFERENCES dbo.email_type(id) ON DELETE SET NULL
 );
+
+INSERT
+INTO dbo.email (name, subject, body, email_type_id, org_id)
+VALUES
+('Signup Confirmation', 'Confirmation', '<html><body>Confirmation</body></html>', '1', null);
