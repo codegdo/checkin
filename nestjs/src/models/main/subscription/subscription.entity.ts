@@ -30,13 +30,13 @@ export class Subscription extends BaseEntity {
   @Column({ name: 'is_trial', default: true })
   isTrial: boolean;
 
-  @CreateDateColumn({
+  @Column({
     name: 'start_date',
     type: 'timestamp',
   })
   startDate: Date;
 
-  @CreateDateColumn({
+  @Column({
     name: 'end_date',
     type: 'timestamp',
   })
@@ -53,7 +53,6 @@ export class Subscription extends BaseEntity {
   @UpdateDateColumn({
     name: 'updated_at',
     type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
     select: false
   })
   updatedAt: Date;

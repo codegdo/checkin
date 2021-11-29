@@ -27,17 +27,17 @@ export class EmailType {
   })
   name: EmailTypeEnum;
 
-  @Column({ name: 'type' })
+  @Column({ name: 'type', nullable: true })
   type: string;
 
-  @OneToMany(() => Email, (email) => email.emailType)
+  @OneToMany(() => Email, (email) => email.emailTypeId, { nullable: true })
   emails: Email[];
 
-  @ManyToOne(() => Module, (module) => module.id)
+  @ManyToOne(() => Module, (module) => module.id, { nullable: true })
   @JoinColumn({ name: 'module_id' })
   moduleId: Module;
 
-  @ManyToOne(() => Recipient, (recipient) => recipient.id)
+  @ManyToOne(() => Recipient, (recipient) => recipient.emailTypes, { nullable: true })
   @JoinColumn({ name: 'recipient_id' })
   recipientId: Recipient;
 
@@ -49,6 +49,7 @@ export class EmailType {
 
   @Column({
     name: 'updated_by',
+    nullable: true
   })
   updatedBy: string;
 
@@ -62,7 +63,6 @@ export class EmailType {
   @UpdateDateColumn({
     name: 'updated_at',
     type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
 }
@@ -72,23 +72,23 @@ export class Email {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'name' })
+  @Column({ name: 'name', nullable: true })
   name: string;
 
-  @Column({ name: 'subject' })
+  @Column({ name: 'subject', nullable: true })
   subject: string;
 
-  @Column({ name: 'body' })
+  @Column({ name: 'body', nullable: true })
   body: string;
 
   @Column({ name: 'is_active', default: true })
   isActive: boolean;
 
-  @ManyToOne(() => EmailType, (email_type) => email_type.id)
+  @ManyToOne(() => EmailType, (email_type) => email_type.emails, { nullable: true })
   @JoinColumn({ name: 'email_type_id' })
-  emailType: EmailType;
+  emailTypeId: EmailType;
 
-  @Column({ name: 'org_id' })
+  @Column({ name: 'org_id', nullable: true })
   orgId: number;
 
   @Column({
@@ -99,6 +99,7 @@ export class Email {
 
   @Column({
     name: 'updated_by',
+    nullable: true
   })
   updatedBy: string;
 
@@ -111,8 +112,7 @@ export class Email {
 
   @UpdateDateColumn({
     name: 'updated_at',
-    type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
+    type: 'timestamp'
   })
   updatedAt: Date;
 }

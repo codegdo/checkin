@@ -32,14 +32,14 @@ export class Location extends BaseEntity {
   @Column({ name: 'postal_code', nullable: true })
   postalCode: number;
 
-  @OneToOne(() => Territory, (territory) => territory.id)
+  @OneToOne(() => Territory, (territory) => territory.id, { nullable: true })
   @JoinColumn({ name: 'territory_id' })
   territory: Territory;
 
-  @Column({ name: 'phone_number' })
+  @Column({ name: 'phone_number', nullable: true })
   phoneNumber: string;
 
-  @Column({ name: 'fax_number' })
+  @Column({ name: 'fax_number', nullable: true })
   faxNumber: string;
 
   @Column({ name: 'owner_id', nullable: true })
@@ -48,38 +48,34 @@ export class Location extends BaseEntity {
   @Column({ name: 'org_id', nullable: true })
   orgId: number;
 
-  @ManyToMany(() => Client, (client: Client) => client.locations)
+  @ManyToMany(() => Client, (client: Client) => client.locations, { nullable: true })
   clients: Client[];
 
-  @ManyToMany(() => User, (user: User) => user.locations)
+  @ManyToMany(() => User, (user: User) => user.locations, { nullable: true })
   users: User[];
 
   @Column({
     name: 'created_by',
-    default: () => 'CURRENT_USER',
-    select: false
+    default: () => 'CURRENT_USER'
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
-    select: false
+    nullable: true
   })
   updatedBy: string;
 
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    select: false
+    default: () => 'CURRENT_TIMESTAMP'
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
-    type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
-    select: false
+    type: 'timestamp'
   })
   updatedAt: Date;
 }

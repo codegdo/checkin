@@ -353,4 +353,4 @@ CASCADE;
 
 DROP TYPE IF EXISTS
 dbo.role_type_enum,
-dbo.email_type_enum;
+dbo.role_type_name_enum;

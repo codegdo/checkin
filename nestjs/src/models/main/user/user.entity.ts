@@ -11,6 +11,7 @@ import {
   Unique,
   ManyToMany,
   JoinTable,
+  ManyToOne,
 } from 'typeorm';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
@@ -40,11 +41,11 @@ export class User {
   @Column({ name: 'is_active', default: false })
   isActive: boolean;
 
-  @OneToOne(() => Contact, (contact) => contact.id, { nullable: false })
+  @OneToOne(() => Contact, (contact) => contact.id, { nullable: true })
   @JoinColumn({ name: 'contact_id' })
   contact: Contact;
 
-  @OneToOne(() => Role, (role) => role.id, { nullable: false })
+  @ManyToOne(() => Role, (role) => role.id, { nullable: true })
   @JoinColumn({ name: 'role_id' })
   role: Role;
 
@@ -54,7 +55,7 @@ export class User {
   @Column({ name: 'org_id', nullable: true })
   orgId: number;
 
-  @ManyToMany(() => Location, (location: Location) => location.users)
+  @ManyToMany(() => Location, (location: Location) => location.users, { nullable: true })
   @JoinTable({
     name: 'user_location',
     joinColumn: {
@@ -93,8 +94,6 @@ export class User {
   @UpdateDateColumn({
     name: 'updated_at',
     type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
-    nullable: true,
     select: false,
   })
   updatedAt: Date;

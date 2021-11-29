@@ -19,14 +19,14 @@ export class Feature extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'name' })
+  @Column({ name: 'name', nullable: true })
   name: string;
 
-  @Column({ name: 'price' })
+  @Column({ name: 'price', nullable: true })
   price: number;
 
   // Use middle table to join
-  @ManyToMany(() => Module, (module: Module) => module.features)
+  @ManyToMany(() => Module, (module: Module) => module.features, { nullable: true })
   @JoinTable({
     name: 'feature_module',
     joinColumn: {
@@ -42,30 +42,26 @@ export class Feature extends BaseEntity {
 
   @Column({
     name: 'created_by',
-    default: () => 'CURRENT_USER',
-    select: false
+    default: () => 'CURRENT_USER'
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
-    select: false
+    nullable: true
   })
   updatedBy: string;
 
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    select: false
+    default: () => 'CURRENT_TIMESTAMP'
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
-    type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
-    select: false
+    type: 'timestamp'
   })
   updatedAt: Date;
 }

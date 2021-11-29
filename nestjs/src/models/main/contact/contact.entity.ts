@@ -21,7 +21,7 @@ export class Contact extends BaseEntity {
   @Column({ name: 'last_name', nullable: true })
   lastName: string;
 
-  @Column({ name: 'email_address' })
+  @Column({ name: 'email_address', nullable: true })
   emailAddress: string;
 
   @Column({ name: 'street_address', nullable: true })
@@ -33,7 +33,7 @@ export class Contact extends BaseEntity {
   @Column({ name: 'postal_code', nullable: true })
   postalCode: number;
 
-  @OneToOne(() => Territory, (territory) => territory.id)
+  @OneToOne(() => Territory, (territory) => territory.id, { nullable: true })
   @JoinColumn({ name: 'territory_id' })
   territory: Territory;
 
@@ -51,7 +51,7 @@ export class Contact extends BaseEntity {
   @UpdateDateColumn({
     name: 'updated_at',
     type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
+    nullable: true,
     select: false,
   })
   updatedAt: Date;

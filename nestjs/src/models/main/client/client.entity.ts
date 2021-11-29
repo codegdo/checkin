@@ -34,7 +34,7 @@ export class Client extends BaseEntity {
   @Column({ name: 'day_of_birth' })
   dayOfBirth: Date;
 
-  @ManyToMany(() => Location, (location: Location) => location.clients)
+  @ManyToMany(() => Location, (location: Location) => location.clients, { nullable: true })
   @JoinTable({
     name: 'client_location',
     joinColumn: {
@@ -51,16 +51,13 @@ export class Client extends BaseEntity {
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    select: false
+    default: () => 'CURRENT_TIMESTAMP'
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
-    type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
-    select: false
+    type: 'timestamp'
   })
   updatedAt: Date;
 }

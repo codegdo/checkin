@@ -7,25 +7,49 @@ export class EmailRepository extends Repository<Email> {
     const query = this.createQueryBuilder('e');
 
     const signupEmails = await query
-
-      //.leftJoinAndSelect('email.email_type_id', 'email_type')
-
-      //.leftJoinAndSelect('email_type.recipient_id', 'recipient')
-      //.where('email_type.name = :name', { name: 'signup' })
-      //.leftJoinAndSelect('email.email_type_id', 'email_type')
-      //.leftJoin('email.email_type_id', 'email_type')
-      //.addSelect('*')
-
-      .leftJoinAndSelect(EmailType, 'et', 'e.email_type_id = et.id')
-      .select(['e.id as id', 'et.type as type'])
-      // .leftJoinAndSelect(
-      //   Recipient,
-      //   'recipient',
-      //   'email_type.recipient_id = recipient.id',
-      // )
-
-      //.where('email_type.name = :name', { name: 'signup' })
+      .leftJoinAndSelect('e.emailTypeId', 'email_type')
+      .leftJoinAndSelect('email_type.recipientId', 'recipient')
+      .where('email_type.name = :name', { name: 'signup' })
+      .select([
+        'e.id as id',
+        'email_type.type as type',
+        'e.name as name',
+        'recipient.email_address as "emailAddress"',
+        'e.subject as subject',
+        'e.body as body',
+        'e.is_active as "isActive"',
+        'e.org_id as orgId'
+      ])
       .getRawMany();
+
+    // const signupEmails = await query
+    //   .leftJoinAndSelect(EmailType, 'et', 'e.email_type_id = et.id')
+    //   .leftJoinAndSelect(Recipient, 'r', 'et.recipient_id = r.id')
+    //   .select([
+    //     'e.id as id',
+    //     'et.type as type',
+    //     'e.name as name',
+    //     'r.email_address as "emailAddress"',
+    //     'e.subject as subject',
+    //     'e.body as body',
+    //     'e.is_active as "isActive"',
+    //     'e.org_id as orgId'
+    //   ])
+    //   .where('et.name = :name', { name: 'signup' })
+    //   .getRawMany();
+
+    return signupEmails;
+  }
+}
+
+@EntityRepository(EmailType)
+export class EmailTypeRepository extends Repository<EmailType> {
+  async getSingupEmail() {
+    const query = this.createQueryBuilder('email_type');
+
+    const signupEmails = await query
+      .leftJoinAndSelect('email_type.emails', 'email')
+      .getMany();
 
     return signupEmails;
   }

@@ -45,11 +45,11 @@ export class Role extends BaseEntity {
   @Column({ name: 'is_owner', default: false })
   isOwner: boolean;
 
-  @ManyToOne(() => RoleType, (role_type) => role_type.id)
+  @ManyToOne(() => RoleType, (role_type) => role_type.id, { nullable: true })
   @JoinColumn({ name: 'role_type_id' })
   roleType: RoleType;
 
-  @ManyToMany(() => Policy, (policy: Policy) => policy.roles)
+  @ManyToMany(() => Policy, (policy: Policy) => policy.roles, { nullable: true })
   @JoinTable({
     name: 'role_policy',
     joinColumn: {
@@ -68,14 +68,13 @@ export class Role extends BaseEntity {
 
   @Column({
     name: 'created_by',
-    default: () => 'CURRENT_USER',
-    select: false
+    default: () => 'CURRENT_USER'
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
-    select: false
+    nullable: true
   })
   updatedBy: string;
 
@@ -83,15 +82,12 @@ export class Role extends BaseEntity {
     name: 'created_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
-    select: false
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
-    type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
-    select: false
+    type: 'timestamp'
   })
   updatedAt: Date;
 }

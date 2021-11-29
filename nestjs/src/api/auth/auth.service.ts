@@ -71,7 +71,7 @@ export class AuthService {
 
     private readonly mailService: MailService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   async signup(body: ISignup) {
     /*   
@@ -117,16 +117,12 @@ export class AuthService {
       //const org = await queryRunner.manager.save(organization);
       //user.orgId = org.id;
 
-      contact.phoneNumber = '8583571474';
       const saveContact = await queryRunner.manager.save(contact);
       user.contact = saveContact;
 
       // assign role = owner
       role.id = 2;
       user.role = role;
-      user.passcode = '1234';
-      user.formId = 1;
-      user.orgId = 1;
 
       token.data = { username: user.username };
       token.expiredAt = Math.floor(new Date().getTime() / 1000 + 60 * 1000);
@@ -190,7 +186,7 @@ export class AuthService {
     return user;
   }
 
-  async logout() {}
+  async logout() { }
 
   async verify(id: string) {
     const token = await this.tokenRepository.findOne({

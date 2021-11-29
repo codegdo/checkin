@@ -4,18 +4,23 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
+import { EmailType } from '../entities';
 
 @Entity({ database: 'main', schema: 'dbo', name: 'recipient' })
 export class Recipient {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'name' })
+  @Column({ name: 'name', nullable: true })
   name: string;
 
-  @Column({ name: 'email_address' })
+  @Column({ name: 'email_address', nullable: true })
   emailAddress: string;
+
+  @OneToMany(() => EmailType, (email_type) => email_type.recipientId, { nullable: true })
+  emailTypes: EmailType[];
 
   @Column({
     name: 'created_by',
@@ -25,6 +30,7 @@ export class Recipient {
 
   @Column({
     name: 'updated_by',
+    nullable: true
   })
   updatedBy: string;
 
@@ -37,8 +43,7 @@ export class Recipient {
 
   @UpdateDateColumn({
     name: 'updated_at',
-    type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
+    type: 'timestamp'
   })
   updatedAt: Date;
 }

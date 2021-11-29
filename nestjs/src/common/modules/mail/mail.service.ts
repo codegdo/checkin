@@ -14,7 +14,7 @@ export class MailService {
 
     @Inject(Logger)
     private readonly logger: LoggerService,
-  ) {}
+  ) { }
 
   async sendUserConfirmation() {
     try {

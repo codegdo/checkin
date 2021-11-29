@@ -10,6 +10,7 @@ import {
   //ManyToOne,
   JoinColumn,
   OneToOne,
+  ManyToOne,
   //OneToMany,
 } from 'typeorm';
 import { Feature } from '../feature/feature.entity';
@@ -31,7 +32,7 @@ export class ModuleGroup extends BaseEntity {
 
   @Column({
     name: 'updated_by',
-    default: () => 'CURRENT_USER',
+    nullable: true,
   })
   updatedBy: string;
 
@@ -44,9 +45,7 @@ export class ModuleGroup extends BaseEntity {
 
   @UpdateDateColumn({
     name: 'updated_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    onUpdate: 'CURRENT_TIMESTAMP',
+    type: 'timestamp'
   })
   updatedAt: Date;
 }
@@ -62,15 +61,15 @@ export class Module extends BaseEntity {
   @Column({ name: 'sort_order', default: 0 })
   sortOrder: number;
 
-  //@ManyToOne(() => ModuleGroup)
-  //@JoinColumn({ name: 'module_group_id', referencedColumnName: 'id' })
-  //moduleGroup: ModuleGroup;
-
-  @OneToOne(() => ModuleGroup, (moduleGroup) => moduleGroup.id)
-  @JoinColumn({ name: 'module_group_id' })
+  @ManyToOne(() => ModuleGroup)
+  @JoinColumn({ name: 'module_group_id', referencedColumnName: 'id' })
   moduleGroup: ModuleGroup;
 
-  @ManyToMany(() => Feature, (feature: Feature) => feature.modules)
+  //@ManyToOne(() => ModuleGroup, (moduleGroup) => moduleGroup.id, { nullable: true })
+  //@JoinColumn({ name: 'module_group_id' })
+  //moduleGroup: ModuleGroup;
+
+  @ManyToMany(() => Feature, (feature: Feature) => feature.modules, { nullable: true })
   features: Feature[];
 
   @Column({ name: 'is_external', default: false })
@@ -89,7 +88,7 @@ export class Module extends BaseEntity {
   //pages!: Page[];
 
   // Use middle table to join
-  @ManyToMany(() => Page, (page: Page) => page.modules)
+  @ManyToMany(() => Page, (page: Page) => page.modules, { nullable: true })
   @JoinTable({
     name: 'module_page',
     joinColumn: {
@@ -105,30 +104,26 @@ export class Module extends BaseEntity {
 
   @Column({
     name: 'created_by',
-    default: () => 'CURRENT_USER',
-    select: false
+    default: () => 'CURRENT_USER'
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
-    select: false
+    nullable: true
   })
   updatedBy: string;
 
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    select: false
+    default: () => 'CURRENT_TIMESTAMP'
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
-    type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
-    select: false
+    type: 'timestamp'
   })
   updatedAt: Date;
 }

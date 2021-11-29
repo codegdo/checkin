@@ -326,7 +326,3 @@ dbo.object,
 dbo.field,
 dbo.plan
 CASCADE;
-
-DROP TYPE IF EXISTS
-dbo.email_type_name_enum,
-dbo.role_type_name_enum;

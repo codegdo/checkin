@@ -97,4 +97,5 @@ org.email
 CASCADE;
 
 DROP TYPE IF EXISTS
-dbo.email_type_enum;
+dbo.email_type_enum,
+dbo.email_type_name_enum;

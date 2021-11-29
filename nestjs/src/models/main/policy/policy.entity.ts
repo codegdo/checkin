@@ -29,19 +29,18 @@ export class Policy extends BaseEntity {
   @Column({ name: 'org_id', nullable: true })
   orgId!: number;
 
-  @ManyToMany(() => Role, (role: Role) => role.policies)
+  @ManyToMany(() => Role, (role: Role) => role.policies, { nullable: true })
   roles: Role[];
 
   @Column({
     name: 'created_by',
-    default: () => 'CURRENT_USER',
-    select: false
+    default: () => 'CURRENT_USER'
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
-    select: false
+    nullable: true
   })
   updatedBy: string;
 
@@ -49,15 +48,12 @@ export class Policy extends BaseEntity {
     name: 'created_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
-    select: false
   })
   createdAt: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
-    type: 'timestamp',
-    onUpdate: 'CURRENT_TIMESTAMP',
-    select: false
+    type: 'timestamp'
   })
   updatedAt: Date;
 }
