@@ -8,3 +8,8 @@ CREATE TABLE IF NOT EXISTS org.calendar (
   --
   PRIMARY KEY(id)
 );
+
+-- DROP
+DROP TABLE IF EXISTS
+org.calendar
+CASCADE;

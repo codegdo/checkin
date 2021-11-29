@@ -2,3 +2,6 @@ $ ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS256.key
 
 https://travistidwell.com/jsencrypt/demo/
 https://8gwifi.org/RSAFunctionality?keysize=1024
+
+sudo lsof -i :3000
+kill -9 {PID}

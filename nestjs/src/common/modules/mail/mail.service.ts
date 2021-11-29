@@ -14,16 +14,15 @@ export class MailService {
 
     @Inject(Logger)
     private readonly logger: LoggerService,
-  ) { }
+  ) {}
 
   async sendUserConfirmation() {
-
-    const signupEmail = await this.emailRepository.getSingupEmail();
-
-    const template = handlebars.compile('<div>{{name}}</div>');
-    const htmlToSend = template({ name: 'hello' });
-
     try {
+      const template = handlebars.compile('<div>{{name}}</div>');
+      const htmlToSend = template({ name: 'hello' });
+      const signupEmail = await this.emailRepository.getSingupEmail();
+      console.log('SIGNUP EMAIL', signupEmail);
+
       const result = await this.mailerService.sendMail({
         to: 'giangd@gmail.com',
         from: 'support@checkin.com',
@@ -33,7 +32,7 @@ export class MailService {
 
       return result;
     } catch (err) {
-      this.logger.error(`Failed to send confirmation email`);
+      this.logger.error(`Failed to send confirmation email`, err);
     }
   }
 }

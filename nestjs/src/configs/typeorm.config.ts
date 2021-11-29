@@ -1,5 +1,5 @@
 import { ConnectionOptions } from 'typeorm';
-import { registerAs } from "@nestjs/config";
+import { registerAs } from '@nestjs/config';
 
 export const dbConfig = registerAs('database', () => {
   const options: ConnectionOptions = {
@@ -29,5 +29,5 @@ export const dbConfig = registerAs('database', () => {
     entities: [__dirname + '/../models/checkin/**/*.entity{.ts,.js}'],
   };
 
-  return { main, checkin }
+  return { main, checkin };
 });

@@ -31,7 +31,7 @@ export class User {
   @Column({ name: 'password', select: false })
   password: string;
 
-  @Column({ name: 'passcode', select: false })
+  @Column({ name: 'passcode', nullable: true, select: false })
   passcode: string;
 
   @Column({ name: 'is_new_password', default: false })
@@ -40,18 +40,18 @@ export class User {
   @Column({ name: 'is_active', default: false })
   isActive: boolean;
 
-  @OneToOne(() => Contact, (contact) => contact.id)
+  @OneToOne(() => Contact, (contact) => contact.id, { nullable: false })
   @JoinColumn({ name: 'contact_id' })
   contact: Contact;
 
-  @OneToOne(() => Role, (role) => role.id)
+  @OneToOne(() => Role, (role) => role.id, { nullable: false })
   @JoinColumn({ name: 'role_id' })
   role: Role;
 
-  @Column({ name: 'form_id' })
+  @Column({ name: 'form_id', nullable: true })
   formId: number;
 
-  @Column({ name: 'org_id' })
+  @Column({ name: 'org_id', nullable: true })
   orgId: number;
 
   @ManyToMany(() => Location, (location: Location) => location.users)
@@ -71,13 +71,14 @@ export class User {
   @Column({
     name: 'created_by',
     default: () => 'CURRENT_USER',
-    select: false
+    select: false,
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
-    select: false
+    nullable: true,
+    select: false,
   })
   updatedBy: string;
 
@@ -85,7 +86,7 @@ export class User {
     name: 'created_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
-    select: false
+    select: false,
   })
   createdAt: Date;
 
@@ -93,7 +94,8 @@ export class User {
     name: 'updated_at',
     type: 'timestamp',
     onUpdate: 'CURRENT_TIMESTAMP',
-    select: false
+    nullable: true,
+    select: false,
   })
   updatedAt: Date;
 

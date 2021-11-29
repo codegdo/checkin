@@ -6,6 +6,7 @@ import {
   JoinColumn,
   PrimaryGeneratedColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { Recipient } from '../entities';
 import { Module } from '../module/module.entity';
@@ -28,6 +29,9 @@ export class EmailType {
 
   @Column({ name: 'type' })
   type: string;
+
+  @OneToMany(() => Email, (email) => email.emailType)
+  emails: Email[];
 
   @ManyToOne(() => Module, (module) => module.id)
   @JoinColumn({ name: 'module_id' })

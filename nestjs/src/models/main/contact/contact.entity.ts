@@ -37,14 +37,14 @@ export class Contact extends BaseEntity {
   @JoinColumn({ name: 'territory_id' })
   territory: Territory;
 
-  @Column({ name: 'phone_number' })
+  @Column({ name: 'phone_number', nullable: true })
   phoneNumber: string;
 
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
-    select: false
+    select: false,
   })
   createdAt: Date;
 
@@ -52,7 +52,7 @@ export class Contact extends BaseEntity {
     name: 'updated_at',
     type: 'timestamp',
     onUpdate: 'CURRENT_TIMESTAMP',
-    select: false
+    select: false,
   })
   updatedAt: Date;
 }

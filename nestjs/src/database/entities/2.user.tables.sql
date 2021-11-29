@@ -348,8 +348,9 @@ sec.client,
 sec.client_location,
 sec.organization,
 sec.session,
-sec.token,
+sec.token
 CASCADE;
 
 DROP TYPE IF EXISTS
-dbo.role_type_enum;
+dbo.role_type_enum,
+dbo.email_type_enum;
