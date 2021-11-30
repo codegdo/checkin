@@ -1,7 +1,7 @@
 -- CREATE TABLE OBJECT
 CREATE TABLE IF NOT EXISTS dbo.object (
   id SERIAL,
-  name TEXT,
+  name CHARACTER VARYING(95),
 
   is_external BOOLEAN DEFAULT TRUE,
   is_internal BOOLEAN DEFAULT TRUE,
@@ -9,8 +9,8 @@ CREATE TABLE IF NOT EXISTS dbo.object (
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
-  created_by VARCHAR(45) DEFAULT CURRENT_USER,
-  updated_by VARCHAR(45),
+  created_by CHARACTER VARYING(45) DEFAULT CURRENT_USER,
+  updated_by CHARACTER VARYING(45),
   --
   PRIMARY KEY(id)
 );

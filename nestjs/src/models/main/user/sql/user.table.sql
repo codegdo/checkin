@@ -1,9 +1,9 @@
 -- CREATE TABLE USER
 CREATE TABLE IF NOT EXISTS sec.user (
   id SERIAL NOT NULL,
-  username VARCHAR(45),
-  password VARCHAR(85),
-  passcode VARCHAR(45),
+  username CHARACTER VARYING(45),
+  password CHARACTER VARYING(85),
+  passcode CHARACTER VARYING(4),
 
   contact_id INT,
   role_id INT,
@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS sec.user (
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
-  created_by VARCHAR(45) DEFAULT CURRENT_USER,
-  updated_by VARCHAR(45),
+  created_by CHARACTER VARYING(45) DEFAULT CURRENT_USER,
+  updated_by CHARACTER VARYING(45),
   --
   PRIMARY KEY(id),
   UNIQUE(username),

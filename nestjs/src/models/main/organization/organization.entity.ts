@@ -19,13 +19,25 @@ export class Organization extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'name', nullable: true })
+  @Column({
+    name: 'name',
+    length: 45,
+    nullable: true
+  })
   name: string;
 
-  @Column({ name: 'street_address', nullable: true })
+  @Column({
+    name: 'street_address',
+    length: 45,
+    nullable: true
+  })
   streetAddress: string;
 
-  @Column({ name: 'city', nullable: true })
+  @Column({
+    name: 'city',
+    length: 45,
+    nullable: true
+  })
   city: string;
 
   @Column({ name: 'postal_code', nullable: true })
@@ -34,7 +46,11 @@ export class Organization extends BaseEntity {
   @Column({ name: 'territory_id', nullable: true })
   territoryId: number;
 
-  @Column({ name: 'website', nullable: true })
+  @Column({
+    name: 'website',
+    length: 45,
+    nullable: true
+  })
   website: string;
 
   @Column({ name: 'phone_number', nullable: true })
@@ -43,10 +59,17 @@ export class Organization extends BaseEntity {
   @Column({ name: 'fax_number', nullable: true })
   faxNumber: number;
 
-  @Column({ name: 'subdomain', nullable: false })
+  @Column({
+    name: 'subdomain',
+    length: 45
+  })
   subdomain: string;
 
-  @Column({ name: 'data', type: 'jsonb', nullable: true })
+  @Column({
+    name: 'data',
+    type: 'jsonb',
+    nullable: true
+  })
   data: OrgData;
 
   @Column({ name: 'is_active', default: true })
@@ -58,12 +81,14 @@ export class Organization extends BaseEntity {
 
   @Column({
     name: 'created_by',
+    length: 45,
     default: () => 'CURRENT_USER'
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
+    length: 45,
     nullable: true
   })
   updatedBy: string;

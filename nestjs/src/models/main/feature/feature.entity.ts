@@ -19,10 +19,18 @@ export class Feature extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'name', nullable: true })
+  @Column({
+    name: 'name',
+    length: 45,
+    nullable: true
+  })
   name: string;
 
-  @Column({ name: 'price', nullable: true })
+  @Column({
+    name: 'price',
+    type: 'float',
+    default: 0.00
+  })
   price: number;
 
   // Use middle table to join
@@ -42,12 +50,14 @@ export class Feature extends BaseEntity {
 
   @Column({
     name: 'created_by',
+    length: 45,
     default: () => 'CURRENT_USER'
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
+    length: 45,
     nullable: true
   })
   updatedBy: string;

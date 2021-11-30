@@ -14,16 +14,32 @@ export class LogError extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'message', nullable: true })
+  @Column({
+    name: 'message',
+    length: 255,
+    nullable: true
+  })
   message: string;
 
-  @Column({ name: 'host', nullable: true })
+  @Column({
+    name: 'host',
+    length: 45,
+    nullable: true
+  })
   host: string;
 
-  @Column({ name: 'url', nullable: true })
+  @Column({
+    name: 'url',
+    length: 45,
+    nullable: true
+  })
   url: string;
 
-  @Column({ name: 'stack', nullable: true })
+  @Column({
+    name: 'stack',
+    type: 'text',
+    nullable: true
+  })
   stack: string;
 
   @CreateDateColumn({

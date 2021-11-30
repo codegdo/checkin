@@ -9,7 +9,7 @@ export class Token extends BaseEntity {
   @Column({ name: 'expired_at', nullable: true })
   expiredAt: number;
 
-  @Column({ type: 'jsonb', name: 'data', nullable: true })
-  data?: TokenData;
+  @Column({ name: 'data', type: 'jsonb', nullable: true })
+  data: TokenData;
 
 }

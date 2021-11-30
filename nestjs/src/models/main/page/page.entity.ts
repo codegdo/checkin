@@ -16,10 +16,18 @@ export class Page extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'name', nullable: false })
+  @Column({
+    name: 'name',
+    length: 45,
+    nullable: false
+  })
   name: string;
 
-  @Column({ name: 'type', nullable: true })
+  @Column({
+    name: 'type',
+    length: 45,
+    nullable: true
+  })
   type: string;
 
   @Column({ name: 'sort_order', default: 0 })
@@ -43,12 +51,14 @@ export class Page extends BaseEntity {
 
   @Column({
     name: 'created_by',
+    length: 45,
     default: () => 'CURRENT_USER'
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
+    length: 45,
     nullable: true
   })
   updatedBy: string;

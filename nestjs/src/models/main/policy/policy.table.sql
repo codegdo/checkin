@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS sec.policy (
   id SERIAL NOT NULL,
-  name VARCHAR(45) NOT NULL,
-  description VARCHAR(255),
+  name CHARACTER VARYING(45) NOT NULL,
+  description CHARACTER VARYING(255),
 
   data JSONB,
 
@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS sec.policy (
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
-  created_by VARCHAR(45) DEFAULT CURRENT_USER,
-  updated_by VARCHAR(45),
+  created_by CHARACTER VARYING(45) DEFAULT CURRENT_USER,
+  updated_by CHARACTER VARYING(45),
   --
   PRIMARY KEY(id),
   FOREIGN KEY(role_type_id) REFERENCES dbo.role_type(id) ON DELETE SET NULL

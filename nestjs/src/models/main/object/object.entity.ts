@@ -14,7 +14,11 @@ export class DBObject extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'name', nullable: false })
+  @Column({
+    name: 'name',
+    length: 45,
+    nullable: false
+  })
   name: string;
 
   // @Column({ name: 'mapping', nullable: false })
@@ -31,12 +35,14 @@ export class DBObject extends BaseEntity {
 
   @Column({
     name: 'created_by',
+    length: 45,
     default: () => 'CURRENT_USER'
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
+    length: 45,
     nullable: true
   })
   updatedBy: string;

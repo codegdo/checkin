@@ -14,13 +14,24 @@ export class Policy extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'name', nullable: true })
+  @Column({
+    name: 'name',
+    length: 45,
+    nullable: true
+  })
   name: string;
 
-  @Column({ name: 'description', nullable: true })
+  @Column({
+    name: 'description',
+    length: 255,
+    nullable: true
+  })
   description: string;
 
-  @Column({ name: 'data', nullable: true })
+  @Column({
+    name: 'jsonb',
+    nullable: true
+  })
   data: string;
 
   @Column({ name: 'is_active', default: false })
@@ -34,12 +45,14 @@ export class Policy extends BaseEntity {
 
   @Column({
     name: 'created_by',
+    length: 45,
     default: () => 'CURRENT_USER'
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
+    length: 45,
     nullable: true
   })
   updatedBy: string;

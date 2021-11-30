@@ -19,19 +19,25 @@ import { Page } from '../page/page.entity';
 @Entity({ database: 'main', schema: 'dbo', name: 'module_group' })
 export class ModuleGroup extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
-  id!: number;
+  id: number;
 
-  @Column({ name: 'name', nullable: false })
-  name!: string;
+  @Column({
+    name: 'name',
+    length: 45,
+    nullable: false
+  })
+  name: string;
 
   @Column({
     name: 'created_by',
+    length: 45,
     default: () => 'CURRENT_USER',
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
+    length: 45,
     nullable: true,
   })
   updatedBy: string;
@@ -53,10 +59,14 @@ export class ModuleGroup extends BaseEntity {
 @Entity({ database: 'main', schema: 'dbo', name: 'module' })
 export class Module extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
-  id!: number;
+  id: number;
 
-  @Column({ name: 'name', nullable: false })
-  name!: string;
+  @Column({
+    name: 'name',
+    length: 45,
+    nullable: false
+  })
+  name: string;
 
   @Column({ name: 'sort_order', default: 0 })
   sortOrder: number;
@@ -104,12 +114,14 @@ export class Module extends BaseEntity {
 
   @Column({
     name: 'created_by',
+    length: 45,
     default: () => 'CURRENT_USER'
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
+    length: 45,
     nullable: true
   })
   updatedBy: string;

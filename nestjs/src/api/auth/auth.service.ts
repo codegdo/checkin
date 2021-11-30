@@ -157,7 +157,7 @@ export class AuthService {
     // api/auth/signup
     // get emails
 
-    this.mailService.sendUserConfirmation();
+    this.mailService.sendSignupEmail(user.username, '', '');
 
     return { username: user.username };
 

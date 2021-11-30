@@ -180,3 +180,31 @@
 {"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
 {"code":"42703","driverError":{"code":"42703","file":"d:\\pginstaller.auto\\postgres.windows-x64\\src\\backend\\parser\\parse_relation.c","hint":"Perhaps you meant to reference the column \"r.email_address\".","length":235,"line":"3294","name":"error","position":"65","routine":"errorMissingColumn","severity":"ERROR"},"file":"d:\\pginstaller.auto\\postgres.windows-x64\\src\\backend\\parser\\parse_relation.c","hint":"Perhaps you meant to reference the column \"r.email_address\".","length":235,"level":"error","line":"3294","message":"Failed to send confirmation email column e.email_address does not exist","parameters":["signup"],"position":"65","query":"SELECT \"e\".\"id\" as id, \"et\".\"type\" as type, \"e\".\"name\" as name, e.email_address as emailAddress, \"e\".\"subject\" as subject, \"e\".\"body\" as body, \"e\".\"is_active\" as isActive, \"e\".\"org_id\" as orgId FROM \"org\".\"email\" \"e\" LEFT JOIN \"dbo\".\"email_type\" \"et\" ON \"e\".\"email_type_id\" = \"et\".\"id\"  LEFT JOIN \"dbo\".\"recipient\" \"r\" ON \"et\".\"recipient_id\" = \"r\".\"id\" WHERE \"et\".\"name\" = $1","routine":"errorMissingColumn","severity":"ERROR","stack":"QueryFailedError: column e.email_address does not exist\n    at QueryFailedError.TypeORMError [as constructor] (C:\\CMR\\gdo\\checkin\\nestjs\\src\\error\\TypeORMError.ts:7:9)\n    at new QueryFailedError (C:\\CMR\\gdo\\checkin\\nestjs\\src\\error\\QueryFailedError.ts:9:9)\n    at PostgresQueryRunner.<anonymous> (C:\\CMR\\gdo\\checkin\\nestjs\\src\\driver\\postgres\\PostgresQueryRunner.ts:247:19)\n    at step (C:\\CMR\\gdo\\checkin\\nestjs\\node_modules\\tslib\\tslib.js:143:27)\n    at Object.throw (C:\\CMR\\gdo\\checkin\\nestjs\\node_modules\\tslib\\tslib.js:124:57)\n    at rejected (C:\\CMR\\gdo\\checkin\\nestjs\\node_modules\\tslib\\tslib.js:115:69)\n    at processTicksAndRejections (node:internal/process/task_queues:96:5)"}
 {"level":"error","message":"Failed to send confirmation email \"et\" alias was not found. Maybe you forgot to join it?","stack":"TypeORMError: \"et\" alias was not found. Maybe you forgot to join it?\n    at new TypeORMError (C:\\CMR\\gdo\\checkin\\nestjs\\src\\error\\TypeORMError.ts:7:9)\n    at QueryExpressionMap.findAliasByName (C:\\CMR\\gdo\\checkin\\nestjs\\src\\query-builder\\QueryExpressionMap.ts:387:19)\n    at JoinAttribute.getValue (C:\\CMR\\gdo\\checkin\\nestjs\\src\\query-builder\\JoinAttribute.ts:147:72)\n    at JoinAttribute.get (C:\\CMR\\gdo\\checkin\\nestjs\\src\\query-builder\\JoinAttribute.ts:163:53)\n    at JoinAttribute.get (C:\\CMR\\gdo\\checkin\\nestjs\\src\\query-builder\\JoinAttribute.ts:176:18)\n    at SelectQueryBuilder.join (C:\\CMR\\gdo\\checkin\\nestjs\\src\\query-builder\\SelectQueryBuilder.ts:1357:27)\n    at SelectQueryBuilder.leftJoin (C:\\CMR\\gdo\\checkin\\nestjs\\src\\query-builder\\SelectQueryBuilder.ts:314:14)\n    at SelectQueryBuilder.leftJoinAndSelect (C:\\CMR\\gdo\\checkin\\nestjs\\src\\query-builder\\SelectQueryBuilder.ts:394:14)\n    at EmailRepository.getSingupEmail (C:\\CMR\\gdo\\checkin\\nestjs\\src\\models\\main\\email\\email.repository.ts:11:8)\n    at MailService.sendUserConfirmation (C:\\CMR\\gdo\\checkin\\nestjs\\src\\common\\modules\\mail\\mail.service.ts:26:54)"}
+{"level":"error","message":"Unable to connect to the database. Retrying (1)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (2)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (3)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (4)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (5)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (6)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (7)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (8)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (9)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (1)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (2)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (3)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (4)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (5)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (6)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (7)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (8)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (9)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (1)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (2)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (3)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (4)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (5)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (6)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (7)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (8)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (9)..."}
+{"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}

@@ -26,13 +26,25 @@ export class User {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'username' })
+  @Column({
+    name: 'username',
+    length: 45,
+  })
   username: string;
 
-  @Column({ name: 'password', select: false })
+  @Column({
+    name: 'password',
+    length: 85,
+    select: false
+  })
   password: string;
 
-  @Column({ name: 'passcode', nullable: true, select: false })
+  @Column({
+    name: 'passcode',
+    length: 4,
+    nullable: true,
+    select: false
+  })
   passcode: string;
 
   @Column({ name: 'is_new_password', default: false })
@@ -72,6 +84,7 @@ export class User {
   @Column({
     name: 'created_by',
     default: () => 'CURRENT_USER',
+    length: 45,
     select: false,
   })
   createdBy: string;
@@ -79,6 +92,7 @@ export class User {
   @Column({
     name: 'updated_by',
     nullable: true,
+    length: 45,
     select: false,
   })
   updatedBy: string;

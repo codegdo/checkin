@@ -1,7 +1,7 @@
 -- CREATE TABLE CALENDAR
 CREATE TABLE IF NOT EXISTS org.calendar (
   id SERIAL NOT NULL,
-  name VARCHAR(200),
+  name CHARACTER VARYING(200),
 
   location_id INT,
   org_id INT,

@@ -18,19 +18,39 @@ export class Field extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'name', nullable: false })
+  @Column({
+    name: 'name',
+    length: 225,
+    nullable: false
+  })
   name: string;
 
-  @Column({ name: 'description', nullable: true })
+  @Column({
+    name: 'description',
+    length: 225,
+    nullable: true
+  })
   description: string;
 
-  @Column({ name: 'role', nullable: true })
+  @Column({
+    name: 'role',
+    length: 15,
+    nullable: true
+  })
   role: string;
 
-  @Column({ name: 'type', nullable: true })
+  @Column({
+    name: 'type',
+    length: 15,
+    nullable: true
+  })
   type: string;
 
-  @Column({ type: 'jsonb', name: 'data', nullable: true })
+  @Column({
+    name: 'data',
+    type: 'jsonb',
+    nullable: true
+  })
   data: FieldData;
 
   @Column({ name: 'is_required', default: false })
@@ -42,12 +62,14 @@ export class Field extends BaseEntity {
 
   @Column({
     name: 'created_by',
+    length: 45,
     default: () => 'CURRENT_USER'
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
+    length: 45,
     nullable: true
   })
   updatedBy: string;

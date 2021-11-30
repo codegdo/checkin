@@ -19,16 +19,26 @@ export class Client extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id!: number;
 
-  @Column({ name: 'first_name', nullable: true })
+  @Column({
+    name: 'first_name',
+    nullable: true
+  })
   firstName!: string;
 
-  @Column({ name: 'last_name', nullable: true })
+  @Column({
+    name: 'last_name',
+    nullable: true
+  })
   lastName!: string;
 
-  @Column({ name: 'email_address' })
+  @Column({
+    name: 'email_address',
+  })
   emailAddress: string;
 
-  @Column({ name: 'phone_number' })
+  @Column({
+    name: 'phone_number',
+  })
   phoneNumber: string;
 
   @Column({ name: 'day_of_birth' })

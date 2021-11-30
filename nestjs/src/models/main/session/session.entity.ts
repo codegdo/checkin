@@ -6,7 +6,7 @@ export class Session implements ISession {
   @PrimaryColumn({ name: 'id' })
   id: string;
 
-  @Column({ name: 'json', nullable: true })
+  @Column({ name: 'jsonb', nullable: true })
   json: string;
 
   @Column({ name: 'expired_at', type: 'bigint', nullable: true })

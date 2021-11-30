@@ -10,6 +10,5 @@ export * from './token/token.entity';
 export * from './user/user.entity';
 export * from './error/error.entity';
 export * from './email/email.entity';
-export * from './recipient/recipient.entity';
 
 

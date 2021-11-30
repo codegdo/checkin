@@ -20,26 +20,49 @@ export class Location extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'name', nullable: true })
+  @Column({
+    name: 'name',
+    length: 95,
+    nullable: true
+  })
   name: string;
 
-  @Column({ name: 'street_address', nullable: true })
+  @Column({
+    name: 'street_address',
+    length: 95,
+    nullable: true
+  })
   streetAddress: string;
 
-  @Column({ name: 'city', nullable: true })
+  @Column({
+    name: 'city',
+    length: 95,
+    nullable: true
+  })
   city: string;
 
-  @Column({ name: 'postal_code', nullable: true })
+  @Column({
+    name: 'postal_code',
+    nullable: true
+  })
   postalCode: number;
 
   @OneToOne(() => Territory, (territory) => territory.id, { nullable: true })
   @JoinColumn({ name: 'territory_id' })
   territory: Territory;
 
-  @Column({ name: 'phone_number', nullable: true })
+  @Column({
+    name: 'phone_number',
+    length: 20,
+    nullable: true
+  })
   phoneNumber: string;
 
-  @Column({ name: 'fax_number', nullable: true })
+  @Column({
+    name: 'fax_number',
+    length: 20,
+    nullable: true
+  })
   faxNumber: string;
 
   @Column({ name: 'owner_id', nullable: true })
@@ -56,12 +79,14 @@ export class Location extends BaseEntity {
 
   @Column({
     name: 'created_by',
+    length: 45,
     default: () => 'CURRENT_USER'
   })
   createdBy: string;
 
   @Column({
     name: 'updated_by',
+    length: 45,
     nullable: true
   })
   updatedBy: string;
