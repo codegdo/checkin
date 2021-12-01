@@ -5,43 +5,21 @@ export class Plan extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({
-    name: 'name',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'name' })
   name: string;
 
-  @Column({
-    name: 'duration',
-    nullable: true
-  })
+  @Column({ name: 'duration' })
   duration: number;
 
-  @Column({
-    name: 'created_by',
-    length: 45,
-    default: () => 'CURRENT_USER'
-  })
+  @Column({ name: 'created_by' })
   createdBy: string;
 
-  @Column({
-    name: 'updated_by',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'updated_by' })
   updatedBy: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP'
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp'
-  })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

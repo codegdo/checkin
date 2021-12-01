@@ -20,63 +20,32 @@ export class EmailAddress {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({
-    name: 'name',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'name' })
   name: string;
 
-  @Column({
-    name: 'recipient',
-    type: 'text',
-    nullable: true
-  })
-  recipient: string;
+  @Column({ name: 'recipients' })
+  recipients: string;
 
-  @Column({
-    name: 'cc_recipient',
-    type: 'text',
-    nullable: true
-  })
-  ccRecipient: string;
+  @Column({ name: 'cc_recipients' })
+  ccRecipients: string;
 
-  @Column({
-    name: 'bcc_recipient',
-    type: 'text',
-    nullable: true
-  })
-  bccRecipient: string;
+  @Column({ name: 'bcc_recipients' })
+  bccRecipients: string;
 
-  @OneToMany(() => EmailType, (email_type) => email_type.emailAddressId, { nullable: true })
-  emailTypes: EmailType[];
-
-  @Column({
-    name: 'created_by',
-    length: 45,
-    default: () => 'CURRENT_USER',
-  })
+  @Column({ name: 'created_by' })
   createdBy: string;
 
-  @Column({
-    name: 'updated_by',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'updated_by' })
   updatedBy: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp'
-  })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @OneToMany(() => EmailType, (email_type) => email_type.emailAddressId)
+  emailTypes: EmailType[];
 }
 
 
@@ -92,53 +61,31 @@ export class EmailType {
   })
   name: EmailTypeEnum;
 
-  @Column({
-    name: 'type',
-    type: 'varchar',
-    length: 1,
-    nullable: true
-  })
+  @Column({ name: 'type' })
   type: string;
 
-  @OneToMany(() => Email, (email) => email.emailTypeId, { nullable: true })
-  emails: Email[];
-
-  @ManyToOne(() => Module, (module) => module.id, { nullable: true })
+  @ManyToOne(() => Module, (module) => module.id)
   @JoinColumn({ name: 'module_id' })
   moduleId: Module;
 
-  @ManyToOne(() => EmailAddress, (emailAddress) => emailAddress.emailTypes, { nullable: true })
+  @ManyToOne(() => EmailAddress, (emailAddress) => emailAddress.emailTypes)
   @JoinColumn({ name: 'email_address_id' })
   emailAddressId: EmailAddress;
 
-  @Column({
-    name: 'created_by',
-    type: 'varchar',
-    length: 45,
-    default: () => 'CURRENT_USER',
-  })
+  @Column({ name: 'created_by' })
   createdBy: string;
 
-  @Column({
-    name: 'updated_by',
-    type: 'varchar',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'updated_by' })
   updatedBy: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-  })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @OneToMany(() => Email, (email) => email.emailTypeId)
+  emails: Email[];
 }
 
 @Entity({ database: 'main', schema: 'org', name: 'email' })
@@ -146,65 +93,34 @@ export class Email {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({
-    name: 'name',
-    type: 'varchar',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'name' })
   name: string;
 
-  @Column({
-    name: 'subject',
-    type: 'varchar',
-    length: 255,
-    nullable: true
-  })
+  @Column({ name: 'subject' })
   subject: string;
 
-  @Column({
-    name: 'body',
-    type: 'text',
-    nullable: true
-  })
+  @Column({ name: 'body' })
   body: string;
 
-  @Column({ name: 'is_active', default: true })
+  @Column({ name: 'is_active' })
   isActive: boolean;
 
-  @ManyToOne(() => EmailType, (emailType) => emailType.emails, { nullable: true })
+  @ManyToOne(() => EmailType, (emailType) => emailType.emails)
   @JoinColumn({ name: 'email_type_id' })
   emailTypeId: EmailType;
 
-  @Column({ name: 'org_id', nullable: true })
+  @Column({ name: 'org_id' })
   orgId: number;
 
-  @Column({
-    name: 'created_by',
-    type: 'varchar',
-    length: 45,
-    default: () => 'CURRENT_USER',
-  })
+  @Column({ name: 'created_by' })
   createdBy: string;
 
-  @Column({
-    name: 'updated_by',
-    type: 'varchar',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'updated_by' })
   updatedBy: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp'
-  })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

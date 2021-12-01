@@ -4,10 +4,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   JoinColumn,
-  ManyToOne,
   ManyToMany,
-  JoinTable,
-  Unique,
   CreateDateColumn,
   UpdateDateColumn,
   OneToOne,
@@ -20,87 +17,49 @@ export class Location extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({
-    name: 'name',
-    length: 95,
-    nullable: true
-  })
+  @Column({ name: 'name' })
   name: string;
 
-  @Column({
-    name: 'street_address',
-    length: 95,
-    nullable: true
-  })
+  @Column({ name: 'street_address' })
   streetAddress: string;
 
-  @Column({
-    name: 'city',
-    length: 95,
-    nullable: true
-  })
+  @Column({ name: 'city' })
   city: string;
 
-  @Column({
-    name: 'postal_code',
-    nullable: true
-  })
+  @Column({ name: 'postal_code' })
   postalCode: number;
 
-  @OneToOne(() => Territory, (territory) => territory.id, { nullable: true })
+  @OneToOne(() => Territory, (territory) => territory.id)
   @JoinColumn({ name: 'territory_id' })
   territory: Territory;
 
-  @Column({
-    name: 'phone_number',
-    length: 20,
-    nullable: true
-  })
+  @Column({ name: 'phone_number' })
   phoneNumber: string;
 
-  @Column({
-    name: 'fax_number',
-    length: 20,
-    nullable: true
-  })
+  @Column({ name: 'fax_number' })
   faxNumber: string;
 
-  @Column({ name: 'owner_id', nullable: true })
+  @Column({ name: 'owner_id' })
   ownerId: number;
 
-  @Column({ name: 'org_id', nullable: true })
+  @Column({ name: 'org_id' })
   orgId: number;
 
-  @ManyToMany(() => Client, (client: Client) => client.locations, { nullable: true })
+  @ManyToMany(() => Client, (client: Client) => client.locations)
   clients: Client[];
 
-  @ManyToMany(() => User, (user: User) => user.locations, { nullable: true })
+  @ManyToMany(() => User, (user: User) => user.locations)
   users: User[];
 
-  @Column({
-    name: 'created_by',
-    length: 45,
-    default: () => 'CURRENT_USER'
-  })
+  @Column({ name: 'created_by' })
   createdBy: string;
 
-  @Column({
-    name: 'updated_by',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'updated_by' })
   updatedBy: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP'
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp'
-  })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

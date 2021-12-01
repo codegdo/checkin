@@ -20,40 +20,25 @@ export class Subscription extends BaseEntity {
   @PrimaryColumn({ name: 'org_id', primary: true })
   orgId: number;
 
-  @OneToOne(() => Plan, (plan) => plan.id, { nullable: true })
+  @OneToOne(() => Plan, (plan) => plan.id)
   @JoinColumn({ name: 'plan_id' })
   plan: Plan;
 
-  @Column({ name: 'is_renewed', default: true })
+  @Column({ name: 'is_renewed' })
   isRenewed: boolean;
 
-  @Column({ name: 'is_trial', default: true })
+  @Column({ name: 'is_trial' })
   isTrial: boolean;
 
-  @Column({
-    name: 'start_date',
-    type: 'timestamp',
-  })
+  @Column({ name: 'start_date' })
   startDate: Date;
 
-  @Column({
-    name: 'end_date',
-    type: 'timestamp',
-  })
+  @Column({ name: 'end_date' })
   endDate: Date;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    select: false
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    select: false
-  })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

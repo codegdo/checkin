@@ -5,21 +5,12 @@ export class Calendar {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({
-    name: 'name',
-    length: 200
-  })
+  @Column({ name: 'name' })
   name: string;
 
-  @Column({
-    name: 'location_id',
-    nullable: true
-  })
+  @Column({ name: 'location_id' })
   locationId: number;
 
-  @Column({
-    name: 'org_id',
-    nullable: true
-  })
+  @Column({ name: 'org_id' })
   orgId: number;
 }

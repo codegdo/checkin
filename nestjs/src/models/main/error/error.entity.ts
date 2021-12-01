@@ -4,8 +4,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
-  ManyToMany,
 } from 'typeorm';
 
 
@@ -14,38 +12,18 @@ export class LogError extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({
-    name: 'message',
-    length: 255,
-    nullable: true
-  })
+  @Column({ name: 'message' })
   message: string;
 
-  @Column({
-    name: 'host',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'host' })
   host: string;
 
-  @Column({
-    name: 'url',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'url' })
   url: string;
 
-  @Column({
-    name: 'stack',
-    type: 'text',
-    nullable: true
-  })
+  @Column({ name: 'stack' })
   stack: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 }

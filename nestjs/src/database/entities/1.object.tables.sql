@@ -299,7 +299,9 @@ VALUES
 CREATE INDEX idx_module_page ON dbo.module_page(module_id, page_id);
 CREATE INDEX idx_page_object ON dbo.page_object(page_id, object_id);
 
-
+-------------------------------------------------------------------------
+-- END ------------------------------------------------------------------
+-------------------------------------------------------------------------
 
 -- SELECT
 SELECT * FROM dbo.feature;

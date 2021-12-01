@@ -157,7 +157,13 @@ export class AuthService {
     // api/auth/signup
     // get emails
 
-    this.mailService.sendSignupEmail(user.username, '', '');
+    const sendData = {
+      to: contact.emailAddress,
+      username: user.username,
+      url: `${this.configService.get('app.host')}/auth/verify/${token.id}`
+    }
+
+    this.mailService.sendSignupEmail(sendData);
 
     return { username: user.username };
 

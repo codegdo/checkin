@@ -1,10 +1,10 @@
 -- CREATE TABLE CLIENT
 CREATE TABLE IF NOT EXISTS sec.client (
   id SERIAL NOT NULL,
-  first_name CHARACTER VARYING(45),
-  last_name CHARACTER VARYING(45),
-  email_address CHARACTER VARYING(45),
-  phone_number CHARACTER VARYING(20),
+  first_name VARCHAR(45),
+  last_name VARCHAR(45),
+  email_address VARCHAR(45),
+  phone_number VARCHAR(20),
   day_of_birth DATE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

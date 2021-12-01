@@ -6,10 +6,10 @@ export class Token extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'expired_at', nullable: true })
+  @Column({ name: 'expired_at' })
   expiredAt: number;
 
-  @Column({ name: 'data', type: 'jsonb', nullable: true })
+  @Column({ name: 'data', type: 'jsonb' })
   data: TokenData;
 
 }

@@ -3,11 +3,8 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  JoinColumn,
-  ManyToOne,
   ManyToMany,
   JoinTable,
-  Unique,
   CreateDateColumn,
   UpdateDateColumn,
   OneToOne,
@@ -19,22 +16,14 @@ export class Feature extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({
-    name: 'name',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'name' })
   name: string;
 
-  @Column({
-    name: 'price',
-    type: 'float',
-    default: 0.00
-  })
+  @Column({ name: 'price' })
   price: number;
 
   // Use middle table to join
-  @ManyToMany(() => Module, (module: Module) => module.features, { nullable: true })
+  @ManyToMany(() => Module, (module: Module) => module.features)
   @JoinTable({
     name: 'feature_module',
     joinColumn: {
@@ -48,30 +37,15 @@ export class Feature extends BaseEntity {
   })
   modules: Module[];
 
-  @Column({
-    name: 'created_by',
-    length: 45,
-    default: () => 'CURRENT_USER'
-  })
+  @Column({ name: 'created_by' })
   createdBy: string;
 
-  @Column({
-    name: 'updated_by',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'updated_by' })
   updatedBy: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP'
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp'
-  })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

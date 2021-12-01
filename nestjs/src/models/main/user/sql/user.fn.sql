@@ -1,21 +1,21 @@
 -- CREATE FUNCTION USER SIGNUP
 CREATE OR REPLACE FUNCTION sec.fn_user_signup(
-  p_first_name varchar, 
-  p_last_name varchar, 
-  p_email_address varchar, 
-  p_username varchar, 
-  p_password varchar,
-  p_data jsonb, 
-  p_expired_at integer
+  p_first_name VARCHAR, 
+  p_last_name VARCHAR, 
+  p_email_address VARCHAR, 
+  p_username VARCHAR, 
+  p_password VARCHAR,
+  p_data JSONB, 
+  p_expired_at INT
 )
 --RETURNS RECORD
 --RETURNS sec.user
-RETURNS uuid
+RETURNS UUID
 $$
   DECLARE
-    contactId integer;
-    userId integer;
-    tokenId uuid;
+    contactId INT;
+    userId INT;
+    tokenId UUID;
     rec RECORD;
   BEGIN
 
@@ -52,13 +52,13 @@ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION sec.fn_user_signup(
-  p_first_name varchar,
-  p_last_name varchar,
-  p_email_address varchar,
-  p_username varchar,
-  p_password varchar,
-  p_data jsonb,
-  p_expired_at integer
+  p_first_name VARCHAR,
+  p_last_name VARCHAR,
+  p_email_address VARCHAR,
+  p_username VARCHAR,
+  p_password VARCHAR,
+  p_data JSONB,
+  p_expired_at INT
 )
 RETURNS SETOF sec.token
 --RETURNS TABLE(token_id uuid)

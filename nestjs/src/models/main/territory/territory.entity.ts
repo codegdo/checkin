@@ -12,46 +12,22 @@ export class Territory extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({
-    name: 'country',
-    length: 90,
-    nullable: false
-  })
+  @Column({ name: 'country' })
   Country: string;
 
-  @Column({
-    name: 'country_code',
-    length: 3,
-    nullable: false
-  })
+  @Column({ name: 'country_code' })
   countryCode: string;
 
-  @Column({
-    name: 'state',
-    length: 90,
-    nullable: false
-  })
+  @Column({ name: 'state' })
   State: string;
 
-  @Column({
-    name: 'state_code',
-    length: 2,
-    nullable: false
-  })
+  @Column({ name: 'state_code' })
   stateCode: string;
 
-  @Column({
-    name: 'region',
-    length: 45,
-    nullable: false
-  })
+  @Column({ name: 'region' })
   region: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
 }

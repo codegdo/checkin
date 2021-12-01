@@ -18,72 +18,37 @@ export class Field extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({
-    name: 'name',
-    length: 225,
-    nullable: false
-  })
+  @Column({ name: 'name' })
   name: string;
 
-  @Column({
-    name: 'description',
-    length: 225,
-    nullable: true
-  })
+  @Column({ name: 'description' })
   description: string;
 
-  @Column({
-    name: 'role',
-    length: 15,
-    nullable: true
-  })
+  @Column({ name: 'role' })
   role: string;
 
-  @Column({
-    name: 'type',
-    length: 15,
-    nullable: true
-  })
+  @Column({ name: 'type' })
   type: string;
 
-  @Column({
-    name: 'data',
-    type: 'jsonb',
-    nullable: true
-  })
+  @Column({ name: 'data', type: 'jsonb' })
   data: FieldData;
 
-  @Column({ name: 'is_required', default: false })
+  @Column({ name: 'is_required' })
   isRequired: boolean;
 
-  @ManyToOne(() => DBObject, { nullable: true })
+  @ManyToOne(() => DBObject)
   @JoinColumn({ name: 'object_id', referencedColumnName: 'id' })
   object: DBObject;
 
-  @Column({
-    name: 'created_by',
-    length: 45,
-    default: () => 'CURRENT_USER'
-  })
+  @Column({ name: 'created_by' })
   createdBy: string;
 
-  @Column({
-    name: 'updated_by',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'updated_by' })
   updatedBy: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP'
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp'
-  })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

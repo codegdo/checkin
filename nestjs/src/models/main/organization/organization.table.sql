@@ -1,15 +1,15 @@
 CREATE TABLE IF NOT EXISTS sec.organization (
   id SERIAL NOT NULL,
-  name CHARACTER VARYING(45) NOT NULL,
+  name VARCHAR(45) NOT NULL,
 
-  street_address CHARACTER VARYING(45),
-  city CHARACTER VARYING(45),
-  postal_code CHARACTER VARYING(15),
+  street_address VARCHAR(45),
+  city VARCHAR(45),
+  postal_code VARCHAR(15),
   territory_id INT,
-  phone_number CHARACTER VARYING(15),
-  fax_number CHARACTER VARYING(15),
-  website CHARACTER VARYING(45),
-  subdomain CHARACTER VARYING(45) NOT NULL,
+  phone_number VARCHAR(15),
+  fax_number VARCHAR(15),
+  website VARCHAR(45),
+  subdomain VARCHAR(45) NOT NULL,
 
   data JSONB,
 
@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS sec.organization (
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
-  created_by CHARACTER VARYING(45) DEFAULT CURRENT_USER,
-  updated_by CHARACTER VARYING(45),
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
   UNIQUE(subdomain, owner_id),

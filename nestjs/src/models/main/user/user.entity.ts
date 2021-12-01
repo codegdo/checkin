@@ -26,48 +26,36 @@ export class User {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({
-    name: 'username',
-    length: 45,
-  })
+  @Column({ name: 'username' })
   username: string;
 
-  @Column({
-    name: 'password',
-    length: 85,
-    select: false
-  })
+  @Column({ name: 'password', select: false })
   password: string;
 
-  @Column({
-    name: 'passcode',
-    length: 4,
-    nullable: true,
-    select: false
-  })
+  @Column({ name: 'passcode', select: false })
   passcode: string;
 
-  @Column({ name: 'is_new_password', default: false })
+  @Column({ name: 'is_new_password' })
   isNewPassword: boolean;
 
-  @Column({ name: 'is_active', default: false })
+  @Column({ name: 'is_active' })
   isActive: boolean;
 
-  @OneToOne(() => Contact, (contact) => contact.id, { nullable: true })
+  @OneToOne(() => Contact, (contact) => contact.id)
   @JoinColumn({ name: 'contact_id' })
   contact: Contact;
 
-  @ManyToOne(() => Role, (role) => role.id, { nullable: true })
+  @ManyToOne(() => Role, (role) => role.id)
   @JoinColumn({ name: 'role_id' })
   role: Role;
 
-  @Column({ name: 'form_id', nullable: true })
+  @Column({ name: 'form_id' })
   formId: number;
 
-  @Column({ name: 'org_id', nullable: true })
+  @Column({ name: 'org_id' })
   orgId: number;
 
-  @ManyToMany(() => Location, (location: Location) => location.users, { nullable: true })
+  @ManyToMany(() => Location, (location: Location) => location.users)
   @JoinTable({
     name: 'user_location',
     joinColumn: {
@@ -81,35 +69,16 @@ export class User {
   })
   locations: Location[];
 
-  @Column({
-    name: 'created_by',
-    default: () => 'CURRENT_USER',
-    length: 45,
-    select: false,
-  })
+  @Column({ name: 'created_by' })
   createdBy: string;
 
-  @Column({
-    name: 'updated_by',
-    nullable: true,
-    length: 45,
-    select: false,
-  })
+  @Column({ name: 'updated_by' })
   updatedBy: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-    select: false,
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp',
-    select: false,
-  })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
   @BeforeInsert()

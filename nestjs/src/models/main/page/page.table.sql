@@ -1,8 +1,8 @@
 -- CREATE TABLE PAGE
 CREATE TABLE IF NOT EXISTS dbo.page (
   id SERIAL,
-  name CHARACTER VARYING(45),
-  type CHARACTER VARYING(45) CHECK(type in ('view', 'form')),
+  name VARCHAR(45),
+  type VARCHAR(45) CHECK(type in ('view', 'form')),
   sort_order INTEGER DEFAULT 0,
   is_external BOOLEAN DEFAULT TRUE,
   is_internal BOOLEAN DEFAULT TRUE,
@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS dbo.page (
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
-  created_by CHARACTER VARYING(45) DEFAULT CURRENT_USER,
-  updated_by CHARACTER VARYING(45),
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
   --
   PRIMARY KEY(id)
 );

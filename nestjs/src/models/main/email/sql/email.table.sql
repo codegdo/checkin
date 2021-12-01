@@ -1,15 +1,15 @@
--- CREATE TABLE RECIPIENT
+-- CREATE TABLE EMAIL_ADDRESS
 CREATE TABLE IF NOT EXISTS dbo.email_address (
   id SERIAL NOT NULL,
-  name CHARACTER VARYING(45),
+  name VARCHAR(45),
   recipient TEXT,
   cc_recipient TEXT,
   bcc_recipient TEXT,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
-  created_by CHARACTER VARYING(45) DEFAULT CURRENT_USER,
-  updated_by CHARACTER VARYING(45),
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
   --
   PRIMARY KEY(id)
 );
@@ -25,14 +25,14 @@ CREATE TYPE dbo.email_type_enum AS ENUM ('signup');
 CREATE TABLE IF NOT EXISTS dbo.email_type (
   id SERIAL NOT NULL,
   name dbo.email_type_enum NOT NULL,
-  type CHARACTER VARYING(1) CHECK(type in ('S', 'R')),
+  type VARCHAR(1) CHECK(type in ('S', 'R')),
   module_id INT,
   email_address_id INT,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
-  created_by CHARACTER VARYING(45) DEFAULT CURRENT_USER,
-  updated_by CHARACTER VARYING(45),
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
   FOREIGN KEY(module_id) REFERENCES dbo.module(id) ON DELETE SET NULL,
@@ -48,8 +48,8 @@ VALUES
 -- CREATE TABLE EMAIL
 CREATE TABLE IF NOT EXISTS org.email (
   id SERIAL NOT NULL,
-  name CHARACTER VARYING(45) NOT NULL,
-  subject CHARACTER VARYING(255),
+  name VARCHAR(45) NOT NULL,
+  subject VARCHAR(255),
   body TEXT,
 
   email_type_id INT,
@@ -59,8 +59,8 @@ CREATE TABLE IF NOT EXISTS org.email (
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
-  created_by CHARACTER VARYING(45) DEFAULT CURRENT_USER,
-  updated_by CHARACTER VARYING(45),
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
   FOREIGN KEY(email_type_id) REFERENCES dbo.email_type(id) ON DELETE SET NULL

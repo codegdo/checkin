@@ -328,10 +328,15 @@ CREATE INDEX idx_client_location ON sec.client_location(client_id, location_id);
 CREATE INDEX idx_user_location ON sec.user_location(user_id, location_id);
 CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
 
---
-SELECT * FROM sec.token;
---
+-------------------------------------------------------------------------
+-- END ------------------------------------------------------------------
+-------------------------------------------------------------------------
 
+
+-- SELECT
+SELECT * FROM sec.token;
+
+-- DROP
 DROP TABLE IF EXISTS
 dbo.territory,
 dbo.role_type,
@@ -352,5 +357,4 @@ sec.token
 CASCADE;
 
 DROP TYPE IF EXISTS
-dbo.role_type_enum,
-dbo.role_type_name_enum;
+dbo.role_type_enum;

@@ -9,65 +9,41 @@ import {
 } from 'typeorm';
 import { Role } from '../role/role.entity';
 
+interface PolicyData { }
+
 @Entity({ database: 'portal', schema: 'sec', name: 'policy' })
 export class Policy extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({
-    name: 'name',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'name' })
   name: string;
 
-  @Column({
-    name: 'description',
-    length: 255,
-    nullable: true
-  })
+  @Column({ name: 'description' })
   description: string;
 
-  @Column({
-    name: 'jsonb',
-    nullable: true
-  })
-  data: string;
+  @Column({ name: 'data', type: 'jsonb' })
+  data: PolicyData;
 
-  @Column({ name: 'is_active', default: false })
+  @Column({ name: 'is_active' })
   isActive: boolean;
 
-  @Column({ name: 'org_id', nullable: true })
-  orgId!: number;
+  @Column({ name: 'org_id' })
+  orgId: number;
 
-  @ManyToMany(() => Role, (role: Role) => role.policies, { nullable: true })
+  @ManyToMany(() => Role, (role: Role) => role.policies)
   roles: Role[];
 
-  @Column({
-    name: 'created_by',
-    length: 45,
-    default: () => 'CURRENT_USER'
-  })
+  @Column({ name: 'created_by' })
   createdBy: string;
 
-  @Column({
-    name: 'updated_by',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'updated_by' })
   updatedBy: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp'
-  })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
 

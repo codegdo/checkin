@@ -11,8 +11,8 @@ CREATE TABLE IF NOT EXISTS org.subscription (
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
-  created_by CHARACTER VARYING(45) DEFAULT CURRENT_USER,
-  updated_by CHARACTER VARYING(45),
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
   --
   PRIMARY KEY(module_id, org_id),
   FOREIGN KEY(module_id) REFERENCES dbo.module(id) ON DELETE CASCADE,

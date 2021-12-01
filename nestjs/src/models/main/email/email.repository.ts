@@ -9,12 +9,14 @@ export class EmailRepository extends Repository<Email> {
 
     // const emails = await this.createQueryBuilder('email')
     //   .leftJoinAndSelect('email.emailTypeId', 'emailType')
-    //   .leftJoinAndSelect('emailType.recipientId', 'recipient')
+    //   .leftJoinAndSelect('emailType.emailAddressId', 'emailAddress')
     //   .select([
     //     'email.id as id',
     //     'emailType.type as type',
     //     'email.name as name',
-    //     'recipient.email_address as "emailAddress"',
+    //     'emailAddress.recipient',
+    //     'emailAddress.cc_recipient as "ccRecipient"',
+    //     'emailAddress.bcc_recipient as "bccRecipient"',
     //     'email.subject as subject',
     //     'email.body as body',
     //     'email.is_active as "isActive"',
@@ -25,12 +27,14 @@ export class EmailRepository extends Repository<Email> {
 
     // const emails = await await this.createQueryBuilder('e')
     //   .leftJoinAndSelect(EmailType, 'et', 'e.email_type_id = et.id')
-    //   .leftJoinAndSelect(Recipient, 'r', 'et.recipient_id = r.id')
+    //   .leftJoinAndSelect(EmailAdress, 'ea', 'et.email_address_id = ea.id')
     //   .select([
     //     'e.id as id',
     //     'et.type as type',
     //     'e.name as name',
-    //     'r.email_address as "emailAddress"',
+    //     'ea.recipient',
+    //     'ea.cc_recipient as "ccRecipient"',
+    //     'ea.bcc_recipient as "bccRecipient"',
     //     'e.subject as subject',
     //     'e.body as body',
     //     'e.is_active as "isActive"',

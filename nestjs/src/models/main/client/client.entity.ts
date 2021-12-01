@@ -3,11 +3,8 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  JoinColumn,
-  ManyToOne,
   ManyToMany,
   JoinTable,
-  Unique,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -19,32 +16,22 @@ export class Client extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id!: number;
 
-  @Column({
-    name: 'first_name',
-    nullable: true
-  })
+  @Column({ name: 'first_name' })
   firstName!: string;
 
-  @Column({
-    name: 'last_name',
-    nullable: true
-  })
+  @Column({ name: 'last_name' })
   lastName!: string;
 
-  @Column({
-    name: 'email_address',
-  })
+  @Column({ name: 'email_address' })
   emailAddress: string;
 
-  @Column({
-    name: 'phone_number',
-  })
+  @Column({ name: 'phone_number' })
   phoneNumber: string;
 
   @Column({ name: 'day_of_birth' })
   dayOfBirth: Date;
 
-  @ManyToMany(() => Location, (location: Location) => location.clients, { nullable: true })
+  @ManyToMany(() => Location, (location: Location) => location.clients)
   @JoinTable({
     name: 'client_location',
     joinColumn: {
@@ -58,16 +45,9 @@ export class Client extends BaseEntity {
   })
   locations: Location[];
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP'
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp'
-  })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }

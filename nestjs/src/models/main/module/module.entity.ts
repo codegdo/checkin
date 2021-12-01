@@ -7,11 +7,8 @@ import {
   UpdateDateColumn,
   ManyToMany,
   JoinTable,
-  //ManyToOne,
   JoinColumn,
-  OneToOne,
   ManyToOne,
-  //OneToMany,
 } from 'typeorm';
 import { Feature } from '../feature/feature.entity';
 import { Page } from '../page/page.entity';
@@ -21,38 +18,19 @@ export class ModuleGroup extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({
-    name: 'name',
-    length: 45,
-    nullable: false
-  })
+  @Column({ name: 'name' })
   name: string;
 
-  @Column({
-    name: 'created_by',
-    length: 45,
-    default: () => 'CURRENT_USER',
-  })
+  @Column({ name: 'created_by' })
   createdBy: string;
 
-  @Column({
-    name: 'updated_by',
-    length: 45,
-    nullable: true,
-  })
+  @Column({ name: 'updated_by' })
   updatedBy: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp'
-  })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
 
@@ -61,44 +39,40 @@ export class Module extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({
-    name: 'name',
-    length: 45,
-    nullable: false
-  })
+  @Column({ name: 'name' })
   name: string;
 
-  @Column({ name: 'sort_order', default: 0 })
+  @Column({ name: 'sort_order' })
   sortOrder: number;
 
   @ManyToOne(() => ModuleGroup)
   @JoinColumn({ name: 'module_group_id', referencedColumnName: 'id' })
   moduleGroup: ModuleGroup;
 
-  //@ManyToOne(() => ModuleGroup, (moduleGroup) => moduleGroup.id, { nullable: true })
+  //@ManyToOne(() => ModuleGroup, (moduleGroup) => moduleGroup.id)
   //@JoinColumn({ name: 'module_group_id' })
   //moduleGroup: ModuleGroup;
 
-  @ManyToMany(() => Feature, (feature: Feature) => feature.modules, { nullable: true })
+  @ManyToMany(() => Feature, (feature: Feature) => feature.modules)
   features: Feature[];
 
-  @Column({ name: 'is_external', default: false })
+  @Column({ name: 'is_external' })
   isExternal: boolean;
 
-  @Column({ name: 'is_internal', default: false })
+  @Column({ name: 'is_internal' })
   isInternal: boolean;
 
-  @Column({ name: 'is_subscription', default: false })
+  @Column({ name: 'is_subscription' })
   isSubscription: boolean;
 
-  @Column({ name: 'is_active', default: true })
+  @Column({ name: 'is_active' })
   isActive: boolean;
 
   //@OneToMany(() => Page, page => page.module)
   //pages!: Page[];
 
   // Use middle table to join
-  @ManyToMany(() => Page, (page: Page) => page.modules, { nullable: true })
+  @ManyToMany(() => Page, (page: Page) => page.modules)
   @JoinTable({
     name: 'module_page',
     joinColumn: {
@@ -112,30 +86,15 @@ export class Module extends BaseEntity {
   })
   pages: Page[];
 
-  @Column({
-    name: 'created_by',
-    length: 45,
-    default: () => 'CURRENT_USER'
-  })
+  @Column({ name: 'created_by' })
   createdBy: string;
 
-  @Column({
-    name: 'updated_by',
-    length: 45,
-    nullable: true
-  })
+  @Column({ name: 'updated_by' })
   updatedBy: string;
 
-  @CreateDateColumn({
-    name: 'created_at',
-    type: 'timestamp',
-    default: () => 'CURRENT_TIMESTAMP'
-  })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({
-    name: 'updated_at',
-    type: 'timestamp'
-  })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
