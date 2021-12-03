@@ -118,6 +118,23 @@
     },
     {
       "id": 6,
+      "label": "Phone Number",
+      "name": "phoneNumber",
+      "description": null,
+      "type": "text",
+      "role": "field",
+      "data": null,
+      "value": "",
+      "defaultValue": "",
+      "isRequired": true,
+      "position": 0,
+      "positionParent": 1,
+      "mapSchema": "org",
+      "mapTable": "contact",
+      "mapColumn": "phone_number"
+    },
+    {
+      "id": 7,
       "label": "Username",
       "name": "username",
       "description": null,
@@ -134,7 +151,7 @@
       "mapColumn": "username"
     },
     {
-      "id": 7,
+      "id": 8,
       "label": "Password",
       "name": "password",
       "description": null,
