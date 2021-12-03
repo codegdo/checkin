@@ -4,11 +4,23 @@ import { InjectRepository } from '@nestjs/typeorm';
 import handlebars from 'handlebars';
 import { EmailRepository } from 'src/models/main/repositories';
 
+type SendSignupEmailData = {
+  to: string;
+  name: string;
+  username: string;
+  url: string;
+}
+
 @Injectable()
 export class MailService {
-  private fromAddress = {
-    name: 'Checkin',
-    address: 'codegdo.checkin@gmail.com'
+  private system = {
+    name: 'Codegdo',
+    address: 'system@codegdo.com'
+  };
+
+  private support = {
+    name: 'Codegdo',
+    address: 'support@codegdo.com'
   };
 
   constructor(
@@ -21,7 +33,7 @@ export class MailService {
     private readonly logger: LoggerService,
   ) { }
 
-  async sendSignupEmail(data) {
+  async sendSignupEmail(data: SendSignupEmailData) {
     try {
       const emails = await this.emailRepository.getSingupEmail();
 
@@ -30,8 +42,16 @@ export class MailService {
         const htmlToSend = template(data);
 
         this.mailerService.sendMail({
-          from: this.fromAddress,
-          to: [{ name: email.subject, address: (email.type === 'R' ? email.recipients : data.to) }],
+          from: {
+            name: email.sendName,
+            address: email.sendFrom
+          },
+          to: [
+            {
+              name: (email.type === 'R' ? this.system.name : data.name),
+              address: (email.type === 'R' ? email.recipients : data.to)
+            }
+          ],
           cc: email.ccRecipients,
           bcc: email.bccRecipients,
           subject: email.subject,

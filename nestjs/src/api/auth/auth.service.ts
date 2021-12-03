@@ -159,6 +159,7 @@ export class AuthService {
 
     const sendData = {
       to: contact.emailAddress,
+      name: `${contact.firstName} ${contact.lastName}`,
       username: user.username,
       url: `${this.configService.get('app.host')}/auth/verify/${token.id}`
     }

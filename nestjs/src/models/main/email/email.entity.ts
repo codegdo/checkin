@@ -15,13 +15,14 @@ export enum EmailTypeEnum {
   SIGNUP = 'signup',
 }
 
+
 @Entity({ database: 'main', schema: 'dbo', name: 'email_address' })
 export class EmailAddress {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'name' })
-  name: string;
+  @Column({ name: 'group_name' })
+  groupName: string;
 
   @Column({ name: 'recipients' })
   recipients: string;
@@ -48,6 +49,36 @@ export class EmailAddress {
   emailTypes: EmailType[];
 }
 
+@Entity({ database: 'main', schema: 'dbo', name: 'email_from' })
+export class EmailFrom {
+  @PrimaryGeneratedColumn({ name: 'id' })
+  id: number;
+
+  @Column({ name: 'from_name' })
+  fromName: string;
+
+  @Column({ name: 'from_address' })
+  fromAddress: string;
+
+  @Column({ name: 'reply_to' })
+  replyTo: string;
+
+  @Column({ name: 'created_by' })
+  createdBy: string;
+
+  @Column({ name: 'updated_by' })
+  updatedBy: string;
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+
+  @OneToMany(() => EmailType, (email_type) => email_type.emailFromId)
+  emailTypes: EmailType[];
+}
+
 
 @Entity({ database: 'main', schema: 'dbo', name: 'email_type' })
 export class EmailType {
@@ -55,22 +86,26 @@ export class EmailType {
   id: number;
 
   @Column({
-    name: 'name',
+    name: 'type_name',
     type: 'enum',
     enum: EmailTypeEnum,
   })
-  name: EmailTypeEnum;
+  typeName: EmailTypeEnum;
 
   @Column({ name: 'type' })
   type: string;
 
-  @ManyToOne(() => Module, (module) => module.id)
-  @JoinColumn({ name: 'module_id' })
-  moduleId: Module;
-
   @ManyToOne(() => EmailAddress, (emailAddress) => emailAddress.emailTypes)
   @JoinColumn({ name: 'email_address_id' })
   emailAddressId: EmailAddress;
+
+  @ManyToOne(() => EmailFrom, (emailFrom) => emailFrom.emailTypes)
+  @JoinColumn({ name: 'email_from_id' })
+  emailFromId: EmailFrom;
+
+  @ManyToOne(() => Module, (module) => module.id)
+  @JoinColumn({ name: 'module_id' })
+  moduleId: Module;
 
   @Column({ name: 'created_by' })
   createdBy: string;
