@@ -1,7 +1,7 @@
 -- CREATE TABLE EMAIL_ADDRESS
 CREATE TABLE IF NOT EXISTS dbo.email_address (
   id SERIAL NOT NULL,
-  name VARCHAR(45),
+  group_name VARCHAR(45),
   recipients TEXT,
   cc_recipients TEXT,
   bcc_recipients TEXT,
@@ -15,15 +15,16 @@ CREATE TABLE IF NOT EXISTS dbo.email_address (
 );
 
 INSERT
-INTO dbo.email_address (name, recipients, cc_recipients, bcc_recipients)
+INTO dbo.email_address (group_name, recipients, cc_recipients, bcc_recipients)
 VALUES
 ('System', 'checkin.clientservices@gmail.com', null, null);
 
 -- CREATE TABLE EMAIL_FROM
 CREATE TABLE IF NOT EXISTS dbo.email_from (
   id SERIAL NOT NULL,
-  name VARCHAR(45),
-  send_from VARCHAR(255),
+  from_name VARCHAR(45),
+  from_address VARCHAR(255),
+  reply_to VARCHAR(255),
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
@@ -34,16 +35,16 @@ CREATE TABLE IF NOT EXISTS dbo.email_from (
 );
 
 INSERT
-INTO dbo.email_from (name, send_from)
+INTO dbo.email_from (from_name, from_address, reply_to)
 VALUES
-('Client Services', 'checkin.clientservices@gmail.com');
+('Client Services', 'checkin.clientservices@gmail.com', null);
 
 -- CREATE TABLE EMAIL_TYPE
 CREATE TYPE dbo.email_type_enum AS ENUM ('signup');
 
 CREATE TABLE IF NOT EXISTS dbo.email_type (
   id SERIAL NOT NULL,
-  name dbo.email_type_enum NOT NULL,
+  type_name dbo.email_type_enum NOT NULL,
   type VARCHAR(1) CHECK(type in ('S', 'R')),
 
   email_address_id INT,
@@ -62,7 +63,7 @@ CREATE TABLE IF NOT EXISTS dbo.email_type (
 );
 
 INSERT
-INTO dbo.email_type (id, name, type, module_id, email_address_id, email_from_id)
+INTO dbo.email_type (id, type_name, type, module_id, email_address_id, email_from_id)
 VALUES
 ('1', 'signup', 'S', '1', null, '1'),
 ('2', 'signup', 'R', '1', '1', '1');
@@ -96,13 +97,14 @@ VALUES
 
 
 -- CREATE FUNCTION FN_GET_EMAIL_BY_NAME
-CREATE OR REPLACE FUNCTION org.fn_get_email_by_name(p_name dbo.email_type_enum)
+CREATE OR REPLACE FUNCTION org.fn_get_email_by_name(p_type_name dbo.email_type_enum)
 RETURNS TABLE (
   id INT,
   name VARCHAR,
   type VARCHAR,
-  "sendName" VARCHAR,
-  "sendFrom" VARCHAR,
+  "fromName" VARCHAR,
+  "fromAddress" VARCHAR,
+  "replyTo" VARCHAR,
   recipients TEXT,
   "ccRecipients" TEXT,
   "bccRecipients" TEXT,
@@ -123,8 +125,9 @@ $$
         e.id,
         e.name,
         et.type,
-        ef.name,
-        ef.send_from,
+        ef.from_name,
+        ef.from_address,
+        ef.reply_to,
         ea.recipients,
         ea.cc_recipients,
         ea.bcc_recipients,
@@ -136,7 +139,7 @@ $$
       LEFT JOIN dbo.email_type et ON et.id = e.email_type_id
       LEFT JOIN dbo.email_address ea ON ea.id = et.email_address_id
       LEFT JOIN dbo.email_from ef ON ef.id = et.email_from_id
-      WHERE et.name = p_name AND e.is_active = true;
+      WHERE et.type_name = p_type_name AND e.is_active = true;
 
   END;
 $$;

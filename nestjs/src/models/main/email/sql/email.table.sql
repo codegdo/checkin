@@ -1,7 +1,7 @@
 -- CREATE TABLE EMAIL_ADDRESS
 CREATE TABLE IF NOT EXISTS dbo.email_address (
   id SERIAL NOT NULL,
-  category VARCHAR(45),
+  group_name VARCHAR(45),
   recipients TEXT,
   cc_recipients TEXT,
   bcc_recipients TEXT,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS dbo.email_address (
 );
 
 INSERT
-INTO dbo.email_address (category, recipients, cc_recipients, bcc_recipients)
+INTO dbo.email_address (group_name, recipients, cc_recipients, bcc_recipients)
 VALUES
 ('System', 'checkin.clientservices@gmail.com', null, null);
 

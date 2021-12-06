@@ -357,4 +357,4 @@ sec.token
 CASCADE;
 
 DROP TYPE IF EXISTS
-dbo.role_type_enum;
+dbo.role_type_enum CASCADE;
