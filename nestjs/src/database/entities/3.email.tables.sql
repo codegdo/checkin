@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS dbo.email_address (
 INSERT
 INTO dbo.email_address (group_name, recipients, cc_recipients, bcc_recipients)
 VALUES
-('System', 'checkin.clientservices@gmail.com', null, null);
+('System', 'checkin.workspace@gmail.com', null, null);
 
 -- CREATE TABLE EMAIL_FROM
 CREATE TABLE IF NOT EXISTS dbo.email_from (
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS dbo.email_from (
 INSERT
 INTO dbo.email_from (from_name, from_address, reply_to)
 VALUES
-('Client Services', 'checkin.clientservices@gmail.com', null);
+('Auth Service', 'checkin.authservice@gmail.com', null);
 
 -- CREATE TABLE EMAIL_TYPE
 CREATE TYPE dbo.email_type_enum AS ENUM ('signup');

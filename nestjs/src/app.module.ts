@@ -7,9 +7,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import {
   GuardModule,
   SessionModule,
-  LoggerMiddleware,
   MailModule,
-} from './common';
+} from './common/modules';
+
+import {
+  LoggerMiddleware
+} from './common/middlewares';
 
 import {
   AuthModule,

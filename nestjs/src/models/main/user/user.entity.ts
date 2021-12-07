@@ -19,7 +19,7 @@ import { Role, Contact, Location } from '../entities';
 
 const scrypt = promisify(_scrypt);
 
-@Entity({ database: 'main', schema: 'sec', name: 'user' })
+@Entity({ database: 'c_main', schema: 'sec', name: 'user' })
 @Unique(['username'])
 @Unique(['passcode'])
 export class User {

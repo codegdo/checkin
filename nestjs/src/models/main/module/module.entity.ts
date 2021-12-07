@@ -13,7 +13,7 @@ import {
 import { Feature } from '../feature/feature.entity';
 import { Page } from '../page/page.entity';
 
-@Entity({ database: 'main', schema: 'dbo', name: 'module_group' })
+@Entity({ database: 'c_main', schema: 'dbo', name: 'module_group' })
 export class ModuleGroup extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
@@ -34,7 +34,7 @@ export class ModuleGroup extends BaseEntity {
   updatedAt: Date;
 }
 
-@Entity({ database: 'main', schema: 'dbo', name: 'module' })
+@Entity({ database: 'c_main', schema: 'dbo', name: 'module' })
 export class Module extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;

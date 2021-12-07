@@ -11,7 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 
 import { AuthService } from './auth.service';
 import { CreateUserDto, UserDto, LoginUserDto } from '../../models/main/dtos';
-import { CurrentUser, Public, Serialize } from 'src/common';
+import { CurrentUser, Public, Serialize } from 'src/common/decorators';
 import { User } from 'src/models/main/entities';
 import { ISignup } from './auth.interface';
 

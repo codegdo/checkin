@@ -26,9 +26,8 @@ import {
   EmailRepository,
 } from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/checkin/repositories';
-import { MailService } from 'src/common';
+import { AuthMailService } from 'src/common/modules';
 import { ISignup } from './auth.interface';
-import { SignupUserDto } from 'src/models/main/user/dtos/signup-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -69,7 +68,7 @@ export class AuthService {
     @Inject(Logger)
     private readonly logger: LoggerService,
 
-    private readonly mailService: MailService,
+    private readonly mailService: AuthMailService,
     private readonly configService: ConfigService,
   ) { }
 
@@ -111,7 +110,7 @@ export class AuthService {
     const queryRunner2 = this.connection2.createQueryRunner();
 
     await queryRunner.startTransaction();
-    await queryRunner2.startTransaction();
+    //await queryRunner2.startTransaction();
 
     try {
       //const org = await queryRunner.manager.save(organization);
@@ -129,15 +128,15 @@ export class AuthService {
 
       await queryRunner.manager.save(user);
       await queryRunner.manager.save(token);
-      await queryRunner2.manager.save(calendar);
+      //await queryRunner2.manager.save(calendar);
 
       // commit
       await queryRunner.commitTransaction();
-      await queryRunner2.commitTransaction();
+      //await queryRunner2.commitTransaction();
     } catch (err) {
       // rollback
       await queryRunner.rollbackTransaction();
-      await queryRunner2.rollbackTransaction();
+      //await queryRunner2.rollbackTransaction();
 
       // 23505 = conflict
       if (err.code == 23505) {
@@ -150,7 +149,7 @@ export class AuthService {
     } finally {
       // release
       await queryRunner.release();
-      await queryRunner2.release();
+      //await queryRunner2.release();
     }
 
     // send mail
@@ -168,19 +167,6 @@ export class AuthService {
 
     return { username: user.username };
 
-    /* try {
-      const { response } = await this.mailerService.sendMail({
-        from: 'noreply@checkin.com',
-        to: `${user.emailAddress}`,
-        subject: 'Activate Your Account',
-        html: `<a href="${this.configService.get('app.host')}/auth/verify/${token.id}">Activate Your Account</a>`,
-      });
-
-      const msgId = response.split('=').slice(-1).join().replace(/]$/, '');
-      console.log(`${this.configService.get('app.mailerUrl')}/message/${msgId}`);
-    } catch (err) {
-      console.log(err);
-    } */
   }
 
   async login(loginUserDto) {

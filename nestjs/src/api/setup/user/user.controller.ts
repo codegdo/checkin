@@ -10,7 +10,8 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto, UserDto } from 'src/models/main/dtos';
-import { Serialize, PaginationQueryDto, CurrentUser } from 'src/common';
+import { Serialize, CurrentUser } from 'src/common/decorators';
+import { PaginationQueryDto } from 'src/common/dtos';
 import { User } from 'src/models/main/entities';
 
 @Controller('setup')

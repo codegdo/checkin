@@ -15,8 +15,7 @@ export enum EmailTypeEnum {
   SIGNUP = 'signup',
 }
 
-
-@Entity({ database: 'main', schema: 'dbo', name: 'email_address' })
+@Entity({ database: 'c_main', schema: 'dbo', name: 'email_address' })
 export class EmailAddress {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
@@ -49,7 +48,7 @@ export class EmailAddress {
   emailTypes: EmailType[];
 }
 
-@Entity({ database: 'main', schema: 'dbo', name: 'email_from' })
+@Entity({ database: 'c_main', schema: 'dbo', name: 'email_from' })
 export class EmailFrom {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
@@ -79,8 +78,7 @@ export class EmailFrom {
   emailTypes: EmailType[];
 }
 
-
-@Entity({ database: 'main', schema: 'dbo', name: 'email_type' })
+@Entity({ database: 'c_main', schema: 'dbo', name: 'email_type' })
 export class EmailType {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
@@ -123,7 +121,7 @@ export class EmailType {
   emails: Email[];
 }
 
-@Entity({ database: 'main', schema: 'org', name: 'email' })
+@Entity({ database: 'c_main', schema: 'org', name: 'email' })
 export class Email {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;

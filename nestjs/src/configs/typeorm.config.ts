@@ -17,14 +17,14 @@ export const dbConfig = registerAs('database', () => {
 
   const main: ConnectionOptions = {
     ...options,
-    database: 'main',
+    database: 'c_main',
     name: 'default',
     entities: [__dirname + '/../models/main/**/*.entity{.ts,.js}'],
   };
 
   const checkin: ConnectionOptions = {
     ...options,
-    database: 'checkin',
+    database: 'c_checkin',
     name: 'checkin',
     entities: [__dirname + '/../models/checkin/**/*.entity{.ts,.js}'],
   };

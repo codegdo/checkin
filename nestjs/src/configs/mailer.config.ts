@@ -4,6 +4,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 //import { join } from 'path';
 
 export const mailerConfig = registerAs('mailer', () => async () => {
+
   const OAuth2Client = new google.auth.OAuth2(
     process.env.CLIENT_ID,
     process.env.CLIENT_SECRET,
@@ -28,7 +29,9 @@ export const mailerConfig = registerAs('mailer', () => async () => {
       // },
 
       transport: {
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
         auth: {
           type: 'OAuth2',
           user: process.env.CLIENT_EMAIL,
@@ -37,9 +40,9 @@ export const mailerConfig = registerAs('mailer', () => async () => {
           refreshToken: process.env.CLIENT_REFRESH_TOKEN,
           accessToken: accessToken,
         },
-        // tls: {
-        //   rejectUnauthorized: false,
-        // },
+        tls: {
+          rejectUnauthorized: false,
+        },
       },
       defaults: {
         from: '"No Reply" <noreply@checkin.com>',

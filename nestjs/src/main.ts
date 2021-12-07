@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as expressWinston from 'express-winston';
-import { logger } from './common';
+import { logger } from './common/modules';
 
 async function bootstrap() {
 

@@ -1,7 +1,7 @@
 import { BaseEntity, Entity, PrimaryColumn, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { TokenData } from '../interfaces';
 
-@Entity({ database: 'main', schema: 'sec', name: 'token' })
+@Entity({ database: 'c_main', schema: 'sec', name: 'token' })
 export class Token extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

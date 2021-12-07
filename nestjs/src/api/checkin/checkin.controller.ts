@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { Restricted } from 'src/common';
+import { Restricted } from 'src/common/decorators';
 import { CheckinService } from './checkin.service';
 
 @Controller('checkin')
 export class CheckinController {
-  constructor(private readonly checkinService: CheckinService) {}
+  constructor(private readonly checkinService: CheckinService) { }
 
   @Restricted()
   @Get('/')

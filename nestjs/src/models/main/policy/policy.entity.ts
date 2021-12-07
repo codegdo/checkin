@@ -11,7 +11,7 @@ import { Role } from '../role/role.entity';
 
 interface PolicyData { }
 
-@Entity({ database: 'portal', schema: 'sec', name: 'policy' })
+@Entity({ database: 'c_main', schema: 'sec', name: 'policy' })
 export class Policy extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;

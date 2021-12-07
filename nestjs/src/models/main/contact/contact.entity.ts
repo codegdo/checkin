@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { Territory } from '../territory/territory.entity';
 
-@Entity({ database: 'main', schema: 'org', name: 'contact' })
+@Entity({ database: 'c_main', schema: 'org', name: 'contact' })
 export class Contact extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;

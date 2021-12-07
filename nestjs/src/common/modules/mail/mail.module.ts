@@ -3,7 +3,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { MailService } from './mail.service';
+import { AuthMailService } from './auth-mail.service';
 import { EmailRepository } from 'src/models/main/repositories';
 
 @Global()
@@ -20,7 +20,7 @@ import { EmailRepository } from 'src/models/main/repositories';
       inject: [ConfigService]
     })
   ],
-  providers: [MailService, Logger],
-  exports: [MailService]
+  providers: [AuthMailService, Logger],
+  exports: [AuthMailService]
 })
 export class MailModule { }

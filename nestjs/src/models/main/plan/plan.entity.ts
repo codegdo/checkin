@@ -1,6 +1,6 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity({ database: 'main', schema: 'dbo', name: 'plan' })
+@Entity({ database: 'c_main', schema: 'dbo', name: 'plan' })
 export class Plan extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;

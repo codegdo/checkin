@@ -306,12 +306,12 @@ CREATE INDEX idx_page_object ON dbo.page_object(page_id, object_id);
 -- SELECT
 SELECT * FROM dbo.feature;
 SELECT * FROM dbo.feature_module;
-SELECT * FROM dbo.module_group;
 SELECT * FROM dbo.module;
 SELECT * FROM dbo.module_page;
 SELECT * FROM dbo.page;
 SELECT * FROM dbo.page_object;
 SELECT * FROM dbo.object;
+SELECT * FROM dbo.field;
 
 
 -- DROP

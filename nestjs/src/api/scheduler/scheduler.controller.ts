@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query, Session } from '@nestjs/common';
 
-import { CurrentUser } from 'src/common';
+import { CurrentUser } from 'src/common/decorators';
 import { User } from 'src/models/main/entities';
 
 @Controller('scheduler')

@@ -12,7 +12,7 @@ import {
 
 import { Client, User, Territory } from '../entities';
 
-@Entity({ database: 'main', schema: 'org', name: 'location' })
+@Entity({ database: 'c_main', schema: 'org', name: 'location' })
 export class Location extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;

@@ -227,3 +227,4 @@
 {"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
 {"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
 {"level":"error","message":"secret option required for sessions"}
+{"level":"error","message":"secret option required for sessions"}
