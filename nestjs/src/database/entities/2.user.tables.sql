@@ -328,13 +328,54 @@ CREATE INDEX idx_client_location ON sec.client_location(client_id, location_id);
 CREATE INDEX idx_user_location ON sec.user_location(user_id, location_id);
 CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
 
+
+-- CREATE FUNCTION USER LOGIN
+CREATE OR REPLACE FUNCTION sec.fn_login_user(p_username VARCHAR)
+RETURNS TABLE (
+  username VARCHAR,
+  password VARCHAR,
+  "orgId" INT,
+  "isActive" BOOLEAN,
+  "isOwner" BOOLEAN,
+  policy JSONB,
+  roletype dbo.role_type_enum
+)
+LANGUAGE plpgsql
+AS
+$$
+  DECLARE
+
+  BEGIN
+    RETURN QUERY
+      SELECT
+        u.username,
+        u.password,
+        u.org_id,
+        u.is_active,
+        r.is_owner,
+        p.data,
+        rt.name
+      FROM sec.user u
+      LEFT JOIN sec.role r ON r.id = u.role_id
+      LEFT JOIN sec.role_policy rp ON rp.role_id = r.id
+      LEFT JOIN sec.policy p ON rp.policy_id = p.id
+      LEFT JOIN dbo.role_type rt ON rt.id = r.role_type_id
+      WHERE u.username = p_username;
+  END;
+$$;
+
 -------------------------------------------------------------------------
 -- END ------------------------------------------------------------------
 -------------------------------------------------------------------------
 
+SELECT * FROM sec.fn_login_user('gdo');
 
 -- SELECT
+SELECT * FROM dbo.role_type;
+SELECT * FROM org.contact;
 SELECT * FROM sec.token;
+SELECT * FROM sec.user;
+SELECT * FROM sec.policy;
 
 -- DROP
 DROP TABLE IF EXISTS
@@ -358,3 +399,6 @@ CASCADE;
 
 DROP TYPE IF EXISTS
 dbo.role_type_enum CASCADE;
+
+DROP FUNCTION IF EXISTS
+sec.fn_login_user;

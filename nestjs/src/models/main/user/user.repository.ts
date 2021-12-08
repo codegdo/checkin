@@ -4,6 +4,7 @@ import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { User } from './user.entity';
 import { SignupUserDto } from './dtos/signup-user.dto';
+import { LoginUserDto } from '../dtos';
 
 const scrypt = promisify(_scrypt);
 
@@ -31,6 +32,7 @@ export class UserRepository extends Repository<User> {
       data,
       expiredAt,
     } = signupUserDto;
+
     const hashedPassword = await this.hashPassword(password);
 
     const [result] = await this.manager.query(
@@ -52,8 +54,9 @@ export class UserRepository extends Repository<User> {
     return result;
   }
 
-  async loginUser(loginUserDto) {
+  async loginUser(loginUserDto: LoginUserDto) {
     const { username, password } = loginUserDto;
+
     const query = this.createQueryBuilder('user');
     const user = await query
       .addSelect(['user.password'])

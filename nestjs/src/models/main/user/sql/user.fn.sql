@@ -11,6 +11,8 @@ CREATE OR REPLACE FUNCTION sec.fn_user_signup(
 --RETURNS RECORD
 --RETURNS sec.user
 RETURNS UUID
+LANGUAGE plpgsql
+AS
 $$
   DECLARE
     contactId INT;
@@ -47,8 +49,9 @@ $$
     --RETURN rec;
     RETURN tokenId;
   END;
-$$
-LANGUAGE plpgsql;
+$$;
+
+SELECT * FROM sec.fn_user_signup('giang','do', 'giangd@gmail.com', 'gdo', 'password','{"username":"gdo"}', '123456');
 
 
 CREATE OR REPLACE FUNCTION sec.fn_user_signup(
@@ -62,6 +65,7 @@ CREATE OR REPLACE FUNCTION sec.fn_user_signup(
 )
 RETURNS SETOF sec.token
 --RETURNS TABLE(token_id uuid)
+LANGUAGE plpgsql
 AS
 $$
   BEGIN
@@ -92,9 +96,48 @@ $$
     --RETURNING id;
     RETURNING *;
   END;
-$$
-LANGUAGE plpgsql;
+$$;
+
 
 SELECT (sec.fn_user_signup('giang','do', 'giangd@gmail.com', 'gdo', 'password','{"username":"gdo"}', '123456')).*;
 
-SELECT * FROM sec.fn_user_signup('giang','do', 'giangd@gmail.com', 'gdo', 'password','{"username":"gdo"}', '123456');
+
+
+-- CREATE FUNCTION USER LOGIN
+CREATE OR REPLACE FUNCTION sec.fn_login_user(p_username VARCHAR)
+RETURNS TABLE (
+  username VARCHAR,
+  password VARCHAR,
+  "roleType" dbo.role_type_enum,
+  policy JSONB,
+  "orgId" INT,
+  "isActive" BOOLEAN,
+  "isOwner" BOOLEAN 
+)
+LANGUAGE plpgsql
+AS
+$$
+  DECLARE
+
+  BEGIN
+    RETURN QUERY
+      SELECT
+        u.username,
+        u.password,
+        p.data,
+        rt.name,
+        u.org_id,
+        u.is_active,
+        r.is_owner 
+      FROM sec.user u
+      LEFT JOIN sec.role r ON r.id = u.role_id
+      LEFT JOIN sec.role_policy rp ON rp.role_id = r.id
+      LEFT JOIN sec.policy p ON rp.policy_id = p.id
+      LEFT JOIN dbo.role_type rt ON rt.id = r.role_type_id
+      WHERE u.username = p_username;
+  END;
+$$;
+
+
+
+
