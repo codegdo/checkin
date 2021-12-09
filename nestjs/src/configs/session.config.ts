@@ -29,7 +29,7 @@ export const sessionConfig = registerAs('session', () => ((async () => {
         cleanupLimit: 0,
         limitSubquery: false, // If using MariaDB.
         ttl: 360,
-      }).connect(getConnection('default').getRepository(Session)),
+      }).connect(getConnection().getRepository(Session)),
     };
   } catch (err) {
     console.log(err);

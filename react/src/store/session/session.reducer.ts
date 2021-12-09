@@ -15,6 +15,7 @@ export const sessionReducer = (
 ): SessionState => {
   switch (action.type) {
     case UPDATE_SESSION: {
+      console.log(action.payload);
       return {
         ...state,
         ...action.payload,

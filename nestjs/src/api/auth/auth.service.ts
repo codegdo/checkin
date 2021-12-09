@@ -157,8 +157,8 @@ export class AuthService {
     // get emails
 
     const sendData = {
-      to: contact.emailAddress,
       name: `${contact.firstName} ${contact.lastName}`,
+      emailAddress: contact.emailAddress,
       username: user.username,
       url: `${this.configService.get('app.host')}/auth/verify/${token.id}`
     }
@@ -176,10 +176,22 @@ export class AuthService {
       throw new BadRequestException();
     }
 
+    const { orgId, orgActive, isActive } = user;
+
+    if (!orgId && !orgActive && !isActive) {
+      throw new BadRequestException('Unactivated');
+    }
+
+    if (orgId && orgActive && !isActive) {
+      throw new BadRequestException('Account Disabled');
+    }
+
+    if (orgId && !orgActive) {
+      throw new BadRequestException('Organization Diabled');
+    }
+
     return user;
   }
-
-  async logout() { }
 
   async verify(id: string) {
     const token = await this.tokenRepository.findOne({
@@ -240,6 +252,24 @@ export class AuthService {
       // release
       await queryRunner.release();
     } */
+  }
+
+  async resend(username: string) {
+    const token = await this.tokenRepository.create();
+    const user = await this.userRepository.getUser(username);
+
+    console.log(user);
+
+    const sendData = {
+      name: null,
+      emailAddress: null,
+      username,
+      url: `${this.configService.get('app.host')}/auth/verify/${token.id}`
+    }
+
+    //this.mailService.sendVerifyEmail(sendData);
+
+    return { username };
   }
 }
 

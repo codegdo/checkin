@@ -24,15 +24,24 @@ const Login: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     if (loading === 'success' && result.ok) {
-      const { user, orgId, locationId, accessToken } = result?.data;
+      const { user, orgId, accessToken } = result?.data;
 
       updateSession({
         loggedIn: true,
         user,
         orgId,
-        locationId,
+        locationId: null,
         accessToken
       });
+    }
+
+    if (loading === 'error') {
+      const { message } = result?.data;
+
+      console.log(message);
+      if (message === 'Unactivated') {
+        navigate('../resend');
+      }
     }
 
   }, [loading]);

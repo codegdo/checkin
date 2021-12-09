@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 import { useFetch } from '../../../hooks';
 import { Form, FormData } from '../../../components/form';
+import ResendSuccess from './resend.success';
 
 const Resend: React.FC = (): JSX.Element => {
 
   //const { updateSession } = useAction();
-  const [{ loading, result }, fetchSignup] = useFetch('/api/auth/signup');
+  const [{ loading, result }, fetchSignup] = useFetch('/api/auth/resend');
   const [form, setForm] = useState<FormData>();
 
   // Load form
@@ -24,7 +25,6 @@ const Resend: React.FC = (): JSX.Element => {
   }, [loading]);
 
   const handleSubmit = (values: any) => {
-    console.log(values);
     void fetchSignup({ body: values });
   };
 
@@ -32,8 +32,15 @@ const Resend: React.FC = (): JSX.Element => {
     return <div>loading...</div>;
   }
 
+  if (loading === 'success') {
+    return <ResendSuccess />;
+  }
+
   return (
-    <Form form={form} loading={loading} isMap={true} onSubmit={handleSubmit} />
+    <>
+      {loading === 'error' && <div>Error</div>}
+      <Form form={form} loading={loading} onSubmit={handleSubmit} />
+    </>
   );
 };
 

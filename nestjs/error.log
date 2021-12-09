@@ -228,3 +228,8 @@
 {"level":"error","message":"No repository for \"Session\" was found. Looks like this entity is not registered in current \"default\" connection?"}
 {"level":"error","message":"secret option required for sessions"}
 {"level":"error","message":"secret option required for sessions"}
+{"level":"error","message":"Cannot read properties of undefined (reading 'transport')"}
+{"level":"error","message":"relation \"sec.fn_login_user\" does not exist"}
+{"level":"error","message":"user.validatePassword is not a function"}
+{"level":"error","message":"secret option required for sessions"}
+{"level":"error","message":"secret option required for sessions"}

@@ -15,7 +15,7 @@ import {
 } from 'typeorm';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
-import { Role, Contact, Location } from '../entities';
+import { Role, Contact, Location, Organization } from '../entities';
 
 const scrypt = promisify(_scrypt);
 

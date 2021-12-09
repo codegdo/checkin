@@ -39,7 +39,7 @@ const Trial: React.FC = (): JSX.Element => {
   }
 
   return <div>
-    <Form form={form} loading={loading} onSubmit={handleSubmit} />
+    <Form form={form} loading={loading} isMap={true} onSubmit={handleSubmit} />
   </div>
 }
 

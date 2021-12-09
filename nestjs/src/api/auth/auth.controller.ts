@@ -33,7 +33,7 @@ export class AuthController {
   @Post('login')
   async login(@Session() session: any, @Body() loginUserDto: LoginUserDto) {
     const user = await this.authService.login(loginUserDto);
-    const { id, username, isActive, orgId } = user;
+    const { id, username, roleType, isActive, isOwner, orgId } = user;
     const accessToken = this.jwtService.sign({ orgId });
     session.user = user;
 
@@ -41,6 +41,8 @@ export class AuthController {
       user: {
         id,
         username,
+        roleType,
+        isOwner,
         isActive
       },
       orgId,
@@ -68,19 +70,13 @@ export class AuthController {
     return {};
   }
 
-  /* @Public()
-  @Get('login')
-  getLogin(@Session() session: any) {
-
-    const token = this.jwtService.sign({ sid: session.id });
-    session.user = 'hello';
-
-    console.log('TOKEN', token);
-
-    return this.authService.getLogin();
+  @Public()
+  @Post('resend')
+  async resend(@Body('username') username: string) {
+    return this.authService.resend(username);
   }
 
-  @Get('logout')
+  /*@Get('logout')
   async getLogout(@Session() session: any, @CurrentUser() user: string) {
     session.destroy();
     return this.authService.getLogout();

@@ -1,7 +1,7 @@
 {
   "id": 1,
-  "label": "Signup",
-  "name": "Signup",
+  "label": "Setup",
+  "name": "Setup",
   "description": null,
   "data": [
     {
@@ -31,7 +31,7 @@
     {
       "id": 5,
       "label": null,
-      "name": "Singup",
+      "name": "Setup",
       "description": null,
       "type": "title",
       "role": "element",
@@ -42,7 +42,7 @@
     },
     {
       "id": 6,
-      "label": "Signup",
+      "label": "Submit",
       "name": "submit",
       "type": "button",
       "role": "element",
@@ -53,13 +53,13 @@
     },
     {
       "id": 7,
-      "label": "Login",
+      "label": "Cancel",
       "name": null,
       "description": null,
       "type": "link",
       "role": "element",
       "data": null,
-      "value": "/auth/login",
+      "value": "/auth/logout",
       "position": 0,
       "positionParent": 2
     }
@@ -67,8 +67,8 @@
   "fields": [
     {
       "id": 3,
-      "label": "Username",
-      "name": "username",
+      "label": "Organization Name",
+      "name": "OrganizationName",
       "description": null,
       "type": "text",
       "role": "field",
@@ -77,35 +77,27 @@
       "defaultValue": "",
       "isRequired": true,
       "position": 0,
-      "positionParent": 1
+      "positionParent": 1,
+      "mapSchema": "sec",
+      "mapTable": "organization",
+      "mapColumn": "name"
     },
     {
       "id": 4,
-      "label": "Password",
-      "name": "password",
+      "label": "Subdomain",
+      "name": "Subdomain",
       "description": null,
-      "type": "password",
+      "type": "text",
       "role": "field",
       "data": null,
       "value": "",
       "defaultValue": "",
       "isRequired": true,
       "position": 0,
-      "positionParent": 1
-    },
-    {
-      "id": 5,
-      "label": "Email Address",
-      "name": "emailAddress",
-      "description": null,
-      "type": "email",
-      "role": "field",
-      "data": null,
-      "value": "",
-      "defaultValue": "",
-      "isRequired": true,
-      "position": 0,
-      "positionParent": 1
+      "positionParent": 1,
+      "mapSchema": "sec",
+      "mapTable": "organization",
+      "mapColumn": "name"
     }
   ]
 }

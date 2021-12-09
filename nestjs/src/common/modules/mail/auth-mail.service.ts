@@ -9,8 +9,8 @@ import { appConfig } from 'src/configs';
 import { EmailRepository } from 'src/models/main/repositories';
 
 type SendSignupEmailData = {
-  to: string;
   name: string;
+  emailAddress: string;
   username: string;
   url: string;
 }
@@ -58,7 +58,7 @@ export class AuthMailService {
         },
         to: {
           name: data.name,
-          address: data.to
+          address: data.emailAddress
         },
         subject: sender.subject,
         html: htmlSender
@@ -83,5 +83,9 @@ export class AuthMailService {
     } catch (err) {
       this.logger.error(`${err.message}`, err);
     }
+  }
+
+  async sendVerifyEmail(data: SendSignupEmailData) {
+
   }
 }

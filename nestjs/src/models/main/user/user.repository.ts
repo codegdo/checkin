@@ -1,4 +1,3 @@
-import { ConflictException } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
@@ -10,18 +9,19 @@ const scrypt = promisify(_scrypt);
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
+
   async hashPassword(password) {
     const salt = randomBytes(8).toString('hex');
     const hash = (await scrypt(password, salt, 32)) as Buffer;
     return hash.toString('hex') + '.' + salt;
   }
 
-  /*  async validatePassword(password: string) {
-     const [hashPassword, salt] = this.password.split('.');
-     const hash = (await scrypt(password, salt, 32)) as Buffer;
-     return hashPassword === hash.toString('hex');
-   }
-  */
+  async validatePassword(password: string, _password: string) {
+    const [hashPassword, salt] = _password.split('.');
+    const hash = (await scrypt(password, salt, 32)) as Buffer;
+    return hashPassword === hash.toString('hex');
+  }
+
   async singupUser(signupUserDto: SignupUserDto) {
     const {
       firstName,
@@ -57,11 +57,15 @@ export class UserRepository extends Repository<User> {
   async loginUser(loginUserDto: LoginUserDto) {
     const { username, password } = loginUserDto;
 
-    const query = this.createQueryBuilder('user');
-    const user = await query
-      .addSelect(['user.password'])
-      .where('user.username = :username', { username })
-      .getOne();
+    const user = await this.getUser(username);
+
+    // const query = this.createQueryBuilder('user');
+    // const user = await query
+    //   .addSelect(['user.password'])
+    //   .leftJoinAndSelect('user.role', 'role')
+    //   .leftJoinAndSelect('role.roleType', 'roleType')
+    //   .where('user.username = :username', { username })
+    //   .getOne();
 
     if (!user) {
       return undefined;
@@ -69,6 +73,11 @@ export class UserRepository extends Repository<User> {
 
     const { password: _password, ..._user } = user;
 
-    return (await user.validatePassword(password)) ? _user : null;
+    return (await this.validatePassword(password, _password)) ? _user : null;
+  }
+
+  async getUser(username: string) {
+    const [user] = await this.manager.query(`SELECT * FROM sec.fn_get_user($1)`, [username]);
+    return user;
   }
 }
