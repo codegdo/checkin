@@ -17,7 +17,7 @@ const Auth: React.FC = (): JSX.Element => {
     <Route path="login" element={<Login page="login" />} />
     <Route path="logout" element={<Logout page="logout" />} />
     <Route path="signup" element={<Signup page="signup" />} />
-    <Route path="verify/:token" element={<Verify page="verify" />} />
+    <Route path="verify" element={<Verify page="verify" />} />
     <Route path="resend" element={<Resend page="resend" />} />
     <Route path="trial" element={<Trial page="trial" />} />
     <Route path="*" element={<NotFound page="not-found" />} />

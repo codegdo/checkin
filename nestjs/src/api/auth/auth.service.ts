@@ -178,10 +178,6 @@ export class AuthService {
 
     const { orgId, orgActive, isActive } = user;
 
-    if (!orgId && !orgActive && !isActive) {
-      throw new BadRequestException('Unactivated');
-    }
-
     if (orgId && orgActive && !isActive) {
       throw new BadRequestException('Account Disabled');
     }
@@ -263,7 +259,6 @@ export class AuthService {
     const sendData = {
       name: null,
       emailAddress: null,
-      username,
       url: `${this.configService.get('app.host')}/auth/verify/${token.id}`
     }
 

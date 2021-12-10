@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { randomBytes, scrypt as _scrypt } from 'crypto';
+import { randomBytes, randomInt, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { User } from './user.entity';
 import { SignupUserDto } from './dtos/signup-user.dto';
@@ -57,7 +57,16 @@ export class UserRepository extends Repository<User> {
   async loginUser(loginUserDto: LoginUserDto) {
     const { username, password } = loginUserDto;
 
-    const user = await this.getUser(username);
+    const r = await randomInt(100000, 999999);
+    const b = await randomBytes(6).toString('base64');
+
+    console.log(Number.isSafeInteger(r));
+    console.log(Number.isSafeInteger(b));
+
+    console.log('RANDOM R', r);
+    console.log('RANDOM B', b);
+
+    const [user] = await this.manager.query(`SELECT * FROM sec.fn_login_user($1)`, [username]);
 
     // const query = this.createQueryBuilder('user');
     // const user = await query

@@ -105,6 +105,32 @@ SELECT (sec.fn_user_signup('giang','do', 'giangd@gmail.com', 'gdo', 'password','
 -- CREATE FUNCTION GET USER
 CREATE OR REPLACE FUNCTION sec.fn_get_user(p_username VARCHAR)
 RETURNS TABLE (
+  "firstName" VARCHAR,
+  "lastName" VARCHAR,
+  "emailAddress" VARCHAR,
+  username VARCHAR
+)
+LANGUAGE plpgsql
+AS
+$$
+  DECLARE
+
+  BEGIN
+    RETURN QUERY
+      SELECT
+        c.first_name,
+        c.last_name,
+        c.email_address,
+        u.username
+      FROM sec.user u
+      LEFT JOIN org.contact c ON c.id = u.contact_id
+      WHERE u.username = p_username;
+  END;
+$$;
+
+-- CREATE FUNCTION LOGIN USER
+CREATE OR REPLACE FUNCTION sec.fn_login_user(p_username VARCHAR)
+RETURNS TABLE (
   id INT,
   "firstName" VARCHAR,
   "lastName" VARCHAR,
@@ -151,7 +177,7 @@ $$
   END;
 $$;
 
-SELECT * FROM sec.fn_get_user('gdo');
+SELECT * FROM sec.fn_login_user('gdo');
 
 
 

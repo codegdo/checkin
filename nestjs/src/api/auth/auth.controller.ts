@@ -34,8 +34,12 @@ export class AuthController {
   async login(@Session() session: any, @Body() loginUserDto: LoginUserDto) {
     const user = await this.authService.login(loginUserDto);
     const { id, username, roleType, isActive, isOwner, orgId } = user;
-    const accessToken = this.jwtService.sign({ orgId });
-    session.user = user;
+    let accessToken = null;
+
+    if (orgId) {
+      session.user = user;
+      accessToken = this.jwtService.sign({ orgId })
+    }
 
     return {
       user: {

@@ -1,33 +1,24 @@
 import React, { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 import { useFetch } from '../../../hooks';
+import { AppState } from '../../../store/reducers';
 
 
 const Verify: React.FC = (): JSX.Element => {
-
-  const { token = '' } = useParams();
-  const [{ loading, result }, fetchVerify] = useFetch(`/api/auth/verify/${token}`);
-
-  console.log(token);
+  const { loggedIn, orgId, user } = useSelector((state: AppState) => state.session);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    void fetchVerify();
+    if (!user) {
+      navigate('../login');
+    }
   }, []);
 
-  switch (loading) {
-    case 'success':
-      return <div>
-        success
-        <Link to="../login">Login</Link>
-      </div>
-    case 'error':
-      return <div>
-        error
-        <Link to="../login">Login</Link>
-      </div>
-    default:
-      return <div>loading...</div>
-  }
+
+
+  return <div>Verify <Link to="../logout">Cancel</Link></div>
+
 }
 
 export default Verify;

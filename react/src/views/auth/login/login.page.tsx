@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
@@ -8,11 +8,12 @@ import { AppState } from '../../../store/reducers';
 import { Form, FormData } from '../../../components/form';
 
 const Login: React.FC = (): JSX.Element => {
-  const { loggedIn, orgId } = useSelector((state: AppState) => state.session);
+  const { loggedIn, orgId, user } = useSelector((state: AppState) => state.session);
   const { updateSession } = useAction();
   const [form, setForm] = useState<FormData>();
   const navigate = useNavigate();
   const [{ loading, result }, fetchLogin] = useFetch('/api/auth/login');
+  const [verify, setVerify] = useState(false);
 
   // load form
   useEffect(() => {
@@ -24,23 +25,20 @@ const Login: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     if (loading === 'success' && result.ok) {
-      const { user, orgId, accessToken } = result?.data;
+      const { user: _user, orgId: _orgId, accessToken } = result?.data;
 
-      updateSession({
-        loggedIn: true,
-        user,
-        orgId,
-        locationId: null,
-        accessToken
-      });
-    }
+      if (_user && !_orgId) {
+        updateSession({
+          user: _user
+        });
 
-    if (loading === 'error') {
-      const { message } = result?.data;
-
-      console.log(message);
-      if (message === 'Unactivated') {
-        navigate('../resend');
+      } else {
+        updateSession({
+          loggedIn: true,
+          user: _user,
+          orgId: _orgId,
+          accessToken
+        });
       }
     }
 
@@ -48,9 +46,16 @@ const Login: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     if (loggedIn) {
-      orgId ? navigate('/') : navigate('../trial');
+      navigate('/');
     }
-  }, [loggedIn, orgId]);
+  }, [loggedIn]);
+
+  useEffect(() => {
+    if (user && !orgId) {
+      //navigate('../verify');
+      setVerify(true);
+    }
+  }, [user]);
 
   const handleSubmit = (values: any) => {
     console.log('SUBMIT VALUES', values);
@@ -59,6 +64,10 @@ const Login: React.FC = (): JSX.Element => {
 
   if (!form) {
     return <div>loading...</div>;
+  }
+
+  if (verify) {
+    return <Navigate to="../verify" />
   }
 
   return (
