@@ -280,11 +280,13 @@ CREATE TABLE IF NOT EXISTS sec.session (
 
 -- CREATE TABLE TOKEN
 CREATE TABLE IF NOT EXISTS sec.token (
-    id UUID DEFAULT uuid_generate_v4() NOT NULL,
-    data JSONB,
-    expired_at BIGINT,
-    --
-    PRIMARY KEY(id)
+  id UUID DEFAULT uuid_generate_v4() NOT NULL,
+  key VARCHAR(100),
+  data JSONB,
+  expired_at BIGINT,
+  --
+  PRIMARY KEY(id),
+  UNIQUE(key)
 );
 
 -- CREATE JOIN TABLE ROLE_POLICY
@@ -329,16 +331,13 @@ CREATE INDEX idx_user_location ON sec.user_location(user_id, location_id);
 CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
 
 
--- CREATE FUNCTION USER LOGIN
-CREATE OR REPLACE FUNCTION sec.fn_login_user(p_username VARCHAR)
+-- CREATE FUNCTION GET USER
+CREATE OR REPLACE FUNCTION sec.fn_get_user(p_username VARCHAR)
 RETURNS TABLE (
-  username VARCHAR,
-  password VARCHAR,
-  "orgId" INT,
-  "isActive" BOOLEAN,
-  "isOwner" BOOLEAN,
-  policy JSONB,
-  roletype dbo.role_type_enum
+  "firstName" VARCHAR,
+  "lastName" VARCHAR,
+  "emailAddress" VARCHAR,
+  username VARCHAR
 )
 LANGUAGE plpgsql
 AS
@@ -348,18 +347,61 @@ $$
   BEGIN
     RETURN QUERY
       SELECT
+        c.first_name,
+        c.last_name,
+        c.email_address,
+        u.username
+      FROM sec.user u
+      LEFT JOIN org.contact c ON c.id = u.contact_id
+      WHERE u.username = p_username;
+  END;
+$$;
+
+-- CREATE FUNCTION LOGIN USER
+CREATE OR REPLACE FUNCTION sec.fn_login_user(p_username VARCHAR)
+RETURNS TABLE (
+  id INT,
+  "firstName" VARCHAR,
+  "lastName" VARCHAR,
+  "emailAddress" VARCHAR,
+  username VARCHAR,
+  password VARCHAR,
+  "roleId" INT,
+  "roleType" dbo.role_type_enum,
+  policy JSONB,
+  "orgId" INT,
+  "orgActive" BOOLEAN,
+  "isActive" BOOLEAN,
+  "isOwner" BOOLEAN
+)
+LANGUAGE plpgsql
+AS
+$$
+  DECLARE
+
+  BEGIN
+    RETURN QUERY
+      SELECT
+        u.id,
+        c.first_name,
+        c.last_name,
+        c.email_address,
         u.username,
         u.password,
-        u.org_id,
-        u.is_active,
-        r.is_owner,
+        r.id,
+        rt.name,
         p.data,
-        rt.name
+        u.org_id,
+        o.is_active,
+        u.is_active,
+        r.is_owner
       FROM sec.user u
       LEFT JOIN sec.role r ON r.id = u.role_id
       LEFT JOIN sec.role_policy rp ON rp.role_id = r.id
       LEFT JOIN sec.policy p ON rp.policy_id = p.id
       LEFT JOIN dbo.role_type rt ON rt.id = r.role_type_id
+      LEFT JOIN sec.organization o ON o.id = u.org_id
+      LEFT JOIN org.contact c ON c.id = u.contact_id
       WHERE u.username = p_username;
   END;
 $$;
@@ -402,3 +444,6 @@ dbo.role_type_enum CASCADE;
 
 DROP FUNCTION IF EXISTS
 sec.fn_login_user;
+
+DROP FUNCTION IF EXISTS
+sec.fn_get_user;

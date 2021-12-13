@@ -233,3 +233,4 @@
 {"level":"error","message":"user.validatePassword is not a function"}
 {"level":"error","message":"secret option required for sessions"}
 {"level":"error","message":"secret option required for sessions"}
+{"level":"error","message":"Unable to connect to the database. Retrying (1)..."}

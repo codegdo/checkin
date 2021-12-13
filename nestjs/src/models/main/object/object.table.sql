@@ -20,7 +20,9 @@ INTO dbo.object(id, name, is_external, is_internal, is_active)
 VALUES
 --
 ('1', 'User',        '1', '1', '1'),
-('2', 'Employee',    '1', '1', '1');
+('2', 'Contact',    '1', '1', '1'),
+('3', 'Location',    '1', '1', '1'),
+('4', 'Organization',    '1', '0', '1');
 
 -- CREATE TABLE PAGE_OBJECT
 CREATE TABLE IF NOT EXISTS dbo.page_object (

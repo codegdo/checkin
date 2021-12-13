@@ -3,16 +3,16 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- CREATE TABLE ERROR
 CREATE TABLE IF NOT EXISTS log.error (
-    id UUID DEFAULT uuid_generate_v4() NOT NULL,
+  id UUID DEFAULT uuid_generate_v4() NOT NULL,
 
-    message VARCHAR(255),
-    host VARCHAR(45),
-    url VARCHAR(45),
-    stack TEXT,
+  message VARCHAR(255),
+  host VARCHAR(45),
+  url VARCHAR(45),
+  stack TEXT,
 
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    --
-    PRIMARY KEY(id)
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  --
+  PRIMARY KEY(id)
 );
 
 -- CREATE TABLE FEATURE
@@ -182,7 +182,8 @@ VALUES
 ('213', 'Marketing',    'view', '15', '0', '1', '1'),
 --Account
 ('300', 'Profile',      'form', '0', '1', '1', '1'),
-('301', 'Subscription', 'form', '1', '1', '1', '1'),
+('301', 'Organization', 'form', '1', '1', '1', '1'),
+('302', 'Subscription', 'form', '1', '1', '1', '1'),
 --Help
 ('400', 'Supports',     'view', '0', '1', '1', '1'),
 ('401', 'Guides',       'view', '1', '1', '1', '1'),
@@ -274,7 +275,9 @@ INTO dbo.object(id, name, is_external, is_internal, is_active)
 VALUES
 --
 ('1', 'User',        '1', '1', '1'),
-('2', 'Employee',    '1', '1', '1');
+('2', 'Contact',    '1', '1', '1'),
+('3', 'Location',    '1', '1', '1'),
+('4', 'Organization',    '1', '0', '1');
 
 -- CREATE TABLE PAGE_OBJECT
 CREATE TABLE IF NOT EXISTS dbo.page_object (
@@ -294,6 +297,26 @@ VALUES
 --Manager
 ('200', '1', null),
 ('200', '2', null);
+
+-- CREATE TABLE FIELD
+CREATE TABLE IF NOT EXISTS dbo.field (
+  id SERIAL,
+  name VARCHAR(255),
+  description VARCHAR(255),
+  role VARCHAR(15) CHECK(type in ('field')),
+  type VARCHAR(15) CHECK(type in ('text', 'textarea', 'select')),
+
+  data JSONB,
+
+  is_required BOOLEAN DEFAULT FALSE,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
+  --
+  PRIMARY KEY(id)
+);
 
 -- CREATE INDEX
 CREATE INDEX idx_module_page ON dbo.module_page(module_id, page_id);

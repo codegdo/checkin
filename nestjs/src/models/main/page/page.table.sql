@@ -39,7 +39,8 @@ VALUES
 ('213', 'Marketing',    'view', '15', '0', '1', '1'),
 --Account
 ('300', 'Profile',      'form', '0', '1', '1', '1'),
-('301', 'Subscription', 'form', '1', '1', '1', '1'),
+('301', 'Organization', 'form', '1', '1', '1', '1'),
+('302', 'Subscription', 'form', '1', '1', '1', '1')
 --Help
 ('400', 'Supports',     'view', '0', '1', '1', '1'),
 ('401', 'Guides',       'view', '1', '1', '1', '1'),
