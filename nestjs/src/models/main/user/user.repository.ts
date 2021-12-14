@@ -27,30 +27,26 @@ export class UserRepository extends Repository<User> {
       firstName,
       lastName,
       emailAddress,
+      phoneNumber,
       username,
       password,
-      data,
-      expiredAt,
     } = signupUserDto;
 
     const hashedPassword = await this.hashPassword(password);
 
     const [result] = await this.manager.query(
-      `SELECT * FROM sec.fn_user_signup($1, $2, $3, $4, $5, $6, $7)`,
+      `SELECT * FROM sec.fn_user_signup($1, $2, $3, $4, $5, $6)`,
       [
         firstName,
         lastName,
         emailAddress,
+        phoneNumber,
 
         username,
-        hashedPassword,
-
-        data,
-        expiredAt,
+        hashedPassword
       ],
     );
 
-    //return result[0].fn_signupuser;
     return result;
   }
 

@@ -9,4 +9,7 @@ export class CreateContactDto {
 
   @IsString()
   emailAddress: string;
+
+  @IsString()
+  phoneNumber: string;
 }

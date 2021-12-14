@@ -1,70 +1,21 @@
+-- CREATE FUNCTION USER SIGNUP RETURN
+CREATE TYPE sec.user_signup_return_type AS (
+    username VARCHAR,
+    email_address VARCHAR,
+    phone_number VARCHAR
+);
+
 -- CREATE FUNCTION USER SIGNUP
-CREATE OR REPLACE FUNCTION sec.fn_user_signup(
-  p_first_name VARCHAR, 
-  p_last_name VARCHAR, 
-  p_email_address VARCHAR, 
-  p_username VARCHAR, 
-  p_password VARCHAR,
-  p_data JSONB, 
-  p_expired_at INT
-)
---RETURNS RECORD
---RETURNS sec.user
-RETURNS UUID
-LANGUAGE plpgsql
-AS
-$$
-  DECLARE
-    contactId INT;
-    userId INT;
-    tokenId UUID;
-    rec RECORD;
-  BEGIN
-
-    INSERT INTO org.contact(
-      first_name,
-      last_name,
-      email_address
-    )
-    VALUES(p_first_name, p_last_name, p_email_address)
-    RETURNING id INTO contactId;
-
-    INSERT INTO sec.user(
-      username,
-      password,
-      contact_id
-    )
-    VALUES(p_username, p_password, contactId)
-    RETURNING id INTO userId;
-    
-    INSERT INTO sec.token(
-      data, 
-      expired_at
-    ) 
-    VALUES (p_data, p_expired_at)
-    RETURNING id INTO tokenId;
-    
-    --rec := (contactId, userId, tokenId);
-    
-    --RETURN rec;
-    RETURN tokenId;
-  END;
-$$;
-
-SELECT * FROM sec.fn_user_signup('giang','do', 'giangd@gmail.com', 'gdo', 'password','{"username":"gdo"}', '123456');
-
-
 CREATE OR REPLACE FUNCTION sec.fn_user_signup(
   p_first_name VARCHAR,
   p_last_name VARCHAR,
   p_email_address VARCHAR,
+  p_phone_number VARCHAR,
   p_username VARCHAR,
   p_password VARCHAR,
-  p_data JSONB,
-  p_expired_at INT
+  r_role_id INT
 )
-RETURNS SETOF sec.token
---RETURNS TABLE(token_id uuid)
+RETURNS SETOF sec.user_signup_return_type
 LANGUAGE plpgsql
 AS
 $$
@@ -74,40 +25,44 @@ $$
       INSERT INTO org.contact(
         first_name,
         last_name,
-        email_address
+        email_address,
+        phone_number
       )
-      VALUES (p_first_name, p_last_name, p_email_address)
-      RETURNING id
+      VALUES (p_first_name, p_last_name, p_email_address, p_phone_number)
+      RETURNING
+        id,
+        email_address,
+        phone_number
     ), u AS (
-      INSERT INTO sec.user(
+        INSERT INTO sec.user(
         username,
         password,
+        role_id,
         contact_id
       )
-      --SELECT p_username, p_password, c.id FROM c
-      VALUES(p_username, p_password, (SELECT id FROM c))
+      --SELECT p_username, p_password, r_role_id, id FROM c
+      VALUES(p_username, p_password, r_role_id, (SELECT id FROM c))
+      RETURNING
+        username,
+        contact_id
     )
-    INSERT INTO sec.token(
-      data,
-      expired_at
-    )
-    --SELECT p_data, p_expired_at
-    VALUES(p_data, p_expired_at)
-    --RETURNING id;
-    RETURNING *;
+    SELECT
+      u.username,
+      c.email_address,
+      c.phone_number
+    FROM u
+        LEFT JOIN c ON c.id = u.contact_id;
   END;
 $$;
 
 
-SELECT (sec.fn_user_signup('giang','do', 'giangd@gmail.com', 'gdo', 'password','{"username":"gdo"}', '123456')).*;
-
-
--- CREATE FUNCTION GET USER
-CREATE OR REPLACE FUNCTION sec.fn_get_user(p_username VARCHAR)
+-- CREATE FUNCTION USER CONTACT
+CREATE OR REPLACE FUNCTION sec.fn_user_contact(p_username VARCHAR)
 RETURNS TABLE (
   "firstName" VARCHAR,
   "lastName" VARCHAR,
   "emailAddress" VARCHAR,
+  "phoneNumber" VARCHAR,
   username VARCHAR
 )
 LANGUAGE plpgsql
@@ -121,6 +76,7 @@ $$
         c.first_name,
         c.last_name,
         c.email_address,
+        c.phone_number,
         u.username
       FROM sec.user u
       LEFT JOIN org.contact c ON c.id = u.contact_id
@@ -128,8 +84,8 @@ $$
   END;
 $$;
 
--- CREATE FUNCTION LOGIN USER
-CREATE OR REPLACE FUNCTION sec.fn_login_user(p_username VARCHAR)
+-- CREATE FUNCTION USER LOGIN
+CREATE OR REPLACE FUNCTION sec.fn_user_login(p_username VARCHAR)
 RETURNS TABLE (
   id INT,
   "firstName" VARCHAR,
@@ -177,7 +133,11 @@ $$
   END;
 $$;
 
-SELECT * FROM sec.fn_login_user('gdo');
+
+--SELECT (sec.fn_user_signup('giang','do', 'giangd@gmail.com', 'gdo', 'password','{"username":"gdo"}', '123456')).*;
+SELECT * FROM sec.fn_user_signup('giang','do', 'giangd@gmail.com', 'gdo', 'password','{"username":"gdo"}', '123456');
+SELECT * FROM sec.fn_user_contact('gdo');
+SELECT * FROM sec.fn_user_login('gdo');
 
 
 

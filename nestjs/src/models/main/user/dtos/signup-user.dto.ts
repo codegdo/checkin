@@ -12,12 +12,11 @@ export class SignupUserDto {
   emailAddress: string;
 
   @IsString()
+  phoneNumber: string;
+
+  @IsString()
   username: string;
 
   @IsString()
   password: string;
-
-  data: SignupTokenData;
-
-  expiredAt: number;
 }

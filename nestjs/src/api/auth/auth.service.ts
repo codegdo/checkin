@@ -59,9 +59,6 @@ export class AuthService {
     @InjectRepository(CalendarRepository, 'checkin')
     private calendarRepository: CalendarRepository,
 
-    //@InjectPinoLogger(AuthService.name)
-    //private readonly logger: PinoLogger,
-
     // @Inject(WINSTON_MODULE_PROVIDER)
     // private readonly logger: Logger,
 
@@ -72,101 +69,21 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) { }
 
-  async signup(body: ISignup) {
-    /*   
-    const { contact, user } = body;
+  async signup({ contact, user }: ISignup) {
+    const queryRunner = this.connection.createQueryRunner();
 
     try {
-      const signupUserDto: SignupUserDto = {
-        ...contact,
-        ...user,
-        data: { username: user.username },
-        expiredAt: Math.floor(new Date().getTime() / 1000 + 60 * 1000),
-      };
+      await queryRunner.startTransaction();
+      const result = await queryRunner.manager.getCustomRepository(UserRepository).singupUser({ ...contact, ...user });
+      await queryRunner.commitTransaction();
 
-      const { id } = await this.userRepository.singupUser(signupUserDto);
-
-      console.log(id);
+      return result;
     } catch (err) {
       console.log(err);
-    }
-
-    return {username: user.username};
-*/
-
-    //const organization = await this.orgRepository.create({
-    //subdomain: createUserDto.username,
-    //});
-
-    const contact = await this.contactRepository.create(body.contact);
-    const user = await this.userRepository.create(body.user);
-    const role = await this.roleRepository.create();
-    const token = await this.tokenRepository.create();
-    const calendar = await this.calendarRepository.create({
-      name: user.username,
-    });
-
-    const queryRunner = this.connection.createQueryRunner();
-    const queryRunner2 = this.connection2.createQueryRunner();
-
-    await queryRunner.startTransaction();
-    //await queryRunner2.startTransaction();
-
-    try {
-      //const org = await queryRunner.manager.save(organization);
-      //user.orgId = org.id;
-
-      const saveContact = await queryRunner.manager.save(contact);
-      user.contact = saveContact;
-
-      // assign role = owner
-      role.id = 2;
-      user.role = role;
-
-      token.data = { username: user.username };
-      token.expiredAt = Math.floor(new Date().getTime() / 1000 + 60 * 1000);
-
-      await queryRunner.manager.save(user);
-      await queryRunner.manager.save(token);
-      //await queryRunner2.manager.save(calendar);
-
-      // commit
-      await queryRunner.commitTransaction();
-      //await queryRunner2.commitTransaction();
-    } catch (err) {
-      // rollback
       await queryRunner.rollbackTransaction();
-      //await queryRunner2.rollbackTransaction();
-
-      // 23505 = conflict
-      if (err.code == 23505) {
-        this.logger.warn(`${err.message}`, err);
-        throw new ConflictException(409, 'Username already exists.');
-      } else {
-        this.logger.error(`${err.message}`, err);
-        throw new InternalServerErrorException(500, err.code);
-      }
     } finally {
-      // release
       await queryRunner.release();
-      //await queryRunner2.release();
     }
-
-    // send mail
-    // api/auth/signup
-    // get emails
-
-    const sendData = {
-      name: `${contact.firstName} ${contact.lastName}`,
-      emailAddress: contact.emailAddress,
-      username: user.username,
-      url: `${this.configService.get('app.host')}/auth/verify/${token.id}`
-    }
-
-    this.mailService.sendSignupEmail(sendData);
-
-    return { username: user.username };
-
   }
 
   async login(loginUserDto) {

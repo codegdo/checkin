@@ -24,9 +24,10 @@ export class AuthController {
 
   @Public()
   @Post('signup')
-  @Serialize(UserDto)
-  signup(@Body() body: ISignup) {
-    return this.authService.signup(body);
+  //@Serialize(UserDto)
+  async signup(@Body() body: ISignup) {
+    const user = await this.authService.signup(body);
+    return { user };
   }
 
   @Public()

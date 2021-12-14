@@ -406,11 +406,67 @@ $$
   END;
 $$;
 
+-- CREATE FUNCTION USER SIGNUP RETURN
+CREATE TYPE sec.user_signup_return_type AS (
+    username VARCHAR,
+    email_address VARCHAR,
+    phone_number VARCHAR
+);
+
+-- CREATE FUNCTION USER SIGNUP
+CREATE OR REPLACE FUNCTION sec.fn_user_signup(
+  p_first_name VARCHAR,
+  p_last_name VARCHAR,
+  p_email_address VARCHAR,
+  p_phone_number VARCHAR,
+  p_username VARCHAR,
+  p_password VARCHAR,
+  r_role_id INT
+)
+RETURNS SETOF sec.user_signup_return_type
+LANGUAGE plpgsql
+AS
+$$
+  BEGIN
+    RETURN QUERY
+    WITH c AS (
+      INSERT INTO org.contact(
+        first_name,
+        last_name,
+        email_address,
+        phone_number
+      )
+      VALUES (p_first_name, p_last_name, p_email_address, p_phone_number)
+      RETURNING
+        id,
+        email_address,
+        phone_number
+    ), u AS (
+        INSERT INTO sec.user(
+        username,
+        password,
+        role_id,
+        contact_id
+      )
+      --SELECT p_username, p_password, r_role_id, id FROM c
+      VALUES(p_username, p_password, r_role_id, (SELECT id FROM c))
+      RETURNING
+        username,
+        contact_id
+    )
+    SELECT
+      u.username,
+      c.email_address,
+      c.phone_number
+    FROM u
+        LEFT JOIN c ON c.id = u.contact_id;
+  END;
+$$;
+
 -------------------------------------------------------------------------
 -- END ------------------------------------------------------------------
 -------------------------------------------------------------------------
 
-SELECT * FROM sec.fn_login_user('gdo');
 
 -- SELECT
 SELECT * FROM dbo.role_type;
@@ -440,10 +496,14 @@ sec.token
 CASCADE;
 
 DROP TYPE IF EXISTS
-dbo.role_type_enum CASCADE;
+dbo.role_type_enum,
+sec.user_signup_return_type CASCADE;
 
 DROP FUNCTION IF EXISTS
 sec.fn_login_user;
 
 DROP FUNCTION IF EXISTS
 sec.fn_get_user;
+
+DROP FUNCTION IF EXISTS
+sec.fn_user_signup;

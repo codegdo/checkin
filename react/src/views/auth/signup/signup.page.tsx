@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
-import { useFetch } from '../../../hooks';
+import { useAction, useFetch } from '../../../hooks';
 import { Form, FormData } from '../../../components/form';
-import SignupSuccess from './signup.success';
+import { Navigate } from 'react-router-dom';
 
 const Signup: React.FC = (): JSX.Element => {
 
-  //const { updateSession } = useAction();
+  const { updateSession } = useAction();
   const [{ loading, result }, fetchSignup] = useFetch('/api/auth/signup');
   const [form, setForm] = useState<FormData>();
+  const [requireVerify, setRequireVerify] = useState(false);
 
   // Load form
   useEffect(() => {
@@ -19,13 +20,20 @@ const Signup: React.FC = (): JSX.Element => {
   }, [])
 
   useEffect(() => {
-    if (loading === 'error') {
-      console.log(result);
+
+    if (loading === 'success' && result.ok) {
+      const { user } = result?.data;
+
+      if (user) {
+        updateSession({ user });
+        setRequireVerify(true);
+      }
+
     }
+
   }, [loading]);
 
   const handleSubmit = (values: any) => {
-    console.log(values);
     void fetchSignup({ body: values });
   };
 
@@ -33,8 +41,8 @@ const Signup: React.FC = (): JSX.Element => {
     return <div>loading...</div>;
   }
 
-  if (loading === 'success') {
-    return <SignupSuccess data={result.data} />;
+  if (requireVerify) {
+    return <Navigate to="../verify" />
   }
 
   return (
