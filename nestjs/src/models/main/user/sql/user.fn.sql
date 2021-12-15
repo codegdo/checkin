@@ -1,8 +1,88 @@
+-- CREATE FUNCTION GET USER
+CREATE OR REPLACE FUNCTION sec.fn_get_user(p_username VARCHAR)
+RETURNS TABLE (
+  "firstName" VARCHAR,
+  "lastName" VARCHAR,
+  "emailAddress" VARCHAR,
+  "phoneNumber" VARCHAR,
+  username VARCHAR
+)
+AS
+$$
+  DECLARE
+
+  BEGIN
+    RETURN QUERY
+      SELECT
+        c.first_name,
+        c.last_name,
+        c.email_address,
+        c.phone_number,
+        u.username
+      FROM sec.user u
+      LEFT JOIN org.contact c ON c.id = u.contact_id
+      WHERE u.username = p_username;
+  END;
+$$
+LANGUAGE plpgsql;
+
+-- CREATE FUNCTION LOGIN USER
+CREATE OR REPLACE FUNCTION sec.fn_login_user(p_username VARCHAR)
+RETURNS TABLE (
+  id INT,
+  "firstName" VARCHAR,
+  "lastName" VARCHAR,
+  "emailAddress" VARCHAR,
+  "phoneNumber" VARCHAR,
+  username VARCHAR,
+  password VARCHAR,
+  "roleId" INT,
+  "roleType" dbo.role_type_enum,
+  policy JSONB,
+  "orgId" INT,
+  "orgActive" BOOLEAN,
+  "isActive" BOOLEAN,
+  "isOwner" BOOLEAN
+)
+AS
+$$
+  DECLARE
+
+  BEGIN
+    RETURN QUERY
+      SELECT
+        u.id,
+        c.first_name,
+        c.last_name,
+        c.email_address,
+        c.phone_number,
+        u.username,
+        u.password,
+        r.id,
+        rt.name,
+        p.data,
+        u.org_id,
+        o.is_active,
+        u.is_active,
+        r.is_owner
+      FROM sec.user u
+      LEFT JOIN sec.role r ON r.id = u.role_id
+      LEFT JOIN sec.role_policy rp ON rp.role_id = r.id
+      LEFT JOIN sec.policy p ON rp.policy_id = p.id
+      LEFT JOIN dbo.role_type rt ON rt.id = r.role_type_id
+      LEFT JOIN sec.organization o ON o.id = u.org_id
+      LEFT JOIN org.contact c ON c.id = u.contact_id
+      WHERE u.username = p_username;
+  END;
+$$
+LANGUAGE plpgsql;
+
 -- CREATE FUNCTION USER SIGNUP RETURN
 CREATE TYPE sec.user_signup_return_type AS (
     username VARCHAR,
-    email_address VARCHAR,
-    phone_number VARCHAR
+    "emailAddress" VARCHAR,
+    "phoneNumber" VARCHAR,
+    "isActive" BOOLEAN
 );
 
 -- CREATE FUNCTION USER SIGNUP
@@ -12,13 +92,13 @@ CREATE OR REPLACE FUNCTION sec.fn_user_signup(
   p_email_address VARCHAR,
   p_phone_number VARCHAR,
   p_username VARCHAR,
-  p_password VARCHAR,
-  r_role_id INT
+  p_password VARCHAR
 )
 RETURNS SETOF sec.user_signup_return_type
-LANGUAGE plpgsql
 AS
 $$
+  DECLARE
+    roleId INT = 2;
   BEGIN
     RETURN QUERY
     WITH c AS (
@@ -40,105 +120,20 @@ $$
         role_id,
         contact_id
       )
-      --SELECT p_username, p_password, r_role_id, id FROM c
-      VALUES(p_username, p_password, r_role_id, (SELECT id FROM c))
+      --SELECT p_username, p_password, roleId, id FROM c
+      VALUES(p_username, p_password, roleId, (SELECT id FROM c))
       RETURNING
         username,
+        is_active,
         contact_id
     )
     SELECT
       u.username,
       c.email_address,
-      c.phone_number
+      c.phone_number,
+      u.is_active
     FROM u
         LEFT JOIN c ON c.id = u.contact_id;
   END;
-$$;
-
-
--- CREATE FUNCTION USER CONTACT
-CREATE OR REPLACE FUNCTION sec.fn_user_contact(p_username VARCHAR)
-RETURNS TABLE (
-  "firstName" VARCHAR,
-  "lastName" VARCHAR,
-  "emailAddress" VARCHAR,
-  "phoneNumber" VARCHAR,
-  username VARCHAR
-)
-LANGUAGE plpgsql
-AS
 $$
-  DECLARE
-
-  BEGIN
-    RETURN QUERY
-      SELECT
-        c.first_name,
-        c.last_name,
-        c.email_address,
-        c.phone_number,
-        u.username
-      FROM sec.user u
-      LEFT JOIN org.contact c ON c.id = u.contact_id
-      WHERE u.username = p_username;
-  END;
-$$;
-
--- CREATE FUNCTION USER LOGIN
-CREATE OR REPLACE FUNCTION sec.fn_user_login(p_username VARCHAR)
-RETURNS TABLE (
-  id INT,
-  "firstName" VARCHAR,
-  "lastName" VARCHAR,
-  "emailAddress" VARCHAR,
-  username VARCHAR,
-  password VARCHAR,
-  "roleId" INT,
-  "roleType" dbo.role_type_enum,
-  policy JSONB,
-  "orgId" INT,
-  "orgActive" BOOLEAN,
-  "isActive" BOOLEAN,
-  "isOwner" BOOLEAN
-)
-LANGUAGE plpgsql
-AS
-$$
-  DECLARE
-
-  BEGIN
-    RETURN QUERY
-      SELECT
-        u.id,
-        c.first_name,
-        c.last_name,
-        c.email_address,
-        u.username,
-        u.password,
-        r.id,
-        rt.name,
-        p.data,
-        u.org_id,
-        o.is_active,
-        u.is_active,
-        r.is_owner
-      FROM sec.user u
-      LEFT JOIN sec.role r ON r.id = u.role_id
-      LEFT JOIN sec.role_policy rp ON rp.role_id = r.id
-      LEFT JOIN sec.policy p ON rp.policy_id = p.id
-      LEFT JOIN dbo.role_type rt ON rt.id = r.role_type_id
-      LEFT JOIN sec.organization o ON o.id = u.org_id
-      LEFT JOIN org.contact c ON c.id = u.contact_id
-      WHERE u.username = p_username;
-  END;
-$$;
-
-
---SELECT (sec.fn_user_signup('giang','do', 'giangd@gmail.com', 'gdo', 'password','{"username":"gdo"}', '123456')).*;
-SELECT * FROM sec.fn_user_signup('giang','do', 'giangd@gmail.com', 'gdo', 'password','{"username":"gdo"}', '123456');
-SELECT * FROM sec.fn_user_contact('gdo');
-SELECT * FROM sec.fn_user_login('gdo');
-
-
-
-
+LANGUAGE plpgsql;

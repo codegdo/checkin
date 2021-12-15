@@ -26,34 +26,45 @@ export class AuthController {
   @Post('signup')
   //@Serialize(UserDto)
   async signup(@Body() body: ISignup) {
-    const user = await this.authService.signup(body);
-    return { user };
+    const { username, emailAddress = '', phoneNumber = '', isActive }: UserDto = await this.authService.signup(body);
+
+    return {
+      username,
+      emailAddress: emailAddress.replace(/^(.{2})[^@]+/, "$1***"),
+      phoneNumber: phoneNumber.replace(/^(.{3})+/, "******$1"),
+      isActive
+    };
   }
 
   @Public()
   @Post('login')
   async login(@Session() session: any, @Body() loginUserDto: LoginUserDto) {
-    const user = await this.authService.login(loginUserDto);
-    const { id, username, roleType, isActive, isOwner, orgId } = user;
-    let accessToken = null;
+    const user: UserDto = await this.authService.login(loginUserDto);
+    const { password, orgId, orgActive, ...rest } = user;
+    const accessToken = this.jwtService.sign({ orgId });
 
     if (orgId) {
       session.user = user;
-      accessToken = this.jwtService.sign({ orgId })
+
+      return {
+        user: { ...rest },
+        orgId,
+        sid: session.id,
+        accessToken
+      };
     }
+
+    const { username, emailAddress = '', phoneNumber = '', isActive } = rest;
 
     return {
       user: {
-        id,
         username,
-        roleType,
-        isOwner,
+        emailAddress: emailAddress.replace(/^(.{2})[^@]+/, "$1***"),
+        phoneNumber: phoneNumber.replace(/^(.{3})+/, "******$1"),
         isActive
-      },
-      orgId,
-      sid: session.id,
-      accessToken
-    };
+      }
+    }
+
   }
 
   @Public()

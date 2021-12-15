@@ -8,12 +8,13 @@ import { AppState } from '../../../store/reducers';
 import { Form, FormData } from '../../../components/form';
 
 const Login: React.FC = (): JSX.Element => {
-  const { loggedIn, orgId, user } = useSelector((state: AppState) => state.session);
+  const { loggedIn, user, orgId } = useSelector((state: AppState) => state.session);
   const { updateSession } = useAction();
+
   const [form, setForm] = useState<FormData>();
-  const navigate = useNavigate();
   const [{ loading, result }, fetchLogin] = useFetch('/api/auth/login');
-  const [verify, setVerify] = useState(false);
+  const [verified, setVerified] = useState(true);
+  const [completed, setCompleted] = useState(true);
 
   // load form
   useEffect(() => {
@@ -24,19 +25,24 @@ const Login: React.FC = (): JSX.Element => {
   }, [])
 
   useEffect(() => {
-    if (loading === 'success' && result.ok) {
-      const { user: _user, orgId: _orgId, accessToken } = result?.data;
+    if (loading === 'success') {
+      const { user, orgId, accessToken } = result?.data;
 
-      if (_user && !_orgId) {
-        updateSession({
-          user: _user
-        });
+      if (user && !user.isActive) {
+        updateSession({ user });
+        setVerified(false);
+      }
 
-      } else {
+      if (user && user.isActive && !orgId) {
+        updateSession({ user });
+        setCompleted(false);
+      }
+
+      if (user && orgId) {
         updateSession({
           loggedIn: true,
-          user: _user,
-          orgId: _orgId,
+          user,
+          orgId,
           accessToken
         });
       }
@@ -44,21 +50,7 @@ const Login: React.FC = (): JSX.Element => {
 
   }, [loading]);
 
-  useEffect(() => {
-    if (loggedIn) {
-      navigate('/');
-    }
-  }, [loggedIn]);
-
-  useEffect(() => {
-    if (user && !orgId) {
-      //navigate('../verify');
-      setVerify(true);
-    }
-  }, [user]);
-
   const handleSubmit = (values: any) => {
-    console.log('SUBMIT VALUES', values);
     void fetchLogin({ body: values });
   };
 
@@ -66,8 +58,16 @@ const Login: React.FC = (): JSX.Element => {
     return <div>loading...</div>;
   }
 
-  if (verify) {
+  if (!verified) {
     return <Navigate to="../verify" />
+  }
+
+  if (!completed) {
+    return <Navigate to="../setup" />
+  }
+
+  if (loggedIn) {
+    return <Navigate to="/" />
   }
 
   return (

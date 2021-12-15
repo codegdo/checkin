@@ -9,7 +9,7 @@ const Signup: React.FC = (): JSX.Element => {
   const { updateSession } = useAction();
   const [{ loading, result }, fetchSignup] = useFetch('/api/auth/signup');
   const [form, setForm] = useState<FormData>();
-  const [requireVerify, setRequireVerify] = useState(false);
+  const [verified, setVerified] = useState(false);
 
   // Load form
   useEffect(() => {
@@ -21,12 +21,11 @@ const Signup: React.FC = (): JSX.Element => {
 
   useEffect(() => {
 
-    if (loading === 'success' && result.ok) {
-      const { user } = result?.data;
+    if (loading === 'success') {
 
-      if (user) {
-        updateSession({ user });
-        setRequireVerify(true);
+      if (result?.data) {
+        updateSession({ user: result.data });
+        setVerified(true);
       }
 
     }
@@ -41,7 +40,7 @@ const Signup: React.FC = (): JSX.Element => {
     return <div>loading...</div>;
   }
 
-  if (requireVerify) {
+  if (verified) {
     return <Navigate to="../verify" />
   }
 

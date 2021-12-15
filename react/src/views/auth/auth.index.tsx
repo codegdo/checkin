@@ -8,7 +8,7 @@ const Logout = Partial(lazy(() => import('./logout/logout.page')));
 const Signup = Partial(lazy(() => import('./signup/signup.page')));
 const Verify = Partial(lazy(() => import('./verify/verify.page')));
 const Resend = Partial(lazy(() => import('./resend/resend.page')));
-const Trial = Partial(lazy(() => import('./trial/trial.page')));
+const Setup = Partial(lazy(() => import('./setup/setup.page')));
 const NotFound = Partial(lazy(() => import('../notfound.component')));
 
 const Auth: React.FC = (): JSX.Element => {
@@ -19,7 +19,7 @@ const Auth: React.FC = (): JSX.Element => {
     <Route path="signup" element={<Signup page="signup" />} />
     <Route path="verify" element={<Verify page="verify" />} />
     <Route path="resend" element={<Resend page="resend" />} />
-    <Route path="trial" element={<Trial page="trial" />} />
+    <Route path="setup" element={<Setup page="setup" />} />
     <Route path="*" element={<NotFound page="not-found" />} />
   </Routes>;
 };

@@ -28,6 +28,7 @@ import {
 import { CalendarRepository } from 'src/models/checkin/repositories';
 import { AuthMailService } from 'src/common/modules';
 import { ISignup } from './auth.interface';
+import { UserDto } from 'src/models/main/dtos';
 
 @Injectable()
 export class AuthService {
@@ -79,15 +80,24 @@ export class AuthService {
 
       return result;
     } catch (err) {
-      console.log(err);
       await queryRunner.rollbackTransaction();
+
+      // 23505 = conflict
+      if (err.code == 23505) {
+        this.logger.warn(`${err.message}`, err);
+        throw new ConflictException(409, 'Username already exists.');
+      } else {
+        this.logger.error(`${err.message}`, err);
+        throw new InternalServerErrorException(500, err.code);
+      }
+
     } finally {
       await queryRunner.release();
     }
   }
 
   async login(loginUserDto) {
-    const user = await this.userRepository.loginUser(loginUserDto);
+    const user: UserDto = await this.userRepository.loginUser(loginUserDto);
 
     if (!user) {
       throw new BadRequestException();
