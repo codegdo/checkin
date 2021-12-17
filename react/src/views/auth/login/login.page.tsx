@@ -19,7 +19,7 @@ const Login: React.FC = (): JSX.Element => {
   // load form
   useEffect(() => {
     void (async () => {
-      const json: any = (await import('./login.json')).default;
+      const json: any = (await import('./form-login.json')).default;
       setForm(json);
     })();
   }, [])

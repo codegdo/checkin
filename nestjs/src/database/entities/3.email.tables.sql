@@ -113,9 +113,8 @@ RETURNS TABLE (
   "isActive" BOOLEAN,
   "orgId" INT
 )
-LANGUAGE plpgsql
 AS
-$$
+$BODY$
   DECLARE
 
   BEGIN
@@ -142,7 +141,8 @@ $$
       WHERE et.type_name = p_type_name AND e.is_active = true;
 
   END;
-$$;
+$BODY$
+LANGUAGE plpgsql;
 
 -------------------------------------------------------------------------
 -- END ------------------------------------------------------------------

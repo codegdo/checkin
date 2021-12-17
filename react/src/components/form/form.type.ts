@@ -104,6 +104,7 @@ export type FormProps = {
   isKey?: boolean;
   isMap?: boolean;
   onSubmit?: (values: any) => void;
+  onCallback?: (name: string) => void;
 };
 
 export type FormContextProps =
@@ -116,7 +117,7 @@ export type FormContextProps =
     formSchema?: any;
     isKey?: boolean;
     isMap?: boolean;
-    handleSubmit: (name: string) => void;
+    handleClick: (name: string) => void;
   }
   | undefined;
 

@@ -79,11 +79,25 @@ export class AuthController {
     return {};
   }
 
+  // @Public()
+  // @Get('verify/:token')
+  // async verify(@Param('token') token: string) {
+  //   await this.authService.verify(token);
+  //   return {};
+  // }
+
   @Public()
-  @Get('verify/:token')
-  async verify(@Param('token') token: string) {
-    await this.authService.verify(token);
-    return {};
+  @Post('verify')
+  async verify(@Body('username') username: string) {
+    //await this.authService.verify(username);
+    return { username };
+  }
+
+  @Public()
+  @Post('verify/confirm')
+  async verifyConfirm(@Body('key') key: string) {
+    //await this.authService.verify(username);
+    return { key };
   }
 
   @Public()

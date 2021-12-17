@@ -16,10 +16,10 @@ const Setup: React.FC = (): JSX.Element => {
   // Load form
   useEffect(() => {
     void (async () => {
-      const json: any = (await import('./setup.json')).default;
+      const json: any = (await import('./form-setup.json')).default;
       setForm(json);
     })();
-  }, [])
+  }, []);
 
   const handleSubmit = (values: any) => {
     console.log(values);

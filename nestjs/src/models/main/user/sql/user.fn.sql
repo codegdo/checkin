@@ -8,7 +8,7 @@ RETURNS TABLE (
   username VARCHAR
 )
 AS
-$$
+$BODY$
   DECLARE
 
   BEGIN
@@ -23,7 +23,7 @@ $$
       LEFT JOIN org.contact c ON c.id = u.contact_id
       WHERE u.username = p_username;
   END;
-$$
+$BODY$
 LANGUAGE plpgsql;
 
 -- CREATE FUNCTION LOGIN USER
@@ -45,7 +45,7 @@ RETURNS TABLE (
   "isOwner" BOOLEAN
 )
 AS
-$$
+$BODY$
   DECLARE
 
   BEGIN
@@ -74,15 +74,15 @@ $$
       LEFT JOIN org.contact c ON c.id = u.contact_id
       WHERE u.username = p_username;
   END;
-$$
+$BODY$
 LANGUAGE plpgsql;
 
 -- CREATE FUNCTION USER SIGNUP RETURN
 CREATE TYPE sec.user_signup_return_type AS (
-    username VARCHAR,
-    "emailAddress" VARCHAR,
-    "phoneNumber" VARCHAR,
-    "isActive" BOOLEAN
+  username VARCHAR,
+  "emailAddress" VARCHAR,
+  "phoneNumber" VARCHAR,
+  "isActive" BOOLEAN
 );
 
 -- CREATE FUNCTION USER SIGNUP
@@ -96,9 +96,9 @@ CREATE OR REPLACE FUNCTION sec.fn_user_signup(
 )
 RETURNS SETOF sec.user_signup_return_type
 AS
-$$
+$BODY$
   DECLARE
-    roleId INT = 2;
+    v_role_id INT := 2;
   BEGIN
     RETURN QUERY
     WITH c AS (
@@ -114,26 +114,27 @@ $$
         email_address,
         phone_number
     ), u AS (
-        INSERT INTO sec.user(
+      INSERT INTO sec.user(
         username,
         password,
         role_id,
         contact_id
       )
-      --SELECT p_username, p_password, roleId, id FROM c
-      VALUES(p_username, p_password, roleId, (SELECT id FROM c))
+      --SELECT p_username, p_password, v_role_id, id FROM c
+      VALUES(p_username, p_password, v_role_id, (SELECT id FROM c))
       RETURNING
         username,
         is_active,
         contact_id
     )
+
     SELECT
       u.username,
       c.email_address,
       c.phone_number,
       u.is_active
     FROM u
-        LEFT JOIN c ON c.id = u.contact_id;
+      LEFT JOIN c ON c.id = u.contact_id;
   END;
-$$
+$BODY$
 LANGUAGE plpgsql;

@@ -8,7 +8,7 @@ import { normalizeForm } from '../../helpers';
 
 export const FormContext = React.createContext<FormContextProps>(undefined);
 
-export const Form: React.FC<FormProps> = ({ form, loading, isKey = false, isMap = false, onSubmit, children, ...props }): JSX.Element => {
+export const Form: React.FC<FormProps> = ({ form, loading, isKey = false, isMap = false, onSubmit, onCallback, children, ...props }): JSX.Element => {
 
   const data = form && normalizeForm(form) || props;
   const { current: values } = useRef({});
@@ -29,7 +29,7 @@ export const Form: React.FC<FormProps> = ({ form, loading, isKey = false, isMap 
 
       if (Object.keys(errors).length === 0) {
         console.log(values);
-        console.log('TRIM', trimValues(values))
+        //console.log('TRIM', trimValues(values))
         onSubmit && onSubmit(values);
       }
     }
@@ -37,8 +37,12 @@ export const Form: React.FC<FormProps> = ({ form, loading, isKey = false, isMap 
     return () => setSubmit(undefined);
   }, [submit]);
 
-  const handleSubmit = useCallback((name: string) => {
-    setSubmit(name)
+  const handleClick = useCallback((name: string) => {
+    if (name === 'submit') {
+      setSubmit(name);
+    } else {
+      onCallback && onCallback(name);
+    }
   }, []);
 
   useEffect(() => {
@@ -47,7 +51,7 @@ export const Form: React.FC<FormProps> = ({ form, loading, isKey = false, isMap 
 
   return (
     <form>
-      <FormContext.Provider value={{ data, values, errors, loading, submit, formSchema, isKey, isMap, handleSubmit }}>
+      <FormContext.Provider value={{ data, values, errors, loading, submit, formSchema, isKey, isMap, handleClick }}>
         {
           children || render({ data })
         }

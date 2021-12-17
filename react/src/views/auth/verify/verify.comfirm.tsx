@@ -5,32 +5,29 @@ import { Navigate } from 'react-router-dom';
 import { Form, FormData } from '../../../components/form';
 import { useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
-import Confirm from './verify.comfirm';
 
 
-const Verify: React.FC = (): JSX.Element => {
+const Confirm: React.FC<any> = ({ setConfirmed }): JSX.Element => {
   const { loggedIn, orgId, user } = useSelector((state: AppState) => state.session);
-  const [{ loading, result }, fetchVerify] = useFetch('/api/auth/verify');
+  const [{ loading, result }, fetchConfirm] = useFetch('/api/auth/verify/confirm');
   const [form, setForm] = useState<FormData>();
-  const [confirmed, setConfirmed] = useState(false);
 
   // Load form
   useEffect(() => {
     void (async () => {
-      const json: any = (await import('./form-verify.json')).default;
+      const json: any = (await import('./form-confirm.json')).default;
       setForm(json);
     })();
   }, []);
 
-  useEffect(() => {
-    if (loading == 'success') {
-      setConfirmed(true);
-    }
-  }, [loading]);
-
   const handleSubmit = (values: any) => {
     console.log(values);
-    void fetchVerify({ body: values });
+    void fetchConfirm({ body: values });
+  };
+
+  const handleCallback = (value: any) => {
+    //alert(value);
+    setConfirmed(false);
   };
 
   if (!user) {
@@ -46,13 +43,9 @@ const Verify: React.FC = (): JSX.Element => {
   }
 
   return <div>
-    {
-      !confirmed ?
-        <Form form={form} loading={loading} isMap={true} onSubmit={handleSubmit} /> :
-        <Confirm setConfirmed={setConfirmed} />
-    }
+    <Form form={form} loading={loading} isMap={true} onSubmit={handleSubmit} onCallback={handleCallback} />
   </div>
 
 }
 
-export default Verify;
+export default Confirm;

@@ -13,7 +13,7 @@ const Resend: React.FC = (): JSX.Element => {
   // Load form
   useEffect(() => {
     void (async () => {
-      const json: any = (await import('./resend.json')).default;
+      const json: any = (await import('./form-resend.json')).default;
       setForm(json);
     })();
   }, [])

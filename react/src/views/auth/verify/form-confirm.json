@@ -1,7 +1,7 @@
 {
   "id": 1,
-  "label": "Setup",
-  "name": "Setup",
+  "label": "Verify",
+  "name": "Verify",
   "description": null,
   "data": [
     {
@@ -31,7 +31,7 @@
     {
       "id": 5,
       "label": null,
-      "name": "Setup",
+      "name": "Verify you're a human",
       "description": null,
       "type": "title",
       "role": "element",
@@ -54,12 +54,11 @@
     {
       "id": 7,
       "label": "Cancel",
-      "name": null,
-      "description": null,
-      "type": "link",
+      "name": "cancel",
+      "type": "button",
       "role": "element",
-      "data": null,
-      "value": "/auth/logout",
+      "data": [],
+      "value": null,
       "position": 0,
       "positionParent": 2
     }
@@ -67,25 +66,8 @@
   "fields": [
     {
       "id": 3,
-      "label": "Organization Name",
+      "label": "Please enter the verification code",
       "name": "OrganizationName",
-      "description": null,
-      "type": "text",
-      "role": "field",
-      "data": null,
-      "value": "",
-      "defaultValue": "",
-      "isRequired": true,
-      "position": 0,
-      "positionParent": 1,
-      "mapSchema": "sec",
-      "mapTable": "organization",
-      "mapColumn": "name"
-    },
-    {
-      "id": 4,
-      "label": "Subdomain",
-      "name": "Subdomain",
       "description": null,
       "type": "text",
       "role": "field",

@@ -14,7 +14,7 @@ export const Title: React.FC<TitleProps> = ({ name, description }): JSX.Element 
   return (
     <div>
       {name && <strong>{name}</strong>}
-      {description && <small>{description}</small>}
+      {description && <span>{description}</span>}
     </div>
   )
 }
