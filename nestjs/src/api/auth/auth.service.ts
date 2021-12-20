@@ -27,7 +27,7 @@ import {
 } from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/checkin/repositories';
 import { AuthMailService } from 'src/common/modules';
-import { ISignup } from './auth.interface';
+import { ISignup, IVerify } from './auth.interface';
 import { UserDto } from 'src/models/main/dtos';
 
 @Injectable()
@@ -68,7 +68,7 @@ export class AuthService {
 
     private readonly mailService: AuthMailService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   async signup({ contact, user }: ISignup) {
     const queryRunner = this.connection.createQueryRunner();
@@ -117,30 +117,35 @@ export class AuthService {
     return user;
   }
 
-  async verify(body: { verification: string; username: string }) {
-    const token = await this.tokenRepository.findOne({
-      where: [{ id }],
-    });
+  async verify({ verification, username }: IVerify) {
 
-    if (!token) {
-      throw new NotFoundException(404, 'Not Found');
-    }
+    const token = await this.userRepository.verifyUser(username);
 
-    const date = new Date();
-    const now = Math.round(date.getTime() / 1000);
+    return token;
 
-    if (token.expiredAt < now) {
-      throw new UnauthorizedException(401, 'Unauthorized');
-    }
+    // const token = await this.tokenRepository.findOne({
+    //   where: [{ id }],
+    // });
 
-    const { username } = token.data;
-    const user = await this.userRepository.findOne({ where: [{ username }] });
+    // if (!token) {
+    //   throw new NotFoundException(404, 'Not Found');
+    // }
 
-    if (user.isActive) {
-      throw new ConflictException(409, 'Activated');
-    }
+    // const date = new Date();
+    // const now = Math.round(date.getTime() / 1000);
 
-    user.isActive = true;
+    // if (token.expiredAt < now) {
+    //   throw new UnauthorizedException(401, 'Unauthorized');
+    // }
+
+    // const { username } = token.data;
+    // const user = await this.userRepository.findOne({ where: [{ username }] });
+
+    // if (user.isActive) {
+    //   throw new ConflictException(409, 'Activated');
+    // }
+
+    // user.isActive = true;
 
     // try {
     //   await this.userRepository.save(user);
@@ -149,14 +154,14 @@ export class AuthService {
     //   throw new InternalServerErrorException(err.code);
     // }
 
-    await this.connection.transaction(async (manager) => {
-      try {
-        await manager.save(user);
-        await manager.remove(token);
-      } catch (err) {
-        throw new InternalServerErrorException(err.code);
-      }
-    });
+    // await this.connection.transaction(async (manager) => {
+    //   try {
+    //     await manager.save(user);
+    //     await manager.remove(token);
+    //   } catch (err) {
+    //     throw new InternalServerErrorException(err.code);
+    //   }
+    // });
 
     /* const queryRunner = this.connection.createQueryRunner();
     await queryRunner.startTransaction();
@@ -176,6 +181,10 @@ export class AuthService {
       // release
       await queryRunner.release();
     } */
+  }
+
+  async confirm(key: string) {
+    await this.userRepository.confirmUser(key);
   }
 
   async resend(username: string) {

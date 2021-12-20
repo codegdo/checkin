@@ -138,3 +138,100 @@ $BODY$
   END;
 $BODY$
 LANGUAGE plpgsql;
+
+-- CREATE FUNCTION USER VERIFY
+CREATE OR REPLACE FUNCTION sec.fn_user_verify(
+  p_username varchar, 
+  p_key varchar, 
+  p_data jsonb
+)
+RETURNS SETOF record
+AS
+$BODY$
+  DECLARE
+    rec record;
+  BEGIN
+    RETURN QUERY
+    WITH u AS (
+      SELECT *
+      INTO STRICT rec
+      FROM sec.user
+      WHERE username = p_username
+      EXCEPTION
+        WHEN no_data_found THEN
+        RAISE EXCEPTION 'No username was found %', p_username;
+    )
+    INSERT INTO sec.token(key, data)
+    VALUES(p_key, p_data)
+    RETURNING INTO rec;
+  END;
+$BODY$
+LANGUAGE plpgsql;
+
+-- CREATE FUNCTION USER VERIFY
+CREATE OR REPLACE FUNCTION sec.fn_user_verify(
+  p_username varchar, 
+  p_key varchar, 
+  p_data jsonb,
+  p_expired_at bigint
+)
+RETURNS sec.token
+AS
+$BODY$
+  DECLARE
+    rec record;
+  BEGIN
+
+    SELECT *
+    INTO rec
+    FROM sec.user
+    WHERE username = p_username;
+
+    IF found THEN
+
+      INSERT INTO sec.token(key, data, expired_at)
+      VALUES(p_key, p_data, p_expired_at)
+      RETURNING * INTO rec;
+
+    ELSE
+        RAISE EXCEPTION no_data_found ;
+    END IF;
+
+    RETURN rec;
+  END;
+$BODY$
+LANGUAGE plpgsql;
+
+-- CREATE FUNCTION USER CONFIRM
+CREATE OR REPLACE FUNCTION sec.fn_user_confirm(
+  p_key varchar
+)
+RETURNS sec.user
+AS
+$BODY$
+  DECLARE
+    rec record;
+  BEGIN
+
+    SELECT *
+    INTO rec
+    FROM sec.token
+    WHERE key = p_key;
+
+    IF found THEN
+
+      UPDATE sec.user
+      SET is_active = true
+      WHERE username = rec.data::jsonb ->> 'username'
+      RETURNING * INTO rec;
+
+      DELETE FROM sec.token WHERE key = p_key;
+
+    ELSE
+        RAISE EXCEPTION no_data_found ;
+    END IF;
+
+    RETURN rec;
+  END;
+$BODY$
+LANGUAGE plpgsql;

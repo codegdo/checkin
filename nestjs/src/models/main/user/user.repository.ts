@@ -4,6 +4,7 @@ import { promisify } from 'util';
 import { User } from './user.entity';
 import { SignupUserDto } from './dtos/signup-user.dto';
 import { LoginUserDto } from '../dtos';
+import { VerifyUserDto } from './dtos/verify-user.dto';
 
 const scrypt = promisify(_scrypt);
 
@@ -79,6 +80,36 @@ export class UserRepository extends Repository<User> {
     const { password: _password, ..._user } = user;
 
     return (await this.validatePassword(password, _password)) ? _user : null;
+  }
+
+  async verifyUser(username: string) {
+
+    const key = await randomInt(100000, 999999).toString();
+    const data = { username };
+    const expiredAt = Math.floor(new Date().getTime() / 1000 + 300000); // 5 mins
+
+    const [result] = await this.manager.query(
+      `SELECT * FROM sec.fn_user_verify($1, $2, $3, $4)`,
+      [
+        username,
+        key,
+        data,
+        expiredAt
+      ],
+    );
+
+    return result;
+  }
+
+  async confirmUser(key: string) {
+    const [result] = await this.manager.query(
+      `SELECT is_active AS "isActive" FROM sec.fn_user_confirm($1)`,
+      [
+        key
+      ],
+    );
+
+    return result;
   }
 
   async getUser(username: string) {

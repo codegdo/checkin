@@ -20,7 +20,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   @Public()
   @Post('signup')
@@ -83,25 +83,18 @@ export class AuthController {
     return {};
   }
 
-  // @Public()
-  // @Get('verify/:token')
-  // async verify(@Param('token') token: string) {
-  //   await this.authService.verify(token);
-  //   return {};
-  // }
-
   @Public()
   @Post('verify')
   async verify(@Body() body: { verification: string; username: string }) {
     await this.authService.verify(body);
-    return body;
+    return { ok: true };
   }
 
   @Public()
-  @Post('verify/confirm')
+  @Post('confirm')
   async verifyConfirm(@Body('key') key: string) {
-    //await this.authService.verify(username);
-    return { key };
+    await this.authService.confirm(key);
+    return { ok: true };
   }
 
   @Public()
@@ -109,6 +102,14 @@ export class AuthController {
   async resend(@Body('username') username: string) {
     return this.authService.resend(username);
   }
+
+
+  // @Public()
+  // @Get('verify/:token')
+  // async verify(@Param('token') token: string) {
+  //   await this.authService.verify(token);
+  //   return {};
+  // }
 
   /*@Get('logout')
   async getLogout(@Session() session: any, @CurrentUser() user: string) {

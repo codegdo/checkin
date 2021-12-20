@@ -53,8 +53,8 @@
     },
     {
       "id": 7,
-      "label": "Cancel",
-      "name": "cancel",
+      "label": "Back",
+      "name": "back",
       "type": "button",
       "role": "element",
       "data": [],
