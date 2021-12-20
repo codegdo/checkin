@@ -8,12 +8,21 @@ export const InputRadio: React.FC = (): JSX.Element => {
     throw new Error('Require INPUTTEXT Nested In INPUTCONTEXT');
   }
 
-  const { data, value, handleChange } = context;
-  const { type = 'radio' } = data;
+  const { data: input, value, handleChange } = context;
+  const { data, name } = input;
 
   return (
-    <span>
-      <input type={type} value={value} onChange={handleChange} />
-    </span>
+    <>
+      {
+        data.map(({ key, value: text }: any) => {
+          return (
+            <label key={key}>
+              <input type="radio" name={name} value={key} checked={key === value} onChange={handleChange} />
+              {text && <span>{text}</span>}
+            </label>
+          )
+        })
+      }
+    </>
   )
 }

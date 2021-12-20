@@ -31,3 +31,50 @@ export function mapToParent(list: Item[], item: Item): void {
     // console.warn(`Fail mapToParent: ${block.mapToParent}`, block);
   }
 }
+
+/*
+  input:
+  {
+    blocks: [
+      {
+        role: 'block',
+        data: [],
+        position: 1
+      }
+    ],
+    fields: [
+      {
+        role: 'field',
+        position: 0,
+        positionParent: 1
+      }
+    ]
+  }
+
+  output:
+  {
+    blocks: [
+      {
+        role: 'block',
+        data: [
+          //
+          {
+            role: 'field',
+            position: 2,
+            positionParent: 1
+          }
+          //
+        ],
+        position: 1,
+        positionParent: null
+      }
+    ],
+    fields: [
+      {
+        role: 'field',
+        position: 2,
+        positionParent: 1
+      }
+    ]
+  }
+*/

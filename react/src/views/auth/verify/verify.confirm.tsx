@@ -15,7 +15,7 @@ const Confirm: React.FC<any> = ({ setConfirmed }): JSX.Element => {
   // Load form
   useEffect(() => {
     void (async () => {
-      const json: any = (await import('./form-confirm.json')).default;
+      const json: any = (await import('./verify.confirm.json')).default;
       setForm(json);
     })();
   }, []);

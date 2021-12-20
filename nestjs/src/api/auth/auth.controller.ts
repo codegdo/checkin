@@ -20,19 +20,24 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   @Public()
   @Post('signup')
   //@Serialize(UserDto)
   async signup(@Body() body: ISignup) {
-    const { username, emailAddress = '', phoneNumber = '', isActive }: UserDto = await this.authService.signup(body);
+    const {
+      username,
+      emailAddress = '',
+      phoneNumber = '',
+      isActive,
+    }: UserDto = await this.authService.signup(body);
 
     return {
       username,
-      emailAddress: emailAddress.replace(/^(.{2})[^@]+/, "$1***"),
-      phoneNumber: phoneNumber.replace(/^(.{3})+/, "******$1"),
-      isActive
+      emailAddress: emailAddress.replace(/^(.{2})[^@]+/, '$1***'),
+      phoneNumber: phoneNumber.replace(/^(.{3})+/, '******$1'),
+      isActive,
     };
   }
 
@@ -50,7 +55,7 @@ export class AuthController {
         user: { ...rest },
         orgId,
         sid: session.id,
-        accessToken
+        accessToken,
       };
     }
 
@@ -59,12 +64,11 @@ export class AuthController {
     return {
       user: {
         username,
-        emailAddress: emailAddress.replace(/^(.{2})[^@]+/, "$1***"),
-        phoneNumber: phoneNumber.replace(/^(.{3})+/, "******$1"),
-        isActive
-      }
-    }
-
+        emailAddress: emailAddress.replace(/^(.{2})[^@]+/, '$1***'),
+        phoneNumber: phoneNumber.replace(/^(.{3})+/, '******$1'),
+        isActive,
+      },
+    };
   }
 
   @Public()
@@ -88,9 +92,9 @@ export class AuthController {
 
   @Public()
   @Post('verify')
-  async verify(@Body('username') username: string) {
-    //await this.authService.verify(username);
-    return { username };
+  async verify(@Body() body: { verification: string; username: string }) {
+    await this.authService.verify(body);
+    return body;
   }
 
   @Public()

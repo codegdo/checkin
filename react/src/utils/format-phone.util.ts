@@ -16,3 +16,13 @@ export const formatPhone = (value: string): string => {
     return value;
   }
 };
+
+/*
+{
+  input:
+  '8583571474'
+
+  output:
+  '858-357-1474'
+}
+*/

@@ -67,37 +67,20 @@
   "fields": [
     {
       "id": 3,
-      "label": "Select",
-      "name": "Select",
+      "label": null,
+      "name": "verification",
       "description": null,
       "type": "radio",
       "role": "field",
-      "data": null,
-      "value": "",
+      "data": [],
+      "value": "phoneNumber",
       "defaultValue": "",
       "isRequired": true,
       "position": 0,
       "positionParent": 1,
-      "mapSchema": "sec",
-      "mapTable": "organization",
-      "mapColumn": "name"
-    },
-    {
-      "id": 3,
-      "label": "Select",
-      "name": "Select",
-      "description": null,
-      "type": "checkbox",
-      "role": "field",
-      "data": null,
-      "value": "",
-      "defaultValue": "",
-      "isRequired": true,
-      "position": 0,
-      "positionParent": 1,
-      "mapSchema": "sec",
-      "mapTable": "organization",
-      "mapColumn": "name"
+      "mapSchema": null,
+      "mapTable": null,
+      "mapColumn": null
     }
   ]
 }

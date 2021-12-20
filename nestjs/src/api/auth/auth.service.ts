@@ -68,14 +68,16 @@ export class AuthService {
 
     private readonly mailService: AuthMailService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   async signup({ contact, user }: ISignup) {
     const queryRunner = this.connection.createQueryRunner();
 
     try {
       await queryRunner.startTransaction();
-      const result = await queryRunner.manager.getCustomRepository(UserRepository).singupUser({ ...contact, ...user });
+      const result = await queryRunner.manager
+        .getCustomRepository(UserRepository)
+        .singupUser({ ...contact, ...user });
       await queryRunner.commitTransaction();
 
       return result;
@@ -90,7 +92,6 @@ export class AuthService {
         this.logger.error(`${err.message}`, err);
         throw new InternalServerErrorException(500, err.code);
       }
-
     } finally {
       await queryRunner.release();
     }
@@ -116,7 +117,7 @@ export class AuthService {
     return user;
   }
 
-  async verify(id: string) {
+  async verify(body: { verification: string; username: string }) {
     const token = await this.tokenRepository.findOne({
       where: [{ id }],
     });
@@ -186,8 +187,8 @@ export class AuthService {
     const sendData = {
       name: null,
       emailAddress: null,
-      url: `${this.configService.get('app.host')}/auth/verify/${token.id}`
-    }
+      url: `${this.configService.get('app.host')}/auth/verify/${token.id}`,
+    };
 
     //this.mailService.sendVerifyEmail(sendData);
 

@@ -1,11 +1,14 @@
+import { userInfo } from 'os';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 import { Form, FormData } from '../../../components/form';
+import { mapDataToField } from '../../../helpers';
 import { useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
-import Confirm from './verify.comfirm';
+import { objectToKeyValue } from '../../../utils';
+import Confirm from './verify.confirm';
 
 
 const Verify: React.FC = (): JSX.Element => {
@@ -17,7 +20,16 @@ const Verify: React.FC = (): JSX.Element => {
   // Load form
   useEffect(() => {
     void (async () => {
-      const json: any = (await import('./form-verify.json')).default;
+      const json: any = (await import('./verify.page.json')).default;
+      const values = objectToKeyValue({ ...user }, ['emailAddress', 'phoneNumber']);
+
+      const mapField = {
+        name: 'verification',
+        value: 'phoneNumber',
+        data: values
+      }
+
+      mapDataToField(json.fields, mapField)
       setForm(json);
     })();
   }, []);
@@ -29,8 +41,7 @@ const Verify: React.FC = (): JSX.Element => {
   }, [loading]);
 
   const handleSubmit = (values: any) => {
-    console.log(values);
-    void fetchVerify({ body: values });
+    void fetchVerify({ body: { ...values, username: user?.username } });
   };
 
   if (!user) {
@@ -48,7 +59,7 @@ const Verify: React.FC = (): JSX.Element => {
   return <div>
     {
       !confirmed ?
-        <Form form={form} loading={loading} isMap={true} onSubmit={handleSubmit} /> :
+        <Form form={form} loading={loading} onSubmit={handleSubmit} /> :
         <Confirm setConfirmed={setConfirmed} />
     }
   </div>

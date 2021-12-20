@@ -16,7 +16,7 @@ const Setup: React.FC = (): JSX.Element => {
   // Load form
   useEffect(() => {
     void (async () => {
-      const json: any = (await import('./form-setup.json')).default;
+      const json: any = (await import('./setup.page.json')).default;
       setForm(json);
     })();
   }, []);
