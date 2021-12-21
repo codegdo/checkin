@@ -27,8 +27,8 @@ import {
 } from 'src/models/main/repositories';
 import { CalendarRepository } from 'src/models/checkin/repositories';
 import { AuthMailService } from 'src/common/modules';
-import { ISignup, IVerify } from './auth.interface';
-import { UserDto } from 'src/models/main/dtos';
+import { ISignup } from './types/auth.interface';
+import { UserData, VerifyUserDto } from 'src/models/main/dtos';
 
 @Injectable()
 export class AuthService {
@@ -75,9 +75,11 @@ export class AuthService {
 
     try {
       await queryRunner.startTransaction();
+
       const result = await queryRunner.manager
         .getCustomRepository(UserRepository)
         .singupUser({ ...contact, ...user });
+
       await queryRunner.commitTransaction();
 
       return result;
@@ -98,7 +100,7 @@ export class AuthService {
   }
 
   async login(loginUserDto) {
-    const user: UserDto = await this.userRepository.loginUser(loginUserDto);
+    const user: UserData = await this.userRepository.loginUser(loginUserDto);
 
     if (!user) {
       throw new BadRequestException();
@@ -117,7 +119,7 @@ export class AuthService {
     return user;
   }
 
-  async verify({ verification, username }: IVerify) {
+  async verify({ verification, username }: VerifyUserDto) {
 
     const token = await this.userRepository.verifyUser(username);
 

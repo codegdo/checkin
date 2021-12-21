@@ -1,4 +1,3 @@
-
 SHOW rds.extensions;
 
 -- INSTALL EXTENSIONS

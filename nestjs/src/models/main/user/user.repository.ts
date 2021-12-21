@@ -2,9 +2,7 @@ import { EntityRepository, Repository } from 'typeorm';
 import { randomBytes, randomInt, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { User } from './user.entity';
-import { SignupUserDto } from './dtos/signup-user.dto';
-import { LoginUserDto } from '../dtos';
-import { VerifyUserDto } from './dtos/verify-user.dto';
+import { LoginUserDto, SignupUserDto } from '../dtos';
 
 const scrypt = promisify(_scrypt);
 
@@ -53,17 +51,7 @@ export class UserRepository extends Repository<User> {
 
   async loginUser(loginUserDto: LoginUserDto) {
     const { username, password } = loginUserDto;
-
-    const r = await randomInt(100000, 999999);
-    const b = await randomBytes(6).toString('base64');
-
-    console.log(Number.isSafeInteger(r));
-    console.log(Number.isSafeInteger(b));
-
-    console.log('RANDOM R', r);
-    console.log('RANDOM B', b);
-
-    const [user] = await this.manager.query(`SELECT * FROM sec.fn_login_user($1)`, [username]);
+    const [user] = await this.manager.query(`SELECT * FROM sec.fn_user_login($1)`, [username]);
 
     // const query = this.createQueryBuilder('user');
     // const user = await query
@@ -83,6 +71,8 @@ export class UserRepository extends Repository<User> {
   }
 
   async verifyUser(username: string) {
+    // await randomBytes(6).toString('base64');
+    // await randomInt(100000, 999999);
 
     const key = await randomInt(100000, 999999).toString();
     const data = { username };
@@ -104,9 +94,7 @@ export class UserRepository extends Repository<User> {
   async confirmUser(key: string) {
     const [result] = await this.manager.query(
       `SELECT is_active AS "isActive" FROM sec.fn_user_confirm($1)`,
-      [
-        key
-      ],
+      [key],
     );
 
     return result;

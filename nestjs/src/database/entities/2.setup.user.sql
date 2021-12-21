@@ -282,6 +282,7 @@ CREATE TABLE IF NOT EXISTS sec.session (
 CREATE TABLE IF NOT EXISTS sec.token (
   id UUID DEFAULT uuid_generate_v4() NOT NULL,
   key VARCHAR(100),
+  type VARCHAR(100),
   data JSONB,
   expired_at BIGINT,
   --
@@ -341,7 +342,7 @@ RETURNS TABLE (
   username VARCHAR
 )
 AS
-$BODY$
+$$
   DECLARE
 
   BEGIN
@@ -356,11 +357,11 @@ $BODY$
       LEFT JOIN org.contact c ON c.id = u.contact_id
       WHERE u.username = p_username;
   END;
-$BODY$
+$$
 LANGUAGE plpgsql;
 
 -- CREATE FUNCTION LOGIN USER
-CREATE OR REPLACE FUNCTION sec.fn_login_user(p_username VARCHAR)
+CREATE OR REPLACE FUNCTION sec.fn_user_login(p_username VARCHAR)
 RETURNS TABLE (
   id INT,
   "firstName" VARCHAR,
@@ -378,7 +379,7 @@ RETURNS TABLE (
   "isOwner" BOOLEAN
 )
 AS
-$BODY$
+$$
   DECLARE
 
   BEGIN
@@ -407,7 +408,7 @@ $BODY$
       LEFT JOIN org.contact c ON c.id = u.contact_id
       WHERE u.username = p_username;
   END;
-$BODY$
+$$
 LANGUAGE plpgsql;
 
 -- CREATE FUNCTION USER SIGNUP RETURN
@@ -429,7 +430,7 @@ CREATE OR REPLACE FUNCTION sec.fn_user_signup(
 )
 RETURNS SETOF sec.user_signup_return_type
 AS
-$BODY$
+$$
   DECLARE
     v_role_id INT := 2;
   BEGIN
@@ -469,14 +470,145 @@ $BODY$
     FROM u
       LEFT JOIN c ON c.id = u.contact_id;
   END;
+$$
+LANGUAGE plpgsql;
+
+-- CREATE FUNCTION USER VERIFY
+CREATE OR REPLACE FUNCTION sec.fn_user_verify(
+  p_username varchar,
+  p_key varchar,
+  p_type varchar,
+  p_data jsonb,
+  p_expired_at bigint
+)
+RETURNS sec.token
+AS
+$BODY$
+  DECLARE
+    rec record;
+  BEGIN
+
+    SELECT *
+    INTO rec
+    FROM sec.user
+    WHERE username = p_username;
+
+    IF found THEN
+
+      INSERT INTO sec.token(key, type, data, expired_at)
+      VALUES(p_key, p_type, p_data, p_expired_at)
+      RETURNING * INTO rec;
+
+    ELSE
+        RAISE EXCEPTION no_data_found ;
+    END IF;
+
+    RETURN rec;
+  END;
 $BODY$
 LANGUAGE plpgsql;
+
+-- CREATE FUNCTION USER CONFIRM
+CREATE OR REPLACE FUNCTION sec.fn_user_confirm(
+  p_key varchar
+)
+RETURNS sec.user
+AS
+$BODY$
+  DECLARE
+    rec record;
+  BEGIN
+
+    SELECT *
+    INTO rec
+    FROM sec.token
+    WHERE key = p_key;
+
+    IF found THEN
+
+      UPDATE sec.user
+      SET is_active = true
+      WHERE username = rec.data::jsonb ->> 'username'
+      RETURNING * INTO rec;
+
+      DELETE FROM sec.token WHERE key = p_key;
+
+    ELSE
+        RAISE EXCEPTION no_data_found ;
+    END IF;
+
+    RETURN rec;
+  END;
+$BODY$
+LANGUAGE plpgsql;
+
+-- CREATE PROCEDURE USER SIGNUP
+CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
+  p_first_name varchar,
+  p_last_name varchar,
+  p_email_address varchar,
+  p_phone_number varchar,
+  p_username varchar,
+  p_password varchar,
+  o_user_signup OUT sec.user_signup_return_type
+)
+AS
+$BODY$
+    DECLARE
+        v_role_id INT := 2;
+    BEGIN
+        WITH c AS (
+      INSERT INTO org.contact(
+        first_name,
+        last_name,
+        email_address,
+        phone_number
+      )
+      VALUES (p_first_name, p_last_name, p_email_address, p_phone_number)
+      RETURNING
+        id,
+        email_address,
+        phone_number
+    ), u AS (
+      INSERT INTO sec.user(
+        username,
+        password,
+        role_id,
+        contact_id
+      )
+      VALUES(p_username, p_password, v_role_id, (SELECT id FROM c))
+      RETURNING
+        username,
+        is_active,
+        contact_id
+    )
+
+    SELECT
+      u.username,
+      c.email_address,
+      c.phone_number,
+      u.is_active
+    INTO o_user_signup
+    FROM u
+      LEFT JOIN c ON c.id = u.contact_id;
+
+    COMMIT;
+    END;
+$BODY$
+LANGUAGE plpgsql;
+
 
 -------------------------------------------------------------------------
 -- END ------------------------------------------------------------------
 -------------------------------------------------------------------------
 
 SELECT * FROM sec.fn_user_signup('triny','do','giangd@gmail.com','8583571474','triny','675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2');
+
+SELECT sec.fn_user_verify('gdo', '658970', '{"username":  "gdo"}', '45628554');
+
+SELECT is_active AS "isActive" FROM sec.fn_user_confirm('658973');
+
+CALL sec.pr_user_signup('triny','do','giangd@gmail.com','8583571474','triny','675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2');
 
 -- SELECT
 SELECT * FROM dbo.role_type;
@@ -510,11 +642,22 @@ dbo.role_type_enum,
 sec.user_signup_return_type CASCADE;
 
 DROP FUNCTION IF EXISTS
-sec.fn_login_user;
-
-DROP FUNCTION IF EXISTS
 sec.fn_get_user;
 
 DROP FUNCTION IF EXISTS
 sec.fn_user_signup;
+
+DROP FUNCTION IF EXISTS
+sec.fn_user_login;
+
+DROP FUNCTION IF EXISTS
+sec.fn_user_verify;
+
+DROP FUNCTION IF EXISTS
+sec.fn_user_confirm;
+
+DROP PROCEDURE IF EXISTS
+sec.pr_user_signup;
+
+
 

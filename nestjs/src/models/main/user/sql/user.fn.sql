@@ -1,11 +1,11 @@
 -- CREATE FUNCTION GET USER
-CREATE OR REPLACE FUNCTION sec.fn_get_user(p_username VARCHAR)
+CREATE OR REPLACE FUNCTION sec.fn_get_user(p_username varchar)
 RETURNS TABLE (
-  "firstName" VARCHAR,
-  "lastName" VARCHAR,
-  "emailAddress" VARCHAR,
-  "phoneNumber" VARCHAR,
-  username VARCHAR
+  "firstName" varchar,
+  "lastName" varchar,
+  "emailAddress" varchar,
+  "phoneNumber" varchar,
+  username varchar
 )
 AS
 $BODY$
@@ -26,23 +26,89 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
+-- CREATE FUNCTION USER SIGNUP RETURN
+CREATE TYPE sec.user_signup_return_type AS (
+  username varchar,
+  "emailAddress" varchar,
+  "phoneNumber" varchar,
+  "isActive" boolean
+);
+
+-- CREATE FUNCTION USER SIGNUP
+CREATE OR REPLACE FUNCTION sec.fn_user_signup(
+  p_first_name varchar,
+  p_last_name varchar,
+  p_email_address varchar,
+  p_phone_number varchar,
+  p_username varchar,
+  p_password varchar
+)
+RETURNS SETOF sec.user_signup_return_type
+AS
+$BODY$
+  DECLARE
+    v_role_id int := 2;
+  BEGIN
+    RETURN QUERY
+    WITH c AS (
+      
+      INSERT INTO org.contact(
+        first_name,
+        last_name,
+        email_address,
+        phone_number
+      )
+      VALUES (p_first_name, p_last_name, p_email_address, p_phone_number)
+      RETURNING
+        id,
+        email_address,
+        phone_number
+
+    ), u AS (
+
+      INSERT INTO sec.user(
+        username,
+        password,
+        role_id,
+        contact_id
+      )
+      --SELECT p_username, p_password, v_role_id, id FROM c
+      VALUES(p_username, p_password, v_role_id, (SELECT id FROM c))
+      RETURNING
+        username,
+        is_active,
+        contact_id
+
+    )
+
+    SELECT
+      u.username,
+      c.email_address,
+      c.phone_number,
+      u.is_active
+    FROM u
+      LEFT JOIN c ON c.id = u.contact_id;
+  END;
+$BODY$
+LANGUAGE plpgsql;
+
 -- CREATE FUNCTION LOGIN USER
-CREATE OR REPLACE FUNCTION sec.fn_login_user(p_username VARCHAR)
+CREATE OR REPLACE FUNCTION sec.fn_user_login(p_username varchar)
 RETURNS TABLE (
-  id INT,
-  "firstName" VARCHAR,
-  "lastName" VARCHAR,
-  "emailAddress" VARCHAR,
-  "phoneNumber" VARCHAR,
-  username VARCHAR,
-  password VARCHAR,
-  "roleId" INT,
+  id int,
+  "firstName" varchar,
+  "lastName" varchar,
+  "emailAddress" varchar,
+  "phoneNumber" varchar,
+  username varchar,
+  password varchar,
+  "roleId" int,
   "roleType" dbo.role_type_enum,
-  policy JSONB,
-  "orgId" INT,
-  "orgActive" BOOLEAN,
-  "isActive" BOOLEAN,
-  "isOwner" BOOLEAN
+  policy jsonb,
+  "orgId" int,
+  "orgActive" boolean,
+  "isActive" boolean,
+  "isOwner" boolean
 )
 AS
 $BODY$
@@ -73,97 +139,6 @@ $BODY$
       LEFT JOIN sec.organization o ON o.id = u.org_id
       LEFT JOIN org.contact c ON c.id = u.contact_id
       WHERE u.username = p_username;
-  END;
-$BODY$
-LANGUAGE plpgsql;
-
--- CREATE FUNCTION USER SIGNUP RETURN
-CREATE TYPE sec.user_signup_return_type AS (
-  username VARCHAR,
-  "emailAddress" VARCHAR,
-  "phoneNumber" VARCHAR,
-  "isActive" BOOLEAN
-);
-
--- CREATE FUNCTION USER SIGNUP
-CREATE OR REPLACE FUNCTION sec.fn_user_signup(
-  p_first_name VARCHAR,
-  p_last_name VARCHAR,
-  p_email_address VARCHAR,
-  p_phone_number VARCHAR,
-  p_username VARCHAR,
-  p_password VARCHAR
-)
-RETURNS SETOF sec.user_signup_return_type
-AS
-$BODY$
-  DECLARE
-    v_role_id INT := 2;
-  BEGIN
-    RETURN QUERY
-    WITH c AS (
-      INSERT INTO org.contact(
-        first_name,
-        last_name,
-        email_address,
-        phone_number
-      )
-      VALUES (p_first_name, p_last_name, p_email_address, p_phone_number)
-      RETURNING
-        id,
-        email_address,
-        phone_number
-    ), u AS (
-      INSERT INTO sec.user(
-        username,
-        password,
-        role_id,
-        contact_id
-      )
-      --SELECT p_username, p_password, v_role_id, id FROM c
-      VALUES(p_username, p_password, v_role_id, (SELECT id FROM c))
-      RETURNING
-        username,
-        is_active,
-        contact_id
-    )
-
-    SELECT
-      u.username,
-      c.email_address,
-      c.phone_number,
-      u.is_active
-    FROM u
-      LEFT JOIN c ON c.id = u.contact_id;
-  END;
-$BODY$
-LANGUAGE plpgsql;
-
--- CREATE FUNCTION USER VERIFY
-CREATE OR REPLACE FUNCTION sec.fn_user_verify(
-  p_username varchar, 
-  p_key varchar, 
-  p_data jsonb
-)
-RETURNS SETOF record
-AS
-$BODY$
-  DECLARE
-    rec record;
-  BEGIN
-    RETURN QUERY
-    WITH u AS (
-      SELECT *
-      INTO STRICT rec
-      FROM sec.user
-      WHERE username = p_username
-      EXCEPTION
-        WHEN no_data_found THEN
-        RAISE EXCEPTION 'No username was found %', p_username;
-    )
-    INSERT INTO sec.token(key, data)
-    VALUES(p_key, p_data)
-    RETURNING INTO rec;
   END;
 $BODY$
 LANGUAGE plpgsql;
@@ -235,3 +210,34 @@ $BODY$
   END;
 $BODY$
 LANGUAGE plpgsql;
+
+
+
+-- CREATE FUNCTION USER VERIFY
+-- CREATE OR REPLACE FUNCTION sec.fn_user_verify(
+--   p_username varchar, 
+--   p_key varchar, 
+--   p_data jsonb
+-- )
+-- RETURNS SETOF record
+-- AS
+-- $BODY$
+--   DECLARE
+--     rec record;
+--   BEGIN
+--     RETURN QUERY
+--     WITH u AS (
+--       SELECT *
+--       INTO STRICT rec
+--       FROM sec.user
+--       WHERE username = p_username
+--       EXCEPTION
+--         WHEN no_data_found THEN
+--         RAISE EXCEPTION 'No username was found %', p_username;
+--     )
+--     INSERT INTO sec.token(key, data)
+--     VALUES(p_key, p_data)
+--     RETURNING INTO rec;
+--   END;
+-- $BODY$
+-- LANGUAGE plpgsql;

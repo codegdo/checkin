@@ -5,7 +5,7 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-import { TokenData } from '../interfaces';
+import { TokenData } from '../types';
 
 @Entity({ database: 'c_main', schema: 'sec', name: 'token' })
 @Unique(['key'])
@@ -15,6 +15,9 @@ export class Token extends BaseEntity {
 
   @Column({ name: 'key' })
   key: string;
+
+  @Column({ name: 'type' })
+  type: string;
 
   @Column({ name: 'data', type: 'jsonb' })
   data: TokenData;

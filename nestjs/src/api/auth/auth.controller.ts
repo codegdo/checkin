@@ -10,10 +10,10 @@ import {
 import { JwtService } from '@nestjs/jwt';
 
 import { AuthService } from './auth.service';
-import { CreateUserDto, UserDto, LoginUserDto } from '../../models/main/dtos';
+import { LoginUserDto, UserData, VerifyUserDto } from '../../models/main/dtos';
 import { CurrentUser, Public, Serialize } from 'src/common/decorators';
 import { User } from 'src/models/main/entities';
-import { ISignup } from './auth.interface';
+import { ISignup } from './types/auth.interface';
 
 @Controller('auth')
 export class AuthController {
@@ -24,14 +24,14 @@ export class AuthController {
 
   @Public()
   @Post('signup')
-  //@Serialize(UserDto)
+  //@Serialize(UserData)
   async signup(@Body() body: ISignup) {
     const {
       username,
       emailAddress = '',
       phoneNumber = '',
       isActive,
-    }: UserDto = await this.authService.signup(body);
+    }: UserData = await this.authService.signup(body);
 
     return {
       username,
@@ -44,7 +44,7 @@ export class AuthController {
   @Public()
   @Post('login')
   async login(@Session() session: any, @Body() loginUserDto: LoginUserDto) {
-    const user: UserDto = await this.authService.login(loginUserDto);
+    const user: UserData = await this.authService.login(loginUserDto);
     const { password, orgId, orgActive, ...rest } = user;
     const accessToken = this.jwtService.sign({ orgId });
 
@@ -71,21 +71,11 @@ export class AuthController {
     };
   }
 
-  @Public()
-  @Get('logout')
-  logout(@Session() session: any, @CurrentUser() user: User) {
-    console.log(session.id);
 
-    if (session.user) {
-      session.destroy();
-    }
-
-    return {};
-  }
 
   @Public()
   @Post('verify')
-  async verify(@Body() body: { verification: string; username: string }) {
+  async verify(@Body() body: VerifyUserDto) {
     await this.authService.verify(body);
     return { ok: true };
   }
@@ -101,6 +91,18 @@ export class AuthController {
   @Post('resend')
   async resend(@Body('username') username: string) {
     return this.authService.resend(username);
+  }
+
+  @Public()
+  @Get('logout')
+  logout(@Session() session: any, @CurrentUser() user: User) {
+    console.log(session.id);
+
+    if (session.user) {
+      session.destroy();
+    }
+
+    return {};
   }
 
 
