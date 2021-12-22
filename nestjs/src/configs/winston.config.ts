@@ -33,7 +33,7 @@ export const winstonConfig = registerAs('winston', async () => {
     host: process.env.POSTGRES_HOST,
     username: process.env.POSTGRES_USERNAME,
     password: process.env.POSTGRES_PASSWORD,
-    port: 5432,
+    port: +process.env.POSTGRES_PORT,
     database: 'c_main',
     name: 'default',
     synchronize: true,

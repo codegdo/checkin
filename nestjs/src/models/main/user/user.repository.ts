@@ -3,6 +3,8 @@ import { randomBytes, randomInt, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { User } from './user.entity';
 import { LoginUserDto, SignupUserDto } from '../dtos';
+import { trimUnderscoreObjectKey } from 'src/common/utils/trim-underscore-object-key.util';
+import { SignupUserData } from './user.dto';
 
 const scrypt = promisify(_scrypt);
 
@@ -21,7 +23,7 @@ export class UserRepository extends Repository<User> {
     return hashPassword === hash.toString('hex');
   }
 
-  async singupUser(signupUserDto: SignupUserDto) {
+  async signupUser(signupUserDto: SignupUserDto): Promise<SignupUserData> {
     const {
       firstName,
       lastName,
@@ -33,8 +35,21 @@ export class UserRepository extends Repository<User> {
 
     const hashedPassword = await this.hashPassword(password);
 
+    // const [result] = await this.manager.query(
+    //   `SELECT * FROM sec.fn_user_signup($1, $2, $3, $4, $5, $6)`,
+    //   [
+    //     firstName,
+    //     lastName,
+    //     emailAddress,
+    //     phoneNumber,
+
+    //     username,
+    //     hashedPassword
+    //   ],
+    // );
+
     const [result] = await this.manager.query(
-      `SELECT * FROM sec.fn_user_signup($1, $2, $3, $4, $5, $6)`,
+      `CALL sec.pr_user_signup($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
       [
         firstName,
         lastName,
@@ -42,11 +57,16 @@ export class UserRepository extends Repository<User> {
         phoneNumber,
 
         username,
-        hashedPassword
+        hashedPassword,
+
+        'null',
+        'null',
+        'null',
+        '0'
       ],
     );
 
-    return result;
+    return trimUnderscoreObjectKey<SignupUserData>(result);
   }
 
   async loginUser(loginUserDto: LoginUserDto) {

@@ -7,7 +7,7 @@ export const dbConfig = registerAs('database', () => {
     host: process.env.POSTGRES_HOST,
     username: process.env.POSTGRES_USERNAME,
     password: process.env.POSTGRES_PASSWORD,
-    port: 5434,
+    port: +process.env.POSTGRES_PORT,
     synchronize: false,
     logging: true,
     cli: {

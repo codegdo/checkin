@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto, UserDto } from 'src/models/main/dtos';
+import { CreateUserDto, UpdateUserDto, UserData } from 'src/models/main/dtos';
 import { Serialize, CurrentUser } from 'src/common/decorators';
 import { PaginationQueryDto } from 'src/common/dtos';
 import { User } from 'src/models/main/entities';
@@ -19,14 +19,14 @@ export class UserController {
   constructor(private readonly userService: UserService) { }
 
   @Get('users')
-  @Serialize(UserDto)
+  @Serialize(UserData)
   getAllUsers(@CurrentUser() user: User, @Query() paginationQuery: PaginationQueryDto) {
 
     return this.userService.findAll(paginationQuery);
   }
 
   @Get('users/:id')
-  @Serialize(UserDto)
+  @Serialize(UserData)
   getOneUser(@CurrentUser() user: User, @Param('id') id: number) {
     console.log('GET_CURRENT_USER', user);
     return this.userService.findOne(id);

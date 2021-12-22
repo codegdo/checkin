@@ -29,6 +29,7 @@ import { CalendarRepository } from 'src/models/checkin/repositories';
 import { AuthMailService } from 'src/common/modules';
 import { ISignup } from './types/auth.interface';
 import { UserData, VerifyUserDto } from 'src/models/main/dtos';
+import { trimUnderscoreObjectKey } from 'src/common/utils/trim-underscore-object-key.util';
 
 @Injectable()
 export class AuthService {
@@ -71,21 +72,10 @@ export class AuthService {
   ) { }
 
   async signup({ contact, user }: ISignup) {
-    const queryRunner = this.connection.createQueryRunner();
 
     try {
-      await queryRunner.startTransaction();
-
-      const result = await queryRunner.manager
-        .getCustomRepository(UserRepository)
-        .singupUser({ ...contact, ...user });
-
-      await queryRunner.commitTransaction();
-
-      return result;
+      return await this.userRepository.signupUser({ ...contact, ...user });
     } catch (err) {
-      await queryRunner.rollbackTransaction();
-
       // 23505 = conflict
       if (err.code == 23505) {
         this.logger.warn(`${err.message}`, err);
@@ -94,9 +84,36 @@ export class AuthService {
         this.logger.error(`${err.message}`, err);
         throw new InternalServerErrorException(500, err.code);
       }
-    } finally {
-      await queryRunner.release();
     }
+
+
+    // const queryRunner = this.connection.createQueryRunner();
+
+    // try {
+    //   await queryRunner.startTransaction();
+
+    //   const result = await queryRunner.manager
+    //     .getCustomRepository(UserRepository)
+    //     .singupUser({ ...contact, ...user });
+
+    //   await queryRunner.commitTransaction();
+
+    //   return result;
+    // } catch (err) {
+    //   await queryRunner.rollbackTransaction();
+
+    //   // 23505 = conflict
+    //   if (err.code == 23505) {
+    //     this.logger.warn(`${err.message}`, err);
+    //     throw new ConflictException(409, 'Username already exists.');
+    //   } else {
+    //     this.logger.error(`${err.message}`, err);
+    //     throw new InternalServerErrorException(500, err.code);
+    //   }
+    // } finally {
+    //   await queryRunner.release();
+    // }
+
   }
 
   async login(loginUserDto) {

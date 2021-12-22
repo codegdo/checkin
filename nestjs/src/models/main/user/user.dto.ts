@@ -48,6 +48,13 @@ export class UserData {
   isOwner: boolean;
 }
 
+export class SignupUserData {
+  username: string;
+  emailAddress: string;
+  phoneNumber: string;
+  isActive: boolean;
+}
+
 export class SignupUserDto {
   @IsString()
   firstName: string;
@@ -82,4 +89,38 @@ export class VerifyUserDto {
 
   @IsString()
   username: string;
+}
+
+export class CreateUserDto {
+  @IsString()
+  emailAddress: string;
+
+  @IsString()
+  username: string;
+
+  @IsString()
+  password: string;
+
+  @IsNumber()
+  roleId: number;
+
+  @IsNumber()
+  orgId: number;
+}
+
+export class UpdateUserDto {
+  @IsString()
+  emailAddress: string;
+
+  @IsString()
+  username: string;
+
+  @IsString()
+  password: string;
+
+  @IsNumber()
+  roleId: number;
+
+  @IsNumber()
+  orgId: number;
 }

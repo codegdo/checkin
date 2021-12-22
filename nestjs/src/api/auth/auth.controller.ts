@@ -31,7 +31,7 @@ export class AuthController {
       emailAddress = '',
       phoneNumber = '',
       isActive,
-    }: UserData = await this.authService.signup(body);
+    } = await this.authService.signup(body);
 
     return {
       username,

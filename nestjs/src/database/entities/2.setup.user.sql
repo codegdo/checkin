@@ -335,11 +335,11 @@ CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
 -- CREATE FUNCTION GET USER
 CREATE OR REPLACE FUNCTION sec.fn_get_user(p_username VARCHAR)
 RETURNS TABLE (
-  "firstName" VARCHAR,
-  "lastName" VARCHAR,
-  "emailAddress" VARCHAR,
-  "phoneNumber" VARCHAR,
-  username VARCHAR
+  "firstName" varchar,
+  "lastName" varchar,
+  "emailAddress" varchar,
+  "phoneNumber" varchar,
+  username varchar
 )
 AS
 $$
@@ -363,20 +363,20 @@ LANGUAGE plpgsql;
 -- CREATE FUNCTION LOGIN USER
 CREATE OR REPLACE FUNCTION sec.fn_user_login(p_username VARCHAR)
 RETURNS TABLE (
-  id INT,
-  "firstName" VARCHAR,
-  "lastName" VARCHAR,
-  "emailAddress" VARCHAR,
-  "phoneNumber" VARCHAR,
-  username VARCHAR,
-  password VARCHAR,
-  "roleId" INT,
+  id int,
+  "firstName" varchar,
+  "lastName" varchar,
+  "emailAddress" varchar,
+  "phoneNumber" varchar,
+  username varchar,
+  password varchar,
+  "roleId" int,
   "roleType" dbo.role_type_enum,
-  policy JSONB,
-  "orgId" INT,
-  "orgActive" BOOLEAN,
-  "isActive" BOOLEAN,
-  "isOwner" BOOLEAN
+  policy jsonb,
+  "orgId" int,
+  "orgActive" boolean,
+  "isActive" boolean,
+  "isOwner" boolean
 )
 AS
 $$
@@ -413,20 +413,20 @@ LANGUAGE plpgsql;
 
 -- CREATE FUNCTION USER SIGNUP RETURN
 CREATE TYPE sec.user_signup_return_type AS (
-  username VARCHAR,
-  "emailAddress" VARCHAR,
-  "phoneNumber" VARCHAR,
-  "isActive" BOOLEAN
+  username varchar,
+  "emailAddress" varchar,
+  "phoneNumber" varchar,
+  "isActive" boolean
 );
 
 -- CREATE FUNCTION USER SIGNUP
 CREATE OR REPLACE FUNCTION sec.fn_user_signup(
-  p_first_name VARCHAR,
-  p_last_name VARCHAR,
-  p_email_address VARCHAR,
-  p_phone_number VARCHAR,
-  p_username VARCHAR,
-  p_password VARCHAR
+  p_first_name varchar,
+  p_last_name varchar,
+  p_email_address varchar,
+  p_phone_number varchar,
+  p_username varchar,
+  p_password varchar
 )
 RETURNS SETOF sec.user_signup_return_type
 AS
@@ -542,7 +542,7 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
--- CREATE PROCEDURE USER SIGNUP
+-- CREATE PROCEDURE USER_SIGNUP
 CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
   p_first_name varchar,
   p_last_name varchar,
@@ -550,14 +550,20 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
   p_phone_number varchar,
   p_username varchar,
   p_password varchar,
-  o_user_signup OUT sec.user_signup_return_type
+
+  "_username" INOUT varchar,
+  "_emailAddress" INOUT varchar,
+  "_phoneNumber" INOUT varchar,
+  "_isActive" INOUT boolean
+  --out_user_signup_return_type INOUT sec.user_signup_return_type
 )
 AS
 $BODY$
-    DECLARE
-        v_role_id INT := 2;
-    BEGIN
-        WITH c AS (
+  DECLARE
+      v_role_id INT := 2;
+  BEGIN
+
+    WITH c AS (
       INSERT INTO org.contact(
         first_name,
         last_name,
@@ -584,16 +590,21 @@ $BODY$
     )
 
     SELECT
-      u.username,
-      c.email_address,
-      c.phone_number,
-      u.is_active
-    INTO o_user_signup
+      u.username::varchar,
+      c.email_address::varchar,
+      c.phone_number::varchar,
+      u.is_active::boolean
+    INTO
+      "_username",
+      "_emailAddress",
+      "_phoneNumber",
+      "_isActive"
+      --out_user_signup_return_type
     FROM u
       LEFT JOIN c ON c.id = u.contact_id;
 
     COMMIT;
-    END;
+  END;
 $BODY$
 LANGUAGE plpgsql;
 
@@ -608,9 +619,13 @@ SELECT sec.fn_user_verify('gdo', '658970', '{"username":  "gdo"}', '45628554');
 
 SELECT is_active AS "isActive" FROM sec.fn_user_confirm('658973');
 
-CALL sec.pr_user_signup('triny','do','giangd@gmail.com','8583571474','triny','675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2');
+CALL sec.pr_user_signup('kenny'::varchar,'do'::varchar,'giangd@gmail.com'::varchar,'8583571474'::varchar,'kennny'::varchar,'675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2'::varchar, 'null'::text, 'null'::text, 'null'::text, '0'::boolean);
+
+CALL sec.pr_user_signup('kenny'::varchar,'do'::varchar,'giangd@gmail.com'::varchar,'8583571474'::varchar,'kennny'::varchar,'675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2'::varchar, ('null'::varchar,'null'::varchar,'null'::varchar,'0'::boolean)::sec.user_signup_return_type);
+
 
 -- SELECT
+SELECT * FROM log.error;
 SELECT * FROM dbo.role_type;
 SELECT * FROM org.contact;
 SELECT * FROM sec.token;

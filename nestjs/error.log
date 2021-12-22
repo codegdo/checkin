@@ -240,3 +240,5 @@
 {"level":"error","message":"Unable to connect to the database (checkin). Retrying (1)..."}
 {"level":"error","message":"Unable to connect to the database (checkin). Retrying (1)..."}
 {"level":"error","message":"function sec.fn_user_signup(unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"secret option required for sessions"}
+{"level":"error","message":"there is no parameter $0"}

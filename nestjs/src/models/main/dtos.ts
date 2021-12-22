@@ -1,3 +1,2 @@
 export * from './user/user.dto';
-
-export * from './contact/dtos/create-contact.dto';
+export * from './contact/contact.dto';
