@@ -28,8 +28,7 @@ import {
 import { CalendarRepository } from 'src/models/checkin/repositories';
 import { AuthMailService } from 'src/common/modules';
 import { ISignup } from './types/auth.interface';
-import { UserData, VerifyUserDto } from 'src/models/main/dtos';
-import { trimUnderscoreObjectKey } from 'src/common/utils/trim-underscore-object-key.util';
+import { VerifyUserDto } from 'src/models/main/dtos';
 
 @Injectable()
 export class AuthService {
@@ -85,39 +84,10 @@ export class AuthService {
         throw new InternalServerErrorException(500, err.code);
       }
     }
-
-
-    // const queryRunner = this.connection.createQueryRunner();
-
-    // try {
-    //   await queryRunner.startTransaction();
-
-    //   const result = await queryRunner.manager
-    //     .getCustomRepository(UserRepository)
-    //     .singupUser({ ...contact, ...user });
-
-    //   await queryRunner.commitTransaction();
-
-    //   return result;
-    // } catch (err) {
-    //   await queryRunner.rollbackTransaction();
-
-    //   // 23505 = conflict
-    //   if (err.code == 23505) {
-    //     this.logger.warn(`${err.message}`, err);
-    //     throw new ConflictException(409, 'Username already exists.');
-    //   } else {
-    //     this.logger.error(`${err.message}`, err);
-    //     throw new InternalServerErrorException(500, err.code);
-    //   }
-    // } finally {
-    //   await queryRunner.release();
-    // }
-
   }
 
   async login(loginUserDto) {
-    const user: UserData = await this.userRepository.loginUser(loginUserDto);
+    const user = await this.userRepository.loginUser(loginUserDto);
 
     if (!user) {
       throw new BadRequestException();
@@ -140,66 +110,13 @@ export class AuthService {
 
     const token = await this.userRepository.verifyUser(username);
 
+    if (verification == 'phoneNumber') {
+      // send msg
+    } else {
+      // send email
+    }
+
     return token;
-
-    // const token = await this.tokenRepository.findOne({
-    //   where: [{ id }],
-    // });
-
-    // if (!token) {
-    //   throw new NotFoundException(404, 'Not Found');
-    // }
-
-    // const date = new Date();
-    // const now = Math.round(date.getTime() / 1000);
-
-    // if (token.expiredAt < now) {
-    //   throw new UnauthorizedException(401, 'Unauthorized');
-    // }
-
-    // const { username } = token.data;
-    // const user = await this.userRepository.findOne({ where: [{ username }] });
-
-    // if (user.isActive) {
-    //   throw new ConflictException(409, 'Activated');
-    // }
-
-    // user.isActive = true;
-
-    // try {
-    //   await this.userRepository.save(user);
-    //   await this.tokenRepository.delete(token);
-    // } catch (err) {
-    //   throw new InternalServerErrorException(err.code);
-    // }
-
-    // await this.connection.transaction(async (manager) => {
-    //   try {
-    //     await manager.save(user);
-    //     await manager.remove(token);
-    //   } catch (err) {
-    //     throw new InternalServerErrorException(err.code);
-    //   }
-    // });
-
-    /* const queryRunner = this.connection.createQueryRunner();
-    await queryRunner.startTransaction();
-
-    try {
-      await queryRunner.manager.save(user);
-      await queryRunner.manager.remove(token);
-
-      // commit
-      await queryRunner.commitTransaction();
-    } catch (err) {
-      // rollback
-      await queryRunner.rollbackTransaction();
-
-      throw new InternalServerErrorException(err.code);
-    } finally {
-      // release
-      await queryRunner.release();
-    } */
   }
 
   async confirm(key: string) {
@@ -258,4 +175,93 @@ const queryRunner = this.connection.createQueryRunner();
     user.businessId = bus.id;
     await manager.save(user);
   });
+*/
+
+/*
+// const queryRunner = this.connection.createQueryRunner();
+
+    // try {
+    //   await queryRunner.startTransaction();
+
+    //   const result = await queryRunner.manager
+    //     .getCustomRepository(UserRepository)
+    //     .singupUser({ ...contact, ...user });
+
+    //   await queryRunner.commitTransaction();
+
+    //   return result;
+    // } catch (err) {
+    //   await queryRunner.rollbackTransaction();
+
+    //   // 23505 = conflict
+    //   if (err.code == 23505) {
+    //     this.logger.warn(`${err.message}`, err);
+    //     throw new ConflictException(409, 'Username already exists.');
+    //   } else {
+    //     this.logger.error(`${err.message}`, err);
+    //     throw new InternalServerErrorException(500, err.code);
+    //   }
+    // } finally {
+    //   await queryRunner.release();
+    // }
+
+
+    // const token = await this.tokenRepository.findOne({
+    //   where: [{ id }],
+    // });
+
+    // if (!token) {
+    //   throw new NotFoundException(404, 'Not Found');
+    // }
+
+    // const date = new Date();
+    // const now = Math.round(date.getTime() / 1000);
+
+    // if (token.expiredAt < now) {
+    //   throw new UnauthorizedException(401, 'Unauthorized');
+    // }
+
+    // const { username } = token.data;
+    // const user = await this.userRepository.findOne({ where: [{ username }] });
+
+    // if (user.isActive) {
+    //   throw new ConflictException(409, 'Activated');
+    // }
+
+    // user.isActive = true;
+
+    // try {
+    //   await this.userRepository.save(user);
+    //   await this.tokenRepository.delete(token);
+    // } catch (err) {
+    //   throw new InternalServerErrorException(err.code);
+    // }
+
+    // await this.connection.transaction(async (manager) => {
+    //   try {
+    //     await manager.save(user);
+    //     await manager.remove(token);
+    //   } catch (err) {
+    //     throw new InternalServerErrorException(err.code);
+    //   }
+    // });
+
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.save(user);
+      await queryRunner.manager.remove(token);
+
+      // commit
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      // rollback
+      await queryRunner.rollbackTransaction();
+
+      throw new InternalServerErrorException(err.code);
+    } finally {
+      // release
+      await queryRunner.release();
+    } 
 */

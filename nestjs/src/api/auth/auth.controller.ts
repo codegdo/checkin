@@ -10,7 +10,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 
 import { AuthService } from './auth.service';
-import { LoginUserDto, UserData, VerifyUserDto } from '../../models/main/dtos';
+import { LoginUserDto, VerifyUserDto } from '../../models/main/dtos';
 import { CurrentUser, Public, Serialize } from 'src/common/decorators';
 import { User } from 'src/models/main/entities';
 import { ISignup } from './types/auth.interface';
@@ -44,7 +44,7 @@ export class AuthController {
   @Public()
   @Post('login')
   async login(@Session() session: any, @Body() loginUserDto: LoginUserDto) {
-    const user: UserData = await this.authService.login(loginUserDto);
+    const user = await this.authService.login(loginUserDto);
     const { password, orgId, orgActive, ...rest } = user;
     const accessToken = this.jwtService.sign({ orgId });
 

@@ -3,8 +3,9 @@ import { randomBytes, randomInt, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
 import { User } from './user.entity';
 import { LoginUserDto, SignupUserDto } from '../dtos';
-import { trimUnderscoreObjectKey } from 'src/common/utils/trim-underscore-object-key.util';
-import { SignupUserData } from './user.dto';
+import { trimObjectKey } from 'src/common/utils';
+import { SignupUserData, UserData } from './user.dto';
+import { TokenData } from '../token/token.dto';
 
 const scrypt = promisify(_scrypt);
 
@@ -66,10 +67,10 @@ export class UserRepository extends Repository<User> {
       ],
     );
 
-    return trimUnderscoreObjectKey<SignupUserData>(result);
+    return trimObjectKey<SignupUserData>(result, '_');
   }
 
-  async loginUser(loginUserDto: LoginUserDto) {
+  async loginUser(loginUserDto: LoginUserDto): Promise<UserData | undefined | null> {
     const { username, password } = loginUserDto;
     const [user] = await this.manager.query(`SELECT * FROM sec.fn_user_login($1)`, [username]);
 
@@ -90,7 +91,7 @@ export class UserRepository extends Repository<User> {
     return (await this.validatePassword(password, _password)) ? _user : null;
   }
 
-  async verifyUser(username: string) {
+  async verifyUser(username: string): Promise<TokenData> {
     // await randomBytes(6).toString('base64');
     // await randomInt(100000, 999999);
 

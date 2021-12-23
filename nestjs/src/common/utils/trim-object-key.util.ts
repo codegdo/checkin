@@ -1,7 +1,7 @@
-export const trimUnderscoreObjectKey = <T>(values): T => {
+export const trimObjectKey = <T>(values, k: string): T => {
   return Object.entries(values).reduce(
     (a: T, i) => {
-      const key = i[0].substring(1);
+      const key = i[0].replace(k, '');
       const value = i[1];
 
       a = { ...a, [key]: value };

@@ -145,8 +145,9 @@ LANGUAGE plpgsql;
 
 -- CREATE FUNCTION USER VERIFY
 CREATE OR REPLACE FUNCTION sec.fn_user_verify(
-  p_username varchar, 
-  p_key varchar, 
+  p_username varchar,
+  p_key varchar,
+  p_type varchar,
   p_data jsonb,
   p_expired_at bigint
 )
@@ -164,8 +165,8 @@ $BODY$
 
     IF found THEN
 
-      INSERT INTO sec.token(key, data, expired_at)
-      VALUES(p_key, p_data, p_expired_at)
+      INSERT INTO sec.token(key, type, data, expired_at)
+      VALUES(p_key, p_type, p_data, p_expired_at)
       RETURNING * INTO rec;
 
     ELSE
