@@ -501,7 +501,7 @@ $BODY$
       RETURNING * INTO rec;
 
     ELSE
-        RAISE EXCEPTION no_data_found ;
+        RAISE EXCEPTION no_data_found;
     END IF;
 
     RETURN rec;
@@ -527,7 +527,6 @@ $BODY$
     WHERE key = p_key;
 
     IF found THEN
-
       IF current < rec.expired_at THEN
 
         UPDATE sec.user
@@ -538,9 +537,7 @@ $BODY$
         DELETE FROM sec.token WHERE key = p_key OR current > expired_at;
 
       ELSE
-
         RAISE EXCEPTION no_data_found;
-
       END IF;
     ELSE
         RAISE EXCEPTION no_data_found;

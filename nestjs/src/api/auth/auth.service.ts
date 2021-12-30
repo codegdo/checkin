@@ -26,7 +26,7 @@ import {
   EmailRepository,
 } from 'src/models/main/repositories';
 import { WorkspaceRepository as CheckinRepository } from 'src/models/checkin/repositories';
-import { AuthMailService } from 'src/common/modules';
+import { AuthMessageService } from 'src/common/modules';
 import { ISignup } from './types/auth.interface';
 import { VerifyUserDto } from 'src/models/main/dtos';
 
@@ -66,7 +66,7 @@ export class AuthService {
     @Inject(Logger)
     private readonly logger: LoggerService,
 
-    private readonly mailService: AuthMailService,
+    private readonly messageService: AuthMessageService,
     private readonly configService: ConfigService,
   ) { }
 
@@ -106,23 +106,48 @@ export class AuthService {
     return user;
   }
 
-  async verify({ verification, username }: VerifyUserDto) {
+  async verify({ verify, username }: VerifyUserDto) {
+    try {
+      const token = await this.userRepository.verifyUser(username);
+      const type = verify == 'phoneNumber' ? 'phone' : 'email';
 
-    const { data } = await this.userRepository.verifyUser(username);
+      return this.messageService.sendVerifyMessage();
 
-    console.log(data);
+      if (verify == 'phoneNumber') {
+        // send msg
 
-    if (verification == 'phoneNumber') {
-      // send msg
-    } else {
-      // send email
+      } else {
+        // send email
+      }
+
+      return { username };
+
+    } catch (err) {
+      // P0002 = no data found
+      if (err.code == 'P0002') {
+        this.logger.warn(`${err.message}`, err);
+        throw new NotFoundException(404, 'Not Found.');
+      } else {
+        this.logger.error(`${err.message}`, err);
+        throw new InternalServerErrorException(500, err.code);
+      }
     }
-
-    return { username };
   }
 
   async confirm(key: string) {
-    return await this.userRepository.confirmUser(key);
+    try {
+      return await this.userRepository.confirmUser(key);
+    } catch (err) {
+      // P0002 = no data found
+      if (err.code == 'P0002') {
+        this.logger.warn(`${err.message}`, err);
+        throw new NotFoundException(404, 'Not Found.');
+      } else {
+        this.logger.error(`${err.message}`, err);
+        throw new InternalServerErrorException(500, err.code);
+      }
+    }
+
   }
 
   async resend(username: string) {

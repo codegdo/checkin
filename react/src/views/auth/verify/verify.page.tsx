@@ -56,13 +56,16 @@ const Verify: React.FC = (): JSX.Element => {
     return <Navigate to="/" />;
   }
 
-  return <div>
-    {
-      !confirmed ?
-        <Form form={form} loading={loading} onSubmit={handleSubmit} /> :
-        <Confirm setConfirmed={setConfirmed} />
-    }
-  </div>
+  return (
+    <>
+      {loading === 'error' && <div>Error</div>}
+      {
+        !confirmed ?
+          <Form form={form} loading={loading} onSubmit={handleSubmit} /> :
+          <Confirm setConfirmed={setConfirmed} />
+      }
+    </>
+  );
 
 }
 

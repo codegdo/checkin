@@ -7,7 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import {
   GuardModule,
   SessionModule,
-  MailModule,
+  MessageModule,
 } from './common/modules';
 
 import {
@@ -30,14 +30,16 @@ import {
   mailerConfig,
   pinoConfig,
   sessionConfig,
+  twilioConfig,
   winstonConfig,
 } from './configs';
+
 
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [appConfig, dbConfig, sessionConfig, mailerConfig, jwtConfig, pinoConfig, winstonConfig],
+      load: [appConfig, dbConfig, sessionConfig, mailerConfig, jwtConfig, pinoConfig, winstonConfig, twilioConfig],
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
@@ -67,7 +69,7 @@ import {
     // }),
 
     GuardModule,
-    MailModule,
+    MessageModule,
     AuthModule,
     UserModule,
 

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 import { Form, FormData } from '../../../components/form';
-import { useFetch } from '../../../hooks';
+import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 
 
@@ -11,6 +11,8 @@ const Confirm: React.FC<any> = ({ setConfirmed }): JSX.Element => {
   const { loggedIn, orgId, user } = useSelector((state: AppState) => state.session);
   const [{ loading, result }, fetchConfirm] = useFetch('/api/auth/confirm');
   const [form, setForm] = useState<FormData>();
+  const [isActive, setIsActive] = useState(false);
+  const { updateSession } = useAction();
 
   // Load form
   useEffect(() => {
@@ -22,7 +24,8 @@ const Confirm: React.FC<any> = ({ setConfirmed }): JSX.Element => {
 
   useEffect(() => {
     if (loading == 'success') {
-      console.log(result);
+      updateSession({ user: { ...user, isActive: true } });
+      setIsActive(true);
     }
   }, [loading]);
 
@@ -41,7 +44,7 @@ const Confirm: React.FC<any> = ({ setConfirmed }): JSX.Element => {
     return <Navigate to="../login" />;
   }
 
-  if (user && user.isActive && !orgId) {
+  if (isActive) {
     return <Navigate to="../setup" />;
   }
 
@@ -49,10 +52,12 @@ const Confirm: React.FC<any> = ({ setConfirmed }): JSX.Element => {
     return <Navigate to="/" />;
   }
 
-  return <div>
-    <Form form={form} loading={loading} onSubmit={handleSubmit} onCallback={handleCallback} />
-  </div>
-
+  return (
+    <>
+      {loading === 'error' && <div>Error</div>}
+      <Form form={form} loading={loading} onSubmit={handleSubmit} onCallback={handleCallback} />
+    </>
+  );
 }
 
 export default Confirm;

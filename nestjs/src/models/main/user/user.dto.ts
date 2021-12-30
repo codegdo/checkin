@@ -109,7 +109,7 @@ export class LoginUserDto {
 
 export class VerifyUserDto {
   @IsString()
-  verification: string;
+  verify: string;
 
   @IsString()
   username: string;

@@ -1,8 +1,13 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Email, EmailType } from '../entities';
+import { EmailData } from './email.dto';
 
 @EntityRepository(Email)
 export class EmailRepository extends Repository<Email> {
+  async getVerifyEmail(): Promise<EmailData[]> {
+    return this.manager.query(`SELECT * FROM org.fn_get_email_by_name($1)`, ['verify']);
+  }
+
   async getSingupEmail() {
 
     const emails = await this.manager.query(`SELECT * FROM org.fn_get_email_by_name($1)`, ['signup']);

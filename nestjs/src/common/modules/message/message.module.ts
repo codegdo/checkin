@@ -4,8 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TwilioModule } from 'nestjs-twilio';
 
-import { AuthMailService } from './auth-mail.service';
 import { EmailRepository } from 'src/models/main/repositories';
+import { AuthMessageService } from './auth-message.service';
 
 @Global()
 @Module({
@@ -20,13 +20,13 @@ import { EmailRepository } from 'src/models/main/repositories';
       },
       inject: [ConfigService]
     }),
-    // TwilioModule.forRootAsync({
-    //   useFactory: async (configService: ConfigService) =>
-    //     configService.get('twilio'),
-    //   inject: [ConfigService],
-    // }),
+    TwilioModule.forRootAsync({
+      useFactory: async (configService: ConfigService) =>
+        configService.get('twilio'),
+      inject: [ConfigService],
+    }),
   ],
-  providers: [AuthMailService, Logger],
-  exports: [AuthMailService]
+  providers: [AuthMessageService, Logger],
+  exports: [AuthMessageService]
 })
-export class MailModule { }
+export class MessageModule { }

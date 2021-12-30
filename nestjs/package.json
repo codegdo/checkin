@@ -38,11 +38,13 @@
     "googleapis": "^92.0.0",
     "handlebars": "^4.7.7",
     "nest-winston": "^1.6.1",
+    "nestjs-twilio": "^2.1.0",
     "nodemailer": "^6.7.0",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "twilio": "^3.72.0",
     "typeorm": "^0.2.35",
     "winston": "^3.3.3",
     "winston-transport": "^4.4.0"

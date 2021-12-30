@@ -32,6 +32,9 @@ export class EmailAddress {
   @Column({ name: 'bcc_recipients' })
   bccRecipients: string;
 
+  @Column({ name: 'sms_recipients' })
+  sms_Recipients: string;
+
   @Column({ name: 'created_by' })
   createdBy: string;
 
@@ -134,6 +137,9 @@ export class Email {
 
   @Column({ name: 'body' })
   body: string;
+
+  @Column({ name: 'message' })
+  message: string;
 
   @Column({ name: 'is_active' })
   isActive: boolean;

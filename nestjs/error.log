@@ -268,3 +268,11 @@
 {"level":"error","message":"column \"data\" is of type jsonb but expression is of type text"}
 {"level":"error","message":"invalid input syntax for type json"}
 {"level":"error","message":"column \"data\" is of type jsonb but expression is of type text"}
+{"level":"error","message":"no_data_found"}
+{"level":"error","message":"no_data_found"}
+{"level":"error","message":"column reference \"is_active\" is ambiguous"}
+{"level":"error","message":"column reference \"is_active\" is ambiguous"}
+{"level":"error","message":"column reference \"is_active\" is ambiguous"}
+{"level":"error","message":"column reference \"is_active\" is ambiguous"}
+{"level":"error","message":"no_data_found"}
+{"level":"error","message":"no_data_found"}

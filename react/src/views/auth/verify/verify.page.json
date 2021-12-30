@@ -68,7 +68,7 @@
     {
       "id": 3,
       "label": null,
-      "name": "verification",
+      "name": "verify",
       "description": null,
       "type": "radio",
       "role": "field",
