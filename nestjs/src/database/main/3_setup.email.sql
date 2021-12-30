@@ -6,6 +6,8 @@ CREATE TABLE IF NOT EXISTS dbo.email_address (
   cc_recipients TEXT,
   bcc_recipients TEXT,
 
+  sms_recipients TEXT,
+
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
   created_by VARCHAR(45) DEFAULT CURRENT_USER,
@@ -15,9 +17,9 @@ CREATE TABLE IF NOT EXISTS dbo.email_address (
 );
 
 INSERT
-INTO dbo.email_address (group_name, recipients, cc_recipients, bcc_recipients)
+INTO dbo.email_address (group_name, recipients, cc_recipients, bcc_recipients, sms_recipients)
 VALUES
-('System', 'checkin.workspace@gmail.com', null, null);
+('System', 'checkin.workspace@gmail.com', null, null, null);
 
 -- CREATE TABLE EMAIL_FROM
 CREATE TABLE IF NOT EXISTS dbo.email_from (
@@ -40,7 +42,7 @@ VALUES
 ('Auth Service', 'checkin.authservice@gmail.com', null);
 
 -- CREATE TABLE EMAIL_TYPE
-CREATE TYPE dbo.email_type_enum AS ENUM ('signup');
+CREATE TYPE dbo.email_type_enum AS ENUM ('verify','signup');
 
 CREATE TABLE IF NOT EXISTS dbo.email_type (
   id SERIAL NOT NULL,
@@ -65,7 +67,7 @@ CREATE TABLE IF NOT EXISTS dbo.email_type (
 INSERT
 INTO dbo.email_type (id, type_name, type, module_id, email_address_id, email_from_id)
 VALUES
-('1', 'signup', 'S', '1', null, '1'),
+('1', 'verify', 'S', '1', null, '1'),
 ('2', 'signup', 'R', '1', '1', '1');
 
 -- CREATE TABLE EMAIL
@@ -74,6 +76,8 @@ CREATE TABLE IF NOT EXISTS org.email (
   name VARCHAR(45) NOT NULL,
   subject VARCHAR(255),
   body TEXT,
+
+  message TEXT,
 
   email_type_id INT,
   org_id INT,
@@ -90,10 +94,9 @@ CREATE TABLE IF NOT EXISTS org.email (
 );
 
 INSERT
-INTO org.email (name, subject, body, email_type_id, org_id)
+INTO org.email (name, subject, body, message, email_type_id, org_id)
 VALUES
-('Signup Confirmation', 'Activate Your Account', '<html><body><p>Hi {{name}},</p><p>To verify your email address ({{emailAddres}}), please click the following <a href="{{url}}">confirmation link</a></p><p>If you believe you received this email in error, please contact us at <a href="mailto:suport@codegdo.com">support@codegdo.com</a></p><p>Thank you,<br>The Codegdo Team</p></body></html>', '1', null),
-('Organization Signup', 'New Client Signup', '<html><body>New client has signed up. username: {{username}}</body></html>', '2', null);
+('Verify Confirmation', 'Your Verification Code', '<html><body><p>Hi {{name}},</p><p>Your verification code is {{key}}, please enter the code to confirm.</p><p>If you believe you received this email in error, please contact us at <a href="mailto:suport@codegdo.com">support@codegdo.com</a></p><p>Thank you,<br>The Codegdo Team</p></body></html>', 'Your verification code is {{key}}.', '1', null);
 
 
 -- CREATE FUNCTION FN_GET_EMAIL_BY_NAME
@@ -108,8 +111,10 @@ RETURNS TABLE (
   recipients TEXT,
   "ccRecipients" TEXT,
   "bccRecipients" TEXT,
+  "smsRecipients" TEXT,
   subject VARCHAR,
   body TEXT,
+  message TEXT,
   "isActive" BOOLEAN,
   "orgId" INT
 )
@@ -130,8 +135,10 @@ $BODY$
         ea.recipients,
         ea.cc_recipients,
         ea.bcc_recipients,
+        ea.sms_recipients,
         e.subject,
         e.body,
+        e.message,
         e.is_active,
         e.org_id
       FROM org.email e
@@ -153,7 +160,7 @@ SELECT * FROM dbo.email_address;
 SELECT * FROM dbo.email_from;
 SELECT * FROM dbo.email_type;
 SELECT * FROM org.email;
-SELECT * FROM org.fn_get_email_by_name('signup');
+SELECT * FROM org.fn_get_email_by_name('verify');
 
 -- DROP
 DROP TABLE IF EXISTS
