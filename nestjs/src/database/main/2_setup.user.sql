@@ -490,13 +490,14 @@ $BODY$
 
     SELECT *
     INTO rec
-    FROM sec.user
+    FROM sec.user u
+    LEFT JOIN org.contact c ON c.id = u.contact_id
     WHERE username = p_username;
 
     IF found THEN
 
       INSERT INTO sec.token(key, type, data, expired_at)
-      VALUES(p_key, p_type, p_data, p_expired_at)
+      VALUES(p_key, p_type, CAST('{"username":"' || rec.username || '", "phoneNumber":"' || rec.phone_number || '", "emailAddress":"' || rec.email_address || '"}' as jsonb), p_expired_at)
       RETURNING * INTO rec;
 
     ELSE
@@ -517,6 +518,7 @@ AS
 $BODY$
   DECLARE
     rec record;
+    current bigint := extract(epoch from now()) * 1000;
   BEGIN
 
     SELECT *
@@ -526,15 +528,22 @@ $BODY$
 
     IF found THEN
 
-      UPDATE sec.user
-      SET is_active = true
-      WHERE username = rec.data::jsonb ->> 'username'
-      RETURNING * INTO rec;
+      IF current < rec.expired_at THEN
 
-      DELETE FROM sec.token WHERE key = p_key;
+        UPDATE sec.user
+        SET is_active = true
+        WHERE username = rec.data::jsonb ->> 'username'
+        RETURNING * INTO rec;
 
+        DELETE FROM sec.token WHERE key = p_key OR current > expired_at;
+
+      ELSE
+
+        RAISE EXCEPTION no_data_found;
+
+      END IF;
     ELSE
-        RAISE EXCEPTION no_data_found ;
+        RAISE EXCEPTION no_data_found;
     END IF;
 
     RETURN rec;
@@ -551,10 +560,10 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
   p_username varchar,
   p_password varchar,
 
-  "_username" INOUT varchar,
-  "_emailAddress" INOUT varchar,
-  "_phoneNumber" INOUT varchar,
-  "_isActive" INOUT boolean
+  "out_username" INOUT varchar,
+  "out_emailAddress" INOUT varchar,
+  "out_phoneNumber" INOUT varchar,
+  "out_isActive" INOUT boolean
   --out_user_signup_return_type INOUT sec.user_signup_return_type
 )
 AS
@@ -595,10 +604,10 @@ $BODY$
       c.phone_number::varchar,
       u.is_active::boolean
     INTO
-      "_username",
-      "_emailAddress",
-      "_phoneNumber",
-      "_isActive"
+      "out_username",
+      "out_emailAddress",
+      "out_phoneNumber",
+      "out_isActive"
       --out_user_signup_return_type
     FROM u
       LEFT JOIN c ON c.id = u.contact_id;
@@ -631,6 +640,8 @@ SELECT * FROM org.contact;
 SELECT * FROM sec.token;
 SELECT * FROM sec.user;
 SELECT * FROM sec.policy;
+
+TRUNCATE sec.token;
 
 -- DROP
 DROP TABLE IF EXISTS

@@ -13,7 +13,7 @@ import { User } from '../user/user.entity';
 
 interface OrgData { };
 
-@Entity({ database: 'c_main', schema: 'sec', name: 'organization' })
+@Entity({ database: 'main', schema: 'sec', name: 'organization' })
 @Unique(['subdomain'])
 export class Organization extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })

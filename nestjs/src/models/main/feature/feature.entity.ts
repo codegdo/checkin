@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { Module } from '../module/module.entity';
 
-@Entity({ database: 'c_main', schema: 'dbo', name: 'feature' })
+@Entity({ database: 'main', schema: 'dbo', name: 'feature' })
 export class Feature extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;

@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 
-@Entity({ database: 'c_main', schema: 'log', name: 'error' })
+@Entity({ database: 'main', schema: 'log', name: 'error' })
 export class LogError extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

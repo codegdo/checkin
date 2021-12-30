@@ -13,7 +13,7 @@ import {
   UserRepository,
   EmailRepository
 } from 'src/models/main/repositories';
-import { CalendarRepository } from 'src/models/checkin/repositories';
+import { WorkspaceRepository as CheckinRepository } from 'src/models/checkin/repositories';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { CalendarRepository } from 'src/models/checkin/repositories';
       [OrganizationRepository, UserRepository, ContactRepository, RoleRepository, TokenRepository, EmailRepository],
       'default',
     ),
-    TypeOrmModule.forFeature([CalendarRepository], 'checkin'),
+    TypeOrmModule.forFeature([CheckinRepository], 'checkin'),
     JwtModule.registerAsync({
       useFactory: async (configService: ConfigService) => {
         return configService.get('jwt');

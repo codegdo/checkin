@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ database: 'c_checkin', schema: 'org', name: 'calendar' })
-export class Calendar {
+@Entity({ database: 'checkin', schema: 'org', name: 'workspace' })
+export class Workspace {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 

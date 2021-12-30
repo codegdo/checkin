@@ -9,6 +9,9 @@ setup
 account
 support
 
+
+workspace
+
 checkin
   bookings
 

@@ -7,10 +7,10 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
   p_username varchar,
   p_password varchar,
 
-  "_username" INOUT varchar,
-  "_emailAddress" INOUT varchar,
-  "_phoneNumber" INOUT varchar,
-  "_isActive" INOUT boolean
+  "out_username" INOUT varchar,
+  "out_emailAddress" INOUT varchar,
+  "out_phoneNumber" INOUT varchar,
+  "out_isActive" INOUT boolean
   --out_user_signup_return_type INOUT sec.user_signup_return_type
 )
 AS
@@ -51,10 +51,10 @@ $BODY$
       c.phone_number::varchar,
       u.is_active::boolean
     INTO
-      "_username",
-      "_emailAddress",
-      "_phoneNumber",
-      "_isActive"
+      "out_username",
+      "out_emailAddress",
+      "out_phoneNumber",
+      "out_isActive"
       --out_user_signup_return_type
     FROM u
       LEFT JOIN c ON c.id = u.contact_id;

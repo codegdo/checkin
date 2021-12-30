@@ -9,7 +9,7 @@ import { AppState } from '../../../store/reducers';
 
 const Confirm: React.FC<any> = ({ setConfirmed }): JSX.Element => {
   const { loggedIn, orgId, user } = useSelector((state: AppState) => state.session);
-  const [{ loading, result }, fetchConfirm] = useFetch('/api/auth/verify/confirm');
+  const [{ loading, result }, fetchConfirm] = useFetch('/api/auth/confirm');
   const [form, setForm] = useState<FormData>();
 
   // Load form
@@ -19,6 +19,13 @@ const Confirm: React.FC<any> = ({ setConfirmed }): JSX.Element => {
       setForm(json);
     })();
   }, []);
+
+  useEffect(() => {
+    if (loading == 'success') {
+      console.log(result);
+    }
+  }, [loading]);
+
 
   const handleSubmit = (values: any) => {
     console.log(values);
@@ -43,7 +50,7 @@ const Confirm: React.FC<any> = ({ setConfirmed }): JSX.Element => {
   }
 
   return <div>
-    <Form form={form} loading={loading} isMap={true} onSubmit={handleSubmit} onCallback={handleCallback} />
+    <Form form={form} loading={loading} onSubmit={handleSubmit} onCallback={handleCallback} />
   </div>
 
 }

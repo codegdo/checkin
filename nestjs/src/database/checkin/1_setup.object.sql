@@ -1,5 +1,5 @@
--- CREATE TABLE CALENDAR
-CREATE TABLE IF NOT EXISTS org.calendar (
+-- CREATE TABLE WORKSPACE
+CREATE TABLE IF NOT EXISTS org.workspace (
   id SERIAL NOT NULL,
   name VARCHAR(200),
 
@@ -11,5 +11,5 @@ CREATE TABLE IF NOT EXISTS org.calendar (
 
 -- DROP
 DROP TABLE IF EXISTS
-org.calendar
+org.workspace
 CASCADE;

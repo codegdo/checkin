@@ -1,1 +1,1 @@
-export * from './calendar/calendar.entity';
+export * from './workspace/workspace.entity';

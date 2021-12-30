@@ -67,7 +67,7 @@
     {
       "id": 3,
       "label": "Please enter the verification code",
-      "name": "OrganizationName",
+      "name": "key",
       "description": null,
       "type": "text",
       "role": "field",
@@ -77,9 +77,9 @@
       "isRequired": true,
       "position": 0,
       "positionParent": 1,
-      "mapSchema": "sec",
-      "mapTable": "organization",
-      "mapColumn": "name"
+      "mapSchema": null,
+      "mapTable": null,
+      "mapColumn": null
     }
   ]
 }

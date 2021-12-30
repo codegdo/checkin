@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 
-@Entity({ database: 'c_main', schema: 'dbo', name: 'object' })
+@Entity({ database: 'main', schema: 'dbo', name: 'object' })
 export class DBObject extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;

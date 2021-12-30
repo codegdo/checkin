@@ -5,9 +5,9 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-import { TokenData } from '../types';
 
-@Entity({ database: 'c_main', schema: 'sec', name: 'token' })
+
+@Entity({ database: 'main', schema: 'sec', name: 'token' })
 @Unique(['key'])
 export class Token extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -20,7 +20,7 @@ export class Token extends BaseEntity {
   type: string;
 
   @Column({ name: 'data', type: 'jsonb' })
-  data: TokenData;
+  data: any;
 
   @Column({ name: 'expired_at' })
   expiredAt: number;

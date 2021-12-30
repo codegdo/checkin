@@ -25,7 +25,7 @@ import {
   ContactRepository,
   EmailRepository,
 } from 'src/models/main/repositories';
-import { CalendarRepository } from 'src/models/checkin/repositories';
+import { WorkspaceRepository as CheckinRepository } from 'src/models/checkin/repositories';
 import { AuthMailService } from 'src/common/modules';
 import { ISignup } from './types/auth.interface';
 import { VerifyUserDto } from 'src/models/main/dtos';
@@ -57,8 +57,8 @@ export class AuthService {
     @InjectRepository(EmailRepository)
     private emailRepository: EmailRepository,
 
-    @InjectRepository(CalendarRepository, 'checkin')
-    private calendarRepository: CalendarRepository,
+    @InjectRepository(CheckinRepository, 'checkin')
+    private checkinRepository: CheckinRepository,
 
     // @Inject(WINSTON_MODULE_PROVIDER)
     // private readonly logger: Logger,
@@ -108,7 +108,9 @@ export class AuthService {
 
   async verify({ verification, username }: VerifyUserDto) {
 
-    const token = await this.userRepository.verifyUser(username);
+    const { data } = await this.userRepository.verifyUser(username);
+
+    console.log(data);
 
     if (verification == 'phoneNumber') {
       // send msg
@@ -116,11 +118,11 @@ export class AuthService {
       // send email
     }
 
-    return token;
+    return { username };
   }
 
   async confirm(key: string) {
-    await this.userRepository.confirmUser(key);
+    return await this.userRepository.confirmUser(key);
   }
 
   async resend(username: string) {

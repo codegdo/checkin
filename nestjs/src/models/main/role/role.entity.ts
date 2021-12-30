@@ -18,7 +18,7 @@ export enum RoleTypeEnum {
   EXTERNAL = 'external',
 }
 
-@Entity({ database: 'c_main', schema: 'dbo', name: 'role_type' })
+@Entity({ database: 'main', schema: 'dbo', name: 'role_type' })
 export class RoleType extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
@@ -31,7 +31,7 @@ export class RoleType extends BaseEntity {
   name: RoleTypeEnum;
 }
 
-@Entity({ database: 'c_main', schema: 'sec', name: 'role' })
+@Entity({ database: 'main', schema: 'sec', name: 'role' })
 export class Role extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;

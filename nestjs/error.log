@@ -242,3 +242,29 @@
 {"level":"error","message":"function sec.fn_user_signup(unknown, unknown, unknown, unknown) does not exist"}
 {"level":"error","message":"secret option required for sessions"}
 {"level":"error","message":"there is no parameter $0"}
+{"level":"error","message":"Unable to connect to the database (checkin). Retrying (1)..."}
+{"level":"error","message":"Unable to connect to the database (checkin). Retrying (1)..."}
+{"level":"error","message":"Unable to connect to the database (checkin). Retrying (2)..."}
+{"level":"error","message":"Unable to connect to the database (checkin). Retrying (3)..."}
+{"level":"error","message":"Unable to connect to the database (checkin). Retrying (1)..."}
+{"level":"error","message":"Unable to connect to the database (checkin). Retrying (2)..."}
+{"level":"error","message":"Unable to connect to the database (checkin). Retrying (3)..."}
+{"level":"error","message":"Unable to connect to the database (checkin). Retrying (4)..."}
+{"level":"error","message":"function sec.fn_user_verify(unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"function sec.fn_user_verify(unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"function sec.fn_user_verify(unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"no_data_found"}
+{"level":"error","message":"no_data_found"}
+{"level":"error","message":"raise_exception"}
+{"level":"error","message":"returned record type does not match expected record type"}
+{"level":"error","message":"column \"is_active\" does not exist"}
+{"level":"error","message":"column \"is_active\" does not exist"}
+{"level":"error","message":"column \"is_active\" does not exist"}
+{"level":"error","message":"column \"is_active\" does not exist"}
+{"level":"error","message":"column \"is_active\" does not exist"}
+{"level":"error","message":"no_data_found"}
+{"level":"error","message":"no_data_found"}
+{"level":"error","message":"relation \"user\" does not exist"}
+{"level":"error","message":"column \"data\" is of type jsonb but expression is of type text"}
+{"level":"error","message":"invalid input syntax for type json"}
+{"level":"error","message":"column \"data\" is of type jsonb but expression is of type text"}

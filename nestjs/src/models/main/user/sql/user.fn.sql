@@ -160,13 +160,14 @@ $BODY$
 
     SELECT *
     INTO rec
-    FROM sec.user
+    FROM sec.user u
+    LEFT JOIN org.contact c ON c.id = u.contact_id
     WHERE username = p_username;
 
     IF found THEN
 
       INSERT INTO sec.token(key, type, data, expired_at)
-      VALUES(p_key, p_type, p_data, p_expired_at)
+      VALUES(p_key, p_type, CAST('{"username":"' || rec.username || '", "phoneNumber":"' || rec.phone_number || '", "emailAddress":"' || rec.email_address || '"}' as jsonb), p_expired_at)
       RETURNING * INTO rec;
 
     ELSE
@@ -187,6 +188,7 @@ AS
 $BODY$
   DECLARE
     rec record;
+    current bigint := extract(epoch from now()) * 1000;
   BEGIN
 
     SELECT *
@@ -196,15 +198,22 @@ $BODY$
 
     IF found THEN
 
-      UPDATE sec.user
-      SET is_active = true
-      WHERE username = rec.data::jsonb ->> 'username'
-      RETURNING * INTO rec;
+      IF current < rec.expired_at THEN
 
-      DELETE FROM sec.token WHERE key = p_key;
+        UPDATE sec.user
+        SET is_active = true
+        WHERE username = rec.data::jsonb ->> 'username'
+        RETURNING * INTO rec;
 
+        DELETE FROM sec.token WHERE key = p_key OR current > expired_at;
+
+      ELSE
+
+        RAISE EXCEPTION no_data_found;
+
+      END IF;
     ELSE
-        RAISE EXCEPTION no_data_found ;
+        RAISE EXCEPTION no_data_found;
     END IF;
 
     RETURN rec;

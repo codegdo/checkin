@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Module } from '../module/module.entity';
 
-@Entity({ database: 'c_main', schema: 'dbo', name: 'page' })
+@Entity({ database: 'main', schema: 'dbo', name: 'page' })
 export class Page extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;

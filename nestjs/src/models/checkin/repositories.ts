@@ -1,1 +1,1 @@
-export * from './calendar/calendar.repository';
+export * from './workspace/workspace.repository';

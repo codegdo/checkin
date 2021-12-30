@@ -4,8 +4,8 @@ import { promisify } from 'util';
 import { User } from './user.entity';
 import { LoginUserDto, SignupUserDto } from '../dtos';
 import { trimObjectKey } from 'src/common/utils';
-import { SignupUserData, UserData } from './user.dto';
-import { TokenData } from '../token/token.dto';
+import { SignupUserData, UserData, ConfirmUserData, VerifyUserData, LoginUserData } from './user.dto';
+import { TokenData, TokenTypeEnum } from '../token/token.dto';
 
 const scrypt = promisify(_scrypt);
 
@@ -67,10 +67,10 @@ export class UserRepository extends Repository<User> {
       ],
     );
 
-    return trimObjectKey<SignupUserData>(result, '_');
+    return trimObjectKey<SignupUserData>(result);
   }
 
-  async loginUser(loginUserDto: LoginUserDto): Promise<UserData | undefined | null> {
+  async loginUser(loginUserDto: LoginUserDto): Promise<LoginUserData> {
     const { username, password } = loginUserDto;
     const [user] = await this.manager.query(`SELECT * FROM sec.fn_user_login($1)`, [username]);
 
@@ -91,19 +91,21 @@ export class UserRepository extends Repository<User> {
     return (await this.validatePassword(password, _password)) ? _user : null;
   }
 
-  async verifyUser(username: string): Promise<TokenData> {
+  async verifyUser(username: string): Promise<VerifyUserData> {
     // await randomBytes(6).toString('base64');
     // await randomInt(100000, 999999);
 
     const key = await randomInt(100000, 999999).toString();
     const data = { username };
-    const expiredAt = Math.floor(new Date().getTime() / 1000 + 300000); // 5 mins
+    const type = TokenTypeEnum.VERIFY;
+    const expiredAt = new Date().getTime() + 300000; // 5 mins
 
     const [result] = await this.manager.query(
-      `SELECT * FROM sec.fn_user_verify($1, $2, $3, $4)`,
+      `SELECT * FROM sec.fn_user_verify($1, $2, $3, $4, $5)`,
       [
         username,
         key,
+        type,
         data,
         expiredAt
       ],
@@ -112,7 +114,7 @@ export class UserRepository extends Repository<User> {
     return result;
   }
 
-  async confirmUser(key: string) {
+  async confirmUser(key: string): Promise<ConfirmUserData> {
     const [result] = await this.manager.query(
       `SELECT is_active AS "isActive" FROM sec.fn_user_confirm($1)`,
       [key],

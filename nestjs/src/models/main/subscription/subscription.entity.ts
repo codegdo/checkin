@@ -11,7 +11,7 @@ import {
 import { Module } from '../module/module.entity';
 import { Plan } from '../plan/plan.entity';
 
-@Entity({ database: 'c_main', schema: 'org', name: 'subscription' })
+@Entity({ database: 'main', schema: 'org', name: 'subscription' })
 export class Subscription extends BaseEntity {
   @OneToOne(() => Module, (module) => module.id, { primary: true })
   @JoinColumn({ name: 'module_id' })

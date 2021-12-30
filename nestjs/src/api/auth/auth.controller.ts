@@ -76,15 +76,13 @@ export class AuthController {
   @Public()
   @Post('verify')
   async verify(@Body() body: VerifyUserDto) {
-    await this.authService.verify(body);
-    return { ok: true };
+    return this.authService.verify(body);
   }
 
   @Public()
   @Post('confirm')
-  async verifyConfirm(@Body('key') key: string) {
-    await this.authService.confirm(key);
-    return { ok: true };
+  async confirm(@Body('key') key: string) {
+    return this.authService.confirm(key);
   }
 
   @Public()

@@ -1,4 +1,4 @@
-import { ConnectionOptions } from 'typeorm';
+import { createConnection, Connection, ConnectionOptions } from 'typeorm';
 import { registerAs } from '@nestjs/config';
 
 export const dbConfig = registerAs('database', () => {
@@ -17,15 +17,15 @@ export const dbConfig = registerAs('database', () => {
 
   const main: ConnectionOptions = {
     ...options,
-    database: 'c_main',
+    database: process.env.DATABASE_MAIN,
     name: 'default',
     entities: [__dirname + '/../models/main/**/*.entity{.ts,.js}'],
   };
 
   const checkin: ConnectionOptions = {
     ...options,
-    database: 'c_checkin',
-    name: 'checkin',
+    database: process.env.DATABASE_CHECKIN,
+    name: process.env.DATABASE_CHECKIN,
     entities: [__dirname + '/../models/checkin/**/*.entity{.ts,.js}'],
   };
 
