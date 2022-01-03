@@ -14,25 +14,12 @@ import { EmailRepository } from 'src/models/main/repositories';
 import { arrayToObjectKey } from 'src/common/utils/array-to-object-keys.util';
 import { EmailData } from 'src/models/main/email/email.dto';
 import { TokenData } from 'src/models/main/token/token.dto';
-
-export enum MessageType {
-  MESSAGE = 'message',
-  EMAIL = 'email',
-}
-
-export type MessageOptions<T> = {
-  type: MessageType;
-  content: T;
-};
-
-type VerifyData = {
-  username: string;
-  phoneNumber: string;
-  emailAddress: string;
-};
+import { MessageOptions, MessageType, VerifyEmailKey, VerifyMessageKey, VerifyTokenData } from './message.type';
 
 @Injectable()
-export class AuthMessageService {
+export class MessageAuthService {
+  private appName = process.env.APP_NAME;
+
   constructor(
     private readonly mailerService: MailerService,
 
@@ -44,13 +31,14 @@ export class AuthMessageService {
 
     @InjectTwilio()
     private readonly client: TwilioClient,
-  ) {}
+  ) { }
 
-  async sendVerifyMessage(
-    messageOptions: MessageOptions<TokenData<VerifyData>>,
+  async sendMessageVerify(
+    messageOptions: MessageOptions<TokenData<VerifyTokenData>>,
   ): Promise<{ ok: boolean }> {
-    const { type, content } = messageOptions;
-    const { key, data } = content;
+    const { type, context } = messageOptions;
+    const { key, data } = context;
+    const { firstName, lastName, emailAddress, phoneNumber } = data;
 
     try {
       const emails = await this.emailRepository.getEmailByName('verify');
@@ -63,31 +51,36 @@ export class AuthMessageService {
       );
 
       if (sendEmail) {
-        if (type == MessageType.MESSAGE) {
-          const message = sendEmail?.message || '';
-          const body = handlebars.compile(message)({ key });
 
-          this.client.messages.create({
+        const { subject, fromName, fromAddress, replyTo, body = '', message = '' } = sendEmail;
+
+        if (type == MessageType.MESSAGE) {
+          const keys: VerifyMessageKey = { key };
+          const body = handlebars.compile(message)(keys);
+
+          console.log(data);
+
+          await this.client.messages.create({
             body,
             from: process.env.TWILIO_PHONE_NUMBER,
-            to: data?.phoneNumber,
+            to: phoneNumber,
           });
         }
 
         if (type == MessageType.EMAIL) {
-          const body = sendEmail?.body || '';
-          const html = handlebars.compile(body)({ key, ...data });
+          const keys: VerifyEmailKey = { key, firstName, lastName, replyTo };
+          const html = handlebars.compile(body)(keys);
 
-          this.mailerService.sendMail({
+          await this.mailerService.sendMail({
             from: {
-              name: `${this.appName} ${sender.fromName}`,
-              address: sendEmail.fromAddress,
+              name: `${this.appName} ${fromName}`,
+              address: fromAddress,
             },
             to: {
-              name: data.name,
-              address: data.emailAddress,
+              name: `${firstName} ${lastName}`,
+              address: emailAddress,
             },
-            subject: sendEmail.subject,
+            subject: subject,
             html,
           });
         }

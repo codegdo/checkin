@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TwilioModule } from 'nestjs-twilio';
 
 import { EmailRepository } from 'src/models/main/repositories';
-import { AuthMessageService } from './auth-message.service';
+import { MessageAuthService } from './message-auth.service';
 
 @Global()
 @Module({
@@ -26,7 +26,7 @@ import { AuthMessageService } from './auth-message.service';
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthMessageService, Logger],
-  exports: [AuthMessageService]
+  providers: [MessageAuthService, Logger],
+  exports: [MessageAuthService]
 })
 export class MessageModule { }

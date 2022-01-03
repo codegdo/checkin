@@ -22,9 +22,7 @@ export type FieldType = {
 
   isRequired: boolean;
 
-  mapSchema: string;
-  mapTable: string;
-  mapColumn: string;
+  mapto: string;
 };
 
 export type FieldData = Partial<FieldType>;

@@ -31,7 +31,7 @@ const Setup: React.FC = (): JSX.Element => {
   }
 
   return <div>
-    <Form form={form} loading={loading} isMap={true} onSubmit={handleSubmit} />
+    <Form form={form} loading={loading} onSubmit={handleSubmit} />
   </div>
 }
 

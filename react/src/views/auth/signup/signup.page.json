@@ -78,9 +78,8 @@
       "isRequired": true,
       "position": 0,
       "positionParent": 1,
-      "mapSchema": "org",
-      "mapTable": "contact",
-      "mapColumn": "first_name"
+      "mapto": "org.contact.first_name",
+      "lookup": null
     },
     {
       "id": 4,
@@ -95,9 +94,8 @@
       "isRequired": true,
       "position": 0,
       "positionParent": 1,
-      "mapSchema": "org",
-      "mapTable": "contact",
-      "mapColumn": "last_name"
+      "mapto": "org.contact.last_name",
+      "lookup": null
     },
     {
       "id": 5,
@@ -112,9 +110,8 @@
       "isRequired": true,
       "position": 0,
       "positionParent": 1,
-      "mapSchema": "org",
-      "mapTable": "contact",
-      "mapColumn": "email_address"
+      "mapto": "org.contact.email_address",
+      "lookup": null
     },
     {
       "id": 6,
@@ -129,9 +126,8 @@
       "isRequired": true,
       "position": 0,
       "positionParent": 1,
-      "mapSchema": "org",
-      "mapTable": "contact",
-      "mapColumn": "phone_number"
+      "mapto": "org.contact.phone_number",
+      "lookup": null
     },
     {
       "id": 7,
@@ -146,9 +142,8 @@
       "isRequired": true,
       "position": 0,
       "positionParent": 1,
-      "mapSchema": "sec",
-      "mapTable": "user",
-      "mapColumn": "username"
+      "mapto": "sec.user.username",
+      "lookup": null
     },
     {
       "id": 8,
@@ -163,9 +158,8 @@
       "isRequired": true,
       "position": 0,
       "positionParent": 1,
-      "mapSchema": "sec",
-      "mapTable": "user",
-      "mapColumn": "password"
+      "mapto": "sec.user.password",
+      "lookup": null
     }
   ]
 }

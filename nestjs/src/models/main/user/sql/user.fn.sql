@@ -138,7 +138,7 @@ $BODY$
       LEFT JOIN dbo.role_type rt ON rt.id = r.role_type_id
       LEFT JOIN sec.organization o ON o.id = u.org_id
       LEFT JOIN org.contact c ON c.id = u.contact_id
-      WHERE u.username = p_username;
+      WHERE u.username = p_username AND u.is_active = true;
   END;
 $BODY$
 LANGUAGE plpgsql;

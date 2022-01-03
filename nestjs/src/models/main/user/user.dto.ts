@@ -8,7 +8,7 @@ export type TokenVerifyData = {
   phoneNumber: string;
 };
 
-export type VerifyUserData = TokenData;
+export type VerifyUserData = TokenData<any>;
 
 export type ConfirmUserData = {
   isActive: boolean;
@@ -23,20 +23,20 @@ export type SignupUserData = {
 
 export type LoginUserData =
   | {
-      id: number;
-      firstName: string;
-      lastName: string;
-      emailAddress: string;
-      phoneNumber: string;
-      username: string;
-      password: string;
-      roleId: number;
-      roleType: string;
-      orgId: number;
-      orgActive: boolean;
-      isActive: boolean;
-      isOwner: boolean;
-    }
+    id: number;
+    firstName: string;
+    lastName: string;
+    emailAddress: string;
+    phoneNumber: string;
+    username: string;
+    password: string;
+    roleId: number;
+    roleType: string;
+    orgId: number;
+    orgActive: boolean;
+    isActive: boolean;
+    isOwner: boolean;
+  }
   | null
   | undefined;
 
@@ -117,6 +117,14 @@ export class VerifyUserDto {
   username: string;
 }
 
+export class SetupUserDto {
+  @IsString()
+  orgName: string;
+
+  @IsString()
+  subdomain: string;
+}
+
 export class CreateUserDto {
   @IsString()
   emailAddress: string;
@@ -150,3 +158,6 @@ export class UpdateUserDto {
   @IsNumber()
   orgId: number;
 }
+
+
+

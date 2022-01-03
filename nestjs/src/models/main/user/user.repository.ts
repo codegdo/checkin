@@ -4,7 +4,7 @@ import { promisify } from 'util';
 import { User } from './user.entity';
 import { LoginUserDto, SignupUserDto } from '../dtos';
 import { trimObjectKey } from 'src/common/utils';
-import { SignupUserData, UserData, ConfirmUserData, VerifyUserData, LoginUserData } from './user.dto';
+import { SignupUserData, UserData, ConfirmUserData, VerifyUserData, LoginUserData, SetupUserDto } from './user.dto';
 import { TokenData, TokenTypeEnum } from '../token/token.dto';
 
 const scrypt = promisify(_scrypt);
@@ -122,6 +122,8 @@ export class UserRepository extends Repository<User> {
 
     return result;
   }
+
+  async setupUser(setupUserDto: SetupUserDto) { }
 
   async getUser(username: string) {
     const [user] = await this.manager.query(`SELECT * FROM sec.fn_get_user($1)`, [username]);

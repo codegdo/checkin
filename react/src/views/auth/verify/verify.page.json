@@ -78,9 +78,8 @@
       "isRequired": true,
       "position": 0,
       "positionParent": 1,
-      "mapSchema": null,
-      "mapTable": null,
-      "mapColumn": null
+      "mapto": null,
+      "lookup": null
     }
   ]
 }

@@ -26,9 +26,10 @@ import {
   EmailRepository,
 } from 'src/models/main/repositories';
 import { WorkspaceRepository as CheckinRepository } from 'src/models/checkin/repositories';
-import { AuthMessageService, MessageType } from 'src/common/modules';
+import { MessageAuthService, MessageType } from 'src/common/modules';
 import { ISignup } from './types/auth.interface';
 import { VerifyUserDto } from 'src/models/main/dtos';
+
 
 @Injectable()
 export class AuthService {
@@ -66,9 +67,9 @@ export class AuthService {
     @Inject(Logger)
     private readonly logger: LoggerService,
 
-    private readonly messageService: AuthMessageService,
+    private readonly messageService: MessageAuthService,
     private readonly configService: ConfigService,
-  ) {}
+  ) { }
 
   async signup({ contact, user }: ISignup) {
     try {
@@ -110,9 +111,9 @@ export class AuthService {
       const type =
         verifyOption == 'phoneNumber' ? MessageType.MESSAGE : MessageType.EMAIL;
 
-      const content = await this.userRepository.verifyUser(username);
+      const context = await this.userRepository.verifyUser(username);
 
-      return this.messageService.sendVerifyMessage({ type, content });
+      return this.messageService.sendMessageVerify({ type, context });
     } catch (err) {
       // P0002 = no_data_found
       if (err.code == 'P0002') {

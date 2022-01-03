@@ -71,8 +71,6 @@ export class AuthController {
     };
   }
 
-
-
   @Public()
   @Post('verify')
   async verify(@Body() body: VerifyUserDto) {
@@ -83,6 +81,14 @@ export class AuthController {
   @Post('confirm')
   async confirm(@Body('key') key: string) {
     return this.authService.confirm(key);
+  }
+
+  @Public()
+  @Post('setup')
+  async setup(@Session() session: any, @Body() body) {
+    console.log(session.id);
+    console.log(body);
+    return {};
   }
 
   @Public()

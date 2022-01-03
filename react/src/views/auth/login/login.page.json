@@ -77,7 +77,9 @@
       "defaultValue": "",
       "isRequired": true,
       "position": 0,
-      "positionParent": 1
+      "positionParent": 1,
+      "mapto": "sec.user.username",
+      "lookup": null
     },
     {
       "id": 4,
@@ -91,7 +93,9 @@
       "defaultValue": "",
       "isRequired": true,
       "position": 0,
-      "positionParent": 1
+      "positionParent": 1,
+      "mapto": "sec.user.password",
+      "lookup": null
     }
   ]
 }

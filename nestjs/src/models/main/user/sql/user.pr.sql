@@ -63,3 +63,62 @@ $BODY$
   END;
 $BODY$
 LANGUAGE plpgsql;
+
+CALL sec.pr_user_signup('kenny'::varchar,'do'::varchar,'giangd@gmail.com'::varchar,'8583571474'::varchar,'kennny'::varchar,'675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2'::varchar, 'null'::text, 'null'::text, 'null'::text, '0'::boolean);
+CALL sec.pr_user_signup('kenny'::varchar,'do'::varchar,'giangd@gmail.com'::varchar,'8583571474'::varchar,'kennny'::varchar,'675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2'::varchar, ('null'::varchar,'null'::varchar,'null'::varchar,'0'::boolean)::sec.user_signup_return_type);
+
+
+-- CREATE PROCEDURE USER_SETUP
+CREATE OR REPLACE PROCEDURE sec.pr_user_setup(
+  "out_username" INOUT varchar,
+  "out_location_id" INOUT int,
+  "out_org_id" INOUT int
+)
+AS
+$BODY$
+  DECLARE
+    rec record;
+  BEGIN
+    SELECT *
+    INTO rec
+    FROM sec.user
+    WHERE username = 'gdo' AND org_id is NULL;
+
+    IF found THEN
+
+        WITH o AS (
+          INSERT INTO sec.organization(
+              name,
+              subdomain
+          )
+          VALUES('Triny Nail', 'trinynail')
+          RETURNING id
+        ), l AS (
+          INSERT INTO org.location(
+            name,
+            org_id
+          )
+          VALUES('Triny Nail San Diego', (SELECT id FROM o))
+          RETURNING id
+        ), u AS (
+          UPDATE sec.user
+          SET org_id = (SELECT id FROM o)
+          WHERE username = 'gdo'
+          RETURNING username
+        )
+        SELECT
+          u.username::varchar,
+          l.id::int,
+          o.id:int
+        INTO
+          "out_username",
+          "out_location_id",
+          "out_org_id"
+        FROM u;
+
+    ELSE
+        RAISE EXCEPTION no_data_found;
+    END IF;
+  END;
+$BODY$
+LANGUAGE plpgsql;

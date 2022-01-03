@@ -342,7 +342,7 @@ RETURNS TABLE (
   username varchar
 )
 AS
-$$
+$BODY$
   DECLARE
 
   BEGIN
@@ -357,7 +357,7 @@ $$
       LEFT JOIN org.contact c ON c.id = u.contact_id
       WHERE u.username = p_username;
   END;
-$$
+$BODY$
 LANGUAGE plpgsql;
 
 -- CREATE FUNCTION LOGIN USER
@@ -379,7 +379,7 @@ RETURNS TABLE (
   "isOwner" boolean
 )
 AS
-$$
+$BODY$
   DECLARE
 
   BEGIN
@@ -408,7 +408,7 @@ $$
       LEFT JOIN org.contact c ON c.id = u.contact_id
       WHERE u.username = p_username;
   END;
-$$
+$BODY$
 LANGUAGE plpgsql;
 
 -- CREATE FUNCTION USER SIGNUP RETURN
@@ -430,7 +430,7 @@ CREATE OR REPLACE FUNCTION sec.fn_user_signup(
 )
 RETURNS SETOF sec.user_signup_return_type
 AS
-$$
+$BODY$
   DECLARE
     v_role_id INT := 2;
   BEGIN
@@ -470,7 +470,7 @@ $$
     FROM u
       LEFT JOIN c ON c.id = u.contact_id;
   END;
-$$
+$BODY$
 LANGUAGE plpgsql;
 
 -- CREATE FUNCTION USER VERIFY
@@ -492,12 +492,12 @@ $BODY$
     INTO rec
     FROM sec.user u
     LEFT JOIN org.contact c ON c.id = u.contact_id
-    WHERE u.username = p_username AND u.is_active = false;
+    WHERE username = p_username;
 
     IF found THEN
 
       INSERT INTO sec.token(key, type, data, expired_at)
-      VALUES(p_key, p_type, CAST('{"username":"' || rec.username || '", "phoneNumber":"' || rec.phone_number || '", "emailAddress":"' || rec.email_address || '"}' as jsonb), p_expired_at)
+      VALUES(p_key, p_type, CAST('{"username":"' || rec.username || '", "firstName":"' || rec.first_name || '", "lastName":"' || rec.last_name || '", "phoneNumber":"' || rec.phone_number || '", "emailAddress":"' || rec.email_address || '"}' as jsonb), p_expired_at)
       RETURNING * INTO rec;
 
     ELSE
@@ -527,6 +527,7 @@ $BODY$
     WHERE key = p_key;
 
     IF found THEN
+
       IF current < rec.expired_at THEN
 
         UPDATE sec.user
@@ -537,7 +538,9 @@ $BODY$
         DELETE FROM sec.token WHERE key = p_key OR current > expired_at;
 
       ELSE
+
         RAISE EXCEPTION no_data_found;
+
       END IF;
     ELSE
         RAISE EXCEPTION no_data_found;
@@ -620,13 +623,10 @@ LANGUAGE plpgsql;
 -------------------------------------------------------------------------
 
 SELECT * FROM sec.fn_user_signup('triny','do','giangd@gmail.com','8583571474','triny','675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2');
-
 SELECT sec.fn_user_verify('gdo', '658970', '{"username":  "gdo"}', '45628554');
-
 SELECT is_active AS "isActive" FROM sec.fn_user_confirm('658973');
 
 CALL sec.pr_user_signup('kenny'::varchar,'do'::varchar,'giangd@gmail.com'::varchar,'8583571474'::varchar,'kennny'::varchar,'675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2'::varchar, 'null'::text, 'null'::text, 'null'::text, '0'::boolean);
-
 CALL sec.pr_user_signup('kenny'::varchar,'do'::varchar,'giangd@gmail.com'::varchar,'8583571474'::varchar,'kennny'::varchar,'675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2'::varchar, ('null'::varchar,'null'::varchar,'null'::varchar,'0'::boolean)::sec.user_signup_return_type);
 
 
