@@ -1,4 +1,3 @@
-import { userInfo } from 'os';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
@@ -21,15 +20,20 @@ const Verify: React.FC = (): JSX.Element => {
   useEffect(() => {
     void (async () => {
       const json: any = (await import('./verify.page.json')).default;
-      const values = objectToKeyValue({ ...user }, ['emailAddress', 'phoneNumber']);
+      const values = objectToKeyValue({ keys: ['emailAddress', 'phoneNumber'], values: { ...user } });
+
+      console.log(values);
 
       const mapField = {
-        name: 'verification',
+        name: 'verifyOption',
         value: 'phoneNumber',
         data: values
-      }
+      };
 
-      mapDataToField(json.fields, mapField)
+      mapDataToField(json.fields, mapField);
+
+      console.log(json);
+
       setForm(json);
     })();
   }, []);

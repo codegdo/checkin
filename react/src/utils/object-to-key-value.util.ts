@@ -3,10 +3,12 @@ type ObjectField = {
   value: string | number | boolean;
 };
 
-export function objectToKeyValue(
-  values: { [key: string]: string | number | boolean },
-  keys?: string[]
-): ObjectField[] {
+type KeysValues = {
+  keys: string[];
+  values: { [key: string]: string | number | boolean };
+};
+
+export function objectToKeyValue({ keys, values }: KeysValues): ObjectField[] {
   if (typeof values === 'object') {
     return Object.entries(values).reduce((a: ObjectField[], i) => {
       if (keys) {

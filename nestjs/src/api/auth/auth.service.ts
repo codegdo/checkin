@@ -26,7 +26,7 @@ import {
   EmailRepository,
 } from 'src/models/main/repositories';
 import { WorkspaceRepository as CheckinRepository } from 'src/models/checkin/repositories';
-import { AuthMessageService } from 'src/common/modules';
+import { AuthMessageService, MessageType } from 'src/common/modules';
 import { ISignup } from './types/auth.interface';
 import { VerifyUserDto } from 'src/models/main/dtos';
 
@@ -68,10 +68,9 @@ export class AuthService {
 
     private readonly messageService: AuthMessageService,
     private readonly configService: ConfigService,
-  ) { }
+  ) {}
 
   async signup({ contact, user }: ISignup) {
-
     try {
       return await this.userRepository.signupUser({ ...contact, ...user });
     } catch (err) {
@@ -106,24 +105,16 @@ export class AuthService {
     return user;
   }
 
-  async verify({ verify, username }: VerifyUserDto) {
+  async verify({ verifyOption, username }: VerifyUserDto) {
     try {
-      const token = await this.userRepository.verifyUser(username);
-      const type = verify == 'phoneNumber' ? 'phone' : 'email';
+      const type =
+        verifyOption == 'phoneNumber' ? MessageType.MESSAGE : MessageType.EMAIL;
 
-      return this.messageService.sendVerifyMessage();
+      const content = await this.userRepository.verifyUser(username);
 
-      if (verify == 'phoneNumber') {
-        // send msg
-
-      } else {
-        // send email
-      }
-
-      return { username };
-
+      return this.messageService.sendVerifyMessage({ type, content });
     } catch (err) {
-      // P0002 = no data found
+      // P0002 = no_data_found
       if (err.code == 'P0002') {
         this.logger.warn(`${err.message}`, err);
         throw new NotFoundException(404, 'Not Found.');
@@ -138,7 +129,7 @@ export class AuthService {
     try {
       return await this.userRepository.confirmUser(key);
     } catch (err) {
-      // P0002 = no data found
+      // P0002 = no_data_found
       if (err.code == 'P0002') {
         this.logger.warn(`${err.message}`, err);
         throw new NotFoundException(404, 'Not Found.');
@@ -147,7 +138,6 @@ export class AuthService {
         throw new InternalServerErrorException(500, err.code);
       }
     }
-
   }
 
   async resend(username: string) {

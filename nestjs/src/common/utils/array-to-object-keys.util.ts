@@ -1,8 +1,12 @@
-export const arrayToObjectKey = <T>({ key, values }): T => {
+type ObjectKeyParam = {
+  key: string;
+  values: any[];
+};
+export const arrayToObjectKey = <T>({ key, values }: ObjectKeyParam): T => {
   return values.reduce((value, i) => {
-    return { ...value, [i[key]]: i }
+    return { ...value, [i[key]]: i };
   }, {} as T);
-}
+};
 
 /* 
   input:

@@ -167,7 +167,7 @@ $BODY$
     IF found THEN
 
       INSERT INTO sec.token(key, type, data, expired_at)
-      VALUES(p_key, p_type, CAST('{"username":"' || rec.username || '", "phoneNumber":"' || rec.phone_number || '", "emailAddress":"' || rec.email_address || '"}' as jsonb), p_expired_at)
+      VALUES(p_key, p_type, CAST('{"username":"' || rec.username || '", "firstName":"' || rec.first_name || '", "lastName":"' || rec.last_name || '", "phoneNumber":"' || rec.phone_number || '", "emailAddress":"' || rec.email_address || '"}' as jsonb), p_expired_at)
       RETURNING * INTO rec;
 
     ELSE

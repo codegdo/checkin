@@ -492,7 +492,7 @@ $BODY$
     INTO rec
     FROM sec.user u
     LEFT JOIN org.contact c ON c.id = u.contact_id
-    WHERE username = p_username;
+    WHERE u.username = p_username AND u.is_active = false;
 
     IF found THEN
 

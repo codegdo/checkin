@@ -4,15 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 //import { WinstonModule } from 'nest-winston';
 
-import {
-  GuardModule,
-  SessionModule,
-  MessageModule,
-} from './common/modules';
+import { GuardModule, SessionModule, MessageModule } from './common/modules';
 
-import {
-  LoggerMiddleware
-} from './common/middlewares';
+import { LoggerMiddleware } from './common/middlewares';
 
 import {
   AuthModule,
@@ -28,18 +22,23 @@ import {
   dbConfig,
   jwtConfig,
   mailerConfig,
-  pinoConfig,
   sessionConfig,
   twilioConfig,
   winstonConfig,
 } from './configs';
 
-
-
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [appConfig, dbConfig, sessionConfig, mailerConfig, jwtConfig, pinoConfig, winstonConfig, twilioConfig],
+      load: [
+        appConfig,
+        dbConfig,
+        sessionConfig,
+        mailerConfig,
+        jwtConfig,
+        winstonConfig,
+        twilioConfig,
+      ],
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
@@ -90,11 +89,11 @@ import {
           enableImplicitConversion: true,
         },
       }),
-    }
+    },
   ],
 })
 export class AppModule {
-  constructor() { }
+  constructor() {}
 
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');

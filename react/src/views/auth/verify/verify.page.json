@@ -68,7 +68,7 @@
     {
       "id": 3,
       "label": null,
-      "name": "verify",
+      "name": "verifyOption",
       "description": null,
       "type": "radio",
       "role": "field",

@@ -4,13 +4,17 @@ import { EmailData } from './email.dto';
 
 @EntityRepository(Email)
 export class EmailRepository extends Repository<Email> {
-  async getVerifyEmail(): Promise<EmailData[]> {
-    return this.manager.query(`SELECT * FROM org.fn_get_email_by_name($1)`, ['verify']);
+  async getEmailByName(name: string): Promise<EmailData[]> {
+    return this.manager.query(`SELECT * FROM org.fn_get_email_by_name($1)`, [
+      name,
+    ]);
   }
 
   async getSingupEmail() {
-
-    const emails = await this.manager.query(`SELECT * FROM org.fn_get_email_by_name($1)`, ['signup']);
+    const emails = await this.manager.query(
+      `SELECT * FROM org.fn_get_email_by_name($1)`,
+      ['signup'],
+    );
 
     // const emails = await this.createQueryBuilder('email')
     //   .leftJoinAndSelect('email.emailTypeId', 'emailType')

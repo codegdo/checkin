@@ -2,41 +2,43 @@ import { Exclude, Expose } from 'class-transformer';
 import { IsNumber, IsString } from 'class-validator';
 import { TokenData } from '../token/token.dto';
 
-
 export type TokenVerifyData = {
   username: string;
   emailAddress: string;
   phoneNumber: string;
-}
+};
 
 export type VerifyUserData = TokenData;
 
 export type ConfirmUserData = {
   isActive: boolean;
-}
+};
 
 export type SignupUserData = {
   username: string;
   emailAddress: string;
   phoneNumber: string;
   isActive: boolean;
-}
+};
 
-export type LoginUserData = {
-  id: number;
-  firstName: string;
-  lastName: string;
-  emailAddress: string;
-  phoneNumber: string;
-  username: string;
-  password: string;
-  roleId: number;
-  roleType: string;
-  orgId: number;
-  orgActive: boolean;
-  isActive: boolean;
-  isOwner: boolean;
-} | null | undefined;
+export type LoginUserData =
+  | {
+      id: number;
+      firstName: string;
+      lastName: string;
+      emailAddress: string;
+      phoneNumber: string;
+      username: string;
+      password: string;
+      roleId: number;
+      roleType: string;
+      orgId: number;
+      orgActive: boolean;
+      isActive: boolean;
+      isOwner: boolean;
+    }
+  | null
+  | undefined;
 
 export class UserData {
   @Expose()
@@ -109,7 +111,7 @@ export class LoginUserDto {
 
 export class VerifyUserDto {
   @IsString()
-  verify: string;
+  verifyOption: string;
 
   @IsString()
   username: string;
