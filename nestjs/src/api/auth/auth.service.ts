@@ -27,8 +27,7 @@ import {
 } from 'src/models/main/repositories';
 import { WorkspaceRepository as CheckinRepository } from 'src/models/checkin/repositories';
 import { MessageAuthService, MessageType } from 'src/common/modules';
-import { ISignup } from './types/auth.interface';
-import { VerifyUserDto } from 'src/models/main/dtos';
+import { LoginUserDto, SetupUserDto, SignupUserDto, VerifyUserDto } from 'src/models/main/dtos';
 
 
 @Injectable()
@@ -71,9 +70,9 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) { }
 
-  async signup({ contact, user }: ISignup) {
+  async signup(signupUserDto: SignupUserDto) {
     try {
-      return await this.userRepository.signupUser({ ...contact, ...user });
+      return await this.userRepository.signupUser(signupUserDto);
     } catch (err) {
       // 23505 = conflict
       if (err.code == 23505) {
@@ -86,7 +85,7 @@ export class AuthService {
     }
   }
 
-  async login(loginUserDto) {
+  async login(loginUserDto: LoginUserDto) {
     const user = await this.userRepository.loginUser(loginUserDto);
 
     if (!user) {
@@ -106,7 +105,9 @@ export class AuthService {
     return user;
   }
 
-  async verify({ verifyOption, username }: VerifyUserDto) {
+  async verify(verifyUserDto: VerifyUserDto) {
+    const { verifyOption, username } = verifyUserDto;
+
     try {
       const type =
         verifyOption == 'phoneNumber' ? MessageType.MESSAGE : MessageType.EMAIL;
@@ -141,27 +142,53 @@ export class AuthService {
     }
   }
 
-  async resend(username: string) {
-    const token = await this.tokenRepository.create();
-    const user = await this.userRepository.getUser(username);
+  async setup(setupUserDto: SetupUserDto) {
+    //const queryRunner = this.connection.createQueryRunner();
+    //const query2Runner = this.connection2.createQueryRunner();
 
-    console.log(user);
+    try {
 
-    const sendData = {
-      name: null,
-      emailAddress: null,
-      url: `${this.configService.get('app.host')}/auth/verify/${token.id}`,
-    };
+      return await this.userRepository.setupUser(setupUserDto);
 
-    //this.mailService.sendVerifyEmail(sendData);
-
-    return { username };
+    } catch (err) {
+      // P0002 = no_data_found
+      if (err.code == 'P0002') {
+        this.logger.warn(`${err.message}`, err);
+        throw new NotFoundException(404, 'Not Found.');
+      } else {
+        this.logger.error(`${err.message}`, err);
+        throw new InternalServerErrorException(500, err.code);
+      }
+    }
   }
+
 }
+
+
+
+
+
+//   async resend(username: string) {
+//     const token = await this.tokenRepository.create();
+//     const user = await this.userRepository.getUser(username);
+
+//     console.log(user);
+
+//     const sendData = {
+//       name: null,
+//       emailAddress: null,
+//       url: `${this.configService.get('app.host')}/auth/verify/${token.id}`,
+//     };
+
+//     //this.mailService.sendVerifyEmail(sendData);
+
+//     return { username };
+//   }
+
 
 /*
 // Multiple transactions
-const queryRunner = this.connection.createQueryRunner();
+  const queryRunner = this.connection.createQueryRunner();
   const query2Runner = this.connection2.createQueryRunner();
   await queryRunner.startTransaction();
   await query2Runner.startTransaction();

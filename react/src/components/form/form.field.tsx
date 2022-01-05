@@ -18,7 +18,7 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
 
   const data = field || props;
   const { id, label, description, name, mapto = '', value: initialValue, defaultValue = '' } = data;
-  const mapTable = mapto.split('.')[1];
+  const mapTable = mapto?.split('.')[1];
   const fieldSchema = formValidationSchema(data);
 
   const key = (isKey ? id : name) || '';

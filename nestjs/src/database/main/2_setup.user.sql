@@ -332,36 +332,8 @@ CREATE INDEX idx_user_location ON sec.user_location(user_id, location_id);
 CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
 
 
--- CREATE FUNCTION GET USER
-CREATE OR REPLACE FUNCTION sec.fn_get_user(p_username VARCHAR)
-RETURNS TABLE (
-  "firstName" varchar,
-  "lastName" varchar,
-  "emailAddress" varchar,
-  "phoneNumber" varchar,
-  username varchar
-)
-AS
-$BODY$
-  DECLARE
-
-  BEGIN
-    RETURN QUERY
-      SELECT
-        c.first_name,
-        c.last_name,
-        c.email_address,
-        c.phone_number,
-        u.username
-      FROM sec.user u
-      LEFT JOIN org.contact c ON c.id = u.contact_id
-      WHERE u.username = p_username;
-  END;
-$BODY$
-LANGUAGE plpgsql;
-
--- CREATE FUNCTION LOGIN USER
-CREATE OR REPLACE FUNCTION sec.fn_user_login(p_username VARCHAR)
+-- CREATE FUNCTION USER_GET
+CREATE OR REPLACE FUNCTION sec.fn_user_get(p_username VARCHAR)
 RETURNS TABLE (
   id int,
   "firstName" varchar,
@@ -407,68 +379,6 @@ $BODY$
       LEFT JOIN sec.organization o ON o.id = u.org_id
       LEFT JOIN org.contact c ON c.id = u.contact_id
       WHERE u.username = p_username;
-  END;
-$BODY$
-LANGUAGE plpgsql;
-
--- CREATE FUNCTION USER SIGNUP RETURN
-CREATE TYPE sec.user_signup_return_type AS (
-  username varchar,
-  "emailAddress" varchar,
-  "phoneNumber" varchar,
-  "isActive" boolean
-);
-
--- CREATE FUNCTION USER SIGNUP
-CREATE OR REPLACE FUNCTION sec.fn_user_signup(
-  p_first_name varchar,
-  p_last_name varchar,
-  p_email_address varchar,
-  p_phone_number varchar,
-  p_username varchar,
-  p_password varchar
-)
-RETURNS SETOF sec.user_signup_return_type
-AS
-$BODY$
-  DECLARE
-    v_role_id INT := 2;
-  BEGIN
-    RETURN QUERY
-    WITH c AS (
-      INSERT INTO org.contact(
-        first_name,
-        last_name,
-        email_address,
-        phone_number
-      )
-      VALUES (p_first_name, p_last_name, p_email_address, p_phone_number)
-      RETURNING
-        id,
-        email_address,
-        phone_number
-    ), u AS (
-      INSERT INTO sec.user(
-        username,
-        password,
-        role_id,
-        contact_id
-      )
-      --SELECT p_username, p_password, v_role_id, id FROM c
-      VALUES(p_username, p_password, v_role_id, (SELECT id FROM c))
-      RETURNING
-        username,
-        is_active,
-        contact_id
-    )
-
-    SELECT
-      u.username,
-      c.email_address,
-      c.phone_number,
-      u.is_active
-    FROM u
-      LEFT JOIN c ON c.id = u.contact_id;
   END;
 $BODY$
 LANGUAGE plpgsql;
@@ -612,7 +522,83 @@ $BODY$
     FROM u
       LEFT JOIN c ON c.id = u.contact_id;
 
-    COMMIT;
+  END;
+$BODY$
+LANGUAGE plpgsql;
+
+-- CREATE PROCEDURE USER_SETUP
+CREATE OR REPLACE PROCEDURE sec.pr_user_setup(
+  p_username varchar,
+
+  p_org_name varchar,
+  p_subdomain varchar,
+
+  p_location_name varchar,
+  p_street_address varchar,
+  p_country varchar,
+  p_state varchar,
+  p_city varchar,
+  p_postal_code varchar,
+
+  "out_username" INOUT varchar,
+  "out_locationId" INOUT int,
+  "out_orgId" INOUT int
+)
+AS
+$BODY$
+  DECLARE
+    rec record;
+    var_territory_id int;
+  BEGIN
+    SELECT *
+    INTO rec
+    FROM sec.user
+    WHERE username = p_username AND org_id is NULL;
+
+    IF found THEN
+
+      SELECT id
+      INTO var_territory_id
+      FROM dbo.territory
+      WHERE country_code = p_country AND state_code = p_state;
+
+      WITH o AS (
+        INSERT INTO sec.organization(
+          name,
+          subdomain
+        )
+        VALUES(p_org_name, p_subdomain)
+        RETURNING id
+      ), l AS (
+        INSERT INTO org.location(
+          name,
+          street_address,
+          territory_id,
+          city,
+          postal_code,
+          org_id
+        )
+        VALUES(p_location_name, p_street_address, var_territory_id, p_city, p_postal_code, (SELECT id FROM o))
+        RETURNING id
+      ), u AS (
+        UPDATE sec.user
+        SET org_id = (SELECT id FROM o)
+        WHERE username = p_username
+        RETURNING username, org_id
+      )
+      SELECT
+        u.username::varchar,
+        u.org_id::int,
+        (SELECT id FROM l)::int
+      INTO
+        "out_username",
+        "out_orgId",
+        "out_locationId"
+      FROM u;
+
+    ELSE
+        RAISE EXCEPTION no_data_found;
+    END IF;
   END;
 $BODY$
 LANGUAGE plpgsql;
@@ -623,22 +609,50 @@ LANGUAGE plpgsql;
 -------------------------------------------------------------------------
 
 SELECT * FROM sec.fn_user_signup('triny','do','giangd@gmail.com','8583571474','triny','675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2');
+
 SELECT sec.fn_user_verify('gdo', '658970', '{"username":  "gdo"}', '45628554');
+
 SELECT is_active AS "isActive" FROM sec.fn_user_confirm('658973');
 
 CALL sec.pr_user_signup('kenny'::varchar,'do'::varchar,'giangd@gmail.com'::varchar,'8583571474'::varchar,'kennny'::varchar,'675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2'::varchar, 'null'::text, 'null'::text, 'null'::text, '0'::boolean);
+
 CALL sec.pr_user_signup('kenny'::varchar,'do'::varchar,'giangd@gmail.com'::varchar,'8583571474'::varchar,'kennny'::varchar,'675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2'::varchar, ('null'::varchar,'null'::varchar,'null'::varchar,'0'::boolean)::sec.user_signup_return_type);
 
+CALL sec.pr_user_setup(
+'gdo'::varchar,
+
+'Serenity Nail'::varchar,
+'serenitynail'::varchar,
+
+'Serenity Nail Mira Mesa'::varchar,
+'1234 Camaruiz Rd'::varchar,
+'USA'::varchar,
+'CA'::varchar,
+'San Diego'::varchar,
+'92126'::varchar,
+
+''::varchar,
+0::int,
+0::int
+);
+
+SELECT id
+FROM dbo.territory
+WHERE country_code = 'USA' AND state_code = 'CA';
 
 -- SELECT
 SELECT * FROM log.error;
 SELECT * FROM dbo.role_type;
 SELECT * FROM org.contact;
+SELECT * FROM org.location;
 SELECT * FROM sec.token;
 SELECT * FROM sec.user;
 SELECT * FROM sec.policy;
+SELECT * FROM sec.organization;
 
 TRUNCATE sec.token;
+TRUNCATE org.location CASCADE;
+TRUNCATE sec.organization CASCADE;
 
 -- DROP
 DROP TABLE IF EXISTS
@@ -661,17 +675,10 @@ sec.token
 CASCADE;
 
 DROP TYPE IF EXISTS
-dbo.role_type_enum,
-sec.user_signup_return_type CASCADE;
+dbo.role_type_enum CASCADE;
 
 DROP FUNCTION IF EXISTS
-sec.fn_get_user;
-
-DROP FUNCTION IF EXISTS
-sec.fn_user_signup;
-
-DROP FUNCTION IF EXISTS
-sec.fn_user_login;
+sec.fn_user_get;
 
 DROP FUNCTION IF EXISTS
 sec.fn_user_verify;
@@ -681,6 +688,9 @@ sec.fn_user_confirm;
 
 DROP PROCEDURE IF EXISTS
 sec.pr_user_signup;
+
+DROP PROCEDURE IF EXISTS
+sec.pr_user_setup;
 
 
 

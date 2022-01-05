@@ -100,7 +100,7 @@
     {
       "id": 5,
       "label": "Location Name",
-      "name": "localName",
+      "name": "locationName",
       "description": null,
       "type": "text",
       "role": "field",

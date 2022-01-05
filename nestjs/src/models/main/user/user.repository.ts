@@ -4,7 +4,7 @@ import { promisify } from 'util';
 import { User } from './user.entity';
 import { LoginUserDto, SignupUserDto } from '../dtos';
 import { trimObjectKey } from 'src/common/utils';
-import { SignupUserData, UserData, ConfirmUserData, VerifyUserData, LoginUserData, SetupUserDto } from './user.dto';
+import { SignupUserData, UserData, ConfirmUserData, VerifyUserData, LoginUserData, SetupUserDto, SetupUserData } from './user.dto';
 import { TokenData, TokenTypeEnum } from '../token/token.dto';
 
 const scrypt = promisify(_scrypt);
@@ -36,19 +36,6 @@ export class UserRepository extends Repository<User> {
 
     const hashedPassword = await this.hashPassword(password);
 
-    // const [result] = await this.manager.query(
-    //   `SELECT * FROM sec.fn_user_signup($1, $2, $3, $4, $5, $6)`,
-    //   [
-    //     firstName,
-    //     lastName,
-    //     emailAddress,
-    //     phoneNumber,
-
-    //     username,
-    //     hashedPassword
-    //   ],
-    // );
-
     const [result] = await this.manager.query(
       `CALL sec.pr_user_signup($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
       [
@@ -60,10 +47,7 @@ export class UserRepository extends Repository<User> {
         username,
         hashedPassword,
 
-        'null',
-        'null',
-        'null',
-        '0'
+        'null', 'null', 'null', '0'
       ],
     );
 
@@ -72,15 +56,7 @@ export class UserRepository extends Repository<User> {
 
   async loginUser(loginUserDto: LoginUserDto): Promise<LoginUserData> {
     const { username, password } = loginUserDto;
-    const [user] = await this.manager.query(`SELECT * FROM sec.fn_user_login($1)`, [username]);
-
-    // const query = this.createQueryBuilder('user');
-    // const user = await query
-    //   .addSelect(['user.password'])
-    //   .leftJoinAndSelect('user.role', 'role')
-    //   .leftJoinAndSelect('role.roleType', 'roleType')
-    //   .where('user.username = :username', { username })
-    //   .getOne();
+    const [user] = await this.manager.query(`SELECT * FROM sec.fn_user_get($1)`, [username]);
 
     if (!user) {
       return undefined;
@@ -123,10 +99,67 @@ export class UserRepository extends Repository<User> {
     return result;
   }
 
-  async setupUser(setupUserDto: SetupUserDto) { }
+  async setupUser(setupUserDto: SetupUserDto) {
+    const {
+      username,
+      orgName,
+      subdomain,
+      locationName,
+      streetAddress,
+      country,
+      state,
+      city,
+      postalCode
+    } = setupUserDto;
+
+    const [result] = await this.manager.query(
+      `CALL sec.pr_user_setup($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+      [
+        username,
+        orgName,
+        subdomain,
+        locationName,
+        streetAddress,
+        country,
+        state,
+        city,
+        postalCode,
+
+        'null', '0', '0'
+      ],
+    );
+
+    return trimObjectKey<SetupUserData>(result);
+  }
 
   async getUser(username: string) {
-    const [user] = await this.manager.query(`SELECT * FROM sec.fn_get_user($1)`, [username]);
+    const [user] = await this.manager.query(`SELECT * FROM sec.fn_user_get($1)`, [username]);
     return user;
   }
 }
+
+
+/*
+  // signup
+  const [result] = await this.manager.query(
+    `SELECT * FROM sec.fn_user_signup($1, $2, $3, $4, $5, $6)`,
+    [
+      firstName,
+      lastName,
+      emailAddress,
+      phoneNumber,
+
+      username,
+      hashedPassword
+    ],
+  );
+
+  // login
+  const query = this.createQueryBuilder('user');
+  const user = await query
+    .addSelect(['user.password'])
+    .leftJoinAndSelect('user.role', 'role')
+    .leftJoinAndSelect('role.roleType', 'roleType')
+    .where('user.username = :username', { username })
+    .getOne();
+*/

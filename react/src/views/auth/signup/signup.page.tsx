@@ -47,7 +47,7 @@ const Signup: React.FC = (): JSX.Element => {
   return (
     <>
       {loading === 'error' && <div>Error</div>}
-      <Form form={form} loading={loading} isMap={true} onSubmit={handleSubmit} />
+      <Form form={form} loading={loading} onSubmit={handleSubmit} />
     </>
   );
 };

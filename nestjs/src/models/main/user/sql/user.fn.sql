@@ -1,32 +1,4 @@
--- CREATE FUNCTION GET USER
-CREATE OR REPLACE FUNCTION sec.fn_get_user(p_username varchar)
-RETURNS TABLE (
-  "firstName" varchar,
-  "lastName" varchar,
-  "emailAddress" varchar,
-  "phoneNumber" varchar,
-  username varchar
-)
-AS
-$BODY$
-  DECLARE
-
-  BEGIN
-    RETURN QUERY
-      SELECT
-        c.first_name,
-        c.last_name,
-        c.email_address,
-        c.phone_number,
-        u.username
-      FROM sec.user u
-      LEFT JOIN org.contact c ON c.id = u.contact_id
-      WHERE u.username = p_username;
-  END;
-$BODY$
-LANGUAGE plpgsql;
-
--- CREATE FUNCTION USER SIGNUP RETURN
+-- CREATE FUNCTION USER_SIGNUP_RETURN_TYPE
 CREATE TYPE sec.user_signup_return_type AS (
   username varchar,
   "emailAddress" varchar,
@@ -34,7 +6,7 @@ CREATE TYPE sec.user_signup_return_type AS (
   "isActive" boolean
 );
 
--- CREATE FUNCTION USER SIGNUP
+-- CREATE FUNCTION USER_SIGNUP
 CREATE OR REPLACE FUNCTION sec.fn_user_signup(
   p_first_name varchar,
   p_last_name varchar,
@@ -92,8 +64,8 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
--- CREATE FUNCTION LOGIN USER
-CREATE OR REPLACE FUNCTION sec.fn_user_login(p_username varchar)
+-- CREATE FUNCTION USER_GET
+CREATE OR REPLACE FUNCTION sec.fn_user_get(p_username varchar)
 RETURNS TABLE (
   id int,
   "firstName" varchar,
@@ -143,7 +115,7 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
--- CREATE FUNCTION USER VERIFY
+-- CREATE FUNCTION USER_VERIFY
 CREATE OR REPLACE FUNCTION sec.fn_user_verify(
   p_username varchar,
   p_key varchar,
@@ -179,7 +151,7 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
--- CREATE FUNCTION USER CONFIRM
+-- CREATE FUNCTION USER_CONFIRM
 CREATE OR REPLACE FUNCTION sec.fn_user_confirm(
   p_key varchar
 )

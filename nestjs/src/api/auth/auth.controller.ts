@@ -10,10 +10,10 @@ import {
 import { JwtService } from '@nestjs/jwt';
 
 import { AuthService } from './auth.service';
-import { LoginUserDto, VerifyUserDto } from '../../models/main/dtos';
-import { CurrentUser, Public, Serialize } from 'src/common/decorators';
+import { LoginUserDto, SetupUserDto, SignupUserDto, VerifyUserDto } from '../../models/main/dtos';
 import { User } from 'src/models/main/entities';
-import { ISignup } from './types/auth.interface';
+import { CurrentUser, Public, Serialize } from 'src/common/decorators';
+import { maskedEmailAddress, maskedPhoneNumber } from 'src/common/utils';
 
 @Controller('auth')
 export class AuthController {
@@ -25,18 +25,18 @@ export class AuthController {
   @Public()
   @Post('signup')
   //@Serialize(UserData)
-  async signup(@Body() body: ISignup) {
+  async signup(@Body() signupUserDto: SignupUserDto) {
     const {
       username,
       emailAddress = '',
       phoneNumber = '',
       isActive,
-    } = await this.authService.signup(body);
+    } = await this.authService.signup(signupUserDto);
 
     return {
       username,
-      emailAddress: emailAddress.replace(/^(.{2})[^@]+/, '$1***'),
-      phoneNumber: phoneNumber.replace(/^(.{3})+/, '******$1'),
+      emailAddress: maskedEmailAddress(emailAddress),
+      phoneNumber: maskedPhoneNumber(phoneNumber),
       isActive,
     };
   }
@@ -64,8 +64,8 @@ export class AuthController {
     return {
       user: {
         username,
-        emailAddress: emailAddress.replace(/^(.{2})[^@]+/, '$1***'),
-        phoneNumber: phoneNumber.replace(/^(.{3})+/, '******$1'),
+        emailAddress: maskedEmailAddress(emailAddress),
+        phoneNumber: maskedPhoneNumber(phoneNumber),
         isActive,
       },
     };
@@ -85,16 +85,9 @@ export class AuthController {
 
   @Public()
   @Post('setup')
-  async setup(@Session() session: any, @Body() body) {
-    console.log(session.id);
-    console.log(body);
+  async setup(@Body() body: SetupUserDto) {
+    await this.authService.setup(body);
     return {};
-  }
-
-  @Public()
-  @Post('resend')
-  async resend(@Body('username') username: string) {
-    return this.authService.resend(username);
   }
 
   @Public()
@@ -106,9 +99,14 @@ export class AuthController {
       session.destroy();
     }
 
-    return {};
+    return { ok: true };
   }
 
+  // @Public()
+  // @Post('resend')
+  // async resend(@Body('username') username: string) {
+  //   return this.authService.resend(username);
+  // }
 
   // @Public()
   // @Get('verify/:token')

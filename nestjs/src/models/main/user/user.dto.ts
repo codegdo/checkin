@@ -21,6 +21,12 @@ export type SignupUserData = {
   isActive: boolean;
 };
 
+export type SetupUserData = {
+  username: string;
+  orgId: string;
+  locationId: string;
+};
+
 export type LoginUserData =
   | {
     id: number;
@@ -119,10 +125,31 @@ export class VerifyUserDto {
 
 export class SetupUserDto {
   @IsString()
+  username: string;
+
+  @IsString()
   orgName: string;
 
   @IsString()
   subdomain: string;
+
+  @IsString()
+  locationName: string;
+
+  @IsString()
+  streetAddress: string;
+
+  @IsString()
+  country: string;
+
+  @IsString()
+  state: string;
+
+  @IsString()
+  city: string;
+
+  @IsString()
+  postalCode: string;
 }
 
 export class CreateUserDto {
