@@ -1,4 +1,4 @@
-import { Logger, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -14,6 +14,7 @@ import {
   EmailRepository
 } from 'src/models/main/repositories';
 import { WorkspaceRepository as CheckinRepository } from 'src/models/checkin/repositories';
+import { ErrorService } from 'src/common/modules';
 
 @Module({
   imports: [
@@ -30,6 +31,6 @@ import { WorkspaceRepository as CheckinRepository } from 'src/models/checkin/rep
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, Logger],
+  providers: [AuthService, ErrorService],
 })
 export class AuthModule { }

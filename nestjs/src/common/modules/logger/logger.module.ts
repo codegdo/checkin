@@ -2,8 +2,9 @@ import * as winston from 'winston';
 import * as Transport from 'winston-transport';
 import { getConnection } from 'typeorm';
 
-import { LogError } from 'src/models/main/entities';
+import { ErrorEntity } from 'src/models/main/entities';
 import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
+import { LogLevel } from './logger.type';
 
 class WinstonTransport extends Transport {
   private error = null;
@@ -20,7 +21,7 @@ class WinstonTransport extends Transport {
     const { url, headers: { host } } = req;
 
     const connection = await getConnection();
-    const repository = connection.getRepository(LogError);
+    const repository = connection.getRepository(ErrorEntity);
     const data = repository.create({ message, host, url, stack });
 
     await repository.save(data);
@@ -34,19 +35,19 @@ class WinstonTransport extends Transport {
     setImmediate(() => {
       this.emit('logged', info);
 
-      if (info.level === 'info') {
+      if (info.level === LogLevel.INFO) {
         this.info = info;
       }
 
-      if (info.level === 'error') {
+      if (info.level === LogLevel.ERROR) {
         this.error = info;
       }
 
-      if (info.level === 'error' && this.info) {
+      if (info.level === LogLevel.ERROR && this.info) {
         this.insert(info, this.info);
       }
 
-      if (info.level === 'info' && this.error) {
+      if (info.level === LogLevel.INFO && this.error) {
         this.insert(this.error, info);
       }
     });
@@ -60,11 +61,11 @@ export const logger = winston.createLogger({
   transports: [
     new winston.transports.File({
       filename: 'error.log',
-      level: 'error',
+      level: LogLevel.ERROR,
       format: winston.format.json()
     }),
     new winston.transports.Http({
-      level: 'warn',
+      level: LogLevel.WARN,
       format: winston.format.json()
     }),
     new winston.transports.Console({

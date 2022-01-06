@@ -26,6 +26,7 @@ import {
   twilioConfig,
   winstonConfig,
 } from './configs';
+import { ErrorModule } from './common/modules/error/error.module';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import {
     ClientModule,
     CalendarModule,
     LocationModule,
+    ErrorModule,
   ],
   controllers: [],
   providers: [

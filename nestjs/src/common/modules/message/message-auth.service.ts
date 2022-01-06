@@ -15,6 +15,8 @@ import { arrayToObjectKey } from 'src/common/utils/array-to-object-keys.util';
 import { EmailData } from 'src/models/main/email/email.dto';
 import { TokenData } from 'src/models/main/token/token.dto';
 import { MessageOptions, MessageType, VerifyEmailKey, VerifyMessageKey, VerifyTokenData } from './message.type';
+import { ErrorService } from '../error/error.service';
+
 
 @Injectable()
 export class MessageAuthService {
@@ -26,11 +28,10 @@ export class MessageAuthService {
     @InjectRepository(EmailRepository)
     private emailRepository: EmailRepository,
 
-    @Inject(Logger)
-    private readonly logger: LoggerService,
-
     @InjectTwilio()
     private readonly client: TwilioClient,
+
+    private readonly errorService: ErrorService,
   ) { }
 
   async sendMessageVerify(
@@ -87,9 +88,9 @@ export class MessageAuthService {
 
         return { ok: true };
       }
-    } catch (err) {
-      this.logger.error(`${err.message}`, err);
-      throw new InternalServerErrorException(500, err.code);
+
+    } catch (e) {
+      this.errorService.handleError(e);
     }
   }
 }

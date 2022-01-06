@@ -85,9 +85,20 @@ export class AuthController {
 
   @Public()
   @Post('setup')
-  async setup(@Body() body: SetupUserDto) {
-    await this.authService.setup(body);
-    return {};
+  async setup(@Session() session: any, @Body() body: SetupUserDto) {
+    const user = await this.authService.setup(body);
+
+    const { password, orgId, orgActive, ...rest } = user;
+    const accessToken = this.jwtService.sign({ orgId });
+
+    session.user = user;
+
+    return {
+      user: { ...rest },
+      orgId,
+      sid: session.id,
+      accessToken,
+    };
   }
 
   @Public()

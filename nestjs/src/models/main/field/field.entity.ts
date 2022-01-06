@@ -9,7 +9,7 @@ import {
   JoinColumn
 } from 'typeorm';
 
-import { DBObject } from '../object/object.entity';
+import { ObjectEntity } from '../object/object.entity';
 
 interface FieldData { };
 
@@ -21,9 +21,6 @@ export class Field extends BaseEntity {
   @Column({ name: 'name' })
   name: string;
 
-  @Column({ name: 'description' })
-  description: string;
-
   @Column({ name: 'role' })
   role: string;
 
@@ -33,12 +30,21 @@ export class Field extends BaseEntity {
   @Column({ name: 'data', type: 'jsonb' })
   data: FieldData;
 
+  @Column({ name: 'mapto' })
+  mapto: string;
+
+  @Column({ name: 'lookup' })
+  lookup: string;
+
   @Column({ name: 'is_required' })
   isRequired: boolean;
 
-  @ManyToOne(() => DBObject)
+  @ManyToOne(() => ObjectEntity)
   @JoinColumn({ name: 'object_id', referencedColumnName: 'id' })
-  object: DBObject;
+  object: ObjectEntity;
+
+  @Column({ name: 'org_id' })
+  orgId: boolean;
 
   @Column({ name: 'created_by' })
   createdBy: string;

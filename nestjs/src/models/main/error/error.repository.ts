@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { LogError } from './error.entity';
+import { ErrorEntity } from './error.entity';
 
-@EntityRepository(LogError)
-export class ErrorRepository extends Repository<LogError> { }
+@EntityRepository(ErrorEntity)
+export class ErrorRepository extends Repository<ErrorEntity> { }

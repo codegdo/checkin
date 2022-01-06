@@ -9,7 +9,7 @@ import {
 
 
 @Entity({ database: 'main', schema: 'dbo', name: 'object' })
-export class DBObject extends BaseEntity {
+export class ObjectEntity extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 

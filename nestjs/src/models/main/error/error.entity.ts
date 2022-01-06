@@ -8,7 +8,7 @@ import {
 
 
 @Entity({ database: 'main', schema: 'log', name: 'error' })
-export class LogError extends BaseEntity {
+export class ErrorEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

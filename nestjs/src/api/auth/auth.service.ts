@@ -1,13 +1,7 @@
 import {
   BadRequestException,
   NotFoundException,
-  ConflictException,
-  UnauthorizedException,
-  Injectable,
-  InternalServerErrorException,
-  Inject,
-  Logger,
-  LoggerService,
+  Injectable
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
@@ -26,7 +20,7 @@ import {
   EmailRepository,
 } from 'src/models/main/repositories';
 import { WorkspaceRepository as CheckinRepository } from 'src/models/checkin/repositories';
-import { MessageAuthService, MessageType } from 'src/common/modules';
+import { ErrorMessageType, ErrorService, MessageAuthService, MessageType } from 'src/common/modules';
 import { LoginUserDto, SetupUserDto, SignupUserDto, VerifyUserDto } from 'src/models/main/dtos';
 
 
@@ -63,82 +57,55 @@ export class AuthService {
     // @Inject(WINSTON_MODULE_PROVIDER)
     // private readonly logger: Logger,
 
-    @Inject(Logger)
-    private readonly logger: LoggerService,
-
     private readonly messageService: MessageAuthService,
-    private readonly configService: ConfigService,
+    private readonly errorService: ErrorService,
   ) { }
 
   async signup(signupUserDto: SignupUserDto) {
     try {
       return await this.userRepository.signupUser(signupUserDto);
-    } catch (err) {
-      // 23505 = conflict
-      if (err.code == 23505) {
-        this.logger.warn(`${err.message}`, err);
-        throw new ConflictException(409, 'Username already exists.');
-      } else {
-        this.logger.error(`${err.message}`, err);
-        throw new InternalServerErrorException(500, err.code);
-      }
+    } catch (e) {
+      this.errorService.handleError(e);
     }
   }
 
   async login(loginUserDto: LoginUserDto) {
     const user = await this.userRepository.loginUser(loginUserDto);
-
-    if (!user) {
-      throw new BadRequestException();
-    }
-
     const { orgId, orgActive, isActive } = user;
 
-    if (orgId && orgActive && !isActive) {
-      throw new BadRequestException('Account Disabled');
+    if (!user) {
+      throw new NotFoundException(ErrorMessageType.NOT_FOUND);
     }
 
     if (orgId && !orgActive) {
-      throw new BadRequestException('Organization Diabled');
+      throw new BadRequestException(ErrorMessageType.ORGANIZATION_RESTRICT);
+    }
+
+    if (orgId && !isActive) {
+      throw new BadRequestException(ErrorMessageType.ACCOUNT_RESTRICT);
     }
 
     return user;
   }
 
   async verify(verifyUserDto: VerifyUserDto) {
-    const { verifyOption, username } = verifyUserDto;
+    const { verifyOption: v, username } = verifyUserDto;
 
     try {
-      const type =
-        verifyOption == 'phoneNumber' ? MessageType.MESSAGE : MessageType.EMAIL;
-
+      const type = (v == 'phoneNumber') ? MessageType.MESSAGE : MessageType.EMAIL;
       const context = await this.userRepository.verifyUser(username);
 
       return this.messageService.sendMessageVerify({ type, context });
-    } catch (err) {
-      // P0002 = no_data_found
-      if (err.code == 'P0002') {
-        this.logger.warn(`${err.message}`, err);
-        throw new NotFoundException(404, 'Not Found.');
-      } else {
-        this.logger.error(`${err.message}`, err);
-        throw new InternalServerErrorException(500, err.code);
-      }
+    } catch (e) {
+      this.errorService.handleError(e);
     }
   }
 
   async confirm(key: string) {
     try {
       return await this.userRepository.confirmUser(key);
-    } catch (err) {
-      // P0002 = no_data_found
-      if (err.code == 'P0002') {
-        this.logger.warn(`${err.message}`, err);
-        throw new NotFoundException(404, 'Not Found.');
-      } else {
-        this.logger.error(`${err.message}`, err);
-        throw new InternalServerErrorException(500, err.code);
-      }
+    } catch (e) {
+      this.errorService.handleError(e);
     }
   }
 
@@ -148,17 +115,12 @@ export class AuthService {
 
     try {
 
-      return await this.userRepository.setupUser(setupUserDto);
+      const { username } = await this.userRepository.setupUser(setupUserDto);
 
-    } catch (err) {
-      // P0002 = no_data_found
-      if (err.code == 'P0002') {
-        this.logger.warn(`${err.message}`, err);
-        throw new NotFoundException(404, 'Not Found.');
-      } else {
-        this.logger.error(`${err.message}`, err);
-        throw new InternalServerErrorException(500, err.code);
-      }
+      return this.userRepository.getUser(username);
+
+    } catch (e) {
+      this.errorService.handleError(e);
     }
   }
 
