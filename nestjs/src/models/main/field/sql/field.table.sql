@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS dbo.field (
 
   data JSONB,
 
-  mapto VARCHAR(95),
+  map VARCHAR(95),
   lookup VARCHAR(95),
 
   is_required BOOLEAN DEFAULT FALSE,

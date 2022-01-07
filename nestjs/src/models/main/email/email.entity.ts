@@ -12,7 +12,8 @@ import {
 import { Module } from '../module/module.entity';
 
 export enum EmailTypeEnum {
-  SIGNUP = 'signup',
+  SENDER = 'S',
+  RECEIVER = 'R'
 }
 
 @Entity({ database: 'main', schema: 'dbo', name: 'email_address' })
@@ -20,20 +21,20 @@ export class EmailAddress {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'group_name' })
-  groupName: string;
+  @Column({ name: 'name' })
+  name: string;
 
-  @Column({ name: 'recipients' })
-  recipients: string;
+  @Column({ name: 'recipient' })
+  recipient: string;
 
-  @Column({ name: 'cc_recipients' })
-  ccRecipients: string;
+  @Column({ name: 'cc_recipient' })
+  ccRecipient: string;
 
-  @Column({ name: 'bcc_recipients' })
-  bccRecipients: string;
+  @Column({ name: 'bcc_recipient' })
+  bccRecipient: string;
 
-  @Column({ name: 'sms_recipients' })
-  sms_Recipients: string;
+  @Column({ name: 'sms_recipient' })
+  sms_Recipient: string;
 
   @Column({ name: 'created_by' })
   createdBy: string;
@@ -86,15 +87,15 @@ export class EmailType {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
+  @Column({ name: 'name' })
+  name: string;
+
   @Column({
-    name: 'type_name',
+    name: 'type',
     type: 'enum',
     enum: EmailTypeEnum,
   })
-  typeName: EmailTypeEnum;
-
-  @Column({ name: 'type' })
-  type: string;
+  type: EmailTypeEnum;
 
   @ManyToOne(() => EmailAddress, (emailAddress) => emailAddress.emailTypes)
   @JoinColumn({ name: 'email_address_id' })
@@ -138,8 +139,8 @@ export class Email {
   @Column({ name: 'body' })
   body: string;
 
-  @Column({ name: 'message' })
-  message: string;
+  @Column({ name: 'text' })
+  text: string;
 
   @Column({ name: 'is_active' })
   isActive: boolean;

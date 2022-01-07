@@ -22,8 +22,8 @@ VALUES
 CREATE TABLE IF NOT EXISTS dbo.module (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
+  group VARCHAR(45) CHECK(type in ('admin', 'user', 'app')),,
   sort_order INTEGER DEFAULT 0,
-  module_group_id INTEGER DEFAULT 0,
 
   is_external BOOLEAN DEFAULT FALSE,
   is_internal BOOLEAN DEFAULT FALSE,
@@ -40,18 +40,18 @@ CREATE TABLE IF NOT EXISTS dbo.module (
 );
 
 INSERT
-INTO dbo.module(id, name, sort_order, module_group_id, is_external, is_internal, is_subscription, is_active)
+INTO dbo.module(id, name, group, sort_order, is_external, is_internal, is_subscription, is_active)
 VALUES
-('1', 'System',     '0', '1', '0', '0', '0', '1'),
-('2', 'Setup',      '1', '1', '0', '1', '0', '1'),
+('1', 'System', 'admin', '0', '0', '0', '0', '1'),
+('2', 'Setup', 'admin', '1', '0', '1', '0', '1'),
 
-('3', 'Account',    '2', '2', '1', '1', '0', '1'),
-('4', 'Help',       '3', '2', '1', '1', '0', '1'),
+('3', 'Account', 'user', '2', '1', '1', '0', '1'),
+('4', 'Help', 'user', '3', '1', '1', '0', '1'),
 
-('11', 'Checkin',   '11', '3', '1', '1', '1', '1'),
-('12', 'Timeclock', '12', '3', '1', '1', '1', '1'),
-('13', 'POS',       '13', '3', '1', '1', '1', '1'),
-('14', 'Marketing', '14', '3', '1', '1', '1', '1');
+('11', 'Calendar', 'app', '11', '1', '1', '1', '1'),
+('12', 'Checkin', 'app', '12', '1', '1', '1', '1'),
+('13', 'Checkout', 'app', '13', '1', '1', '1', '1'),
+('14', 'Todo', 'app', '14', '1', '1', '1', '1');
 
 -- CREATE TABLE MODULE_PAGE
 CREATE TABLE IF NOT EXISTS dbo.module_page (

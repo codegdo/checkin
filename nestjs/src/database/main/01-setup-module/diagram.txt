@@ -1,0 +1,68 @@
+https://dbdiagram.io/d/61d7514ef8370f0a2edfc8d2
+checkin.workspace
+---
+
+table feature {
+  id int
+  name varchar
+  price int
+}
+
+table feature_module {
+  feature_id int
+  module_id int
+  org_id int
+}
+
+ref: feature_module.feature_id > feature.id
+ref: feature_module.module_id > module.id
+
+table module {
+  id int
+  name varchar
+  type varchar
+  sort_order int
+  
+  is_external boolean
+  is_internal boolean
+  is_subscription boolean
+  is_active boolean
+}
+
+table module_view {
+  module_id int
+  view_id int
+  org_id int
+}
+
+ref: module_view.module_id > module.id
+ref: module_view.view_id > view.id
+
+table view {
+  id int
+  name varchar
+  type varchar
+  sort_order int
+  
+  is_external boolean
+  is_internal boolean
+  is_active boolean
+}
+
+table view_object {
+  view_id int
+  object_id int
+  org_id int
+}
+
+ref: view_object.view_id > view.id
+ref: view_object.object_id > object.id
+
+table object {
+  id int
+  name varchar
+  
+  is_external boolean
+  is_internal boolean
+  is_active boolean
+}

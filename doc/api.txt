@@ -9,7 +9,24 @@ setup
 account
 support
 
+---------
+workspace
+---------
 
+calendar
+  appointments
+
+checkin
+  bookings
+
+checkout
+  orders
+
+todo
+  tasks
+
+
+-----------
 workspace
 
 checkin

@@ -1,1 +1,584 @@
 https://dbdiagram.io/d/61044e092ecb310fc3b76bbf
+
+
+TABLE feature {
+  id int
+  name varchar
+  price int
+}
+
+TABLE feature_module {
+  feature_id int
+  module_id int
+  org_id int
+}
+REF: feature_module.feature_id > feature.id
+REF: feature_module.module_id > module.id
+
+
+TABLE module_group {
+  id int
+  name varchar
+}
+
+TABLE module {
+  id int
+  name varchar
+  sort_order int
+  
+  module_group_id int
+  is_external int
+  is_internal int
+  is_subscription int
+  is_active int
+}
+REF: module.module_group_id > module_group.id
+
+
+TABLE module_page {
+  module_id int
+  page_id int
+  org_id int
+}
+REF: module_page.module_id > module.id
+REF: module_page.page_id > page.id
+
+
+TABLE page {
+  id int
+  name varchar
+  type varchar
+  sort_order int
+  is_external int
+  is_internal int
+  is_active int
+}
+
+TABLE page_object {
+  page_id int
+  object_id int
+  org_id int
+}
+REF: page_object.page_id > page.id
+REF: page_object.object_id > object.id
+
+TABLE object {
+  id int
+  name varchar
+  mapto varchar
+}
+
+
+TABLE field {
+  id int
+  name varchar
+  type varchar
+  
+  object_id int
+  
+  mapto varchar
+  lookup varchar
+}
+REF: field.object_id > object.id
+
+TABLE form_type_object {
+  form_type_id int
+  object_id int
+}
+REF: form_type_object.form_type_id > form_type.id
+REF: form_type_object.object_id > object.id
+
+TABLE form_field {
+  form_id int
+  field_id int
+  label varchar
+}
+REF: form_field.form_id > form.id
+REF: form_field.field_id > field.id
+
+TABLE form_type {
+  id int
+  name varchar
+}
+
+TABLE form {
+  id int
+  name varchar
+  description varchar
+  form_type_id int
+}
+REF: form.form_type_id > form_type.id
+
+
+
+
+TABLE organization {
+  id int
+  name varchar
+  street_address varchar
+  city varchar
+  postal_code number
+  territory_id int
+  phone_number number
+  fax_number number
+  website varchar
+  subdomain varchar
+  owner_id int
+  is_active boolean
+}
+REF: organization.owner_id > user.id
+
+TABLE location {
+  id int
+  name varchar
+  
+  street_address varchar
+  city varchar
+  postal_code number
+  territory_id int
+  phone_number varchar
+  fax_number varchar
+  
+  owner_id int
+  org_id int
+}
+
+TABLE business_hour {
+  id int
+  name varchar
+  
+  start_time int
+  end_time int
+  
+  is_sun boolean
+  is_mon boolean
+  is_tue boolean
+  is_wed boolean
+  is_thu boolean
+  is_fri boolean
+  is_sat boolean
+  
+  location_id int
+}
+REF: business_hour.location_id > location.id
+
+TABLE user_location {
+  user_id int
+  location_id int
+}
+REF: user_location.user_id > user.id
+REF: user_location.location_id > location.id
+
+TABLE user {
+  id int
+  username varchar
+  password varchar
+  passcode varchar
+
+  contact_id int
+  form_id int
+  role_id int
+  org_id int
+  
+  is_new_password boolean
+  is_active boolean
+}
+REF: user.contact_id > contact.id
+REF: user.role_id > role.id
+
+TABLE role_type {
+  id int
+  name varchar
+  description varchar
+  is_active boolean
+}
+
+TABLE role {
+  id int
+  name varchar
+  description varchar
+  role_type_id int
+  org_id int
+  is_active boolean
+}
+REF: role.role_type_id > role_type.id
+
+
+TABLE role_policy {
+  role_id int
+  policy_id int
+}
+REF: role_policy.role_id > role.id
+REF: role_policy.policy_id > policy.id
+
+TABLE policy {
+  id int
+  name varchar
+  description varchar
+  data json
+  role_type_id int
+  org_id int
+  is_active boolean
+}
+
+TABLE client_location {
+  client_id int
+  location_id int
+}
+REF: client_location.client_id > client.id
+REF: client_location.location_id > location.id
+
+
+TABLE client {
+  id int
+  first_name varchar
+  last_name varchar
+  email_address varchar
+  phone_number varchar
+  day_of_birth varchar
+  
+}
+
+TABLE client_group {
+  client_id int
+  group_id int
+}
+REF: client_group.client_id > client.id
+REF: client_group.group_id > group.id
+
+TABLE group {
+  id int
+  name varchar
+  
+  location_id int
+}
+
+TABLE contact {
+  id int
+  first_name varchar
+  last_name varchar
+  street_address varchar
+  city varchar
+  postal_code number
+  territory_id int
+  
+  phone_number varchar
+}
+
+TABLE working_hour {
+  id int
+  name varchar
+  
+  start_time int
+  end_time int
+  
+  is_sun boolean
+  is_mon boolean
+  is_tue boolean
+  is_wed boolean
+  is_thu boolean
+  is_fri boolean
+  is_sat boolean
+  
+  user_id int
+  
+  is_active boolean
+}
+REF: working_hour.user_id > user.id
+
+TABLE timeoff {
+  id int
+  type enum
+  
+  start_time int
+  end_time int
+  date datetime
+  
+  user_id int
+  is_active boolean
+}
+REF: timeoff.user_id > user.id
+
+TABLE calendar {
+  id int
+  name varchar
+  
+  location_id int
+  service_menu_id int
+  org_id int
+  is_active boolean
+}
+REF: calendar.location_id > location.id
+REF: calendar.service_menu_id > service_menu.id
+
+TABLE calendar_status {
+  id int
+  name varchar
+  
+  calendar_id int
+  is_confirmed boolean
+  is_expired boolean
+  is_cancel boolean
+  is_pending boolean
+  is_active boolean
+}
+REF: calendar_status.calendar_id > calendar.id
+
+TABLE holiday {
+  id int
+  name varchar
+  date datetime
+
+  location_id int
+}
+REF: holiday.location_id > location.id
+
+
+
+TABLE service {
+  id int
+  name varchar
+  description varchar
+  
+  category_id int
+  org_id int
+}
+REF: service.category_id > service_category.id
+
+TABLE service_category {
+  id int
+  name varchar
+}
+
+TABLE service_item {
+  id int
+  
+  duration int
+  price int
+  
+  service_menu_id int
+  service_id int
+  org_id int
+}
+REF: service_item.service_menu_id > service_menu.id
+REF: service_item.service_id > service.id
+
+TABLE service_menu {
+  id int
+  name varchar
+  current_code varchar
+  org_id int
+}
+
+TABLE booking_item {
+  id int
+  price int
+  duration int
+  start_time datetime
+  is_active boolean
+  
+  booking_id int
+  user_id int
+}
+//REF: booking_item.appointment_id > appointment.id
+//REF: booking_item.checkin_id > checkin.id
+//REF: booking_item.service_item_id > service_item.id
+REF: booking_item.booking_id > booking.id
+
+TABLE booking {
+  id int
+  
+  comment varchar
+  booking_type_id int
+
+  client_id int
+  calendar_id int
+  org_id int
+  
+  is_active boolean
+  start_time datetime
+  created_at datetime
+  updated_at datetime
+}
+
+REF: booking.booking_type_id > booking_type.id
+REF: booking.calendar_id > calendar.id
+
+TABLE booking_status {
+  id int
+  comment varchar
+  calendar_status_id int
+  booking_id int
+}
+REF: booking_status.calendar_status_id > calendar_status.id
+REF: booking_status.booking_id > booking.id
+
+
+TABLE booking_type {
+  id int
+  name varchar
+  is_active boolean
+}
+
+
+//TABLE booking_item {
+  //item_id int
+  //booking_id int
+  //user_id int
+//}
+//REF: booking_item.item_id > item.id
+
+TABLE user_service {
+  user_id int
+  service_item_id int
+}
+REF: user_service.user_id > user.id
+REF: user_service.service_item_id > service_item.id
+
+TABLE checkin {
+  id int
+
+  client_id int
+  booking_id int
+  location_id int
+
+}
+//REF: checkin.location_id > location.id
+//REF: checkin.booking_id > booking.id
+
+
+TABLE todo {
+  id int
+  name varchar
+  location_id int
+  org_id int
+}
+
+TABLE activity {
+  id int
+  name varchar
+  start_time datetime
+  end_time datetime
+  priority int
+  user_id int
+  todo_id int
+  org_id int
+}
+
+
+TABLE task {
+  id int
+  name varchar
+  task_status_id varchar
+  start_time datetime
+  end_time datetime
+  turn_id int
+  
+  booking_id int
+}
+
+TABLE task_status {
+  id int
+  name varchar
+
+  org_id int
+}
+
+TABLE turn {
+  id int
+  name varchar
+
+}
+
+
+
+
+TABLE cart {
+  id int
+}
+
+TABLE order {
+  id int
+  
+  client_id int
+}
+
+TABLE payment {
+  id int
+}
+
+
+TABLE email_from {
+  id int
+  from_name varchar
+  from_address varchar
+  reply_to varchar
+}
+
+TABLE email_address {
+  id int
+  category varchar
+  recipient varchar
+  cc_recipient varchar
+  bcc_recipient varchar
+}
+
+TABLE email_type {
+  id int
+  type_name varchar
+  type varchar
+  
+  email_address_id int
+  email_from_id int
+  module_id int
+}
+REF: email_type.email_address_id > email_address.id
+REF: email_type.email_from_id > email_from.id
+
+
+TABLE email {
+  id int
+  name varchar
+  subject varchar
+  body text
+  is_active boolean
+  email_type_id int
+  org_id int
+}
+REF: email.email_type_id > email_type.id
+
+
+TABLE email_recipient {
+  id int
+}
+
+TABLE log_mail {
+  id int
+  object_name varchar
+  
+  recipient varchar
+  cc_recipient varchar
+  bcc_recipient varchar
+  
+  subject varchar
+  body text
+  
+  send_date timestamp
+  email_template_id int
+  org_id int
+}
+
+TABLE log_error {
+  id int
+  message varchar
+  host varchar
+  user varchar
+  
+  url varchar
+  stack varchar
+  create_at timestamp
+}
+
+TABLE log_activity {
+  id int
+}

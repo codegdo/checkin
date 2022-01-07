@@ -1,0 +1,4 @@
+https://dbdiagram.io/d/61d8b684f8370f0a2ee4c539
+checkin.workspace
+
+---

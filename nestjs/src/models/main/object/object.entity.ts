@@ -5,7 +5,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToMany,
 } from 'typeorm';
+import { View } from '../view/view.entity';
 
 
 @Entity({ database: 'main', schema: 'dbo', name: 'object' })
@@ -16,9 +18,6 @@ export class ObjectEntity extends BaseEntity {
   @Column({ name: 'name' })
   name: string;
 
-  // @Column({ name: 'mapping', nullable: false })
-  // mapping: string;
-
   @Column({ name: 'is_external' })
   isExternal: boolean;
 
@@ -27,6 +26,9 @@ export class ObjectEntity extends BaseEntity {
 
   @Column({ name: 'is_active' })
   isActive: boolean;
+
+  @ManyToMany(() => View, (view: View) => view.objects)
+  views: View[];
 
   @Column({ name: 'created_by' })
   createdBy: string;

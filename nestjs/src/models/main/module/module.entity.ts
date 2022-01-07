@@ -11,28 +11,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Feature } from '../feature/feature.entity';
-import { Page } from '../page/page.entity';
-
-@Entity({ database: 'main', schema: 'dbo', name: 'module_group' })
-export class ModuleGroup extends BaseEntity {
-  @PrimaryGeneratedColumn({ name: 'id' })
-  id: number;
-
-  @Column({ name: 'name' })
-  name: string;
-
-  @Column({ name: 'created_by' })
-  createdBy: string;
-
-  @Column({ name: 'updated_by' })
-  updatedBy: string;
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
-}
+import { View } from '../view/view.entity';
 
 @Entity({ database: 'main', schema: 'dbo', name: 'module' })
 export class Module extends BaseEntity {
@@ -42,16 +21,11 @@ export class Module extends BaseEntity {
   @Column({ name: 'name' })
   name: string;
 
+  @Column({ name: 'type' })
+  type: string;
+
   @Column({ name: 'sort_order' })
   sortOrder: number;
-
-  @ManyToOne(() => ModuleGroup)
-  @JoinColumn({ name: 'module_group_id', referencedColumnName: 'id' })
-  moduleGroup: ModuleGroup;
-
-  //@ManyToOne(() => ModuleGroup, (moduleGroup) => moduleGroup.id)
-  //@JoinColumn({ name: 'module_group_id' })
-  //moduleGroup: ModuleGroup;
 
   @ManyToMany(() => Feature, (feature: Feature) => feature.modules)
   features: Feature[];
@@ -72,19 +46,19 @@ export class Module extends BaseEntity {
   //pages!: Page[];
 
   // Use middle table to join
-  @ManyToMany(() => Page, (page: Page) => page.modules)
+  @ManyToMany(() => View, (view: View) => view.modules)
   @JoinTable({
-    name: 'module_page',
+    name: 'module_view',
     joinColumn: {
       name: 'module_id',
       referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: 'page_id',
+      name: 'view_id',
       referencedColumnName: 'id',
     },
   })
-  pages: Page[];
+  views: View[];
 
   @Column({ name: 'created_by' })
   createdBy: string;

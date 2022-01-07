@@ -1,8 +1,8 @@
 -- CREATE TABLE PAGE
 CREATE TABLE IF NOT EXISTS dbo.page (
   id SERIAL,
-  name VARCHAR(45),
-  type VARCHAR(45) CHECK(type in ('view', 'form')),
+  name VARCHAR(95),
+  group VARCHAR(45) CHECK(type in ('view', 'form')),
   sort_order INTEGER DEFAULT 0,
   is_external BOOLEAN DEFAULT TRUE,
   is_internal BOOLEAN DEFAULT TRUE,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS dbo.page (
 );
 
 INSERT
-INTO dbo.page(id, name, type, sort_order, is_external, is_internal, is_active)
+INTO dbo.page(id, name, group, sort_order, is_external, is_internal, is_active)
 VALUES
 --Setup
 ('200', 'Managers',     'view', '0', '0', '1', '1'),

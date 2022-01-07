@@ -5,12 +5,14 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany
+  ManyToMany,
+  JoinTable
 } from 'typeorm';
 import { Module } from '../module/module.entity';
+import { ObjectEntity } from '../object/object.entity';
 
-@Entity({ database: 'main', schema: 'dbo', name: 'page' })
-export class Page extends BaseEntity {
+@Entity({ database: 'main', schema: 'dbo', name: 'view' })
+export class View extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
@@ -32,12 +34,23 @@ export class Page extends BaseEntity {
   @Column({ name: 'is_active' })
   isActive: boolean;
 
-  @ManyToMany(() => Module, (module: Module) => module.pages)
+  @ManyToMany(() => Module, (module: Module) => module.views)
   modules: Module[];
 
-  //@ManyToOne(() => Module)
-  //@JoinColumn({ name: 'module_id', referencedColumnName: 'id' })
-  //module!: Module;
+  // Use middle table to join
+  @ManyToMany(() => ObjectEntity, (object: ObjectEntity) => object.views)
+  @JoinTable({
+    name: 'view_object',
+    joinColumn: {
+      name: 'view_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'object_id',
+      referencedColumnName: 'id',
+    },
+  })
+  objects: ObjectEntity[];
 
   @Column({ name: 'created_by' })
   createdBy: string;

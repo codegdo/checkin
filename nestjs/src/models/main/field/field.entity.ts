@@ -13,7 +13,7 @@ import { ObjectEntity } from '../object/object.entity';
 
 interface FieldData { };
 
-@Entity({ database: 'main', schema: 'dbo', name: 'field' })
+@Entity({ database: 'main', schema: 'org', name: 'field' })
 export class Field extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
@@ -27,11 +27,14 @@ export class Field extends BaseEntity {
   @Column({ name: 'type' })
   type: string;
 
+  @Column({ name: 'value' })
+  value: string;
+
   @Column({ name: 'data', type: 'jsonb' })
   data: FieldData;
 
-  @Column({ name: 'mapto' })
-  mapto: string;
+  @Column({ name: 'map' })
+  map: string;
 
   @Column({ name: 'lookup' })
   lookup: string;
