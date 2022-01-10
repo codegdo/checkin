@@ -129,3 +129,15 @@ table level {
 table permission {
   id int
 }
+
+table session {
+  id int
+  json json
+  expired_at bigint
+}
+
+table token {
+  id int
+  data json
+  expired_at bigint
+}

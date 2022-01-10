@@ -21,8 +21,8 @@ export class Module extends BaseEntity {
   @Column({ name: 'name' })
   name: string;
 
-  @Column({ name: 'type' })
-  type: string;
+  @Column({ name: 'group_name' })
+  group: string;
 
   @Column({ name: 'sort_order' })
   sortOrder: number;

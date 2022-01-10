@@ -1,0 +1,52 @@
+{
+  module: {
+    setup: '',
+    account: '',
+    help: '',
+    calendar: '',
+    checkin: '',
+    todo: '',
+    checkout: ''
+  },
+  view: {
+    setup: {
+      users: '',
+      clients: '',
+      roles: '',
+      languages: '',
+      workspaces: '',
+      services: '',
+      prices: '',
+      forms: '',
+      templates: '',
+      calendars: '',
+      checkins: ''
+    },
+    account: {
+      profile: '',
+      organization: ''
+    }
+  },
+  object: {}
+}
+
+{
+  module: ['setup', 'account', 'help', 'calendar', 'checkin', 'todo', 'checkout'],
+  view: ['users,clients,roles', 'profile,organization', 'supports,guides']
+}
+
+
+
+SELECT
+m.name "module",
+v.name "view",
+o.name "object"
+FROM dbo.module AS m
+LEFT JOIN dbo.module_view mv on m.id = mv.module_id
+LEFT JOIN dbo.view v on mv.view_id = v.id
+LEFT JOIN dbo.view_object vo on v.id = vo.view_id
+LEFT JOIN dbo.object o on vo.object_id = o.id
+WHERE m.is_internal = true AND v.is_internal = true
+ORDER BY m.sort_order, v.sort_order ASC;
+
+https://stackoverflow.com/questions/47614938/how-to-map-child-parent-on-a-single-table-using-self-join-in-sql-server

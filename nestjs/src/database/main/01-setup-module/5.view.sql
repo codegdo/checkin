@@ -26,7 +26,7 @@ VALUES
 ('203', 'Roles',        'grid', '3', '0', '1', '1'),
 
 ('204', 'Languages',    'grid', '5', '0', '1', '1'),
-('205', 'Locations',    'grid', '6', '0', '1', '1'),
+('205', 'Workspaces',   'grid', '6', '0', '1', '1'),
 ('206', 'Services',     'grid', '7', '0', '1', '1'),
 ('207', 'Prices',       'grid', '8', '0', '1', '1'),
 
@@ -40,7 +40,7 @@ VALUES
 --Account
 ('300', 'Profile',      'form', '0', '1', '1', '1'),
 ('301', 'Organization', 'form', '1', '1', '1', '1'),
-('302', 'Subscription', 'form', '1', '1', '1', '1')
+('302', 'Subscription', 'form', '1', '1', '1', '1'),
 --Help
 ('400', 'Supports',     'grid', '0', '1', '1', '1'),
 ('401', 'Guides',       'grid', '1', '1', '1', '1'),
