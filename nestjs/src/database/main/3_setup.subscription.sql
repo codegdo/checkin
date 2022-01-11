@@ -19,3 +19,4 @@ CREATE TABLE IF NOT EXISTS org.subscription (
   FOREIGN KEY(org_id) REFERENCES sec.organization(id) ON DELETE CASCADE,
   FOREIGN KEY(plan_id) REFERENCES dbo.plan(id)
 );
+

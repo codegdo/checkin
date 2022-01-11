@@ -20,35 +20,35 @@ INSERT
 INTO dbo.view(id, name, type, sort_order, is_external, is_internal, is_active)
 VALUES
 --Setup
-('200', 'Managers',     'grid', '0', '0', '1', '1'),
-('201', 'Staffs',       'grid', '1', '0', '1', '1'),
-('202', 'Clients',      'grid', '2', '0', '1', '1'),
-('203', 'Roles',        'grid', '3', '0', '1', '1'),
+('200', 'managers',     'grid', '0', '0', '1', '1'),
+('201', 'staffs',       'grid', '1', '0', '1', '1'),
+('202', 'clients',      'grid', '2', '0', '1', '1'),
+('203', 'roles',        'grid', '3', '0', '1', '1'),
 
-('204', 'Languages',    'grid', '5', '0', '1', '1'),
-('205', 'Workspaces',   'grid', '6', '0', '1', '1'),
-('206', 'Services',     'grid', '7', '0', '1', '1'),
-('207', 'Prices',       'grid', '8', '0', '1', '1'),
+('204', 'languages',    'grid', '5', '0', '1', '1'),
+('205', 'workspaces',   'grid', '6', '0', '1', '1'),
+('206', 'services',     'grid', '7', '0', '1', '1'),
+('207', 'prices',       'grid', '8', '0', '1', '1'),
 
-('208', 'Forms',        'grid', '9', '0', '1', '1'),
-('209', 'Templates',    'grid', '10', '0', '1', '1'),
+('208', 'forms',        'grid', '9', '0', '1', '1'),
+('209', 'templates',    'grid', '10', '0', '1', '1'),
 
-('210', 'Checkin',      'grid', '12', '0', '1', '1'),
-('211', 'Timeclock',    'grid', '13', '0', '1', '1'),
-('212', 'POS',          'grid', '14', '0', '1', '1'),
-('213', 'Marketing',    'grid', '15', '0', '1', '1'),
+('210', 'calendars',      'grid', '12', '0', '1', '1'),
+('211', 'checkins',    'grid', '13', '0', '1', '1'),
+('212', 'todos',          'grid', '14', '0', '1', '1'),
+('213', 'checkouts',    'grid', '15', '0', '1', '1'),
 --Account
-('300', 'Profile',      'form', '0', '1', '1', '1'),
-('301', 'Organization', 'form', '1', '1', '1', '1'),
-('302', 'Subscription', 'form', '1', '1', '1', '1'),
+('300', 'profile',      'form', '0', '1', '1', '1'),
+('301', 'organization', 'form', '1', '1', '1', '1'),
+('302', 'subscription', 'form', '1', '1', '1', '1'),
 --Help
-('400', 'Supports',     'grid', '0', '1', '1', '1'),
-('401', 'Guides',       'grid', '1', '1', '1', '1'),
+('400', 'supports',     'grid', '0', '1', '1', '1'),
+('401', 'guides',       'grid', '1', '1', '1', '1'),
 --Calendar
-('1100', 'Appointments',  'grid', '0', '1', '1', '1'),
+('1100', 'appointments',  'grid', '0', '1', '1', '1'),
 --Checkin
-('1200', 'Bookings',      'grid', '0', '1', '1', '1'),
+('1200', 'bookings',      'grid', '0', '1', '1', '1'),
 --Todo
-('1300', 'Tasks',         'grid', '0', '1', '1', '1'),
+('1300', 'tasks',         'grid', '0', '1', '1', '1'),
 --Checkout
-('1400', 'Orders',        'grid', '0', '1', '1', '1');
+('1400', 'orders',        'grid', '0', '1', '1', '1');

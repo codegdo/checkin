@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS dbo.module (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
-  group_name VARCHAR(45),
+  parent_id INT,
   sort_order INTEGER DEFAULT 0,
 
   is_external BOOLEAN DEFAULT FALSE,
@@ -19,15 +19,20 @@ CREATE TABLE IF NOT EXISTS dbo.module (
 );
 
 INSERT
-INTO dbo.module(id, name, group_name, sort_order, is_external, is_internal, is_subscription, is_active)
+INTO dbo.module(id, name, parent_id, sort_order, is_external, is_internal, is_subscription, is_active)
 VALUES
-('1', 'System', 'admin', '0', '0', '0', '0', '1'),
-('2', 'Setup', 'admin', '1', '0', '1', '0', '1'),
 
-('3', 'Account', 'profile', '2', '1', '1', '0', '1'),
-('4', 'Help', 'profile', '3', '1', '1', '0', '1'),
+('1', 'system', '100', '0', '0', '0', '0', '1'),
+('2', 'setup', '100', '1', '0', '1', '0', '1'),
 
-('11', 'Calendar', 'service', '11', '1', '1', '1', '1'),
-('12', 'Checkin', 'service', '12', '1', '1', '1', '1'),
-('13', 'Todo', 'service', '13', '1', '1', '1', '1'),
-('14', 'Checkout', 'service', '14', '1', '1', '1', '1');
+('3', 'account', '101', '2', '1', '1', '0', '1'),
+('4', 'help', '101', '3', '1', '1', '0', '1'),
+
+('11', 'calendar', '102', '4', '1', '1', '1', '1'),
+('12', 'checkin', '102', '5', '1', '1', '1', '1'),
+('13', 'todo', '102', '6', '1', '1', '1', '1'),
+('14', 'checkout', '102', '7', '1', '1', '1', '1'),
+
+('100', 'admin', null, null, '1', '1', '0', '1'),
+('101', 'profile', null, null, '1', '1', '0', '1'),
+('102', 'service', null, null, '1', '1', '0', '1');

@@ -35,7 +35,7 @@ VALUES
 CREATE TABLE IF NOT EXISTS dbo.module (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
-  group_name VARCHAR(45),
+  parent_id INT,
   sort_order INTEGER DEFAULT 0,
 
   is_external BOOLEAN DEFAULT FALSE,
@@ -52,24 +52,31 @@ CREATE TABLE IF NOT EXISTS dbo.module (
 );
 
 INSERT
-INTO dbo.module(id, name, group_name, sort_order, is_external, is_internal, is_subscription, is_active)
+INTO dbo.module(id, name, parent_id, sort_order, is_external, is_internal, is_subscription, is_active)
 VALUES
-('1', 'System', 'admin', '0', '0', '0', '0', '1'),
-('2', 'Setup', 'admin', '1', '0', '1', '0', '1'),
 
-('3', 'Account', 'profile', '2', '1', '1', '0', '1'),
-('4', 'Help', 'profile', '3', '1', '1', '0', '1'),
+('1', 'config', '100', '0', '0', '0', '0', '1'),
+('2', 'setup', '101', '1', '0', '1', '0', '1'),
 
-('11', 'Calendar', 'service', '11', '1', '1', '1', '1'),
-('12', 'Checkin', 'service', '12', '1', '1', '1', '1'),
-('13', 'Todo', 'service', '13', '1', '1', '1', '1'),
-('14', 'Checkout', 'service', '14', '1', '1', '1', '1');
+('3', 'account', '102', '2', '1', '1', '0', '1'),
+('4', 'help', '102', '3', '1', '1', '0', '1'),
+
+('11', 'calendar', '103', '4', '1', '1', '1', '1'),
+('12', 'checkin', '103', '5', '1', '1', '1', '1'),
+('13', 'todo', '103', '6', '1', '1', '1', '1'),
+('14', 'checkout', '103', '7', '1', '1', '1', '1'),
+
+('100', 'system', null, null, '1', '1', '0', '1'),
+('101', 'admin', null, null, '1', '1', '0', '1'),
+('102', 'user', null, null, '1', '1', '0', '1'),
+('103', 'service', null, null, '1', '1', '0', '1');
 
 -- CREATE TABLE VIEW
 CREATE TABLE IF NOT EXISTS dbo.view (
   id SERIAL,
   name VARCHAR(95) NOT NULL,
-  type VARCHAR(45) CHECK(type in ('grid', 'form')),
+  type VARCHAR(45) CHECK(type in ('grid', 'form', 'null')),
+  parent_id INT,
   sort_order INTEGER DEFAULT 0,
 
   is_external BOOLEAN DEFAULT TRUE,
@@ -85,41 +92,49 @@ CREATE TABLE IF NOT EXISTS dbo.view (
 );
 
 INSERT
-INTO dbo.view(id, name, type, sort_order, is_external, is_internal, is_active)
+INTO dbo.view(id, name, type, parent_id, sort_order, is_external, is_internal, is_active)
 VALUES
+('10', 'config',         'null', null, '0', '0', '1', '1'),
+('20', 'setup',          'null', null, '0', '0', '1', '1'),
+('30', 'account',        'null', null, '0', '0', '1', '1'),
+('40', 'help',           'null', null, '0', '0', '1', '1'),
+('50', 'calendar',       'null', null, '0', '0', '1', '1'),
+('60', 'checkin',        'null', null, '0', '0', '1', '1'),
+('70', 'todo',           'null', null, '0', '0', '1', '1'),
+('80', 'checkout',       'null', null, '0', '0', '1', '1'),
+
 --Setup
-('200', 'Managers',     'grid', '0', '0', '1', '1'),
-('201', 'Staffs',       'grid', '1', '0', '1', '1'),
-('202', 'Clients',      'grid', '2', '0', '1', '1'),
-('203', 'Roles',        'grid', '3', '0', '1', '1'),
+('200', 'users',        'grid', '20', '0', '0', '1', '1'),
+('201', 'clients',      'grid', '20', '2', '0', '1', '1'),
+('202', 'roles',        'grid', '20', '3', '0', '1', '1'),
 
-('204', 'Languages',    'grid', '5', '0', '1', '1'),
-('205', 'Workspaces',   'grid', '6', '0', '1', '1'),
-('206', 'Services',     'grid', '7', '0', '1', '1'),
-('207', 'Prices',       'grid', '8', '0', '1', '1'),
+('203', 'languages',    'grid', '20', '5', '0', '1', '1'),
+('204', 'workspaces',   'grid', '20', '6', '0', '1', '1'),
+('205', 'services',     'grid', '20', '7', '0', '1', '1'),
+('206', 'prices',       'grid', '20', '8', '0', '1', '1'),
 
-('208', 'Forms',        'grid', '9', '0', '1', '1'),
-('209', 'Templates',    'grid', '10', '0', '1', '1'),
+('207', 'forms',        'grid', '20', '9', '0', '1', '1'),
+('208', 'templates',    'grid', '20', '10', '0', '1', '1'),
 
-('210', 'Checkin',      'grid', '12', '0', '1', '1'),
-('211', 'Timeclock',    'grid', '13', '0', '1', '1'),
-('212', 'POS',          'grid', '14', '0', '1', '1'),
-('213', 'Marketing',    'grid', '15', '0', '1', '1'),
+('209', 'calendars',    'grid', '20', '12', '0', '1', '1'),
+('210', 'checkins',     'grid', '20', '13', '0', '1', '1'),
+('211', 'todos',        'grid', '20', '14', '0', '1', '1'),
+('212', 'checkouts',    'grid', '20', '15', '0', '1', '1'),
 --Account
-('300', 'Profile',      'form', '0', '1', '1', '1'),
-('301', 'Organization', 'form', '1', '1', '1', '1'),
-('302', 'Subscription', 'form', '1', '1', '1', '1'),
+('300', 'profile',      'form', '30', '0', '1', '1', '1'),
+('301', 'organization', 'form', '30', '1', '1', '1', '1'),
+('302', 'subscription', 'form', '30', '1', '1', '1', '1'),
 --Help
-('400', 'Supports',     'grid', '0', '1', '1', '1'),
-('401', 'Guides',       'grid', '1', '1', '1', '1'),
+('400', 'supports',     'grid', '40', '0', '1', '1', '1'),
+('401', 'guides',       'grid', '40', '1', '1', '1', '1'),
 --Calendar
-('1100', 'Appointments',  'grid', '0', '1', '1', '1'),
+('1100', 'appointments',  'grid', '50', '0', '1', '1', '1'),
 --Checkin
-('1200', 'Bookings',      'grid', '0', '1', '1', '1'),
+('1200', 'bookings',      'grid', '60', '0', '1', '1', '1'),
 --Todo
-('1300', 'Tasks',         'grid', '0', '1', '1', '1'),
+('1300', 'tasks',         'grid', '70', '0', '1', '1', '1'),
 --Checkout
-('1400', 'Orders',        'grid', '0', '1', '1', '1');
+('1400', 'orders',        'grid', '80', '0', '1', '1', '1');
 
 -- CREATE TABLE OBJECT
 CREATE TABLE IF NOT EXISTS dbo.object (
@@ -224,7 +239,6 @@ VALUES
 ('2', '210', null),
 ('2', '211', null),
 ('2', '212', null),
-('2', '213', null),
 --Account
 ('3', '300', null),
 ('3', '301', null),
