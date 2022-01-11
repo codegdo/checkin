@@ -1,6 +1,6 @@
 {
-  module: {
-    setup: '',
+  modules: {
+    setup: {},
     account: '',
     help: '',
     calendar: '',
@@ -8,7 +8,7 @@
     todo: '',
     checkout: ''
   },
-  view: {
+  views: {
     setup: {
       users: '',
       clients: '',
@@ -27,35 +27,185 @@
       organization: ''
     }
   },
-  object: {}
+  objects: {}
 }
 
 {
   module: ['setup', 'account', 'help', 'calendar', 'checkin', 'todo', 'checkout'],
-  view: ['users,clients,roles', 'profile,organization', 'supports,guides']
+  view: [['users','clients','roles'], ['profile', 'organization'], ['supports', 'guides']]
 }
 
 
 
-SELECT
-m.name "module",
-v.name "view",
-o.name "object"
-FROM dbo.module AS m
-LEFT JOIN dbo.module_view mv on m.id = mv.module_id
-LEFT JOIN dbo.view v on mv.view_id = v.id
-LEFT JOIN dbo.view_object vo on v.id = vo.view_id
-LEFT JOIN dbo.object o on vo.object_id = o.id
-WHERE m.is_internal = true AND v.is_internal = true
-ORDER BY m.sort_order, v.sort_order ASC;
-
-https://stackoverflow.com/questions/47614938/how-to-map-child-parent-on-a-single-table-using-self-join-in-sql-server
 
 
-SELECT m.name, m2.name FROM dbo.module m
-JOIN dbo.module m2 on m2.id = m.parent_id
-WHERE EXISTS (
-    SELECT * FROM dbo.module
-    WHERE parent_id IS NOT NULL
-)
-ORDER BY m.sort_order ASC ;
+
+
+
+var arr = [
+	// setup
+  {
+  	modules: 'setup',
+    mgroup: 'admin',
+    views: 'users',
+    objects: 'user'
+  },
+  {
+  	modules: 'setup',
+    mgroup: 'admin',
+    views: 'users',
+    objects: 'contact'
+  },
+  {
+  	modules: 'setup',
+    mgroup: 'admin',
+    views: 'clients',
+    objects: 'client'
+  },
+  {
+  	modules: 'setup',
+    mgroup: 'admin',
+    views: 'roles',
+    objects: 'role'
+  },
+  
+  // account
+  {
+  	modules: 'account',
+    mgroup: 'user',
+    views: 'profile',
+    objects: 'user'
+  },
+  {
+  	modules: 'account',
+    mgroup: 'user',
+    views: 'subscription',
+    objects: 'subscription'
+  },
+  {
+  	modules: 'account',
+    mgroup: 'user',
+    views: 'organization',
+    objects: 'organization'
+  }
+];
+
+// policy
+var p = {
+	module: {
+  	setup: {},
+    account: {}
+  },
+  view: {
+  	setup: {
+      users: {},
+      clients: {},
+      roles: {}
+    }
+  },
+  object: {
+  	users: {
+      user: {},
+      contact: {}, 
+    }
+  }
+}
+
+// 
+var po = {
+	setup: {
+  
+  	users: {
+    	user: {}
+    }
+  },
+  
+	module: {
+  	setup: {
+    	access: '*',
+    	view: {
+      	users: {
+        	object: {
+          	user: {}
+          }
+        }
+      }
+    }
+  }
+}
+
+//
+var n = {
+	module: ['setup', 'account'],
+  view: ['users', 'clients', 'roles', 'profile', 'subscription', 'organization'],
+  object: ['user.contact', ]
+}
+
+var array = arr.reduce((a, i) => {
+
+	const {modules, views, objects} = a;
+  
+  const m = {...modules, [i.modules]: {label: i.modules, group: i.mgroup}};
+  
+	const v = {...views, [i.modules]: {...views[i.modules], [i.views]: {}} };
+  
+  const o = {...objects, [i.views]: {...objects[i.views], [i.objects]: {}}};
+
+  
+	return {modules: {...m}, views: {...v}, objects: {...o}};
+  
+}, {modules: {}, views: {}, objects: {}});
+
+
+
+var nav = arr.reduce((a, i) => {
+
+	const {modules, views, objects} = a;
+  
+  const m = [...modules];
+  const v = [...views];
+  const k = objects[i.views] || [];
+  const o = {...objects, [i.views]: [...k, i.objects]};
+  
+  
+  if(m.indexOf(i.modules) === -1) {
+  	v.push([]);
+  	m.push(i.modules);
+  }
+  
+  if(v[m.indexOf(i.modules)].indexOf(i.views) === -1) {
+  	//o.push([]);
+  	v[m.indexOf(i.modules)].push(i.views);
+    
+  }
+  
+ //o[i.views].push(i.objects);
+
+  //o[o.lastIndexOf(o.at(-1))].push(i.objects);
+  //o[o.lastIndexOf(o.at(-1))].push(i.objects);
+
+	return {modules: [...m], views: [...v], objects: {...o}};
+  
+}, {modules: [], views: [], objects: {}});
+
+
+console.log(nav);
+
+//console.log(obj);
+
+/*
+if(o[v.indexOf(i.views)].indexOf(i.objects) === -1) {
+  	o[v.indexOf(i.views)].push(i.objects);
+  }
+*/
+
+
+
+
+
+
+
+
+
+
+
