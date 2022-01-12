@@ -40,8 +40,6 @@
 
 
 
-
-
 var arr = [
 	// setup
   {
@@ -141,20 +139,53 @@ var n = {
   object: ['user.contact', ]
 }
 
+function getPolicy(policy, i) {
+const {modules, views, objects} = policy;
+ return {
+ 	m: {...modules, [i.modules]: {label: i.modules, group: i.mgroup}},
+  v: {...views, [i.modules]: {...views[i.modules], [i.views]: {}} },
+  o: {...objects, [i.views]: {...objects[i.views], [i.objects]: {}}}
+ }
+}
+
 var array = arr.reduce((a, i) => {
 
-	const {modules, views, objects} = a;
+	//const {modules, views, objects} = a.policy;
+  const {policy} = a;
+    
+  //const pm = {...modules, [i.modules]: {label: i.modules, group: i.mgroup}};  
+  //const pm = getModule(modules, i);
+	//const pv = {...views, [i.modules]: {...views[i.modules], [i.views]: {}} };
+  //const po = {...objects, [i.views]: {...objects[i.views], [i.objects]: {}}};
   
-  const m = {...modules, [i.modules]: {label: i.modules, group: i.mgroup}};
-  
-	const v = {...views, [i.modules]: {...views[i.modules], [i.views]: {}} };
-  
-  const o = {...objects, [i.views]: {...objects[i.views], [i.objects]: {}}};
+  const {m, v, o} = getPolicy(policy, i);
 
   
-	return {modules: {...m}, views: {...v}, objects: {...o}};
+	return {
+  	nav: {
+    	modules: [],
+      views: [],
+      objects: {}
+    }, 
+    policy:	{
+    	modules: {...m}, 
+      views: {...v}, 
+      objects: {...o}
+    }
+  };
   
-}, {modules: {}, views: {}, objects: {}});
+}, { 
+	nav: {
+  	modules: [],
+    views: [],
+    objects: {}
+  }, 
+  policy:{
+  	modules: {}, 
+    views: {}, 
+    objects: {}
+  }
+});
 
 
 
@@ -164,8 +195,7 @@ var nav = arr.reduce((a, i) => {
   
   const m = [...modules];
   const v = [...views];
-  const k = objects[i.views] || [];
-  const o = {...objects, [i.views]: [...k, i.objects]};
+  const o = {...objects, [i.views]: [...objects[i.views] || [], i.objects]};
   
   
   if(m.indexOf(i.modules) === -1) {
@@ -189,15 +219,7 @@ var nav = arr.reduce((a, i) => {
 }, {modules: [], views: [], objects: {}});
 
 
-console.log(nav);
-
-//console.log(obj);
-
-/*
-if(o[v.indexOf(i.views)].indexOf(i.objects) === -1) {
-  	o[v.indexOf(i.views)].push(i.objects);
-  }
-*/
+console.log(array);
 
 
 
