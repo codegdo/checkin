@@ -8,38 +8,27 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-
-import { Module } from '../module/module.entity';
 import { EmailType } from './email-type.entity';
 
-
-
-@Entity({ database: 'main', schema: 'org', name: 'email' })
-export class Email {
+@Entity({ database: 'main', schema: 'dbo', name: 'email_address' })
+export class EmailAddress {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
   @Column({ name: 'name' })
   name: string;
 
-  @Column({ name: 'subject' })
-  subject: string;
+  @Column({ name: 'recipient' })
+  recipient: string;
 
-  @Column({ name: 'body' })
-  body: string;
+  @Column({ name: 'cc_recipient' })
+  ccRecipient: string;
 
-  @Column({ name: 'text' })
-  text: string;
+  @Column({ name: 'bcc_recipient' })
+  bccRecipient: string;
 
-  @Column({ name: 'is_active' })
-  isActive: boolean;
-
-  @ManyToOne(() => EmailType, (emailType) => emailType.emails)
-  @JoinColumn({ name: 'email_type_id' })
-  emailTypeId: EmailType;
-
-  @Column({ name: 'org_id' })
-  orgId: number;
+  @Column({ name: 'sms_recipient' })
+  sms_Recipient: string;
 
   @Column({ name: 'created_by' })
   createdBy: string;
@@ -52,4 +41,7 @@ export class Email {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @OneToMany(() => EmailType, (email_type) => email_type.emailAddressId)
+  emailTypes: EmailType[];
 }

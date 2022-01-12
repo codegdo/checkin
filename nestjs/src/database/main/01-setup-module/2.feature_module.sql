@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS dbo.feature_module (
   FOREIGN KEY(module_id) REFERENCES dbo.module(id) ON DELETE  SET NULL
 );
 
+CREATE INDEX idx_feature_module ON dbo.feature_module(feature_id, module_id);
+
 INSERT
 INTO dbo.feature_module(feature_id, module_id, org_id)
 VALUES

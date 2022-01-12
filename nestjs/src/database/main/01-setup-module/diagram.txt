@@ -61,6 +61,7 @@ ref: view_object.object_id > object.id
 table object {
   id int
   name varchar
+  sort_order int
   
   is_external boolean
   is_internal boolean

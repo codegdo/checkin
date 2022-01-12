@@ -43,48 +43,48 @@
 var arr = [
 	// setup
   {
-  	modules: 'setup',
+  	module: 'setup',
     mgroup: 'admin',
-    views: 'users',
-    objects: 'user'
+    view: 'users',
+    object: 'user'
   },
   {
-  	modules: 'setup',
+  	module: 'setup',
     mgroup: 'admin',
-    views: 'users',
-    objects: 'contact'
+    view: 'users',
+    object: 'contact'
   },
   {
-  	modules: 'setup',
+  	module: 'setup',
     mgroup: 'admin',
-    views: 'clients',
-    objects: 'client'
+    view: 'clients',
+    object: 'client'
   },
   {
-  	modules: 'setup',
+  	module: 'setup',
     mgroup: 'admin',
-    views: 'roles',
-    objects: 'role'
+    view: 'roles',
+    object: 'role'
   },
   
   // account
   {
-  	modules: 'account',
+  	module: 'account',
     mgroup: 'user',
-    views: 'profile',
-    objects: 'user'
+    view: 'profile',
+    object: 'user'
   },
   {
-  	modules: 'account',
+  	module: 'account',
     mgroup: 'user',
-    views: 'subscription',
-    objects: 'subscription'
+    view: 'subscription',
+    object: 'subscription'
   },
   {
-  	modules: 'account',
+  	module: 'account',
     mgroup: 'user',
-    views: 'organization',
-    objects: 'organization'
+    view: 'organization',
+    object: 'organization'
   }
 ];
 

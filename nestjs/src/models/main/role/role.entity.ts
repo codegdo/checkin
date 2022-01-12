@@ -10,26 +10,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
 import { Policy } from '../policy/policy.entity';
-
-export enum RoleTypeEnum {
-  SYSTEM = 'system',
-  INTERNAL = 'internal',
-  EXTERNAL = 'external',
-}
-
-@Entity({ database: 'main', schema: 'dbo', name: 'role_type' })
-export class RoleType extends BaseEntity {
-  @PrimaryGeneratedColumn({ name: 'id' })
-  id: number;
-
-  @Column({
-    name: 'name',
-    type: 'enum',
-    enum: RoleTypeEnum,
-  })
-  name: RoleTypeEnum;
-}
+import { RoleType } from './role-type.entity';
 
 @Entity({ database: 'main', schema: 'sec', name: 'role' })
 export class Role extends BaseEntity {
@@ -45,7 +28,7 @@ export class Role extends BaseEntity {
   @Column({ name: 'is_owner' })
   isOwner: boolean;
 
-  @ManyToOne(() => RoleType, (role_type) => role_type.id)
+  @ManyToOne(() => RoleType, (roleType) => roleType.id)
   @JoinColumn({ name: 'role_type_id' })
   roleType: RoleType;
 

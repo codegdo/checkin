@@ -50,11 +50,30 @@ table workspace_user {
 ref: workspace_user.workspace_id > workspace.id
 ref: workspace_user.user_id > user.id
 
+table workspace_client {
+  workspace_id int
+  client_id int
+}
+
+ref: workspace_client.workspace_id > workspace.id
+ref: workspace_client.client_id > client.id
+
+table client {
+  id int
+  
+  first_name varchar
+  last_name varchar
+  email_address varchar
+  phone_number varchar
+  day_of_birth date
+}
+
+
 table user {
   id int
+  contact_id int
   role_id int
   org_id int
-  contact_id int
   
   username varchar
   password varchar
@@ -116,19 +135,33 @@ table policy {
   role_type_id int
   org_id int
   name varchar
+  description varchar
+  
+  is_active boolean
 }
 
 ref: policy.role_type_id > role_type.id
 
-table level {
+table permission {
   id int
-  number int
+  type varchar
+}
+
+table permission_level {
+  permission_id int
+  level_id int
   org_id int
 }
 
-table permission {
+ref: permission_level.permission_id > permission.id
+ref: permission_level.level_id > level.id
+
+table level {
   id int
+  name varchar
+  label varchar
 }
+
 
 table session {
   id int
