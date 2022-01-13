@@ -116,6 +116,22 @@ CREATE TABLE IF NOT EXISTS sec.user (
   FOREIGN KEY(contact_id) REFERENCES org.contact(id)
 );
 
+-- CREATE TABLE CLIENT
+CREATE TABLE IF NOT EXISTS sec.client (
+  id SERIAL NOT NULL,
+  first_name VARCHAR(45),
+  last_name VARCHAR(45),
+  email_address VARCHAR(45),
+  phone_number VARCHAR(20),
+  day_of_birth DATE,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  --
+  PRIMARY KEY(id),
+  UNIQUE(phone_number)
+);
+
 -- CREATE TABLE WORKSPACE
 CREATE TABLE IF NOT EXISTS org.workspace (
   id SERIAL NOT NULL,
@@ -192,6 +208,34 @@ CREATE TABLE IF NOT EXISTS sec.role_policy (
 
 CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
 
+-- CREATE TABLE WORKSPACE_USER
+CREATE TABLE IF NOT EXISTS org.workspace_user (
+  workspace_id INT NOT NULL,
+  user_id INT NOT NULL,
+  org_id INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  --
+  PRIMARY KEY(workspace_id, user_id),
+  FOREIGN KEY(workspace_id) REFERENCES org.workspace(id) ON DELETE SET NULL,
+  FOREIGN KEY(user_id) REFERENCES sec.user(id) ON DELETE SET NULL
+);
+
+CREATE INDEX idx_workspace_user ON org.workspace_user(workspace_id, user_id);
+
+-- CREATE TABLE WORKSPACE_CLIENT
+CREATE TABLE IF NOT EXISTS org.workspace_client (
+  workspace_id INT NOT NULL,
+  client_id INT NOT NULL,
+  org_id INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  --
+  PRIMARY KEY(workspace_id, client_id),
+  FOREIGN KEY(workspace_id) REFERENCES org.workspace(id) ON DELETE SET NULL,
+  FOREIGN KEY(client_id) REFERENCES sec.client(id) ON DELETE SET NULL
+);
+
+CREATE INDEX idx_workspace_client ON org.workspace_client(workspace_id, client_id);
+
 
 -- DROP TABLES
 
@@ -201,9 +245,12 @@ sec.role,
 sec.policy,
 org.contact,
 sec.user,
+sec.client,
 org.workspace,
 sec.organization,
-sec.role_policy CASCADE;
+sec.role_policy,
+org.workspace_user,
+org.workspace_client CASCADE;
 
 -- END
 
