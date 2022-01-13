@@ -287,7 +287,10 @@ dbo.module,
 dbo.module_view,
 dbo.view,
 dbo.view_object,
-dbo.object CASCADE ;
+dbo.object CASCADE;
+
+DROP TYPE IF EXISTS
+dbo.role_type_enum;
 
 -- END
 
