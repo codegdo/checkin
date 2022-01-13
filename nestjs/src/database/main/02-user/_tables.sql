@@ -208,33 +208,33 @@ CREATE TABLE IF NOT EXISTS sec.role_policy (
 
 CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
 
--- CREATE TABLE WORKSPACE_USER
-CREATE TABLE IF NOT EXISTS org.workspace_user (
-  workspace_id INT NOT NULL,
+-- CREATE TABLE USER_WORKSPACE
+CREATE TABLE IF NOT EXISTS sec.user_workspace (
   user_id INT NOT NULL,
-  org_id INT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  --
-  PRIMARY KEY(workspace_id, user_id),
-  FOREIGN KEY(workspace_id) REFERENCES org.workspace(id) ON DELETE SET NULL,
-  FOREIGN KEY(user_id) REFERENCES sec.user(id) ON DELETE SET NULL
-);
-
-CREATE INDEX idx_workspace_user ON org.workspace_user(workspace_id, user_id);
-
--- CREATE TABLE WORKSPACE_CLIENT
-CREATE TABLE IF NOT EXISTS org.workspace_client (
   workspace_id INT NOT NULL,
-  client_id INT NOT NULL,
   org_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
-  PRIMARY KEY(workspace_id, client_id),
-  FOREIGN KEY(workspace_id) REFERENCES org.workspace(id) ON DELETE SET NULL,
-  FOREIGN KEY(client_id) REFERENCES sec.client(id) ON DELETE SET NULL
+  PRIMARY KEY(user_id, workspace_id),
+  FOREIGN KEY(user_id) REFERENCES sec.user(id) ON DELETE SET NULL,
+  FOREIGN KEY(workspace_id) REFERENCES org.workspace(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_workspace_client ON org.workspace_client(workspace_id, client_id);
+CREATE INDEX idx_user_workspace ON sec.user_workspace(user_id, workspace_id);
+
+-- CREATE TABLE CLIENT_WORKSPACE
+CREATE TABLE IF NOT EXISTS sec.client_workspace (
+  client_id INT NOT NULL,
+  workspace_id INT NOT NULL,
+  org_id INT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  --
+  PRIMARY KEY(client_id, workspace_id),
+  FOREIGN KEY(client_id) REFERENCES sec.client(id) ON DELETE SET NULL,
+  FOREIGN KEY(workspace_id) REFERENCES org.workspace(id) ON DELETE SET NULL
+);
+
+CREATE INDEX idx_client_workspace ON sec.client_workspace(client_id, workspace_id);
 
 
 -- DROP TABLES

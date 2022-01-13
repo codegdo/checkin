@@ -26,7 +26,7 @@ table workspace {
   id int
   org_id int
   owner_id int
-  
+
   name varchar
   street_address varchar
   city varchar
@@ -40,23 +40,8 @@ table workspace {
   is_active boolean
 }
 
+
 ref: workspace.org_id > organization.id
-
-table workspace_user {
-  workspace_id int
-  user_id int
-}
-
-ref: workspace_user.workspace_id > workspace.id
-ref: workspace_user.user_id > user.id
-
-table workspace_client {
-  workspace_id int
-  client_id int
-}
-
-ref: workspace_client.workspace_id > workspace.id
-ref: workspace_client.client_id > client.id
 
 table client {
   id int
@@ -68,6 +53,13 @@ table client {
   day_of_birth date
 }
 
+table client_workspace {
+  client_id int
+  workspace_id int
+}
+
+ref: client_workspace.client_id > client.id
+ref: client_workspace.workspace_id > workspace.id
 
 table user {
   id int
@@ -101,6 +93,14 @@ table contact {
   
   is_active boolean
 }
+
+table user_workspace {
+  user_id int
+  workspace_id int
+}
+
+ref: user_workspace.user_id > user.id
+ref: user_workspace.workspace_id > workspace.id
 
 table role_type {
   id int
@@ -159,9 +159,7 @@ ref: permission_level.level_id > level.id
 table level {
   id int
   name varchar
-  label varchar
 }
-
 
 table session {
   id int
