@@ -11,6 +11,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Feature } from '../feature/feature.entity';
+import { Subscription } from '../subscription/subscription.entity';
 import { View } from '../view/view.entity';
 
 @Entity({ database: 'main', schema: 'dbo', name: 'module' })
@@ -29,6 +30,9 @@ export class Module extends BaseEntity {
 
   @ManyToMany(() => Feature, (feature: Feature) => feature.modules)
   features: Feature[];
+
+  @ManyToMany(() => Subscription, (subscription: Subscription) => subscription.modules)
+  subscriptions: Subscription[];
 
   @Column({ name: 'is_external' })
   isExternal: boolean;

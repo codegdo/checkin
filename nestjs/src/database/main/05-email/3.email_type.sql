@@ -20,6 +20,6 @@ CREATE TABLE IF NOT EXISTS dbo.email_type (
 );
 
 INSERT
-INTO dbo.email_type (id, type_name, type, module_id, email_address_id, email_from_id)
+INTO dbo.email_type (id, name, type, module_id, email_address_id, email_from_id)
 VALUES
 ('1', 'verify', 'S', '1', null, '1');

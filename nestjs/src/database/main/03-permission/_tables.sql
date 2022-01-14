@@ -3,7 +3,7 @@ CREATE TYPE sec.permission_type_enum AS ENUM ('module', 'view', 'object', 'field
 
 CREATE TABLE IF NOT EXISTS sec.permission (
   id SERIAL NOT NULL,
-  type dbo.permission_type_enum NOT NULL,
+  type sec.permission_type_enum NOT NULL,
 
   is_active BOOLEAN DEFAULT TRUE,
 
@@ -39,21 +39,23 @@ CREATE TABLE IF NOT EXISTS sec.level (
 );
 
 INSERT
-INTO sec.level(id, type)
+INTO sec.level(id, name)
 VALUES
--- Module
+-- module
 ('1', 'allow'),
 ('2', 'deny'),
--- View
+-- view
+('10', 'all'),
 ('11', 'read'),
 ('12', 'write'),
 ('13', 'create'),
 ('14', 'delete'),
-('15', 'clone'),
--- Object
+-- object
+('20', 'all'),
 ('21', 'read'),
 ('22', 'write'),
--- Field
+-- field
+('30', 'all'),
 ('31', 'read'),
 ('32', 'write');
 
@@ -70,6 +72,37 @@ CREATE TABLE IF NOT EXISTS sec.permission_level (
 );
 
 CREATE INDEX idx_permission_level ON sec.permission_level(permission_id, level_id);
+
+INSERT
+INTO sec.permission_level(permission_id, level_id)
+VALUES
+-- module
+('1', '1'),
+('1', '2'),
+-- view
+('2', '10'),
+('2', '11'),
+('2', '12'),
+('2', '13'),
+('2', '14'),
+-- object
+('3', '20'),
+('3', '21'),
+('3', '22'),
+-- field
+('4', '30'),
+('4', '31'),
+('4', '32');
+
+-- SELECT TABLES
+
+SELECT type, string_agg(name, ',') as access
+FROM sec.permission p
+LEFT JOIN sec.permission_level pl on p.id = pl.permission_id
+LEFT JOIN sec.level l on l.id = pl.level_id
+GROUP BY type;
+
+-- END
 
 -- DROP TABLES
 

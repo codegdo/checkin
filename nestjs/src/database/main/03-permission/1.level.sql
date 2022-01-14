@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS sec.level (
 );
 
 INSERT
-INTO sec.level(id, type)
+INTO sec.level(id, name)
 VALUES
 -- Module
 ('1', 'allow'),
@@ -24,10 +24,12 @@ VALUES
 ('12', 'write'),
 ('13', 'create'),
 ('14', 'delete'),
-('15', 'clone'),
+('15', 'all'),
 -- Object
 ('21', 'read'),
 ('22', 'write'),
+('23', 'all'),
 -- Field
 ('31', 'read'),
-('32', 'write');
+('32', 'write'),
+('33', 'all');

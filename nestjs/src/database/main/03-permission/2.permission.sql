@@ -1,9 +1,9 @@
 -- CREATE TABLE PERMISSION
-CREATE TYPE dbo.permission_type_enum AS ENUM ('module', 'view', 'object', 'field');
+CREATE TYPE sec.permission_type_enum AS ENUM ('module', 'view', 'object', 'field');
 
 CREATE TABLE IF NOT EXISTS sec.permission (
   id SERIAL NOT NULL,
-  type dbo.permission_type_enum NOT NULL,
+  type sec.permission_type_enum NOT NULL,
 
   is_active BOOLEAN DEFAULT TRUE,
 

@@ -49,6 +49,9 @@ export class Role extends BaseEntity {
   @Column({ name: 'org_id' })
   orgId: number;
 
+  @Column({ name: 'is_active' })
+  isActive: boolean;
+
   @Column({ name: 'created_by' })
   createdBy: string;
 

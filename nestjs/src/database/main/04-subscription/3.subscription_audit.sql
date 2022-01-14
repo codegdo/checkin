@@ -1,10 +1,15 @@
--- TABLE
+-- CREATE TABLE SUBSCRIPTION_AUDIT
 CREATE TABLE IF NOT EXISTS org.subscription_audit (
-
-  subscription_plan_id INT NOT NULL,
-  subscription_type_id INT NOT NULL,
+  id SERIAL NOT NULL,
+  subscription_id INT,
+  subscription_plan_id INT,
+  workspace_id INT,
+  org_id INT,
+  owner_id INT,
   
+  is_active BOOLEAN,
   is_renew BOOLEAN,
+  is_trial BOOLEAN,
 
   purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   start_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -15,8 +20,5 @@ CREATE TABLE IF NOT EXISTS org.subscription_audit (
   created_by VARCHAR(45) DEFAULT CURRENT_USER,
   updated_by VARCHAR(45),
   --
-  PRIMARY KEY(module_id, org_id),
-  FOREIGN KEY(module_id) REFERENCES dbo.module(id) ON DELETE SET NULL,
-  FOREIGN KEY(org_id) REFERENCES sec.organization(id) ON DELETE SET NULL,
-  FOREIGN KEY(subscription_type_id) REFERENCES dbo.subscription_type(id)
+  PRIMARY KEY(id)
 );

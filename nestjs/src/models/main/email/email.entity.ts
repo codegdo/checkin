@@ -9,10 +9,7 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Module } from '../module/module.entity';
 import { EmailType } from './email-type.entity';
-
-
 
 @Entity({ database: 'main', schema: 'org', name: 'email' })
 export class Email {
