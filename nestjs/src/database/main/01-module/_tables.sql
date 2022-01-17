@@ -120,20 +120,20 @@ VALUES
 ('210', 'checkins',     'grid', '20', '13', '0', '1', '1'),
 ('211', 'todos',        'grid', '20', '14', '0', '1', '1'),
 ('212', 'checkouts',    'grid', '20', '15', '0', '1', '1'),
---Account
+--account
 ('300', 'profile',      'form', '30', '0', '1', '1', '1'),
 ('301', 'organization', 'form', '30', '1', '1', '1', '1'),
 ('302', 'subscription', 'form', '30', '1', '1', '1', '1'),
---Help
+--help
 ('400', 'supports',     'grid', '40', '0', '1', '1', '1'),
 ('401', 'guides',       'grid', '40', '1', '1', '1', '1'),
---Calendar
+--calendar
 ('1100', 'appointments',  'grid', '50', '0', '1', '1', '1'),
---Checkin
+--checkin
 ('1200', 'bookings',      'grid', '60', '0', '1', '1', '1'),
---Todo
+--todo
 ('1300', 'tasks',         'grid', '70', '0', '1', '1', '1'),
---Checkout
+--checkout
 ('1400', 'orders',        'grid', '80', '0', '1', '1', '1');
 
 -- CREATE TABLE OBJECT
@@ -157,10 +157,26 @@ INSERT
 INTO dbo.object(id, name, is_external, is_internal, is_active)
 VALUES
 --
-('1', 'user',         '1', '1', '1'),
-('2', 'contact',      '1', '1', '1'),
-('3', 'workspace',    '1', '1', '1'),
-('4', 'organization', '1', '0', '1');
+('1', 'user',          '1', '1', '1'),
+('2', 'contact',       '1', '1', '1'),
+('3', 'client',        '1', '1', '1'),
+('4', 'role',          '1', '1', '1'),
+('5', 'language',      '1', '1', '1'),
+('6', 'workspace',     '1', '1', '1'),
+('7', 'service',       '1', '1', '1'),
+('8', 'price',         '1', '1', '1'),
+('9', 'form',          '1', '1', '1'),
+('10', 'template',     '1', '1', '1'),
+('11', 'calendar',     '1', '1', '1'),
+('12', 'checkin',      '1', '1', '1'),
+('13', 'todo',         '1', '1', '1'),
+('14', 'checkout',     '1', '1', '1'),
+('15', 'organization', '1', '1', '1'),
+('16', 'subscription', '1', '1', '1'),
+('17', 'appointment',  '1', '1', '1'),
+('18', 'booking',      '1', '1', '1'),
+('19', 'task',         '1', '1', '1'),
+('20', 'order',        '1', '1', '1');
 
 -- CREATE TABLE FEATURE_MODULE
 CREATE TABLE IF NOT EXISTS dbo.feature_module (
@@ -227,7 +243,7 @@ CREATE INDEX idx_module_view ON dbo.module_view(module_id, view_id);
 INSERT
 INTO dbo.module_view(module_id, view_id, org_id)
 VALUES
---Setup
+--setup
 ('2', '200', null),
 ('2', '201', null),
 ('2', '202', null),
@@ -241,20 +257,20 @@ VALUES
 ('2', '210', null),
 ('2', '211', null),
 ('2', '212', null),
---Account
+--account
 ('3', '300', null),
 ('3', '301', null),
 ('3', '302', null),
---Help
+--help
 ('4', '400', null),
 ('4', '401', null),
---Calendar
+--calendar
 ('11', '1100', null),
---Checkin
+--checkin
 ('12', '1200', null),
---Todo
+--todo
 ('13', '1300', null),
---Checkout
+--checkout
 ('14', '1400', null);
 
 -- CREATE TABLE VIEW_OBJECT
@@ -274,9 +290,55 @@ CREATE INDEX idx_view_object ON dbo.view_object(view_id, object_id);
 INSERT
 INTO dbo.view_object(view_id, object_id, org_id)
 VALUES
---Manager
+--users
 ('200', '1', null),
-('200', '2', null);
+('200', '2', null),
+--clients
+('201', '3', null),
+--roles
+('202', '4', null),
+--language
+('203', '5', null),
+--workspace
+('204', '6', null),
+--service
+('205', '7', null),
+--price
+('206', '8', null),
+--form
+('207', '9', null),
+--template
+('208', '10', null),
+--calendar
+('209', '11', null),
+--checkin
+('210', '12', null),
+--todo
+('211', '13', null),
+--checkout
+('212', '14', null),
+
+--profile
+('300', '1', null),
+('300', '2', null),
+--organization
+('301', '15', null),
+--subscription
+('302', '16', null),
+
+--support
+('400', '1', null),
+--guide
+('401', '1', null),
+
+--appointment
+('1100', '17', null),
+--booking
+('1200', '18', null),
+--task
+('1300', '19', null),
+--order
+('1400', '20', null);
 
 -- DROP TABLES
 

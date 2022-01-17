@@ -15,6 +15,7 @@ CREATE INDEX idx_feature_module ON dbo.feature_module(feature_id, module_id);
 INSERT
 INTO dbo.feature_module(feature_id, module_id, org_id)
 VALUES
+--calendar
 ('1', '11', null),
 ('2', '11', null),
 ('3', '11', null),
@@ -24,7 +25,7 @@ VALUES
 ('7', '11', null),
 ('8', '11', null),
 ('9', '11', null),
-
+--checkin
 ('1', '12', null),
 ('2', '12', null),
 ('3', '12', null),
@@ -34,14 +35,14 @@ VALUES
 ('7', '12', null),
 ('8', '12', null),
 ('9', '12', null),
-
+--todo
 ('2', '13', null),
 ('5', '13', null),
 ('6', '13', null),
 ('7', '13', null),
 ('8', '13', null),
 ('9', '13', null),
-
+--checkout
 ('1', '14', null),
 ('2', '14', null),
 ('3', '14', null),
