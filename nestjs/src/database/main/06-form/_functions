@@ -1,0 +1,39 @@
+-- CREATE TYPE FORM_FIELD_RETURN_TYPE
+CREATE TYPE org.form_field_return_type AS (
+  id int,
+  form varchar(95),
+  title varchar(95),
+  name varchar(255),
+  label varchar(255)
+);
+
+-- CREATE FUNCTION FORM_FIELD_GET_BY_NAME
+CREATE OR REPLACE FUNCTION org.form_field_get_by_name()
+RETURNS SETOF org.form_field_return_type
+AS
+$$
+DECLARE
+  rec record;
+BEGIN
+
+  DROP TABLE IF EXISTS t_form_field CASCADE;
+  CREATE TEMP TABLE t_form_field AS
+    SELECT
+      fld.id,
+      f.name as form,
+      f.label as title,
+      fld.name as name,
+      ff.label
+      FROM org.form f
+      LEFT JOIN org.form_field ff ON ff.form_id = f.id
+      LEFT JOIN org.field fld ON fld.id = ff.field_id
+      WHERE f.name = 'login';
+
+  RETURN QUERY
+  SELECT * FROM ud_field;
+END;
+$$
+LANGUAGE plpgsql;
+
+
+SELECT * FROM org.form_field_get_by_name();

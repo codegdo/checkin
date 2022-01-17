@@ -101,13 +101,13 @@ VALUES
 ('password', 'field', 'password', 'sec.user.password', null, '1', '1'),
 ('passcode', 'field', 'text', 'sec.user.passcode', null, '1', '1'),
 --contact
-('first_name', 'field', 'text', 'org.contact.first_name', null, '1', '1'),
-('last_name', 'field', 'text', 'org.contact.last_name', null, '1', '1'),
-('email_address', 'field', 'text', 'org.contact.email_address', null, '1', '1'),
-('phone_number', 'field', 'text', 'org.contact.phone_number', null, '1', '1'),
-('street_address', 'field', 'text', 'org.contact.street_address', null, '1', '1'),
-('city', 'field', 'text', 'org.contact.city', null, '1', '1'),
-('postal_code', 'field', 'text', 'org.contact.postal_code', null, '1', '1');
+('first_name', 'field', 'text', 'org.contact.first_name', null, '1', '2'),
+('last_name', 'field', 'text', 'org.contact.last_name', null, '1', '2'),
+('email_address', 'field', 'text', 'org.contact.email_address', null, '1', '2'),
+('phone_number', 'field', 'text', 'org.contact.phone_number', null, '1', '2'),
+('street_address', 'field', 'text', 'org.contact.street_address', null, '1', '2'),
+('city', 'field', 'text', 'org.contact.city', null, '1', '2'),
+('postal_code', 'field', 'text', 'org.contact.postal_code', null, '1', '2');
 
 -- SELECT TABLES
 
@@ -122,6 +122,8 @@ LEFT JOIN dbo.form_type_object fto ON ft.id = fto.form_type_id
 LEFT JOIN dbo.object o ON fto.object_id = o.id
 LEFT JOIN org.field fld ON o.id = fld.object_id
 WHERE f.name = 'login';
+
+SELECT * FROM dbo.object;
 
 --
 

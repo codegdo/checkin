@@ -7,6 +7,9 @@ CREATE TABLE IF NOT EXISTS org.form_field (
   is_required BOOLEAN DEFAULT FALSE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
   --
   PRIMARY KEY(form_id, field_id),
   FOREIGN KEY(form_id) REFERENCES org.form(id) ON DELETE SET NULL,
@@ -19,5 +22,5 @@ INSERT
 INTO dbo.form_field(form_id, field_id, label)
 VALUES
 --user
-('1', '1', null),
-('1', '2', null);
+('1', '1', 'username'),
+('1', '2', 'password');

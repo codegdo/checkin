@@ -1,8 +1,8 @@
 {
   "id": 1,
   "label": "Login",
-  "name": "Login",
   "description": null,
+  "name": "login",
   "data": [
     {
       "id": 2,
@@ -68,13 +68,12 @@
     {
       "id": 3,
       "label": "Username",
-      "name": "username",
       "description": null,
+      "name": "username",
       "type": "text",
       "role": "field",
       "data": null,
       "value": "",
-      "defaultValue": "",
       "isRequired": true,
       "position": 0,
       "positionParent": 1,
@@ -84,13 +83,12 @@
     {
       "id": 4,
       "label": "Password",
-      "name": "password",
       "description": null,
+      "name": "password",
       "type": "password",
       "role": "field",
       "data": null,
       "value": "",
-      "defaultValue": "",
       "isRequired": true,
       "position": 0,
       "positionParent": 1,
