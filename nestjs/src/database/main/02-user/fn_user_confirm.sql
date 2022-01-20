@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION sec.fn_user_confirm(
+CREATE OR REPLACE FUNCTION fn_user_confirm(
   p_key varchar
 )
 RETURNS sec.user

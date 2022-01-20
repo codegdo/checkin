@@ -1,5 +1,5 @@
--- CREATE FUNCTION USER_GET
-CREATE OR REPLACE FUNCTION dbo.fn_module_get(p_type varchar)
+-- CREATE FUNCTION MODULE_GET_BY_TYPE
+CREATE OR REPLACE FUNCTION fn_module_get_by_type(p_type varchar)
 RETURNS TABLE (
 
 )

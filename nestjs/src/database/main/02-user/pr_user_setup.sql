@@ -1,5 +1,5 @@
 -- CREATE PROCEDURE USER_SETUP
-CREATE OR REPLACE PROCEDURE sec.pr_user_setup(
+CREATE OR REPLACE PROCEDURE pr_user_setup(
   p_username varchar,
 
   p_org_name varchar,
@@ -20,7 +20,7 @@ AS
 $BODY$
   DECLARE
     rec record;
-    var_territory_id int;
+    _territory_id int;
   BEGIN
     SELECT *
     INTO rec
@@ -30,7 +30,7 @@ $BODY$
     IF found THEN
 
       SELECT id
-      INTO var_territory_id
+      INTO _territory_id
       FROM dbo.territory
       WHERE country_code = p_country AND state_code = p_state;
 
@@ -50,7 +50,7 @@ $BODY$
           postal_code,
           org_id
         )
-        VALUES(p_location_name, p_street_address, var_territory_id, p_city, p_postal_code, (SELECT id FROM o))
+        VALUES(p_location_name, p_street_address, _territory_id, p_city, p_postal_code, (SELECT id FROM o))
         RETURNING id
       ), u AS (
         UPDATE sec.user

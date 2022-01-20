@@ -1,5 +1,5 @@
 -- CREATE PROCEDURE USER_SIGNUP
-CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
+CREATE OR REPLACE PROCEDURE pr_user_signup(
   p_first_name varchar,
   p_last_name varchar,
   p_email_address varchar,
@@ -16,7 +16,7 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
 AS
 $BODY$
   DECLARE
-      v_role_id INT := 2;
+      _role_id INT := 2;
   BEGIN
 
     WITH c AS (
@@ -38,7 +38,7 @@ $BODY$
         role_id,
         contact_id
       )
-      VALUES(p_username, p_password, v_role_id, (SELECT id FROM c))
+      VALUES(p_username, p_password, _role_id, (SELECT id FROM c))
       RETURNING
         username,
         is_active,

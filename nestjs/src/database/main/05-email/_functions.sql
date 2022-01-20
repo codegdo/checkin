@@ -1,5 +1,5 @@
 -- CREATE FUNCTION FN_EMAIL_GET_BY_NAME
-CREATE OR REPLACE FUNCTION org.fn_email_get_by_name(p_name varchar)
+CREATE OR REPLACE FUNCTION fn_email_get_by_name(p_name varchar)
 RETURNS TABLE (
   id int,
   name varchar,
@@ -53,14 +53,14 @@ LANGUAGE plpgsql;
 
 -- CALL FUNCTIONS
 
-SELECT * FROM org.fn_email_get_by_name('verify');
+SELECT * FROM fn_email_get_by_name('verify');
 
 -- END
 
 -- DROP FUNCTIONS
 
 DROP FUNCTION IF EXISTS
-org.fn_email_get_by_name;
+fn_email_get_by_name;
 
 -- END
 

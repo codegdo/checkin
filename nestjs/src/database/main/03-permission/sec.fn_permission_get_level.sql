@@ -1,5 +1,5 @@
 -- CREATE FUNCTION FN_PERMISSION_GET_LEVEL
-CREATE OR REPLACE FUNCTION sec.fn_permission_get_level()
+CREATE OR REPLACE FUNCTION fn_permission_get_level()
 RETURNS TABLE (
     "type" sec.permission_type_enum,
     "access" text
