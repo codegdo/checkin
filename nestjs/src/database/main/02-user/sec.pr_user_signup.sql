@@ -1,5 +1,5 @@
 -- CREATE PROCEDURE USER_SIGNUP
-CREATE OR REPLACE PROCEDURE pr_user_signup(
+CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
   p_first_name varchar,
   p_last_name varchar,
   p_email_address varchar,

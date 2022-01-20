@@ -1,8 +1,8 @@
--- CREATE FUNCTION FN_PERMISSION_GET_LEVEL
-CREATE OR REPLACE FUNCTION fn_permission_get_level()
+-- CREATE FUNCTION PERMISSION_GET_LEVEL
+CREATE OR REPLACE FUNCTION sec.fn_permission_get_level()
 RETURNS TABLE (
-    "type" sec.permission_type_enum,
-    "access" text
+  "type" varchar,
+  "access" text
 )
 AS
 $BODY$
@@ -20,17 +20,3 @@ $BODY$
   END;
 $BODY$
 LANGUAGE plpgsql;
-
-
--- CALL FUNCTIONS
-
-SELECT * FROM sec.fn_permission_get_level();
-
--- END
-
--- DROP FUNCTIONS
-
-DROP FUNCTION IF EXISTS
-sec.fn_permission_get_level;
-
--- END

@@ -1,9 +1,10 @@
--- CREATE TABLE PERMISSION
-CREATE TYPE sec.permission_type_enum AS ENUM ('module', 'view', 'object', 'field');
+-- CREATE TYPE TP_PERMISSION_ENUM
+CREATE TYPE sec.tp_permission_enum AS enum ('module', 'view', 'object', 'field');
 
+-- CREATE TABLE PERMISSION
 CREATE TABLE IF NOT EXISTS sec.permission (
   id SERIAL NOT NULL,
-  type sec.permission_type_enum NOT NULL,
+  type VARCHAR(45) CHECK(type in ('module', 'view', 'object', 'field')) NOT NULL,
 
   is_active BOOLEAN DEFAULT TRUE,
 

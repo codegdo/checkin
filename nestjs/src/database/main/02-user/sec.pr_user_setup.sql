@@ -1,5 +1,5 @@
 -- CREATE PROCEDURE USER_SETUP
-CREATE OR REPLACE PROCEDURE pr_user_setup(
+CREATE OR REPLACE PROCEDURE sec.pr_user_setup(
   p_username varchar,
 
   p_org_name varchar,

@@ -1,9 +1,7 @@
 -- CREATE TABLE ROLE TYPE
-CREATE TYPE dbo.role_type_enum AS ENUM ('system', 'internal', 'external');
-
 CREATE TABLE IF NOT EXISTS dbo.role_type (
   id SERIAL NOT NULL,
-  name dbo.role_type_enum NOT NULL,
+  name VARCHAR(15) CHECK(name in ('system', 'internal', 'external')) NOT NULL,
   --
   PRIMARY KEY(id)
 );

@@ -1,5 +1,5 @@
 -- CREATE TYPE FORM_FIELD_RETURN_TYPE
-CREATE TYPE form_field_return_type AS (
+CREATE TYPE org.type_form_field_return AS (
   form_id int,
   form_name varchar,
   form_label varchar,
@@ -12,7 +12,7 @@ CREATE TYPE form_field_return_type AS (
   --test int
 );
 
-CREATE OR REPLACE FUNCTION fn_form_field_get_by_name(p_name varchar)
+CREATE OR REPLACE FUNCTION org.fn_form_field_get_by_name(p_name varchar)
 RETURNS TABLE(
   form_id int,
   form_name varchar,
@@ -67,11 +67,12 @@ BEGIN
     INTO _max
     FROM tmp_lookup;
 
-    WHILE _max >= _min LOOP
+    WHILE _max >= _min 
+    LOOP
       SELECT tl.field_id, tl.field_lookup
       INTO _field_id, _field_lookup
       FROM tmp_lookup tl
-      WHERE l.id = _min;
+      WHERE tl.id = _min;
 
       SELECT fn_get_lookup_value(_field_lookup) INTO _lookup_data;
 
@@ -89,7 +90,6 @@ $$
 LANGUAGE plpgsql;
 
 
-SELECT * FROM fn_form_field_get_by_name('signup');
+SELECT * FROM org.fn_form_field_get_by_name('signup');
 
-DROP FUNCTION fn_form_field_get_by_name;
-DROP TYPE form_field_return_type;
+DROP FUNCTION org.fn_form_field_get_by_name;
