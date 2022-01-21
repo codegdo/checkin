@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS sec.policy (
   name VARCHAR(45) NOT NULL,
   description VARCHAR(255),
 
+  data JSONB,
+
   role_type_id INT,
   org_id INT,
 

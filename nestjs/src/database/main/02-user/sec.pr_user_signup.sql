@@ -7,10 +7,10 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
   p_username varchar,
   p_password varchar,
 
-  "out_username" INOUT varchar,
-  "out_emailAddress" INOUT varchar,
-  "out_phoneNumber" INOUT varchar,
-  "out_isActive" INOUT boolean
+  INOUT "out_username" varchar,
+  INOUT "out_emailAddress" varchar,
+  INOUT "out_phoneNumber" varchar,
+  INOUT "out_isActive" boolean
   --out_user_signup_return_type INOUT sec.user_signup_return_type
 )
 AS

@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS dbo.feature_module (
   feature_id INT NOT NULL,
   module_id INT NOT NULL,
   org_id INT,
+  
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY(feature_id, module_id),

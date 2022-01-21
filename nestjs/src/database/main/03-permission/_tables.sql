@@ -110,6 +110,3 @@ sec.level,
 sec.permission_level CASCADE ;
 
 -- END
-
-DROP TYPE IF EXISTS
-sec.permission_type_enum;

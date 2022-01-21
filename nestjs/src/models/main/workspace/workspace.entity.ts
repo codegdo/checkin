@@ -45,10 +45,10 @@ export class Workspace extends BaseEntity {
   @Column({ name: 'org_id' })
   orgId: number;
 
-  @ManyToMany(() => Client, (client: Client) => client.locations)
+  @ManyToMany(() => Client, (client: Client) => client.workspaces)
   clients: Client[];
 
-  @ManyToMany(() => User, (user: User) => user.locations)
+  @ManyToMany(() => User, (user: User) => user.workspaces)
   users: User[];
 
   @Column({ name: 'created_by' })

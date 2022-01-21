@@ -1,5 +1,6 @@
--- CREATE TYPE FORM_FIELD_RETURN_TYPE
-CREATE TYPE form_field_return_type AS (
+-- CREATE FUNCTION FN_FORM_FIELD_GET_BY_NAME
+CREATE OR REPLACE FUNCTION org.fn_form_field_get_by_name(p_name varchar)
+RETURNS TABLE(
   form_id int,
   form_name varchar,
   form_label varchar,
@@ -9,18 +10,15 @@ CREATE TYPE form_field_return_type AS (
   field_data jsonb,
   field_map varchar,
   field_lookup varchar
-  --test int
-);
-
-CREATE OR REPLACE FUNCTION form_field_get_by_name()
-RETURNS SETOF form_field_return_type
+)
 AS
 $$
 DECLARE
-  var_field_id int;
-  var_field_lookup varchar;
-  max int;
-  min int := 1;
+    _field_id int;
+    _field_lookup varchar;
+    _lookup_data jsonb;
+    _max int;
+    _min int := 1;
 BEGIN
     --DROP TABLE IF EXISTS tmp_dropdown_data CASCADE;
     --CREATE TABLE tmp_dropdown_data(key varchar(255), value varchar(255));
@@ -41,40 +39,35 @@ BEGIN
     FROM org.form f
     INNER JOIN org.form_field ff ON ff.form_id = f.id
     INNER JOIN org.field fld ON fld.id = ff.field_id
-    WHERE f.name = 'signup';
+    WHERE f.name = p_name;
 
     DROP TABLE IF EXISTS tmp_lookup CASCADE;
     CREATE TEMP TABLE tmp_lookup AS
     SELECT
-    row_number() over () as id,
-    field_id,
-    field_lookup
-    FROM tmp_form_field
-    WHERE field_lookup IS NOT NULL;
+      row_number() over () as id,
+      tff.field_id,
+      tff.field_lookup
+    FROM tmp_form_field tff
+    WHERE tff.field_lookup IS NOT NULL;
 
     SELECT max(id)
-    INTO max
+    INTO _max
     FROM tmp_lookup;
 
-    WHILE max >= min LOOP
-      SELECT field_id, field_lookup
-      INTO var_field_id, var_field_lookup
-      FROM tmp_lookup
-      WHERE id = min;
+    WHILE _max >= _min 
+    LOOP
+      SELECT tl.field_id, tl.field_lookup
+      INTO _field_id, _field_lookup
+      FROM tmp_lookup tl
+      WHERE tl.id = _min;
 
-      --UPDATE a
-      --SET a.field_data = '{"key":"value"}'
-      --FROM tmp_form_field a;
+      SELECT dbo.fn_lookup_get_value(_field_lookup) INTO _lookup_data;
 
-      UPDATE tmp_form_field
-      SET field_data = '{"key":"value"}'
-      WHERE var_field_id = field_id;
+      UPDATE tmp_form_field tff
+      SET field_data = _lookup_data
+      WHERE _field_id = tff.field_id;
 
-      raise notice 'MIN %', min;
-      raise notice 'FIELD %', var_field_id;
-      raise notice 'LOOKUP %', var_field_lookup;
-
-      min := min + 1;
+      _min := _min + 1;
     END LOOP;
 
     RETURN QUERY
@@ -84,7 +77,21 @@ $$
 LANGUAGE plpgsql;
 
 
-SELECT * FROM form_field_get_by_name();
 
-DROP FUNCTION form_field_get_by_name;
-DROP TYPE form_field_return_type;
+-- CALL FUNCTIONS
+
+SELECT * FROM org.fn_form_field_get_by_name('signup');
+
+
+-- END
+
+-- DROP FUNCTIONS
+
+DROP FUNCTION IF EXISTS 
+org.fn_form_field_get_by_name;
+
+-- END
+
+
+
+

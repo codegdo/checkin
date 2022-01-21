@@ -2,6 +2,9 @@
 CREATE TABLE IF NOT EXISTS dbo.role_type (
   id SERIAL NOT NULL,
   name VARCHAR(15) CHECK(name in ('system', 'internal', 'external')) NOT NULL,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
   --
   PRIMARY KEY(id)
 );

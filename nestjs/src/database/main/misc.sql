@@ -42,3 +42,53 @@ select json_array_elements(s.json_agg) from (
             ' FROM ' || _schema || '.' || _table ||' '
             ' ORDER BY ' || _column ||' '
           ' ) as t '
+
+
+
+
+create table example (id int, name text, params jsonb);
+insert into example values
+(1, 'Anna', '{"height": 175, "weight": 55}'),
+(2, 'Bob', '{"age": 22, "height": 188}'),
+(3, 'Cindy', '{"age": 25, "weight": 48, "pretty": true}');
+
+
+SELECT * FROM example;
+
+create or replace function fn_flat_view()
+returns text language plpgsql as
+$$
+    declare
+        cols text;
+    begin
+        execute format(
+            $ex$
+                SELECT string_agg(format('%2$s->>%%1$L "%%1$s"', key), ', ')
+                FROM (
+                    SELECT DISTINCT key
+                    FROM example, jsonb_each(params)
+                    ORDER by 1
+                ) s;
+            $ex$, 'example', 'params'
+            )
+        INTO cols;
+
+        return cols;
+    end;
+$$;
+
+select fn_flat_view();
+
+drop function fn_flat_view;
+drop table example;
+
+SELECT string_agg(format('params->>%%1$L "%%1$s"', key), ', ')
+FROM (
+    SELECT DISTINCT key
+    FROM example, jsonb_each(params)
+    ORDER by 1
+) s;
+
+select params->>'age' "age" from example;
+
+--params->>'age' "age", params->>'height' "height", params->>'pretty' "pretty", params->>'weight' "weight"

@@ -2,6 +2,7 @@
 CREATE TABLE IF NOT EXISTS org.form (
   id SERIAL,
   name VARCHAR(95),
+  label VARCHAR(95),
   description VARCHAR(255),
 
   form_type_id INT,
@@ -19,6 +20,7 @@ CREATE TABLE IF NOT EXISTS org.form (
 );
 
 INSERT
-INTO org.form (name, description, form_type_id, org_id, is_active)
+INTO org.form (name, label, description, form_type_id, org_id, is_active)
 VALUES
-('login', null, '1', null, '1');
+('login', 'Login', null, '1', null, '1'),
+('signup', 'Signup', null, '1', null, '1');

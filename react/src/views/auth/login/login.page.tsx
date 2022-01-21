@@ -13,12 +13,14 @@ const Login: React.FC = (): JSX.Element => {
 
   const [form, setForm] = useState<FormData>();
   const [{ loading, result }, fetchLogin] = useFetch('/api/auth/login');
+  const [state, getForm] = useFetch('/api/auth/form/login');
   const [verified, setVerified] = useState(true);
   const [completed, setCompleted] = useState(true);
 
   // load form
   useEffect(() => {
     void (async () => {
+      const form = await getForm();
       const json: any = (await import('./login.page.json')).default;
       setForm(json);
     })();

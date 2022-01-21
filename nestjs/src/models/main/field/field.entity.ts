@@ -6,8 +6,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn
+  JoinColumn,
+  OneToMany,
+  ManyToMany
 } from 'typeorm';
+import { Form } from '../form/form.entity';
 
 import { ObjectEntity } from '../object/object.entity';
 
@@ -45,6 +48,9 @@ export class Field extends BaseEntity {
   @ManyToOne(() => ObjectEntity)
   @JoinColumn({ name: 'object_id', referencedColumnName: 'id' })
   object: ObjectEntity;
+
+  @ManyToMany(() => Form, (form: Form) => form.fields)
+  forms: Form[];
 
   @Column({ name: 'org_id' })
   orgId: boolean;

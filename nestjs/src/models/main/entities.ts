@@ -16,3 +16,5 @@ export * from './email/email.entity';
 export * from './email/email-type.entity';
 export * from './email/email-address.entity';
 export * from './email/email-from.entity';
+export * from './form/form.entity';
+export * from './form/form-type.entity';

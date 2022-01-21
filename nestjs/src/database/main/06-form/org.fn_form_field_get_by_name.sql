@@ -1,17 +1,4 @@
--- CREATE TYPE FORM_FIELD_RETURN_TYPE
-CREATE TYPE org.type_form_field_return AS (
-  form_id int,
-  form_name varchar,
-  form_label varchar,
-  field_id int,
-  field_name varchar,
-  field_label varchar,
-  field_data jsonb,
-  field_map varchar,
-  field_lookup varchar
-  --test int
-);
-
+-- CREATE FUNCTION FN_FORM_FIELD_GET_BY_NAME
 CREATE OR REPLACE FUNCTION org.fn_form_field_get_by_name(p_name varchar)
 RETURNS TABLE(
   form_id int,
@@ -74,7 +61,7 @@ BEGIN
       FROM tmp_lookup tl
       WHERE tl.id = _min;
 
-      SELECT fn_get_lookup_value(_field_lookup) INTO _lookup_data;
+      SELECT dbo.fn_lookup_get_value(_field_lookup) INTO _lookup_data;
 
       UPDATE tmp_form_field tff
       SET field_data = _lookup_data
@@ -90,6 +77,21 @@ $$
 LANGUAGE plpgsql;
 
 
+
+-- CALL FUNCTIONS
+
 SELECT * FROM org.fn_form_field_get_by_name('signup');
 
-DROP FUNCTION org.fn_form_field_get_by_name;
+
+-- END
+
+-- DROP FUNCTIONS
+
+DROP FUNCTION IF EXISTS 
+org.fn_form_field_get_by_name;
+
+-- END
+
+
+
+

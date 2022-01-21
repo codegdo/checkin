@@ -11,9 +11,8 @@ import {
   JoinTable,
   OneToMany,
 } from 'typeorm';
-import { Field } from '../field/field.entity';
-import { FormField } from './form-field.entity';
 
+import { Field } from '../field/field.entity';
 import { FormType } from './form-type.entity';
 
 @Entity({ database: 'main', schema: 'org', name: 'form' })
@@ -37,12 +36,8 @@ export class Form extends BaseEntity {
   @Column({ name: 'is_active' })
   isActive: boolean;
 
-  @OneToMany((type) => FormField, (formField) => formField.form)
-  formField: FormField[];
-
   // join table
-  //https://github.com/typeorm/typeorm/issues/1224
-  @ManyToMany((type) => Field, (field: Field) => field.forms)
+  @ManyToMany(() => Field, (field: Field) => field.forms)
   @JoinTable({
     name: 'form_field',
     joinColumn: {

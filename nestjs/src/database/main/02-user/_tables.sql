@@ -2,6 +2,9 @@
 CREATE TABLE IF NOT EXISTS dbo.role_type (
   id SERIAL NOT NULL,
   name VARCHAR(15) CHECK(name in ('system', 'internal', 'external')) NOT NULL,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
   --
   PRIMARY KEY(id)
 );
@@ -47,6 +50,8 @@ CREATE TABLE IF NOT EXISTS sec.policy (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
   description VARCHAR(255),
+
+  data JSONB,
 
   role_type_id INT,
   org_id INT,
@@ -125,6 +130,8 @@ CREATE TABLE IF NOT EXISTS sec.client (
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
   UNIQUE(phone_number)

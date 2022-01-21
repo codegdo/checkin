@@ -56,8 +56,7 @@ export class UserRepository extends Repository<User> {
 
   async loginUser(loginUserDto: LoginUserDto): Promise<LoginUserData> {
     const { username, password } = loginUserDto;
-    const [user] = await this.getUser(username);
-
+    const user = await this.getUser(username);
     if (!user) {
       return undefined;
     }

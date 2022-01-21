@@ -44,6 +44,7 @@ VALUES
 CREATE TABLE IF NOT EXISTS org.form (
   id SERIAL,
   name VARCHAR(95),
+  label VARCHAR(95),
   description VARCHAR(255),
 
   form_type_id INT,
@@ -61,9 +62,10 @@ CREATE TABLE IF NOT EXISTS org.form (
 );
 
 INSERT
-INTO org.form (name, description, form_type_id, org_id, is_active)
+INTO org.form (name, label, description, form_type_id, org_id, is_active)
 VALUES
-('login', null, '1', null, '1');
+('login', 'Login', null, '1', null, '1'),
+('signup', 'Signup', null, '1', null, '1');
 
 -- CREATE TABLE FIELD
 CREATE TABLE IF NOT EXISTS org.field (
@@ -106,8 +108,51 @@ VALUES
 ('email_address', 'field', 'text', 'org.contact.email_address', null, '1', '2'),
 ('phone_number', 'field', 'text', 'org.contact.phone_number', null, '1', '2'),
 ('street_address', 'field', 'text', 'org.contact.street_address', null, '1', '2'),
+('country', 'field', 'text', 'org.contact.territory', 'dbo.territory.country.country_code', '1', '2'),
+('state', 'field', 'text', 'org.contact.territory', 'dbo.territory.state.state_code', '1', '2'),
 ('city', 'field', 'text', 'org.contact.city', null, '1', '2'),
 ('postal_code', 'field', 'text', 'org.contact.postal_code', null, '1', '2');
+
+-- CREATE TABLE FORM_FIELD
+CREATE TABLE IF NOT EXISTS org.form_field (
+  form_id INT NOT NULL,
+  field_id INT NOT NULL,
+  label VARCHAR(255),
+  position INT DEFAULT 0,
+  is_required BOOLEAN DEFAULT FALSE,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  created_by VARCHAR(45) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(45),
+  --
+  PRIMARY KEY(form_id, field_id),
+  FOREIGN KEY(form_id) REFERENCES org.form(id) ON DELETE SET NULL,
+  FOREIGN KEY(field_id) REFERENCES org.field(id) ON DELETE SET NULL
+);
+
+CREATE INDEX idx_form_field  ON org.form_field (form_id, field_id);
+
+INSERT
+INTO org.form_field(form_id, field_id, label)
+VALUES
+--login
+('1', '1', 'Username'),
+('1', '2', 'Password'),
+--signup
+('2', '4', 'First Name'),
+('2', '5', 'Last Name'),
+('2', '6', 'Email Address'),
+('2', '1', 'Username'),
+('2', '2', 'Password'),
+('2', '7', 'Phone Number'),
+('2', '8', 'Street Address'),
+('2', '9', 'Country'),
+('2', '10', 'State'),
+('2', '11', 'City'),
+('2', '12', 'PostalCode');
+
+
 
 -- SELECT TABLES
 
@@ -133,6 +178,7 @@ DROP TABLE IF EXISTS
 dbo.form_type,
 dbo.form_type_object,
 org.form,
-org.field CASCADE;
+org.field,
+org.form_field CASCADE;
 
 -- END

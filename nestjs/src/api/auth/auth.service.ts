@@ -18,8 +18,9 @@ import {
   TokenRepository,
   ContactRepository,
   EmailRepository,
+  FormRepository,
 } from 'src/models/main/repositories';
-import { WorkspaceRepository as CheckinRepository } from 'src/models/checkin/repositories';
+//import { CheckinRepository } from 'src/models/checkin/repositories';
 import { ErrorMessageType, ErrorService, MessageAuthService, MessageType } from 'src/common/modules';
 import { LoginUserDto, SetupUserDto, SignupUserDto, VerifyUserDto } from 'src/models/main/dtos';
 
@@ -51,8 +52,11 @@ export class AuthService {
     @InjectRepository(EmailRepository)
     private emailRepository: EmailRepository,
 
-    @InjectRepository(CheckinRepository, 'checkin')
-    private checkinRepository: CheckinRepository,
+    @InjectRepository(FormRepository)
+    private formRepository: FormRepository,
+
+    //@InjectRepository(CheckinRepository, 'checkin')
+    //private checkinRepository: CheckinRepository,
 
     // @Inject(WINSTON_MODULE_PROVIDER)
     // private readonly logger: Logger,
@@ -60,6 +64,14 @@ export class AuthService {
     private readonly messageService: MessageAuthService,
     private readonly errorService: ErrorService,
   ) { }
+
+  async form(name: string) {
+    try {
+      return await this.formRepository.getFormByName(name);
+    } catch (e) {
+      this.errorService.handleError(e);
+    }
+  }
 
   async signup(signupUserDto: SignupUserDto) {
     try {

@@ -15,7 +15,7 @@ import {
 } from 'typeorm';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
-import { Role, Contact, Location, Organization } from '../entities';
+import { Role, Contact, Workspace, Organization } from '../entities';
 
 const scrypt = promisify(_scrypt);
 
@@ -55,19 +55,19 @@ export class User {
   @Column({ name: 'org_id' })
   orgId: number;
 
-  @ManyToMany(() => Location, (location: Location) => location.users)
+  @ManyToMany(() => Workspace, (workspace: Workspace) => workspace.users)
   @JoinTable({
-    name: 'user_location',
+    name: 'user_workspace',
     joinColumn: {
       name: 'user_id',
       referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: 'location_id',
+      name: 'workspace_id',
       referencedColumnName: 'id',
     },
   })
-  locations: Location[];
+  workspaces: Workspace[];
 
   @Column({ name: 'created_by' })
   createdBy: string;

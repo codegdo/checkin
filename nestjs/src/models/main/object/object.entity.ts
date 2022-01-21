@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
   ManyToMany,
 } from 'typeorm';
+import { FormType } from '../form/form-type.entity';
 import { View } from '../view/view.entity';
 
 
@@ -29,6 +30,9 @@ export class ObjectEntity extends BaseEntity {
 
   @ManyToMany(() => View, (view: View) => view.objects)
   views: View[];
+
+  @ManyToMany(() => FormType, (formType: FormType) => formType.objects)
+  formTypes: FormType[];
 
   @Column({ name: 'created_by' })
   createdBy: string;

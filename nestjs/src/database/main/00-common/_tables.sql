@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS log.error (
   stack TEXT,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
   --
   PRIMARY KEY(id)
 );
@@ -44,6 +45,9 @@ CREATE TABLE IF NOT EXISTS dbo.territory (
   state VARCHAR(90),
   state_code VARCHAR(2),
   region VARCHAR(45),
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
   --
   PRIMARY KEY(id)
 );

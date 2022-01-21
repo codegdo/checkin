@@ -42,8 +42,18 @@ export class AuthController {
   }
 
   @Public()
+  @Get('form/:name')
+  async form(@Param('name') name: string) {
+    const form = await this.authService.form(name);
+
+    console.log(form);
+    return {}
+  }
+
+  @Public()
   @Post('login')
   async login(@Session() session: any, @Body() loginUserDto: LoginUserDto) {
+
     const user = await this.authService.login(loginUserDto);
     const { password, orgId, orgActive, ...rest } = user;
     const accessToken = this.jwtService.sign({ orgId });

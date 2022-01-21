@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS log.error (
   stack TEXT,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
   --
   PRIMARY KEY(id)
 );
