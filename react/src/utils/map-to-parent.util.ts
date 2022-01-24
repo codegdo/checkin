@@ -1,21 +1,23 @@
 interface Item {
+  id: string;
   role: 'block';
   data: any[];
   position: number;
-  positionParent: number;
+  positionId: string;
 }
 
 export function mapToParent(list: Item[], item: Item): void {
+
   let bool = false;
 
-  if (item.positionParent === null) {
+  if (item.positionId === null) {
     bool = true;
     list.push({ ...item });
     return;
   }
 
   list.find((i) => {
-    if (i.position === item.positionParent) {
+    if (i.id === item.positionId) {
       bool = false;
       i.data.push({ ...item });
       return;

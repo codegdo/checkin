@@ -49,6 +49,7 @@ export const useFetch = (
         dispatch({ type: 'LOADING' });
         //
         const result = await http.request(url, option);
+        console.log('FETCH', result);
         //
         dispatch({ type: 'SUCCESS', payload: result });
       } catch (err: any) {

@@ -9,7 +9,11 @@ export class FormRepository extends Repository<Form> {
       [name, null],
     );
 
-    const [form] = result?.data;
-    console.log('FORM', form);
+    if (!result) {
+      //
+    }
+
+    const [form] = result?.data || [];
+    return form;
   }
 }

@@ -67,7 +67,7 @@ export class AuthService {
 
   async form(name: string) {
     try {
-      return await this.formRepository.getFormByName(name);
+      return this.formRepository.getFormByName(name);
     } catch (e) {
       this.errorService.handleError(e);
     }

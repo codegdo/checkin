@@ -46,8 +46,8 @@ export class AuthController {
   async form(@Param('name') name: string) {
     const form = await this.authService.form(name);
 
-    console.log(form);
-    return {}
+    console.log('CONTROLLER', form);
+    return form;
   }
 
   @Public()

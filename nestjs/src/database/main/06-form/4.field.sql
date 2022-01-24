@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS org.field (
 
   is_required BOOLEAN DEFAULT FALSE,
 
+  parent_id INT,
   object_id INT,
   org_id INT,
 

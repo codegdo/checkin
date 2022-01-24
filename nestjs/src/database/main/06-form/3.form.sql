@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS org.form (
   label VARCHAR(95),
   description VARCHAR(255),
 
+  data JSONB NOT NULL DEFAULT '[{"id": "f-aaaa", "type": "div", "role": "block", "data": [], "position": null, "positionId": null}]'::jsonb,
+
   form_type_id INT,
   org_id INT,
 

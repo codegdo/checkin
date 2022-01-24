@@ -13,18 +13,25 @@ const Login: React.FC = (): JSX.Element => {
 
   const [form, setForm] = useState<FormData>();
   const [{ loading, result }, fetchLogin] = useFetch('/api/auth/login');
-  const [state, getForm] = useFetch('/api/auth/form/login');
+  const [{ loading: _loading, result: _result }, getForm] = useFetch('/api/auth/form/login');
   const [verified, setVerified] = useState(true);
   const [completed, setCompleted] = useState(true);
 
   // load form
   useEffect(() => {
     void (async () => {
-      const form = await getForm();
-      const json: any = (await import('./login.page.json')).default;
-      setForm(json);
+      await getForm();
+      //const json: any = (await import('./login.page.json')).default;
+      //setForm(json);
     })();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (_loading === 'success') {
+      setForm(_result.data);
+    }
+
+  }, [_loading]);
 
   useEffect(() => {
     if (loading === 'success') {
@@ -53,7 +60,7 @@ const Login: React.FC = (): JSX.Element => {
   }, [loading]);
 
   const handleSubmit = (values: any) => {
-    void fetchLogin({ body: values });
+    //void fetchLogin({ body: values });
   };
 
   if (!form) {

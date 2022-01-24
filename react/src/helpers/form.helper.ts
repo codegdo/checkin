@@ -13,9 +13,8 @@ export const normalizeForm = (form: FormData): FormData => {
   const list: any = [];
 
   [...data, ...fields].forEach((item) => {
-    let { data } = item;
 
-    if (typeof data === 'string') {
+    if (typeof item.data === 'string') {
       item.data = JSON.parse(data);
     }
 
