@@ -227,7 +227,7 @@ RETURNS TABLE (
   username varchar,
   password varchar,
   "roleId" int,
-  "roleType" dbo.role_type_enum,
+  "roleType" varchar,
   policy jsonb,
   "orgId" int,
   "orgActive" boolean,

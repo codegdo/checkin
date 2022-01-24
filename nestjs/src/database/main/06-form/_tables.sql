@@ -118,6 +118,7 @@ CREATE TABLE IF NOT EXISTS org.form_field (
   form_id INT NOT NULL,
   field_id INT NOT NULL,
   label VARCHAR(255),
+  description TEXT,
   position INT DEFAULT 0,
   is_required BOOLEAN DEFAULT FALSE,
 

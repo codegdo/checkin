@@ -4,8 +4,12 @@ import { Form } from './form.entity';
 @EntityRepository(Form)
 export class FormRepository extends Repository<Form> {
   async getFormByName(name: string) {
-    const form = await this.manager.query(`SELECT * FROM org.fn_form_field_get_by_name($1)`, [name]);
+    const [result] = await this.manager.query(
+      `CALL org.pr_form_field_get_by_name($1, $2)`,
+      [name, null],
+    );
 
-    console.log('FFFOOORRRMMM', form);
+    const [form] = result?.data;
+    console.log('FORM', form);
   }
 }

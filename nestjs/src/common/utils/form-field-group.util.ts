@@ -1,3 +1,4 @@
+/*
 var arr = [
   {
     form_id: 1,
@@ -48,3 +49,4 @@ var group = arr.reduce((a, i) => {
 }, {});
 
 console.log(group);
+*/
