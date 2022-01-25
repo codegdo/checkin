@@ -60,7 +60,7 @@ $BODY$
       field_lookup lookup,
       field_map map,
       field_position position,
-      field_position_id "positionId",
+      field_parent_id "parentId",
       field_is_required "isRequired"
       FROM tmp_form_field
     ) field;

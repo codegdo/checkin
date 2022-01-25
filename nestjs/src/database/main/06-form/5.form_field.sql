@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS org.form_field (
   description TEXT,
 
   position INT DEFAULT 0,
-  position_id VARCHAR(10) DEFAULT 'f-aaaa',
+  parent_id VARCHAR(10) DEFAULT 'f-main',
 
   is_required BOOLEAN DEFAULT FALSE,
 

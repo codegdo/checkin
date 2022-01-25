@@ -5,7 +5,40 @@ CREATE TABLE IF NOT EXISTS org.form (
   label VARCHAR(95),
   description VARCHAR(255),
 
-  data JSONB NOT NULL DEFAULT '[{"id": "f-aaaa", "type": "div", "role": "block", "data": [], "position": null, "positionId": null}]'::jsonb,
+  data JSONB NOT NULL DEFAULT '[
+    {
+      "id": "f-wrap", 
+      "type": "div", 
+      "role": "block", 
+      "data": [], 
+      "position": 0, 
+      "parentId": null
+    },
+    {
+      "id": "f-header", 
+      "type": "div", 
+      "role": "block", 
+      "data": [], 
+      "position": 1, 
+      "parentId": "f-wrap"
+    },
+    {
+      "id": "f-main", 
+      "type": "div", 
+      "role": "block", 
+      "data": [], 
+      "position": 2, 
+      "parentId": "f-wrap"
+    },
+    {
+      "id": "f-footer", 
+      "type": "div", 
+      "role": "block", 
+      "data": [], 
+      "position": 3, 
+      "parentId": "f-wrap"
+    }
+  ]'::jsonb,
 
   form_type_id INT,
   org_id INT,

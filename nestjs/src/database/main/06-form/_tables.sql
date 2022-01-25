@@ -47,7 +47,32 @@ CREATE TABLE IF NOT EXISTS org.form (
   label VARCHAR(95),
   description VARCHAR(255),
 
-  data JSONB NOT NULL DEFAULT '[{"id": "f-aaaa", "type": "div", "role": "block", "data": [], "position": null, "positionId": null}]'::jsonb,
+  data JSONB NOT NULL DEFAULT '[
+    {
+      "id": "f-header", 
+      "type": "header", 
+      "role": "block", 
+      "data": [], 
+      "position": 0, 
+      "parentId": null
+    },
+    {
+      "id": "f-main", 
+      "type": "main", 
+      "role": "block", 
+      "data": [], 
+      "position": 1, 
+      "parentId": null
+    },
+    {
+      "id": "f-footer", 
+      "type": "footer", 
+      "role": "block", 
+      "data": [], 
+      "position": 2, 
+      "parentId": null
+    }
+  ]'::jsonb,
 
   form_type_id INT,
   org_id INT,
@@ -124,7 +149,7 @@ CREATE TABLE IF NOT EXISTS org.form_field (
   description TEXT,
 
   position INT DEFAULT 0,
-  position_id VARCHAR(10) DEFAULT 'f-aaaa',
+  parent_id VARCHAR(10) DEFAULT 'f-main',
 
   is_required BOOLEAN DEFAULT FALSE,
 

@@ -16,7 +16,7 @@ RETURNS TABLE(
   field_map varchar,
   field_lookup varchar,
   field_position int,
-  field_position_id varchar,
+  field_parent_id varchar,
   field_is_required boolean
 )
 AS
@@ -39,7 +39,7 @@ BEGIN
   fld.map,
   fld.lookup,
   ff.position,
-  ff.position_id,
+  ff.parent_id,
   ff.is_required
   --CASE WHEN f.name = 'login' THEN 1 ELSE 0 END AS test
   FROM org.form f

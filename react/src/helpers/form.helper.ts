@@ -1,5 +1,5 @@
 import { FieldData, FormData } from '../components/form';
-import { mapToParent } from '../utils';
+import { arrayToObjectKeyGroup, mapToParent } from '../utils';
 
 type MapField = {
   name: string;
@@ -12,14 +12,26 @@ export const normalizeForm = (form: FormData): FormData => {
 
   const list: any = [];
 
-  [...data, ...fields].forEach((item) => {
-
-    if (typeof item.data === 'string') {
-      item.data = JSON.parse(data);
-    }
-
+  [...data].forEach((item) => {
     return mapToParent(list, item);
   });
+
+  const group: any = arrayToObjectKeyGroup({ key: 'parentId', values: fields });
+
+  for (const key in group) {
+    if (group.hasOwnProperty(key)) {
+      list.find((i) => {
+
+        if (i.id === key) {
+          i.data = [...i.data, ...group[key]];
+          return;
+        }
+
+      });
+    }
+  }
+
+  console.log(list);
 
   return { ...form, data: list };
 };
