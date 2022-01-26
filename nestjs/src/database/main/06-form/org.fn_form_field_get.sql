@@ -13,6 +13,7 @@ RETURNS TABLE(
   field_type varchar,
   field_role varchar,
   field_data jsonb,
+  field_value varchar,
   field_map varchar,
   field_lookup varchar,
   field_position int,
@@ -36,12 +37,22 @@ BEGIN
   fld.type,
   fld.role,
   fld.data,
+  fld.value,
   fld.map,
   fld.lookup,
   ff.position,
   ff.parent_id,
-  ff.is_required
-  --CASE WHEN f.name = 'login' THEN 1 ELSE 0 END AS test
+  --is_required
+  CASE WHEN fld.is_required = true 
+    THEN true 
+  ELSE 
+    CASE WHEN ff.is_required = true 
+      THEN true 
+    ELSE 
+      false 
+    END 
+  END AS is_required
+  --
   FROM org.form f
   INNER JOIN org.form_field ff ON ff.form_id = f.id
   INNER JOIN org.field fld ON fld.id = ff.field_id

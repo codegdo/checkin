@@ -13,6 +13,7 @@ RETURNS TABLE(
   field_type varchar,
   field_role varchar,
   field_data jsonb,
+  field_value varchar,
   field_map varchar,
   field_lookup varchar,
   field_position int,
@@ -36,12 +37,22 @@ BEGIN
   fld.type,
   fld.role,
   fld.data,
+  fld.value,
   fld.map,
   fld.lookup,
   ff.position,
   ff.parent_id,
-  ff.is_required
-  --CASE WHEN f.name = 'login' THEN 1 ELSE 0 END AS test
+  --is_required
+  CASE WHEN fld.is_required = true 
+    THEN true 
+  ELSE 
+    CASE WHEN ff.is_required = true 
+      THEN true 
+    ELSE 
+      false 
+    END 
+  END AS is_required
+  --
   FROM org.form f
   INNER JOIN org.form_field ff ON ff.form_id = f.id
   INNER JOIN org.field fld ON fld.id = ff.field_id
@@ -52,7 +63,7 @@ $BODY$
 LANGUAGE plpgsql;
 
 -- CREATE PROCEDURE PR_FORM_FIELD_GET_BY_NAME
-CREATE OR REPLACE PROCEDURE org.pr_form_field_get_by_name(
+CREATE OR REPLACE PROCEDURE org.pr_form_get_by_name(
   p_name varchar,
   OUT data jsonb
 )
@@ -110,6 +121,7 @@ $BODY$
       field_type type,
       field_role role,
       field_data data,
+      field_value value,
       field_lookup lookup,
       field_map map,
       field_position position,
@@ -139,7 +151,7 @@ LANGUAGE plpgsql;
 -- CALL FUNCTIONS
 
 SELECT * FROM org.fn_form_field_get('signup');
-CALL org.pr_form_field_get_by_name('signup', null);
+CALL org.pr_form_get_by_name('signup', null);
 
 -- END
 -- DROP FUNCTIONS
@@ -147,6 +159,6 @@ CALL org.pr_form_field_get_by_name('signup', null);
 DROP FUNCTION IF EXISTS
 org.fn_form_field_get;
 DROP PROCEDURE IF EXISTS
-org.pr_form_field_get_by_name;
+org.pr_form_get_by_name;
 
 -- END

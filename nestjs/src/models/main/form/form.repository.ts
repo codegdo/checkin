@@ -5,7 +5,7 @@ import { Form } from './form.entity';
 export class FormRepository extends Repository<Form> {
   async getFormByName(name: string) {
     const [result] = await this.manager.query(
-      `CALL org.pr_form_field_get_by_name($1, $2)`,
+      `CALL org.pr_form_get_by_name($1, $2)`,
       [name, null],
     );
 

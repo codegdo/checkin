@@ -71,6 +71,17 @@ CREATE TABLE IF NOT EXISTS org.form (
       "data": [], 
       "position": 2, 
       "parentId": null
+    },
+    {
+      "id": "f-button", 
+      "label": "Submit",
+      "name": "submit",
+      "type": "button", 
+      "role": "inline", 
+      "data": null, 
+      "value": null,
+      "position": 3, 
+      "parentId": "f-footer"
     }
   ]'::jsonb,
 

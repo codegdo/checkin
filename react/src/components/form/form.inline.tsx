@@ -5,7 +5,7 @@ import { Button, Label, Title } from '../element';
 import { FormContext } from './form.component';
 import { ElementProps } from './form.type';
 
-export const FormElement: React.FC<ElementProps> = ({ element, ...props }): JSX.Element | null => {
+export const FormInline: React.FC<ElementProps> = ({ element, ...props }): JSX.Element | null => {
   const context = useContext(FormContext);
 
   if (context == undefined) {

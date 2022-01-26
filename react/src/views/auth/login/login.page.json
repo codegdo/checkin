@@ -34,22 +34,22 @@
       "name": "Login",
       "description": null,
       "type": "title",
-      "role": "element",
+      "role": "inline",
       "data": [],
       "value": null,
       "position": 0,
-      "positionParent": 0
+      "parentId": 0
     },
     {
       "id": 6,
       "label": "Login",
       "name": "submit",
       "type": "button",
-      "role": "element",
+      "role": "inline",
       "data": [],
       "value": null,
       "position": 0,
-      "positionParent": 2
+      "parentId": 2
     },
     {
       "id": 7,
@@ -57,11 +57,11 @@
       "name": null,
       "description": null,
       "type": "link",
-      "role": "element",
+      "role": "inline",
       "data": null,
       "value": "/auth/signup",
       "position": 0,
-      "positionParent": 2
+      "parentId": 2
     }
   ],
   "fields": [
@@ -76,8 +76,8 @@
       "value": "",
       "isRequired": true,
       "position": 0,
-      "positionParent": 1,
-      "mapto": "sec.user.username",
+      "parentId": 1,
+      "map": "sec.user.username",
       "lookup": null
     },
     {
@@ -91,8 +91,8 @@
       "value": "",
       "isRequired": true,
       "position": 0,
-      "positionParent": 1,
-      "mapto": "sec.user.password",
+      "parentId": 1,
+      "map": "sec.user.password",
       "lookup": null
     }
   ]

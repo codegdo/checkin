@@ -1,17 +1,8 @@
 -- CREATE PROCEDURE USER_SIGNUP
 CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
-  p_first_name varchar,
-  p_last_name varchar,
-  p_email_address varchar,
-  p_phone_number varchar,
-  p_username varchar,
-  p_password varchar,
+  p_field_data jsonb,
 
-  INOUT "out_username" varchar,
-  INOUT "out_emailAddress" varchar,
-  INOUT "out_phoneNumber" varchar,
-  INOUT "out_isActive" boolean
-  --out_user_signup_return_type INOUT sec.user_signup_return_type
+  OUT data jsonb
 )
 AS
 $BODY$
@@ -19,50 +10,52 @@ $BODY$
       _role_id INT := 2;
   BEGIN
 
-    WITH c AS (
-      INSERT INTO org.contact(
-        first_name,
-        last_name,
-        email_address,
-        phone_number
-      )
-      VALUES (p_first_name, p_last_name, p_email_address, p_phone_number)
-      RETURNING
-        id,
-        email_address,
-        phone_number
-    ), u AS (
-      INSERT INTO sec.user(
-        username,
-        password,
-        role_id,
-        contact_id
-      )
-      VALUES(p_username, p_password, _role_id, (SELECT id FROM c))
-      RETURNING
-        username,
-        is_active,
-        contact_id
-    )
+    -- convert field_data json to temp table tmp_field_data
+    DROP TABLE IF EXISTS tmp_field_data CASCADE;
+    CREATE TEMP TABLE tmp_field_data(
+      id int,
+      value varchar
+    );
 
-    SELECT
-      u.username::varchar,
-      c.email_address::varchar,
-      c.phone_number::varchar,
-      u.is_active::boolean
-    INTO
-      "out_username",
-      "out_emailAddress",
-      "out_phoneNumber",
-      "out_isActive"
-      --out_user_signup_return_type
-    FROM u
-      LEFT JOIN c ON c.id = u.contact_id;
+    INSERT INTO tmp_field_data(id, value)
+    VALUES 
+    (1, 'test'), 
+    (2, 'hello');
+
+    -- create a tmp_field
+    DROP TABLE IF EXISTS tmp_field CASCADE;
+    CREATE TEMP TABLE tmp_field(
+      id int,
+      value varchar,
+      map varchar,
+      lookup varchar
+    );
+
+    -- insert id and value
+    INSERT INTO tmp_field(id, value)
+    SELECT * FROM tmp_field_data;
+
+    -- insert map and lookup
+    UPDATE tmp_field
+    SET map = f.map
+    FROM org.field f
+    WHERE tmp_field.id = f.id;
+
+    SELECT json_agg(tf)::jsonb
+    INTO data
+    FROM(
+        SELECT * FROM tmp_field
+    ) tf;
 
     COMMIT;
   END;
 $BODY$
 LANGUAGE plpgsql;
 
-CALL sec.pr_user_signup('kenny'::varchar,'do'::varchar,'giangd@gmail.com'::varchar,'8583571474'::varchar,'kennny'::varchar,'675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2'::varchar, 'null'::text, 'null'::text, 'null'::text, '0'::boolean);
-CALL sec.pr_user_signup('kenny'::varchar,'do'::varchar,'giangd@gmail.com'::varchar,'8583571474'::varchar,'kennny'::varchar,'675dac650573721672b492cea4addc28a3f1f6afe93d197abb39cbdca70fcdfe.f4fcd1c555282be2'::varchar, ('null'::varchar,'null'::varchar,'null'::varchar,'0'::boolean)::sec.user_signup_return_type);
+
+
+CALL sec.pr_user_signup('{}', null);
+
+DROP PROCEDURE IF EXISTS sec.pr_sec_signup;
+
+select * from org.field;

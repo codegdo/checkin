@@ -30,7 +30,6 @@ const Login: React.FC = (): JSX.Element => {
     if (_loading === 'success') {
       setForm(_result.data);
     }
-
   }, [_loading]);
 
   useEffect(() => {
@@ -60,7 +59,7 @@ const Login: React.FC = (): JSX.Element => {
   }, [loading]);
 
   const handleSubmit = (values: any) => {
-    //void fetchLogin({ body: values });
+    void fetchLogin({ body: values });
   };
 
   if (!form) {

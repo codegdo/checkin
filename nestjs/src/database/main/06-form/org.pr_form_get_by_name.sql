@@ -1,5 +1,5 @@
 -- CREATE PROCEDURE PR_FORM_FIELD_GET_BY_NAME
-CREATE OR REPLACE PROCEDURE org.pr_form_field_get_by_name(
+CREATE OR REPLACE PROCEDURE org.pr_form_get_by_name(
   p_name varchar,
   OUT data jsonb
 )
@@ -57,6 +57,7 @@ $BODY$
       field_type type,
       field_role role,
       field_data data,
+      field_value value,
       field_lookup lookup,
       field_map map,
       field_position position,

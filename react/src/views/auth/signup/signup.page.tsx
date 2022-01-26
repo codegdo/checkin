@@ -8,16 +8,22 @@ const Signup: React.FC = (): JSX.Element => {
 
   const { updateSession } = useAction();
   const [{ loading, result }, fetchSignup] = useFetch('/api/auth/signup');
+  const [{ loading: _loading, result: _result }, getForm] = useFetch('/api/auth/form/signup');
   const [form, setForm] = useState<FormData>();
   const [verified, setVerified] = useState(false);
 
-  // Load form
+  // load form
   useEffect(() => {
     void (async () => {
-      const json: any = (await import('./signup.page.json')).default;
-      setForm(json);
+      await getForm();
     })();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    if (_loading === 'success') {
+      setForm(_result.data);
+    }
+  }, [_loading]);
 
   useEffect(() => {
 
@@ -33,7 +39,9 @@ const Signup: React.FC = (): JSX.Element => {
   }, [loading]);
 
   const handleSubmit = (values: any) => {
-    void fetchSignup({ body: values });
+
+    console.log(values);
+    //void fetchSignup({ body: values });
   };
 
   if (!form) {
@@ -47,7 +55,7 @@ const Signup: React.FC = (): JSX.Element => {
   return (
     <>
       {loading === 'error' && <div>Error</div>}
-      <Form form={form} loading={loading} onSubmit={handleSubmit} />
+      <Form form={form} isKey={true} loading={loading} onSubmit={handleSubmit} />
     </>
   );
 };

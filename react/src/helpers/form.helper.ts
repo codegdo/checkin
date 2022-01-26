@@ -10,25 +10,25 @@ type MapField = {
 export const normalizeForm = (form: FormData): FormData => {
   const { data = [], fields = [] } = JSON.parse(JSON.stringify(form));
 
-  const list: any = [];
+  const list: any[] = [];
 
-  [...data].forEach((item) => {
+  data.forEach((item: any) => {
     return mapToParent(list, item);
   });
 
-  const group: any = arrayToObjectKeyGroup({ key: 'parentId', values: fields });
+  const group: { [key: string]: FieldData[] } = arrayToObjectKeyGroup({ key: 'parentId', values: fields });
 
   for (const key in group) {
-    if (group.hasOwnProperty(key)) {
-      list.find((i) => {
 
-        if (i.id === key) {
-          i.data = [...i.data, ...group[key]];
-          return;
-        }
+    list.find(item => {
 
-      });
-    }
+      if (item.id === key) {
+        item.data = [...item.data, ...group[key]];
+        return;
+      }
+
+    });
+
   }
 
   console.log(list);

@@ -1,7 +1,7 @@
 export type InputElementType = 'text' | 'number' | 'currency' | 'date' | 'password' | 'email';
 type BlockElementType = 'div' | 'section' | 'header' | 'main' | 'footer' | 'nav';
 type InlineElementType = 'button' | 'link' | 'label' | 'title';
-type RoleElementType = 'block' | 'field' | 'element';
+type RoleElementType = 'block' | 'field' | 'inline';
 
 // FIELD
 export type FieldType = {
@@ -18,11 +18,12 @@ export type FieldType = {
   defaultValue: string;
 
   position: number;
-  positionParent: number;
+  parentId: number;
 
   isRequired: boolean;
 
-  mapto: string;
+  map: string;
+  lookup: string;
 };
 
 export type FieldData = Partial<FieldType>;
@@ -52,7 +53,7 @@ export type BlockType = {
   data: any;
 
   position: number;
-  positionParent: number;
+  parentId: number;
 };
 
 export type BlockData = Partial<BlockType>;
@@ -75,7 +76,7 @@ export type ElementType = {
   value: string;
 
   position: number;
-  positionParent: number;
+  parentId: number;
 };
 
 export type ElementData = Partial<ElementType>;

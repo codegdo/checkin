@@ -10,8 +10,8 @@ export const FormContext = React.createContext<FormContextProps>(undefined);
 
 export const Form: React.FC<FormProps> = ({ form, loading, isKey = false, isMap = false, onSubmit, onCallback, children, ...props }): JSX.Element => {
 
+  const [data, setData] = useState(form || props);
 
-  const data = form && normalizeForm(form) || props;
   const { current: values } = useRef({});
   const { current: errors } = useRef({});
   const { current: formSchema } = useRef({});
@@ -47,7 +47,9 @@ export const Form: React.FC<FormProps> = ({ form, loading, isKey = false, isMap 
   }, []);
 
   useEffect(() => {
-    console.log(data);
+    if (form) {
+      setData(normalizeForm(form))
+    }
   }, []);
 
   return (
