@@ -39,9 +39,7 @@ const Signup: React.FC = (): JSX.Element => {
   }, [loading]);
 
   const handleSubmit = (values: any) => {
-
-    console.log(values);
-    //void fetchSignup({ body: values });
+    void fetchSignup({ body: { data: values } });
   };
 
   if (!form) {

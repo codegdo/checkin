@@ -25,33 +25,22 @@ export class UserRepository extends Repository<User> {
   }
 
   async signupUser(signupUserDto: SignupUserDto): Promise<SignupUserData> {
-    const {
-      firstName,
-      lastName,
-      emailAddress,
-      phoneNumber,
-      username,
-      password,
-    } = signupUserDto;
+    let { data } = signupUserDto;
 
-    const hashedPassword = await this.hashPassword(password);
+    //const hashedPassword = await this.hashPassword(data.password);
+
+    //data = { ...data, password: hashedPassword };
+
+    //console.log(data);
+    //'{"1":"liam","2":"123456","4":"liam","5":"do","6":"giangd@gmail.com","7":"8583571474"}'
 
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_signup($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
-      [
-        firstName,
-        lastName,
-        emailAddress,
-        phoneNumber,
-
-        username,
-        hashedPassword,
-
-        'null', 'null', 'null', '0'
-      ],
+      `CALL sec.pr_user_signup($1::json, $2::jsonb)`,
+      [JSON.stringify([{ "id": 1, "value": "gdo7" }, { "id": 2, "value": "123" }]), 'null']
     );
 
-    return trimObjectKey<SignupUserData>(result);
+    return result;
+    //return trimObjectKey<SignupUserData>(result);
   }
 
   async loginUser(loginUserDto: LoginUserDto): Promise<LoginUserData> {

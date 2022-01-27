@@ -26,6 +26,9 @@ export class AuthController {
   @Post('signup')
   //@Serialize(UserData)
   async signup(@Body() signupUserDto: SignupUserDto) {
+
+    console.log(signupUserDto);
+
     const {
       username,
       emailAddress = '',

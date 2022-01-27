@@ -1,5 +1,5 @@
-import { Exclude, Expose } from 'class-transformer';
-import { IsNumber, IsString } from 'class-validator';
+import { Exclude, Expose, Type } from 'class-transformer';
+import { IsDefined, IsNotEmptyObject, IsNumber, IsObject, IsString, ValidateNested } from 'class-validator';
 import { TokenData } from '../token/token.dto';
 
 export type TokenVerifyData = {
@@ -87,24 +87,34 @@ export class UserData {
   isOwner: boolean;
 }
 
-export class SignupUserDto {
-  @IsString()
+export class SignupFormData {
+
   firstName: string;
 
-  @IsString()
+
   lastName: string;
 
-  @IsString()
+
   emailAddress: string;
 
-  @IsString()
+
   phoneNumber: string;
 
-  @IsString()
+
   username: string;
 
-  @IsString()
+
   password: string;
+}
+
+
+export class SignupUserDto {
+
+  @IsObject()
+  @ValidateNested({ each: true })
+  @Type(() => SignupFormData)
+  data: SignupFormData
+
 }
 
 export class LoginUserDto {

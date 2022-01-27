@@ -5,3 +5,6 @@ https://8gwifi.org/RSAFunctionality?keysize=1024
 
 sudo lsof -i :3000
 kill -9 {PID}
+
+net stop winnat
+net start winnat
