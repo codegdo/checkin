@@ -1,5 +1,14 @@
 import { Exclude, Expose, Type } from 'class-transformer';
-import { IsDefined, IsNotEmptyObject, IsNumber, IsObject, IsString, ValidateNested } from 'class-validator';
+import {
+  IsDefined,
+  IsJSON,
+  IsNotEmpty,
+  IsNotEmptyObject,
+  IsNumber,
+  IsObject,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 import { TokenData } from '../token/token.dto';
 
 export type TokenVerifyData = {
@@ -29,20 +38,20 @@ export type SetupUserData = {
 
 export type LoginUserData =
   | {
-    id: number;
-    firstName: string;
-    lastName: string;
-    emailAddress: string;
-    phoneNumber: string;
-    username: string;
-    password: string;
-    roleId: number;
-    roleType: string;
-    orgId: number;
-    orgActive: boolean;
-    isActive: boolean;
-    isOwner: boolean;
-  }
+      id: number;
+      firstName: string;
+      lastName: string;
+      emailAddress: string;
+      phoneNumber: string;
+      username: string;
+      password: string;
+      roleId: number;
+      roleType: string;
+      orgId: number;
+      orgActive: boolean;
+      isActive: boolean;
+      isOwner: boolean;
+    }
   | null
   | undefined;
 
@@ -88,33 +97,29 @@ export class UserData {
 }
 
 export class SignupFormData {
-
   firstName: string;
-
 
   lastName: string;
 
-
   emailAddress: string;
-
 
   phoneNumber: string;
 
-
   username: string;
-
 
   password: string;
 }
 
-
 export class SignupUserDto {
+  //@IsObject()
+  //@ValidateNested({ each: true })
+  //@Type(() => SignupFormData)
+  //data: SignupFormData
 
-  @IsObject()
-  @ValidateNested({ each: true })
-  @Type(() => SignupFormData)
-  data: SignupFormData
-
+  @IsJSON()
+  @IsNotEmpty()
+  @IsString()
+  data: string;
 }
 
 export class LoginUserDto {
@@ -195,6 +200,3 @@ export class UpdateUserDto {
   @IsNumber()
   orgId: number;
 }
-
-
-

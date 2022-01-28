@@ -84,7 +84,7 @@ import { ErrorModule } from './common/modules/error/error.module';
     {
       provide: APP_PIPE,
       useValue: new ValidationPipe({
-        //whitelist: true,
+        whitelist: true,
         transform: true,
         forbidNonWhitelisted: true,
         transformOptions: {
@@ -95,7 +95,7 @@ import { ErrorModule } from './common/modules/error/error.module';
   ],
 })
 export class AppModule {
-  constructor() { }
+  constructor() {}
 
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');

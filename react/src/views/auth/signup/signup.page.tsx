@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useAction, useFetch } from '../../../hooks';
 import { Form, FormData } from '../../../components/form';
 import { Navigate } from 'react-router-dom';
+import { objectToKeyValue } from '../../../utils';
 
 const Signup: React.FC = (): JSX.Element => {
 
@@ -39,7 +40,12 @@ const Signup: React.FC = (): JSX.Element => {
   }, [loading]);
 
   const handleSubmit = (values: any) => {
-    void fetchSignup({ body: { data: values } });
+    console.log(objectToKeyValue(values));
+    void fetchSignup({
+      body: {
+        data: JSON.stringify(objectToKeyValue(values))
+      }
+    });
   };
 
   if (!form) {

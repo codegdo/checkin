@@ -71,10 +71,8 @@ $BODY$
     INTO data
     FROM (
       SELECT 
-        id, 
         username, 
         is_active "isActive", 
-        contact_id "contactId", 
         phone_number "phoneNumber", 
         email_address "emailAddress"
       FROM u LEFT JOIN c on c.id = u.contact_id

@@ -4,14 +4,20 @@ import { promisify } from 'util';
 import { User } from './user.entity';
 import { LoginUserDto, SignupUserDto } from '../dtos';
 import { trimObjectKey } from 'src/common/utils';
-import { SignupUserData, ConfirmUserData, VerifyUserData, LoginUserData, SetupUserDto, SetupUserData } from './user.dto';
+import {
+  SignupUserData,
+  ConfirmUserData,
+  VerifyUserData,
+  LoginUserData,
+  SetupUserDto,
+  SetupUserData,
+} from './user.dto';
 import { TokenType } from '../token/token.dto';
 
 const scrypt = promisify(_scrypt);
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-
   async hashPassword(password) {
     const salt = randomBytes(8).toString('hex');
     const hash = (await scrypt(password, salt, 32)) as Buffer;
@@ -36,10 +42,14 @@ export class UserRepository extends Repository<User> {
 
     const [result] = await this.manager.query(
       `CALL sec.pr_user_signup($1::json, $2::jsonb)`,
-      [JSON.stringify([{ "id": 1, "value": "gdo7" }, { "id": 2, "value": "123" }]), 'null']
+      [data, 'null'],
     );
 
-    return result;
+    const [signupUserData] = result?.data;
+
+    console.log('SIGNUP RETURN', signupUserData);
+
+    return signupUserData;
     //return trimObjectKey<SignupUserData>(result);
   }
 
@@ -66,13 +76,7 @@ export class UserRepository extends Repository<User> {
 
     const [result] = await this.manager.query(
       `SELECT * FROM sec.fn_user_verify($1, $2, $3, $4, $5)`,
-      [
-        username,
-        key,
-        type,
-        data,
-        expiredAt
-      ],
+      [username, key, type, data, expiredAt],
     );
 
     return result;
@@ -97,7 +101,7 @@ export class UserRepository extends Repository<User> {
       country,
       state,
       city,
-      postalCode
+      postalCode,
     } = setupUserDto;
 
     const [result] = await this.manager.query(
@@ -113,7 +117,9 @@ export class UserRepository extends Repository<User> {
         city,
         postalCode,
 
-        'null', '0', '0'
+        'null',
+        '0',
+        '0',
       ],
     );
 
@@ -121,11 +127,13 @@ export class UserRepository extends Repository<User> {
   }
 
   async getUser(username: string) {
-    const [user] = await this.manager.query(`SELECT * FROM sec.fn_user_get($1)`, [username]);
+    const [user] = await this.manager.query(
+      `SELECT * FROM sec.fn_user_get($1)`,
+      [username],
+    );
     return user;
   }
 }
-
 
 /*
   // signup
