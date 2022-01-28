@@ -11,15 +11,21 @@ const Setup: React.FC = (): JSX.Element => {
   const { updateSession } = useAction();
 
   const [{ loading, result }, fetchSetup] = useFetch('/api/auth/setup');
+  const [{ loading: _loading, result: _result }, getForm] = useFetch('/api/auth/form/auth_setup');
   const [form, setForm] = useState<FormData>();
 
-  // Load form
+  // load form
   useEffect(() => {
     void (async () => {
-      const json: any = (await import('./setup.page.json')).default;
-      setForm(json);
+      await getForm();
     })();
   }, []);
+
+  useEffect(() => {
+    if (_loading === 'success') {
+      setForm(_result.data);
+    }
+  }, [_loading]);
 
   useEffect(() => {
     if (loading == 'success') {
@@ -52,7 +58,7 @@ const Setup: React.FC = (): JSX.Element => {
 
   return <>
     {loading === 'error' && <div>Error</div>}
-    <Form form={form} loading={loading} onSubmit={handleSubmit} />
+    <Form form={form} isKey={true} loading={loading} onSubmit={handleSubmit} />
   </>
 }
 

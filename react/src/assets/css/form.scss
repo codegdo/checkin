@@ -34,7 +34,7 @@
 
 // MODIFIER
 .form {
-  &.-error {
+  &._error {
     .input-message {
       display: block;
       color: $red-medium;

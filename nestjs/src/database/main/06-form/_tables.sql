@@ -49,38 +49,38 @@ CREATE TABLE IF NOT EXISTS org.form (
 
   data JSONB NOT NULL DEFAULT '[
     {
-      "id": "f-header", 
-      "type": "header", 
-      "role": "block", 
-      "data": [], 
-      "position": 0, 
+      "id": "f-header",
+      "type": "header",
+      "role": "block",
+      "data": [],
+      "position": 0,
       "parentId": null
     },
     {
-      "id": "f-main", 
-      "type": "main", 
-      "role": "block", 
-      "data": [], 
-      "position": 1, 
+      "id": "f-main",
+      "type": "main",
+      "role": "block",
+      "data": [],
+      "position": 1,
       "parentId": null
     },
     {
-      "id": "f-footer", 
-      "type": "footer", 
-      "role": "block", 
-      "data": [], 
-      "position": 2, 
+      "id": "f-footer",
+      "type": "footer",
+      "role": "block",
+      "data": [],
+      "position": 2,
       "parentId": null
     },
     {
-      "id": "f-button", 
+      "id": "f-button",
       "label": "Submit",
       "name": "submit",
-      "type": "button", 
-      "role": "inline", 
-      "data": null, 
+      "type": "button",
+      "role": "inline",
+      "data": null,
       "value": null,
-      "position": 3, 
+      "position": 3,
       "parentId": "f-footer"
     }
   ]'::jsonb,
@@ -102,8 +102,8 @@ CREATE TABLE IF NOT EXISTS org.form (
 INSERT
 INTO org.form (name, label, description, form_type_id, org_id, is_active)
 VALUES
-('login', 'Login', null, '1', null, '1'),
-('signup', 'Signup', null, '1', null, '1');
+('auth_signup', 'Signup', null, '1', null, '1'),
+('auth_setup', 'Setup', null, '1', null, '1');
 
 -- CREATE TABLE FIELD
 CREATE TABLE IF NOT EXISTS org.field (
@@ -137,20 +137,40 @@ CREATE TABLE IF NOT EXISTS org.field (
 INSERT
 INTO org.field (name, role, type, map, lookup, is_required, object_id)
 VALUES
---user
+--user=1
 ('username', 'field', 'text', 'sec.user.username', null, '1', '1'),
 ('password', 'field', 'password', 'sec.user.password', null, '1', '1'),
 ('passcode', 'field', 'text', 'sec.user.passcode', null, '1', '1'),
---contact
-('first_name', 'field', 'text', 'org.contact.first_name', null, '1', '2'),
-('last_name', 'field', 'text', 'org.contact.last_name', null, '1', '2'),
-('email_address', 'field', 'text', 'org.contact.email_address', null, '1', '2'),
-('phone_number', 'field', 'text', 'org.contact.phone_number', null, '1', '2'),
-('street_address', 'field', 'text', 'org.contact.street_address', null, '1', '2'),
-('country', 'field', 'text', 'org.contact.territory', 'dbo.territory.country.country_code', '1', '2'),
-('state', 'field', 'text', 'org.contact.territory', 'dbo.territory.state.state_code', '1', '2'),
-('city', 'field', 'text', 'org.contact.city', null, '1', '2'),
-('postal_code', 'field', 'text', 'org.contact.postal_code', null, '1', '2');
+--contact=2
+('firstName', 'field', 'text', 'org.contact.first_name', null, '1', '2'),
+('lastName', 'field', 'text', 'org.contact.last_name', null, '1', '2'),
+('emailAddress', 'field', 'text', 'org.contact.email_address', null, '1', '2'),
+('phoneNumber', 'field', 'text', 'org.contact.phone_number', null, '1', '2'),
+('streetAddress', 'field', 'text', 'org.contact.street_address', null, '0', '2'),
+('country', 'field', 'text', 'org.contact.territory', 'dbo.territory.country.country_code', '0', '2'),
+('state', 'field', 'text', 'org.contact.territory', 'dbo.territory.state.state_code', '0', '2'),
+('city', 'field', 'text', 'org.contact.city', null, '0', '2'),
+('postalCode', 'field', 'text', 'org.contact.postal_code', null, '0', '2'),
+--organization=15
+('name', 'field', 'text', 'sec.organization.name', null, '1', '15'),
+('streetAddress', 'field', 'text', 'sec.organization.street_address', null, '0', '15'),
+('country', 'field', 'text', 'sec.organization.territory', 'dbo.territory.country.country_code', '0', '15'),
+('state', 'field', 'text', 'sec.organization.territory', 'dbo.territory.state.state_code', '0', '15'),
+('city', 'field', 'text', 'sec.organization.city', null, '0', '15'),
+('postalCode', 'field', 'text', 'sec.organization.postal_code', null, '0', '15'),
+('phoneNumber', 'field', 'text', 'sec.organization.phone_number', null, '0', '15'),
+('faxNumber', 'field', 'text', 'sec.organization.fax_number', null, '0', '15'),
+('website', 'field', 'text', 'sec.organization.website', null, '0', '15'),
+('subdomain', 'field', 'text', 'sec.organization.subdomain', null, '1', '15'),
+--workspace=6
+('name', 'field', 'text', 'org.workspace.name', null, '1', '6'),
+('streetAddress', 'field', 'text', 'org.workspace.street_address', null, '0', '6'),
+('country', 'field', 'text', 'org.workspace.country', null, '0', '6'),
+('state', 'field', 'text', 'org.workspace.state', null, '0', '6'),
+('city', 'field', 'text', 'org.workspace.city', null, '0', '6'),
+('postalCode', 'field', 'text', 'org.workspace.postal_code', null, '0', '6'),
+('phoneNumber', 'field', 'text', 'org.workspace.phone_number', null, '0', '6'),
+('faxNumber', 'field', 'text', 'org.workspace.fax_number', null, '0', '6');
 
 -- CREATE TABLE FORM_FIELD
 CREATE TABLE IF NOT EXISTS org.form_field (
@@ -179,16 +199,22 @@ CREATE INDEX idx_form_field  ON org.form_field (form_id, field_id);
 INSERT
 INTO org.form_field(form_id, field_id, label, position)
 VALUES
---login
-('1', '1', 'Username', '0'),
-('1', '2', 'Password', '1'),
---signup
-('2', '4', 'First Name', '0'),
-('2', '5', 'Last Name', '1'),
-('2', '1', 'Username', '2'),
-('2', '2', 'Password', '3'),
-('2', '6', 'Email Address', '4'),
-('2', '7', 'Phone Number', '5');
+--auth_signup
+('1', '4', 'First Name', '0'),
+('1', '5', 'Last Name', '1'),
+('1', '1', 'Username', '2'),
+('1', '2', 'Password', '3'),
+('1', '6', 'Email Address', '4'),
+('1', '7', 'Phone Number', '5'),
+--auth_setup
+('2', '13', 'Organization Name', '0'),
+('2', '22', 'Subdomain', '1'),
+('2', '23', 'Location Name', '2'),
+('2', '24', 'Street Address', '3'),
+('2', '25', 'Country', '4'),
+('2', '26', 'State', '5'),
+('2', '27', 'City', '6'),
+('2', '28', 'Postal Code', '7');
 
 
 

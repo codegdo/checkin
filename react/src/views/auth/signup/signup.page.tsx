@@ -9,7 +9,7 @@ const Signup: React.FC = (): JSX.Element => {
 
   const { updateSession } = useAction();
   const [{ loading, result }, fetchSignup] = useFetch('/api/auth/signup');
-  const [{ loading: _loading, result: _result }, getForm] = useFetch('/api/auth/form/signup');
+  const [{ loading: _loading, result: _result }, getForm] = useFetch('/api/auth/form/auth_signup');
   const [form, setForm] = useState<FormData>();
   const [verified, setVerified] = useState(false);
 

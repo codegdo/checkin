@@ -30,17 +30,37 @@ CREATE TABLE IF NOT EXISTS org.field (
 INSERT
 INTO org.field (name, role, type, map, lookup, is_required, object_id)
 VALUES
---user
+--user=1
 ('username', 'field', 'text', 'sec.user.username', null, '1', '1'),
 ('password', 'field', 'password', 'sec.user.password', null, '1', '1'),
 ('passcode', 'field', 'text', 'sec.user.passcode', null, '1', '1'),
---contact
-('first_name', 'field', 'text', 'org.contact.first_name', null, '1', '2'),
-('last_name', 'field', 'text', 'org.contact.last_name', null, '1', '2'),
-('email_address', 'field', 'text', 'org.contact.email_address', null, '1', '2'),
-('phone_number', 'field', 'text', 'org.contact.phone_number', null, '1', '2'),
-('street_address', 'field', 'text', 'org.contact.street_address', null, '1', '2'),
-('country', 'field', 'text', 'org.contact.territory', 'dbo.territory.country.country_code', '1', '2'),
-('state', 'field', 'text', 'org.contact.territory', 'dbo.territory.state.state_code', '1', '2'),
-('city', 'field', 'text', 'org.contact.city', null, '1', '2'),
-('postal_code', 'field', 'text', 'org.contact.postal_code', null, '1', '2');
+--contact=2
+('firstName', 'field', 'text', 'org.contact.first_name', null, '1', '2'),
+('lastName', 'field', 'text', 'org.contact.last_name', null, '1', '2'),
+('emailAddress', 'field', 'text', 'org.contact.email_address', null, '1', '2'),
+('phoneNumber', 'field', 'text', 'org.contact.phone_number', null, '1', '2'),
+('streetAddress', 'field', 'text', 'org.contact.street_address', null, '0', '2'),
+('country', 'field', 'text', 'org.contact.territory', 'dbo.territory.country.country_code', '0', '2'),
+('state', 'field', 'text', 'org.contact.territory', 'dbo.territory.state.state_code', '0', '2'),
+('city', 'field', 'text', 'org.contact.city', null, '0', '2'),
+('postalCode', 'field', 'text', 'org.contact.postal_code', null, '0', '2'),
+--organization=15
+('name', 'field', 'text', 'sec.organization.name', null, '1', '15'),
+('streetAddress', 'field', 'text', 'sec.organization.street_address', null, '0', '15'),
+('country', 'field', 'text', 'sec.organization.territory', 'dbo.territory.country.country_code', '0', '15'),
+('state', 'field', 'text', 'sec.organization.territory', 'dbo.territory.state.state_code', '0', '15'),
+('city', 'field', 'text', 'sec.organization.city', null, '0', '15'),
+('postalCode', 'field', 'text', 'sec.organization.postal_code', null, '0', '15'),
+('phoneNumber', 'field', 'text', 'sec.organization.phone_number', null, '0', '15'),
+('faxNumber', 'field', 'text', 'sec.organization.fax_number', null, '0', '15'),
+('website', 'field', 'text', 'sec.organization.website', null, '0', '15'),
+('subdomain', 'field', 'text', 'sec.organization.subdomain', null, '1', '15'),
+--workspace=6
+('name', 'field', 'text', 'org.workspace.name', null, '1', '6'),
+('streetAddress', 'field', 'text', 'org.workspace.street_address', null, '0', '6'),
+('country', 'field', 'text', 'org.workspace.country', null, '0', '6'),
+('state', 'field', 'text', 'org.workspace.state', null, '0', '6'),
+('city', 'field', 'text', 'org.workspace.city', null, '0', '6'),
+('postalCode', 'field', 'text', 'org.workspace.postal_code', null, '0', '6'),
+('phoneNumber', 'field', 'text', 'org.workspace.phone_number', null, '0', '6'),
+('faxNumber', 'field', 'text', 'org.workspace.fax_number', null, '0', '6');

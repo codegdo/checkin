@@ -50,7 +50,7 @@ export const Form: React.FC<FormProps> = ({ form, loading, isKey = false, isMap 
     if (form) {
       setData(normalizeForm(form))
     }
-  }, []);
+  }, [form]);
 
   return (
     <form>

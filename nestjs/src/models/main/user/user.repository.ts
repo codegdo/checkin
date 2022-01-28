@@ -1,9 +1,9 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { randomBytes, randomInt, scrypt as _scrypt } from 'crypto';
-import { promisify } from 'util';
+import { randomInt } from 'crypto';
 import { User } from './user.entity';
 import { LoginUserDto, SignupUserDto } from '../dtos';
-import { trimObjectKey } from 'src/common/utils';
+import { hashKeyValue, trimObjectKey, validatePassword } from 'src/common/utils';
+
 import {
   SignupUserData,
   ConfirmUserData,
@@ -14,31 +14,13 @@ import {
 } from './user.dto';
 import { TokenType } from '../token/token.dto';
 
-const scrypt = promisify(_scrypt);
-
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-  async hashPassword(password) {
-    const salt = randomBytes(8).toString('hex');
-    const hash = (await scrypt(password, salt, 32)) as Buffer;
-    return hash.toString('hex') + '.' + salt;
-  }
-
-  async validatePassword(password: string, _password: string) {
-    const [hashPassword, salt] = _password.split('.');
-    const hash = (await scrypt(password, salt, 32)) as Buffer;
-    return hashPassword === hash.toString('hex');
-  }
 
   async signupUser(signupUserDto: SignupUserDto): Promise<SignupUserData> {
     let { data } = signupUserDto;
 
-    //const hashedPassword = await this.hashPassword(data.password);
-
-    //data = { ...data, password: hashedPassword };
-
-    //console.log(data);
-    //'{"1":"liam","2":"123456","4":"liam","5":"do","6":"giangd@gmail.com","7":"8583571474"}'
+    data = await hashKeyValue(2, data);
 
     const [result] = await this.manager.query(
       `CALL sec.pr_user_signup($1::json, $2::jsonb)`,
@@ -47,8 +29,6 @@ export class UserRepository extends Repository<User> {
 
     const [signupUserData] = result?.data;
 
-    console.log('SIGNUP RETURN', signupUserData);
-
     return signupUserData;
     //return trimObjectKey<SignupUserData>(result);
   }
@@ -56,13 +36,14 @@ export class UserRepository extends Repository<User> {
   async loginUser(loginUserDto: LoginUserDto): Promise<LoginUserData> {
     const { username, password } = loginUserDto;
     const user = await this.getUser(username);
+
     if (!user) {
       return undefined;
     }
 
     const { password: _password, ..._user } = user;
 
-    return (await this.validatePassword(password, _password)) ? _user : null;
+    return (await validatePassword(password, _password)) ? _user : null;
   }
 
   async verifyUser(username: string): Promise<VerifyUserData> {

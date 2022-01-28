@@ -5,43 +5,43 @@
   "name": "login",
   "data": [
     {
-      "id": 2,
+      "id": "f-header",
       "type": "header",
       "role": "block",
       "data": [],
       "position": 0,
-      "positionParent": null
+      "parentId": null
     },
     {
-      "id": 3,
+      "id": "f-main",
       "type": "main",
       "role": "block",
       "data": [],
       "position": 1,
-      "positionParent": null
+      "parentId": null
     },
     {
-      "id": 4,
+      "id": "f-footer",
       "type": "footer",
       "role": "block",
       "data": [],
       "position": 2,
-      "positionParent": null
+      "parentId": null
     },
     {
-      "id": 5,
-      "label": null,
-      "name": "Login",
+      "id": "f-title",
+      "label": "Login",
+      "name": "login",
       "description": null,
       "type": "title",
       "role": "inline",
       "data": [],
       "value": null,
       "position": 0,
-      "parentId": 0
+      "parentId": "f-header"
     },
     {
-      "id": 6,
+      "id": "f-submit",
       "label": "Login",
       "name": "submit",
       "type": "button",
@@ -49,10 +49,10 @@
       "data": [],
       "value": null,
       "position": 0,
-      "parentId": 2
+      "parentId": "f-footer"
     },
     {
-      "id": 7,
+      "id": "f-signup",
       "label": "Signup",
       "name": null,
       "description": null,
@@ -61,7 +61,7 @@
       "data": null,
       "value": "/auth/signup",
       "position": 0,
-      "parentId": 2
+      "parentId": "f-footer"
     }
   ],
   "fields": [
@@ -76,7 +76,7 @@
       "value": "",
       "isRequired": true,
       "position": 0,
-      "parentId": 1,
+      "parentId": "f-main",
       "map": "sec.user.username",
       "lookup": null
     },
@@ -91,7 +91,7 @@
       "value": "",
       "isRequired": true,
       "position": 0,
-      "parentId": 1,
+      "parentId": "f-main",
       "map": "sec.user.password",
       "lookup": null
     }

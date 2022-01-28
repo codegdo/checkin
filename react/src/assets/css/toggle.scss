@@ -20,12 +20,12 @@
 
   display: none;
 
-  &.-right {
+  &._right {
     left: auto;
     right: 0;
   }
 
-  &.-full {
+  &._full {
     position: fixed;
     top: 70px;
     right: 0;

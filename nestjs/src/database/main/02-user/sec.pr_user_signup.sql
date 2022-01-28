@@ -14,8 +14,8 @@ $BODY$
     -- JSON p_form_data to table tmp_form_data
     DROP TABLE IF EXISTS tmp_form_data CASCADE;
     CREATE TEMP TABLE tmp_form_data AS
-    SELECT * FROM json_to_recordset(p_form_data)
-    AS rec ("id" int, "value" text);
+    SELECT key AS id, value FROM json_to_recordset(p_form_data)
+    AS rec ("key" int, "value" text);
 
     -- CREATE a table tmp_data
     DROP TABLE IF EXISTS tmp_data CASCADE;
@@ -70,10 +70,10 @@ $BODY$
     SELECT json_agg(r)::jsonb
     INTO data
     FROM (
-      SELECT 
-        username, 
-        is_active "isActive", 
-        phone_number "phoneNumber", 
+      SELECT
+        username,
+        is_active "isActive",
+        phone_number "phoneNumber",
         email_address "emailAddress"
       FROM u LEFT JOIN c on c.id = u.contact_id
     ) r;
@@ -85,7 +85,7 @@ LANGUAGE plpgsql;
 
 
 
-CALL sec.pr_user_signup('[{"id":1, "value":"gdo4"},{"id":2, "value":"123"}]'::json, null::jsonb);
+CALL sec.pr_user_signup('[{"key":1, "value":"gdo4"},{"key":2, "value":"123"}]'::json, null::jsonb);
 
 DROP PROCEDURE IF EXISTS sec.pr_user_signup(json, jsonb);
 

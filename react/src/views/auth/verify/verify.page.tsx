@@ -20,12 +20,12 @@ const Verify: React.FC = (): JSX.Element => {
   useEffect(() => {
     void (async () => {
       const json: any = (await import('./verify.page.json')).default;
-      const values = objectToKeyValue({ keys: ['emailAddress', 'phoneNumber'], values: { ...user } });
+      const values = objectToKeyValue({ ...user }, ['emailAddress', 'phoneNumber']);
 
       console.log(values);
 
       const mapField = {
-        name: 'verifyOption',
+        key: 'verifyOption',
         value: 'phoneNumber',
         data: values
       };

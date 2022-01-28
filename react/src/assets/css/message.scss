@@ -4,11 +4,11 @@
 
   @include transition();
 
-  &.-error {
+  &._error {
     background-color: $red;
     color: $white;
   }
-  &.-success {
+  &._success {
     background-color: $green;
     color: $white;
   }

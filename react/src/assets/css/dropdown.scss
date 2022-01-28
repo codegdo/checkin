@@ -20,12 +20,12 @@
 
   display: none;
 
-  &.-right {
+  &._right {
     left: auto;
     right: 0;
   }
 
-  &.-full {
+  &._full {
     position: fixed;
     top: 0;
     right: 0;
@@ -40,7 +40,7 @@
     @include fadein();
   }
 
-  &[aria-expanded='true'].-full {
+  &[aria-expanded='true']._full {
     top: 70px;
     @include slidedown();
   }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
@@ -8,29 +8,21 @@ import { AppState } from '../../../store/reducers';
 import { Form, FormData } from '../../../components/form';
 
 const Login: React.FC = (): JSX.Element => {
-  const { loggedIn, user, orgId } = useSelector((state: AppState) => state.session);
+  const { loggedIn } = useSelector((state: AppState) => state.session);
   const { updateSession } = useAction();
 
   const [form, setForm] = useState<FormData>();
   const [{ loading, result }, fetchLogin] = useFetch('/api/auth/login');
-  const [{ loading: _loading, result: _result }, getForm] = useFetch('/api/auth/form/login');
   const [verified, setVerified] = useState(true);
   const [completed, setCompleted] = useState(true);
 
   // load form
   useEffect(() => {
     void (async () => {
-      await getForm();
-      //const json: any = (await import('./login.page.json')).default;
-      //setForm(json);
+      const json: any = (await import('./login.page.json')).default;
+      setForm(json);
     })();
   }, []);
-
-  useEffect(() => {
-    if (_loading === 'success') {
-      setForm(_result.data);
-    }
-  }, [_loading]);
 
   useEffect(() => {
     if (loading === 'success') {

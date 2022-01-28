@@ -25,13 +25,19 @@ CREATE INDEX idx_form_field  ON org.form_field (form_id, field_id);
 INSERT
 INTO org.form_field(form_id, field_id, label, position)
 VALUES
---login
-('1', '1', 'Username', '0'),
-('1', '2', 'Password', '1'),
---signup
-('2', '4', 'First Name', '0'),
-('2', '5', 'Last Name', '1'),
-('2', '1', 'Username', '2'),
-('2', '2', 'Password', '3'),
-('2', '6', 'Email Address', '4'),
-('2', '7', 'Phone Number', '5');
+--auth_signup
+('1', '4', 'First Name', '0'),
+('1', '5', 'Last Name', '1'),
+('1', '1', 'Username', '2'),
+('1', '2', 'Password', '3'),
+('1', '6', 'Email Address', '4'),
+('1', '7', 'Phone Number', '5'),
+--auth_setup
+('2', '13', 'Organization Name', '0'),
+('2', '22', 'Subdomain', '1'),
+('2', '23', 'Location Name', '2'),
+('2', '24', 'Street Address', '3'),
+('2', '25', 'Country', '4'),
+('2', '26', 'State', '5'),
+('2', '27', 'City', '6'),
+('2', '28', 'Postal Code', '7');

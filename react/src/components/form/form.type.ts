@@ -62,8 +62,8 @@ export type BlockProps = {
   block?: BlockData;
 } & BlockData;
 
-// ELEMENT
-export type ElementType = {
+// INLINE
+export type InlineType = {
   id: number;
   label: string;
   name: string;
@@ -79,11 +79,11 @@ export type ElementType = {
   parentId: number;
 };
 
-export type ElementData = Partial<ElementType>;
+export type InlineData = Partial<InlineType>;
 
-export type ElementProps = {
-  element?: ElementData;
-} & ElementData;
+export type InlineProps = {
+  inline?: InlineData;
+} & InlineData;
 
 // FORM
 export type FormType = {
