@@ -36,7 +36,7 @@ export const normalizeForm = (form: FormData): FormData => {
   return { ...form, data: list };
 };
 
-export const mapDataToField = (
+export const mapDataToFields = (
   fields: FieldData[],
   { key, value, data }: MapField
 ): void => {

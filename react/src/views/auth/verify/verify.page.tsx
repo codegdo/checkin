@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 import { Form, FormData } from '../../../components/form';
-import { mapDataToField } from '../../../helpers';
+import { mapDataToFields } from '../../../helpers';
 import { useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 import { objectToKeyValue } from '../../../utils';
@@ -22,17 +22,13 @@ const Verify: React.FC = (): JSX.Element => {
       const json: any = (await import('./verify.page.json')).default;
       const values = objectToKeyValue({ ...user }, ['emailAddress', 'phoneNumber']);
 
-      console.log(values);
-
-      const mapField = {
-        key: 'verifyOption',
+      const mapFields = {
+        key: 'option',
         value: 'phoneNumber',
         data: values
       };
 
-      mapDataToField(json.fields, mapField);
-
-      console.log(json);
+      mapDataToFields(json.fields, mapFields);
 
       setForm(json);
     })();

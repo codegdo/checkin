@@ -1,10 +1,10 @@
-export enum MessageType {
+export enum MessageEnum {
   MESSAGE = 'message',
   EMAIL = 'email',
 }
 
 export type MessageOptions<T> = {
-  type: MessageType;
+  type: MessageEnum;
   context: T;
 };
 

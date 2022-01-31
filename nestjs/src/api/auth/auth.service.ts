@@ -22,10 +22,10 @@ import {
 } from 'src/models/main/repositories';
 //import { CheckinRepository } from 'src/models/checkin/repositories';
 import {
-  ErrorMessageType,
+  ErrorMessageEnum,
   ErrorService,
   MessageAuthService,
-  MessageType,
+  MessageEnum,
 } from 'src/common/modules';
 import {
   LoginUserDto,
@@ -72,7 +72,7 @@ export class AuthService {
 
     private readonly messageService: MessageAuthService,
     private readonly errorService: ErrorService,
-  ) {}
+  ) { }
 
   async form(name: string) {
     try {
@@ -84,42 +84,42 @@ export class AuthService {
 
   async signup(signupUserDto: SignupUserDto) {
     try {
-      const result = await this.userRepository.signupUser(signupUserDto);
+      const data = await this.userRepository.signupUser(signupUserDto);
 
-      if (!result) {
-        throw new NotFoundException(ErrorMessageType.NOT_FOUND);
+      if (!data) {
+        throw new NotFoundException(ErrorMessageEnum.NOT_FOUND);
       }
 
-      return result;
+      return data;
     } catch (e) {
       this.errorService.handleError(e);
     }
   }
 
-  async login(loginUserDto: LoginUserDto) {
-    const user = await this.userRepository.loginUser(loginUserDto);
+  async login(dto: LoginUserDto) {
+    const user = await this.userRepository.loginUser(dto);
     const { orgId, orgActive, isActive } = user;
 
     if (!user) {
-      throw new NotFoundException(ErrorMessageType.NOT_FOUND);
+      throw new NotFoundException(ErrorMessageEnum.NOT_FOUND);
     }
 
     if (orgId && !orgActive) {
-      throw new BadRequestException(ErrorMessageType.ORGANIZATION_RESTRICT);
+      throw new BadRequestException(ErrorMessageEnum.ORGANIZATION_RESTRICT);
     }
 
     if (orgId && !isActive) {
-      throw new BadRequestException(ErrorMessageType.ACCOUNT_RESTRICT);
+      throw new BadRequestException(ErrorMessageEnum.ACCOUNT_RESTRICT);
     }
 
     return user;
   }
 
-  async verify(verifyUserDto: VerifyUserDto) {
-    const { verifyOption: v, username } = verifyUserDto;
+  async verify(dto: VerifyUserDto) {
+    const { option, username } = dto;
 
     try {
-      const type = v == 'phoneNumber' ? MessageType.MESSAGE : MessageType.EMAIL;
+      const type = (option == 'phoneNumber') ? MessageEnum.MESSAGE : MessageEnum.EMAIL;
       const context = await this.userRepository.verifyUser(username);
 
       return this.messageService.sendMessageVerify({ type, context });

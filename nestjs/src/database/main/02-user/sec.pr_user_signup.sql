@@ -6,8 +6,6 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
 AS
 $BODY$
   DECLARE
-    _userid int;
-    _username varchar;
     _role_id int := 2;
   BEGIN
 
@@ -71,11 +69,11 @@ $BODY$
     INTO data
     FROM (
       SELECT
-        id,
-        username,
-        is_active "isActive",
-        phone_number "phoneNumber",
-        email_address "emailAddress"
+        u.id,
+        u.username,
+        u.is_active "isActive",
+        c.phone_number "phoneNumber",
+        c.email_address "emailAddress"
       FROM u LEFT JOIN c on c.id = u.contact_id
     ) r;
 

@@ -1,6 +1,6 @@
 import { hashPassword } from "./hash-and-validate.util";
 
-export const hashKeyValue = async (key: string | number, json: string): Promise<string> => {
+export const encryptKeyValue = async (key: string | number, json: string): Promise<string> => {
   const data = JSON.parse(json);
 
   let item = data.find((i) => {

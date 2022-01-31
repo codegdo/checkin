@@ -40,7 +40,7 @@ const Signup: React.FC = (): JSX.Element => {
   }, [loading]);
 
   const handleSubmit = (values: any) => {
-    console.log(objectToKeyValue(values));
+    //console.log(objectToKeyValue(values));
     void fetchSignup({
       body: {
         data: JSON.stringify(objectToKeyValue(values))

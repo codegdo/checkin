@@ -29,7 +29,7 @@ export type SignupUserData = {
   emailAddress: string;
   phoneNumber: string;
   isActive: boolean;
-};
+} | undefined;
 
 export type SetupUserData = {
   username: string;
@@ -39,20 +39,20 @@ export type SetupUserData = {
 
 export type LoginUserData =
   | {
-      id: number;
-      firstName: string;
-      lastName: string;
-      emailAddress: string;
-      phoneNumber: string;
-      username: string;
-      password: string;
-      roleId: number;
-      roleType: string;
-      orgId: number;
-      orgActive: boolean;
-      isActive: boolean;
-      isOwner: boolean;
-    }
+    id: number;
+    firstName: string;
+    lastName: string;
+    emailAddress: string;
+    phoneNumber: string;
+    username: string;
+    password: string;
+    roleId: number;
+    roleType: string;
+    orgId: number;
+    orgActive: boolean;
+    isActive: boolean;
+    isOwner: boolean;
+  }
   | null
   | undefined;
 
@@ -133,7 +133,7 @@ export class LoginUserDto {
 
 export class VerifyUserDto {
   @IsString()
-  verifyOption: string;
+  option: string;
 
   @IsString()
   username: string;

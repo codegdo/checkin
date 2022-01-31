@@ -3,7 +3,7 @@ import { randomInt } from 'crypto';
 import { User } from './user.entity';
 import { LoginUserDto, SignupUserDto } from '../dtos';
 import {
-  hashKeyValue,
+  encryptKeyValue,
   trimObjectKey,
   validatePassword,
 } from 'src/common/utils';
@@ -16,39 +16,39 @@ import {
   SetupUserDto,
   SetupUserData,
 } from './user.dto';
-import { TokenType } from '../token/token.dto';
+import { TokenEnum } from '../token/token.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-  async signupUser(
-    signupUserDto: SignupUserDto,
-  ): Promise<[SignupUserData] | null> {
-    let { data } = signupUserDto;
+  async signupUser(dto: SignupUserDto): Promise<SignupUserData> {
+    let { data } = dto;
 
-    data = await hashKeyValue(2, data);
+    // encrypt password
+    data = await encryptKeyValue(2, data);
 
     const [result] = await this.manager.query(
       `CALL sec.pr_user_signup($1::json, $2::jsonb)`,
       [data, 'null'],
     );
 
-    //const [signupUserData] = result?.data;
+    if (!result.data) {
+      return null;
+    }
 
-    return result;
-    //return trimObjectKey<SignupUserData>(result);
+    return result.data[0];
   }
 
-  async loginUser(loginUserDto: LoginUserDto): Promise<LoginUserData> {
-    const { username, password } = loginUserDto;
+  async loginUser(dto: LoginUserDto): Promise<LoginUserData> {
+    const { username, password } = dto;
     const user = await this.getUser(username);
 
     if (!user) {
       return undefined;
     }
 
-    const { password: _password, ..._user } = user;
+    const { password: _password, ...rest } = user;
 
-    return (await validatePassword(password, _password)) ? _user : null;
+    return (await validatePassword(password, _password)) ? rest : null;
   }
 
   async verifyUser(username: string): Promise<VerifyUserData> {
@@ -57,7 +57,7 @@ export class UserRepository extends Repository<User> {
 
     const key = await randomInt(100000, 999999).toString();
     const data = { username };
-    const type = TokenType.VERIFY;
+    const type = TokenEnum.VERIFY;
     const expiredAt = new Date().getTime() + 300000; // 5 mins
 
     const [result] = await this.manager.query(

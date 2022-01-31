@@ -1,7 +1,7 @@
 import { Exclude, Expose } from 'class-transformer';
 import { IsString } from 'class-validator';
 
-export enum TokenType {
+export enum TokenEnum {
   VERIFY = 'verify',
 }
 

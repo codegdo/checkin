@@ -14,7 +14,7 @@ import { EmailRepository } from 'src/models/main/repositories';
 import { arrayToObjectKey } from 'src/common/utils/array-to-object-keys.util';
 import { EmailData } from 'src/models/main/email/email.dto';
 import { TokenData } from 'src/models/main/token/token.dto';
-import { MessageOptions, MessageType, VerifyEmailKey, VerifyMessageKey, VerifyTokenData } from './message.type';
+import { MessageOptions, MessageEnum, VerifyEmailKey, VerifyMessageKey, VerifyTokenData } from './message.type';
 import { ErrorService } from '../error/error.service';
 
 
@@ -55,7 +55,7 @@ export class MessageAuthService {
 
         const { subject, fromName, fromAddress, replyTo, body = '', message = '' } = sendEmail;
 
-        if (type == MessageType.MESSAGE) {
+        if (type == MessageEnum.MESSAGE) {
           const keys: VerifyMessageKey = { key };
           const body = handlebars.compile(message)(keys);
 
@@ -68,7 +68,7 @@ export class MessageAuthService {
           });
         }
 
-        if (type == MessageType.EMAIL) {
+        if (type == MessageEnum.EMAIL) {
           const keys: VerifyEmailKey = { key, firstName, lastName, replyTo };
           const html = handlebars.compile(body)(keys);
 

@@ -18,37 +18,30 @@ import {
 } from '../../models/main/dtos';
 import { User } from 'src/models/main/entities';
 import { CurrentUser, Public, Serialize } from 'src/common/decorators';
-import { maskedEmailAddress, maskedPhoneNumber } from 'src/common/utils';
+import { MaskEnum, maskValue } from 'src/common/utils';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   @Public()
   @Post('signup')
   //@Serialize(UserData)
-  async signup(@Body() signupUserDto: SignupUserDto) {
-    console.log(signupUserDto);
+  async signup(@Body() body: SignupUserDto) {
 
-    const [signupUserData] = await this.authService.signup(signupUserDto);
+    const data = await this.authService.signup(body);
 
-    const {
-      id,
-      username,
-      emailAddress = '',
-      phoneNumber = '',
-      isActive,
-    } = signupUserData;
+    console.log('SIGNUP', data);
 
     return {
-      id,
-      username,
-      emailAddress: maskedEmailAddress(emailAddress),
-      phoneNumber: maskedPhoneNumber(phoneNumber),
-      isActive,
+      id: data.id,
+      username: data.username,
+      emailAddress: maskValue(MaskEnum.EMAIL, data.emailAddress),
+      phoneNumber: maskValue(MaskEnum.PHONE, data.phoneNumber),
+      isActive: data.isActive,
     };
   }
 
@@ -63,9 +56,9 @@ export class AuthController {
 
   @Public()
   @Post('login')
-  async login(@Session() session: any, @Body() loginUserDto: LoginUserDto) {
-    const user = await this.authService.login(loginUserDto);
-    const { password, orgId, orgActive, ...rest } = user;
+  async login(@Session() session: any, @Body() body: LoginUserDto) {
+    const user = await this.authService.login(body);
+    const { password, orgId, ...rest } = user;
     const accessToken = this.jwtService.sign({ orgId });
 
     if (orgId) {
@@ -79,14 +72,11 @@ export class AuthController {
       };
     }
 
-    const { username, emailAddress = '', phoneNumber = '', isActive } = rest;
-
     return {
       user: {
-        username,
-        emailAddress: maskedEmailAddress(emailAddress),
-        phoneNumber: maskedPhoneNumber(phoneNumber),
-        isActive,
+        ...rest,
+        emailAddress: maskValue(MaskEnum.EMAIL, rest.emailAddress),
+        phoneNumber: maskValue(MaskEnum.PHONE, rest.phoneNumber)
       },
     };
   }
@@ -108,7 +98,7 @@ export class AuthController {
   async setup(@Session() session: any, @Body() body: SetupUserDto) {
     const user = await this.authService.setup(body);
 
-    const { password, orgId, orgActive, ...rest } = user;
+    const { password, orgId, ...rest } = user;
     const accessToken = this.jwtService.sign({ orgId });
 
     session.user = user;
