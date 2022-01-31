@@ -95,6 +95,25 @@ select params->>'age' "age" from example;
 
 
 
+DO
+$$
+    DECLARE
+        _text text[];
+    BEGIN
+        SELECT *
+        INTO _text
+        FROM
+        (
+            SELECT string_to_array('schema.table.column.column_id', '.')
+        ) t;
+
+        FOR i IN 1 .. array_upper(_text, 1)
+        LOOP
+           RAISE NOTICE '%', _text[i];
+        END LOOP;
+    END;
+$$ LANGUAGE plpgsql;
+
 
 -- OLD
 -- CREATE PROCEDURE USER_SIGNUP

@@ -1,7 +1,7 @@
 import {
   BadRequestException,
   NotFoundException,
-  Injectable
+  Injectable,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
@@ -21,9 +21,18 @@ import {
   FormRepository,
 } from 'src/models/main/repositories';
 //import { CheckinRepository } from 'src/models/checkin/repositories';
-import { ErrorMessageType, ErrorService, MessageAuthService, MessageType } from 'src/common/modules';
-import { LoginUserDto, SetupUserDto, SignupUserDto, VerifyUserDto } from 'src/models/main/dtos';
-
+import {
+  ErrorMessageType,
+  ErrorService,
+  MessageAuthService,
+  MessageType,
+} from 'src/common/modules';
+import {
+  LoginUserDto,
+  SetupUserDto,
+  SignupUserDto,
+  VerifyUserDto,
+} from 'src/models/main/dtos';
 
 @Injectable()
 export class AuthService {
@@ -63,7 +72,7 @@ export class AuthService {
 
     private readonly messageService: MessageAuthService,
     private readonly errorService: ErrorService,
-  ) { }
+  ) {}
 
   async form(name: string) {
     try {
@@ -75,7 +84,13 @@ export class AuthService {
 
   async signup(signupUserDto: SignupUserDto) {
     try {
-      return await this.userRepository.signupUser(signupUserDto);
+      const result = await this.userRepository.signupUser(signupUserDto);
+
+      if (!result) {
+        throw new NotFoundException(ErrorMessageType.NOT_FOUND);
+      }
+
+      return result;
     } catch (e) {
       this.errorService.handleError(e);
     }
@@ -104,7 +119,7 @@ export class AuthService {
     const { verifyOption: v, username } = verifyUserDto;
 
     try {
-      const type = (v == 'phoneNumber') ? MessageType.MESSAGE : MessageType.EMAIL;
+      const type = v == 'phoneNumber' ? MessageType.MESSAGE : MessageType.EMAIL;
       const context = await this.userRepository.verifyUser(username);
 
       return this.messageService.sendMessageVerify({ type, context });
@@ -126,21 +141,14 @@ export class AuthService {
     //const query2Runner = this.connection2.createQueryRunner();
 
     try {
-
       const { username } = await this.userRepository.setupUser(setupUserDto);
 
       return this.userRepository.getUser(username);
-
     } catch (e) {
       this.errorService.handleError(e);
     }
   }
-
 }
-
-
-
-
 
 //   async resend(username: string) {
 //     const token = await this.tokenRepository.create();
@@ -158,7 +166,6 @@ export class AuthService {
 
 //     return { username };
 //   }
-
 
 /*
 // Multiple transactions

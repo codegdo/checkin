@@ -151,7 +151,7 @@ LANGUAGE plpgsql;
 -- CALL FUNCTIONS
 
 SELECT * FROM org.fn_form_field_get('signup');
-CALL org.pr_form_get_by_name('signup', null);
+CALL org.pr_form_get_by_name('auth_signup', null);
 
 -- END
 -- DROP FUNCTIONS

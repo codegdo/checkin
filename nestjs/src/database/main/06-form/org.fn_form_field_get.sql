@@ -66,7 +66,7 @@ LANGUAGE plpgsql;
 
 -- CALL FUNCTIONS
 
-SELECT * FROM org.fn_form_field_get('signup');
+SELECT * FROM org.fn_form_field_get('auth_signup');
 
 
 -- END

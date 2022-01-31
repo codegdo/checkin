@@ -65,12 +65,13 @@ $BODY$
         (_role_id),
         (SELECT id FROM c)
       )
-      RETURNING username, is_active, contact_id
+      RETURNING id, username, is_active, contact_id
     )
     SELECT json_agg(r)::jsonb
     INTO data
     FROM (
       SELECT
+        id,
         username,
         is_active "isActive",
         phone_number "phoneNumber",

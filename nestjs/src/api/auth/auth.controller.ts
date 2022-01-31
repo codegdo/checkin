@@ -10,7 +10,12 @@ import {
 import { JwtService } from '@nestjs/jwt';
 
 import { AuthService } from './auth.service';
-import { LoginUserDto, SetupUserDto, SignupUserDto, VerifyUserDto } from '../../models/main/dtos';
+import {
+  LoginUserDto,
+  SetupUserDto,
+  SignupUserDto,
+  VerifyUserDto,
+} from '../../models/main/dtos';
 import { User } from 'src/models/main/entities';
 import { CurrentUser, Public, Serialize } from 'src/common/decorators';
 import { maskedEmailAddress, maskedPhoneNumber } from 'src/common/utils';
@@ -20,23 +25,26 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   @Public()
   @Post('signup')
   //@Serialize(UserData)
   async signup(@Body() signupUserDto: SignupUserDto) {
-
     console.log(signupUserDto);
 
+    const [signupUserData] = await this.authService.signup(signupUserDto);
+
     const {
+      id,
       username,
       emailAddress = '',
       phoneNumber = '',
       isActive,
-    } = await this.authService.signup(signupUserDto);
+    } = signupUserData;
 
     return {
+      id,
       username,
       emailAddress: maskedEmailAddress(emailAddress),
       phoneNumber: maskedPhoneNumber(phoneNumber),
@@ -56,7 +64,6 @@ export class AuthController {
   @Public()
   @Post('login')
   async login(@Session() session: any, @Body() loginUserDto: LoginUserDto) {
-
     const user = await this.authService.login(loginUserDto);
     const { password, orgId, orgActive, ...rest } = user;
     const accessToken = this.jwtService.sign({ orgId });

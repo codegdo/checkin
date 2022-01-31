@@ -1,7 +1,7 @@
 -- CREATE FUNCTION LOOKUP_GET_VALUE
 CREATE OR REPLACE FUNCTION dbo.fn_lookup_get_value(
-  p_lookup text,
-  OUT out_data jsonb
+  IN p_lookup text,
+  OUT data jsonb
 )
 RETURNS jsonb
 AS
@@ -25,7 +25,7 @@ $fn$
       $ex$, _schema, _table, _column, _column_id
     );
 
-    EXECUTE _sql INTO out_data;
+    EXECUTE _sql INTO data;
     END IF;
   END;
 $fn$

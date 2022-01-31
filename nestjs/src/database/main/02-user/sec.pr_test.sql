@@ -50,20 +50,20 @@ Date           Author           Description
                   ,@isContactUpdate BIT = 0
                   ,@CompanyID       INT = 0
                   ,@ContactID       INT = 0
-				  ,@contactname nvarchar(100) --12/10/2019
+				      ,@contactname nvarchar(100) --12/10/2019
                   ,@Status          BIT
                   ,@ErrorNUmber     NVARCHAR(20)
                   ,@ErrorMessage    NVARCHAR(2000)
-				  ,@loginusername VARCHAR(75)
-				  ,@username        varchar(75)
-				  ,@Timestamp SMALLDATETIME = CURRENT_TIMESTAMP
-				  ,@BillingTerritoryID int
-				  ,@ShippingTerritoryID int
-				  ,@ContactTerritoryID int
-				  ,@DefaultLangID int
-				  ,@DefaultCompanyForm int
-				  ,@DefaultContactForm int
-				  ,@ResendActivationEmail bit = 0
+                  ,@loginusername VARCHAR(75)
+                  ,@username        varchar(75)
+                  ,@Timestamp SMALLDATETIME = CURRENT_TIMESTAMP
+                  ,@BillingTerritoryID int
+                  ,@ShippingTerritoryID int
+                  ,@ContactTerritoryID int
+                  ,@DefaultLangID int
+                  ,@DefaultCompanyForm int
+                  ,@DefaultContactForm int
+                  ,@ResendActivationEmail bit = 0
       IF @Userid = 0
 	   Set @UserID = null
 

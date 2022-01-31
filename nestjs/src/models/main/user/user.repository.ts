@@ -2,7 +2,11 @@ import { EntityRepository, Repository } from 'typeorm';
 import { randomInt } from 'crypto';
 import { User } from './user.entity';
 import { LoginUserDto, SignupUserDto } from '../dtos';
-import { hashKeyValue, trimObjectKey, validatePassword } from 'src/common/utils';
+import {
+  hashKeyValue,
+  trimObjectKey,
+  validatePassword,
+} from 'src/common/utils';
 
 import {
   SignupUserData,
@@ -16,8 +20,9 @@ import { TokenType } from '../token/token.dto';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-
-  async signupUser(signupUserDto: SignupUserDto): Promise<SignupUserData> {
+  async signupUser(
+    signupUserDto: SignupUserDto,
+  ): Promise<[SignupUserData] | null> {
     let { data } = signupUserDto;
 
     data = await hashKeyValue(2, data);
@@ -27,9 +32,9 @@ export class UserRepository extends Repository<User> {
       [data, 'null'],
     );
 
-    const [signupUserData] = result?.data;
+    //const [signupUserData] = result?.data;
 
-    return signupUserData;
+    return result;
     //return trimObjectKey<SignupUserData>(result);
   }
 

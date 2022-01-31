@@ -82,4 +82,4 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-CALL org.pr_form_get_by_name('signup', null);
+CALL org.pr_form_get_by_name('auth_signup', null);

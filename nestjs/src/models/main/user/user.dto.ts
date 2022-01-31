@@ -24,6 +24,7 @@ export type ConfirmUserData = {
 };
 
 export type SignupUserData = {
+  id: number;
   username: string;
   emailAddress: string;
   phoneNumber: string;

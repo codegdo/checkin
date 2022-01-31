@@ -21,7 +21,6 @@ export const Form: React.FC<FormProps> = ({ form, loading, isKey = false, isMap 
   useEffect(() => {
 
     if (submit === 'submit') {
-
       const { error } = Joi.object(formSchema).validate((isMap ? flattenObject(values) : values), { abortEarly: false });
 
       if (error) {

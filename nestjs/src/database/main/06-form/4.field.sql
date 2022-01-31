@@ -40,8 +40,8 @@ VALUES
 ('emailAddress', 'field', 'text', 'org.contact.email_address', null, '1', '2'),
 ('phoneNumber', 'field', 'text', 'org.contact.phone_number', null, '1', '2'),
 ('streetAddress', 'field', 'text', 'org.contact.street_address', null, '0', '2'),
-('country', 'field', 'text', 'org.contact.territory', 'dbo.territory.country.country_code', '0', '2'),
-('state', 'field', 'text', 'org.contact.territory', 'dbo.territory.state.state_code', '0', '2'),
+('country', 'field', 'text', 'org.contact.country', 'dbo.territory.country.country_code', '0', '2'),
+('state', 'field', 'text', 'org.contact.state', 'dbo.territory.state.state_code', '0', '2'),
 ('city', 'field', 'text', 'org.contact.city', null, '0', '2'),
 ('postalCode', 'field', 'text', 'org.contact.postal_code', null, '0', '2'),
 --organization=15
@@ -58,8 +58,8 @@ VALUES
 --workspace=6
 ('name', 'field', 'text', 'org.workspace.name', null, '1', '6'),
 ('streetAddress', 'field', 'text', 'org.workspace.street_address', null, '0', '6'),
-('country', 'field', 'text', 'org.workspace.country', null, '0', '6'),
-('state', 'field', 'text', 'org.workspace.state', null, '0', '6'),
+('country', 'field', 'text', 'org.workspace.country', 'dbo.territory.country.country_code', '0', '6'),
+('state', 'field', 'text', 'org.workspace.state', 'dbo.territory.state.state_code', '0', '6'),
 ('city', 'field', 'text', 'org.workspace.city', null, '0', '6'),
 ('postalCode', 'field', 'text', 'org.workspace.postal_code', null, '0', '6'),
 ('phoneNumber', 'field', 'text', 'org.workspace.phone_number', null, '0', '6'),

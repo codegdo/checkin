@@ -39,7 +39,7 @@
   margin-top: 0.5rem;
 
   //
-  &.-group {
+  &._group {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -58,7 +58,7 @@
 
 // MODIFIER
 .field {
-  &.-error {
+  &._error {
     input {
       border-color: $red-light;
     }
