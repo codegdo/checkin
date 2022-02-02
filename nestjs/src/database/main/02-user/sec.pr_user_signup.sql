@@ -1,12 +1,12 @@
 -- CREATE PROCEDURE USER_SIGNUP
 CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
-  IN p_form_data json,
-  OUT data jsonb
+  p_form_data json,
+  OUT data json
 )
 AS
 $BODY$
   DECLARE
-    _role_id int := 2;
+    user_role_id int := 2;
   BEGIN
 
     -- JSON p_form_data to table tmp_form_data
@@ -60,12 +60,12 @@ $BODY$
       VALUES(
         (SELECT DISTINCT value FROM tmp_data WHERE map = 'sec.user.username'),
         (SELECT DISTINCT value FROM tmp_data WHERE map = 'sec.user.password'),
-        (_role_id),
+        (user_role_id),
         (SELECT id FROM c)
       )
       RETURNING id, username, is_active, contact_id
     )
-    SELECT json_agg(r)::jsonb
+    SELECT json_agg(r)::json ->> 0
     INTO data
     FROM (
       SELECT
@@ -82,11 +82,9 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
+CALL sec.pr_user_signup('[]'::json, null::json);
 
-
-CALL sec.pr_user_signup('[{"key":1, "value":"gdo4"},{"key":2, "value":"123"}]'::json, null::jsonb);
-
-DROP PROCEDURE IF EXISTS sec.pr_user_signup(json, jsonb);
+DROP PROCEDURE IF EXISTS sec.pr_user_signup(json, json);
 
 select * from sec.user;
 select * from org.contact;

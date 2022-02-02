@@ -28,10 +28,10 @@ import {
   MessageEnum,
 } from 'src/common/modules';
 import {
-  LoginUserDto,
-  SetupUserDto,
-  SignupUserDto,
-  VerifyUserDto,
+  UserLoginDto,
+  UserSetupDto,
+  UserSignupDto,
+  UserVerifyDto,
 } from 'src/models/main/dtos';
 
 @Injectable()
@@ -74,17 +74,9 @@ export class AuthService {
     private readonly errorService: ErrorService,
   ) { }
 
-  async form(name: string) {
+  async signup(dto: UserSignupDto) {
     try {
-      return this.formRepository.getFormByName(name);
-    } catch (e) {
-      this.errorService.handleError(e);
-    }
-  }
-
-  async signup(signupUserDto: SignupUserDto) {
-    try {
-      const data = await this.userRepository.signupUser(signupUserDto);
+      const data = await this.userRepository.userSignup(dto);
 
       if (!data) {
         throw new NotFoundException(ErrorMessageEnum.NOT_FOUND);
@@ -96,8 +88,21 @@ export class AuthService {
     }
   }
 
-  async login(dto: LoginUserDto) {
-    const user = await this.userRepository.loginUser(dto);
+  async verify(dto: UserVerifyDto) {
+    const { loginId, data: { option } } = dto;
+
+    try {
+      const type = (option == 'phoneNumber') ? MessageEnum.MESSAGE : MessageEnum.EMAIL;
+      const data = await this.userRepository.userVerify(loginId);
+
+      return this.messageService.sendVerify({ type, context: data });
+    } catch (e) {
+      this.errorService.handleError(e);
+    }
+  }
+
+  async login(dto: UserLoginDto) {
+    const user = await this.userRepository.userLogin(dto);
     const { orgId, orgActive, isActive } = user;
 
     if (!user) {
@@ -115,14 +120,11 @@ export class AuthService {
     return user;
   }
 
-  async verify(dto: VerifyUserDto) {
-    const { option, username } = dto;
-
+  async setup(dto: UserSetupDto) {
     try {
-      const type = (option == 'phoneNumber') ? MessageEnum.MESSAGE : MessageEnum.EMAIL;
-      const context = await this.userRepository.verifyUser(username);
+      const { username } = await this.userRepository.userSetup(dto);
 
-      return this.messageService.sendMessageVerify({ type, context });
+      return this.userRepository.getUser(username);
     } catch (e) {
       this.errorService.handleError(e);
     }
@@ -130,24 +132,23 @@ export class AuthService {
 
   async confirm(key: string) {
     try {
-      return await this.userRepository.confirmUser(key);
+      return await this.userRepository.userConfirm(key);
     } catch (e) {
       this.errorService.handleError(e);
     }
   }
 
-  async setup(setupUserDto: SetupUserDto) {
-    //const queryRunner = this.connection.createQueryRunner();
-    //const query2Runner = this.connection2.createQueryRunner();
 
+  async form(name: string) {
     try {
-      const { username } = await this.userRepository.setupUser(setupUserDto);
-
-      return this.userRepository.getUser(username);
+      return this.formRepository.getFormByName(name);
     } catch (e) {
       this.errorService.handleError(e);
     }
   }
+
+
+
 }
 
 //   async resend(username: string) {

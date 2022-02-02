@@ -1,44 +1,62 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { randomInt } from 'crypto';
-import { User } from './user.entity';
-import { LoginUserDto, SignupUserDto } from '../dtos';
+
 import {
   encryptKeyValue,
   trimObjectKey,
   validatePassword,
 } from 'src/common/utils';
 
-import {
-  SignupUserData,
-  ConfirmUserData,
-  VerifyUserData,
-  LoginUserData,
-  SetupUserDto,
-  SetupUserData,
-} from './user.dto';
+import { User } from './user.entity';
 import { TokenEnum } from '../token/token.dto';
+
+import {
+  UserSignupDto,
+  UserSetupDto,
+  UserLoginDto,
+} from './user.dto';
+
+import {
+  UserSignupData,
+  UserVerifyData,
+  UserSetupData,
+  UserLoginData,
+} from './user.type';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-  async signupUser(dto: SignupUserDto): Promise<SignupUserData> {
+
+  async userSignup(dto: UserSignupDto): Promise<UserSignupData> {
     let { data } = dto;
 
     // encrypt password
     data = await encryptKeyValue(2, data);
 
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_signup($1::json, $2::jsonb)`,
-      [data, 'null'],
+      `CALL sec.pr_user_signup($1, $2)`,
+      [data, null],
     );
 
-    if (!result.data) {
-      return null;
-    }
-
-    return result.data[0];
+    return result.data;
   }
 
-  async loginUser(dto: LoginUserDto): Promise<LoginUserData> {
+  async userVerify(id: number): Promise<UserVerifyData> {
+    // await randomBytes(6).toString('base64');
+    // await randomInt(100000, 999999);
+
+    const key = await randomInt(100000, 999999).toString();
+    const type = TokenEnum.VERIFY;
+    const expiredAt = new Date().getTime() + 300000; // 5 mins
+
+    const [result] = await this.manager.query(
+      `CALL sec.pr_user_verify($1, $2, $3, $4, $5)`,
+      [id, key, type, expiredAt, null],
+    );
+
+    return result.data;
+  }
+
+  async userLogin(dto: UserLoginDto): Promise<UserLoginData> {
     const { username, password } = dto;
     const user = await this.getUser(username);
 
@@ -51,24 +69,7 @@ export class UserRepository extends Repository<User> {
     return (await validatePassword(password, _password)) ? rest : null;
   }
 
-  async verifyUser(username: string): Promise<VerifyUserData> {
-    // await randomBytes(6).toString('base64');
-    // await randomInt(100000, 999999);
-
-    const key = await randomInt(100000, 999999).toString();
-    const data = { username };
-    const type = TokenEnum.VERIFY;
-    const expiredAt = new Date().getTime() + 300000; // 5 mins
-
-    const [result] = await this.manager.query(
-      `SELECT * FROM sec.fn_user_verify($1, $2, $3, $4, $5)`,
-      [username, key, type, data, expiredAt],
-    );
-
-    return result;
-  }
-
-  async confirmUser(key: string): Promise<ConfirmUserData> {
+  async userConfirm(key: string): Promise<any> {
     const [result] = await this.manager.query(
       `SELECT is_active AS "isActive" FROM sec.fn_user_confirm($1)`,
       [key],
@@ -77,8 +78,19 @@ export class UserRepository extends Repository<User> {
     return result;
   }
 
-  async setupUser(setupUserDto: SetupUserDto) {
-    const {
+  async userSetup(dto: UserSetupDto): Promise<UserSetupData> {
+
+    let { data } = dto;
+
+    const [result] = await this.manager.query(
+      `CALL sec.pr_user_setup($1, $2)`,
+      [data, null],
+    );
+
+    return result.data;
+
+
+    /* const {
       username,
       orgName,
       subdomain,
@@ -88,7 +100,7 @@ export class UserRepository extends Repository<User> {
       state,
       city,
       postalCode,
-    } = setupUserDto;
+    } = dto;
 
     const [result] = await this.manager.query(
       `CALL sec.pr_user_setup($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
@@ -109,7 +121,7 @@ export class UserRepository extends Repository<User> {
       ],
     );
 
-    return trimObjectKey<SetupUserData>(result);
+    return trimObjectKey<SetupUserData>(result); */
   }
 
   async getUser(username: string) {

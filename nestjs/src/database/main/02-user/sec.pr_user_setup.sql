@@ -7,8 +7,8 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_setup(
 AS
 $BODY$
   DECLARE
-    _login_username varchar;
-    -workspace_territory_id int;
+    login_username varchar;
+    workspace_territory_id int;
   BEGIN
 
     -- JSON p_form_data to table tmp_form_data
@@ -39,13 +39,13 @@ $BODY$
 
     --SET login username
     SELECT username
-    INTO _login_username
+    INTO login_username
     FROM sec.user
     WHERE id = p_login_id AND org_id IS NULL;
 
     --SET workspace territory id
     SELECT id
-    INTO _workspace_territory_id
+    INTO workspace_territory_id
     FROM(
       SELECT id
       FROM dbo.territory
@@ -62,7 +62,7 @@ $BODY$
     ) t;
 
     --CHECK user exists
-    IF _login_username IS NOT NULL THEN
+    IF login_username IS NOT NULL THEN
 
       --INSERT
       WITH o AS (
@@ -76,7 +76,7 @@ $BODY$
           (SELECT DISTINCT value FROM tmp_data WHERE map = 'sec.organization.name'),
           (SELECT DISTINCT value FROM tmp_data WHERE map = 'sec.organization.subdomain'),
           p_login_id,
-          _login_username
+          login_username
         )
         RETURNING id
       ), w AS (
@@ -95,7 +95,7 @@ $BODY$
           (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.workspace.city'),
           (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.workspace.postal_code'),
           (SELECT id FROM o),
-          _login_username
+          login_username
         )
         RETURNING id
       ), u AS (
@@ -104,7 +104,7 @@ $BODY$
         WHERE username = p_username
         RETURNING username, org_id
       )
-      SELECT json_agg(r)::jsonb
+      SELECT json_agg(r)::jsonb ->> 0
       INTO data
       FROM (
         SELECT

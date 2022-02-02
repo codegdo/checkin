@@ -3,7 +3,7 @@ RETURN text
 AS
 $fn$
   DECLARE
-    _cols text;
+    cols text;
   BEGIN
     EXECUTE FORMAT(
       $ex$
@@ -15,7 +15,7 @@ $fn$
         ) s;
       $ex$, p_table_name, p_json_column
     )
-    INTO _cols;
+    INTO cols;
 
     EXECUTE FORMAT(
       $ex$
@@ -26,7 +26,7 @@ $fn$
       $ex$, p_table_name, p_json_column
     );
 
-    RETURN _cols;
+    RETURN cols;
   END;
 $fn$
 LANGUAGE plpgsql;

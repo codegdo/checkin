@@ -34,26 +34,26 @@ export class MessageAuthService {
     private readonly errorService: ErrorService,
   ) { }
 
-  async sendMessageVerify(
-    messageOptions: MessageOptions<TokenData<VerifyTokenData>>,
+  async sendVerify(
+    options: MessageOptions<TokenData<VerifyTokenData>>,
   ): Promise<{ ok: boolean }> {
-    const { type, context } = messageOptions;
+    const { type, context } = options;
     const { key, data } = context;
     const { firstName, lastName, emailAddress, phoneNumber } = data;
 
     try {
       const emails = await this.emailRepository.getEmailByName('verify');
 
-      const { S: sendEmail } = arrayToObjectKey<{ S: EmailData; R: EmailData }>(
+      const { S: send } = arrayToObjectKey<{ S: EmailData; R: EmailData }>(
         {
           key: 'type',
           values: emails,
         },
       );
 
-      if (sendEmail) {
+      if (send) {
 
-        const { subject, fromName, fromAddress, replyTo, body = '', message = '' } = sendEmail;
+        const { subject, fromName, fromAddress, replyTo, body = '', message = '' } = send;
 
         if (type == MessageEnum.MESSAGE) {
           const keys: VerifyMessageKey = { key };

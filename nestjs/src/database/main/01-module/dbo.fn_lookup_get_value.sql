@@ -7,14 +7,14 @@ RETURNS jsonb
 AS
 $fn$
   DECLARE
-    _schema text := split_part(p_lookup, '.', 1);
-    _table text := split_part(p_lookup, '.', 2);
-    _column text := split_part(p_lookup, '.', 3);
-    _column_id text := split_part(p_lookup, '.', 4);
-    _sql text;
+    lookup_schema text := split_part(p_lookup, '.', 1);
+    lookup_table text := split_part(p_lookup, '.', 2);
+    lookup_column text := split_part(p_lookup, '.', 3);
+    lookup_column_id text := split_part(p_lookup, '.', 4);
+    string_sql text;
   BEGIN
     IF _table = 'territory' THEN
-    _sql := FORMAT(
+    string_sql := FORMAT(
       $ex$
         SELECT json_agg(json_build_object('key', %4$s, 'value', %3$s))
         FROM (
@@ -22,10 +22,10 @@ $fn$
           FROM %1$s.%2$s
           ORDER BY %3$s
         ) t
-      $ex$, _schema, _table, _column, _column_id
+      $ex$, lookup_schema, lookup_table, lookup_column, lookup_column_id
     );
 
-    EXECUTE _sql INTO data;
+    EXECUTE string_sql INTO data;
     END IF;
   END;
 $fn$

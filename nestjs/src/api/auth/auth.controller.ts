@@ -11,10 +11,10 @@ import { JwtService } from '@nestjs/jwt';
 
 import { AuthService } from './auth.service';
 import {
-  LoginUserDto,
-  SetupUserDto,
-  SignupUserDto,
-  VerifyUserDto,
+  UserLoginDto,
+  UserSetupDto,
+  UserSignupDto,
+  UserVerifyDto,
 } from '../../models/main/dtos';
 import { User } from 'src/models/main/entities';
 import { CurrentUser, Public, Serialize } from 'src/common/decorators';
@@ -30,33 +30,26 @@ export class AuthController {
   @Public()
   @Post('signup')
   //@Serialize(UserData)
-  async signup(@Body() body: SignupUserDto) {
+  async signup(@Body() body: UserSignupDto) {
 
     const data = await this.authService.signup(body);
 
-    console.log('SIGNUP', data);
-
     return {
-      id: data.id,
-      username: data.username,
+      ...data,
       emailAddress: maskValue(MaskEnum.EMAIL, data.emailAddress),
-      phoneNumber: maskValue(MaskEnum.PHONE, data.phoneNumber),
-      isActive: data.isActive,
+      phoneNumber: maskValue(MaskEnum.PHONE, data.phoneNumber)
     };
   }
 
   @Public()
-  @Get('form/:name')
-  async form(@Param('name') name: string) {
-    const form = await this.authService.form(name);
-
-    console.log('CONTROLLER', form);
-    return form;
+  @Post('verify')
+  async verify(@Body() body: UserVerifyDto) {
+    return this.authService.verify(body);
   }
 
   @Public()
   @Post('login')
-  async login(@Session() session: any, @Body() body: LoginUserDto) {
+  async login(@Session() session: any, @Body() body: UserLoginDto) {
     const user = await this.authService.login(body);
     const { password, orgId, ...rest } = user;
     const accessToken = this.jwtService.sign({ orgId });
@@ -81,11 +74,7 @@ export class AuthController {
     };
   }
 
-  @Public()
-  @Post('verify')
-  async verify(@Body() body: VerifyUserDto) {
-    return this.authService.verify(body);
-  }
+
 
   @Public()
   @Post('confirm')
@@ -95,7 +84,7 @@ export class AuthController {
 
   @Public()
   @Post('setup')
-  async setup(@Session() session: any, @Body() body: SetupUserDto) {
+  async setup(@Session() session: any, @Body() body: UserSetupDto) {
     const user = await this.authService.setup(body);
 
     const { password, orgId, ...rest } = user;
@@ -121,6 +110,15 @@ export class AuthController {
     }
 
     return { ok: true };
+  }
+
+  @Public()
+  @Get('form/:name')
+  async form(@Param('name') name: string) {
+    const form = await this.authService.form(name);
+
+    console.log('CONTROLLER', form);
+    return form;
   }
 
   // @Public()

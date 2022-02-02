@@ -41,7 +41,12 @@ const Verify: React.FC = (): JSX.Element => {
   }, [loading]);
 
   const handleSubmit = (values: any) => {
-    void fetchVerify({ body: { ...values, username: user?.username } });
+    void fetchVerify({
+      body: {
+        loginId: user?.id,
+        data: values
+      }
+    });
   };
 
   if (!user) {
