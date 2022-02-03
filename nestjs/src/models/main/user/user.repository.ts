@@ -10,11 +10,7 @@ import {
 import { User } from './user.entity';
 import { TokenEnum } from '../token/token.dto';
 
-import {
-  UserSignupDto,
-  UserSetupDto,
-  UserLoginDto,
-} from './user.dto';
+import { UserSignupDto, UserSetupDto, UserLoginDto } from './user.dto';
 
 import {
   UserSignupData,
@@ -25,7 +21,6 @@ import {
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-
   async userSignup(dto: UserSignupDto): Promise<UserSignupData> {
     let { data } = dto;
 
@@ -40,7 +35,7 @@ export class UserRepository extends Repository<User> {
     return result.data;
   }
 
-  async userVerify(id: number): Promise<UserVerifyData> {
+  async userVerify(loginId: number): Promise<UserVerifyData> {
     // await randomBytes(6).toString('base64');
     // await randomInt(100000, 999999);
 
@@ -50,7 +45,7 @@ export class UserRepository extends Repository<User> {
 
     const [result] = await this.manager.query(
       `CALL sec.pr_user_verify($1, $2, $3, $4, $5)`,
-      [id, key, type, expiredAt, null],
+      [loginId, key, type, expiredAt, null],
     );
 
     return result.data;
@@ -79,7 +74,6 @@ export class UserRepository extends Repository<User> {
   }
 
   async userSetup(dto: UserSetupDto): Promise<UserSetupData> {
-
     let { data } = dto;
 
     const [result] = await this.manager.query(
@@ -88,7 +82,6 @@ export class UserRepository extends Repository<User> {
     );
 
     return result.data;
-
 
     /* const {
       username,
