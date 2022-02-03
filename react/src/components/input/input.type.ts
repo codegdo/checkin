@@ -22,7 +22,7 @@ export type InputProps = {
 } & InputData;
 
 export type InputContextProps = {
-  data: InputData;
+  input: InputData;
   value?: string;
-  handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 };

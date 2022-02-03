@@ -8,7 +8,7 @@ import { normalizeForm } from '../../helpers';
 
 export const FormContext = React.createContext<FormContextProps>(undefined);
 
-export const Form: React.FC<FormProps> = ({ form, loading, isKey = false, isMap = false, onSubmit, onCallback, children, ...props }): JSX.Element => {
+export const Form: React.FC<FormProps> = ({ form, status, isKey = false, isMap = false, onSubmit, onCallback, children, ...props }): JSX.Element => {
 
   const [data, setData] = useState(form || props);
 
@@ -53,7 +53,7 @@ export const Form: React.FC<FormProps> = ({ form, loading, isKey = false, isMap 
 
   return (
     <form>
-      <FormContext.Provider value={{ data, values, errors, loading, submit, formSchema, isKey, isMap, handleClick }}>
+      <FormContext.Provider value={{ data, values, errors, status, submit, formSchema, isKey, isMap, handleClick }}>
         {
           children || render({ data })
         }

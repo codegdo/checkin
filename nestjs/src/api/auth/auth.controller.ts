@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Session,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -51,7 +52,7 @@ export class AuthController {
   @Post('login')
   async login(@Session() session: any, @Body() body: UserLoginDto) {
     const user = await this.authService.login(body);
-    const { password, orgId, ...rest } = user;
+    const { password, orgId, orgActive, ...rest } = user;
     const accessToken = this.jwtService.sign({ orgId });
 
     if (orgId) {
@@ -74,8 +75,6 @@ export class AuthController {
     };
   }
 
-
-
   @Public()
   @Post('confirm')
   async confirm(@Body('key') key: string) {
@@ -85,6 +84,7 @@ export class AuthController {
   @Public()
   @Post('setup')
   async setup(@Session() session: any, @Body() body: UserSetupDto) {
+    console.log(body);
     const user = await this.authService.setup(body);
 
     const { password, orgId, ...rest } = user;
@@ -113,8 +113,8 @@ export class AuthController {
   }
 
   @Public()
-  @Get('form/:name')
-  async form(@Param('name') name: string) {
+  @Get('form')
+  async form(@Query('name') name: string) {
     const form = await this.authService.form(name);
 
     console.log('CONTROLLER', form);

@@ -12,8 +12,8 @@ import handlebars from 'handlebars';
 
 import { EmailRepository } from 'src/models/main/repositories';
 import { arrayToObjectKey } from 'src/common/utils/array-to-object-keys.util';
-import { EmailData } from 'src/models/main/email/email.dto';
-import { TokenData } from 'src/models/main/token/token.dto';
+import { EmailData } from 'src/models/main/email/email.type';
+import { TokenData } from 'src/models/main/token/token.type';
 import { MessageOptions, MessageEnum, VerifyEmailKey, VerifyMessageKey, VerifyTokenData } from './message.type';
 import { ErrorService } from '../error/error.service';
 

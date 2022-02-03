@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Email, EmailType } from '../entities';
-import { EmailData } from './email.dto';
+import { EmailData } from './email.type';
 
 @EntityRepository(Email)
 export class EmailRepository extends Repository<Email> {

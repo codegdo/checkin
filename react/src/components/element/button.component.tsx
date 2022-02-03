@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useLoading } from '../../hooks';
 type ButtonData = {
   name?: string;
@@ -8,16 +8,16 @@ type ButtonData = {
 
 type ButtonProps = {
   button?: ButtonData;
-  loading?: string;
+  status?: string;
   onClick?: (name: string) => void;
 } & Partial<ButtonData>
 
-export const Button: React.FC<ButtonProps> = ({ button, loading, onClick, children, ...props }): JSX.Element => {
+export const Button: React.FC<ButtonProps> = ({ button, status, onClick, children, ...props }): JSX.Element => {
 
   const data = button || props;
   const { name = 'click', label = 'Button', type = 'button' } = data;
 
-  const isLoading = useLoading(loading);
+  const isLoading = useLoading(status);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();

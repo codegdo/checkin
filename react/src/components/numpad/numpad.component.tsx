@@ -21,7 +21,7 @@ export const NumPad: React.FC<NumPadProps> = ({
   reset = false,
   autoSubmit = false,
   digit = 4,
-  loading = 'idle',
+  status = 'idle',
   children,
   onSubmit }): JSX.Element => {
 
@@ -29,7 +29,7 @@ export const NumPad: React.FC<NumPadProps> = ({
   const [ref, setFocus] = useFocus(null);
   const [value, setValue] = useState(initialValue || '');
   const [counter, setCounter] = useState(0);
-  const { error } = useReset(loading);
+  const { error } = useReset(status);
 
   useEffect(() => {
     const timer = setTimeout(() => {

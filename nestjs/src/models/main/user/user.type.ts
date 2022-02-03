@@ -1,4 +1,4 @@
-import { TokenData } from '../token/token.dto';
+import { TokenData } from '../token/token.type';
 
 export type UserSignupData = {
   id: number;

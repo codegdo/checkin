@@ -8,23 +8,23 @@ type Action = {
 };
 
 type State = {
-  loading: string;
+  status: string;
   result?: any;
 };
 
 const initialState = {
-  loading: 'idle',
+  status: 'idle',
   result: undefined,
 };
 
 const reducer = (state: State, { type, payload }: Action) => {
   switch (type) {
     case 'LOADING':
-      return { ...state, loading: 'pending' };
+      return { ...state, status: 'pending' };
     case 'SUCCESS':
-      return { ...state, loading: 'success', result: payload };
+      return { ...state, status: 'success', result: payload };
     case 'FAILURE':
-      return { ...state, loading: 'error', result: payload };
+      return { ...state, status: 'error', result: payload };
     default:
       return state;
   }

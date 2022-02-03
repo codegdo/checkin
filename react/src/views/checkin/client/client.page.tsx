@@ -4,18 +4,18 @@ import { useFetch } from '../../../hooks';
 import { sessionStore } from '../../../services';
 
 const Client: React.FC = (): JSX.Element => {
-  const [{ loading, result }, fetchCheckin] = useFetch('/api/checkin/clients');
+  const [{ status, result }, fetchCheckin] = useFetch('/api/checkin/clients');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (loading === 'error') {
+    if (status === 'error') {
       setMessage(result.data.message);
     }
-    if (loading === 'success') {
+    if (status === 'success') {
       setMessage('');
       console.log(result.data);
     }
-  }, [loading]);
+  }, [status]);
 
 
   const handleSubmit = (value: any) => {
@@ -35,7 +35,7 @@ const Client: React.FC = (): JSX.Element => {
     digit={10}
     placeholder="Enter Phone Number"
     message={message}
-    loading={loading}
+    status={status}
     onSubmit={handleSubmit} />;
 };
 

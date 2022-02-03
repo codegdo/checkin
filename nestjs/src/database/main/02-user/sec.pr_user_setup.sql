@@ -1,8 +1,8 @@
 -- CREATE PROCEDURE USER_SETUP
 CREATE OR REPLACE PROCEDURE sec.pr_user_setup(
-  IN p_login_id int,
-  IN p_form_data json,
-  OUT data jsonb
+  p_login_id int,
+  p_form_data json,
+  OUT data json
 )
 AS
 $BODY$
@@ -101,10 +101,10 @@ $BODY$
       ), u AS (
         UPDATE sec.user
         SET org_id = (SELECT id FROM o)
-        WHERE username = p_username
+        WHERE id = p_login_id
         RETURNING username, org_id
       )
-      SELECT json_agg(r)::jsonb ->> 0
+      SELECT json_agg(r)::json ->> 0
       INTO data
       FROM (
         SELECT
@@ -120,6 +120,8 @@ $BODY$
   END
 $BODY$
 LANGUAGE plpgsql;
+
+DROP PROCEDURE IF EXISTS sec.pr_user_setup(int, json, json);
 
 
 -- CREATE PROCEDURE USER_SETUP

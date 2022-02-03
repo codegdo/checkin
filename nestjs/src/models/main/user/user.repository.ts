@@ -8,7 +8,7 @@ import {
 } from 'src/common/utils';
 
 import { User } from './user.entity';
-import { TokenEnum } from '../token/token.dto';
+import { TokenEnum } from '../token/token.type';
 
 import { UserSignupDto, UserSetupDto, UserLoginDto } from './user.dto';
 
@@ -36,8 +36,6 @@ export class UserRepository extends Repository<User> {
   }
 
   async userVerify(loginId: number): Promise<UserVerifyData> {
-    // await randomBytes(6).toString('base64');
-    // await randomInt(100000, 999999);
 
     const key = await randomInt(100000, 999999).toString();
     const type = TokenEnum.VERIFY;
@@ -46,6 +44,17 @@ export class UserRepository extends Repository<User> {
     const [result] = await this.manager.query(
       `CALL sec.pr_user_verify($1, $2, $3, $4, $5)`,
       [loginId, key, type, expiredAt, null],
+    );
+
+    return result.data;
+  }
+
+  async userSetup(dto: UserSetupDto): Promise<UserSetupData> {
+    const { loginId, data } = dto;
+
+    const [result] = await this.manager.query(
+      `CALL sec.pr_user_setup($1, $2, $3)`,
+      [loginId, data, null],
     );
 
     return result.data;
@@ -73,17 +82,20 @@ export class UserRepository extends Repository<User> {
     return result;
   }
 
-  async userSetup(dto: UserSetupDto): Promise<UserSetupData> {
-    let { data } = dto;
 
-    const [result] = await this.manager.query(
-      `CALL sec.pr_user_setup($1, $2)`,
-      [data, null],
+
+  async getUser(username: string) {
+    const [user] = await this.manager.query(
+      `SELECT * FROM sec.fn_user_get($1)`,
+      [username],
     );
+    return user;
+  }
+}
 
-    return result.data;
+/*
 
-    /* const {
+const {
       username,
       orgName,
       subdomain,
@@ -114,19 +126,11 @@ export class UserRepository extends Repository<User> {
       ],
     );
 
-    return trimObjectKey<SetupUserData>(result); */
-  }
+    return trimObjectKey<SetupUserData>(result); 
 
-  async getUser(username: string) {
-    const [user] = await this.manager.query(
-      `SELECT * FROM sec.fn_user_get($1)`,
-      [username],
-    );
-    return user;
-  }
-}
+  // await randomBytes(6).toString('base64');
+  // await randomInt(100000, 999999);
 
-/*
   // signup
   const [result] = await this.manager.query(
     `SELECT * FROM sec.fn_user_signup($1, $2, $3, $4, $5, $6)`,

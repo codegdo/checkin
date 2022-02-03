@@ -12,7 +12,7 @@ const Login: React.FC = (): JSX.Element => {
   const { updateSession } = useAction();
 
   const [form, setForm] = useState<FormData>();
-  const [{ loading, result }, fetchLogin] = useFetch('/api/auth/login');
+  const [{ status, result }, fetchLogin] = useFetch('/api/auth/login');
   const [verified, setVerified] = useState(true);
   const [completed, setCompleted] = useState(true);
 
@@ -25,7 +25,7 @@ const Login: React.FC = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    if (loading === 'success') {
+    if (status === 'success') {
       const { user, orgId, accessToken } = result?.data;
 
       if (user && !user.isActive) {
@@ -48,7 +48,7 @@ const Login: React.FC = (): JSX.Element => {
       }
     }
 
-  }, [loading]);
+  }, [status]);
 
   const handleSubmit = (values: any) => {
     void fetchLogin({ body: values });
@@ -72,7 +72,7 @@ const Login: React.FC = (): JSX.Element => {
 
   return (
     <div>
-      <Form form={form} loading={loading} onSubmit={handleSubmit} />
+      <Form form={form} status={status} onSubmit={handleSubmit} />
     </div>
   );
 };

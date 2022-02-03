@@ -99,7 +99,7 @@ export type FormData = Partial<FormType>;
 
 export type FormProps = {
   form?: FormData;
-  loading?: string;
+  status?: string;
   isKey?: boolean;
   isMap?: boolean;
   onSubmit?: (values: any) => void;
@@ -112,7 +112,7 @@ export type FormContextProps =
     values?: any;
     errors?: any;
     submit?: string;
-    loading?: string;
+    status?: string;
     formSchema?: any;
     isKey?: boolean;
     isMap?: boolean;

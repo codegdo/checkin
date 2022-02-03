@@ -22,7 +22,7 @@ export class UserSignupDto {
   data: string;
 }
 
-class UserVerifyDataDto {
+class FormDataDto {
   @IsString()
   option: string;
 }
@@ -33,8 +33,8 @@ export class UserVerifyDto {
 
   @IsObject()
   @ValidateNested({ each: true })
-  @Type(() => UserVerifyDataDto)
-  data: UserVerifyDataDto
+  @Type(() => FormDataDto)
+  data: FormDataDto
 }
 
 export class UserSetupDto {

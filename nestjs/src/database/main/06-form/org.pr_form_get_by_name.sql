@@ -1,17 +1,18 @@
 -- CREATE PROCEDURE PR_FORM_FIELD_GET_BY_NAME
 CREATE OR REPLACE PROCEDURE org.pr_form_get_by_name(
   p_name varchar,
-  OUT data jsonb
+  OUT data json
 )
 AS
 $BODY$
   DECLARE
-    _field_id int;
-    _field_lookup varchar;
-    _lookup_data jsonb;
-    _field_data jsonb;
-    _max int;
-    _min int := 1;
+    form_field_id int;
+    form_field_lookup varchar;
+    form_field_data jsonb;
+    lookup_data jsonb;
+
+    max_id int;
+    min_id int := 1;
   BEGIN
     DROP TABLE IF EXISTS tmp_form_field CASCADE;
     CREATE TEMP TABLE tmp_form_field AS
@@ -27,27 +28,27 @@ $BODY$
     WHERE tff.field_lookup IS NOT NULL;
 
     SELECT max(id)
-    INTO _max
+    INTO max_id
     FROM tmp_lookup;
 
-    WHILE _max >= _min
+    WHILE max_id >= min_id
     LOOP
       SELECT tl.field_id, tl.field_lookup
-      INTO _field_id, _field_lookup
+      INTO form_field_id, form_field_lookup
       FROM tmp_lookup tl
-      WHERE tl.id = _min;
+      WHERE tl.id = min_id;
 
-      SELECT dbo.fn_lookup_get_value(_field_lookup) INTO _lookup_data;
+      SELECT dbo.fn_lookup_get_value(form_field_lookup) INTO lookup_data;
 
       UPDATE tmp_form_field tff
-      SET field_data = _lookup_data
-      WHERE _field_id = tff.field_id;
+      SET field_data = lookup_data
+      WHERE form_field_id = tff.field_id;
 
-      _min := _min + 1;
+      min_id := min_id + 1;
     END LOOP;
 
     SELECT json_agg(field)::jsonb
-    INTO _field_data
+    INTO form_field_data
     FROM(
       SELECT
       field_id id,
@@ -66,7 +67,7 @@ $BODY$
       FROM tmp_form_field
     ) field;
 
-    SELECT json_agg(form)::jsonb
+    SELECT json_agg(form)::json
     INTO data
     FROM(
       SELECT DISTINCT
@@ -74,7 +75,7 @@ $BODY$
       form_name name,
       form_label label,
       form_data data,
-      _field_data fields
+      form_field_data fields
       FROM tmp_form_field
     ) form;
 

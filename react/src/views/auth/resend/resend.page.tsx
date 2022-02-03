@@ -7,7 +7,7 @@ import ResendSuccess from './resend.success';
 const Resend: React.FC = (): JSX.Element => {
 
   //const { updateSession } = useAction();
-  const [{ loading, result }, fetchSignup] = useFetch('/api/auth/resend');
+  const [{ status, result }, fetchSignup] = useFetch('/api/auth/resend');
   const [form, setForm] = useState<FormData>();
 
   // Load form
@@ -19,10 +19,10 @@ const Resend: React.FC = (): JSX.Element => {
   }, [])
 
   useEffect(() => {
-    if (loading === 'success' && result.ok) {
+    if (status === 'success' && result.ok) {
       //
     }
-  }, [loading]);
+  }, [status]);
 
   const handleSubmit = (values: any) => {
     void fetchSignup({ body: values });
@@ -32,14 +32,14 @@ const Resend: React.FC = (): JSX.Element => {
     return <div>loading...</div>;
   }
 
-  if (loading === 'success') {
+  if (status === 'success') {
     return <ResendSuccess />;
   }
 
   return (
     <>
-      {loading === 'error' && <div>Error</div>}
-      <Form form={form} loading={loading} onSubmit={handleSubmit} />
+      {status === 'error' && <div>Error</div>}
+      <Form form={form} status={status} onSubmit={handleSubmit} />
     </>
   );
 };

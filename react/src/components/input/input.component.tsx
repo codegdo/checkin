@@ -12,14 +12,14 @@ export const Input: React.FC<InputProps> = ({ input, onChange, ...props }): JSX.
 
   const [value, setValue] = useState(initialValue || defaultValue);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setValue(event.target.value);
     onChange && onChange(event.target.value);
   };
 
   return (
     <div>
-      <InputContext.Provider value={{ data, value, handleChange }}>
+      <InputContext.Provider value={{ input: data, value, handleChange }}>
         {
           render({ type })
         }

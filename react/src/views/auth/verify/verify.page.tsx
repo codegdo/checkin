@@ -12,7 +12,7 @@ import Confirm from './verify.confirm';
 
 const Verify: React.FC = (): JSX.Element => {
   const { loggedIn, orgId, user } = useSelector((state: AppState) => state.session);
-  const [{ loading, result }, fetchVerify] = useFetch('/api/auth/verify');
+  const [{ status, result }, fetchVerify] = useFetch('/api/auth/verify');
   const [form, setForm] = useState<FormData>();
   const [confirmed, setConfirmed] = useState(false);
 
@@ -35,10 +35,10 @@ const Verify: React.FC = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    if (loading == 'success') {
+    if (status == 'success') {
       setConfirmed(true);
     }
-  }, [loading]);
+  }, [status]);
 
   const handleSubmit = (values: any) => {
     void fetchVerify({
@@ -63,10 +63,10 @@ const Verify: React.FC = (): JSX.Element => {
 
   return (
     <>
-      {loading === 'error' && <div>Error</div>}
+      {status === 'error' && <div>Error</div>}
       {
         !confirmed ?
-          <Form form={form} loading={loading} onSubmit={handleSubmit} /> :
+          <Form form={form} status={status} onSubmit={handleSubmit} /> :
           <Confirm setConfirmed={setConfirmed} />
       }
     </>

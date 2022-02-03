@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { InputContext } from './input.component';
 
-export const InputText: React.FC = (): JSX.Element => {
+export const InputSelect: React.FC = (): JSX.Element => {
   const context = useContext(InputContext);
 
   if (!context) {
@@ -9,11 +9,17 @@ export const InputText: React.FC = (): JSX.Element => {
   }
 
   const { input, value, handleChange } = context;
-  const { type = 'text' } = input;
+  const { data } = input;
 
   return (
     <span>
-      <input type={type} value={value} onChange={handleChange} />
+      <select defaultValue={value} onChange={handleChange} >
+        {
+          data.map(({ key, value }: any, i: number) => {
+            return <option key={i} value={key}>{value}</option>
+          })
+        }
+      </select>
     </span>
   )
 }

@@ -8,7 +8,7 @@ export const InputRadio: React.FC = (): JSX.Element => {
     throw new Error('Require INPUTTEXT Nested In INPUTCONTEXT');
   }
 
-  const { data: input, value, handleChange } = context;
+  const { input, value, handleChange } = context;
   const { data, name } = input;
 
   return (

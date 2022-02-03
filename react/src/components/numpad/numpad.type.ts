@@ -16,7 +16,7 @@ export type NumPadProps = {
   type?: 'input' | 'passcode' | 'phone';
   value?: string;
   className?: string;
-  loading?: string;
+  status?: string;
   placeholder?: string;
   message?: string;
   focus?: boolean;

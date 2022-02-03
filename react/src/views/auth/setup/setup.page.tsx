@@ -5,31 +5,32 @@ import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 import { Form, FormData } from '../../../components/form';
 import { Navigate } from 'react-router-dom';
+import { objectToKeyValue } from '../../../utils';
 
 const Setup: React.FC = (): JSX.Element => {
   const { loggedIn, user } = useSelector((state: AppState) => state.session);
   const { updateSession } = useAction();
 
-  const [{ loading, result }, fetchSetup] = useFetch('/api/auth/setup');
-  const [{ loading: _loading, result: _result }, getForm] = useFetch('/api/auth/form/auth_setup');
+  const [{ status: submit, result: resultSubmit }, fetchSetup] = useFetch('/api/auth/setup');
+  const [{ status: loading, result: resultLoading }, fetchForm] = useFetch('/api/auth/form?name=auth_setup');
   const [form, setForm] = useState<FormData>();
 
   // load form
   useEffect(() => {
     void (async () => {
-      await getForm();
+      await fetchForm();
     })();
   }, []);
 
   useEffect(() => {
-    if (_loading === 'success') {
-      setForm(_result.data);
+    if (loading === 'success') {
+      setForm(resultLoading.data);
     }
-  }, [_loading]);
+  }, [loading]);
 
   useEffect(() => {
-    if (loading == 'success') {
-      const { user, orgId, accessToken } = result?.data;
+    if (submit == 'success') {
+      const { user, orgId, accessToken } = resultSubmit.data;
       updateSession({
         loggedIn: true,
         user,
@@ -37,11 +38,16 @@ const Setup: React.FC = (): JSX.Element => {
         accessToken
       });
     }
-  }, [loading]);
+  }, [submit]);
 
   const handleSubmit = (values: any) => {
     console.log(values);
-    void fetchSetup({ body: { ...values, username: user?.username } });
+    void fetchSetup({
+      body: {
+        userId: user?.id,
+        data: JSON.stringify(objectToKeyValue(values))
+      }
+    });
   };
 
   if (!form) {
@@ -57,8 +63,8 @@ const Setup: React.FC = (): JSX.Element => {
   }
 
   return <>
-    {loading === 'error' && <div>Error</div>}
-    <Form form={form} isKey={true} loading={loading} onSubmit={handleSubmit} />
+    {submit === 'error' && <div>Error</div>}
+    <Form form={form} isKey={true} status={submit} onSubmit={handleSubmit} />
   </>
 }
 

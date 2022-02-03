@@ -8,36 +8,36 @@ import { objectToKeyValue } from '../../../utils';
 const Signup: React.FC = (): JSX.Element => {
 
   const { updateSession } = useAction();
-  const [{ loading, result }, fetchSignup] = useFetch('/api/auth/signup');
-  const [{ loading: _loading, result: _result }, getForm] = useFetch('/api/auth/form/auth_signup');
+  const [{ status: submit, result: resultSubmit }, fetchSignup] = useFetch('/api/auth/signup');
+  const [{ status: loading, result: resultLoading }, fetchForm] = useFetch('/api/auth/form?name=auth_signup');
   const [form, setForm] = useState<FormData>();
   const [verified, setVerified] = useState(false);
 
   // load form
   useEffect(() => {
     void (async () => {
-      await getForm();
+      await fetchForm();
     })();
   }, []);
 
   useEffect(() => {
-    if (_loading === 'success') {
-      setForm(_result.data);
+    if (loading === 'success') {
+      setForm(resultLoading.data);
     }
-  }, [_loading]);
+  }, [loading]);
 
   useEffect(() => {
 
-    if (loading === 'success') {
+    if (submit === 'success') {
 
-      if (result?.data) {
-        updateSession({ user: result.data });
+      if (resultSubmit.data) {
+        updateSession({ user: resultSubmit.data });
         setVerified(true);
       }
 
     }
 
-  }, [loading]);
+  }, [submit]);
 
   const handleSubmit = (values: any) => {
     //console.log(objectToKeyValue(values));
@@ -58,8 +58,8 @@ const Signup: React.FC = (): JSX.Element => {
 
   return (
     <>
-      {loading === 'error' && <div>Error</div>}
-      <Form form={form} isKey={true} loading={loading} onSubmit={handleSubmit} />
+      {submit === 'error' && <div>Error</div>}
+      <Form form={form} isKey={true} status={submit} onSubmit={handleSubmit} />
     </>
   );
 };

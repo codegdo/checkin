@@ -12,7 +12,7 @@ export const FormInline: React.FC<InlineProps> = ({ inline, ...props }): JSX.Ele
     throw new Error('Require ELEMENT Nested In FORMCONTEXT');
   }
 
-  const { loading, handleClick } = context;
+  const { status, handleClick } = context;
 
   const element = inline || props;
   const { label, description, name, type, value } = element;
@@ -25,7 +25,7 @@ export const FormInline: React.FC<InlineProps> = ({ inline, ...props }): JSX.Ele
         type={type}
         name={name}
         label={label}
-        loading={loading}
+        status={status}
         onClick={handleClick}
       />;
     case 'link':
