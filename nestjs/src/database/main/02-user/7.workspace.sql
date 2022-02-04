@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS org.workspace (
 
   data JSONB,
 
-  owner_id INT,
   org_id INT,
 
   is_active BOOLEAN DEFAULT TRUE,

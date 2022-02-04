@@ -44,7 +44,7 @@ const Setup: React.FC = (): JSX.Element => {
     console.log(values);
     void fetchSetup({
       body: {
-        userId: user?.id,
+        loginId: user?.id,
         data: JSON.stringify(objectToKeyValue(values))
       }
     });

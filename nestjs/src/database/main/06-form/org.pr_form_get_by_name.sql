@@ -65,6 +65,7 @@ $BODY$
       field_parent_id "parentId",
       field_is_required "isRequired"
       FROM tmp_form_field
+      ORDER BY field_position
     ) field;
 
     SELECT json_agg(form)::json
