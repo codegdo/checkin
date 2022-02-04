@@ -55,12 +55,12 @@ VALUES
 ('faxNumber', 'field', 'text', 'sec.organization.fax_number', null, '0', '15'),
 ('website', 'field', 'text', 'sec.organization.website', null, '0', '15'),
 ('subdomain', 'field', 'text', 'sec.organization.subdomain', null, '1', '15'),
---workspace=6
-('name', 'field', 'text', 'org.workspace.name', null, '1', '6'),
-('streetAddress', 'field', 'text', 'org.workspace.street_address', null, '0', '6'),
-('country', 'field', 'select', 'org.workspace.country', 'dbo.territory.country.country_code', '0', '6'),
-('state', 'field', 'select', 'org.workspace.state', 'dbo.territory.state.state_code', '0', '6'),
-('city', 'field', 'text', 'org.workspace.city', null, '0', '6'),
-('postalCode', 'field', 'text', 'org.workspace.postal_code', null, '0', '6'),
-('phoneNumber', 'field', 'text', 'org.workspace.phone_number', null, '0', '6'),
-('faxNumber', 'field', 'text', 'org.workspace.fax_number', null, '0', '6');
+--location=6
+('name', 'field', 'text', 'org.location.name', null, '1', '6'),
+('streetAddress', 'field', 'text', 'org.location.street_address', null, '0', '6'),
+('country', 'field', 'select', 'org.location.country', 'dbo.territory.country.country_code', '0', '6'),
+('state', 'field', 'select', 'org.location.state', 'dbo.territory.state.state_code', '0', '6'),
+('city', 'field', 'text', 'org.location.city', null, '0', '6'),
+('postalCode', 'field', 'text', 'org.location.postal_code', null, '0', '6'),
+('phoneNumber', 'field', 'text', 'org.location.phone_number', null, '0', '6'),
+('faxNumber', 'field', 'text', 'org.location.fax_number', null, '0', '6');

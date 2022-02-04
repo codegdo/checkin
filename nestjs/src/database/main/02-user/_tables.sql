@@ -137,8 +137,8 @@ CREATE TABLE IF NOT EXISTS sec.client (
   UNIQUE(phone_number)
 );
 
--- CREATE TABLE WORKSPACE
-CREATE TABLE IF NOT EXISTS org.workspace (
+-- CREATE TABLE LOCATION
+CREATE TABLE IF NOT EXISTS org.location (
   id SERIAL NOT NULL,
 
   name VARCHAR(95),
@@ -153,7 +153,6 @@ CREATE TABLE IF NOT EXISTS org.workspace (
 
   data JSONB,
 
-  owner_id INT,
   org_id INT,
 
   is_active BOOLEAN DEFAULT TRUE,
@@ -164,8 +163,7 @@ CREATE TABLE IF NOT EXISTS org.workspace (
   updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
-  FOREIGN KEY(territory_id) REFERENCES dbo.territory(id),
-  FOREIGN KEY(owner_id) REFERENCES sec.user(id)
+  FOREIGN KEY(territory_id) REFERENCES dbo.territory(id)
 );
 
 -- CREATE TABLE ORGANIZATION
@@ -213,33 +211,33 @@ CREATE TABLE IF NOT EXISTS sec.role_policy (
 
 CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
 
--- CREATE TABLE USER_WORKSPACE
-CREATE TABLE IF NOT EXISTS sec.user_workspace (
+-- CREATE TABLE USER_LOCATION
+CREATE TABLE IF NOT EXISTS sec.user_location (
   user_id INT NOT NULL,
-  workspace_id INT NOT NULL,
+  location_id INT NOT NULL,
   org_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
-  PRIMARY KEY(user_id, workspace_id),
+  PRIMARY KEY(user_id, location_id),
   FOREIGN KEY(user_id) REFERENCES sec.user(id) ON DELETE SET NULL,
-  FOREIGN KEY(workspace_id) REFERENCES org.workspace(id) ON DELETE SET NULL
+  FOREIGN KEY(location_id) REFERENCES org.location(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_user_workspace ON sec.user_workspace(user_id, workspace_id);
+CREATE INDEX idx_user_location ON sec.user_location(user_id, location_id);
 
--- CREATE TABLE CLIENT_WORKSPACE
-CREATE TABLE IF NOT EXISTS sec.client_workspace (
+-- CREATE TABLE CLIENT_LOCATION
+CREATE TABLE IF NOT EXISTS sec.client_location (
   client_id INT NOT NULL,
-  workspace_id INT NOT NULL,
+  location_id INT NOT NULL,
   org_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
-  PRIMARY KEY(client_id, workspace_id),
+  PRIMARY KEY(client_id, location_id),
   FOREIGN KEY(client_id) REFERENCES sec.client(id) ON DELETE SET NULL,
-  FOREIGN KEY(workspace_id) REFERENCES org.workspace(id) ON DELETE SET NULL
+  FOREIGN KEY(location_id) REFERENCES org.location(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_client_workspace ON sec.client_workspace(client_id, workspace_id);
+CREATE INDEX idx_client_location ON sec.client_location(client_id, location_id);
 
 
 -- DROP TABLES
@@ -251,11 +249,12 @@ sec.policy,
 org.contact,
 sec.user,
 sec.client,
-org.workspace,
+org.location,
 sec.organization,
 sec.role_policy,
-sec.user_workspace,
-sec.client_workspace CASCADE;
+sec.user_location,
+sec.client_location CASCADE;
+
 
 -- END
 

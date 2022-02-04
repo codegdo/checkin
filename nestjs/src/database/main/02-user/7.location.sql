@@ -1,5 +1,5 @@
--- CREATE TABLE WORKSPACE
-CREATE TABLE IF NOT EXISTS org.workspace (
+-- CREATE TABLE LOCATION
+CREATE TABLE IF NOT EXISTS org.location (
   id SERIAL NOT NULL,
 
   name VARCHAR(95),
@@ -24,6 +24,5 @@ CREATE TABLE IF NOT EXISTS org.workspace (
   updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
-  FOREIGN KEY(territory_id) REFERENCES dbo.territory(id),
-  FOREIGN KEY(owner_id) REFERENCES sec.user(id)
+  FOREIGN KEY(territory_id) REFERENCES dbo.territory(id)
 );

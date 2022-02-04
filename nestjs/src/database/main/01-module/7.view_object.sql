@@ -24,7 +24,7 @@ VALUES
 ('202', '4', null),
 --language
 ('203', '5', null),
---workspace
+--location
 ('204', '6', null),
 --service
 ('205', '7', null),

@@ -9,7 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Workspace } from '../entities';
+import { Location } from '../entities';
 
 @Entity({ database: 'main', schema: 'sec', name: 'client' })
 export class Client extends BaseEntity {
@@ -31,19 +31,19 @@ export class Client extends BaseEntity {
   @Column({ name: 'day_of_birth' })
   dayOfBirth: Date;
 
-  @ManyToMany(() => Workspace, (workspace: Workspace) => workspace.clients)
+  @ManyToMany(() => Location, (location: Location) => location.clients)
   @JoinTable({
-    name: 'client_workspace',
+    name: 'client_location',
     joinColumn: {
       name: 'client_id',
       referencedColumnName: 'id',
     },
     inverseJoinColumn: {
-      name: 'workspace_id',
+      name: 'location_id',
       referencedColumnName: 'id',
     },
   })
-  workspaces: Workspace[];
+  locations: Location[];
 
   @Column({ name: 'created_by' })
   createdBy: string;

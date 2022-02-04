@@ -1,5 +1,5 @@
 -- CREATE FUNCTION USER_GET
-CREATE OR REPLACE FUNCTION sec.fn_user_get(p_username VARCHAR)
+CREATE OR REPLACE FUNCTION sec.fn_user_get(p_username varchar)
 RETURNS TABLE (
   id int,
   "firstName" varchar,

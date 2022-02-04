@@ -2,13 +2,15 @@
 CREATE OR REPLACE PROCEDURE sec.pr_user_setup(
   p_login_id int,
   p_form_data json,
-  OUT data json
+  OUT "user" json,
+  OUT locations json
 )
 AS
 $BODY$
   DECLARE
     login_username varchar;
-    workspace_territory_id int;
+    location_territory_id int;
+    user_org_id int;
   BEGIN
 
     -- JSON form_data to table tmp_form_data
@@ -43,21 +45,21 @@ $BODY$
     FROM sec.user
     WHERE id = p_login_id AND org_id IS NULL;
 
-    --SET workspace territory id
+    --SET location territory id
     SELECT id
-    INTO workspace_territory_id
+    INTO location_territory_id
     FROM(
       SELECT id
       FROM dbo.territory
       WHERE country_code = (
         SELECT DISTINCT value
         FROM tmp_data
-        WHERE map = 'org.workspace.country'
+        WHERE map = 'org.location.country'
       )
       AND state_code = (
         SELECT DISTINCT value
         FROM tmp_data
-        WHERE map = 'org.workspace.state'
+        WHERE map = 'org.location.state'
       )
     ) t;
 
@@ -80,7 +82,7 @@ $BODY$
         )
         RETURNING id
       ), w AS (
-        INSERT INTO org.workspace(
+        INSERT INTO org.location(
           name,
           street_address,
           territory_id,
@@ -90,11 +92,11 @@ $BODY$
           created_by
         )
         VALUES(
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.workspace.name'),
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.workspace.street_address'),
-          workspace_territory_id,
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.workspace.city'),
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.workspace.postal_code'),
+          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.location.name'),
+          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.location.street_address'),
+          location_territory_id,
+          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.location.city'),
+          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.location.postal_code'),
           (SELECT id FROM o),
           login_username
         )
@@ -103,17 +105,36 @@ $BODY$
         UPDATE sec.user
         SET org_id = (SELECT id FROM o)
         WHERE id = p_login_id
-        RETURNING username, org_id
+        RETURNING id, username, contact_id, org_id, is_active
       )
       SELECT json_agg(r)::json ->> 0
-      INTO data
+      INTO "user"
       FROM (
         SELECT
-          username,
-          org_id "orgId",
-          (SELECT id from w) "workspaceId"
+          u.id "id",
+          c.first_name "firstName",
+          c.last_name "lastName",
+          c.email_address "emailAddress",
+          c.phone_number "phoneNumber",
+          u.username "username",
+          u.org_id "orgId",
+          u.is_active
+          --(SELECT id from w) "locationId",
         FROM u
+        LEFT JOIN org.contact c ON c.id = u.contact_id
       ) r;
+
+      --SET user_org_id
+      SELECT "user" ->> 'orgId' INTO user_org_id;
+
+      SELECT json_agg(w)::json
+      INTO locations
+      FROM (
+        SELECT id, name 
+        FROM org.location
+        WHERE org_id = user_org_id
+        AND is_active IS NOT NULL
+      ) w;
 
     END IF;
 
@@ -122,4 +143,4 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-DROP PROCEDURE IF EXISTS sec.pr_user_setup(int, json, json);
+DROP PROCEDURE IF EXISTS sec.pr_user_setup(int, json, json, json);

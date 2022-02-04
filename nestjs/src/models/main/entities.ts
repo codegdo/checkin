@@ -1,6 +1,6 @@
 export * from './client/client.entity';
 export * from './contact/contact.entity';
-export * from './workspace/workspace.entity';
+export * from './location/location.entity';
 export * from './organization/organization.entity';
 export * from './policy/policy.entity';
 export * from './role/role.entity';

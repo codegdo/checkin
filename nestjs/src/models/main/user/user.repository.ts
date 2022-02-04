@@ -53,16 +53,26 @@ export class UserRepository extends Repository<User> {
     const { loginId, data } = dto;
 
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_setup($1, $2, $3)`,
-      [loginId, data, null],
+      `CALL sec.pr_user_setup($1, $2, $3, $4)`,
+      [loginId, data, null, null],
     );
 
-    return result.data;
+    console.log('RESULT', result)
+
+    return result;
   }
 
   async userLogin(dto: UserLoginDto): Promise<UserLoginData> {
     const { username, password } = dto;
-    const user = await this.getUser(username);
+
+    const [result] = await this.manager.query(
+      `CALL sec.pr_user_login($1, $2, $3)`,
+      [username, null, null],
+    );
+
+    const { user } = result;
+
+    //const user = await this.getUser(username);
 
     if (!user) {
       return undefined;

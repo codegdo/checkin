@@ -1,5 +1,21 @@
 import { TokenData } from '../token/token.type';
 
+export type UserData = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
+  phoneNumber: string;
+  username: string;
+  password?: string;
+  roleId: number;
+  roleType: string;
+  orgId: number;
+  orgActive?: boolean;
+  isActive: boolean;
+  isOwner: boolean;
+}
+
 export type UserSignupData = {
   id: number;
   username: string;
@@ -19,9 +35,8 @@ export type VerifyData = {
 export type UserVerifyData = TokenData<VerifyData> | null;
 
 export type UserSetupData = {
-  username: string;
-  orgId: string;
-  locationId: string;
+  user: UserData,
+  workspaces: any[]
 } | null;
 
 export type UserLoginData = {

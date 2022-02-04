@@ -122,9 +122,9 @@ export class AuthService {
 
   async setup(dto: UserSetupDto) {
     try {
-      const { username } = await this.userRepository.userSetup(dto);
+      const { user, workspaces } = await this.userRepository.userSetup(dto);
 
-      return this.userRepository.getUser(username);
+      return user;
     } catch (e) {
       this.errorService.handleError(e);
     }

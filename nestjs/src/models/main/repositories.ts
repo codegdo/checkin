@@ -1,6 +1,6 @@
 export * from './client/client.repository';
 export * from './contact/contact.repository';
-export * from './workspace/workspace.repository';
+export * from './location/location.repository';
 export * from './organization/organization.repository';
 export * from './policy/policy.repository';
 export * from './role/role.repository';

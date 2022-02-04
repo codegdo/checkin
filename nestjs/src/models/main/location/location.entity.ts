@@ -12,8 +12,8 @@ import {
 
 import { Client, User, Territory } from '../entities';
 
-@Entity({ database: 'main', schema: 'org', name: 'workspace' })
-export class Workspace extends BaseEntity {
+@Entity({ database: 'main', schema: 'org', name: 'location' })
+export class Location extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
@@ -45,10 +45,10 @@ export class Workspace extends BaseEntity {
   @Column({ name: 'org_id' })
   orgId: number;
 
-  @ManyToMany(() => Client, (client: Client) => client.workspaces)
+  @ManyToMany(() => Client, (client: Client) => client.locations)
   clients: Client[];
 
-  @ManyToMany(() => User, (user: User) => user.workspaces)
+  @ManyToMany(() => User, (user: User) => user.locations)
   users: User[];
 
   @Column({ name: 'created_by' })
