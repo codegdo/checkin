@@ -26,19 +26,18 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   @Public()
   @Post('signup')
   //@Serialize(UserData)
   async signup(@Body() body: UserSignupDto) {
-
     const data = await this.authService.signup(body);
 
     return {
       ...data,
       emailAddress: maskValue(MaskEnum.EMAIL, data.emailAddress),
-      phoneNumber: maskValue(MaskEnum.PHONE, data.phoneNumber)
+      phoneNumber: maskValue(MaskEnum.PHONE, data.phoneNumber),
     };
   }
 
@@ -70,7 +69,7 @@ export class AuthController {
       user: {
         ...rest,
         emailAddress: maskValue(MaskEnum.EMAIL, rest.emailAddress),
-        phoneNumber: maskValue(MaskEnum.PHONE, rest.phoneNumber)
+        phoneNumber: maskValue(MaskEnum.PHONE, rest.phoneNumber),
       },
     };
   }
@@ -84,9 +83,7 @@ export class AuthController {
   @Public()
   @Post('setup')
   async setup(@Session() session: any, @Body() body: UserSetupDto) {
-    console.log(body);
-    const user = await this.authService.setup(body);
-
+    const { user, locations } = await this.authService.setup(body);
     const { password, orgId, ...rest } = user;
     const accessToken = this.jwtService.sign({ orgId });
 

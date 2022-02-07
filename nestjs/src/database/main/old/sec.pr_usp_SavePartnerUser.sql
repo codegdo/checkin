@@ -7,17 +7,16 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-ALTER PROCEDURE [Org].[Usp_SavePartnerUser](@FormData  dbo.FORMDATA readonly
-											,@ControlGroupFormData  dbo.FORMDATA readonly
-                                              ,@orgID    INT
-                                              ,@UDFormID INT
-											  ,@Userid INT
-											  ,@LoginUserid INT
-											  ,@ServerUrl VARCHAR(200 ) = N'PartnerPortal.bz'
-											  ,@isActive int = 1 
-											  ,@SessionID            VARCHAR(50)=null) --11/03/2014
-
-
+ALTER PROCEDURE [Org].[Usp_SavePartnerUser](
+   @FormData  dbo.FORMDATA readonly,
+   @ControlGroupFormData  dbo.FORMDATA readonly,
+   @orgID INT,
+   @UDFormID INT,
+   @Userid INT,
+   @LoginUserid INT,
+   @ServerUrl VARCHAR(200 ) = N'PartnerPortal.bz',
+   @isActive int = 1,
+   @SessionID VARCHAR(50)=null) --11/03/2014
 AS
  /****************************************************************                   
 Author:  CMR DBA                    
@@ -28,24 +27,21 @@ CHANGE LOG
 Date           Author           Description              
 -----------------------------------------------------------------              
 01/30/2014     CMR DBA          Created      
-11/03/2014     CmrSunil         732 Support For file upload on 
-								  partner registration     
+11/03/2014     CmrSunil         732 Support For file upload on partner registration     
 12/03/2014     cmrSunil         584 Contact list view not returning contacts
 03/05/2014     cmrSunil         Resend user Activation 
 10/10/2017	   cmrMegha	        added tempisactive = 1, to update object value only at submission
 12/13/2017     cmrArturo        Set TempIsActive = 0 in Org.Upload for uploaded files that have been deleted.
-10/11/2018	   cmrThanh			Updated logic for @ContactTerritoryID retrieval to rely on lookuptable, lookupcolumn instead of on maptocolumn
-12/11/2019		cmrThanh			Added logic for RebateSpiff module, table RebateSpiff.reb.ProgramAccount update
-10/05/2021		cmrKenny		Added logic so if a user updates the company, the system will update org.Contact.CompanyID
+10/11/2018	   cmrThanh			  Updated logic for @ContactTerritoryID retrieval to rely on lookuptable, lookupcolumn instead of on maptocolumn
+12/11/2019		cmrThanh			  Added logic for RebateSpiff module, table RebateSpiff.reb.ProgramAccount update
+10/05/2021		cmrKenny		     Added logic so if a user updates the company, the system will update org.Contact.CompanyID
 ****************************************************************/
   BEGIN
       SET XACT_ABORT ON
       SET nocount ON
 
       BEGIN TRY
-
-
-          DECLARE  @isUserUpdate    BIT = 0
+         DECLARE  @isUserUpdate    BIT = 0
                   ,@isCompanyUpdate BIT = 0
                   ,@isContactUpdate BIT = 0
                   ,@CompanyID       INT = 0
@@ -64,10 +60,11 @@ Date           Author           Description
                   ,@DefaultCompanyForm int
                   ,@DefaultContactForm int
                   ,@ResendActivationEmail bit = 0
+      
       IF @Userid = 0
 	   Set @UserID = null
 
-          DECLARE @Data AS TABLE
+         DECLARE @Data AS TABLE
             ( Id            INT IDENTITY(1, 1)
              ,FieldID      VARCHAR(10)
              ,DataValue    NVARCHAR(MAX)

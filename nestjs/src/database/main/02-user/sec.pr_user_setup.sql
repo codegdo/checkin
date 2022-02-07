@@ -112,15 +112,21 @@ $BODY$
       FROM (
         SELECT
           u.id "id",
+          u.username "username",
+          u.org_id "orgId",
+          u.is_active,
+          
           c.first_name "firstName",
           c.last_name "lastName",
           c.email_address "emailAddress",
           c.phone_number "phoneNumber",
-          u.username "username",
-          u.org_id "orgId",
-          u.is_active
-          --(SELECT id from w) "locationId",
+          
+          r.id "roleId",
+          r.is_owner,
+          rt.name "roleType"
         FROM u
+        LEFT JOIN sec.role r ON r.id = u.role_id
+        LEFT JOIN dbo.role_type rt ON rt.id = r.role_type_id
         LEFT JOIN org.contact c ON c.id = u.contact_id
       ) r;
 
@@ -135,7 +141,8 @@ $BODY$
         WHERE org_id = user_org_id
         AND is_active IS NOT NULL
       ) w;
-
+    ELSE
+      RAISE EXCEPTION no_data_found;
     END IF;
 
     COMMIT;

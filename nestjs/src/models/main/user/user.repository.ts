@@ -18,6 +18,8 @@ import {
   UserSetupData,
   UserLoginData,
 } from './user.type';
+import { ConflictException } from '@nestjs/common';
+import { ErrorMessageEnum } from 'src/common/modules/error/error.type';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
@@ -36,7 +38,6 @@ export class UserRepository extends Repository<User> {
   }
 
   async userVerify(loginId: number): Promise<UserVerifyData> {
-
     const key = await randomInt(100000, 999999).toString();
     const type = TokenEnum.VERIFY;
     const expiredAt = new Date().getTime() + 300000; // 5 mins
@@ -57,8 +58,6 @@ export class UserRepository extends Repository<User> {
       [loginId, data, null, null],
     );
 
-    console.log('RESULT', result)
-
     return result;
   }
 
@@ -70,29 +69,28 @@ export class UserRepository extends Repository<User> {
       [username, null, null],
     );
 
-    const { user } = result;
+    const {
+      user: { password: _password, ...rest },
+      locations,
+    } = result;
 
-    //const user = await this.getUser(username);
+    const isValidate = await validatePassword(password, _password);
 
-    if (!user) {
-      return undefined;
+    if (isValidate) {
+      return { user: rest, locations };
+    } else {
+      throw new ConflictException(ErrorMessageEnum.NOT_MATCH);
     }
-
-    const { password: _password, ...rest } = user;
-
-    return (await validatePassword(password, _password)) ? rest : null;
   }
 
   async userConfirm(key: string): Promise<any> {
     const [result] = await this.manager.query(
-      `SELECT is_active AS "isActive" FROM sec.fn_user_confirm($1)`,
-      [key],
+      `CALL sec.pr_user_confirm($1, $2)`,
+      [key, null],
     );
 
     return result;
   }
-
-
 
   async getUser(username: string) {
     const [user] = await this.manager.query(

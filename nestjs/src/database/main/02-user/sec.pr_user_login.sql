@@ -15,8 +15,6 @@ $BODY$
     FROM (
       SELECT sec.fn_user_get(p_username)
     ) u;
-
-    --RAISE NOTICE 'USER %', "user";
     
     IF "user" IS NOT NULL THEN
       
@@ -31,7 +29,8 @@ $BODY$
         WHERE org_id = user_org_id
         AND is_active IS NOT NULL
       ) l;
-      
+    ELSE
+      RAISE EXCEPTION no_data_found;
     END IF;
     
     COMMIT;

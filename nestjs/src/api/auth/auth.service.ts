@@ -72,7 +72,7 @@ export class AuthService {
 
     private readonly messageService: MessageAuthService,
     private readonly errorService: ErrorService,
-  ) { }
+  ) {}
 
   async signup(dto: UserSignupDto) {
     try {
@@ -89,10 +89,14 @@ export class AuthService {
   }
 
   async verify(dto: UserVerifyDto) {
-    const { loginId, data: { option } } = dto;
+    const {
+      loginId,
+      data: { option },
+    } = dto;
 
     try {
-      const type = (option == 'phoneNumber') ? MessageEnum.MESSAGE : MessageEnum.EMAIL;
+      const type =
+        option == 'phoneNumber' ? MessageEnum.MESSAGE : MessageEnum.EMAIL;
       const data = await this.userRepository.userVerify(loginId);
 
       return this.messageService.sendVerify({ type, context: data });
@@ -102,29 +106,27 @@ export class AuthService {
   }
 
   async login(dto: UserLoginDto) {
-    const user = await this.userRepository.userLogin(dto);
-    const { orgId, orgActive, isActive } = user;
+    try {
+      const { user, locations } = await this.userRepository.userLogin(dto);
+      const { orgId, orgActive, isActive } = user;
 
-    if (!user) {
-      throw new NotFoundException(ErrorMessageEnum.NOT_FOUND);
+      if (orgId && !orgActive) {
+        throw new BadRequestException(ErrorMessageEnum.ORGANIZATION_RESTRICT);
+      }
+
+      if (orgId && !isActive) {
+        throw new BadRequestException(ErrorMessageEnum.ACCOUNT_RESTRICT);
+      }
+
+      return user;
+    } catch (e) {
+      this.errorService.handleError(e);
     }
-
-    if (orgId && !orgActive) {
-      throw new BadRequestException(ErrorMessageEnum.ORGANIZATION_RESTRICT);
-    }
-
-    if (orgId && !isActive) {
-      throw new BadRequestException(ErrorMessageEnum.ACCOUNT_RESTRICT);
-    }
-
-    return user;
   }
 
   async setup(dto: UserSetupDto) {
     try {
-      const { user, workspaces } = await this.userRepository.userSetup(dto);
-
-      return user;
+      return this.userRepository.userSetup(dto);
     } catch (e) {
       this.errorService.handleError(e);
     }
@@ -138,7 +140,6 @@ export class AuthService {
     }
   }
 
-
   async form(name: string) {
     try {
       return this.formRepository.getFormByName(name);
@@ -146,9 +147,6 @@ export class AuthService {
       this.errorService.handleError(e);
     }
   }
-
-
-
 }
 
 //   async resend(username: string) {
