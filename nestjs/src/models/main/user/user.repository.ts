@@ -20,18 +20,19 @@ import {
 } from './user.type';
 import { ConflictException } from '@nestjs/common';
 import { ErrorMessageEnum } from 'src/common/modules/error/error.type';
+import { FormTypeEnum } from '../form/form.type';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   async userSignup(dto: UserSignupDto): Promise<UserSignupData> {
-    let { data } = dto;
+    let { formName, data } = dto;
 
     // encrypt password
     data = await encryptKeyValue(2, data);
 
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_signup($1, $2)`,
-      [data, null],
+      `CALL sec.pr_user_signup($1, $2, $3)`,
+      [formName, data, null],
     );
 
     return result.data;

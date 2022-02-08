@@ -16,6 +16,10 @@ export class UserSignupDto {
   //@Type(() => SignupFormData)
   //data: SignupFormData
 
+  @IsNotEmpty()
+  @IsString()
+  formName: string;
+
   @IsJSON()
   @IsNotEmpty()
   @IsString()

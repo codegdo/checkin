@@ -43,6 +43,7 @@ const Signup: React.FC = (): JSX.Element => {
     //console.log(objectToKeyValue(values));
     void fetchSignup({
       body: {
+        formName: 'auth_signup',
         data: JSON.stringify(objectToKeyValue(values))
       }
     });
