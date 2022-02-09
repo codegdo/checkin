@@ -17,19 +17,25 @@ INSERT
 INTO sec.level(id, name)
 VALUES
 -- Module
-('1', 'allow'),
+('1', 'all'),
 ('2', 'deny'),
+
 -- View
-('11', 'read'),
-('12', 'write'),
-('13', 'create'),
-('14', 'delete'),
-('15', 'all'),
+('10', 'all'),
+('11', 'deny'),
+('12', 'read'),
+('13', 'write'),
+('14', 'create'),
+('15', 'delete'),
+
 -- Object
-('21', 'read'),
-('22', 'write'),
-('23', 'all'),
+('20', 'all'),
+('21', 'deny'),
+('22', 'read'),
+('23', 'write'),
+
 -- Field
-('31', 'read'),
-('32', 'write'),
-('33', 'all');
+('30', 'all'),
+('31', 'deny'),
+('32', 'read'),
+('33', 'write');

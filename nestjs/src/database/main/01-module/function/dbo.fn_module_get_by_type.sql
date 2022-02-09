@@ -70,9 +70,6 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
+SELECT * FROM dbo.fn_module_get_by_type('');
 
-
--- DROP FUNCTIONS
-
-DROP FUNCTION IF EXISTS
-dbo.fn_module_get_by_type;
+DROP FUNCTION IF EXISTS dbo.fn_module_get_by_type;

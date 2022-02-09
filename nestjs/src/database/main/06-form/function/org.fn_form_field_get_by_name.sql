@@ -1,5 +1,5 @@
 -- CREATE FUNCTION FN_FORM_FIELD_GET
-CREATE OR REPLACE FUNCTION org.fn_form_field_get(p_name varchar)
+CREATE OR REPLACE FUNCTION org.fn_form_field_get_by_name(p_name varchar)
 RETURNS TABLE(
   form_id int,
   form_name varchar,
@@ -62,6 +62,6 @@ END;
 $BODY$
 LANGUAGE plpgsql;
 
-SELECT * FROM org.fn_form_field_get('auth_signup');
+SELECT * FROM org.fn_form_field_get_by_name('auth_signup');
 
-DROP FUNCTION IF EXISTS org.fn_form_field_get;
+DROP FUNCTION IF EXISTS org.fn_form_field_get_by_name;

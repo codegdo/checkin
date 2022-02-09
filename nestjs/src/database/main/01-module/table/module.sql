@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS dbo.module (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
-  parent_id INT,
+  parent_id INT REFERENCES dbo.module(id) ON DELETE SET NULL,
   sort_order INTEGER DEFAULT 0,
 
   is_external BOOLEAN DEFAULT FALSE,
@@ -24,15 +24,15 @@ VALUES
 
 ('1', 'config', '100', '0', '0', '0', '0', '1'),
 ('2', 'setup', '101', '1', '0', '1', '0', '1'),
-
 ('3', 'account', '102', '2', '1', '1', '0', '1'),
 ('4', 'help', '102', '3', '1', '1', '0', '1'),
 
-('11', 'calendar', '103', '4', '1', '1', '1', '1'),
-('12', 'checkin', '103', '5', '1', '1', '1', '1'),
-('13', 'todo', '103', '6', '1', '1', '1', '1'),
-('14', 'checkout', '103', '7', '1', '1', '1', '1'),
+('50', 'calendar', '103', '4', '1', '1', '1', '1'),
+('51', 'checkin', '103', '5', '1', '1', '1', '1'),
+('52', 'todo', '103', '6', '1', '1', '1', '1'),
+('53', 'checkout', '103', '7', '1', '1', '1', '1'),
 
+-- grouping
 ('100', 'system', null, null, '1', '1', '0', '1'),
 ('101', 'admin', null, null, '1', '1', '0', '1'),
 ('102', 'user', null, null, '1', '1', '0', '1'),

@@ -28,6 +28,8 @@ const Login: React.FC = (): JSX.Element => {
     if (status === 'success') {
       const { user, orgId, accessToken } = result?.data;
 
+      console.log(result.data);
+
       if (user && !user.isActive) {
         updateSession({ user });
         setVerified(false);
@@ -71,9 +73,10 @@ const Login: React.FC = (): JSX.Element => {
   }
 
   return (
-    <div>
+    <>
+      {status === 'error' && <div>Error</div>}
       <Form form={form} status={status} onSubmit={handleSubmit} />
-    </div>
+    </>
   );
 };
 

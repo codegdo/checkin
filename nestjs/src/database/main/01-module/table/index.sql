@@ -35,7 +35,7 @@ VALUES
 CREATE TABLE IF NOT EXISTS dbo.module (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
-  parent_id INT,
+  parent_id INT REFERENCES dbo.module(id) ON DELETE SET NULL,
   sort_order INTEGER DEFAULT 0,
 
   is_external BOOLEAN DEFAULT FALSE,
@@ -57,14 +57,13 @@ VALUES
 
 ('1', 'config', '100', '0', '0', '0', '0', '1'),
 ('2', 'setup', '101', '1', '0', '1', '0', '1'),
-
 ('3', 'account', '102', '2', '1', '1', '0', '1'),
 ('4', 'help', '102', '3', '1', '1', '0', '1'),
 
-('11', 'calendar', '103', '4', '1', '1', '1', '1'),
-('12', 'checkin', '103', '5', '1', '1', '1', '1'),
-('13', 'todo', '103', '6', '1', '1', '1', '1'),
-('14', 'checkout', '103', '7', '1', '1', '1', '1'),
+('50', 'calendar', '103', '4', '1', '1', '1', '1'),
+('51', 'checkin', '103', '5', '1', '1', '1', '1'),
+('52', 'todo', '103', '6', '1', '1', '1', '1'),
+('53', 'checkout', '103', '7', '1', '1', '1', '1'),
 
 ('100', 'system', null, null, '1', '1', '0', '1'),
 ('101', 'admin', null, null, '1', '1', '0', '1'),
@@ -76,7 +75,7 @@ CREATE TABLE IF NOT EXISTS dbo.view (
   id SERIAL,
   name VARCHAR(95) NOT NULL,
   type VARCHAR(45) CHECK(type in ('grid', 'form', 'null')),
-  parent_id INT,
+  parent_id INT REFERENCES dbo.view(id) ON DELETE SET NULL,
   sort_order INTEGER DEFAULT 0,
 
   is_external BOOLEAN DEFAULT TRUE,
@@ -94,39 +93,41 @@ CREATE TABLE IF NOT EXISTS dbo.view (
 INSERT
 INTO dbo.view(id, name, type, parent_id, sort_order, is_external, is_internal, is_active)
 VALUES
-('10', 'config',         'null', null, '0', '0', '1', '1'),
-('20', 'setup',          'null', null, '0', '0', '1', '1'),
-('30', 'account',        'null', null, '0', '0', '1', '1'),
-('40', 'help',           'null', null, '0', '0', '1', '1'),
-('50', 'calendar',       'null', null, '0', '0', '1', '1'),
-('60', 'checkin',        'null', null, '0', '0', '1', '1'),
-('70', 'todo',           'null', null, '0', '0', '1', '1'),
-('80', 'checkout',       'null', null, '0', '0', '1', '1'),
+-- grouping
+('10', 'config',         'null', null, '0', '1', '1', '1'),
+('20', 'setup',          'null', null, '0', '1', '1', '1'),
+('30', 'account',        'null', null, '0', '1', '1', '1'),
+('40', 'help',           'null', null, '0', '1', '1', '1'),
+('50', 'calendar',       'null', null, '0', '1', '1', '1'),
+('60', 'checkin',        'null', null, '0', '1', '1', '1'),
+('70', 'todo',           'null', null, '0', '1', '1', '1'),
+('80', 'checkout',       'null', null, '0', '1', '1', '1'),
 
---Setup
+--setup
 ('200', 'users',        'grid', '20', '0', '0', '1', '1'),
-('201', 'clients',      'grid', '20', '2', '0', '1', '1'),
-('202', 'roles',        'grid', '20', '3', '0', '1', '1'),
+('201', 'clients',      'grid', '20', '1', '0', '1', '1'),
+('202', 'roles',        'grid', '20', '2', '0', '1', '1'),
 
-('203', 'languages',    'grid', '20', '5', '0', '1', '1'),
-('204', 'locations',    'grid', '20', '6', '0', '1', '1'),
-('205', 'services',     'grid', '20', '7', '0', '1', '1'),
-('206', 'prices',       'grid', '20', '8', '0', '1', '1'),
+('203', 'languages',    'grid', '20', '3', '0', '1', '1'),
+('204', 'locations',    'grid', '20', '4', '0', '1', '1'),
+('205', 'services',     'grid', '20', '5', '0', '1', '1'),
+('206', 'prices',       'grid', '20', '6', '0', '1', '1'),
 
-('207', 'forms',        'grid', '20', '9', '0', '1', '1'),
-('208', 'templates',    'grid', '20', '10', '0', '1', '1'),
+('207', 'forms',        'grid', '20', '7', '0', '1', '1'),
+('208', 'templates',    'grid', '20', '8', '0', '1', '1'),
 
-('209', 'calendars',    'grid', '20', '12', '0', '1', '1'),
-('210', 'checkins',     'grid', '20', '13', '0', '1', '1'),
-('211', 'todos',        'grid', '20', '14', '0', '1', '1'),
-('212', 'checkouts',    'grid', '20', '15', '0', '1', '1'),
+('209', 'calendars',    'grid', '20', '9', '0', '1', '1'),
+('210', 'checkins',     'grid', '20', '10', '0', '1', '1'),
+('211', 'todos',        'grid', '20', '11', '0', '1', '1'),
+('212', 'checkouts',    'grid', '20', '12', '0', '1', '1'),
 --account
 ('300', 'profile',      'form', '30', '0', '1', '1', '1'),
 ('301', 'organization', 'form', '30', '1', '1', '1', '1'),
-('302', 'subscription', 'form', '30', '1', '1', '1', '1'),
+('302', 'subscription', 'form', '30', '2', '1', '1', '1'),
 --help
 ('400', 'supports',     'grid', '40', '0', '1', '1', '1'),
 ('401', 'guides',       'grid', '40', '1', '1', '1', '1'),
+
 --calendar
 ('1100', 'appointments',  'grid', '50', '0', '1', '1', '1'),
 --checkin
@@ -195,37 +196,38 @@ CREATE INDEX idx_feature_module ON dbo.feature_module(feature_id, module_id);
 INSERT
 INTO dbo.feature_module(feature_id, module_id, org_id)
 VALUES
-('1', '11', null),
-('2', '11', null),
-('3', '11', null),
-('4', '11', null),
-('5', '11', null),
-('6', '11', null),
-('7', '11', null),
-('8', '11', null),
-('9', '11', null),
-
-('1', '12', null),
-('2', '12', null),
-('3', '12', null),
-('4', '12', null),
-('5', '12', null),
-('6', '12', null),
-('7', '12', null),
-('8', '12', null),
-('9', '12', null),
-
-('2', '13', null),
-('5', '13', null),
-('6', '13', null),
-('7', '13', null),
-('8', '13', null),
-('9', '13', null),
-
-('1', '14', null),
-('2', '14', null),
-('3', '14', null),
-('4', '14', null);
+--calendar
+('1', '50', null),
+('2', '50', null),
+('3', '50', null),
+('4', '50', null),
+('5', '50', null),
+('6', '50', null),
+('7', '50', null),
+('8', '50', null),
+('9', '50', null),
+--checkin
+('1', '51', null),
+('2', '51', null),
+('3', '51', null),
+('4', '51', null),
+('5', '51', null),
+('6', '51', null),
+('7', '51', null),
+('8', '51', null),
+('9', '51', null),
+--todo
+('2', '52', null),
+('5', '52', null),
+('6', '52', null),
+('7', '52', null),
+('8', '52', null),
+('9', '52', null),
+--checkout
+('1', '53', null),
+('2', '53', null),
+('3', '53', null),
+('4', '53', null);
 
 -- CREATE TABLE MODULE_VIEW
 CREATE TABLE IF NOT EXISTS dbo.module_view (
@@ -265,13 +267,13 @@ VALUES
 ('4', '400', null),
 ('4', '401', null),
 --calendar
-('11', '1100', null),
+('50', '1100', null),
 --checkin
-('12', '1200', null),
+('51', '1200', null),
 --todo
-('13', '1300', null),
+('52', '1300', null),
 --checkout
-('14', '1400', null);
+('53', '1400', null);
 
 -- CREATE TABLE VIEW_OBJECT
 CREATE TABLE IF NOT EXISTS dbo.view_object (

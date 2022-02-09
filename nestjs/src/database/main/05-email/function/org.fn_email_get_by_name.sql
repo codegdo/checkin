@@ -50,18 +50,11 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-
 -- CALL FUNCTIONS
 
 SELECT * FROM org.fn_email_get_by_name('verify');
-
--- END
 
 -- DROP FUNCTIONS
 
 DROP FUNCTION IF EXISTS
 org.fn_email_get_by_name;
-
--- END
-
-select * from sec.token;

@@ -66,19 +66,19 @@ export class UserRepository extends Repository<User> {
     const { username, password } = dto;
 
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_login($1, $2, $3)`,
-      [username, null, null],
+      `CALL sec.pr_user_login($1, $2, $3, $4, $5)`,
+      [username, null, null, null, null],
     );
 
     const {
-      user: { password: _password, ...rest },
-      locations,
+      user: { password: _password, ..._user },
+      ...rest
     } = result;
 
     const isValidate = await validatePassword(password, _password);
 
     if (isValidate) {
-      return { user: rest, locations };
+      return { user: _user, ...rest };
     } else {
       throw new ConflictException(ErrorMessageEnum.NOT_MATCH);
     }

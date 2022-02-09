@@ -26,7 +26,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   @Public()
   @Post('signup')
@@ -50,15 +50,17 @@ export class AuthController {
   @Public()
   @Post('login')
   async login(@Session() session: any, @Body() body: UserLoginDto) {
-    const user = await this.authService.login(body);
-    const { password, orgId, orgActive, ...rest } = user;
+    const { user, policy, nav } = await this.authService.login(body);
+    const { password, orgId, ...rest } = user;
     const accessToken = this.jwtService.sign({ orgId });
 
     if (orgId) {
-      session.user = user;
+      session.data = { user, policy, nav };
 
       return {
         user: { ...rest },
+        policy,
+        nav,
         orgId,
         sid: session.id,
         accessToken,

@@ -1,11 +1,11 @@
 type ModuleViewObjectData = {
   module: string;
-  mlabel: string;
-  mgroup: string;
+  moduleLabel: string;
+  moduleGroup: string;
 
   view: string;
-  vlabel: string;
-  vgroup: string;
+  viewLabel: string;
+  viewGroup: string;
 
   object: string;
 }
@@ -38,15 +38,20 @@ function mapPolicy(policy: ModuleViewObjectPolicy, i: ModuleViewObjectData) {
   const { modules = {}, views = {}, objects = {} } = policy;
 
   const m = {
-    label: i.mlabel || i.module,
-    group: i.mgroup,
-    type: PermissionType.MODULE
+    label: i.moduleLabel || i.module,
+    group: i.moduleGroup,
+    type: PermissionType.MODULE,
+    access: 'all'
   };
   const v = {
-    type: PermissionType.VIEW
+    label: i.viewLabel || i.view,
+    group: i.viewGroup,
+    type: PermissionType.VIEW,
+    access: 'all'
   };
   const o = {
-    type: PermissionType.OBJECT
+    type: PermissionType.OBJECT,
+    access: 'all'
   };
 
   return {
@@ -94,7 +99,7 @@ function mapNav(nav: ModuleViewObjectNav, i: ModuleViewObjectData) {
   }
 }
 
-export const moduleViewObjectGroup = (list: ModuleViewObjectData[] = []) => {
+export const moduleViewObjectGroup = (list: ModuleViewObjectData[] = []): any => {
 
   return list.reduce((a, i: ModuleViewObjectData) => {
 

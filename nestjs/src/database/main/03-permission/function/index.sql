@@ -1,5 +1,5 @@
--- CREATE FUNCTION FN_PERMISSION_GET_LEVEL
-CREATE OR REPLACE FUNCTION sec.fn_permission_get_level()
+-- CREATE FUNCTION FN_PERMISSION_GET_ACCESS_LEVEL
+CREATE OR REPLACE FUNCTION sec.fn_permission_get_access_level()
 RETURNS TABLE (
   "type" varchar,
   "access" text
@@ -21,7 +21,7 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-SELECT * FROM sec.fn_permission_get_level();
+SELECT * FROM sec.fn_permission_get_access_level();
 
 DROP FUNCTION IF EXISTS
-sec.fn_permission_get_level;
+sec.fn_permission_get_access_level;

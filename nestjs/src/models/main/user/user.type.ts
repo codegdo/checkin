@@ -42,4 +42,9 @@ export type UserSetupData = {
 export type UserLoginData = {
   user: UserData;
   locations: any[];
+  organizations: any[];
+  permissions: any[];
+  modules: any[];
+  policy: any;
+  nav: any;
 } | null;

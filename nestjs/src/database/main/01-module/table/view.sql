@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS dbo.view (
   id SERIAL,
   name VARCHAR(95) NOT NULL,
   type VARCHAR(45) CHECK(type in ('grid', 'form', 'null')),
-  parent_id INT,
+  parent_id INT REFERENCES dbo.view(id) ON DELETE SET NULL,
   sort_order INTEGER DEFAULT 0,
 
   is_external BOOLEAN DEFAULT TRUE,
@@ -21,14 +21,15 @@ CREATE TABLE IF NOT EXISTS dbo.view (
 INSERT
 INTO dbo.view(id, name, type, parent_id, sort_order, is_external, is_internal, is_active)
 VALUES
-('10', 'config',         'null', null, '0', '0', '1', '1'),
-('20', 'setup',          'null', null, '0', '0', '1', '1'),
-('30', 'account',        'null', null, '0', '0', '1', '1'),
-('40', 'help',           'null', null, '0', '0', '1', '1'),
-('50', 'calendar',       'null', null, '0', '0', '1', '1'),
-('60', 'checkin',        'null', null, '0', '0', '1', '1'),
-('70', 'todo',           'null', null, '0', '0', '1', '1'),
-('80', 'checkout',       'null', null, '0', '0', '1', '1'),
+-- grouping
+('10', 'config',         'null', null, '0', '1', '1', '1'),
+('20', 'setup',          'null', null, '0', '1', '1', '1'),
+('30', 'account',        'null', null, '0', '1', '1', '1'),
+('40', 'help',           'null', null, '0', '1', '1', '1'),
+('50', 'calendar',       'null', null, '0', '1', '1', '1'),
+('60', 'checkin',        'null', null, '0', '1', '1', '1'),
+('70', 'todo',           'null', null, '0', '1', '1', '1'),
+('80', 'checkout',       'null', null, '0', '1', '1', '1'),
 
 --setup
 ('200', 'users',        'grid', '20', '0', '0', '1', '1'),
@@ -36,7 +37,7 @@ VALUES
 ('202', 'roles',        'grid', '20', '2', '0', '1', '1'),
 
 ('203', 'languages',    'grid', '20', '3', '0', '1', '1'),
-('204', 'locations',   'grid', '20', '4', '0', '1', '1'),
+('204', 'locations',    'grid', '20', '4', '0', '1', '1'),
 ('205', 'services',     'grid', '20', '5', '0', '1', '1'),
 ('206', 'prices',       'grid', '20', '6', '0', '1', '1'),
 
@@ -54,6 +55,7 @@ VALUES
 --help
 ('400', 'supports',     'grid', '40', '0', '1', '1', '1'),
 ('401', 'guides',       'grid', '40', '1', '1', '1', '1'),
+
 --calendar
 ('1100', 'appointments',  'grid', '50', '0', '1', '1', '1'),
 --checkin

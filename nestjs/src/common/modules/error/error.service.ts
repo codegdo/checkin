@@ -11,16 +11,21 @@ export class ErrorService {
 
 
   handleError(error) {
-    switch (error.code) {
-      case 'P0002':
-        this.logger.warn(`${error.message}`, error);
-        throw new NotFoundException(ErrorMessageEnum.NOT_FOUND);
-      case '23505':
-        this.logger.warn(`${error.message}`, error);
-        throw new ConflictException(ErrorMessageEnum.UNIQUE_VIOLATION);
-      default:
-        this.logger.error(`${error.message}`, error);
-        throw new InternalServerErrorException(error.code);
+    if (error.code) {
+      switch (error.code) {
+        case 'P0002':
+          this.logger.warn(error);
+          throw new NotFoundException(ErrorMessageEnum.NOT_FOUND);
+        case '23505':
+          this.logger.warn(error);
+          throw new ConflictException(ErrorMessageEnum.UNIQUE_VIOLATION);
+        default:
+          this.logger.error(error);
+          throw new InternalServerErrorException(ErrorMessageEnum.INTERNAL_SERVER_ERROR);
+      }
+    } else {
+      this.logger.warn(error);
+      throw error;
     }
   }
 }

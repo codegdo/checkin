@@ -33,6 +33,7 @@ import {
   UserSignupDto,
   UserVerifyDto,
 } from 'src/models/main/dtos';
+import { moduleViewObjectGroup } from 'src/common/utils/module-view-object-group.util';
 
 @Injectable()
 export class AuthService {
@@ -72,7 +73,7 @@ export class AuthService {
 
     private readonly messageService: MessageAuthService,
     private readonly errorService: ErrorService,
-  ) {}
+  ) { }
 
   async signup(dto: UserSignupDto) {
     try {
@@ -107,18 +108,16 @@ export class AuthService {
 
   async login(dto: UserLoginDto) {
     try {
-      const { user, locations } = await this.userRepository.userLogin(dto);
-      const { orgId, orgActive, isActive } = user;
-
-      if (orgId && !orgActive) {
-        throw new BadRequestException(ErrorMessageEnum.ORGANIZATION_RESTRICT);
-      }
+      const { user, locations, organizations, modules, permissions } = await this.userRepository.userLogin(dto);
+      const { orgId, isActive } = user;
 
       if (orgId && !isActive) {
-        throw new BadRequestException(ErrorMessageEnum.ACCOUNT_RESTRICT);
+        throw new BadRequestException(ErrorMessageEnum.ACCOUNT_UNACTIVE);
       }
 
-      return user;
+      const { policy, nav } = moduleViewObjectGroup(modules);
+
+      return { user, policy, nav, permissions };
     } catch (e) {
       this.errorService.handleError(e);
     }

@@ -39,23 +39,29 @@ CREATE TABLE IF NOT EXISTS sec.level (
 INSERT
 INTO sec.level(id, name)
 VALUES
--- module
-('1', 'allow'),
+-- Module
+('1', 'all'),
 ('2', 'deny'),
--- view
+
+-- View
 ('10', 'all'),
-('11', 'read'),
-('12', 'write'),
-('13', 'create'),
-('14', 'delete'),
--- object
+('11', 'deny'),
+('12', 'read'),
+('13', 'write'),
+('14', 'create'),
+('15', 'delete'),
+
+-- Object
 ('20', 'all'),
-('21', 'read'),
-('22', 'write'),
--- field
+('21', 'deny'),
+('22', 'read'),
+('23', 'write'),
+
+-- Field
 ('30', 'all'),
-('31', 'read'),
-('32', 'write');
+('31', 'deny'),
+('32', 'read'),
+('33', 'write');
 
 -- CREATE TABLE PERMISSION_LEVEL
 CREATE TABLE IF NOT EXISTS sec.permission_level (
@@ -83,14 +89,17 @@ VALUES
 ('2', '12'),
 ('2', '13'),
 ('2', '14'),
+('2', '15'),
 -- object
 ('3', '20'),
 ('3', '21'),
 ('3', '22'),
+('3', '23'),
 -- field
 ('4', '30'),
 ('4', '31'),
-('4', '32');
+('4', '32'),
+('4', '33');
 
 -- SELECT TABLES
 
@@ -99,8 +108,6 @@ FROM sec.permission p
 LEFT JOIN sec.permission_level pl on p.id = pl.permission_id
 LEFT JOIN sec.level l on l.id = pl.level_id
 GROUP BY type;
-
--- END
 
 -- DROP TABLES
 

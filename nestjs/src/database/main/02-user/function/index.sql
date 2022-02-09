@@ -1,5 +1,5 @@
 -- CREATE FUNCTION USER_GET
-CREATE OR REPLACE FUNCTION sec.fn_user_get(p_username varchar)
+CREATE OR REPLACE FUNCTION sec.fn_user_get_by_username(p_username varchar)
 RETURNS TABLE (
   "id" int,
   "username" varchar,
@@ -49,4 +49,4 @@ LANGUAGE plpgsql;
 -- DROP FUNCTIONS
 
 DROP FUNCTION IF EXISTS
-sec.fn_user_get;
+sec.fn_user_get_by_username;
