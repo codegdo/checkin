@@ -1,10 +1,7 @@
 import { AnyAction } from 'redux';
 import { LocationState, UPDATE_LOCATION, DELETE_LOCATION } from './location.type';
 
-const initialState: LocationState = {
-  data: [],
-  ids: {}
-};
+const initialState: LocationState = {};
 
 export const locationReducer = (
   state = initialState,

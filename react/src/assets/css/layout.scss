@@ -1,10 +1,10 @@
-// GENERAL
-.general {
+// BASE
+.template {
   display: grid;
   overflow: hidden;
 }
 
-.general-aside {
+.template-aside {
   .container {
     display: flex;
     flex-direction: column;
@@ -32,7 +32,7 @@
   background-color: $purple;
   display: none;
 }
-.general-main {
+.template-main {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,18 +87,18 @@
 // MEDIA
 @media (min-width: 960px) {
   // NA
-  .general {
+  .template {
     display: grid;
     grid-template-areas: 'aside main';
     grid-template-rows: 1fr;
     grid-template-columns: 30% 1fr;
     overflow: hidden;
   }
-  .general-aside {
+  .template-aside {
     grid-area: aside;
     display: block;
   }
-  .general-main {
+  .template-main {
     grid-area: main;
   }
 

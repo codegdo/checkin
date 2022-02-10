@@ -68,7 +68,7 @@ VALUES
 ('100', 'system', null, null, '1', '1', '0', '1'),
 ('101', 'admin', null, null, '1', '1', '0', '1'),
 ('102', 'user', null, null, '1', '1', '0', '1'),
-('103', 'service', null, null, '1', '1', '0', '1');
+('103', 'solution', null, null, '1', '1', '0', '1');
 
 -- CREATE TABLE VIEW
 CREATE TABLE IF NOT EXISTS dbo.view (

@@ -1,6 +1,6 @@
 import React, { Suspense, useMemo } from 'react';
 import JsxParser from 'react-jsx-parser';
-import { useTemplate } from '../../hooks/use-template.hook';
+import { useTemplate } from '../../hooks';
 
 import * as Navs from '../nav';
 
@@ -10,7 +10,7 @@ type TemplateProps = {
 
 export const Template = (Content: React.FC<TemplateProps>) => (props: TemplateProps): JSX.Element => {
   const { page } = props;
-  const { template } = useTemplate();
+  const { template } = useTemplate(page);
   const components: any = { Content, ...Navs };
 
   const jsxTemplate = useMemo(() => {
