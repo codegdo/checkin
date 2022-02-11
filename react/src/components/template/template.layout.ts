@@ -23,14 +23,14 @@ const external = `
   <header class="external-header">
     <div class="container"> 
       <nav class="nav _bar">
-        <div class="nav-logo"><Link to="/">External App</Link></div>
+        <div class="nav-brand"><Link to="/">External App</Link></div>
         <ul class="nav-link nav_main"><NavMain {...props}/></ul>
-        <ul class="nav-link nav_menu"><NavProfile {...props} /></ul>
+        <ul class="nav-link nav_profile"><NavProfile {...props} /></ul>
       </nav>
     </div> 
   </header>
   <aside class="external-aside">
-    <NavSub {...props} />
+    <ul class="nav-menu nav_sub"><NavSub {...props} /></ul>
   </aside>
   <main class="external-main">
     <div class="container">
@@ -47,14 +47,14 @@ const internal = `
   <header class="internal-header">
     <div class="container"> 
       <nav class="nav _bar">
-        <div class="nav-logo"><Link to="/">Internal App</Link></div>
+        <div class="nav-brand"><Link to="/">Internal App</Link></div>
         <ul class="nav-link nav_main"><NavMain {...props}/></ul>
-        <ul class="nav-link nav_menu"><NavProfile {...props} /></ul>
+        <ul class="nav-link nav_profile"><NavProfile {...props} /></ul>
       </nav>
     </div> 
   </header>
   <aside class="internal-aside">
-    <NavSub {...props} />
+  <ul class="nav-menu nav_sub"><NavSub {...props} /></ul>
   </aside>
   <main class="internal-main">
     <div class="container">
@@ -71,14 +71,14 @@ const system = `
   <header class="internal-header">
     <div class="container"> 
       <nav class="nav _bar">
-        <div class="nav-logo"><Link to="/">Internal App</Link></div>
+        <div class="nav-brand"><Link to="/">Internal App</Link></div>
         <ul class="nav-link nav_main"><NavMain {...props}/></ul>
-        <ul class="nav-link nav_menu"><NavMenuProfile {...props} /></ul>
+        <ul class="nav-link nav_profile"><NavProfile {...props} /></ul>
       </nav>
     </div> 
   </header>
   <aside class="internal-aside">
-    <NavSub {...props} />
+    <ul class="nav-menu nav_sub"><NavSub {...props} /></ul>
   </aside>
   <main class="internal-main">
     <div class="container">

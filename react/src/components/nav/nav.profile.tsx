@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { AppState } from '../../store/reducers';
 import { NavModuleGroup } from './nav.type';
 
-export const NavMain: React.FC<{ name: string }> = (props): JSX.Element | null => {
+export const NavProfile: React.FC<{ name: string }> = (props): JSX.Element | null => {
   const { nav } = useSelector((state: AppState) => state);
   const { modules } = nav;
 
@@ -21,7 +21,7 @@ export const NavMain: React.FC<{ name: string }> = (props): JSX.Element | null =
 
           const { label, group } = modules[key];
 
-          return (group == NavModuleGroup.SOLUTION) ? <li key={i}>
+          return (group !== NavModuleGroup.SOLUTION) ? <li key={i}>
             <NavLink to={`/${key}`}>{label}</NavLink>
           </li> : null
         })
@@ -29,11 +29,3 @@ export const NavMain: React.FC<{ name: string }> = (props): JSX.Element | null =
     </>
   )
 }
-
-/*
- <NavLink to="/" end>Home</NavLink>
-      <Link to="/admin" className={`${['admin'].includes(path) ? 'active' : ''}`}>Admin</Link>
-      <NavLink to="/auth/login">Login</NavLink>
-      <NavLink to="/auth/passcode">Passcode</NavLink>
-      <NavLink to="/auth/logout">Logout</NavLink>
-*/

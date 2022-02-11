@@ -25,7 +25,7 @@ VALUES
 ('1', 'config', '100', '0', '0', '0', '0', '1'),
 ('2', 'setup', '101', '1', '0', '1', '0', '1'),
 ('3', 'account', '102', '2', '1', '1', '0', '1'),
-('4', 'help', '102', '3', '1', '1', '0', '1'),
+('4', 'help', '104', '3', '1', '1', '0', '1'),
 
 ('50', 'calendar', '103', '4', '1', '1', '1', '1'),
 ('51', 'checkin', '103', '5', '1', '1', '1', '1'),
@@ -33,7 +33,8 @@ VALUES
 ('53', 'checkout', '103', '7', '1', '1', '1', '1'),
 
 -- grouping
-('100', 'system', null, null, '1', '1', '0', '1'),
-('101', 'admin', null, null, '1', '1', '0', '1'),
-('102', 'user', null, null, '1', '1', '0', '1'),
-('103', 'solution', null, null, '1', '1', '0', '1');
+('100', 'system', null, null, null, null, null, '1'),
+('101', 'admin', null, null, null, null, null, '1'),
+('102', 'user', null, null, null, null, null, '1'),
+('103', 'solution', null, null, null, null, null, '1'),
+('104', 'resource', null, null, null, null, null, '1');
