@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { TemplateProps } from '../components';
 import { AppState } from '../store/reducers';
 
-export const useAccess = ({ route, page }: TemplateProps): string[] => {
+export const usePermission = ({ route, page }: TemplateProps): string => {
   const { nav, session } = useSelector((state: AppState) => state);
   const { loggedIn } = session;
   const { modules } = nav;
@@ -12,21 +12,21 @@ export const useAccess = ({ route, page }: TemplateProps): string[] => {
   return useMemo(() => {
     console.log('accessIN', page);
 
-    const access = [];
+    let access = 'allow';
 
     if (loggedIn) {
       if (route !== 'auth') {
         // check nav
-        if (!(modules as Record<string, any>)[route as string]) {
-          access.push('deny');
+        if (!(modules as Record<string, any>)[route as string] && route !== 'home') {
+          access = 'deny';
         } else {
           // check policy
-          access.push('all');
         }
       } else {
-        access.length = 0;
+        //
       }
     }
+
     return access;
   }, []);
 };

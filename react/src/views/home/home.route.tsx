@@ -9,7 +9,7 @@ export const HomeRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
     {
       path: '/',
-      element: <Index route="home" page="home" />
+      element: <Index route="home" page="index" />
     },
     {
       path: '*',

@@ -1,6 +1,6 @@
-import React, { Suspense, useMemo } from 'react';
+import React, { Suspense, useLayoutEffect, useMemo } from 'react';
 import JsxParser from 'react-jsx-parser';
-import { useTemplate, useAccess } from '../../hooks';
+import { useTemplate, usePermission } from '../../hooks';
 
 
 import * as Navs from '../nav';
@@ -12,12 +12,16 @@ export type TemplateProps = {
 }
 
 export const Template = (Component: React.FC<TemplateProps>) => (options: TemplateProps): JSX.Element | null => {
-  //const { route, page } = options;
+  const { route, page } = options;
   const template = useTemplate(options);
-  const access = useAccess(options);
-  const Content = (access.indexOf('deny') !== -1) ? UnAuthorize : Component;
-  //const Content = Component;
+  const access = usePermission(options);
+  //const Content = (access.indexOf('deny') !== -1) ? UnAuthorize : Component;
+  const Content = (access == 'deny') ? UnAuthorize : Component;
 
+  useLayoutEffect(() => {
+    const pageId = route ? `${route}_${page}` : page;
+    document.body.setAttribute('data-view', pageId);
+  }, [page]);
 
   const jsxTemplate = useMemo(() => {
     const components: any = { Content, ...Navs };

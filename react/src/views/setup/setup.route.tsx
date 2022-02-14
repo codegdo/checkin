@@ -6,13 +6,18 @@ import { Template } from '../../components/template/template.component';
 
 const Index = Template(lazy(() => import('./setup.index')));
 const User = Template(lazy(() => import('./user/user.page')));
+const UserForm = Template(lazy(() => import('./user/user.form')));
 const Client = Template(lazy(() => import('./client/client.page')));
 
 export const SetupRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
     {
       path: '/',
-      element: <Index route="setup" page="setup" />
+      element: <Index route="setup" page="index" />
+    },
+    {
+      path: 'users/:id',
+      element: <UserForm route="setup" page="user_form" />
     },
     {
       path: 'users',

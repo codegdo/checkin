@@ -2,7 +2,7 @@
 CREATE OR REPLACE FUNCTION sec.fn_permission_get_access_level()
 RETURNS TABLE (
   "type" varchar,
-  "access" text
+  "action" text
 )
 AS
 $BODY$
