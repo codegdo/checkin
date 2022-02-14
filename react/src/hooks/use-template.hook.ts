@@ -2,23 +2,27 @@ import { useSelector } from 'react-redux';
 import { AppState } from '../store/reducers';
 
 import { templates } from '../components/template/template.layout';
+import { TemplateProps } from '../components';
+import { useMemo } from 'react';
 
-interface TemplateData {
-  template: string
-}
+export const useTemplate = ({ route, page }: TemplateProps): string => {
+  const { session } = useSelector((state: AppState) => state);
+  const { loggedIn } = session;
 
-export const useTemplate = (page: string): TemplateData => {
-  const { layout, session } = useSelector((state: AppState) => state);
-  let template = `<Content {...props} />`;
+  console.log('OUT', route);
 
-  if (session.loggedIn) {
-    const type = session.user?.roleType as string;
+  return useMemo(() => {
+    console.log('IN', page);
 
-    template = (templates as Record<string, string>)[type];
-  } else {
-    template = templates.base;
-  }
+    let template = `<Content {...props} />`;
 
+    if (loggedIn) {
+      const type = session.user?.roleType as string;
+      template = (templates as Record<string, string>)[type];
+    } else {
+      template = templates.base;
+    }
 
-  return { template }
-}
+    return template;
+  }, [page]);
+};

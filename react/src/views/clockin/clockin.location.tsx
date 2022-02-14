@@ -4,7 +4,7 @@ import { Navigate, Routes, Route } from 'react-router-dom';
 import { Partial } from '../../components/template/partial.component';
 
 const Employee = Partial(lazy(() => import('./employee/employee.page')));
-const NotFound = Partial(lazy(() => import('../notfound.component')));
+const NotFound = Partial(lazy(() => import('../../components/page/notfound.page')));
 
 const ClockinLocation: React.FC = (): JSX.Element => {
 

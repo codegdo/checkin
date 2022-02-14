@@ -1,16 +1,19 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import { useRoutes } from 'react-router-dom';
 
 import { RouteGuard } from './components/route/route.guard';
-import { Template } from './components/template/template.component';
-import { AuthRoute, CheckinRoute, ClockinRoute, SetupRoute, AccountRoute, SchedulerRoute, HomeRoute } from './views';
-const NotFound = Template(lazy(() => import('./views/notfound.component')));
+import { NotFound } from './components/page';
+import { AuthRoute, CheckinRoute, ClockinRoute, ConfigRoute, SetupRoute, AccountRoute, CalendarRoute, HomeRoute } from './views';
 
 export const AppRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
     {
-      path: '/',
+      path: '/*',
       element: <RouteGuard path='/*' element={<HomeRoute />} />
+    },
+    {
+      path: '/config/*',
+      element: <RouteGuard path='/*' element={<ConfigRoute />} />
     },
     {
       path: '/setup/*',
@@ -21,8 +24,8 @@ export const AppRoute: React.FC = (): JSX.Element => {
       element: <RouteGuard path='/*' element={<AccountRoute />} />
     },
     {
-      path: '/scheduler/*',
-      element: <RouteGuard path='/*' element={<SchedulerRoute />} />
+      path: '/calendar/*',
+      element: <RouteGuard path='/*' element={<CalendarRoute />} />
     },
     {
       path: '/auth/*',

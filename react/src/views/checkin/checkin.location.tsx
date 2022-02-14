@@ -4,7 +4,7 @@ import { Navigate, Routes, Route } from 'react-router-dom';
 import { Partial } from '../../components/template/partial.component';
 
 const Client = Partial(lazy(() => import('./client/client.page')));
-const NotFound = Partial(lazy(() => import('../notfound.component')));
+const NotFound = Partial(lazy(() => import('../../components/page/notfound.page')));
 
 const CheckinLocation: React.FC = (): JSX.Element => {
 

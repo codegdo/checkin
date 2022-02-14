@@ -1,24 +1,24 @@
 import React, { lazy } from 'react';
-import { Navigate, useRoutes } from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
 import { Template } from '../../components/template/template.component';
 
-//const Index = Template(lazy(() => import('./setup.index')));
+const Index = Template(lazy(() => import('./account.index')));
 const User = Template(lazy(() => import('./profile/profile.page')));
-const NotFound = Template(lazy(() => import('../notfound.component')));
+const NotFound = Template(lazy(() => import('../../components/page/notfound.page')));
 
 export const AccountRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
     {
       path: '/',
-      element: <Navigate to="profile" />
+      element: <Index route="account" page="account" />
     },
     {
       path: 'profile',
-      element: <User page="profile" />
+      element: <User route="account" page="profile" />
     },
     {
       path: '*',
-      element: <NotFound page="not-found" />
+      element: <NotFound route="account" page="notfound" />
     },
   ]);
 

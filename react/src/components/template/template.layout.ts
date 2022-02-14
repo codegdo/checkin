@@ -94,5 +94,5 @@ export const templates = {
   base,
   external,
   internal,
-  system
-}
+  system,
+};

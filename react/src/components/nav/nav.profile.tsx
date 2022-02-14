@@ -26,6 +26,7 @@ export const NavProfile: React.FC<{ name: string }> = (props): JSX.Element | nul
           </li> : null
         })
       }
+      <NavLink to={`/auth/logout`}>logout</NavLink>
     </>
   )
 }

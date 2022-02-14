@@ -10,7 +10,7 @@ import { AppState } from '../../store/reducers';
 
 const Index = Template(lazy(() => import('./clockin.index')));
 const Location = Template(lazy(() => import('./clockin.location')));
-const NotFound = Template(lazy(() => import('../notfound.component')));
+const NotFound = Template(lazy(() => import('../../components/page/notfound.page')));
 
 export const ClockinRoute: React.FC = (): JSX.Element => {
   const { loggedIn, accessToken } = useSelector((state: AppState) => state.session);

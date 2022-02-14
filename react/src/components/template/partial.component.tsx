@@ -1,7 +1,8 @@
 import React, { Suspense } from 'react';
 
 type PartialProps = {
-  page?: string;
+  route?: string;
+  page: string;
 }
 
 export const Partial = (Component: React.FC<PartialProps>) => (props: PartialProps): JSX.Element => {

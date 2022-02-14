@@ -12,6 +12,6 @@ CREATE TABLE IF NOT EXISTS dbo.role_type (
 INSERT
 INTO dbo.role_type(name)
 VALUES
-('system'),
-('internal'),
-('external');
+('1', 'system'),
+('2', 'internal'),
+('3', 'external');

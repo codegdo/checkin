@@ -6,9 +6,9 @@ import { Template } from '../../components/template/template.component';
 //const Calendar = Template(lazy(() => import('./scheduler.calendar')));
 const Calendar = Template(lazy(() => import('./calendar/calendar.page')));
 const Appointment = Template(lazy(() => import('./appointment/appointment.page')));
-const NotFound = Template(lazy(() => import('../notfound.component')));
+const NotFound = Template(lazy(() => import('../../components/page/notfound.page')));
 
-export const SchedulerRoute: React.FC = (): JSX.Element => {
+export const CalendarRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
     {
       path: '/',

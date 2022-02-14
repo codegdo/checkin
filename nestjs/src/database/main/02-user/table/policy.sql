@@ -3,9 +3,10 @@ CREATE TABLE IF NOT EXISTS sec.policy (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
   description VARCHAR(255),
-
+  
   data JSONB,
-
+  
+  version_id INT,
   role_type_id INT,
   org_id INT,
 
@@ -19,3 +20,8 @@ CREATE TABLE IF NOT EXISTS sec.policy (
   PRIMARY KEY(id),
   FOREIGN KEY(role_type_id) REFERENCES dbo.role_type(id) ON DELETE SET NULL
 );
+
+INSERT
+INTO sec.policy(name)
+VALUES
+('1.0');
