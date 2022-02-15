@@ -1,5 +1,5 @@
 export const UPDATE_NAV = 'nav/UPDATE_NAV';
 
-export interface NavState {
+export type NavState = {
   [x: string]: any;
-}
+};

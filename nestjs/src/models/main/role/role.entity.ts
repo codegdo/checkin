@@ -25,6 +25,9 @@ export class Role extends BaseEntity {
   @Column({ name: 'description' })
   description: string;
 
+  @Column({ name: 'role_level' })
+  roleLevel: number;
+
   @Column({ name: 'is_owner' })
   isOwner: boolean;
 

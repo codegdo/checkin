@@ -35,7 +35,7 @@ enum PermissionType {
   FIELD = 'field'
 }
 
-function mapPolicy(policy: ModuleViewObjectPolicy, i: ModuleViewObjectData) {
+/* function mapPolicy(policy: ModuleViewObjectPolicy, i: ModuleViewObjectData) {
   const { modules = {}, views = {}, objects = {} } = policy;
 
   const m = {
@@ -75,21 +75,27 @@ function mapPolicy(policy: ModuleViewObjectPolicy, i: ModuleViewObjectData) {
       }
     }
   }
-}
+} */
 
 function mapNav(nav: ModuleViewObjectPolicy, i: ModuleViewObjectData) {
   const { modules = {}, views = {}, objects = {} } = nav;
 
   const m = {
+    //name: i.module,
     label: i.moduleLabel || i.module,
-    group: i.moduleGroup
+    group: i.moduleGroup,
+    //type: PermissionType.MODULE
   };
   const v = {
+    //name: i.view,
     label: i.viewLabel || i.view,
-    group: i.viewGroup
+    group: i.viewGroup,
+    //type: PermissionType.VIEW
   };
   const o = {
-    label: i.objectLabel || i.object
+    name: i.object,
+    label: i.objectLabel || i.object,
+    //type: PermissionType.OBJECT
   };
 
   return {
@@ -113,6 +119,19 @@ function mapNav(nav: ModuleViewObjectPolicy, i: ModuleViewObjectData) {
     }
   }
 }
+
+export const moduleViewObjectGroup = (list: ModuleViewObjectData[] = []): any => {
+
+  return list.reduce((a, i: ModuleViewObjectData) => {
+
+    const nav = mapNav(a, i);
+
+    return { ...nav };
+
+  }, {});
+};
+
+
 /*
 function mapNav(nav: ModuleViewObjectNav, i: ModuleViewObjectData) {
   const { modules = [], views = {}, objects = {} } = nav;
@@ -138,18 +157,18 @@ function mapNav(nav: ModuleViewObjectNav, i: ModuleViewObjectData) {
   }
 }
 */
-export const moduleViewObjectGroup = (list: ModuleViewObjectData[] = []): any => {
+/* export const moduleViewObjectGroup = (list: ModuleViewObjectData[] = []): any => {
 
   return list.reduce((a, i: ModuleViewObjectData) => {
 
-    const { nav = {}, policy = {} }: ModuleViewObjectReturn = a;
-    const _policy = mapPolicy(policy, i);
+    const { nav = {} }: ModuleViewObjectReturn = a;
+    //const _policy = mapPolicy(policy, i);
     const _nav = mapNav(nav, i);
 
     return {
       nav: { ..._nav },
-      policy: { ..._policy }
+      //policy: { ..._policy }
     };
 
   }, {});
-};
+}; */

@@ -6,6 +6,7 @@ import storage from 'redux-persist/lib/storage';
 import { sessionReducer } from './session/session.reducer';
 import { layoutReducer } from './layout/layout.reducer';
 import { navReducer } from './nav/nav.reducer';
+import { policyReducer } from './policy/policy.reducer';
 import { locationReducer } from './location/location.reducer';
 
 export type AppState = ReturnType<typeof appReducer>;
@@ -15,6 +16,7 @@ export const appReducer = combineReducers({
   session: sessionReducer,
   layout: layoutReducer,
   nav: navReducer,
+  policy: policyReducer,
   location: locationReducer
 });
 

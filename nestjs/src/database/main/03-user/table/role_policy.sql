@@ -11,3 +11,12 @@ CREATE TABLE IF NOT EXISTS sec.role_policy (
 );
 
 CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
+
+INSERT
+INTO sec.role_policy(role_id, policy_id)
+VALUES
+('1', '1'),
+('2', '2'),
+('3', '2'),
+('4', '3'),
+('5', '4');

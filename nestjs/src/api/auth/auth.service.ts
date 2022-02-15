@@ -108,16 +108,16 @@ export class AuthService {
 
   async login(dto: UserLoginDto) {
     try {
-      const { user, locations, organizations, modules, permissions } = await this.userRepository.userLogin(dto);
+      const { user, locations, organizations, modules, permissions, policy } = await this.userRepository.userLogin(dto);
       const { orgId, isActive } = user;
 
       if (orgId && !isActive) {
         throw new BadRequestException(ErrorMessageEnum.ACCOUNT_UNACTIVE);
       }
 
-      const { policy, nav } = moduleViewObjectGroup(modules);
+      const nav = moduleViewObjectGroup(modules);
 
-      return { user, policy, nav, permissions };
+      return { user, nav, permissions, policy };
     } catch (e) {
       this.errorService.handleError(e);
     }

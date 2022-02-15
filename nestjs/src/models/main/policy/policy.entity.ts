@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Role } from '../role/role.entity';
 
-interface PolicyData { }
+interface PolicyStatement { }
 
 @Entity({ database: 'main', schema: 'sec', name: 'policy' })
 export class Policy extends BaseEntity {
@@ -23,7 +23,10 @@ export class Policy extends BaseEntity {
   description: string;
 
   @Column({ name: 'data', type: 'jsonb' })
-  data: PolicyData;
+  statement: PolicyStatement;
+
+  @Column({ name: 'version_id' })
+  versionId: number;
 
   @Column({ name: 'is_active' })
   isActive: boolean;
@@ -46,12 +49,3 @@ export class Policy extends BaseEntity {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
-
-/*
-INSERT
-INTO sec."Permission"
-VALUES
-('1', 'None'),
-('2', 'Read'),
-('3', 'Write');
-*/

@@ -4,13 +4,15 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_login(
   OUT "user" json,
   OUT "locations" json,
   OUT "modules" json,
-  OUT "permissions" json
+  OUT "permissions" json,
+  OUT "policy" json
 )
 AS
 $BODY$
   DECLARE
       user_org_id int;
       user_role_type varchar;
+      user_role_id int;
   BEGIN
 
     SELECT json_agg(u.*)::json ->> 0
@@ -24,6 +26,7 @@ $BODY$
       --SET
       SELECT "user" ->> 'orgId' INTO user_org_id;
       SELECT "user" ->> 'roleType' INTO user_role_type;
+      SELECT "user" ->> 'roleId' INTO user_role_id;
 
       IF user_role_type = 'system' THEN
 
@@ -53,6 +56,12 @@ $BODY$
               SELECT * FROM sec.fn_permission_get_access_level()
             ) p;
 
+            SELECT json_agg(p.*)::json ->> 0
+            INTO "policy"
+            FROM (
+              SELECT * FROM sec.fn_policy_get_by_role_id(user_role_id)
+            ) p;
+
           ELSE
             RAISE EXCEPTION no_data_found;
           END IF;
@@ -67,6 +76,6 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-CALL sec.pr_user_login('gdo', null, null, null, null);
+CALL sec.pr_user_login('gdo', null, null, null, null, null);
 
-DROP PROCEDURE IF EXISTS sec.pr_user_login(varchar, json, json, json, json);
+DROP PROCEDURE IF EXISTS sec.pr_user_login(varchar, json, json, json, json, json);

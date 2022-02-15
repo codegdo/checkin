@@ -5,7 +5,7 @@ import { AppState } from '../store/reducers';
 
 export const usePermission = ({ route, page }: TemplateProps): string => {
   const { nav, session } = useSelector((state: AppState) => state);
-  const { loggedIn } = session;
+  const { isLogin } = session;
   const { modules } = nav;
   console.log('accessOUT', route);
 
@@ -14,7 +14,7 @@ export const usePermission = ({ route, page }: TemplateProps): string => {
 
     let access = 'allow';
 
-    if (loggedIn) {
+    if (isLogin) {
       if (route !== 'auth') {
         // check nav
         if (!(modules as Record<string, any>)[route as string] && route !== 'home') {

@@ -11,7 +11,7 @@ import Confirm from './verify.confirm';
 
 
 const Verify: React.FC = (): JSX.Element => {
-  const { loggedIn, orgId, user } = useSelector((state: AppState) => state.session);
+  const { isLogin, orgId, user } = useSelector((state: AppState) => state.session);
   const [{ status, result }, fetchVerify] = useFetch('/api/auth/verify');
   const [form, setForm] = useState<FormData>();
   const [confirmed, setConfirmed] = useState(false);
@@ -57,7 +57,7 @@ const Verify: React.FC = (): JSX.Element => {
     return <Navigate to="../setup" />;
   }
 
-  if (loggedIn) {
+  if (isLogin) {
     return <Navigate to="/" />;
   }
 

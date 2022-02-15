@@ -16,11 +16,29 @@ VALUES
 ('internal'),
 ('external');
 
+-- CREATE TABLE POLICY_VERSION
+CREATE TABLE IF NOT EXISTS dbo.policy_version (
+  id SERIAL NOT NULL,
+  name VARCHAR(5) NOT NULL,
+  description VARCHAR(255),
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  --
+  PRIMARY KEY(id)
+);
+
+INSERT
+INTO dbo.policy_version(id, name)
+VALUES
+('1', '1.0');
+
 -- CREATE TABLE ROLE
 CREATE TABLE IF NOT EXISTS sec.role (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
   description VARCHAR(255),
+  role_level INT DEFAULT 1,
 
   role_type_id INT,
   org_id INT,
@@ -40,19 +58,21 @@ CREATE TABLE IF NOT EXISTS sec.role (
 INSERT
 INTO sec.role(name, description, is_owner, org_id, role_type_id)
 VALUES
-('System User', null, '0', null, '1'),
-('Owner User', null, '1', null, '2'),
-('Manager User', null, '0', null, '2'),
-('Employee User', null, '0', null, '3');
+('System Role', null, '0', null, '1'),
+('Owner Role', null, '1', null, '2'),
+('Admin Role', null, '0', null, '2'),
+('Manager Role', null, '0', null, '2'),
+('Employee Role', null, '0', null, '3');
 
 -- CREATE TABLE POLICY
 CREATE TABLE IF NOT EXISTS sec.policy (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
   description VARCHAR(255),
-
-  data JSONB,
-
+  
+  statement JSONB NOT NULL DEFAULT '{"effect":"allow","action":"*","resource":"*"}'::jsonb,
+  
+  version_id INT,
   role_type_id INT,
   org_id INT,
 
@@ -64,8 +84,17 @@ CREATE TABLE IF NOT EXISTS sec.policy (
   updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
-  FOREIGN KEY(role_type_id) REFERENCES dbo.role_type(id) ON DELETE SET NULL
+  FOREIGN KEY(role_type_id) REFERENCES dbo.role_type(id) ON DELETE SET NULL,
+  FOREIGN KEY(version_id) REFERENCES dbo.policy_version(id) ON DELETE SET NULL
 );
+
+INSERT
+INTO sec.policy(name, description, statement, version_id, role_type_id)
+VALUES
+('System Access', 'Full access','{"effect":"allow","action":"*","resource":"*"}', '1', '1'),
+('Admin Access', 'Full access','{"effect":"allow","action":"*","resource":"*"}', '1', '2'),
+('Manager Access', 'Some access','{"effect":"allow","action":"*","resource":"*"}', '1', '2'),
+('Employee Access', 'Less access','{"effect":"allow","action":"*","resource":"*"}', '1', '3');
 
 -- CREATE TABLE CONTACT
 CREATE TABLE IF NOT EXISTS org.contact (
@@ -211,6 +240,15 @@ CREATE TABLE IF NOT EXISTS sec.role_policy (
 
 CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
 
+INSERT
+INTO sec.role_policy(role_id, policy_id)
+VALUES
+('1', '1'),
+('2', '2'),
+('3', '2'),
+('4', '3'),
+('5', '4');
+
 -- CREATE TABLE USER_LOCATION
 CREATE TABLE IF NOT EXISTS sec.user_location (
   user_id INT NOT NULL,
@@ -244,6 +282,7 @@ CREATE INDEX idx_client_location ON sec.client_location(client_id, location_id);
 
 DROP TABLE IF EXISTS
 dbo.role_type,
+dbo.policy_version,
 sec.role,
 sec.policy,
 org.contact,

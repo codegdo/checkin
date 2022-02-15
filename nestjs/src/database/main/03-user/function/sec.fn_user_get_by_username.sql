@@ -13,8 +13,9 @@ RETURNS TABLE (
   "phoneNumber" varchar,
   
   "roleId" int,
-  "isOwner" boolean,
-  "roleType" varchar
+  "roleLevel" int,
+  "roleType" varchar,
+  "isOwner" boolean 
 )
 AS
 $BODY$
@@ -35,8 +36,9 @@ $BODY$
         c.phone_number,
 
         r.id,
-        r.is_owner,
-        rt.name
+        r.role_level,
+        rt.name,
+        r.is_owner
       FROM sec.user u
       LEFT JOIN org.contact c ON c.id = u.contact_id
       LEFT JOIN sec.role r ON r.id = u.role_id

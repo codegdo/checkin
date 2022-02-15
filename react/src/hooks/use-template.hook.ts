@@ -7,7 +7,7 @@ import { useMemo } from 'react';
 
 export const useTemplate = ({ route, page }: TemplateProps): string => {
   const { session } = useSelector((state: AppState) => state);
-  const { loggedIn } = session;
+  const { isLogin } = session;
 
   console.log('OUT', route);
 
@@ -16,7 +16,7 @@ export const useTemplate = ({ route, page }: TemplateProps): string => {
 
     let template = `<Content {...props} />`;
 
-    if (loggedIn) {
+    if (isLogin) {
       const type = session.user?.roleType as string;
       template = (templates as Record<string, string>)[type];
     } else {

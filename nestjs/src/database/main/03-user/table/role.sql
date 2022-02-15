@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS sec.role (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
   description VARCHAR(255),
+  role_level INT DEFAULT 1,
 
   role_type_id INT,
   org_id INT,
@@ -22,7 +23,8 @@ CREATE TABLE IF NOT EXISTS sec.role (
 INSERT
 INTO sec.role(name, description, is_owner, org_id, role_type_id)
 VALUES
-('System User', null, '0', null, '1'),
-('Owner User', null, '1', null, '2'),
-('Manager User', null, '0', null, '2'),
-('Employee User', null, '0', null, '3');
+('System Role', null, '0', null, '1'),
+('Owner Role', null, '1', null, '2'),
+('Admin Role', null, '0', null, '2'),
+('Manager Role', null, '0', null, '2'),
+('Employee Role', null, '0', null, '3');

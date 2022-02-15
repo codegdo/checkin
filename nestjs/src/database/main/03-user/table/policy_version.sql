@@ -2,6 +2,7 @@
 CREATE TABLE IF NOT EXISTS dbo.policy_version (
   id SERIAL NOT NULL,
   name VARCHAR(5) NOT NULL,
+  description VARCHAR(255),
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,

@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 import { SessionState, UPDATE_SESSION, DELETE_SESSION } from './session.type';
 
 const initialState: SessionState = {
-  loggedIn: false,
+  isLogin: false,
   user: null,
   orgId: null,
   locationId: null,

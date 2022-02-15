@@ -66,8 +66,8 @@ export class UserRepository extends Repository<User> {
     const { username, password } = dto;
 
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_login($1, $2, $3, $4, $5)`,
-      [username, null, null, null, null],
+      `CALL sec.pr_user_login($1, $2, $3, $4, $5, $6)`,
+      [username, null, null, null, null, null],
     );
 
     const {

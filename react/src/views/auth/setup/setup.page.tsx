@@ -8,7 +8,7 @@ import { Navigate } from 'react-router-dom';
 import { objectToKeyValue } from '../../../utils';
 
 const Setup: React.FC = (): JSX.Element => {
-  const { loggedIn, user } = useSelector((state: AppState) => state.session);
+  const { isLogin, user } = useSelector((state: AppState) => state.session);
   const { updateSession } = useAction();
 
   const [{ status: submit, result: resultSubmit }, fetchSetup] = useFetch('/api/auth/setup');
@@ -32,7 +32,7 @@ const Setup: React.FC = (): JSX.Element => {
     if (submit == 'success') {
       const { user, orgId, accessToken } = resultSubmit.data;
       updateSession({
-        loggedIn: true,
+        isLogin: true,
         user,
         orgId,
         accessToken
@@ -58,7 +58,7 @@ const Setup: React.FC = (): JSX.Element => {
     return <Navigate to="../login" />;
   }
 
-  if (loggedIn) {
+  if (isLogin) {
     return <Navigate to="/" />;
   }
 

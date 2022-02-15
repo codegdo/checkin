@@ -22,34 +22,36 @@ VALUES
 ('201', '3', null),
 --roles
 ('202', '4', null),
---language
+--policies
 ('203', '5', null),
---location
+--language
 ('204', '6', null),
---service
+--location
 ('205', '7', null),
---price
+--service
 ('206', '8', null),
---form
+--price
 ('207', '9', null),
---template
+--form
 ('208', '10', null),
---calendar
+--template
 ('209', '11', null),
---checkin
+--calendar
 ('210', '12', null),
---todo
+--checkin
 ('211', '13', null),
---checkout
+--todo
 ('212', '14', null),
+--checkout
+('213', '15', null),
 
 --profile
 ('300', '1', null),
 ('300', '2', null),
 --organization
-('301', '15', null),
+('301', '16', null),
 --subscription
-('302', '16', null),
+('302', '17', null),
 
 --support
 ('400', '1', null),
@@ -57,10 +59,10 @@ VALUES
 ('401', '1', null),
 
 --appointment
-('1100', '17', null),
+('1100', '18', null),
 --booking
-('1200', '18', null),
+('1200', '19', null),
 --task
-('1300', '19', null),
+('1300', '20', null),
 --order
-('1400', '20', null);
+('1400', '21', null);

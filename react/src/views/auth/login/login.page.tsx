@@ -7,10 +7,9 @@ import { AppState } from '../../../store/reducers';
 
 import { Form, FormData } from '../../../components/form';
 
-
 const Login: React.FC = (): JSX.Element => {
-  const { loggedIn } = useSelector((state: AppState) => state.session);
-  const { updateSession, updateNav } = useAction();
+  const { isLogin } = useSelector((state: AppState) => state.session);
+  const { updateSession, updateNav, updatePolicy } = useAction();
 
   const [form, setForm] = useState<FormData>();
   const [{ status, result }, fetchLogin] = useFetch('/api/auth/login');
@@ -27,7 +26,7 @@ const Login: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     if (status === 'success') {
-      const { user, orgId, accessToken, nav } = result?.data;
+      const { user, orgId, accessToken, nav, policy } = result?.data;
 
       console.log(result.data);
 
@@ -43,12 +42,13 @@ const Login: React.FC = (): JSX.Element => {
 
       if (user && orgId) {
         updateSession({
-          loggedIn: true,
+          isLogin: true,
           user,
           orgId,
           accessToken
         });
         updateNav(nav);
+        updatePolicy(policy);
       }
     }
 
@@ -70,7 +70,7 @@ const Login: React.FC = (): JSX.Element => {
     return <Navigate to="../setup" />
   }
 
-  if (loggedIn) {
+  if (isLogin) {
     return <Navigate to="/" />
   }
 
