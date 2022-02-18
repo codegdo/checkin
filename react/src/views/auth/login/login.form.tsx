@@ -7,7 +7,7 @@ import { AppState } from '../../../store/reducers';
 
 import { Form, FormData } from '../../../components/form';
 
-const Login: React.FC = (): JSX.Element => {
+const LoginForm: React.FC = (): JSX.Element => {
   const { isLogin } = useSelector((state: AppState) => state.session);
   const { updateSession, updateNav, updatePolicy } = useAction();
 
@@ -19,7 +19,7 @@ const Login: React.FC = (): JSX.Element => {
   // load form
   useEffect(() => {
     void (async () => {
-      const json: any = (await import('./login.page.json')).default;
+      const json: any = (await import('./login.form.json')).default;
       setForm(json);
     })();
   }, []);
@@ -82,7 +82,7 @@ const Login: React.FC = (): JSX.Element => {
   );
 };
 
-export default Login;
+export default LoginForm;
 
 /*
 <Form loading={loading} onSubmit={handleSubmit}>

@@ -83,6 +83,9 @@ module.exports = (env) => {
         '.jpeg',
         '.gif',
       ],
+      alias: {
+        handlebars: 'handlebars/dist/handlebars.js',
+      },
     },
     plugins: [
       new CleanWebpackPlugin(),

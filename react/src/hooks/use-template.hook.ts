@@ -4,8 +4,9 @@ import { AppState } from '../store/reducers';
 import { templates } from '../components/template/template.layout';
 import { TemplateProps } from '../components';
 import { useMemo } from 'react';
+import { stringTemplate, TemplateData } from '../helpers';
 
-export const useTemplate = ({ route, page }: TemplateProps): string => {
+export const useTemplate = ({ route, page }: TemplateProps): TemplateData => {
   const { session } = useSelector((state: AppState) => state);
   const { isLogin } = session;
 
@@ -17,12 +18,15 @@ export const useTemplate = ({ route, page }: TemplateProps): string => {
     let template = `<Content {...props} />`;
 
     if (isLogin) {
+
       const type = session.user?.roleType as string;
-      template = (templates as Record<string, string>)[type];
+      const defaultTemplate = (templates as Record<string, string>)[type];
+
+      template = defaultTemplate;
     } else {
       template = templates.base;
     }
 
-    return template;
+    return stringTemplate(template);
   }, [page]);
 };

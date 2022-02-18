@@ -10,7 +10,7 @@ import { objectToKeyValue } from '../../../utils';
 import Confirm from './verify.confirm';
 
 
-const Verify: React.FC = (): JSX.Element => {
+const VerifyForm: React.FC = (): JSX.Element => {
   const { isLogin, orgId, user } = useSelector((state: AppState) => state.session);
   const [{ status, result }, fetchVerify] = useFetch('/api/auth/verify');
   const [form, setForm] = useState<FormData>();
@@ -19,7 +19,7 @@ const Verify: React.FC = (): JSX.Element => {
   // Load form
   useEffect(() => {
     void (async () => {
-      const json: any = (await import('./verify.page.json')).default;
+      const json: any = (await import('./verify.form.json')).default;
       const values = objectToKeyValue({ ...user }, ['emailAddress', 'phoneNumber']);
 
       const mapFields = {
@@ -74,4 +74,4 @@ const Verify: React.FC = (): JSX.Element => {
 
 }
 
-export default Verify;
+export default VerifyForm;

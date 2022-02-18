@@ -61,4 +61,5 @@ INSERT
 INTO org.form (name, label, description, form_type_id, org_id, is_active)
 VALUES
 ('auth_signup', 'Signup', null, '1', null, '1'),
-('auth_setup', 'Setup', null, '1', null, '1');
+('auth_setup', 'Setup', null, '1', null, '1'),
+('user_add', 'User', null, '1', null, '1');

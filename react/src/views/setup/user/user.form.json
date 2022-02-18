@@ -1,0 +1,122 @@
+{
+  "id": null,
+  "label": "User",
+  "name": "user_add",
+  "description": null,
+  "data": [
+    {
+      "id": "f-header",
+      "type": "header",
+      "role": "block",
+      "data": [],
+      "position": 0,
+      "parentId": null
+    },
+    {
+      "id": "f-main",
+      "type": "main",
+      "role": "block",
+      "data": [],
+      "position": 1,
+      "parentId": null
+    },
+    {
+      "id": "f-footer",
+      "type": "footer",
+      "role": "block",
+      "data": [],
+      "position": 2,
+      "parentId": null
+    },
+    {
+      "id": "f-title",
+      "label": "Setup",
+      "name": "setup_title",
+      "description": null,
+      "type": "title",
+      "role": "inline",
+      "data": [],
+      "value": null,
+      "position": 3,
+      "parentId": "f-header"
+    },
+    {
+      "id": "f-cancel",
+      "label": "Cancel",
+      "name": "cancel",
+      "type": "button",
+      "role": "inline",
+      "data": null,
+      "value": null,
+      "position": 5,
+      "parentId": "f-footer"
+    },
+    {
+      "id": "f-submit",
+      "label": "Submit",
+      "name": "submit",
+      "type": "button",
+      "role": "inline",
+      "data": [],
+      "value": null,
+      "position": 4,
+      "parentId": "f-footer"
+    }
+  ],
+  "fields": [
+    {
+      "id": 1,
+      "label": "Username",
+      "name": "user_name",
+      "description": null,
+      "type": "text",
+      "role": "field",
+      "data": null,
+      "value": "",
+      "isRequired": true,
+      "position": 0,
+      "parentId": "f-main",
+      "map": "sec.user.name",
+      "lookup": null
+    },
+    {
+      "id": 2,
+      "label": "Password",
+      "name": "user_password",
+      "description": null,
+      "type": "text",
+      "role": "field",
+      "data": null,
+      "value": "",
+      "isRequired": true,
+      "position": 0,
+      "parentId": "f-main",
+      "map": "sec.user.name",
+      "lookup": null
+    },
+    {
+      "id": 3,
+      "label": "Access Type",
+      "name": "user_access_type",
+      "description": null,
+      "type": "radio",
+      "role": "field",
+      "data": [
+        {
+          "key": 2,
+          "value": "internal"
+        },
+        {
+          "key": 3,
+          "value": "external"
+        }
+      ],
+      "value": "2",
+      "isRequired": true,
+      "position": 0,
+      "parentId": "f-main",
+      "map": "sec.user.name",
+      "lookup": null
+    }
+  ]
+}

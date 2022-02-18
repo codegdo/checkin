@@ -99,7 +99,7 @@
     {
       "id": 2,
       "label": "Location Name",
-      "name": "workspace_name",
+      "name": "location_name",
       "description": null,
       "type": "text",
       "role": "field",
@@ -108,13 +108,13 @@
       "isRequired": true,
       "position": 0,
       "parentId": "f-main",
-      "map": "org.workspace.name",
+      "map": "org.locataion.name",
       "lookup": null
     },
     {
       "id": 3,
       "label": "Street Address",
-      "name": "workspace_street_address",
+      "name": "location_street_address",
       "description": null,
       "type": "text",
       "role": "field",
@@ -123,13 +123,13 @@
       "isRequired": true,
       "position": 0,
       "parentId": "f-main",
-      "map": "org.workspace.street_address",
+      "map": "org.location.street_address",
       "lookup": null
     },
     {
       "id": 4,
       "label": "Country",
-      "name": "workspace_country",
+      "name": "location_country",
       "description": null,
       "type": "select",
       "role": "field",
@@ -139,13 +139,13 @@
       "isRequired": true,
       "position": 0,
       "parentId": "f-main",
-      "map": "org.workspace.territory_id",
+      "map": "org.location.territory_id",
       "lookup": null
     },
     {
       "id": 5,
       "label": "State",
-      "name": "state",
+      "name": "location_state",
       "description": null,
       "type": "select",
       "role": "field",
@@ -155,13 +155,13 @@
       "isRequired": true,
       "position": 0,
       "parentId": "f-main",
-      "map": "org.workspace.territory_id",
+      "map": "org.location.territory_id",
       "lookup": null
     },
     {
       "id": 6,
       "label": "City",
-      "name": "city",
+      "name": "location_city",
       "description": null,
       "type": "text",
       "role": "field",
@@ -171,13 +171,13 @@
       "isRequired": true,
       "position": 0,
       "parentId": "f-main",
-      "map": "org.workspace.city",
+      "map": "org.location.city",
       "lookup": null
     },
     {
       "id": 7,
       "label": "Postal Code",
-      "name": "workspace_postal_code",
+      "name": "location_postal_code",
       "description": null,
       "type": "text",
       "role": "field",
@@ -187,7 +187,7 @@
       "isRequired": true,
       "position": 0,
       "parentId": "f-main",
-      "map": "org.workspace.postal_code",
+      "map": "org.location.postal_code",
       "lookup": null
     }
   ]

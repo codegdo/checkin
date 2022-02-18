@@ -1,8 +1,8 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import { useRoutes } from 'react-router-dom';
-import { Template } from '../../components/template/template.component';
+import { Template, lazy } from '../../components/template/template.component';
 
-const Index = Template(lazy(() => import('./account.index')));
+const Index = Template(lazy(() => import('./account.index'), 1000));
 const User = Template(lazy(() => import('./profile/profile.page')));
 const NotFound = Template(lazy(() => import('../../components/page/notfound.page')));
 

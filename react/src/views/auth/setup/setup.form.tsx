@@ -7,7 +7,7 @@ import { Form, FormData } from '../../../components/form';
 import { Navigate } from 'react-router-dom';
 import { objectToKeyValue } from '../../../utils';
 
-const Setup: React.FC = (): JSX.Element => {
+const SetupForm: React.FC = (): JSX.Element => {
   const { isLogin, user } = useSelector((state: AppState) => state.session);
   const { updateSession } = useAction();
 
@@ -68,4 +68,4 @@ const Setup: React.FC = (): JSX.Element => {
   </>
 }
 
-export default Setup;
+export default SetupForm;

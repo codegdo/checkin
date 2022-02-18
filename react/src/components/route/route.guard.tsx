@@ -7,13 +7,11 @@ import { AppState } from '../../store/reducers';
 
 export const RouteGuard: React.FC<RouteProps> = (props): JSX.Element => {
   const { session } = useSelector((state: AppState) => state);
-  const { isLogin, user } = session;
+  const { isLogin } = session;
 
   if (!isLogin) {
     return <Navigate to="/auth/login" />;
   }
-
-  console.log('ROUTE GUARD', props);
 
   return <Routes><Route {...props} /></Routes>
 };

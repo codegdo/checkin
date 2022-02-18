@@ -40,4 +40,7 @@ VALUES
 ('2', '25', 'Country', '4'),
 ('2', '26', 'State', '5'),
 ('2', '27', 'City', '6'),
-('2', '28', 'Postal Code', '7');
+('2', '28', 'Postal Code', '7'),
+--user_add
+('3', '1', 'Username', '2'),
+('3', '2', 'Password', '3'),;

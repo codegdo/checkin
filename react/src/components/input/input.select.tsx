@@ -9,7 +9,7 @@ export const InputSelect: React.FC = (): JSX.Element => {
   }
 
   const { input, value, handleChange } = context;
-  const { data } = input;
+  const { data = [] } = input;
 
   return (
     <span>

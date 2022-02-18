@@ -5,7 +5,7 @@ import { Form, FormData } from '../../../components/form';
 import { Navigate } from 'react-router-dom';
 import { objectToKeyValue } from '../../../utils';
 
-const Signup: React.FC = (): JSX.Element => {
+const SignupForm: React.FC = (): JSX.Element => {
 
   const { updateSession } = useAction();
   const [{ status: submit, result: resultSubmit }, fetchSignup] = useFetch('/api/auth/signup');
@@ -65,4 +65,4 @@ const Signup: React.FC = (): JSX.Element => {
   );
 };
 
-export default Signup;
+export default SignupForm;

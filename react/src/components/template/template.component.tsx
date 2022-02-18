@@ -1,8 +1,7 @@
-import React, { Suspense, useLayoutEffect, useMemo } from 'react';
+import React, { ComponentType, lazy as _lazy, Suspense, useLayoutEffect, useMemo } from 'react';
 import JsxParser from 'react-jsx-parser';
-import { useTemplate, usePermission } from '../../hooks';
 
-
+import { useTemplate, useAuthorize } from '../../hooks';
 import * as Navs from '../nav';
 import UnAuthorize from '../page/unauthorize.page';
 
@@ -11,12 +10,19 @@ export type TemplateProps = {
   page: string;
 }
 
+export const lazy = <T extends ComponentType<any>>(factory: () => Promise<{ default: T }>, minLoadTimeMs = 0): React.LazyExoticComponent<T> => {
+  return _lazy(() => {
+    return Promise.all([factory(), new Promise((resolve) => setTimeout(resolve, minLoadTimeMs))]).then(([moduleExports]) => moduleExports)
+  });
+}
+
+
 export const Template = (Component: React.FC<TemplateProps>) => (options: TemplateProps): JSX.Element | null => {
   const { route, page } = options;
-  const template = useTemplate(options);
-  const access = usePermission(options);
-  //const Content = (access.indexOf('deny') !== -1) ? UnAuthorize : Component;
-  const Content = (access == 'deny') ? UnAuthorize : Component;
+  const { template, fallback } = useTemplate(options);
+  const hasAccess = useAuthorize(options);
+
+  const Content = hasAccess ? Component : UnAuthorize;
 
   useLayoutEffect(() => {
     const pageId = route ? `${route}_${page}` : page;
@@ -25,7 +31,7 @@ export const Template = (Component: React.FC<TemplateProps>) => (options: Templa
 
   const jsxTemplate = useMemo(() => {
     const components: any = { Content, ...Navs };
-    const props = { ...options, access }
+    const props = { ...options, hasAccess }
 
     return <JsxParser
       allowUnknownElements={false}
@@ -33,8 +39,8 @@ export const Template = (Component: React.FC<TemplateProps>) => (options: Templa
       bindings={{ props }}
       components={{ ...components }}
       jsx={template} />
-  }, [Content]);
+  }, []);
 
-  return <Suspense fallback={''}>{jsxTemplate}</Suspense>;
+  return <Suspense fallback={<JsxParser renderInWrapper={false} jsx={fallback} />}>{jsxTemplate}</Suspense>;
 };
 

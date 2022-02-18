@@ -1,13 +1,16 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import { NotFound } from '../../components/page';
-import { Template } from '../../components/template/template.component';
+import { Template, lazy } from '../../components/template/template.component';
 
-
-const Index = Template(lazy(() => import('./setup.index')));
-const User = Template(lazy(() => import('./user/user.page')));
+const Index = Template(lazy(() => import('./setup.index'), 1000));
+const UserList = Template(lazy(() => import('./user/user.list')));
 const UserForm = Template(lazy(() => import('./user/user.form')));
-const Client = Template(lazy(() => import('./client/client.page')));
+const ClientList = Template(lazy(() => import('./client/client.list')));
+const RoleList = Template(lazy(() => import('./role/role.list')));
+const RoleForm = Template(lazy(() => import('./role/role.form')));
+const PolicyList = Template(lazy(() => import('./policy/policy.list')));
+const PolicyForm = Template(lazy(() => import('./policy/policy.form')));
 
 export const SetupRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
@@ -17,15 +20,31 @@ export const SetupRoute: React.FC = (): JSX.Element => {
     },
     {
       path: 'users/:id',
-      element: <UserForm route="setup" page="user_form" />
+      element: <UserForm route="setup" page="users" />
     },
     {
       path: 'users',
-      element: <User route="setup" page="user" />
+      element: <UserList route="setup" page="users" />
     },
     {
       path: 'clients',
-      element: <Client route="setup" page="client" />
+      element: <ClientList route="setup" page="clients" />
+    },
+    {
+      path: 'roles/:id',
+      element: <RoleForm route="setup" page="roles" />
+    },
+    {
+      path: 'roles',
+      element: <RoleList route="setup" page="roles" />
+    },
+    {
+      path: 'policies/:id',
+      element: <PolicyForm route="setup" page="policies" />
+    },
+    {
+      path: 'policies',
+      element: <PolicyList route="setup" page="policies" />
     },
     {
       path: '*',

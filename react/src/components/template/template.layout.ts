@@ -11,7 +11,7 @@ const base = `
   </aside>
   <main class="template-main">
     <div class="container">
-      <Content {...props} />
+    {{{content}}}
       <div class="terms hidden"><small>Creating an account means you’re okay with our <a href="#">Terms</a>.</small></div>
     </div>
   </main>
@@ -24,18 +24,18 @@ const external = `
     <div class="container"> 
       <nav class="nav _bar">
         <div class="nav-brand"><Link to="/">External App</Link></div>
-        <ul class="nav-link nav_main"><NavMain {...props}/></ul>
-        <ul class="nav-link nav_profile"><NavProfile {...props} /></ul>
+        <ul class="nav-link nav_main">{{{navMain}}}</ul>
+        <ul class="nav-link nav_profile">{{{navProfile}}}</ul>
       </nav>
     </div> 
   </header>
   <aside class="external-aside">
-    <ul class="nav-menu nav_sub"><NavSub {...props} /></ul>
+    <ul class="nav-menu nav_sub">{{{navSub}}}</ul>
   </aside>
   <main class="external-main">
     <div class="container">
       <div id="placeholder">
-        <Content {...props} />
+      {{{content}}}
       </div>
     </div>  
   </main>
@@ -48,18 +48,18 @@ const internal = `
     <div class="container"> 
       <nav class="nav _bar">
         <div class="nav-brand"><Link to="/">Internal App</Link></div>
-        <ul class="nav-link nav_main"><NavMain {...props}/></ul>
-        <ul class="nav-link nav_profile"><NavProfile {...props} /></ul>
+        <ul class="nav-link nav_main">{{{navMain}}}</ul>
+        <ul class="nav-link nav_profile">{{{navProfile}}}</ul>
       </nav>
     </div> 
   </header>
   <aside class="internal-aside">
-  <ul class="nav-menu nav_sub"><NavSub {...props} /></ul>
+  <ul class="nav-menu nav_sub">{{{navSub}}}</ul>
   </aside>
   <main class="internal-main">
     <div class="container">
       <div id="placeholder">
-        <Content {...props} />
+        {{{content}}}
       </div>
     </div>  
   </main>
@@ -72,18 +72,18 @@ const system = `
     <div class="container"> 
       <nav class="nav _bar">
         <div class="nav-brand"><Link to="/">Internal App</Link></div>
-        <ul class="nav-link nav_main"><NavMain {...props}/></ul>
-        <ul class="nav-link nav_profile"><NavProfile {...props} /></ul>
+        <ul class="nav-link nav_main">{{{navMain}}}</ul>
+        <ul class="nav-link nav_profile">{{{navProfile}}}</ul>
       </nav>
     </div> 
   </header>
   <aside class="internal-aside">
-    <ul class="nav-menu nav_sub"><NavSub {...props} /></ul>
+    <ul class="nav-menu nav_sub">{{{navSub}}}</ul>
   </aside>
   <main class="internal-main">
     <div class="container">
       <div id="placeholder">
-        <Content {...props} />
+        {{{content}}}
       </div>
     </div>  
   </main>

@@ -9,7 +9,7 @@ export const InputRadio: React.FC = (): JSX.Element => {
   }
 
   const { input, value, handleChange } = context;
-  const { data, name } = input;
+  const { data = [], name } = input;
 
   return (
     <>
@@ -17,7 +17,7 @@ export const InputRadio: React.FC = (): JSX.Element => {
         data.map(({ key, value: text }: any) => {
           return (
             <label key={key}>
-              <input type="radio" name={name} value={key} checked={key === value} onChange={handleChange} />
+              <input type="radio" name={name} value={key} checked={key == value} onChange={handleChange} />
               {text && <span>{text}</span>}
             </label>
           )

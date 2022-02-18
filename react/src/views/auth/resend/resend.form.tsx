@@ -4,7 +4,7 @@ import { useFetch } from '../../../hooks';
 import { Form, FormData } from '../../../components/form';
 import ResendSuccess from './resend.success';
 
-const Resend: React.FC = (): JSX.Element => {
+const ResendForm: React.FC = (): JSX.Element => {
 
   //const { updateSession } = useAction();
   const [{ status, result }, fetchSignup] = useFetch('/api/auth/resend');
@@ -13,7 +13,7 @@ const Resend: React.FC = (): JSX.Element => {
   // Load form
   useEffect(() => {
     void (async () => {
-      const json: any = (await import('./resend.page.json')).default;
+      const json: any = (await import('./resend.form.json')).default;
       setForm(json);
     })();
   }, [])
@@ -44,4 +44,4 @@ const Resend: React.FC = (): JSX.Element => {
   );
 };
 
-export default Resend;
+export default ResendForm;
