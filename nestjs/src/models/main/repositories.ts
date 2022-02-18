@@ -3,7 +3,7 @@ export * from './contact/contact.repository';
 export * from './location/location.repository';
 export * from './organization/organization.repository';
 export * from './policy/policy.repository';
-export * from './role/role.repository';
+export * from './group/group.repository';
 export * from './permission/permission.repository';
 export * from './level/level.repository';
 export * from './session/session.repository';

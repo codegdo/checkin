@@ -1,5 +1,5 @@
--- CREATE FUNCTION MODULE_GET_BY_TYPE
-CREATE OR REPLACE FUNCTION dbo.fn_module_get_by_type(p_type varchar)
+-- CREATE FUNCTION MODULE_GET_BY_GROUP_TYPE
+CREATE OR REPLACE FUNCTION dbo.fn_module_get_by_group_type(p_group_type varchar)
 RETURNS TABLE (
   module varchar,
   "moduleGroup" varchar,
@@ -10,7 +10,7 @@ RETURNS TABLE (
 AS
 $BODY$
   BEGIN
-    IF p_type = 'internal' THEN
+    IF p_group_type = 'internal' THEN
       RETURN QUERY
       SELECT
         m1.name,
@@ -29,7 +29,7 @@ $BODY$
       ORDER BY m1.sort_order, v1.sort_order;
     END IF;
 
-    IF p_type = 'external' THEN
+    IF p_group_type = 'external' THEN
       RETURN QUERY
       SELECT
         m1.name,
@@ -48,7 +48,7 @@ $BODY$
       ORDER BY m1.sort_order, v1.sort_order;
     END IF;
 
-    IF p_type = 'system' THEN
+    IF p_group_type = 'system' THEN
       RETURN QUERY
       SELECT
         m1.name,
@@ -69,8 +69,6 @@ $BODY$
   END;
 $BODY$
 LANGUAGE plpgsql;
-
-
 
 -- DROP FUNCTIONS
 

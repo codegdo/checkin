@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS org.form (
 
   data JSONB NOT NULL DEFAULT '[
     {
-      "id": "f-header", 
+      "id": "f_header", 
       "type": "header", 
       "role": "block", 
       "data": [], 
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS org.form (
       "parentId": null
     },
     {
-      "id": "f-main", 
+      "id": "f_main", 
       "type": "main", 
       "role": "block", 
       "data": [], 
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS org.form (
       "parentId": null
     },
     {
-      "id": "f-footer", 
+      "id": "f_footer", 
       "type": "footer", 
       "role": "block", 
       "data": [], 
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS org.form (
       "parentId": null
     },
     {
-      "id": "f-button", 
+      "id": "f_button", 
       "label": "Submit",
       "name": "submit",
       "type": "button", 
@@ -39,14 +39,15 @@ CREATE TABLE IF NOT EXISTS org.form (
       "data": null, 
       "value": null,
       "position": 3, 
-      "parentId": "f-footer"
+      "parentId": "f_footer"
     }
   ]'::jsonb,
 
   form_type_id INT,
   org_id INT,
 
-  is_active BOOLEAN,
+  is_active BOOLEAN DEFAULT TRUE,
+  is_publish BOOLEAN DEFAULT FALSE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
@@ -58,8 +59,8 @@ CREATE TABLE IF NOT EXISTS org.form (
 );
 
 INSERT
-INTO org.form (name, label, description, form_type_id, org_id, is_active)
+INTO org.form (name, label, description, form_type_id, org_id, is_publish)
 VALUES
 ('auth_signup', 'Signup', null, '1', null, '1'),
 ('auth_setup', 'Setup', null, '1', null, '1'),
-('user_add', 'User', null, '1', null, '1');
+('user_add', 'Users', null, '2', null, '1');

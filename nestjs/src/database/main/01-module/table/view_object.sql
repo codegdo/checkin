@@ -20,7 +20,7 @@ VALUES
 ('200', '2', null),
 --clients
 ('201', '3', null),
---roles
+--groups
 ('202', '4', null),
 --policies
 ('203', '5', null),

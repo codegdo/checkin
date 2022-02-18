@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS sec.policy (
   statement JSONB NOT NULL DEFAULT '{"effect":"allow","action":"*","resource":"*"}'::jsonb,
   
   version_id INT,
-  role_type_id INT,
+  group_type_id INT,
   org_id INT,
 
   is_active BOOLEAN DEFAULT TRUE,
@@ -18,12 +18,12 @@ CREATE TABLE IF NOT EXISTS sec.policy (
   updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
-  FOREIGN KEY(role_type_id) REFERENCES dbo.role_type(id) ON DELETE SET NULL,
+  FOREIGN KEY(group_type_id) REFERENCES dbo.group_type(id) ON DELETE SET NULL,
   FOREIGN KEY(version_id) REFERENCES dbo.policy_version(id) ON DELETE SET NULL
 );
 
 INSERT
-INTO sec.policy(name, description, statement, version_id, role_type_id)
+INTO sec.policy(name, description, statement, version_id, group_type_id)
 VALUES
 ('System Access', 'Full access','{"effect":"allow","action":"*","resource":"*"}', '1', '1'),
 ('Admin Access', 'Full access','{"effect":"allow","action":"*","resource":"*"}', '1', '2'),

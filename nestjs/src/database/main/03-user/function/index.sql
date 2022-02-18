@@ -11,11 +11,11 @@ RETURNS TABLE (
   "lastName" varchar,
   "emailAddress" varchar,
   "phoneNumber" varchar,
-  
-  "roleId" int,
-  "roleLevel" int,
-  "roleType" varchar,
-  "isOwner" boolean 
+
+  "groupId" int,
+  "groupLevel" int,
+  "groupType" varchar,
+  "isOwner" boolean
 )
 AS
 $BODY$
@@ -35,21 +35,21 @@ $BODY$
         c.email_address,
         c.phone_number,
 
-        r.id,
-        r.role_level,
-        rt.name,
-        r.is_owner
+        g.id,
+        g.group_level,
+        gt.name,
+        g.is_owner
       FROM sec.user u
       LEFT JOIN org.contact c ON c.id = u.contact_id
-      LEFT JOIN sec.role r ON r.id = u.role_id
-      LEFT JOIN dbo.role_type rt ON rt.id = r.role_type_id
+      LEFT JOIN sec.group g ON g.id = u.group_id
+      LEFT JOIN dbo.group_type gt ON gt.id = g.group_type_id
       WHERE u.username = p_username;
   END;
 $BODY$
 LANGUAGE plpgsql;
 
--- CREATE FUNCTION POLICY_GET_BY_ROLE_ID
-CREATE OR REPLACE FUNCTION sec.fn_policy_get_by_role_id(p_role_id int)
+-- CREATE FUNCTION POLICY_GET_BY_GROUP_ID
+CREATE OR REPLACE FUNCTION sec.fn_policy_get_by_group_id(p_group_id int)
 RETURNS TABLE (
   "statement" jsonb,
   "version" varchar
@@ -63,11 +63,11 @@ $BODY$
       SELECT
         p.statement,
         pv.name
-      FROM sec.role r
-      INNER JOIN sec.role_policy rp ON r.id = rp.role_id
-      LEFT JOIN sec.policy p ON rp.policy_id = p.id
+      FROM sec.group g
+      INNER JOIN sec.group_policy gp ON g.id = gp.group_id
+      LEFT JOIN sec.policy p ON gp.policy_id = p.id
       LEFT JOIN dbo.policy_version pv ON p.version_id = pv.id
-      WHERE r.id = p_role_id;
+      WHERE g.id = p_group_id;
   END;
 $BODY$
 LANGUAGE plpgsql;
@@ -78,4 +78,4 @@ DROP FUNCTION IF EXISTS
 sec.fn_user_get_by_username;
 
 DROP FUNCTION IF EXISTS
-sec.fn_policy_get_by_role_id;
+sec.fn_policy_get_by_group_id;

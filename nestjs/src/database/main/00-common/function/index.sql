@@ -5,7 +5,7 @@ CREATE OR REPLACE FUNCTION dbo.fn_lookup_get_value(
 )
 RETURNS jsonb
 AS
-$fn$
+$BODY$
   DECLARE
     lookup_schema text := split_part(p_lookup, '.', 1);
     lookup_table text := split_part(p_lookup, '.', 2);
@@ -13,7 +13,8 @@ $fn$
     lookup_column_id text := split_part(p_lookup, '.', 4);
     string_sql text;
   BEGIN
-    IF lookup_table = 'territory' THEN
+    IF lookup_table IN ('territory', 'group_type') THEN
+      
       string_sql := FORMAT(
         $ex$
           SELECT json_agg(json_build_object('key', %4$s, 'value', %3$s))
@@ -28,7 +29,7 @@ $fn$
       EXECUTE string_sql INTO data;
     END IF;
   END;
-$fn$
+$BODY$
 LANGUAGE plpgsql;
 
 -- DROP FUNCTIONS

@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
   ManyToMany,
 } from 'typeorm';
-import { Role } from '../role/role.entity';
+import { Group } from '../group/group.entity';
 
 interface PolicyStatement { }
 
@@ -34,8 +34,8 @@ export class Policy extends BaseEntity {
   @Column({ name: 'org_id' })
   orgId: number;
 
-  @ManyToMany(() => Role, (role: Role) => role.policies)
-  roles: Role[];
+  @ManyToMany(() => Group, (group: Group) => group.policies)
+  groups: Group[];
 
   @Column({ name: 'created_by' })
   createdBy: string;

@@ -12,9 +12,9 @@ RETURNS TABLE (
   "emailAddress" varchar,
   "phoneNumber" varchar,
   
-  "roleId" int,
-  "roleLevel" int,
-  "roleType" varchar,
+  "groupId" int,
+  "groupLevel" int,
+  "groupType" varchar,
   "isOwner" boolean 
 )
 AS
@@ -35,14 +35,14 @@ $BODY$
         c.email_address,
         c.phone_number,
 
-        r.id,
-        r.role_level,
-        rt.name,
-        r.is_owner
+        g.id,
+        g.group_level,
+        gt.name,
+        g.is_owner
       FROM sec.user u
       LEFT JOIN org.contact c ON c.id = u.contact_id
-      LEFT JOIN sec.role r ON r.id = u.role_id
-      LEFT JOIN dbo.role_type rt ON rt.id = r.role_type_id
+      LEFT JOIN sec.group g ON g.id = u.group_id
+      LEFT JOIN dbo.group_type gt ON gt.id = g.group_type_id
       WHERE u.username = p_username;
   END;
 $BODY$

@@ -1,31 +1,34 @@
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable } from 'typeorm';
 import { ObjectEntity } from '../object/object.entity';
 
-export enum FormTypeEnum {
-  USER_SIGNUP = 'user_signup'
+export enum GridTypeEnum {
+  USER_GROUP_GRID = 'user_group_grid'
 }
 
-@Entity({ database: 'main', schema: 'dbo', name: 'form_type' })
-export class FormType extends BaseEntity {
+@Entity({ database: 'main', schema: 'dbo', name: 'grid_type' })
+export class GridType extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
   @Column({
     name: 'name',
     type: 'enum',
-    enum: FormTypeEnum,
+    enum: GridTypeEnum,
   })
-  name: FormTypeEnum;
+  name: GridTypeEnum;
 
-  @Column({ name: 'is_custom' })
-  isCustom: boolean;
+  @Column({ name: 'is_remove' })
+  isRemove: boolean;
+
+  @Column({ name: 'is_active' })
+  isActive: boolean;
 
   // join table
   @ManyToMany(() => ObjectEntity, (object: ObjectEntity) => object.formTypes)
   @JoinTable({
-    name: 'form_type_object',
+    name: 'grid_type_object',
     joinColumn: {
-      name: 'form_type_id',
+      name: 'grid_type_id',
       referencedColumnName: 'id',
     },
     inverseJoinColumn: {

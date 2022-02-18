@@ -7,23 +7,23 @@ import {
   UpdateDateColumn
 } from 'typeorm';
 
-export enum RoleTypeEnum {
+export enum GroupTypeEnum {
   SYSTEM = 'system',
   INTERNAL = 'internal',
   EXTERNAL = 'external',
 }
 
-@Entity({ database: 'main', schema: 'dbo', name: 'role_type' })
-export class RoleType extends BaseEntity {
+@Entity({ database: 'main', schema: 'dbo', name: 'group_type' })
+export class GroupType extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
   @Column({
     name: 'name',
     type: 'enum',
-    enum: RoleTypeEnum,
+    enum: GroupTypeEnum,
   })
-  name: RoleTypeEnum;
+  name: GroupTypeEnum;
 
   @Column({ name: 'created_by' })
   createdBy: string;

@@ -105,7 +105,7 @@ $BODY$
         UPDATE sec.user
         SET org_id = (SELECT id FROM o)
         WHERE id = p_login_id
-        RETURNING id, username, contact_id, org_id, role_id, is_active
+        RETURNING id, username, contact_id, org_id, group_id, is_active
       )
       SELECT json_agg(r)::json ->> 0
       INTO "user"
@@ -121,12 +121,12 @@ $BODY$
           c.email_address "emailAddress",
           c.phone_number "phoneNumber",
           
-          r.id "roleId",
-          r.is_owner,
-          rt.name "roleType"
+          g.id "groupId",
+          g.is_owner,
+          gt.name "groupType"
         FROM u
-        LEFT JOIN sec.role r ON r.id = u.role_id
-        LEFT JOIN dbo.role_type rt ON rt.id = r.role_type_id
+        LEFT JOIN sec.group g ON g.id = u.group_id
+        LEFT JOIN dbo.group_type gt ON gt.id = g.group_type_id
         LEFT JOIN org.contact c ON c.id = u.contact_id
       ) r;
 

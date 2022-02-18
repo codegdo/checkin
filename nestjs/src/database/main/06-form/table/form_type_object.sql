@@ -15,8 +15,11 @@ CREATE INDEX idx_form_type_object  ON dbo.form_type_object (form_type_id, object
 INSERT
 INTO dbo.form_type_object(form_type_id, object_id, org_id)
 VALUES
---user
+--auth_signup
 ('1', '1', null),
 ('1', '2', null),
 ('1', '6', null),
-('1', '15', null);
+('1', '15', null),
+--user_add
+('2', '1', null),
+('2', '4', null);

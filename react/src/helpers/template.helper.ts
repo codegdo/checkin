@@ -5,7 +5,7 @@ export type TemplateData = {
   fallback: string;
 }
 
-export const stringTemplate = (template: string): TemplateData => {
+export const stringTemplate = (template = ''): TemplateData => {
   const components = {
     content: '<Content {...props} />',
     navMain: '<NavMain {...props}/>',

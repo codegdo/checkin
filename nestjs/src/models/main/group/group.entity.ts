@@ -12,10 +12,10 @@ import {
 } from 'typeorm';
 
 import { Policy } from '../policy/policy.entity';
-import { RoleType } from './role-type.entity';
+import { GroupType } from './group-type.entity';
 
-@Entity({ database: 'main', schema: 'sec', name: 'role' })
-export class Role extends BaseEntity {
+@Entity({ database: 'main', schema: 'sec', name: 'group' })
+export class Group extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
@@ -25,21 +25,21 @@ export class Role extends BaseEntity {
   @Column({ name: 'description' })
   description: string;
 
-  @Column({ name: 'role_level' })
-  roleLevel: number;
+  @Column({ name: 'group_level' })
+  groupLevel: number;
 
   @Column({ name: 'is_owner' })
   isOwner: boolean;
 
-  @ManyToOne(() => RoleType, (roleType) => roleType.id)
-  @JoinColumn({ name: 'role_type_id' })
-  roleType: RoleType;
+  @ManyToOne(() => GroupType, (groupType) => groupType.id)
+  @JoinColumn({ name: 'group_type_id' })
+  groupType: GroupType;
 
-  @ManyToMany(() => Policy, (policy: Policy) => policy.roles)
+  @ManyToMany(() => Policy, (policy: Policy) => policy.groups)
   @JoinTable({
-    name: 'role_policy',
+    name: 'group_policy',
     joinColumn: {
-      name: 'role_id',
+      name: 'group_id',
       referencedColumnName: 'id',
     },
     inverseJoinColumn: {

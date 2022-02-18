@@ -7,13 +7,13 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
 AS
 $BODY$
   DECLARE
-    user_role_id int := 2;
+    user_group_id int := 2;
     user_form_id int;
   BEGIN
 
-    SELECT id 
-    INTO user_form_id 
-    FROM org.form 
+    SELECT id
+    INTO user_form_id
+    FROM org.form
     WHERE name = p_form_name;
 
     IF user_form_id IS NOT NULL THEN
@@ -64,14 +64,14 @@ $BODY$
           username,
           password,
           contact_id,
-          role_id
+          group_id
           --form_id
         )
         VALUES(
           (SELECT DISTINCT value FROM tmp_data WHERE map = 'sec.user.username'),
           (SELECT DISTINCT value FROM tmp_data WHERE map = 'sec.user.password'),
           (SELECT id FROM c),
-          (user_role_id)
+          (user_group_id)
           --(user_form_id)
         )
         RETURNING id, username, is_active, contact_id
@@ -272,7 +272,7 @@ $BODY$
         UPDATE sec.user
         SET org_id = (SELECT id FROM o)
         WHERE id = p_login_id
-        RETURNING id, username, contact_id, org_id, role_id, is_active
+        RETURNING id, username, contact_id, org_id, group_id, is_active
       )
       SELECT json_agg(r)::json ->> 0
       INTO "user"
@@ -288,13 +288,13 @@ $BODY$
           c.email_address "emailAddress",
           c.phone_number "phoneNumber",
 
-          r.id "roleId",
-          r.is_owner,
-          rt.name "roleType"
+          g.id "groupId",
+          g.is_owner,
+          gt.name "groupType"
         FROM u
+        LEFT JOIN sec.group g ON g.id = u.group_id
+        LEFT JOIN dbo.group_type gt ON gt.id = g.group_type_id
         LEFT JOIN org.contact c ON c.id = u.contact_id
-        LEFT JOIN sec.role r ON r.id = u.role_id
-        LEFT JOIN dbo.role_type rt ON rt.id = r.role_type_id
       ) r;
 
       --SET user_org_id
@@ -331,8 +331,8 @@ AS
 $BODY$
   DECLARE
       user_org_id int;
-      user_role_type varchar;
-      user_role_id int;
+      user_group_type varchar;
+      user_group_id int;
   BEGIN
 
     SELECT json_agg(u.*)::json ->> 0
@@ -345,10 +345,10 @@ $BODY$
 
       --SET
       SELECT "user" ->> 'orgId' INTO user_org_id;
-      SELECT "user" ->> 'roleType' INTO user_role_type;
-      SELECT "user" ->> 'roleId' INTO user_role_id;
+      SELECT "user" ->> 'groupType' INTO user_group_type;
+      SELECT "user" ->> 'groupId' INTO user_group_id;
 
-      IF user_role_type = 'system' THEN
+      IF user_group_type = 'system' THEN
 
       ELSE
         IF user_org_id IS NOT NULL THEN
@@ -367,7 +367,7 @@ $BODY$
             SELECT json_agg(m.*)::json
             INTO "modules"
             FROM (
-              SELECT * FROM dbo.fn_module_get_by_type(user_role_type)
+              SELECT * FROM dbo.fn_module_get_by_group_type(user_group_type)
             ) m;
 
             SELECT json_agg(p.*)::json
@@ -379,7 +379,7 @@ $BODY$
             SELECT json_agg(p.*)::json ->> 0
             INTO "policy"
             FROM (
-              SELECT * FROM sec.fn_policy_get_by_role_id(user_role_id)
+              SELECT * FROM sec.fn_policy_get_by_group_id(user_group_id)
             ) p;
 
           ELSE

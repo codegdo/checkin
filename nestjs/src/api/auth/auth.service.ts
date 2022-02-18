@@ -14,7 +14,7 @@ import { Connection } from 'typeorm';
 import {
   OrganizationRepository,
   UserRepository,
-  RoleRepository,
+  GroupRepository,
   TokenRepository,
   ContactRepository,
   EmailRepository,
@@ -53,8 +53,8 @@ export class AuthService {
     @InjectRepository(ContactRepository)
     private contactRepository: ContactRepository,
 
-    @InjectRepository(RoleRepository)
-    private roleRepository: RoleRepository,
+    @InjectRepository(GroupRepository)
+    private groupRepository: GroupRepository,
 
     @InjectRepository(TokenRepository)
     private tokenRepository: TokenRepository,

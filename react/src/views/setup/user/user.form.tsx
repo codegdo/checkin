@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { Form, FormData } from '../../../components/form';
 import { useFetch } from '../../../hooks';
 
-const UserForm: React.FC = (props): JSX.Element => {
+const UserForm: React.FC = (): JSX.Element => {
 
   const navigate = useNavigate();
   const [form, setForm] = useState<FormData>();
-  const [{ status, result }, postUser] = useFetch('/api/setup/users');
+  const [{ status: submit, result }, postUser] = useFetch('/api/setup/users');
+  //const [{ status: loading, result: formData}, getForm] = useFetch('/api/setup/users/new?name=user_add');
 
   // load form
   useEffect(() => {
@@ -28,8 +29,8 @@ const UserForm: React.FC = (props): JSX.Element => {
 
   return (
     <>
-      {status === 'error' && <div>Error</div>}
-      <Form form={form} status={status} onSubmit={handleSubmit} onCallback={handleCallback} />
+      {submit === 'error' && <div>Error</div>}
+      <Form form={form} status={submit} onSubmit={handleSubmit} onCallback={handleCallback} />
     </>
   );
 };

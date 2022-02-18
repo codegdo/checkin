@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS sec.user (
   passcode VARCHAR(4),
 
   contact_id INT,
-  role_id INT,
+  group_id INT,
   form_id INT,
   org_id INT,
 
@@ -21,6 +21,6 @@ CREATE TABLE IF NOT EXISTS sec.user (
   PRIMARY KEY(id),
   UNIQUE(username),
   UNIQUE(passcode),
-  FOREIGN KEY(role_id) REFERENCES sec.role(id),
+  FOREIGN KEY(group_id) REFERENCES sec.group(id),
   FOREIGN KEY(contact_id) REFERENCES org.contact(id)
 );

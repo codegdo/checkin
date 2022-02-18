@@ -11,6 +11,7 @@ import {
   ManyToMany
 } from 'typeorm';
 import { Form } from '../form/form.entity';
+import { GridType } from '../grid/grid-type.entity';
 
 import { ObjectEntity } from '../object/object.entity';
 
@@ -45,12 +46,15 @@ export class Field extends BaseEntity {
   @Column({ name: 'is_required' })
   isRequired: boolean;
 
-  @ManyToOne(() => ObjectEntity)
-  @JoinColumn({ name: 'object_id', referencedColumnName: 'id' })
-  object: ObjectEntity;
+  @ManyToOne(() => GridType)
+  @JoinColumn({ name: 'grid_type_id', referencedColumnName: 'id' })
+  gridType: GridType;
 
   @ManyToMany(() => Form, (form: Form) => form.fields)
   forms: Form[];
+
+  @Column({ name: 'object_id' })
+  objectId: boolean;
 
   @Column({ name: 'org_id' })
   orgId: boolean;

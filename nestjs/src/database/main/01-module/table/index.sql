@@ -108,7 +108,7 @@ VALUES
 --setup
 ('200', 'users',        'grid', '20', '0', '0', '1', '1'),
 ('201', 'clients',      'grid', '20', '1', '0', '1', '1'),
-('202', 'roles',        'grid', '20', '2', '0', '1', '1'),
+('202', 'groups',        'grid', '20', '2', '0', '1', '1'),
 ('203', 'policies',     'grid', '20', '2', '0', '1', '1'),
 
 ('204', 'languages',    'grid', '20', '3', '0', '1', '1'),
@@ -147,7 +147,9 @@ CREATE TABLE IF NOT EXISTS dbo.object (
 
   is_external BOOLEAN DEFAULT TRUE,
   is_internal BOOLEAN DEFAULT TRUE,
-  is_active BOOLEAN,
+  
+  is_custom BOOLEAN DEFAULT FALSE,
+  is_active BOOLEAN DEFAULT TRUE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
@@ -158,19 +160,19 @@ CREATE TABLE IF NOT EXISTS dbo.object (
 );
 
 INSERT
-INTO dbo.object(id, name, is_external, is_internal, is_active)
+INTO dbo.object(id, name, is_external, is_internal, is_custom)
 VALUES
 --
 ('1', 'user',          '1', '1', '1'),
 ('2', 'contact',       '1', '1', '1'),
 ('3', 'client',        '1', '1', '1'),
-('4', 'role',          '1', '1', '1'),
+('4', 'group',         '1', '1', '1'),
 ('5', 'policy',        '1', '1', '1'),
 ('6', 'language',      '1', '1', '1'),
 ('7', 'location',      '1', '1', '1'),
 ('8', 'service',       '1', '1', '1'),
 ('9', 'price',         '1', '1', '1'),
-('10', 'form',          '1', '1', '1'),
+('10', 'form',         '1', '1', '1'),
 ('11', 'template',     '1', '1', '1'),
 ('12', 'calendar',     '1', '1', '1'),
 ('13', 'checkin',      '1', '1', '1'),
@@ -301,7 +303,7 @@ VALUES
 ('200', '2', null),
 --clients
 ('201', '3', null),
---roles
+--groups
 ('202', '4', null),
 --policies
 ('203', '5', null),

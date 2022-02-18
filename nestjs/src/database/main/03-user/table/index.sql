@@ -1,5 +1,5 @@
--- CREATE TABLE ROLE TYPE
-CREATE TABLE IF NOT EXISTS dbo.role_type (
+-- CREATE TABLE GROUP TYPE
+CREATE TABLE IF NOT EXISTS dbo.group_type (
   id SERIAL NOT NULL,
   name VARCHAR(15) CHECK(name in ('system', 'internal', 'external')) NOT NULL,
 
@@ -10,11 +10,11 @@ CREATE TABLE IF NOT EXISTS dbo.role_type (
 );
 
 INSERT
-INTO dbo.role_type(name)
+INTO dbo.group_type(id, name)
 VALUES
-('system'),
-('internal'),
-('external');
+('1', 'system'),
+('2', 'internal'),
+('3', 'external');
 
 -- CREATE TABLE POLICY_VERSION
 CREATE TABLE IF NOT EXISTS dbo.policy_version (
@@ -33,14 +33,14 @@ INTO dbo.policy_version(id, name)
 VALUES
 ('1', '1.0');
 
--- CREATE TABLE ROLE
-CREATE TABLE IF NOT EXISTS sec.role (
+-- CREATE TABLE GROUP
+CREATE TABLE IF NOT EXISTS sec.group (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
   description VARCHAR(255),
-  role_level INT DEFAULT 1,
+  group_level INT DEFAULT 1,
 
-  role_type_id INT,
+  group_type_id INT,
   org_id INT,
 
   is_owner BOOLEAN DEFAULT FALSE,
@@ -52,17 +52,14 @@ CREATE TABLE IF NOT EXISTS sec.role (
   updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
-  FOREIGN KEY(role_type_id) REFERENCES dbo.role_type(id) ON DELETE SET NULL
+  FOREIGN KEY(group_type_id) REFERENCES dbo.group_type(id) ON DELETE SET NULL
 );
 
 INSERT
-INTO sec.role(name, description, is_owner, org_id, role_type_id)
+INTO sec.group(name, description, is_owner, org_id, group_type_id)
 VALUES
-('System Role', null, '0', null, '1'),
-('Owner Role', null, '1', null, '2'),
-('Admin Role', null, '0', null, '2'),
-('Manager Role', null, '0', null, '2'),
-('Employee Role', null, '0', null, '3');
+('System Group', null, '0', null, '1'),
+('Owner Group', null, '1', null, '2');
 
 -- CREATE TABLE POLICY
 CREATE TABLE IF NOT EXISTS sec.policy (
@@ -73,7 +70,7 @@ CREATE TABLE IF NOT EXISTS sec.policy (
   statement JSONB NOT NULL DEFAULT '{"effect":"allow","action":"*","resource":"*"}'::jsonb,
   
   version_id INT,
-  role_type_id INT,
+  group_type_id INT,
   org_id INT,
 
   is_active BOOLEAN DEFAULT TRUE,
@@ -84,12 +81,12 @@ CREATE TABLE IF NOT EXISTS sec.policy (
   updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
-  FOREIGN KEY(role_type_id) REFERENCES dbo.role_type(id) ON DELETE SET NULL,
+  FOREIGN KEY(group_type_id) REFERENCES dbo.group_type(id) ON DELETE SET NULL,
   FOREIGN KEY(version_id) REFERENCES dbo.policy_version(id) ON DELETE SET NULL
 );
 
 INSERT
-INTO sec.policy(name, description, statement, version_id, role_type_id)
+INTO sec.policy(name, description, statement, version_id, group_type_id)
 VALUES
 ('System Access', 'Full access','{"effect":"allow","action":"*","resource":"*"}', '1', '1'),
 ('Admin Access', 'Full access','{"effect":"allow","action":"*","resource":"*"}', '1', '2'),
@@ -129,7 +126,7 @@ CREATE TABLE IF NOT EXISTS sec.user (
   passcode VARCHAR(4),
 
   contact_id INT,
-  role_id INT,
+  group_id INT,
   form_id INT,
   org_id INT,
 
@@ -144,7 +141,7 @@ CREATE TABLE IF NOT EXISTS sec.user (
   PRIMARY KEY(id),
   UNIQUE(username),
   UNIQUE(passcode),
-  FOREIGN KEY(role_id) REFERENCES sec.role(id),
+  FOREIGN KEY(group_id) REFERENCES sec.group(id),
   FOREIGN KEY(contact_id) REFERENCES org.contact(id)
 );
 
@@ -226,28 +223,25 @@ CREATE TABLE IF NOT EXISTS sec.organization (
   FOREIGN KEY(owner_id) REFERENCES sec.user(id)
 );
 
--- CREATE TABLE ROLE_POLICY
-CREATE TABLE IF NOT EXISTS sec.role_policy (
-  role_id INT NOT NULL,
+-- CREATE TABLE GROUP_POLICY
+CREATE TABLE IF NOT EXISTS sec.group_policy (
+  group_id INT NOT NULL,
   policy_id INT NOT NULL,
   org_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
-  PRIMARY KEY(role_id, policy_id),
-  FOREIGN KEY(role_id) REFERENCES sec.role(id) ON DELETE SET NULL,
+  PRIMARY KEY(group_id, policy_id),
+  FOREIGN KEY(group_id) REFERENCES sec.group(id) ON DELETE SET NULL,
   FOREIGN KEY(policy_id) REFERENCES sec.policy(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_role_policy ON sec.role_policy(role_id, policy_id);
+CREATE INDEX idx_group_policy ON sec.group_policy(group_id, policy_id);
 
 INSERT
-INTO sec.role_policy(role_id, policy_id)
+INTO sec.group_policy(group_id, policy_id)
 VALUES
 ('1', '1'),
-('2', '2'),
-('3', '2'),
-('4', '3'),
-('5', '4');
+('2', '2');
 
 -- CREATE TABLE USER_LOCATION
 CREATE TABLE IF NOT EXISTS sec.user_location (
@@ -281,16 +275,16 @@ CREATE INDEX idx_client_location ON sec.client_location(client_id, location_id);
 -- DROP TABLES
 
 DROP TABLE IF EXISTS
-dbo.role_type,
+dbo.group_type,
 dbo.policy_version,
-sec.role,
+sec.group,
 sec.policy,
 org.contact,
 sec.user,
 sec.client,
 org.location,
 sec.organization,
-sec.role_policy,
+sec.group_policy,
 sec.user_location,
 sec.client_location CASCADE;
 

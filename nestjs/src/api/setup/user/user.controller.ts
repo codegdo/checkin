@@ -21,7 +21,6 @@ export class UserController {
   @Get('users')
   //@Serialize(UserData)
   getAllUsers(@CurrentUser() user: User, @Query() paginationQuery: PaginationQueryDto) {
-
     return this.userService.findAll(paginationQuery);
   }
 

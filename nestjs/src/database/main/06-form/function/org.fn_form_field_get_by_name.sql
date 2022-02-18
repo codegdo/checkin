@@ -55,7 +55,7 @@ BEGIN
   --
   FROM org.form f
   INNER JOIN org.form_field ff ON ff.form_id = f.id
-  INNER JOIN org.field fld ON fld.id = ff.field_id
+  LEFT JOIN org.field fld ON fld.id = ff.field_id
   WHERE f.name = p_name
   ORDER BY ff.position;
 END;

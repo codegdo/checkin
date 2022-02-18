@@ -7,7 +7,7 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
 AS
 $BODY$
   DECLARE
-    user_role_id int := 2;
+    user_group_id int := 2;
     user_form_id int;
   BEGIN
 
@@ -64,14 +64,14 @@ $BODY$
           username,
           password,
           contact_id,
-          role_id
+          group_id
           --form_id
         )
         VALUES(
           (SELECT DISTINCT value FROM tmp_data WHERE map = 'sec.user.username'),
           (SELECT DISTINCT value FROM tmp_data WHERE map = 'sec.user.password'),
           (SELECT id FROM c),
-          (user_role_id)
+          (user_group_id)
           --(user_form_id)
         )
         RETURNING id, username, is_active, contact_id

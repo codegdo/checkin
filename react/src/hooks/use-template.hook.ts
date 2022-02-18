@@ -19,7 +19,7 @@ export const useTemplate = ({ route, page }: TemplateProps): TemplateData => {
 
     if (isLogin) {
 
-      const type = session.user?.roleType as string;
+      const type = session.user?.groupType as string;
       const defaultTemplate = (templates as Record<string, string>)[type];
 
       template = defaultTemplate;

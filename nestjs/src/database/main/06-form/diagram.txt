@@ -47,6 +47,7 @@ ref: form_field.field_id > field.id
 
 table grid_type {
   id int
+  name varchar
   form_type_id int
 }
 
@@ -66,7 +67,7 @@ table grid_field {
   label varchar
   form_id int
   field_id int
-  parent_id int
+
   is_required boolean
 }
 
@@ -75,8 +76,10 @@ ref: grid_field.field_id > field.id
 
 table field {
   id int
+  grid_type_id int
   object_id int
   org_id int
+  parent_id int
   name varchar
   role varchar
   type varchar
@@ -90,4 +93,5 @@ table field {
   is_required boolean
 }
 
-ref: field.object_id > object.id
+
+ref: field.grid_type_id > grid_type.id

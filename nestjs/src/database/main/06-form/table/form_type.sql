@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS dbo.form_type (
   name VARCHAR(255),
 
   is_custom BOOLEAN DEFAULT FALSE,
+  is_active BOOLEAN DEFAULT TRUE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
@@ -17,4 +18,5 @@ CREATE TABLE IF NOT EXISTS dbo.form_type (
 INSERT
 INTO dbo.form_type (id, name, is_custom)
 VALUES
-('1', 'user', '0');
+('1', 'user_signup', '0'),
+('2', 'user_add', '0');

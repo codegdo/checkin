@@ -12,7 +12,7 @@ const SetupForm: React.FC = (): JSX.Element => {
   const { updateSession } = useAction();
 
   const [{ status: submit, result: resultSubmit }, fetchSetup] = useFetch('/api/auth/setup');
-  const [{ status: loading, result: resultLoading }, fetchForm] = useFetch('/api/auth/form?name=auth_setup');
+  const [{ status: loading, result: resultForm }, fetchForm] = useFetch('/api/auth/form?name=auth_setup');
   const [form, setForm] = useState<FormData>();
 
   // load form
@@ -24,7 +24,7 @@ const SetupForm: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     if (loading === 'success') {
-      setForm(resultLoading.data);
+      setForm(resultForm.data);
     }
   }, [loading]);
 

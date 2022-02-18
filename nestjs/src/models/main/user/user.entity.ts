@@ -15,7 +15,7 @@ import {
 } from 'typeorm';
 import { randomBytes, scrypt as _scrypt } from 'crypto';
 import { promisify } from 'util';
-import { Role, Contact, Location, Organization } from '../entities';
+import { Group, Contact, Location, Organization } from '../entities';
 
 const scrypt = promisify(_scrypt);
 
@@ -45,9 +45,9 @@ export class User {
   @JoinColumn({ name: 'contact_id' })
   contact: Contact;
 
-  @ManyToOne(() => Role, (role) => role.id)
-  @JoinColumn({ name: 'role_id' })
-  role: Role;
+  @ManyToOne(() => Group, (group) => group.id)
+  @JoinColumn({ name: 'group_id' })
+  group: Group;
 
   @Column({ name: 'form_id' })
   formId: number;

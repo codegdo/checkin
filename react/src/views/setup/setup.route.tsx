@@ -7,8 +7,8 @@ const Index = Template(lazy(() => import('./setup.index'), 1000));
 const UserList = Template(lazy(() => import('./user/user.list')));
 const UserForm = Template(lazy(() => import('./user/user.form')));
 const ClientList = Template(lazy(() => import('./client/client.list')));
-const RoleList = Template(lazy(() => import('./role/role.list')));
-const RoleForm = Template(lazy(() => import('./role/role.form')));
+const GroupList = Template(lazy(() => import('./group/group.list')));
+const GroupForm = Template(lazy(() => import('./group/group.form')));
 const PolicyList = Template(lazy(() => import('./policy/policy.list')));
 const PolicyForm = Template(lazy(() => import('./policy/policy.form')));
 
@@ -31,12 +31,12 @@ export const SetupRoute: React.FC = (): JSX.Element => {
       element: <ClientList route="setup" page="clients" />
     },
     {
-      path: 'roles/:id',
-      element: <RoleForm route="setup" page="roles" />
+      path: 'groups/:id',
+      element: <GroupForm route="setup" page="groups" />
     },
     {
-      path: 'roles',
-      element: <RoleList route="setup" page="roles" />
+      path: 'groups',
+      element: <GroupList route="setup" page="groups" />
     },
     {
       path: 'policies/:id',

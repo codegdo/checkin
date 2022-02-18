@@ -25,6 +25,9 @@ export class ObjectEntity extends BaseEntity {
   @Column({ name: 'is_internal' })
   isInternal: boolean;
 
+  @Column({ name: 'is_custom' })
+  isCustom: boolean;
+
   @Column({ name: 'is_active' })
   isActive: boolean;
 
