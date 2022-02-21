@@ -73,11 +73,11 @@ export class AuthService {
 
     private readonly messageService: MessageAuthService,
     private readonly errorService: ErrorService,
-  ) {}
+  ) { }
 
   async signup(dto: UserSignupDto) {
     try {
-      const data = await this.userRepository.userSignup(dto);
+      const data = await this.userRepository.signupUser(dto);
 
       if (!data) {
         throw new NotFoundException(ErrorMessageEnum.NOT_FOUND);
@@ -98,7 +98,7 @@ export class AuthService {
     try {
       const type =
         option == 'phoneNumber' ? MessageEnum.MESSAGE : MessageEnum.EMAIL;
-      const data = await this.userRepository.userVerify(loginId);
+      const data = await this.userRepository.verifyUser(loginId);
 
       return this.messageService.sendVerify({ type, context: data });
     } catch (e) {
@@ -109,7 +109,7 @@ export class AuthService {
   async login(dto: UserLoginDto) {
     try {
       const { user, locations, organizations, modules, permissions, policy } =
-        await this.userRepository.userLogin(dto);
+        await this.userRepository.loginUser(dto);
       const { orgId, isActive } = user;
 
       if (orgId && !isActive) {
@@ -126,7 +126,7 @@ export class AuthService {
 
   async setup(dto: UserSetupDto) {
     try {
-      return this.userRepository.userSetup(dto);
+      return this.userRepository.setupUser(dto);
     } catch (e) {
       this.errorService.handleError(e);
     }
@@ -134,7 +134,7 @@ export class AuthService {
 
   async confirm(key: string) {
     try {
-      return await this.userRepository.userConfirm(key);
+      return await this.userRepository.confirmUser(key);
     } catch (e) {
       this.errorService.handleError(e);
     }
@@ -142,7 +142,7 @@ export class AuthService {
 
   async getForm(formName: string) {
     try {
-      return this.formRepository.getFormByName(formName);
+      return this.formRepository.getForm(formName);
     } catch (e) {
       this.errorService.handleError(e);
     }

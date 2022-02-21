@@ -24,7 +24,7 @@ import { FormTypeEnum } from '../form/form.type';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-  async userSignup(dto: UserSignupDto): Promise<UserSignupData> {
+  async signupUser(dto: UserSignupDto): Promise<UserSignupData> {
     let { formName, data } = dto;
 
     // encrypt password
@@ -38,7 +38,7 @@ export class UserRepository extends Repository<User> {
     return result.data;
   }
 
-  async userVerify(loginId: number): Promise<UserVerifyData> {
+  async verifyUser(loginId: number): Promise<UserVerifyData> {
     const key = await randomInt(100000, 999999).toString();
     const type = TokenEnum.VERIFY;
     const expiredAt = new Date().getTime() + 300000; // 5 mins
@@ -51,7 +51,7 @@ export class UserRepository extends Repository<User> {
     return result.data;
   }
 
-  async userSetup(dto: UserSetupDto): Promise<UserSetupData> {
+  async setupUser(dto: UserSetupDto): Promise<UserSetupData> {
     const { loginId, data } = dto;
 
     const [result] = await this.manager.query(
@@ -62,7 +62,7 @@ export class UserRepository extends Repository<User> {
     return result;
   }
 
-  async userLogin(dto: UserLoginDto): Promise<UserLoginData> {
+  async loginUser(dto: UserLoginDto): Promise<UserLoginData> {
     const { username, password } = dto;
 
     const [result] = await this.manager.query(
@@ -84,7 +84,7 @@ export class UserRepository extends Repository<User> {
     }
   }
 
-  async userConfirm(key: string): Promise<any> {
+  async confirmUser(key: string): Promise<any> {
     const [result] = await this.manager.query(
       `CALL sec.pr_user_confirm($1, $2)`,
       [key, null],

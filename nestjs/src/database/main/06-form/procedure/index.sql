@@ -1,6 +1,6 @@
--- CREATE PROCEDURE PR_FORM_FIELD_GET_BY_NAME
-CREATE OR REPLACE PROCEDURE org.pr_form_get_by_name(
-  p_name varchar,
+-- CREATE PROCEDURE PR_FORM_GET_BY_ID
+CREATE OR REPLACE PROCEDURE org.pr_form_get_by_id(
+  p_form_id varchar,
   OUT data json
 )
 AS
@@ -16,7 +16,7 @@ $BODY$
   BEGIN
     DROP TABLE IF EXISTS tmp_form_field CASCADE;
     CREATE TEMP TABLE tmp_form_field AS
-    SELECT * FROM org.fn_form_field_get_by_name(p_name);
+    SELECT * FROM org.fn_form_field_get_by_id(p_form_id);
 
     DROP TABLE IF EXISTS tmp_lookup CASCADE;
     CREATE TEMP TABLE tmp_lookup AS
@@ -84,6 +84,6 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-CALL org.pr_form_get_by_name('auth_signup', null);
+CALL org.pr_form_get_by_id('auth_signup', null);
 
-DROP PROCEDURE IF EXISTS org.pr_form_get_by_name;
+DROP PROCEDURE IF EXISTS org.pr_form_get_by_id(varchar, json);

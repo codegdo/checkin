@@ -21,7 +21,7 @@ export class UserService {
 
     private readonly errorService: ErrorService, //private repo: MainRepository
   ) //@Inject(MainRepository)
-  {}
+  { }
 
   async getAllUsers(paginationQueryDto) {
     const { limit, offset } = paginationQueryDto;
@@ -52,9 +52,9 @@ export class UserService {
     }
   }
 
-  async updateUser(id, updateUserDto) {}
+  async updateUser(id, updateUserDto) { }
 
-  async delete(id) {}
+  async delete(id) { }
 
   async getForm(dto: UserFormDto) {
     try {

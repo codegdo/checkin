@@ -211,7 +211,7 @@ VALUES
 
 --group=4
 ('groupGrid', 'component', 'grid', 'sec.group', null, '1', '4', '1', null),
-('name', 'field', 'text', 'sec.group.name', null, '1', '4', '1', '15'),
+('name', 'field', 'text', 'sec.group.name', null, '1', '4', '1', '14'),
 
 --organization=15
 ('name', 'field', 'text', 'sec.organization.name', null, '1', '15', null, null),

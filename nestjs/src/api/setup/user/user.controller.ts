@@ -9,14 +9,14 @@ import {
   Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import {} from 'src/models/main/dtos';
+import { } from 'src/models/main/dtos';
 import { Serialize, CurrentUser } from 'src/common/decorators';
 import { PaginationQueryDto } from 'src/common/dtos';
 import { User } from 'src/models/main/entities';
 
 @Controller('setup')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Get('users')
   //@Serialize(UserData)
@@ -37,7 +37,7 @@ export class UserController {
     console.log('GET_CURRENT_USER', user);
 
     if (formId) {
-      // getForm
+      // getFormForUser
       return this.userService.getForm({ userId, formId });
     } else {
       // getUser
@@ -60,5 +60,5 @@ export class UserController {
   }
 
   @Delete('users/:id')
-  deleteUser(@CurrentUser() user: User, @Param('id') id: number) {}
+  deleteUser(@CurrentUser() user: User, @Param('id') id: number) { }
 }

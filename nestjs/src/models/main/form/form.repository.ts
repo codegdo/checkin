@@ -4,10 +4,10 @@ import { Form } from './form.entity';
 
 @EntityRepository(Form)
 export class FormRepository extends Repository<Form> {
-  async getFormByName(name: string) {
+  async getForm(id: number | string) {
     const [result] = await this.manager.query(
-      `CALL org.pr_form_get_by_name($1, $2)`,
-      [name, null],
+      `CALL org.pr_form_get_by_id($1, $2)`,
+      [id, null],
     );
 
     if (!result) {

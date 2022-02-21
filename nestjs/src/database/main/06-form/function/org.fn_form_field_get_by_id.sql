@@ -51,8 +51,8 @@ $BODY$
         fld.map,
         fld.lookup,
         ff.position,
-      ff.parent_id,
-      --is_required
+        ff.parent_id,
+        --is_required
       CASE WHEN fld.is_required = true 
         THEN true 
       ELSE 
@@ -72,12 +72,6 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-
--- CALL FUNCTIONS
-
 SELECT * FROM org.fn_form_field_get_by_id('auth_signup');
 
--- DROP FUNCTIONS
-
-DROP FUNCTION IF EXISTS
-org.fn_form_field_get_by_id;
+DROP FUNCTION IF EXISTS org.fn_form_field_get_by_id;

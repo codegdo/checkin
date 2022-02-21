@@ -1,6 +1,6 @@
--- CREATE PROCEDURE PR_FORM_FIELD_GET_BY_NAME
-CREATE OR REPLACE PROCEDURE org.pr_form_get_by_name(
-  p_name varchar,
+-- CREATE PROCEDURE PR_FORM_GET_BY_ID
+CREATE OR REPLACE PROCEDURE org.pr_form_get_by_id(
+  p_form_id varchar,
   OUT data json
 )
 AS
@@ -14,9 +14,13 @@ $BODY$
     max_id int;
     min_id int := 1;
   BEGIN
+    --DROP TABLE IF EXISTS tmp_eval CASCADE;
+    --CREATE TEMP TABLE tmp_eval AS
+    --SELECT * FROM org.fn_get_user();
+    
     DROP TABLE IF EXISTS tmp_form_field CASCADE;
     CREATE TEMP TABLE tmp_form_field AS
-    SELECT * FROM org.fn_form_field_get_by_name(p_name);
+    SELECT * FROM org.fn_form_field_get_by_id(p_form_id);
 
     DROP TABLE IF EXISTS tmp_lookup CASCADE;
     CREATE TEMP TABLE tmp_lookup AS
@@ -84,4 +88,5 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-CALL org.pr_form_get_by_name('auth_signup', null);
+CALL org.pr_form_get_by_id('auth_signup', null);
+

@@ -26,7 +26,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   @Public()
   @Get('signup')
@@ -92,7 +92,7 @@ export class AuthController {
 
   @Public()
   @Get('setup')
-  async getFormSetup(@Query('formName') formName: string) {
+  async getSetup(@Query('formName') formName: string) {
     const form = await this.authService.getForm(formName);
 
     return form;
