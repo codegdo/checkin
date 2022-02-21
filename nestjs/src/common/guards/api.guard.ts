@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, HttpException, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  HttpException,
+  Injectable,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
@@ -18,7 +23,7 @@ export class ApiGuard implements CanActivate {
     private reflector: Reflector,
     private jwtService: JwtService,
     private sessionRepository: SessionRepository,
-  ) { }
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
@@ -37,7 +42,6 @@ export class ApiGuard implements CanActivate {
     }
 
     if (isRestricted) {
-
       if (!apiToken) {
         return false;
       }
@@ -47,18 +51,19 @@ export class ApiGuard implements CanActivate {
         console.log('API GUARD', api);
 
         return true;
-
       } catch (err) {
         console.log('API TOKEN ERROR', err);
         return false;
       }
     }
 
-    const { user } = request.session;
+    const { data } = request.session;
+
+    console.log('API GUARD SESSION USER', data);
 
     //
-    if (user) {
-      request.currentUser = user;
+    if (data) {
+      request.currentUser = data.user;
       return true;
     }
 
@@ -90,6 +95,6 @@ export class ApiGuard implements CanActivate {
 
     //return false;
     //console.log('SESSION TIMEOUT');
-    throw new HttpException('Session Timeout', 404)
+    throw new HttpException('Session Timeout', 404);
   }
 }

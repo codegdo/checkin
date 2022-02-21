@@ -14,7 +14,7 @@ type State = {
 
 const initialState = {
   status: 'idle',
-  result: undefined,
+  result: {},
 };
 
 const reducer = (state: State, { type, payload }: Action) => {
@@ -53,6 +53,7 @@ export const useFetch = (
         //
         dispatch({ type: 'SUCCESS', payload: result });
       } catch (err: any) {
+        console.log('FETCH', err);
         dispatch({ type: 'FAILURE', payload: err });
         //
         if (err.data?.message === 'Session Timeout') {

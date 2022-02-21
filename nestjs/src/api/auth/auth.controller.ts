@@ -26,7 +26,15 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
+
+  @Public()
+  @Get('signup')
+  async getFormSignup(@Query('formName') formName: string) {
+    const form = await this.authService.getForm(formName);
+
+    return form;
+  }
 
   @Public()
   @Post('signup')
@@ -83,6 +91,14 @@ export class AuthController {
   }
 
   @Public()
+  @Get('setup')
+  async getFormSetup(@Query('formName') formName: string) {
+    const form = await this.authService.getForm(formName);
+
+    return form;
+  }
+
+  @Public()
   @Post('setup')
   async setup(@Session() session: any, @Body() body: UserSetupDto) {
     const { user, locations } = await this.authService.setup(body);
@@ -109,15 +125,6 @@ export class AuthController {
     }
 
     return { ok: true };
-  }
-
-  @Public()
-  @Get('form')
-  async form(@Query('name') name: string) {
-    const form = await this.authService.form(name);
-
-    console.log('CONTROLLER', form);
-    return form;
   }
 
   // @Public()

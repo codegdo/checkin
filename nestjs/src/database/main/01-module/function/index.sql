@@ -73,4 +73,4 @@ LANGUAGE plpgsql;
 -- DROP FUNCTIONS
 
 DROP FUNCTION IF EXISTS
-dbo.fn_module_get_by_type;
+dbo.fn_module_get_by_group_type;

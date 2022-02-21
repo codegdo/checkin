@@ -1,4 +1,4 @@
-CREATE PROCEDURE IF NOT EXISTS dbo.pr_module_get_by_type(
+CREATE PROCEDURE IF NOT EXISTS dbo.pr_module_get_by_group_type(
   OUT modules json,
   OUT permissions json,
 )

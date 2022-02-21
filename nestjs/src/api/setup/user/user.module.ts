@@ -3,12 +3,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { UserRepository } from 'src/models/main/repositories';
-
+import { FormRepository, UserRepository } from 'src/models/main/repositories';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserRepository])],
+  imports: [
+    TypeOrmModule.forFeature([FormRepository, UserRepository], 'default'),
+  ],
   controllers: [UserController],
-  providers: [UserService]
+  providers: [UserService],
 })
-export class UserModule { }
+export class UserModule {}

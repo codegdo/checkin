@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsNotEmptyObject,
   IsNumber,
+  IsNumberString,
   IsObject,
   IsString,
   ValidateNested,
@@ -38,7 +39,7 @@ export class UserVerifyDto {
   @IsObject()
   @ValidateNested({ each: true })
   @Type(() => FormDataDto)
-  data: FormDataDto
+  data: FormDataDto;
 }
 
 export class UserSetupDto {
@@ -57,4 +58,12 @@ export class UserLoginDto {
 
   @IsString()
   password: string;
+}
+
+export class UserFormDto {
+  @IsNumber()
+  userId: number;
+
+  @IsNumberString()
+  formId: number | string;
 }

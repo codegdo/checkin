@@ -73,7 +73,7 @@ export class AuthService {
 
     private readonly messageService: MessageAuthService,
     private readonly errorService: ErrorService,
-  ) { }
+  ) {}
 
   async signup(dto: UserSignupDto) {
     try {
@@ -108,7 +108,8 @@ export class AuthService {
 
   async login(dto: UserLoginDto) {
     try {
-      const { user, locations, organizations, modules, permissions, policy } = await this.userRepository.userLogin(dto);
+      const { user, locations, organizations, modules, permissions, policy } =
+        await this.userRepository.userLogin(dto);
       const { orgId, isActive } = user;
 
       if (orgId && !isActive) {
@@ -139,9 +140,9 @@ export class AuthService {
     }
   }
 
-  async form(name: string) {
+  async getForm(formName: string) {
     try {
-      return this.formRepository.getFormByName(name);
+      return this.formRepository.getFormByName(formName);
     } catch (e) {
       this.errorService.handleError(e);
     }

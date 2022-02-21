@@ -9,38 +9,56 @@ import {
   Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { } from 'src/models/main/dtos';
+import {} from 'src/models/main/dtos';
 import { Serialize, CurrentUser } from 'src/common/decorators';
 import { PaginationQueryDto } from 'src/common/dtos';
 import { User } from 'src/models/main/entities';
 
 @Controller('setup')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @Get('users')
   //@Serialize(UserData)
-  getAllUsers(@CurrentUser() user: User, @Query() paginationQuery: PaginationQueryDto) {
-    return this.userService.findAll(paginationQuery);
+  getAllUsers(
+    @CurrentUser() user: User,
+    @Query() paginationQuery: PaginationQueryDto,
+  ) {
+    return this.userService.getAllUsers(paginationQuery);
   }
 
-  @Get('users/:id')
+  @Get('users/:userId')
   //@Serialize(UserData)
-  getOneUser(@CurrentUser() user: User, @Param('id') id: number) {
+  getUser(
+    @CurrentUser() user: User,
+    @Param('userId') userId: number,
+    @Query('formId') formId: number | string,
+  ) {
     console.log('GET_CURRENT_USER', user);
-    return this.userService.findOne(id);
+
+    if (formId) {
+      // getForm
+      return this.userService.getForm({ userId, formId });
+    } else {
+      // getUser
+      return { formId };
+    }
   }
 
   @Post('users')
   createUser(@CurrentUser() user: User, @Body() body: any) {
-    return this.userService.create(body);
+    return this.userService.createUser(body);
   }
 
   @Patch('users/:id')
-  updateUser(@CurrentUser() user: User, @Param('id') id: number, @Body() body: any) {
-    return this.userService.update(id, body);
+  updateUser(
+    @CurrentUser() user: User,
+    @Param('id') id: number,
+    @Body() body: any,
+  ) {
+    return this.userService.updateUser(id, body);
   }
 
   @Delete('users/:id')
-  deleteUser(@CurrentUser() user: User, @Param('id') id: number) { }
+  deleteUser(@CurrentUser() user: User, @Param('id') id: number) {}
 }

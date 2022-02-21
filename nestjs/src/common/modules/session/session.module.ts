@@ -3,7 +3,7 @@ import { createModule } from 'create-nestjs-middleware-module';
 
 declare module 'express-session' {
   export interface SessionData {
-    user: { [key: string]: any };
+    data: { [key: string]: any };
   }
 }
 interface ConfigSession {

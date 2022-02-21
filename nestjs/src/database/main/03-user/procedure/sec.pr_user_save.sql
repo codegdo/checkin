@@ -1,8 +1,8 @@
 -- CREATE PROCEDURE USER_SAVE
 CREATE OR REPLACE PROCEDURE sec.pr_user_save(
-  IN p_user_id int,
-  IN p_login_id int,
-  IN p_form_data json,
+  p_user_id int,
+  p_login_id int,
+  p_form_data json,
   OUT data jsonb
 )
 AS

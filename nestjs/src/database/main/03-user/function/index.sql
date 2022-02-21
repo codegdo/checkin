@@ -1,5 +1,5 @@
--- CREATE FUNCTION USER_GET
-CREATE OR REPLACE FUNCTION sec.fn_user_get_by_username(p_username varchar)
+-- CREATE FUNCTION USER_GET_BY_ID
+CREATE OR REPLACE FUNCTION sec.fn_user_get_by_id(p_user_id varchar)
 RETURNS TABLE (
   "id" int,
   "username" varchar,
@@ -20,8 +20,16 @@ RETURNS TABLE (
 AS
 $BODY$
   DECLARE
-
+    _id int := 0;
+    _username varchar := '';
   BEGIN
+
+    IF (SELECT p_user_id ~ '^\d+$') THEN
+      _id := p_user_id::int;
+    ELSE
+      _username := p_user_id::varchar;
+    END IF;
+
     RETURN QUERY
       SELECT
         u.id,
@@ -43,7 +51,7 @@ $BODY$
       LEFT JOIN org.contact c ON c.id = u.contact_id
       LEFT JOIN sec.group g ON g.id = u.group_id
       LEFT JOIN dbo.group_type gt ON gt.id = g.group_type_id
-      WHERE u.username = p_username;
+      WHERE u.id = _id OR u.username = _username;
   END;
 $BODY$
 LANGUAGE plpgsql;
@@ -75,7 +83,7 @@ LANGUAGE plpgsql;
 -- DROP FUNCTIONS
 
 DROP FUNCTION IF EXISTS
-sec.fn_user_get_by_username;
+sec.fn_user_get_by_id;
 
 DROP FUNCTION IF EXISTS
 sec.fn_policy_get_by_group_id;

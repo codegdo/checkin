@@ -1,30 +1,38 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from 'src/models/main/user/user.entity';
-import { UserRepository } from 'src/models/main/repositories';
+import { UserRepository, FormRepository } from 'src/models/main/repositories';
+import { ErrorService } from 'src/common/modules';
+import { UserFormDto } from 'src/models/main/dtos';
 
 @Injectable()
 export class UserService {
-
   constructor(
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
 
-    //@Inject(MainRepository)
-    //private repo: MainRepository
-  ) { }
+    @InjectRepository(FormRepository)
+    private formRepository: FormRepository,
 
-  findAll(paginationQueryDto) {
+    private readonly errorService: ErrorService, //private repo: MainRepository
+  ) //@Inject(MainRepository)
+  {}
+
+  async getAllUsers(paginationQueryDto) {
     const { limit, offset } = paginationQueryDto;
 
     return this.userRepository.find({
       skip: offset,
-      take: limit
+      take: limit,
     });
   }
 
-  async findOne(id) {
+  async getUser(id) {
     const user = await this.userRepository.findOne(id);
 
     if (!user) {
@@ -34,7 +42,7 @@ export class UserService {
     return user;
   }
 
-  async create(dto) {
+  async createUser(dto) {
     const user = this.userRepository.create(dto);
 
     try {
@@ -42,10 +50,17 @@ export class UserService {
     } catch (err) {
       throw new ConflictException('Duplicate username');
     }
-
   }
 
-  async update(id, updateUserDto) { }
+  async updateUser(id, updateUserDto) {}
 
-  async delete(id) { }
+  async delete(id) {}
+
+  async getForm(dto: UserFormDto) {
+    try {
+      return this.formRepository.getFormForUser(dto);
+    } catch (e) {
+      this.errorService.handleError(e);
+    }
+  }
 }

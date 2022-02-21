@@ -338,7 +338,7 @@ $BODY$
     SELECT json_agg(u.*)::json ->> 0
     INTO "user"
     FROM (
-      SELECT * FROM sec.fn_user_get_by_username(p_username)
+      SELECT * FROM sec.fn_user_get_by_id(p_username)
     ) u;
 
     IF "user" IS NOT NULL THEN

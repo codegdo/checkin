@@ -269,14 +269,14 @@ VALUES
 ('1', '7', 'Email Address', '4'),
 ('1', '8', 'Phone Number', '5'),
 --auth_setup
-('2', '13', 'Organization Name', '0'),
-('2', '22', 'Subdomain', '1'),
-('2', '23', 'Location Name', '2'),
-('2', '24', 'Street Address', '3'),
-('2', '25', 'Country', '4'),
-('2', '26', 'State', '5'),
-('2', '27', 'City', '6'),
-('2', '28', 'Postal Code', '7'),
+('2', '16', 'Organization Name', '0'),
+('2', '25', 'Subdomain', '1'),
+('2', '26', 'Location Name', '2'),
+('2', '27', 'Street Address', '3'),
+('2', '28', 'Country', '4'),
+('2', '29', 'State', '5'),
+('2', '30', 'City', '6'),
+('2', '31', 'Postal Code', '7'),
 --user_add
 ('3', '1', 'Username', '0'),
 ('3', '2', 'Password', '1'),
@@ -314,21 +314,6 @@ VALUES
 --user_group_grid
 ('3', '3', 'Name', '0', 15);
 
--- SELECT TABLES
-
-SELECT
-f.name,
-fld.id,
-fld.name,
-fld.data
-FROM org.form f
-LEFT JOIN dbo.form_type ft ON f.form_type_id = ft.id
-LEFT JOIN dbo.form_type_object fto ON ft.id = fto.form_type_id
-LEFT JOIN dbo.object o ON fto.object_id = o.id
-LEFT JOIN org.field fld ON o.id = fld.object_id
-WHERE f.name = 'login';
-
-SELECT * FROM dbo.object;
 
 -- DROP TABLES
 

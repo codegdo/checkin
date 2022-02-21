@@ -1,4 +1,5 @@
 import { EntityRepository, Repository } from 'typeorm';
+import { UserFormDto } from '../dtos';
 import { Form } from './form.entity';
 
 @EntityRepository(Form)
@@ -15,5 +16,9 @@ export class FormRepository extends Repository<Form> {
 
     const [form] = result?.data || [];
     return form;
+  }
+
+  async getFormForUser(dto: UserFormDto) {
+    return dto;
   }
 }
