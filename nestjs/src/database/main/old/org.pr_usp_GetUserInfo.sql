@@ -128,7 +128,7 @@ AS
         ( udFieldlD    INT
          ,maptoColumn VARCHAR(200)
          ,maptoTable  VARCHAR(200)
-		 ,LookUpColumn VARCHAR(128) null	--10/11/2018 cmrThanh
+		    ,LookUpColumn VARCHAR(128) null	--10/11/2018 cmrThanh
          ,LookUpTable  VARCHAR(200) null	--10/11/2018 cmrThanh
 		 )
 

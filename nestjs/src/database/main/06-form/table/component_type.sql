@@ -1,5 +1,5 @@
--- CREATE TABLE GRID_TYPE
-CREATE TABLE IF NOT EXISTS dbo.grid_type (
+-- CREATE TABLE COMPONENT_TYPE
+CREATE TABLE IF NOT EXISTS dbo.component_type (
   id SERIAL,
   name VARCHAR(255),
 
@@ -14,11 +14,11 @@ CREATE TABLE IF NOT EXISTS dbo.grid_type (
   updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
-  FOREIGN KEY(form_type_id) REFERENCES dbo.form_type(id) ON DELETE SET NULL,
+  FOREIGN KEY(form_type_id) REFERENCES dbo.form_type(id) ON DELETE SET NULL
 );
 
 
 INSERT
-INTO dbo.grid_type (id, name, form_type_id)
+INTO dbo.component_type (id, name, form_type_id)
 VALUES
 (1, 'user_group_grid', 2);

@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS org.field (
   is_required BOOLEAN DEFAULT FALSE,
 
   parent_id INT REFERENCES org.field(id) ON DELETE SET NULL,
-  grid_type_id INT,
+  component_type_id INT,
   object_id INT,
   org_id INT,
 
@@ -25,11 +25,12 @@ CREATE TABLE IF NOT EXISTS org.field (
   updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
-  FOREIGN KEY(grid_type_id) REFERENCES dbo.grid_type(id)
+  FOREIGN KEY(component_type_id) REFERENCES dbo.component_type(id)  ON DELETE SET NULL,
+  FOREIGN KEY(object_id) REFERENCES dbo.object(id)  ON DELETE SET NULL
 );
 
 INSERT
-INTO org.field (name, role, type, map, lookup, is_required, object_id, grid_type_id, parent_id)
+INTO org.field (name, role, type, map, lookup, is_required, object_id, component_type_id, parent_id)
 VALUES
 --user=1
 ('username', 'field', 'text', 'sec.user.username', null, '1', '1', null, null),

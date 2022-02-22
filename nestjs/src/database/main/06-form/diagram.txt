@@ -5,7 +5,6 @@ checkin.workspace
 
 table object {
   id int
-  name varchar
 }
 
 table form_type {
@@ -53,26 +52,20 @@ table grid_type {
 
 ref: grid_type.form_type_id > form_type.id
 
-table grid_type_object {
-  id int
-  grid_type_id int
-  object_id int
-}
-
-ref: grid_type_object.grid_type_id > grid_type.id
-ref: grid_type_object.object_id > object.id
-
 table grid_field {
-  id int
-  label varchar
   form_id int
   field_id int
-
+  parent_id int
+  label varchar
   is_required boolean
 }
 
 ref: grid_field.form_id > form.id
 ref: grid_field.field_id > field.id
+
+table dependent_field {
+  id int
+}
 
 table field {
   id int
@@ -92,6 +85,5 @@ table field {
   
   is_required boolean
 }
-
 
 ref: field.grid_type_id > grid_type.id

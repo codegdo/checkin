@@ -1,5 +1,5 @@
--- CREATE TABLE GRID_FIELD
-CREATE TABLE IF NOT EXISTS org.grid_field (
+-- CREATE TABLE COMPONENT_FIELD
+CREATE TABLE IF NOT EXISTS org.component_field (
   form_id INT NOT NULL,
   field_id INT NOT NULL,
 
@@ -21,10 +21,10 @@ CREATE TABLE IF NOT EXISTS org.grid_field (
   FOREIGN KEY(field_id) REFERENCES org.field(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_grid_field  ON org.grid_field (form_id, field_id);
+CREATE INDEX idx_component_field  ON org.component_field (form_id, field_id);
 
 INSERT
-INTO org.grid_field(form_id, field_id, label, position, parent_id)
+INTO org.component_field(form_id, field_id, label, position, parent_id)
 VALUES
 --user_group_grid
 ('3', '3', 'Name', '0', 15);

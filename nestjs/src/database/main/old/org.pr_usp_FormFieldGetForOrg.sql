@@ -1,26 +1,31 @@
 USE [PartnerPortal]
-GO
+
+go
+
 /****** Object:  StoredProcedure [Org].[Usp_formfieldgetfororg]    Script Date: 2/21/2022 9:10:03 AM ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
+SET ansi_nulls ON
+
+go
+
+SET quoted_identifier ON
+
+go
 
 --exec sp_executesql N'EXEC Org.USP_FormFieldGetForOrg @OrgId, @formId, @loginUserId',N'@OrgId int,@formId int,@loginUserId int',@OrgId=36,@formId=86,@loginUserId=1187
 --exec [Org].[Usp_formfieldgetfororgv1_1_0] 50,261,1331,null
-ALTER PROCEDURE [Org].[Usp_formfieldgetfororg](@OrgID        INT
-                                                     ,@UDFormID    INT
-                                                     ,@LoginUserID INT
-                                                     ,@ProgramID   INT = NULL)
+ALTER PROCEDURE [Org].[Usp_formfieldgetfororg](@OrgID       INT,
+                                               @UDFormID    INT,
+                                               @LoginUserID INT,
+                                               @ProgramID   INT = NULL)
 WITH EXECUTE AS 'PartnerPortalSpUser'
 /****************************************************************    
 Author:  CMR DBA 
   Date:  11/09/2013
 Purpose: fetch the data to 
          Recreate a form at Different Places  
-		 For Dealer Registeration Accepts '0' for ProgramType
-		 as dealer Registeration doesnot have a programes
-		 as of now.
+     For Dealer Registeration Accepts '0' for ProgramType
+     as dealer Registeration doesnot have a programes
+     as of now.
 -----------------------------------------------------------------      
 CHANGE LOG              
 Date           Author           Description              
@@ -28,511 +33,584 @@ Date           Author           Description
 11/09/2013     CMR DBA          Created         
 08/26/2014     Cmr DBA          Add fieldDescription Localization   
 10/13/2014     cmr DBA          Form Description and Name Localization
-07/20/2017		cmrArturo		Added DataAttribute and Option fields for UDFormArea, UDFormSection and	UDFormBlock
-								Added DataAttribute, Options, AdminStyle and PartnerStyle to UDForm
-								Added DataAttribute, HelperText and Options to UDFormField
+07/20/2017    cmrArturo    Added DataAttribute and Option fields for UDFormArea, UDFormSection and  UDFormBlock
+                Added DataAttribute, Options, AdminStyle and PartnerStyle to UDForm
+                Added DataAttribute, HelperText and Options to UDFormField
 ****************************************************************/
 AS
-    DECLARE @Prefix              VARCHAR(2)
-            ,@LangID             INT
-            ,@formType           VARCHAR(255)
-            ,@SecurityRoleTypeID INT
+    DECLARE @Prefix             VARCHAR(2),
+            @LangID             INT,
+            @formType           VARCHAR(255),
+            @SecurityRoleTypeID INT
     DECLARE @UDFormField TABLE
-      ( UDFormId         INT
-       ,UDFieldId       INT
-       ,Position        INT
-       ,isReadonly      BIT
-       ,formisrequired  BIT
-       ,FieldLabel      VARCHAR(200)
-       ,FieldName       VARCHAR(100)
-       ,FieldType       VARCHAR(50)
-       ,Value           NVARCHAR(2000)
-       ,DropDownValue   NVARCHAR(max)
-       ,DataType        VARCHAR(50)
-       ,isUnique        BIT
-       ,fieldisrequired BIT
-       ,isDateCheck     BIT
-       ,isNumericCheck  BIT
-       ,isEmailCheck    BIT
-       ,LookUpSchema    VARCHAR(50)
-       ,LookUpTable     VARCHAR(50)
-       ,LookUpColumn    VARCHAR(50)
-       ,LookUpIDColumn  VARCHAR(50)
-       ,Maptotable      VARCHAR(100)
-       ,[Description]   VARCHAR(200)
-       ,ObjectID        INT
-       ,OrgID           INT
-       ,FieldLength     INT
-       ,FieldDecimal    INT
-       ,isAdmin         BIT
-       ,hasDependent    BIT
-       ,IsInUse         BIT DEFAULT 1
-       ,isDependent     BIT
-       ,ParentUDfieldID INT
-       ,Prefix          VARCHAR(20)
-       ,isHidden        BIT
-       ,UDFormBlockID   INT
-       ,ParentPosition  INT
-       ,ClassName       VARCHAR(120)
-       ,Datacomponent   VARCHAR(120)
-       ,DataFormat      VARCHAR(120)
-       ,GridTypeID      INT
-       ,GridType        VARCHAR(50)
-       ,formtype        VARCHAR(255)
-       ,isForReview     BIT
-       ,CssStyle        VARCHAR(max)
-	   ,DataAttribute   NVARCHAR(max)
-	   ,Options         NVARCHAR(max)
-	   ,HelperText      NVARCHAR(max)
-       ,isForAudit      BIT
-	   ,isRemovable bit)
+      (
+         udformid        INT,
+         udfieldid       INT,
+         position        INT,
+         isreadonly      BIT,
+         formisrequired  BIT,
+         fieldlabel      VARCHAR(200),
+         fieldname       VARCHAR(100),
+         fieldtype       VARCHAR(50),
+         value           NVARCHAR(2000),
+         dropdownvalue   NVARCHAR(max),
+         datatype        VARCHAR(50),
+         isunique        BIT,
+         fieldisrequired BIT,
+         isdatecheck     BIT,
+         isnumericcheck  BIT,
+         isemailcheck    BIT,
+         lookupschema    VARCHAR(50),
+         lookuptable     VARCHAR(50),
+         lookupcolumn    VARCHAR(50),
+         lookupidcolumn  VARCHAR(50),
+         maptotable      VARCHAR(100),
+         [description]   VARCHAR(200),
+         objectid        INT,
+         orgid           INT,
+         fieldlength     INT,
+         fielddecimal    INT,
+         isadmin         BIT,
+         hasdependent    BIT,
+         isinuse         BIT DEFAULT 1,
+         isdependent     BIT,
+         parentudfieldid INT,
+         prefix          VARCHAR(20),
+         ishidden        BIT,
+         udformblockid   INT,
+         parentposition  INT,
+         classname       VARCHAR(120),
+         datacomponent   VARCHAR(120),
+         dataformat      VARCHAR(120),
+         gridtypeid      INT,
+         gridtype        VARCHAR(50),
+         formtype        VARCHAR(255),
+         isforreview     BIT,
+         cssstyle        VARCHAR(max),
+         dataattribute   NVARCHAR(max),
+         options         NVARCHAR(max),
+         helpertext      NVARCHAR(max),
+         isforaudit      BIT,
+         isremovable     BIT
+      )
     DECLARE @DropDownData TABLE
-      ( keyvalue   VARCHAR(200)
-       ,datavalue VARCHAR(200))
+      (
+         keyvalue  VARCHAR(200),
+         datavalue VARCHAR(200)
+      )
     DECLARE @DropDownData2 TABLE
-      ( keyvalue   VARCHAR(max)
-       ,UDFieldID INT
-       ,num       INT)
+      (
+         keyvalue  VARCHAR(max),
+         udfieldid INT,
+         num       INT
+      )
 
-    SELECT @Prefix = c.CurrencySymbol
-           ,@LangID = LangID
-           ,@SecurityRoleTypeID = sr.SecurityRoleTypeID
-    FROM   sec.Useraccount ua
-            Inner join sec.securityRole sr
-                on sr.securityRoleid = ua.roleid
-           LEFT JOIN dbo.Currency c
-                  ON ua.currencyID = c.CurrencyID
+    SELECT @Prefix = c.currencysymbol,
+           @LangID = langid,
+           @SecurityRoleTypeID = sr.securityroletypeid
+    FROM   sec.useraccount ua
+           INNER JOIN sec.securityrole sr
+           ON sr.securityroleid = ua.roleid
+           LEFT JOIN dbo.currency c
+           ON ua.currencyid = c.currencyid
     WHERE  ua.userid = @LoginUserID
 
     INSERT INTO @UDFormField
-    SELECT UF.UDFormId
-           ,UFF.UDFieldId
-           ,UFF.Position
-           ,CASE
-              WHEN uff.isReadonly = 0 AND fs.SecurityLevelID = 3 THEN 0
-              ELSE 1
-            END                        AS isReadonly
-           ,CASE
-              WHEN UFF.isRequired = 1  OR UDF.isRequired = 1 THEN 1
-              ELSE 0
-            END             formisrequired 
-           ,COALESCE(uffl.labeltext, uff.FieldLabel)
-           ,UDF.FieldName
-           ,UDF.FieldType
-           ,UDF.Value
-           ,UDF.DropDownValue
-           ,UDF.DataType
-           ,UDF.isUnique
-           ,UDF.isrequired                       fieldisrequired
-           ,UDF.isDateCheck
-           ,udf.isNumericCheck
-           ,udf.isEmailCheck
-           ,udf.LookUpSchema
-           ,udf.LookUpTable
-           ,udf.LookUpColumn
-           ,udf.LookUpIDColumn
-           ,udf.Maptotable
-           ,COALESCE(uffl.LabelDescription, uff.[Description],udf.Description) [Description]
-           ,udf.ObjectID
-           ,udf.OrgID
-           ,udf.FieldLength
-           ,udf.FieldDecimal
-           ,udf.isAdmin
-           ,udf.hasDependent
-           ,1
-           ,udf.isDependent
-           ,udf.ParentUDFieldid
-           ,CASE
-              WHEN DataType = 'Currency' THEN @Prefix
-              ELSE NULL
-            END                        Prefix
-           ,UFF.isHidden
-           ,UFF.UDFormBlockID
-           ,ufb.Position
-           ,uff.ClassName
-           ,udf.Datacomponent
-           ,udf.DataFormat
-           ,udf.GridTypeID
-           ,gt.GridType
-           ,ft.FormTypeName
-           ,UdF.isForreview
-           ,uff.CssStyle
-		   ,uff.DataAttribute
-		   ,uff.Options
-		   ,uff.HelperText
-           ,COALESCE(gt.isForAudit, 0) isForAudit
-		   ,gt.isRemovable
-    FROM   org.Udform UF
-           INNER JOIN Formtype ft
-                   ON ft.formtypeid = uf.FormTypeID
-           INNER JOIN org.Udformfield UFF
-                   ON UFF.UDFormID = UF.UDFormId
-           INNER JOIN org.Udfield UDF
-                   ON UDF.UDFieldId = UFF.UDFieldID
-		   LEFT JOIN org.formtypeudfield ftuf
-				   ON ft.formtypeid = ftuf.formtypeid
-				   AND udf.udfieldid = ftuf.udfieldid
-				   AND udf.objectid = ftuf.objectid
-           LEFT JOIN org.Udformblock ufb
-                  ON ufb.UDFormBlockID = uff.UDFormBlockID AND ufb.isActive = 1
-           LEFT JOIN Org.Udformfieldlabel uffl
-                  ON uffl.UDformid = UFF.UDformid AND uffl.LabelKey = uff.FieldLabel AND uffl.langID = @LangID
-           LEFT JOIN dbo.Gridtype gt
-                  ON gt.GridTypeID = udf.GridTypeID
+    SELECT UF.udformid,
+           UFF.udfieldid,
+           UFF.position,
+           CASE
+             WHEN uff.isreadonly = 0
+                  AND fs.securitylevelid = 3 THEN 0
+             ELSE 1
+           END                        AS isReadonly,
+           CASE
+             WHEN UFF.isrequired = 1
+                   OR UDF.isrequired = 1 THEN 1
+             ELSE 0
+           END                        formisrequired,
+           COALESCE(uffl.labeltext, uff.fieldlabel),
+           UDF.fieldname,
+           UDF.fieldtype,
+           UDF.value,
+           UDF.dropdownvalue,
+           UDF.datatype,
+           UDF.isunique,
+           UDF.isrequired             fieldisrequired,
+           UDF.isdatecheck,
+           udf.isnumericcheck,
+           udf.isemailcheck,
+           udf.lookupschema,
+           udf.lookuptable,
+           udf.lookupcolumn,
+           udf.lookupidcolumn,
+           udf.maptotable,
+           COALESCE(uffl.labeldescription, uff.[description], udf.description)
+                                      [Description],
+           udf.objectid,
+           udf.orgid,
+           udf.fieldlength,
+           udf.fielddecimal,
+           udf.isadmin,
+           udf.hasdependent,
+           1,
+           udf.isdependent,
+           udf.parentudfieldid,
+           CASE
+             WHEN datatype = 'Currency' THEN @Prefix
+             ELSE NULL
+           END                        Prefix,
+           UFF.ishidden,
+           UFF.udformblockid,
+           ufb.position,
+           uff.classname,
+           udf.datacomponent,
+           udf.dataformat,
+           udf.gridtypeid,
+           gt.gridtype,
+           ft.formtypename,
+           UdF.isforreview,
+           uff.cssstyle,
+           uff.dataattribute,
+           uff.options,
+           uff.helpertext,
+           COALESCE(gt.isforaudit, 0) isForAudit,
+           gt.isremovable
+    FROM   org.udform UF
+           INNER JOIN formtype ft
+                   ON ft.formtypeid = uf.formtypeid
+           INNER JOIN org.udformfield UFF
+                   ON UFF.udformid = UF.udformid
+           INNER JOIN org.udfield UDF
+                   ON UDF.udfieldid = UFF.udfieldid
+
+           LEFT JOIN org.formtypeudfield ftuf
+                  ON ft.formtypeid = ftuf.formtypeid
+                     AND udf.udfieldid = ftuf.udfieldid
+                     AND udf.objectid = ftuf.objectid
+
+           LEFT JOIN org.udformblock ufb
+                  ON ufb.udformblockid = uff.udformblockid
+                     AND ufb.isactive = 1
+           LEFT JOIN org.udformfieldlabel uffl
+                  ON uffl.udformid = UFF.udformid
+                     AND uffl.labelkey = uff.fieldlabel
+                     AND uffl.langid = @LangID
+
+           LEFT JOIN dbo.gridtype gt
+                  ON gt.gridtypeid = udf.gridtypeid
+                  
            INNER JOIN sec.Uf_fieldsecurityforuser(@LoginUserID) fs
-                   ON fs.UDFieldID = udf.UDFieldId AND fs.SecurityLevelID > 1
-    WHERE  UF.OrgID               = @OrgID AND uf.UDFormId         = @UDFormID AND udf.isConfig       = 1-- AND ua.Userid = @LoginUserID
-           AND uff.isadmin in  (0,Case @SecurityRoleTypeID
-		                           When 1 then 1 
-								   Else 0 
-								   end )
-		   AND uff.isForReview = 0
+                   ON fs.udfieldid = udf.udfieldid
+                      AND fs.securitylevelid > 1
+    WHERE  UF.orgid = @OrgID
+           AND uf.udformid = @UDFormID
+           AND udf.isconfig = 1-- AND ua.Userid = @LoginUserID
+           AND uff.isadmin IN ( 0, CASE @SecurityRoleTypeID
+                                     WHEN 1 THEN 1
+                                     ELSE 0
+                                   END )
+           AND uff.isforreview = 0
 
     DECLARE @LookUp TABLE
-      ( id              INT IDENTITY (1, 1)
-       ,LookUpSchema   VARCHAR(50)
-       ,LookUpTable    VARCHAR(50)
-       ,LookUpColumn   VARCHAR(50)
-       ,LookUpIDColumn VARCHAR(50)
-       ,UDFieldID      INT
-       ,isDependent    INT)
+      (
+         id             INT IDENTITY (1, 1),
+         lookupschema   VARCHAR(50),
+         lookuptable    VARCHAR(50),
+         lookupcolumn   VARCHAR(50),
+         lookupidcolumn VARCHAR(50),
+         udfieldid      INT,
+         isdependent    INT
+      )
 
     INSERT INTO @LookUp
-    SELECT LookUpSchema
-           ,LookUpTable
-           ,LookUpColumn
-           ,LookUpIDColumn
-           ,UDFieldID
-           ,isdependent
+    SELECT lookupschema,
+           lookuptable,
+           lookupcolumn,
+           lookupidcolumn,
+           udfieldid,
+           isdependent
     FROM   @UDFormField
-    WHERE  LookUpTable IS NOT NULL AND DataType = 'DropDown'
+    WHERE  lookuptable IS NOT NULL
+           AND datatype = 'DropDown'
 
-    DECLARE @max             INT
-            ,@min            INT = 1
-            ,@udFieldID      INT
-            ,@LookUpSchema   VARCHAR(50)
-            ,@LookUpTable    VARCHAR(50)
-            ,@LookUpColumn   VARCHAR(50)
-            ,@LookUpIDColumn VARCHAR(50)
-            ,@Keyvalue       VARCHAR(max) = ''
-            ,@DataValue      VARCHAR(max) = ''
-            ,@isDependent    BIT = 0
+    DECLARE @max            INT,
+            @min            INT = 1,
+            @udFieldID      INT,
+            @LookUpSchema   VARCHAR(50),
+            @LookUpTable    VARCHAR(50),
+            @LookUpColumn   VARCHAR(50),
+            @LookUpIDColumn VARCHAR(50),
+            @Keyvalue       VARCHAR(max) = '',
+            @DataValue      VARCHAR(max) = '',
+            @isDependent    BIT = 0
 
     SELECT @max = Max(id)
     FROM   @LookUp
 
     WHILE @max >= @min
       BEGIN
-          SELECT @LookUpSchema = LookUpSchema
-                 ,@LookUpTable = LookUpTable
-                 ,@LookUpColumn = LookUpColumn
-                 ,@LookUpIDColumn = LookUpIDColumn
-                 ,@udFieldID = udFieldID
-                 ,@isDependent = isDependent
+          SELECT @LookUpSchema = lookupschema,
+                 @LookUpTable = lookuptable,
+                 @LookUpColumn = lookupcolumn,
+                 @LookUpIDColumn = lookupidcolumn,
+                 @udFieldID = udfieldid,
+                 @isDependent = isdependent
           FROM   @LookUp
           WHERE  id = @min
 
           INSERT INTO @DropDownData
-                      (keyvalue
-                       ,datavalue)
+                      (keyvalue,
+                       datavalue)
           EXEC Usp_getlookupvalue
-            @LookUpSchema    = @LookUpSchema
-            ,@LookUpTable    = @LookUpTable
-            ,@LookUpColumn   = @LookUpColumn
-            ,@LookUpIDColumn = @LookUpIDColumn
-            ,@UserID         = @LoginUserID
-            ,@UDFormID       = @UDFormID
-            ,@ProgramID      = @ProgramID
-            ,@isDependent    = @isDependent
-            ,@Value          = NULL
-            ,@orgID          = @OrgID
-            ,@FilterField    = NULL
+            @LookUpSchema = @LookUpSchema,
+            @LookUpTable = @LookUpTable,
+            @LookUpColumn = @LookUpColumn,
+            @LookUpIDColumn = @LookUpIDColumn,
+            @UserID = @LoginUserID,
+            @UDFormID = @UDFormID,
+            @ProgramID = @ProgramID,
+            @isDependent = @isDependent,
+            @Value = NULL,
+            @orgID = @OrgID,
+            @FilterField = NULL
 
           SET @min +=1
 
-          SELECT @Keyvalue = @Keyvalue + Keyvalue + ',' + DataValue + ';'
+          SELECT @Keyvalue = @Keyvalue + keyvalue + ',' + datavalue + ';'
           FROM   @DropDownData
 
           --Select  @DataValue = @DataValue +  DataValue + ';'  from @DropDownData
           INSERT INTO @DropDownData2
-          VALUES      (@Keyvalue
-                       ,@UDFieldID
-                       ,(SELECT Count(Keyvalue)
-                         FROM   @DropDownData) )
+          VALUES      (@Keyvalue,
+                       @UDFieldID,
+                       (SELECT Count(keyvalue)
+                        FROM   @DropDownData) )
 
           SET @Keyvalue = ''
 
           DELETE FROM @DropDownData
       END
 
-    UPDATE A
-    SET    A.DropDownValue = dw.keyvalue
-           ,A.value = CASE
-                        WHEN DW.num = 1 THEN Substring (dw.Keyvalue, 1, ( Patindex('%,%', dw.keyvalue) - 1 ))
-                        ELSE NULL
-                      END
-           ,A.isReadonly = CASE
-                             WHEN DW.num = 1 THEN 1
-                             ELSE A.isReadonly
-                           END
+    UPDATE a
+    SET    a.dropdownvalue = dw.keyvalue,
+           a.value = CASE
+                       WHEN DW.num = 1 THEN Substring (dw.keyvalue, 1, (
+                                            Patindex('%,%', dw.keyvalue)
+                                            - 1 ))
+                       ELSE NULL
+                     END,
+           a.isreadonly = CASE
+                            WHEN DW.num = 1 THEN 1
+                            ELSE a.isreadonly
+                          END
     FROM   @UDFormField a
            INNER JOIN @DropDownData2 DW
-                   ON DW.UDFieldID = a.udfieldid
+                   ON DW.udfieldid = a.udfieldid
 
-	SELECT uf.[UDFormId]
-		   ,[OrgID]
-		   ,[FormTypeID]
-		   ,[UDFormGUID]
-		   ,[ProgramID]
-		   ,COALESCE(ufl.[Labeltext], uf.[Name]) as Name
-		   ,[isDeleted]
-		   ,[isPublished]
-		   ,COALESCE(ufl.[LabelDescription], uf.Description)  as Description
-		   ,[ClassName]
-		   ,[CustomStyle]
-		   ,[DefaultStyle]
-		   ,[isDefaultStyle]
-		   ,[CssStyle]
-		   ,[AdminStyle]  --
-		   ,[PartnerStyle] --
-		   ,[DataAttribute] --
-		   ,[Options]  --
-		   ,uf.[CreateUser]
-		   ,uf.[CreateDate]
-		   ,uf.[ModifyUser]
-		   ,uf.[ModifyDate]
-		   ,[isExternal]
-	FROM   [Org].[Udform] uf
-		   LEFT JOIN org.Udformlabel ufl
-				  ON ufl.udformID = uf.UDformID AND Ufl.LabelKey = uf.NAME AND ufl.LangID = @LangID
-	WHERE  uf.UDformID = @UDFormID 
+    SELECT uf.[udformid],
+           [orgid],
+           [formtypeid],
+           [udformguid],
+           [programid],
+           COALESCE(ufl.[labeltext], uf.[name])             AS NAME,
+           [isdeleted],
+           [ispublished],
+           COALESCE(ufl.[labeldescription], uf.description) AS Description,
+           [classname],
+           [customstyle],
+           [defaultstyle],
+           [isdefaultstyle],
+           [cssstyle],
+           [adminstyle] --
+           ,
+           [partnerstyle] --
+           ,
+           [dataattribute] --
+           ,
+           [options] --
+           ,
+           uf.[createuser],
+           uf.[createdate],
+           uf.[modifyuser],
+           uf.[modifydate],
+           [isexternal]
+    FROM   [Org].[udform] uf
+           LEFT JOIN org.udformlabel ufl
+                  ON ufl.udformid = uf.udformid
+                     AND Ufl.labelkey = uf.NAME
+                     AND ufl.langid = @LangID
+    WHERE  uf.udformid = @UDFormID
 
-	SELECT ufa.[UDFormAreaID]
-           ,ufa.[UDFormID]
-           ,COALESCE(ufal.Labeltext, ufa.[Name])               AS [Name]
-           ,ufa.[Type]
-           ,ufa.[Position]
-           ,ufa.[isAdmin]
-           ,ufa.[CssStyle]
-		   ,ufa.[DataAttribute] ---
-		   ,ufa.[Options]     ---
-           ,ufa.[DataRole]
-           ,ufa.[ClassName]
-           ,COALESCE(ufal.LabelDescription, ufa.[Description]) [Description]
-           ,ufa.[isActive]
-    FROM   org.Udformarea ufa
-           LEFT JOIN org.Udformarealabel ufal
-                  ON ufal.UDFormID = ufa.UDFormID AND ufal.LabelKey = ufa.NAME AND ufal.langid = @LangID
-    WHERE  Ufa.UDformID = @UDFormID AND isactive         = 1
-    ORDER  BY Position
+    SELECT ufa.[udformareaid],
+           ufa.[udformid],
+           COALESCE(ufal.labeltext, ufa.[name])               AS [Name],
+           ufa.[type],
+           ufa.[position],
+           ufa.[isadmin],
+           ufa.[cssstyle],
+           ufa.[dataattribute] ---
+           ,
+           ufa.[options] ---
+           ,
+           ufa.[datarole],
+           ufa.[classname],
+           COALESCE(ufal.labeldescription, ufa.[description]) [Description],
+           ufa.[isactive]
+    FROM   org.udformarea ufa
+           LEFT JOIN org.udformarealabel ufal
+                  ON ufal.udformid = ufa.udformid
+                     AND ufal.labelkey = ufa.NAME
+                     AND ufal.langid = @LangID
+    WHERE  Ufa.udformid = @UDFormID
+           AND isactive = 1
+    ORDER  BY position
 
-    SELECT ufs.[UDFormSectionID]
-           ,ufs.[UDFormID]
-           ,ufs.[UDFormAreaID]
-           ,COALESCE(ufsl.labelText, ufs.[Name])               AS [Name]
-           ,ufs.[Type]
-           ,ufs.[Position]
-           ,ufs.[isAdmin]
-           ,ufs.[CssStyle]
-		   ,ufs.[DataAttribute]  ----
-		   ,ufs.[Options]        ----
-           ,ufs.[DataRole]
-           ,ufs.[ClassName]
-           ,COALESCE(ufsl.LabelDescription, ufs.[Description]) [Description]
-           ,ufs.[isActive]
-           ,ufs.[isRenew]
-           ,ufa.position                                       AS ParentPosition
-    FROM   org.Udformsection ufs
-           INNER JOIN org.Udformarea ufa
-                   ON ufa.UDFormAreaID = ufs.UDFormAreaID
-           LEFT JOIN org.Udformsectionlabel ufsl
-                  ON ufsl.UDFormID = ufs.UDFormID AND ufsl.LabelKey = ufs.NAME AND ufsl.langid = @LangID
-    WHERE  ufs.UDformID = @UDFormID AND ufs.isActive = 1 AND ufs.isadmin  in  (0,Case @SecurityRoleTypeID When 1 then 1 Else 0  end ) AND ufs.isRenew   = 0
-    ORDER  BY Position
+    SELECT ufs.[udformsectionid],
+           ufs.[udformid],
+           ufs.[udformareaid],
+           COALESCE(ufsl.labeltext, ufs.[name])               AS [Name],
+           ufs.[type],
+           ufs.[position],
+           ufs.[isadmin],
+           ufs.[cssstyle],
+           ufs.[dataattribute] ----
+           ,
+           ufs.[options] ----
+           ,
+           ufs.[datarole],
+           ufs.[classname],
+           COALESCE(ufsl.labeldescription, ufs.[description]) [Description],
+           ufs.[isactive],
+           ufs.[isrenew],
+           ufa.position                                       AS ParentPosition
+    FROM   org.udformsection ufs
+           INNER JOIN org.udformarea ufa
+                   ON ufa.udformareaid = ufs.udformareaid
+           LEFT JOIN org.udformsectionlabel ufsl
+                  ON ufsl.udformid = ufs.udformid
+                     AND ufsl.labelkey = ufs.NAME
+                     AND ufsl.langid = @LangID
+    WHERE  ufs.udformid = @UDFormID
+           AND ufs.isactive = 1
+           AND ufs.isadmin IN ( 0, CASE @SecurityRoleTypeID
+                                     WHEN 1 THEN 1
+                                     ELSE 0
+                                   END )
+           AND ufs.isrenew = 0
+    ORDER  BY position
 
-    SELECT ufb.[UDFormBlockID]
-           ,ufb.[UDFormID]
-           ,ufb.[UDFormSectionID]
-           ,COALESCE(ufbl.labeltext, ufb.[Name])               AS [Name]
-           ,ufb.[Type]
-           ,ufb.[Position]
-           ,ufb.[isAdmin]
-           ,ufb.[CssStyle]
-		   ,ufb.[DataAttribute]   ----
-		   ,ufb.[Options]      ---
-           ,ufb.[DataRole]
-           ,ufb.[ClassName]
-           ,COALESCE(ufbl.LabelDescription, ufb.[Description]) [Description]
-           ,ufb.[isActive]
-           ,ufs.position                                       AS ParentPosition
-    FROM   org.Udformblock ufb
-           INNER JOIN org.Udformsection ufs
-                   ON ufs.UDFormSectionID = ufb.UDFormSectionID
-           LEFT JOIN org.Udformblocklabel ufbl
-                  ON ufbl.UDFormID = ufb.UDFormID AND ufbl.LabelKey = ufb.NAME AND ufbl.langid = @LangID
-    WHERE  ufb.UDformID = @UDFormID AND ufb.isActive = 1
-    ORDER  BY Position
+    SELECT ufb.[udformblockid],
+           ufb.[udformid],
+           ufb.[udformsectionid],
+           COALESCE(ufbl.labeltext, ufb.[name])               AS [Name],
+           ufb.[type],
+           ufb.[position],
+           ufb.[isadmin],
+           ufb.[cssstyle],
+           ufb.[dataattribute] ----
+           ,
+           ufb.[options] ---
+           ,
+           ufb.[datarole],
+           ufb.[classname],
+           COALESCE(ufbl.labeldescription, ufb.[description]) [Description],
+           ufb.[isactive],
+           ufs.position                                       AS ParentPosition
+    FROM   org.udformblock ufb
+           INNER JOIN org.udformsection ufs
+                   ON ufs.udformsectionid = ufb.udformsectionid
+           LEFT JOIN org.udformblocklabel ufbl
+                  ON ufbl.udformid = ufb.udformid
+                     AND ufbl.labelkey = ufb.NAME
+                     AND ufbl.langid = @LangID
+    WHERE  ufb.udformid = @UDFormID
+           AND ufb.isactive = 1
+    ORDER  BY position
 
-    SELECT UDFormId
-           ,UDFieldId
-           ,Position
-           ,isReadonly
-           ,formisrequired
-           ,FieldLabel
-           ,FieldName
-           ,FieldType
-           ,Value
-           ,DropDownValue
-           ,DataType
-           ,isUnique
-           ,fieldisrequired
-           ,isDateCheck
-           ,isNumericCheck
-           ,isEmailCheck
-           ,LookUpSchema
-           ,LookUpTable
-           ,LookUpColumn
-           ,LookUpIDColumn
-           ,Maptotable
-           ,[Description]
-           ,ObjectID
-           ,OrgID
-           ,FieldLength
-           ,FieldDecimal
-           ,isAdmin
-           ,hasDependent
-           ,IsInUse
-           ,isDependent
-           ,ParentUDfieldID
-           ,Prefix
-           ,isHidden
-           ,UDFormBlockID
-           ,ParentPosition
-           ,ClassName
-           ,Datacomponent
-           ,DataFormat
-           ,GridTypeID
-           ,GridType
-           ,formtype
-           ,isForreview
-           ,CssStyle
-		   ,DataAttribute  ---
-		   ,Options      ---
-		   ,HelperText
-           ,isForAudit
-		   ,isRemovable
+    SELECT udformid,
+           udfieldid,
+           position,
+           isreadonly,
+           formisrequired,
+           fieldlabel,
+           fieldname,
+           fieldtype,
+           value,
+           dropdownvalue,
+           datatype,
+           isunique,
+           fieldisrequired,
+           isdatecheck,
+           isnumericcheck,
+           isemailcheck,
+           lookupschema,
+           lookuptable,
+           lookupcolumn,
+           lookupidcolumn,
+           maptotable,
+           [description],
+           objectid,
+           orgid,
+           fieldlength,
+           fielddecimal,
+           isadmin,
+           hasdependent,
+           isinuse,
+           isdependent,
+           parentudfieldid,
+           prefix,
+           ishidden,
+           udformblockid,
+           parentposition,
+           classname,
+           datacomponent,
+           dataformat,
+           gridtypeid,
+           gridtype,
+           formtype,
+           isforreview,
+           cssstyle,
+           dataattribute ---
+           ,
+           options ---
+           ,
+           helpertext,
+           isforaudit,
+           isremovable
     FROM   @UDFormField udf
-    WHERE  udf.UDfieldid = ParentUDfieldID
+    WHERE  udf.udfieldid = parentudfieldid
     ORDER  BY position
 
-    SELECT UDFormId
-           ,UDFieldId
-           ,Position
-           ,isReadonly
-           ,formisrequired
-           ,FieldLabel
-           ,FieldName
-           ,FieldType
-           ,Value
-           ,DropDownValue
-           ,DataType
-           ,isUnique
-           ,fieldisrequired
-           ,isDateCheck
-           ,isNumericCheck
-           ,isEmailCheck
-           ,LookUpSchema
-           ,LookUpTable
-           ,LookUpColumn
-           ,LookUpIDColumn
-           ,Maptotable
-           ,[Description]
-           ,ObjectID
-           ,OrgID
-           ,FieldLength
-           ,FieldDecimal
-           ,isAdmin
-           ,hasDependent
-           ,IsInUse
-           ,isDependent
-           ,ParentUDfieldID
-           ,Prefix
-           ,isHidden
-           ,UDFormBlockID
-           ,ParentPosition
-           ,ClassName
-           ,Datacomponent
-           ,DataFormat
-           ,GridTypeID
-           ,GridType
-           ,formtype
-           ,isForreview
-           ,CssStyle
-		   ,DataAttribute  ---
-		   ,Options        ----
-		   ,HelperText
-           ,isForAudit
-		   ,isRemovable
+    SELECT udformid,
+           udfieldid,
+           position,
+           isreadonly,
+           formisrequired,
+           fieldlabel,
+           fieldname,
+           fieldtype,
+           value,
+           dropdownvalue,
+           datatype,
+           isunique,
+           fieldisrequired,
+           isdatecheck,
+           isnumericcheck,
+           isemailcheck,
+           lookupschema,
+           lookuptable,
+           lookupcolumn,
+           lookupidcolumn,
+           maptotable,
+           [description],
+           objectid,
+           orgid,
+           fieldlength,
+           fielddecimal,
+           isadmin,
+           hasdependent,
+           isinuse,
+           isdependent,
+           parentudfieldid,
+           prefix,
+           ishidden,
+           udformblockid,
+           parentposition,
+           classname,
+           datacomponent,
+           dataformat,
+           gridtypeid,
+           gridtype,
+           formtype,
+           isforreview,
+           cssstyle,
+           dataattribute ---
+           ,
+           options ----
+           ,
+           helpertext,
+           isforaudit,
+           isremovable
     FROM   @UDFormField
-    WHERE  UDfieldid <> ParentUDfieldID
+    WHERE  udfieldid <> parentudfieldid
     ORDER  BY position
 
-    SELECT DISTINCT UDF.[UDFieldId]
-                    ,COALESCE(udfl.Label, udgf.FieldLabel, FieldName)   AS FieldLabel
-                    ,[FieldType]
-                    ,Cast (COALESCE(UDGF.isReadOnly, 0) AS BIT)         AS isReadOnly
-                    ,[DataType]
-                    ,udgf.[ValidationFunction]
-                    ,[Value]
-                    ,[MapToSchema]
-                    ,[MapToTable]
-                    ,[MaptoColumn]
-                    ,[isUnique]
-                    ,UDF.[isRequired]
-                    ,[isDateCheck]
-                    ,[isNumericCheck]
-                    ,[isEmailCheck]
-                    ,[LookUpSchema]
-                    ,[LookUpTable]
-                    ,[LookUpColumn]
-                    ,[LookUpIDColumn]
-                    ,Maptotable
-                    ,COALESCE(udfl.LabelDescription, udf.[Description]) [Description]
-                    ,UDF.[ObjectID]
-                    ,UDF.[OrgID]
-                    ,[FieldLength]
-                    ,[FieldDecimal]
-                    ,isConfig
-                    ,COALESCE(udgf.isAdmin, 'False')                    isadmin
-                    ,Cast(COALESCE(udgf.IsVisible, 0) AS BIT)           AS IsVisible
-                    ,COALESCE(udgf.HasTotal, 'False')                   HasTotal
-                    ,DropDownValue
-                    ,Cast(( CASE
-                              WHEN UDGF.UDFieldID IS NOT NULL THEN 1
-                              ELSE 0
-                            END ) AS BIT)                               AS isInUse
-                    ,COALESCE(udgf.ParentUDFieldID, UDF.ParentUDfieldid)ParentUDFieldID
-                    ,HasDependent
-                    ,isdependent
-                    ,COALESCE(Position, 0)                              Position
-                    ,COALESCE(udgf.isKey, 'False')                      iskey
-                    ,COALESCE(udgf.isforreview, 'False')                isforreview
-                    ,NULL                                               className
-                    ,udf.DataComponent
-    FROM   dbo. Gridtypeobject gto
-           INNER JOIN org.Udfield UDF
-                   ON UDF.ObjectID = gto.ObjectID
-           INNER JOIN Org.Udformgridfield udgf
-                   ON udgf.UDFieldID = udf.UDFieldId AND udgf.UDFormid = @UDFormID AND udgf.ParentUDFieldID = udf.ParentUDFieldid
-           LEFT JOIN Org.Udformfieldlabel udfl
-                  ON udfl.UDFieldId = udf.UDFieldId AND udfl.OrgID = @OrgID AND udfl.UDFormID = @UDFormID
-    WHERE  ( UDF.OrgID                     = @OrgID  OR UDF.OrgID IS NULL ) AND UDF.isConfig               = 1 AND udf.ParentUDFieldid <> udf.UDFieldId AND udgf.isVisible           = 1 
-	  AND udgf.IsAdmin  in  (0,Case @SecurityRoleTypeID
-		                           When 1 then 1 
-								   Else 0 
-								   end )
-      AND udgf.IsForReview       = 0
-    ORDER  BY Position
+    SELECT DISTINCT UDF.[udfieldid],
+                    COALESCE(udfl.label, udgf.fieldlabel, fieldname)   AS
+                    FieldLabel
+                    ,
+                    [fieldtype],
+                    Cast (COALESCE(UDGF.isreadonly, 0) AS BIT)         AS
+                    isReadOnly
+                    ,
+                    [datatype],
+                    udgf.[validationfunction],
+                    [value],
+                    [maptoschema],
+                    [maptotable],
+                    [maptocolumn],
+                    [isunique],
+                    UDF.[isrequired],
+                    [isdatecheck],
+                    [isnumericcheck],
+                    [isemailcheck],
+                    [lookupschema],
+                    [lookuptable],
+                    [lookupcolumn],
+                    [lookupidcolumn],
+                    maptotable,
+                    COALESCE(udfl.labeldescription, udf.[description])
+                    [Description]
+                    ,
+                    UDF.[objectid],
+                    UDF.[orgid],
+                    [fieldlength],
+                    [fielddecimal],
+                    isconfig,
+                    COALESCE(udgf.isadmin, 'False')                    isadmin,
+                    Cast(COALESCE(udgf.isvisible, 0) AS BIT)           AS
+                    IsVisible,
+                    COALESCE(udgf.hastotal, 'False')                   HasTotal,
+                    dropdownvalue,
+                    Cast(( CASE
+                             WHEN UDGF.udfieldid IS NOT NULL THEN 1
+                             ELSE 0
+                           END ) AS BIT)                               AS
+                    isInUse,
+                    COALESCE(udgf.parentudfieldid,
+                    UDF.parentudfieldid)ParentUDFieldID,
+                    hasdependent,
+                    isdependent,
+                    COALESCE(position, 0)                              Position,
+                    COALESCE(udgf.iskey, 'False')                      iskey,
+                    COALESCE(udgf.isforreview, 'False')
+                    isforreview,
+                    NULL                                               className
+                    ,
+                    udf.datacomponent
+    FROM   dbo. gridtypeobject gto
+           INNER JOIN org.udfield UDF
+                   ON UDF.objectid = gto.objectid
+           INNER JOIN org.udformgridfield udgf
+                   ON udgf.udfieldid = udf.udfieldid
+                      AND udgf.udformid = @UDFormID
+                      AND udgf.parentudfieldid = udf.parentudfieldid
+           LEFT JOIN org.udformfieldlabel udfl
+                  ON udfl.udfieldid = udf.udfieldid
+                     AND udfl.orgid = @OrgID
+                     AND udfl.udformid = @UDFormID
+    WHERE  ( UDF.orgid = @OrgID
+              OR UDF.orgid IS NULL )
+           AND UDF.isconfig = 1
+           AND udf.parentudfieldid <> udf.udfieldid
+           AND udgf.isvisible = 1
+           AND udgf.isadmin IN ( 0, CASE @SecurityRoleTypeID
+                                      WHEN 1 THEN 1
+                                      ELSE 0
+                                    END )
+           AND udgf.isforreview = 0
+    ORDER  BY position
 -- AND uf.UDFormId = (SELECT Max(UDFormId)
 -- FROM   org.UDForm)
 --11/09/2012 Temporary fix to get data for one form 

@@ -21,8 +21,8 @@ VALUES
 ('1', 'user_signup', '0'),
 ('2', 'user_add', '0');
 
--- CREATE TABLE GRID_TYPE
-CREATE TABLE IF NOT EXISTS dbo.grid_type (
+-- CREATE TABLE COMPONENT_TYPE
+CREATE TABLE IF NOT EXISTS dbo.component_type (
   id SERIAL,
   name VARCHAR(255),
 
@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS dbo.grid_type (
 
 
 INSERT
-INTO dbo.grid_type (id, name, form_type_id)
+INTO dbo.component_type (id, name, form_type_id)
 VALUES
 (1, 'user_group_grid', 2);
 
@@ -71,26 +71,6 @@ VALUES
 --user_add
 ('2', '1', null),
 ('2', '4', null);
-
--- CREATE TABLE GRID_TYPE_OBJECT
-CREATE TABLE IF NOT EXISTS dbo.grid_type_object (
-  grid_type_id INT NOT NULL,
-  object_id INT NOT NULL,
-  org_id INT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  --
-  PRIMARY KEY(grid_type_id, object_id),
-  FOREIGN KEY(grid_type_id) REFERENCES dbo.grid_type(id) ON DELETE SET NULL,
-  FOREIGN KEY(object_id) REFERENCES dbo.object(id) ON DELETE SET NULL
-);
-
-CREATE INDEX idx_grid_type_object  ON dbo.grid_type_object (grid_type_id, object_id);
-
-INSERT
-INTO dbo.grid_type_object(grid_type_id, object_id)
-VALUES
---user_group_grid
-('1', '4');
 
 -- CREATE TABLE FORM
 CREATE TABLE IF NOT EXISTS org.form (
@@ -176,7 +156,7 @@ CREATE TABLE IF NOT EXISTS org.field (
   is_required BOOLEAN DEFAULT FALSE,
 
   parent_id INT REFERENCES org.field(id) ON DELETE SET NULL,
-  grid_type_id INT,
+  component_type_id INT,
   object_id INT,
   org_id INT,
 
@@ -186,11 +166,12 @@ CREATE TABLE IF NOT EXISTS org.field (
   updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
-  FOREIGN KEY(grid_type_id) REFERENCES dbo.grid_type(id)
+  FOREIGN KEY(component_type_id) REFERENCES dbo.component_type(id)  ON DELETE SET NULL,
+  FOREIGN KEY(object_id) REFERENCES dbo.object(id)  ON DELETE SET NULL
 );
 
 INSERT
-INTO org.field (name, role, type, map, lookup, is_required, object_id, grid_type_id, parent_id)
+INTO org.field (name, role, type, map, lookup, is_required, object_id, component_type_id, parent_id)
 VALUES
 --user=1
 ('username', 'field', 'text', 'sec.user.username', null, '1', '1', null, null),
@@ -283,8 +264,8 @@ VALUES
 ('3', '3', 'Passcode', '2'),
 ('3', '4', 'Access Type', '3');
 
--- CREATE TABLE GRID_FIELD
-CREATE TABLE IF NOT EXISTS org.grid_field (
+-- CREATE TABLE COMPONENT_FIELD
+CREATE TABLE IF NOT EXISTS org.component_field (
   form_id INT NOT NULL,
   field_id INT NOT NULL,
 
@@ -306,10 +287,10 @@ CREATE TABLE IF NOT EXISTS org.grid_field (
   FOREIGN KEY(field_id) REFERENCES org.field(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_grid_field  ON org.grid_field (form_id, field_id);
+CREATE INDEX idx_component_field  ON org.component_field (form_id, field_id);
 
 INSERT
-INTO org.grid_field(form_id, field_id, label, position, parent_id)
+INTO org.component_field(form_id, field_id, label, position, parent_id)
 VALUES
 --user_group_grid
 ('3', '3', 'Name', '0', 15);
@@ -319,10 +300,9 @@ VALUES
 
 DROP TABLE IF EXISTS
 dbo.form_type,
-dbo.grid_type,
+dbo.component_type,
 dbo.form_type_object,
-dbo.grid_type_object,
 org.form,
 org.field,
 org.form_field,
-org.grid_field CASCADE;
+org.component_field CASCADE;

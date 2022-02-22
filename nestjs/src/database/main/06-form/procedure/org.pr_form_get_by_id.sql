@@ -27,7 +27,8 @@ $BODY$
     SELECT
       row_number() over () as id,
       tff.field_id,
-      tff.field_lookup
+      tff.field_lookup,
+      --tff.has_dependent
     FROM tmp_form_field tff
     WHERE tff.field_lookup IS NOT NULL;
 
