@@ -56,8 +56,8 @@ export class Field extends BaseEntity {
   @Column({ name: 'object_id' })
   objectId: boolean;
 
-  @Column({ name: 'org_id' })
-  orgId: boolean;
+  @Column({ name: 'biz_id' })
+  bizId: boolean;
 
   @Column({ name: 'created_by' })
   createdBy: string;

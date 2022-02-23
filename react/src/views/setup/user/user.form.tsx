@@ -9,7 +9,7 @@ const UserForm: React.FC = (): JSX.Element => {
   const navigate = useNavigate();
   const [form, setForm] = useState<FormData>();
   //const [{ status: submit, result: { data: submitData } }, postSignup] = useFetch('/api/auth/signup');
-  const [{ status: loading, result: { data: formData } }, getForm] = useFetch(`/api/setup/users/${id == 'new' ? 0 : id}${search}`);
+  const [{ status: loading, result: { data: formData } }, getForm] = useFetch(`/api/setup/users/${id == 'new' || id == undefined ? '0' : id}${search}`);
 
   const [{ status: submit, result }, postUser] = useFetch('/api/setup/users');
   //const [{ status: loading, result: formData}, getForm] = useFetch('/api/setup/users/new?name=user_add');

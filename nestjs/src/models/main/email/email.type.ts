@@ -13,5 +13,5 @@ export type EmailData = {
   body: string;
   message: string;
   isActive: boolean;
-  orgId: number;
+  bizId: number;
 }

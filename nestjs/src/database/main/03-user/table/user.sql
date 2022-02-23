@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS sec.user (
   contact_id INT,
   group_id INT,
   form_id INT,
-  org_id INT,
+  biz_id INT,
 
   is_new_password BOOLEAN DEFAULT FALSE,
   is_active BOOLEAN DEFAULT FALSE,

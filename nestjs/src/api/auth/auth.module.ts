@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 import {
   FormRepository,
   ContactRepository,
-  OrganizationRepository,
+  BusinessRepository,
   GroupRepository,
   TokenRepository,
   UserRepository,
@@ -20,7 +20,7 @@ import { ErrorService } from 'src/common/modules';
 @Module({
   imports: [
     TypeOrmModule.forFeature(
-      [FormRepository, OrganizationRepository, UserRepository, ContactRepository, GroupRepository, TokenRepository, EmailRepository],
+      [FormRepository, BusinessRepository, UserRepository, ContactRepository, GroupRepository, TokenRepository, EmailRepository],
       'default',
     ),
     //TypeOrmModule.forFeature([CheckinRepository], 'checkin'),

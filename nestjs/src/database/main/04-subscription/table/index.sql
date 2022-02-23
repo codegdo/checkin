@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS org.subscription (
   id SERIAL NOT NULL,
   subscription_plan_id INT NOT NULL,
   workspace_id INT NOT NULL,
-  org_id INT NOT NULL,
+  biz_id INT NOT NULL,
   owner_id INT NOT NULL,
 
   is_active BOOLEAN,
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS org.subscription_audit (
   subscription_id INT,
   subscription_plan_id INT,
   workspace_id INT,
-  org_id INT,
+  biz_id INT,
   owner_id INT,
 
   is_active BOOLEAN,
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS org.subscription_audit (
 CREATE TABLE IF NOT EXISTS org.subscription_purchase (
   id SERIAL,
   subscription_id INT NOT NULL,
-  org_id INT NOT NULL,
+  biz_id INT NOT NULL,
 
   payment_method VARCHAR(25),
   status VARCHAR(45),

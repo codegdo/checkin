@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS dbo.module_view (
   module_id INT NOT NULL,
   view_id INT NOT NULL,
-  org_id INT,
+  biz_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY(module_id, view_id),
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS dbo.module_view (
 CREATE INDEX idx_module_view ON dbo.module_view(module_id, view_id);
 
 INSERT
-INTO dbo.module_view(module_id, view_id, org_id)
+INTO dbo.module_view(module_id, view_id, biz_id)
 VALUES
 --setup
 ('2', '200', null),

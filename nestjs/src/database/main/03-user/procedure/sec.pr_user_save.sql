@@ -8,7 +8,7 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_save(
 AS
 $BODY$
   DECLARE
-
+    login_username varchar;
   BEGIN
 
     -- JSON p_form_data to table tmp_form_data
@@ -39,7 +39,7 @@ $BODY$
 
     --SET login username
     SELECT username
-    INTO _login_username
+    INTO login_username
     FROM sec.user
     WHERE id = p_login_id;
 

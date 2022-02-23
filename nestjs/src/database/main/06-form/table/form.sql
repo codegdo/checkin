@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS org.form (
   ]'::jsonb,
 
   form_type_id INT,
-  org_id INT,
+  biz_id INT,
 
   is_active BOOLEAN DEFAULT TRUE,
   is_publish BOOLEAN DEFAULT FALSE,
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS org.form (
 );
 
 INSERT
-INTO org.form (name, label, description, form_type_id, org_id, is_publish)
+INTO org.form (name, label, description, form_type_id, biz_id, is_publish)
 VALUES
 ('auth_signup', 'Signup', null, '1', null, '1'),
 ('auth_setup', 'Setup', null, '1', null, '1'),

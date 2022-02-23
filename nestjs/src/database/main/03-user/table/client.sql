@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS sec.client (
   last_name VARCHAR(45),
   email_address VARCHAR(45),
   phone_number VARCHAR(20),
-  day_of_birth DATE,
+  birthday DATE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,

@@ -2,8 +2,7 @@
 CREATE TABLE IF NOT EXISTS dbo.feature_module (
   feature_id INT NOT NULL,
   module_id INT NOT NULL,
-  org_id INT,
-  
+  biz_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY(feature_id, module_id),
@@ -14,7 +13,7 @@ CREATE TABLE IF NOT EXISTS dbo.feature_module (
 CREATE INDEX idx_feature_module ON dbo.feature_module(feature_id, module_id);
 
 INSERT
-INTO dbo.feature_module(feature_id, module_id, org_id)
+INTO dbo.feature_module(feature_id, module_id, biz_id)
 VALUES
 --calendar
 ('1', '50', null),

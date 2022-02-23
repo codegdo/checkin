@@ -8,14 +8,14 @@ export class CheckinController {
 
   @Restricted()
   @Get('/')
-  getAllLocations() {
+  getAllStores() {
     return {};
   }
 
   @Restricted()
-  @Get('/:locationId')
-  getOneLocation(@Query() { location, phone }) {
-    console.log('PHONE', location);
+  @Get('/:storeId')
+  getOneStore(@Query() { store, phone }) {
+    console.log('PHONE', store);
     return {};
   }
 }

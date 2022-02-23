@@ -21,6 +21,7 @@ VALUES
 ('1', 'user_signup', '0'),
 ('2', 'user_add', '0');
 
+
 -- CREATE TABLE COMPONENT_TYPE
 CREATE TABLE IF NOT EXISTS dbo.component_type (
   id SERIAL,
@@ -50,7 +51,7 @@ VALUES
 CREATE TABLE IF NOT EXISTS dbo.form_type_object (
   form_type_id INT NOT NULL,
   object_id INT NOT NULL,
-  org_id INT,
+  biz_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY(form_type_id, object_id),
@@ -61,7 +62,7 @@ CREATE TABLE IF NOT EXISTS dbo.form_type_object (
 CREATE INDEX idx_form_type_object  ON dbo.form_type_object (form_type_id, object_id);
 
 INSERT
-INTO dbo.form_type_object(form_type_id, object_id, org_id)
+INTO dbo.form_type_object(form_type_id, object_id, biz_id)
 VALUES
 --auth_signup
 ('1', '1', null),
@@ -118,7 +119,7 @@ CREATE TABLE IF NOT EXISTS org.form (
   ]'::jsonb,
 
   form_type_id INT,
-  org_id INT,
+  biz_id INT,
 
   is_active BOOLEAN DEFAULT TRUE,
   is_publish BOOLEAN DEFAULT FALSE,
@@ -133,7 +134,7 @@ CREATE TABLE IF NOT EXISTS org.form (
 );
 
 INSERT
-INTO org.form (name, label, description, form_type_id, org_id, is_publish)
+INTO org.form (name, label, description, form_type_id, biz_id, is_publish)
 VALUES
 ('auth_signup', 'Signup', null, '1', null, '1'),
 ('auth_setup', 'Setup', null, '1', null, '1'),
@@ -158,7 +159,7 @@ CREATE TABLE IF NOT EXISTS org.field (
   parent_id INT REFERENCES org.field(id) ON DELETE SET NULL,
   component_type_id INT,
   object_id INT,
-  org_id INT,
+  biz_id INT,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
@@ -194,26 +195,26 @@ VALUES
 ('groupGrid', 'component', 'grid', 'sec.group', null, '1', '4', '1', null),
 ('name', 'field', 'text', 'sec.group.name', null, '1', '4', '1', '14'),
 
---organization=15
-('name', 'field', 'text', 'sec.organization.name', null, '1', '15', null, null),
-('streetAddress', 'field', 'text', 'sec.organization.street_address', null, '0', '15', null, null),
-('country', 'field', 'select', 'sec.organization.country', 'dbo.territory.country.country_code', '0', '15', null, null),
-('state', 'field', 'select', 'sec.organization.state', 'dbo.territory.state.state_code', '0', '15', null, null),
-('city', 'field', 'text', 'sec.organization.city', null, '0', '15', null, null),
-('postalCode', 'field', 'text', 'sec.organization.postal_code', null, '0', '15', null, null),
-('phoneNumber', 'field', 'text', 'sec.organization.phone_number', null, '0', '15', null, null),
-('faxNumber', 'field', 'text', 'sec.organization.fax_number', null, '0', '15', null, null),
-('website', 'field', 'text', 'sec.organization.website', null, '0', '15', null, null),
-('subdomain', 'field', 'text', 'sec.organization.subdomain', null, '1', '15', null, null),
---location=6
-('name', 'field', 'text', 'org.location.name', null, '1', '6', null, null),
-('streetAddress', 'field', 'text', 'org.location.street_address', null, '0', '6', null, null),
-('country', 'field', 'select', 'org.location.country', 'dbo.territory.country.country_code', '0', '6', null, null),
-('state', 'field', 'select', 'org.location.state', 'dbo.territory.state.state_code', '0', '6', null, null),
-('city', 'field', 'text', 'org.location.city', null, '0', '6', null, null),
-('postalCode', 'field', 'text', 'org.location.postal_code', null, '0', '6', null, null),
-('phoneNumber', 'field', 'text', 'org.location.phone_number', null, '0', '6', null, null),
-('faxNumber', 'field', 'text', 'org.location.fax_number', null, '0', '6', null, null);
+--business=15
+('name', 'field', 'text', 'org.business.name', null, '1', '15', null, null),
+('streetAddress', 'field', 'text', 'org.business.street_address', null, '0', '15', null, null),
+('country', 'field', 'select', 'org.business.country', 'dbo.territory.country.country_code', '0', '15', null, null),
+('state', 'field', 'select', 'org.business.state', 'dbo.territory.state.state_code', '0', '15', null, null),
+('city', 'field', 'text', 'org.business.city', null, '0', '15', null, null),
+('postalCode', 'field', 'text', 'org.business.postal_code', null, '0', '15', null, null),
+('phoneNumber', 'field', 'text', 'org.business.phone_number', null, '0', '15', null, null),
+('faxNumber', 'field', 'text', 'org.business.fax_number', null, '0', '15', null, null),
+('website', 'field', 'text', 'org.business.website', null, '0', '15', null, null),
+('subdomain', 'field', 'text', 'org.business.subdomain', null, '1', '15', null, null),
+--store=6
+('name', 'field', 'text', 'org.store.name', null, '1', '6', null, null),
+('streetAddress', 'field', 'text', 'org.store.street_address', null, '0', '6', null, null),
+('country', 'field', 'select', 'org.store.country', 'dbo.territory.country.country_code', '0', '6', null, null),
+('state', 'field', 'select', 'org.store.state', 'dbo.territory.state.state_code', '0', '6', null, null),
+('city', 'field', 'text', 'org.store.city', null, '0', '6', null, null),
+('postalCode', 'field', 'text', 'org.store.postal_code', null, '0', '6', null, null),
+('phoneNumber', 'field', 'text', 'org.store.phone_number', null, '0', '6', null, null),
+('faxNumber', 'field', 'text', 'org.store.fax_number', null, '0', '6', null, null);
 
 -- CREATE TABLE FORM_FIELD
 CREATE TABLE IF NOT EXISTS org.form_field (
@@ -250,9 +251,9 @@ VALUES
 ('1', '7', 'Email Address', '4'),
 ('1', '8', 'Phone Number', '5'),
 --auth_setup
-('2', '16', 'Organization Name', '0'),
+('2', '16', 'Business Name', '0'),
 ('2', '25', 'Subdomain', '1'),
-('2', '26', 'Location Name', '2'),
+('2', '26', 'Store Name', '2'),
 ('2', '27', 'Street Address', '3'),
 ('2', '28', 'Country', '4'),
 ('2', '29', 'State', '5'),

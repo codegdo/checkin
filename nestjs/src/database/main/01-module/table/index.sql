@@ -112,7 +112,7 @@ VALUES
 ('203', 'policies',     'grid', '20', '2', '0', '1', '1'),
 
 ('204', 'languages',    'grid', '20', '3', '0', '1', '1'),
-('205', 'locations',    'grid', '20', '4', '0', '1', '1'),
+('205', 'stores',    'grid', '20', '4', '0', '1', '1'),
 ('206', 'services',     'grid', '20', '5', '0', '1', '1'),
 ('207', 'prices',       'grid', '20', '6', '0', '1', '1'),
 
@@ -125,7 +125,7 @@ VALUES
 ('213', 'checkouts',    'grid', '20', '12', '0', '1', '1'),
 --account
 ('300', 'profile',      'form', '30', '0', '1', '1', '1'),
-('301', 'organization', 'form', '30', '1', '1', '1', '1'),
+('301', 'business', 'form', '30', '1', '1', '1', '1'),
 ('302', 'subscription', 'form', '30', '2', '1', '1', '1'),
 --help
 ('400', 'supports',     'grid', '40', '0', '1', '1', '1'),
@@ -169,7 +169,7 @@ VALUES
 ('4', 'group',         '1', '1', '1'),
 ('5', 'policy',        '1', '1', '1'),
 ('6', 'language',      '1', '1', '1'),
-('7', 'location',      '1', '1', '1'),
+('7', 'store',          '1', '1', '1'),
 ('8', 'service',       '1', '1', '1'),
 ('9', 'price',         '1', '1', '1'),
 ('10', 'form',         '1', '1', '1'),
@@ -178,7 +178,7 @@ VALUES
 ('13', 'checkin',      '1', '1', '1'),
 ('14', 'todo',         '1', '1', '1'),
 ('15', 'checkout',     '1', '1', '1'),
-('16', 'organization', '1', '1', '1'),
+('16', 'business', '1', '1', '1'),
 ('17', 'subscription', '1', '1', '1'),
 ('18', 'appointment',  '1', '1', '1'),
 ('19', 'booking',      '1', '1', '1'),
@@ -189,7 +189,7 @@ VALUES
 CREATE TABLE IF NOT EXISTS dbo.feature_module (
   feature_id INT NOT NULL,
   module_id INT NOT NULL,
-  org_id INT,
+  biz_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY(feature_id, module_id),
@@ -200,7 +200,7 @@ CREATE TABLE IF NOT EXISTS dbo.feature_module (
 CREATE INDEX idx_feature_module ON dbo.feature_module(feature_id, module_id);
 
 INSERT
-INTO dbo.feature_module(feature_id, module_id, org_id)
+INTO dbo.feature_module(feature_id, module_id, biz_id)
 VALUES
 --calendar
 ('1', '50', null),
@@ -239,7 +239,7 @@ VALUES
 CREATE TABLE IF NOT EXISTS dbo.module_view (
   module_id INT NOT NULL,
   view_id INT NOT NULL,
-  org_id INT,
+  biz_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY(module_id, view_id),
@@ -249,7 +249,7 @@ CREATE TABLE IF NOT EXISTS dbo.module_view (
 CREATE INDEX idx_module_view ON dbo.module_view(module_id, view_id);
 
 INSERT
-INTO dbo.module_view(module_id, view_id, org_id)
+INTO dbo.module_view(module_id, view_id, biz_id)
 VALUES
 --setup
 ('2', '200', null),
@@ -285,7 +285,7 @@ VALUES
 CREATE TABLE IF NOT EXISTS dbo.view_object (
   view_id INT NOT NULL,
   object_id INT NOT NULL,
-  org_id INT,
+  biz_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY(view_id, object_id),
@@ -296,7 +296,7 @@ CREATE TABLE IF NOT EXISTS dbo.view_object (
 CREATE INDEX idx_view_object ON dbo.view_object(view_id, object_id);
 
 INSERT
-INTO dbo.view_object(view_id, object_id, org_id)
+INTO dbo.view_object(view_id, object_id, biz_id)
 VALUES
 --users
 ('200', '1', null),
@@ -309,7 +309,7 @@ VALUES
 ('203', '5', null),
 --language
 ('204', '6', null),
---location
+--store
 ('205', '7', null),
 --service
 ('206', '8', null),
@@ -331,7 +331,7 @@ VALUES
 --profile
 ('300', '1', null),
 ('300', '2', null),
---organization
+--business
 ('301', '16', null),
 --subscription
 ('302', '17', null),

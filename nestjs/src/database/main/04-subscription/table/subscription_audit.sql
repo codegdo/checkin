@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS org.subscription_audit (
   subscription_id INT,
   subscription_plan_id INT,
   workspace_id INT,
-  org_id INT,
+  biz_id INT,
   owner_id INT,
   
   is_active BOOLEAN,

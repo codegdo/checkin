@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS sec.group (
   group_level INT DEFAULT 1,
 
   group_type_id INT,
-  org_id INT,
+  biz_id INT,
 
   is_owner BOOLEAN DEFAULT FALSE,
   is_active BOOLEAN DEFAULT TRUE,
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS sec.group (
 );
 
 INSERT
-INTO sec.group(name, description, is_owner, org_id, group_type_id)
+INTO sec.group(name, description, is_owner, biz_id, group_type_id)
 VALUES
 ('System Group', null, '0', null, '1'),
 ('Owner Group', null, '1', null, '2');

@@ -8,7 +8,7 @@ import { AppState } from '../../../store/reducers';
 
 
 const Confirm: React.FC<any> = ({ setConfirmed }): JSX.Element => {
-  const { isLogin, orgId, user } = useSelector((state: AppState) => state.session);
+  const { isLogin, bizId, user } = useSelector((state: AppState) => state.session);
   const [{ status, result }, fetchConfirm] = useFetch('/api/auth/confirm');
   const [form, setForm] = useState<FormData>();
   const [isActive, setIsActive] = useState(false);

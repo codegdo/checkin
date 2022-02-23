@@ -39,7 +39,7 @@ $BODY$
         e.body,
         e.text,
         e.is_active,
-        e.org_id
+        e.biz_id
       FROM org.email e
       LEFT JOIN dbo.email_type et ON et.id = e.email_type_id
       LEFT JOIN dbo.email_address ea ON ea.id = et.email_address_id

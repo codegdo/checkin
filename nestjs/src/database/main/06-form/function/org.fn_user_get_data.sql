@@ -7,10 +7,24 @@ RETURNS TABLE(
 AS
 $BODY$
   DECLARE
-    
+    user_data json;
   BEGIN
     DROP TABLE IF EXISTS tmp_eval CASCADE;
     CREATE  TEMP TABLE tmp_eval(id int, value text);
+
+    SELECT json_agg(u.*)::json ->> 0
+    INTO user_data
+    FROM (
+      SELECT * 
+      FROM sec.user 
+      WHERE id = p_user_id;
+    ) u;
+
+    --SET
+    SELECT user_data ->> 'formId' INTO user_form_id;
+
+
+    
 
     RETURN QUERY
     SELECT  *

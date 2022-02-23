@@ -20,8 +20,8 @@ export class SubscriptionPurchase extends BaseEntity {
   @JoinColumn({ name: 'subscription_id' })
   subscription: Subscription;
 
-  @Column({ name: 'org_id' })
-  orgId: number;
+  @Column({ name: 'biz_id' })
+  bizId: number;
 
   @Column({ name: 'payment_method' })
   paymentMethod: string;

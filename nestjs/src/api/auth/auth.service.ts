@@ -12,7 +12,7 @@ import { Connection } from 'typeorm';
 //import { Logger } from 'winston';
 
 import {
-  OrganizationRepository,
+  BusinessRepository,
   UserRepository,
   GroupRepository,
   TokenRepository,
@@ -44,8 +44,8 @@ export class AuthService {
     @InjectConnection('checkin')
     private connection2: Connection,
 
-    @InjectRepository(OrganizationRepository)
-    private orgRepository: OrganizationRepository,
+    @InjectRepository(BusinessRepository)
+    private bizRepository: BusinessRepository,
 
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
@@ -108,15 +108,18 @@ export class AuthService {
 
   async login(dto: UserLoginDto) {
     try {
-      const { user, locations, organizations, modules, permissions, policy } =
-        await this.userRepository.loginUser(dto);
-      const { orgId, isActive } = user;
+      const data = await this.userRepository.loginUser(dto);
 
-      if (orgId && !isActive) {
+      console.log(data);
+
+      const { user, stores, business, modules, permissions, policy } = data;
+      const { bizId, isActive } = user;
+
+      if (bizId && !isActive) {
         throw new BadRequestException(ErrorMessageEnum.ACCOUNT_UNACTIVE);
       }
 
-      const nav = moduleViewObjectGroup(modules);
+      const nav = modules && moduleViewObjectGroup(modules);
 
       return { user, nav, permissions, policy };
     } catch (e) {

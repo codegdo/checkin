@@ -11,9 +11,9 @@ $BODY$
     user_form_id int;
   BEGIN
 
-    SELECT id
-    INTO user_form_id
-    FROM org.form
+    SELECT id 
+    INTO user_form_id 
+    FROM org.form 
     WHERE name = p_form_name;
 
     IF user_form_id IS NOT NULL THEN
@@ -139,7 +139,7 @@ $BODY$
     rec_token record;
     current bigint := extract(epoch from now()) * 1000;
   BEGIN
-
+    
     SELECT *
     INTO rec_token
     FROM sec.token
@@ -170,14 +170,14 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_setup(
   p_login_id int,
   p_form_data json,
   OUT "user" json,
-  OUT locations json
+  OUT stores json
 )
 AS
 $BODY$
   DECLARE
     login_username varchar;
-    location_territory_id int;
-    user_org_id int;
+    store_territory_id int;
+    user_biz_id int;
   BEGIN
 
     -- JSON form_data to table tmp_form_data
@@ -210,23 +210,23 @@ $BODY$
     SELECT username
     INTO login_username
     FROM sec.user
-    WHERE id = p_login_id AND org_id IS NULL;
+    WHERE id = p_login_id AND biz_id IS NULL;
 
-    --SET location territory id
+    --SET store territory id
     SELECT id
-    INTO location_territory_id
+    INTO store_territory_id
     FROM(
       SELECT id
       FROM dbo.territory
       WHERE country_code = (
         SELECT DISTINCT value
         FROM tmp_data
-        WHERE map = 'org.location.country'
+        WHERE map = 'org.store.country'
       )
       AND state_code = (
         SELECT DISTINCT value
         FROM tmp_data
-        WHERE map = 'org.location.state'
+        WHERE map = 'org.store.state'
       )
     ) t;
 
@@ -234,45 +234,45 @@ $BODY$
     IF login_username IS NOT NULL THEN
 
       --INSERT
-      WITH o AS (
-        INSERT INTO sec.organization(
+      WITH b AS (
+        INSERT INTO org.business(
           name,
           subdomain,
           owner_id,
           created_by
         )
         VALUES(
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'sec.organization.name'),
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'sec.organization.subdomain'),
+          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.business.name'),
+          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.business.subdomain'),
           p_login_id,
           login_username
         )
         RETURNING id
-      ), w AS (
-        INSERT INTO org.location(
+      ), s AS (
+        INSERT INTO org.store(
           name,
           street_address,
           territory_id,
           city,
           postal_code,
-          org_id,
+          biz_id,
           created_by
         )
         VALUES(
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.location.name'),
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.location.street_address'),
-          location_territory_id,
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.location.city'),
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.location.postal_code'),
-          (SELECT id FROM o),
+          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.store.name'),
+          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.store.street_address'),
+          store_territory_id,
+          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.store.city'),
+          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.store.postal_code'),
+          (SELECT id FROM b),
           login_username
         )
         RETURNING id
       ), u AS (
         UPDATE sec.user
-        SET org_id = (SELECT id FROM o)
+        SET biz_id = (SELECT id FROM b)
         WHERE id = p_login_id
-        RETURNING id, username, contact_id, org_id, group_id, is_active
+        RETURNING id, username, contact_id, biz_id, group_id, is_active
       )
       SELECT json_agg(r)::json ->> 0
       INTO "user"
@@ -280,14 +280,14 @@ $BODY$
         SELECT
           u.id "id",
           u.username "username",
-          u.org_id "orgId",
+          u.biz_id "bizId",
           u.is_active,
-
+          
           c.first_name "firstName",
           c.last_name "lastName",
           c.email_address "emailAddress",
           c.phone_number "phoneNumber",
-
+          
           g.id "groupId",
           g.is_owner,
           gt.name "groupType"
@@ -297,15 +297,15 @@ $BODY$
         LEFT JOIN org.contact c ON c.id = u.contact_id
       ) r;
 
-      --SET user_org_id
-      SELECT "user" ->> 'orgId' INTO user_org_id;
+      --SET user_biz_id
+      SELECT "user" ->> 'bizId' INTO user_biz_id;
 
       SELECT json_agg(l)::json
-      INTO locations
+      INTO stores
       FROM (
-        SELECT id, name
-        FROM org.location
-        WHERE org_id = user_org_id
+        SELECT id, name 
+        FROM org.store
+        WHERE biz_id = user_biz_id
         AND is_active IS NOT NULL
       ) l;
     ELSE
@@ -322,7 +322,7 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE PROCEDURE sec.pr_user_login(
   p_username varchar,
   OUT "user" json,
-  OUT "locations" json,
+  OUT "stores" json,
   OUT "modules" json,
   OUT "permissions" json,
   OUT "policy" json
@@ -330,7 +330,7 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_login(
 AS
 $BODY$
   DECLARE
-      user_org_id int;
+      user_biz_id int;
       user_group_type varchar;
       user_group_id int;
   BEGIN
@@ -344,23 +344,23 @@ $BODY$
     IF "user" IS NOT NULL THEN
 
       --SET
-      SELECT "user" ->> 'orgId' INTO user_org_id;
+      SELECT "user" ->> 'bizId' INTO user_biz_id;
       SELECT "user" ->> 'groupType' INTO user_group_type;
       SELECT "user" ->> 'groupId' INTO user_group_id;
 
       IF user_group_type = 'system' THEN
 
       ELSE
-        IF user_org_id IS NOT NULL THEN
-          --CHECK org is_active
-          IF(SELECT 1 FROM sec.organization WHERE id = user_org_id AND is_active is TRUE) THEN
+        IF user_biz_id IS NOT NULL THEN
+          --CHECK biz is_active
+          IF(SELECT 1 FROM org.business WHERE id = user_biz_id AND is_active is TRUE) THEN
 
             SELECT json_agg(l)::json
-            INTO "locations"
+            INTO "stores"
             FROM (
               SELECT id, name
-              FROM org.location
-              WHERE org_id = user_org_id
+              FROM org.store
+              WHERE biz_id = user_biz_id
               AND is_active = true
             ) l;
 

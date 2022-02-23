@@ -33,9 +33,9 @@ VALUES
 ('1', '7', 'Email Address', '4'),
 ('1', '8', 'Phone Number', '5'),
 --auth_setup
-('2', '16', 'Organization Name', '0'),
+('2', '16', 'Business Name', '0'),
 ('2', '25', 'Subdomain', '1'),
-('2', '26', 'Location Name', '2'),
+('2', '26', 'Store Name', '2'),
 ('2', '27', 'Street Address', '3'),
 ('2', '28', 'Country', '4'),
 ('2', '29', 'State', '5'),

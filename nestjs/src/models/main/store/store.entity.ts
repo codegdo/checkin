@@ -3,19 +3,17 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToOne,
   JoinColumn,
-  Unique,
+  ManyToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
-import { User } from '../user/user.entity';
 
-interface OrgData { };
+import { Client, User, Territory } from '../entities';
 
-@Entity({ database: 'main', schema: 'sec', name: 'organization' })
-@Unique(['subdomain'])
-export class Organization extends BaseEntity {
+@Entity({ database: 'main', schema: 'org', name: 'store' })
+export class Store extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
@@ -31,30 +29,27 @@ export class Organization extends BaseEntity {
   @Column({ name: 'postal_code' })
   postalCode: number;
 
-  @Column({ name: 'territory_id' })
-  territoryId: number;
-
-  @Column({ name: 'website' })
-  website: string;
+  @OneToOne(() => Territory, (territory) => territory.id)
+  @JoinColumn({ name: 'territory_id' })
+  territory: Territory;
 
   @Column({ name: 'phone_number' })
-  phoneNumber: number;
+  phoneNumber: string;
 
   @Column({ name: 'fax_number' })
-  faxNumber: number;
+  faxNumber: string;
 
-  @Column({ name: 'subdomain' })
-  subdomain: string;
+  @Column({ name: 'owner_id' })
+  ownerId: number;
 
-  @Column({ name: 'data', type: 'jsonb' })
-  data: OrgData;
+  @Column({ name: 'biz_id' })
+  bizId: number;
 
-  @Column({ name: 'is_active' })
-  isActive: boolean;
+  @ManyToMany(() => Client, (client: Client) => client.stores)
+  clients: Client[];
 
-  @OneToOne(() => User, (user) => user.id)
-  @JoinColumn({ name: 'owner_id' })
-  owner: User;
+  @ManyToMany(() => User, (user: User) => user.stores)
+  users: User[];
 
   @Column({ name: 'created_by' })
   createdBy: string;

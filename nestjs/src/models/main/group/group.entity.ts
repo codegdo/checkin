@@ -49,8 +49,8 @@ export class Group extends BaseEntity {
   })
   policies: Policy[];
 
-  @Column({ name: 'org_id' })
-  orgId: number;
+  @Column({ name: 'biz_id' })
+  bizId: number;
 
   @Column({ name: 'is_active' })
   isActive: boolean;

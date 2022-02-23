@@ -14,7 +14,7 @@ import {
   CheckinModule,
   ClientModule,
   CalendarModule,
-  LocationModule,
+  StoreModule,
 } from './api';
 
 import {
@@ -76,7 +76,7 @@ import { ErrorModule } from './common/modules/error/error.module';
     CheckinModule,
     ClientModule,
     CalendarModule,
-    LocationModule,
+    StoreModule,
     ErrorModule,
   ],
   controllers: [],
@@ -95,7 +95,7 @@ import { ErrorModule } from './common/modules/error/error.module';
   ],
 })
 export class AppModule {
-  constructor() {}
+  constructor() { }
 
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');

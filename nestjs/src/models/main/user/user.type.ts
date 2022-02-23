@@ -10,7 +10,7 @@ export type UserData = {
   password?: string;
   roleId: number;
   roleType: string;
-  orgId: number;
+  bizId: number;
   orgActive?: boolean;
   isActive: boolean;
   isOwner: boolean;
@@ -36,13 +36,13 @@ export type UserVerifyData = TokenData<VerifyData> | null;
 
 export type UserSetupData = {
   user: UserData;
-  locations: any[];
+  stores: any[];
 } | null;
 
 export type UserLoginData = {
   user: UserData;
-  locations: any[];
-  organizations: any[];
+  stores: any[];
+  business: any[];
   permissions: any[];
   modules: any[];
   policy: any;

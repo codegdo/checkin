@@ -7,7 +7,7 @@ import { sessionReducer } from './session/session.reducer';
 import { layoutReducer } from './layout/layout.reducer';
 import { navReducer } from './nav/nav.reducer';
 import { policyReducer } from './policy/policy.reducer';
-import { locationReducer } from './location/location.reducer';
+import { storeReducer } from './store/store.reducer';
 
 export type AppState = ReturnType<typeof appReducer>;
 type RootReducer = ReturnType<typeof rootReducer>;
@@ -17,7 +17,7 @@ export const appReducer = combineReducers({
   layout: layoutReducer,
   nav: navReducer,
   policy: policyReducer,
-  location: locationReducer
+  store: storeReducer
 });
 
 const rootReducer = (state: AppState | undefined, action: AnyAction): AppState => {

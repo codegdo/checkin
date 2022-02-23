@@ -35,8 +35,8 @@ export class Email {
   @JoinColumn({ name: 'email_type_id' })
   emailTypeId: EmailType;
 
-  @Column({ name: 'org_id' })
-  orgId: number;
+  @Column({ name: 'biz_id' })
+  bizId: number;
 
   @Column({ name: 'created_by' })
   createdBy: string;

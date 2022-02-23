@@ -29,18 +29,18 @@ const SetupForm: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     if (submit == 'success' && submitData) {
-      const { user, orgId, accessToken } = submitData;
+      const { user, bizId, accessToken } = submitData;
       updateSession({
         isLogin: true,
         user,
-        orgId,
+        bizId,
         accessToken
       });
     }
   }, [submit]);
 
   const handleSubmit = (values: any) => {
-    console.log(values);
+    console.log(JSON.stringify(objectToKeyValue(values)));
     void postSetup({
       body: {
         loginId: user?.id,

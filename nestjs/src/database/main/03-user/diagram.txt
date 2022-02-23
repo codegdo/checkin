@@ -3,7 +3,7 @@ checkin.workspace
 
 ---
 
-table organization {
+table businness {
   id int
   owner_id int
   
@@ -22,9 +22,9 @@ table organization {
   is_active boolean
 }
 
-table location {
+table store {
   id int
-  org_id int
+  biz_id int
   owner_id int
 
   name varchar
@@ -41,7 +41,7 @@ table location {
 }
 
 
-ref: location.org_id > organization.id
+ref: store.biz_id > businness.id
 
 table client {
   id int
@@ -53,19 +53,19 @@ table client {
   day_of_birth date
 }
 
-table client_location {
+table client_store {
   client_id int
-  location_id int
+  store_id int
 }
 
-ref: client_location.client_id > client.id
-ref: client_location.location_id > location.id
+ref: client_store.client_id > client.id
+ref: client_store.store_id > store.id
 
 table user {
   id int
   contact_id int
   role_id int
-  org_id int
+  biz_id int
   
   username varchar
   password varchar
@@ -94,13 +94,13 @@ table contact {
   is_active boolean
 }
 
-table user_location {
+table user_store {
   user_id int
-  location_id int
+  store_id int
 }
 
-ref: user_location.user_id > user.id
-ref: user_location.location_id > location.id
+ref: user_store.user_id > user.id
+ref: user_store.store_id > store.id
 
 table role_type {
   id int
@@ -111,7 +111,7 @@ table role {
   id int
   level int
   role_type_id int
-  org_id int
+  biz_id int
   name varchar
   description varchar
   
@@ -133,7 +133,7 @@ ref: role_policy.policy_id > policy.id
 table policy {
   id int
   role_type_id int
-  org_id int
+  biz_id int
   name varchar
   description varchar
   
@@ -152,7 +152,7 @@ table permission {
 table permission_level {
   permission_id int
   level_id int
-  org_id int
+  biz_id int
 }
 
 ref: permission_level.permission_id > permission.id

@@ -26,7 +26,7 @@ const LoginForm: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     if (status === 'success') {
-      const { user, orgId, accessToken, nav, policy } = result?.data;
+      const { user, bizId, accessToken, nav, policy } = result?.data;
 
       console.log(result.data);
 
@@ -35,16 +35,16 @@ const LoginForm: React.FC = (): JSX.Element => {
         setVerified(false);
       }
 
-      if (user && user.isActive && !orgId) {
+      if (user && user.isActive && !bizId) {
         updateSession({ user });
         setCompleted(false);
       }
 
-      if (user && orgId) {
+      if (user && bizId) {
         updateSession({
           isLogin: true,
           user,
-          orgId,
+          bizId,
           accessToken
         });
         updateNav(nav);

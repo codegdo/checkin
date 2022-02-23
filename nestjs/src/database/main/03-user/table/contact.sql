@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS org.contact (
 
   street_address VARCHAR(95),
   city VARCHAR(95),
-  postal_code INT(18),
+  postal_code VARCHAR(15),
   territory_id INT,
   
   is_active BOOLEAN DEFAULT TRUE,

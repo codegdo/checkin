@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS org.subscription (
   id SERIAL NOT NULL,
   subscription_plan_id INT NOT NULL,
   workspace_id INT NOT NULL,
-  org_id INT NOT NULL,
+  biz_id INT NOT NULL,
   owner_id INT NOT NULL,
   
   is_active BOOLEAN,

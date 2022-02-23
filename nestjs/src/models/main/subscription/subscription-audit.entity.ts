@@ -21,11 +21,11 @@ export class SubscriptionAudit extends BaseEntity {
   @Column({ name: 'subscription_plan_id' })
   subscriptionPlanId: number;
 
-  @Column({ name: 'workspace_id' })
-  workspaceId: number;
+  @Column({ name: 'store_id' })
+  storeId: number;
 
-  @Column({ name: 'org_id' })
-  orgId: number;
+  @Column({ name: 'biz_id' })
+  bizId: number;
 
   @Column({ name: 'operation' })
   operation: string;
