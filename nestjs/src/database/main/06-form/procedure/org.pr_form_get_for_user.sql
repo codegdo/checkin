@@ -1,4 +1,5 @@
 CREATE PROCEDURE IF NOT EXISTS org.pr_form_get_for_user(
+  p_user_id int,
   p_form_id varchar,
   OUT data json
 )
@@ -9,23 +10,26 @@ $BODY$
     min_id int := 1;
   BEGIN
 
-    DROP TABLE IF EXISTS tmp_user CASCADE;
-    CREATE  TEMP TABLE tmp_user AS
-    SELECT  *
-    FROM    sec.user
-    WHERE   id = p_user_id;
-
-    DROP TABLE IF EXISTS tmp_contact CASCADE;
-    CREATE  TEMP TABLE tmp_contact AS
-    SELECT  *
-    FROM    org.contact
-    WHERE   id = (SELECT contact_id FROM tmp_user)
-
     DROP TABLE IF EXISTS tmp_form_field CASCADE;
     CREATE  TEMP TABLE tmp_form_field AS
     SELECT  *
-    FROM    org.fn_form_field_get_by_id(p_form_id);
-  
+    FROM    org.fn_form_get_field(p_form_id);
+
+    DROP TABLE IF EXISTS tmp_component_field CASCADE;
+    CREATE  TEMP TABLE tmp_component_field AS
+    SELECT  *
+    FROM    org.fn_form_get_component(p_form_id);
+
+    DROP TABLE IF EXISTS tmp_lookup CASCADE;
+    CREATE TEMP TABLE tmp_lookup AS
+    SELECT
+      row_number() over () as id,
+      tff.field_id,
+      tff.field_lookup,
+      --tff.has_dependent
+    FROM tmp_form_field tff
+    WHERE tff.field_lookup IS NOT NULL;
+
     SELECT max(id)
     INTO max_id
     FROM tmp_lookup;

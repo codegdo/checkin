@@ -16,7 +16,7 @@ table form_type {
 table form_type_object {
   form_type_id int
   object_id int
-  org_id int
+  biz_id int
 }
 
 ref: form_type_object.form_type_id > form_type.id
@@ -44,15 +44,15 @@ table form_field {
 ref: form_field.form_id > form.id
 ref: form_field.field_id > field.id
 
-table grid_type {
+table component_type {
   id int
   name varchar
   form_type_id int
 }
 
-ref: grid_type.form_type_id > form_type.id
+ref: component_type.form_type_id > form_type.id
 
-table grid_field {
+table component_field {
   form_id int
   field_id int
   parent_id int
@@ -60,16 +60,12 @@ table grid_field {
   is_required boolean
 }
 
-ref: grid_field.form_id > form.id
-ref: grid_field.field_id > field.id
-
-table dependent_field {
-  id int
-}
+ref: component_field.form_id > form.id
+ref: component_field.field_id > field.id
 
 table field {
   id int
-  grid_type_id int
+  component_type_id int
   object_id int
   org_id int
   parent_id int
@@ -86,4 +82,5 @@ table field {
   is_required boolean
 }
 
-ref: field.grid_type_id > grid_type.id
+ref: field.component_type_id > component_type.id
+ref: field.object_id > object.id

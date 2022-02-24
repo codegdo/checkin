@@ -11,7 +11,7 @@ table feature {
 table feature_module {
   feature_id int
   module_id int
-  org_id int
+  biz_id int
 }
 
 ref: feature_module.feature_id > feature.id
@@ -32,7 +32,7 @@ table module {
 table module_view {
   module_id int
   view_id int
-  org_id int
+  biz_id int
 }
 
 ref: module_view.module_id > module.id
@@ -52,7 +52,7 @@ table view {
 table view_object {
   view_id int
   object_id int
-  org_id int
+  biz_id int
 }
 
 ref: view_object.view_id > view.id
@@ -61,8 +61,7 @@ ref: view_object.object_id > object.id
 table object {
   id int
   name varchar
-  sort_order int
-  
+
   is_external boolean
   is_internal boolean
   is_active boolean

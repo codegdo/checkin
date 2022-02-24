@@ -294,7 +294,7 @@ INSERT
 INTO org.component_field(form_id, field_id, label, position, parent_id)
 VALUES
 --user_group_grid
-('3', '3', 'Name', '0', 15);
+('3', '15', 'Name', '0', 14);
 
 
 -- DROP TABLES

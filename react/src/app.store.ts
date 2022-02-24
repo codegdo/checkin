@@ -1,16 +1,13 @@
-import { createStore, applyMiddleware, compose, Store } from 'redux';
+import { createStore, applyMiddleware, Store } from 'redux';
+import { composeWithDevTools } from '@redux-devtools/extension';
 import { persistStore } from 'redux-persist';
 import thunk from 'redux-thunk';
 
 import { persistedReducer } from './store/reducers';
 
-declare global {
-  interface Window {
-    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
-  }
-}
-
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = composeWithDevTools({
+  // other options like actionSanitizer, stateSanitizer, actionsDenylist, actionsCreators
+});
 
 const store: Store = createStore(
   persistedReducer,

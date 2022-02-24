@@ -20,7 +20,7 @@ $BODY$
     
     DROP TABLE IF EXISTS tmp_form_field CASCADE;
     CREATE TEMP TABLE tmp_form_field AS
-    SELECT * FROM org.fn_form_field_get_by_id(p_form_id);
+    SELECT * FROM org.fn_form_get_field(p_form_id);
 
     DROP TABLE IF EXISTS tmp_lookup CASCADE;
     CREATE TEMP TABLE tmp_lookup AS
@@ -54,28 +54,28 @@ $BODY$
 
     SELECT json_agg(field)::jsonb
     INTO form_field_data
-    FROM(
+    FROM (
       SELECT
-      field_id id,
-      field_name name,
-      field_label label,
-      field_description description,
-      field_type type,
-      field_role role,
-      field_data data,
-      field_value value,
-      field_lookup lookup,
-      field_map map,
-      field_position position,
-      field_parent_id "parentId",
-      field_is_required "isRequired"
+        field_id id,
+        field_name name,
+        field_label label,
+        field_description description,
+        field_type type,
+        field_role role,
+        field_data data,
+        field_value value,
+        field_lookup lookup,
+        field_map map,
+        field_position position,
+        field_parent_id "parentId",
+        field_is_required "isRequired"
       FROM tmp_form_field
       ORDER BY field_position
     ) field;
 
     SELECT json_agg(form)::json
     INTO data
-    FROM(
+    FROM (
       SELECT DISTINCT
       form_id id,
       form_name name,

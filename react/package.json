@@ -16,6 +16,7 @@
   "author": "gdo",
   "license": "ISC",
   "dependencies": {
+    "@redux-devtools/extension": "^3.2.2",
     "date-fns": "^2.24.0",
     "handlebars": "^4.7.7",
     "history": "^5.0.1",

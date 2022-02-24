@@ -16,7 +16,7 @@ $BODY$
   BEGIN
     DROP TABLE IF EXISTS tmp_form_field CASCADE;
     CREATE TEMP TABLE tmp_form_field AS
-    SELECT * FROM org.fn_form_field_get_by_id(p_form_id);
+    SELECT * FROM org.fn_form_get_field(p_form_id);
 
     DROP TABLE IF EXISTS tmp_lookup CASCADE;
     CREATE TEMP TABLE tmp_lookup AS
