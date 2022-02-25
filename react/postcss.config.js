@@ -1,5 +1,3 @@
 module.exports = {
-  plugins: {
-    precss: {},
-  },
+  plugins: [['postcss-preset-env', { stage: 0 }]],
 };
