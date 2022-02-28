@@ -86,7 +86,8 @@ $BODY$
       row_number() over () as row_id,
       ff.fld_id,
       ff.fld_lookup
-      --tff.has_dependent
+      --ff.is_dependent
+      --ff.value
     FROM FGF_form_field ff
     WHERE ff.fld_lookup IS NOT NULL;
 
@@ -101,6 +102,7 @@ $BODY$
       FROM FGF_lookup l
       WHERE l.row_id = min_id;
 
+      --CASE LOOKUP
       SELECT dbo.fn_lookup_get_value(form_field_lookup) INTO lookup_data;
 
       UPDATE FGF_form_field ff

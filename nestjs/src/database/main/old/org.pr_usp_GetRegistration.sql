@@ -82,8 +82,8 @@ select @regid = 24900, @LoginUserID = 14521
              ,Datavalue   VARCHAR(MAX)
              ,Rownum      INT
              ,GridTypeID  INT
-			 ,ProductID int null --09/29/2021
-			 )
+	      ,ProductID int null --09/29/2021
+              )
 
           DECLARE @Registration TABLE
             ( [RegID]                 [INT] NOT NULL
@@ -485,42 +485,6 @@ select @regid = 24900, @LoginUserID = 14521
           WHERE  RegID = @RegID
           ORDER  BY CreateDate DESC
 
-          --),
-          --     Cte2_ReviewerComments
-          --     AS (SELECT Cast((SELECT CONVERT(VARCHAR(20), CreateDate, 101) + ' '
-          --                             + Createuser + ': ' + ReviewerComments + ';'
-          --                             + Char(10)
-          --                      FROM   Cte
-          --                      ORDER  BY CreateDate DESC
-          --                      FOR xml path('')) AS VARCHAR(max)) AS ReviewerCommentsReadonly),
-          --     Cte3_InternalComments
-          --     AS (SELECT Cast((SELECT CONVERT(VARCHAR(20), CreateDate, 101) + ' '
-          --                             + Createuser + ': ' + InternalComments + ';'
-          --                             + Char(10)
-          --                      FROM   Cte
-          --                      ORDER  BY CreateDate DESC
-          --                      FOR xml path('')) AS VARCHAR(max)) AS InternalCommentsReadonly)
-          --INSERT INTO @RegistrationStatus
-          --            (ProgramStatusID,RegID,ownerid,CreateDate,CreateUser,ModifyDate,ModifyUser,InternalComments,ReviewerComments,UDF,ReviewerCommentsReadonly,InternalCommentsReadonly)
-          --SELECT TOP 1 ProgramStatusID
-          --             , RegID
-          --             , ownerid
-          --             , CreateDate
-          --             , CreateUser
-          --             , ModifyDate
-          --             , ModifyUser
-          --             , InternalComments
-          --             , ReviewerComments
-          --             , udf
-          --             , ReviewerCommentsReadonly
-          --             , InternalCommentsReadonly
-          --FROM   Cte,
-          --       Cte2_ReviewerComments,
-          --       Cte3_InternalComments
-          --WHERE  ProgramStatusID = @ProgramStatusID
-          --ORDER  BY CreateDate DESC
-          --/End 6/24/2014 add registration status grid
-
           INSERT INTO @eval
                       (MapTotAble
                        ,MapToColumn
@@ -591,7 +555,8 @@ select @regid = 24900, @LoginUserID = 14521
                          ,CAST(ReviewerComments AS NVARCHAR(MAX))  AS ReviewerComments
                   FROM   @RegistrationStatus rs
                          INNER JOIN ORG.programStatus ps
-                                 ON ps.ProgramStatusID = rs.ProgramStatusID)Rs
+                                 ON ps.ProgramStatusID = rs.ProgramStatusID
+              )Rs
                  UNPIVOT (VALUE
                          FOR COL IN ( STATUSNAME
                                       ,CREATEDATE
@@ -604,14 +569,14 @@ select @regid = 24900, @LoginUserID = 14521
                       (MapTotAble
                        ,MapToColumn
                        ,DataValue
-					   ,Rownum --04/06/2018
-					   ,GridTypeID --04/06/2018 
-					   )
+			,Rownum --04/06/2018
+			,GridTypeID --04/06/2018 
+			)
           SELECT 'RegistrationContact'
                  ,Col
                  ,value
-				 ,Rownum --04/06/2018
-				 ,null --,@multiDistiGridTypeid --04/06/2018 
+		,Rownum --04/06/2018
+		,null --,@multiDistiGridTypeid --04/06/2018 
           FROM   (SELECT CAST([CompanyId] AS NVARCHAR(MAX))        AS [ResellerID]
                          ,CAST([CompanyName] AS NVARCHAR(MAX))     AS [ResellerCompanyName]
                          ,CAST([Department] AS NVARCHAR(MAX))      AS [ResellerDepartment]
@@ -660,8 +625,8 @@ select @regid = 24900, @LoginUserID = 14521
                       (Maptotable
                        ,MaptoColumn
                        ,Datavalue
-					   ,Rownum --04/06/2018
-					   ,GridTypeID --04/06/2018 
+			,Rownum --04/06/2018
+			,GridTypeID --04/06/2018 
 					   )
           SELECT 'RegistrationContact'
                  ,Col
