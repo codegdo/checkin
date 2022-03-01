@@ -1,7 +1,8 @@
 -- CREATE FUNCTION LOOKUP_GET_VALUE
 CREATE OR REPLACE FUNCTION dbo.fn_lookup_get_value(
   p_lookup text,
-  p_user_id int,
+  p_filter_value int,
+  p_login_id int,
   p_biz_id int,
   OUT data jsonb
 )
@@ -18,13 +19,14 @@ $BODY$
     string_sql text;
   BEGIN
 
-    IF lookup_table = 'group_type' THEN
+    --SET
+    SELECT gt.id from sec.user u
+    INTO group_type_id
+    LEFT JOIN sec."group" g ON u.group_id = g.id
+    LEFT JOIN dbo.group_type gt ON g.group_type_id = gt.id
+    WHERE u.id = p_login_id;
 
-      SELECT gt.id from sec.user u
-      INTO group_type_id
-      LEFT JOIN sec."group" g ON u.group_id = g.id
-      LEFT JOIN dbo.group_type gt ON g.group_type_id = gt.id
-      WHERE u.id = p_user_id;
+    IF lookup_table = 'group_type' THEN
 
       IF group_type_id = 1 THEN
         string_sql := FORMAT(
@@ -71,6 +73,7 @@ $BODY$
       EXECUTE string_sql INTO data;
 
     END IF;
+
   END;
 $BODY$
 LANGUAGE plpgsql;

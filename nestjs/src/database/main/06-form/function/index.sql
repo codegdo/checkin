@@ -1,7 +1,8 @@
 -- CREATE FUNCTION FN_FORM_GET_FIELD
 CREATE OR REPLACE FUNCTION org.fn_form_get_field(
   p_form_id varchar,
-  p_user_id int,
+  p_filter_id int,
+  p_login_id int,
   p_biz_id int
 )
 RETURNS TABLE(
@@ -23,27 +24,30 @@ RETURNS TABLE(
   field_lookup varchar,
   field_position int,
   field_parent_id varchar,
-  field_is_required boolean
+  field_is_required boolean,
+  field_has_dependent boolean,
+  field_is_dependent boolean
 )
 AS
 $BODY$
   DECLARE
-    _id int := 0;
-    _name varchar := '';
+    filter_id int := 0;
+    filter_name varchar := '';
 
-    form_field_id int;
-    form_field_lookup varchar;
+    rec_id int;
+    rec_lookup varchar;
+    rec_is_dependent boolean;
 
     lookup_data jsonb;
 
-    max_id int;
-    min_id int := 1;
+    row_max int;
+    row_min int := 1;
   BEGIN
 
     IF (SELECT p_form_id ~ '^\d+$') THEN
-      _id := p_form_id::int;
+      filter_id := p_form_id::int;
     ELSE
-      _name := p_form_id::varchar;
+      filter_name := p_form_id::varchar;
     END IF;
 
     DROP TABLE IF EXISTS FGF_form_field CASCADE;
@@ -76,12 +80,14 @@ $BODY$
         ELSE
           false
         END
-      END AS fld_is_required
-    --
+      END AS fld_is_required,
+      --
+      fld.has_dependent fld_has_dependent,
+      fld.is_dependent fld_is_dependent
     FROM org.form f
     INNER JOIN org.form_field ff ON ff.form_id = f.id
     LEFT JOIN org.field fld ON fld.id = ff.field_id
-    WHERE f.id = _id OR f.name = _name
+    WHERE f.id = filter_id OR f.name = filter_name
     ORDER BY ff.position;
 
     DROP TABLE IF EXISTS FGF_lookup CASCADE;
@@ -89,31 +95,35 @@ $BODY$
     SELECT
       row_number() over () as row_num,
       ff.fld_id,
-      ff.fld_lookup
-      --ff.is_dependent
+      ff.fld_lookup,
+      ff.fld_is_dependent
       --ff.value
     FROM FGF_form_field ff
     WHERE ff.fld_lookup IS NOT NULL;
 
     SELECT max(l.row_num)
-    INTO max_id
+    INTO row_max
     FROM FGF_lookup l;
 
-    WHILE max_id >= min_id
+    WHILE row_max >= row_min
     LOOP
-      SELECT l.fld_id, l.fld_lookup
-      INTO form_field_id, form_field_lookup
+      SELECT l.fld_id, l.fld_lookup, l.fld_is_dependent
+      INTO rec_id, rec_lookup, rec_is_dependent
       FROM FGF_lookup l
-      WHERE l.row_num = min_id;
+      WHERE l.row_num = row_min;
 
       --CASE LOOKUP
-      SELECT dbo.fn_lookup_get_value(form_field_lookup, p_user_id, p_biz_id) INTO lookup_data;
+      IF rec_is_dependent is TRUE THEN
+        SELECT dbo.fn_lookup_get_value(rec_lookup, null, p_login_id, p_biz_id) INTO lookup_data;
+      ELSE
+        SELECT dbo.fn_lookup_get_value(rec_lookup, null, p_login_id, p_biz_id) INTO lookup_data;
+      END IF;
 
       UPDATE FGF_form_field ff
       SET fld_data = lookup_data
-      WHERE form_field_id = ff.fld_id;
+      WHERE ff.fld_id = rec_id;
 
-      min_id := min_id + 1;
+      row_min := row_min + 1;
     END LOOP;
 
     RETURN QUERY
@@ -123,10 +133,11 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
--- CREATE FUNCTION FN_FORM_GET_COMPONENT
-CREATE OR REPLACE FUNCTION org.fn_form_get_component(
+-- CREATE FUNCTION FN_FORM_GET_FIELD_COMPONENT
+CREATE OR REPLACE FUNCTION org.fn_form_get_field_component(
   p_form_id varchar,
-  p_user_id int,
+  p_filter_id int,
+  p_login_id int,
   p_biz_id int
 )
 RETURNS TABLE(
@@ -148,27 +159,30 @@ RETURNS TABLE(
   field_lookup varchar,
   field_position int,
   field_parent_id int,
-  field_is_required boolean
+  field_is_required boolean,
+  field_has_dependent boolean,
+  field_is_dependent boolean
 )
 AS
 $BODY$
   DECLARE
-    _id int := 0;
-    _name varchar := '';
+    filter_id int := 0;
+    filter_name varchar := '';
 
-    form_field_id int;
-    form_field_lookup varchar;
+    rec_id int;
+    rec_lookup varchar;
+    rec_is_dependent boolean;
 
     lookup_data jsonb;
 
-    max_id int;
-    min_id int := 1;
+    row_max int;
+    row_min int := 1;
   BEGIN
 
     IF (SELECT p_form_id ~ '^\d+$') THEN
-      _id := p_form_id::int;
+      filter_id := p_form_id::int;
     ELSE
-      _name := p_form_id::varchar;
+      filter_name := p_form_id::varchar;
     END IF;
 
     DROP TABLE IF EXISTS FGC_form_field CASCADE;
@@ -201,12 +215,14 @@ $BODY$
         ELSE
           false
         END
-      END AS fld_is_required
-    --
+      END AS fld_is_required,
+      --
+      fld.has_dependent fld_has_dependent,
+      fld.is_dependent fld_is_dependent
     FROM org.form f
     INNER JOIN org.form_component fc ON fc.form_id = f.id
     LEFT JOIN org.field fld ON fld.id = fc.field_id
-    WHERE f.id = _id OR f.name = _name
+    WHERE f.id = filter_id OR f.name = filter_name
     ORDER BY fc.position;
 
     DROP TABLE IF EXISTS FGC_lookup CASCADE;
@@ -214,29 +230,35 @@ $BODY$
     SELECT
       row_number() over () as row_num,
       ff.fld_id,
-      ff.fld_lookup
-      --tff.has_dependent
+      ff.fld_lookup,
+      ff.fld_has_dependent
+      --ff.value
     FROM FGC_form_field ff
     WHERE ff.fld_lookup IS NOT NULL;
 
     SELECT max(l.row_num)
-    INTO max_id
+    INTO row_max
     FROM FGC_lookup l;
 
-    WHILE max_id >= min_id
+    WHILE row_max >= row_min
     LOOP
       SELECT l.fld_id, l.fld_lookup
-      INTO form_field_id, form_field_lookup
+      INTO rec_id, rec_lookup, rec_is_dependent
       FROM FGC_lookup l
-      WHERE l.row_num = min_id;
+      WHERE l.row_num = row_min;
 
-      SELECT dbo.fn_lookup_get_value(form_field_lookup, p_user_id, p_biz_id) INTO lookup_data;
+      --CASE LOOKUP
+      IF rec_is_dependent is TRUE THEN
+        SELECT dbo.fn_lookup_get_value(rec_lookup, null, p_login_id, p_biz_id) INTO lookup_data;
+      ELSE
+        SELECT dbo.fn_lookup_get_value(rec_lookup, null, p_login_id, p_biz_id) INTO lookup_data;
+      END IF;
 
       UPDATE FGC_form_field ff
       SET fld_data = lookup_data
-      WHERE form_field_id = ff.fld_id;
+      WHERE ff.fld_id = rec_id;
 
-      min_id := min_id + 1;
+      row_min := row_min + 1;
     END LOOP;
 
     RETURN QUERY
@@ -246,10 +268,134 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
+-- CREATE FUNCTION FN_FORM_GET_DATA_FOR_USER
+CREATE OR REPLACE FUNCTION org.fn_form_get_data_for_user(
+  p_form_id varchar,
+  p_filter_id int,
+  p_login_id int,
+  p_biz_id int
+)
+RETURNS TABLE(
+  id int,
+  value text
+) AS
+$BODY$
+  DECLARE
+    user_form_id varchar;
+    user_contact_id int;
+    user_group_id int;
 
--- CALL FUNCTIONS
+    user_data json;
+    contact_data json;
+    group_data json;
+    policy_data json;
 
-SELECT * FROM org.fn_form_get_field('auth_signup');
+    eval_id int;
+    eval_value text;
+
+    map text;
+    map_table text;
+    map_column text;
+
+    row_max int;
+    row_min int := 1;
+  BEGIN
+    DROP TABLE IF EXISTS FGDFU_eval CASCADE;
+    CREATE TEMP TABLE FGDFU_eval(id int, value text);
+
+    SELECT json_agg(data.*)::json ->> 0
+    INTO user_data
+    FROM (
+      SELECT *
+      FROM sec.user u
+      WHERE u.id = p_filter_id
+    ) data;
+
+    --SET
+    SELECT user_data ->> 'contact_id' INTO user_contact_id;
+    SELECT user_data ->> 'group_id' INTO user_group_id;
+    SELECT user_data ->> 'form_id' INTO user_form_id;
+
+    SELECT json_agg(data.*)::json ->> 0
+    INTO contact_data
+    FROM (
+      SELECT *
+      FROM org.contact c
+      WHERE c.id = user_contact_id
+    ) data;
+
+    SELECT json_agg(data.*)::json ->> 0
+    INTO group_data
+    FROM (
+      SELECT *
+      FROM sec.group g
+      WHERE g.id = user_group_id
+    ) data;
+
+    --REPLACE
+    IF user_form_id IS NULL THEN
+      user_form_id := p_form_id;
+    END IF;
+
+    DROP TABLE IF EXISTS FGDFU_form_field CASCADE;
+    CREATE TEMP TABLE FGDFU_form_field AS
+    SELECT
+      row_number() over () as row_num, *
+    FROM (
+      SELECT
+        field_id,
+        field_map,
+        field_lookup
+      FROM org.fn_form_get_field(user_form_id, null, p_login_id, p_biz_id)
+      UNION
+      SELECT
+        field_id,
+        field_map,
+        field_lookup
+      FROM org.fn_form_get_field_component(user_form_id, null, p_login_id, p_biz_id)
+    ) ff;
+
+    SELECT max(ff.row_num)
+    INTO row_max
+    FROM FGDFU_form_field ff;
+
+    WHILE row_max >= row_min
+    LOOP
+
+      SELECT field_id, field_map
+      INTO eval_id, map
+      FROM FGDFU_form_field ff
+      WHERE ff.row_num = row_min;
+
+      map_table := split_part(map, '.', 2);
+      map_column := split_part(map, '.', 3);
+
+      CASE map_table
+        WHEN 'user' THEN
+          SELECT user_data ->> map_column INTO eval_value;
+        WHEN 'contact' THEN
+          SELECT contact_data ->> map_column INTO eval_value;
+         WHEN 'group' THEN
+          SELECT group_data ->> map_column INTO eval_value;
+        ELSE
+          eval_value := null;
+      END CASE;
+
+      INSERT INTO FGDFU_eval(id, value)
+      VALUES (eval_id, eval_value);
+
+      row_min := row_min + 1;
+    END LOOP;
+
+    --RAISE NOTICE 'USER DATA %', user_data;
+
+    RETURN QUERY
+    SELECT *
+    FROM FGDFU_eval;
+
+  END;
+$BODY$
+LANGUAGE plpgsql;
 
 -- DROP FUNCTIONS
 
@@ -257,4 +403,7 @@ DROP FUNCTION IF EXISTS
 org.fn_form_get_field;
 
 DROP FUNCTION IF EXISTS
-org.fn_form_get_component;
+org.fn_form_get_field_component;
+
+DROP FUNCTION IF EXISTS
+org.fn_form_get_data_for_user;

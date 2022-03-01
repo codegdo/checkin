@@ -27,6 +27,7 @@ import {
   winstonConfig,
 } from './configs';
 import { ErrorModule } from './common/modules/error/error.module';
+import { GroupModule } from './api/setup/group/group.module';
 
 @Module({
   imports: [
@@ -78,6 +79,7 @@ import { ErrorModule } from './common/modules/error/error.module';
     CalendarModule,
     StoreModule,
     ErrorModule,
+    GroupModule,
   ],
   controllers: [],
   providers: [

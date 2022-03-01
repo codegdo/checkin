@@ -410,3 +410,11 @@
 {"level":"error","message":"invalid input syntax for type integer: \"new\""}
 {"level":"error","message":"procedure org.pr_form_get_for_user(unknown, unknown, unknown) does not exist"}
 {"level":"error","message":"procedure org.pr_form_get_for_user(unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"structure of query does not match function result type"}
+{"level":"error","message":"structure of query does not match function result type"}
+{"level":"error","message":"structure of query does not match function result type"}
+{"level":"error","message":"operator does not exist: integer = character varying"}
+{"level":"error","message":"column reference \"form_name\" is ambiguous"}
+{"level":"error","message":"column reference \"form_name\" is ambiguous"}
+{"level":"error","message":"column reference \"form_name\" is ambiguous"}
+{"level":"error","message":"column reference \"form_name\" is ambiguous"}

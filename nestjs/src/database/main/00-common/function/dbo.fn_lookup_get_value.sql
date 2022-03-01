@@ -1,6 +1,7 @@
 -- CREATE FUNCTION LOOKUP_GET_VALUE
 CREATE OR REPLACE FUNCTION dbo.fn_lookup_get_value(
   p_lookup text,
+  p_filter_id int,
   p_login_id int,
   p_biz_id int,
   OUT data jsonb
@@ -71,6 +72,7 @@ $BODY$
       EXECUTE string_sql INTO data;
 
     END IF;
+
   END;
 $BODY$
 LANGUAGE plpgsql;

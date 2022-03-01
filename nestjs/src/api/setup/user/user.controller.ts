@@ -35,8 +35,6 @@ export class UserController {
     @Query('formId') formId: number | string,
   ) {
 
-    console.log('GET_CURRENT_USER', user);
-
     const { id: loginId, bizId } = user;
 
     if (formId) {
@@ -47,10 +45,11 @@ export class UserController {
       }
 
       return this.userService.getForm({ formId, userId, loginId, bizId });
-    } else {
-      // getUser
-      return { formId };
     }
+
+    // getUser
+    return { formId };
+
   }
 
   @Post('users')

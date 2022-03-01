@@ -14,7 +14,7 @@ $BODY$
 
     DROP TABLE IF EXISTS FGBI_form_field CASCADE;
     CREATE TEMP TABLE FGBI_form_field AS
-    SELECT * FROM org.fn_form_get_field(p_form_id, null, null);
+    SELECT * FROM org.fn_form_get_field(p_form_id, null, null, null);
 
     SELECT json_agg(field)::jsonb
     INTO form_field_data
@@ -53,7 +53,7 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-CALL org.pr_form_get_by_id('auth_signup', null);
-
 DROP PROCEDURE IF EXISTS org.pr_form_get_by_id(varchar, json);
+
+CALL org.pr_form_get_by_id('auth_signup', null);
 
