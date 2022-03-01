@@ -4,12 +4,12 @@ import { Form, FormData } from '../../../components/form';
 import { useFetch } from '../../../hooks';
 
 const UserForm: React.FC = (): JSX.Element => {
-  const { id } = useParams();
+  const { id = 0 } = useParams();
   const { search } = useLocation();
   const navigate = useNavigate();
   const [form, setForm] = useState<FormData>();
   //const [{ status: submit, result: { data: submitData } }, postSignup] = useFetch('/api/auth/signup');
-  const [{ status: loading, result: { data: formData } }, getForm] = useFetch(`/api/setup/users/${id == 'new' || id == undefined ? '0' : id}${search}`);
+  const [{ status: loading, result: { data: formData } }, getForm] = useFetch(`/api/setup/users/${id}${search}`);
 
   const [{ status: submit, result }, postUser] = useFetch('/api/setup/users');
   //const [{ status: loading, result: formData}, getForm] = useFetch('/api/setup/users/new?name=user_add');
@@ -27,7 +27,7 @@ const UserForm: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     if (loading === 'success' && formData) {
-      //setForm(formData);
+      setForm(formData);
       console.log(formData);
     }
   }, [loading]);

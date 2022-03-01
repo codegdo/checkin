@@ -404,3 +404,9 @@
 {"level":"error","message":"Cannot read properties of null (reading 'reduce')"}
 {"level":"error","message":"Cannot read properties of null (reading 'reduce')"}
 {"level":"error","message":"null value in column \"name\" of relation \"business\" violates not-null constraint"}
+{"level":"error","message":"procedure org.pr_form_get_for_user(unknown, unknown) does not exist"}
+{"level":"error","message":"procedure org.pr_form_get_for_user(unknown, unknown) does not exist"}
+{"level":"error","message":"invalid input syntax for type integer: \"NaN\""}
+{"level":"error","message":"invalid input syntax for type integer: \"new\""}
+{"level":"error","message":"procedure org.pr_form_get_for_user(unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"procedure org.pr_form_get_for_user(unknown, unknown, unknown) does not exist"}

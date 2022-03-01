@@ -34,11 +34,19 @@ export class UserController {
     @Param('userId') userId: number,
     @Query('formId') formId: number | string,
   ) {
+
     console.log('GET_CURRENT_USER', user);
 
+    const { id: loginId, bizId } = user;
+
     if (formId) {
+
       // getFormForUser
-      return this.userService.getForm({ userId, formId });
+      if (isNaN(userId)) {
+        userId = 0;
+      }
+
+      return this.userService.getForm({ formId, userId, loginId, bizId });
     } else {
       // getUser
       return { formId };

@@ -5,6 +5,8 @@ CREATE TABLE IF NOT EXISTS sec.user (
   password VARCHAR(85),
   passcode VARCHAR(4),
 
+  custom JSONB DEFAULT '[]'::jsonb,
+
   contact_id INT,
   group_id INT,
   form_id INT,

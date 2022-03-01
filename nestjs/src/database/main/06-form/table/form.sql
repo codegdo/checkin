@@ -7,38 +7,38 @@ CREATE TABLE IF NOT EXISTS org.form (
 
   data JSONB NOT NULL DEFAULT '[
     {
-      "id": "f_header", 
-      "type": "header", 
-      "role": "block", 
-      "data": [], 
-      "position": 0, 
+      "id": "f_header",
+      "type": "header",
+      "role": "block",
+      "data": [],
+      "position": 0,
       "parentId": null
     },
     {
-      "id": "f_main", 
-      "type": "main", 
-      "role": "block", 
-      "data": [], 
-      "position": 1, 
+      "id": "f_main",
+      "type": "main",
+      "role": "block",
+      "data": [],
+      "position": 1,
       "parentId": null
     },
     {
-      "id": "f_footer", 
-      "type": "footer", 
-      "role": "block", 
-      "data": [], 
-      "position": 2, 
+      "id": "f_footer",
+      "type": "footer",
+      "role": "block",
+      "data": [],
+      "position": 2,
       "parentId": null
     },
     {
-      "id": "f_button", 
+      "id": "f_button",
       "label": "Submit",
       "name": "submit",
-      "type": "button", 
-      "role": "inline", 
-      "data": null, 
+      "type": "button",
+      "role": "inline",
+      "data": null,
       "value": null,
-      "position": 3, 
+      "position": 3,
       "parentId": "f_footer"
     }
   ]'::jsonb,

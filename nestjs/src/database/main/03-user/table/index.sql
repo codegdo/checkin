@@ -125,6 +125,8 @@ CREATE TABLE IF NOT EXISTS sec.user (
   password VARCHAR(85),
   passcode VARCHAR(4),
 
+  custom JSONB,
+
   contact_id INT,
   group_id INT,
   form_id INT,
@@ -207,7 +209,7 @@ CREATE TABLE IF NOT EXISTS org.business (
   website VARCHAR(45),
   subdomain VARCHAR(45) NOT NULL,
 
-  data JSONB,
+  custom JSONB DEFAULT '[]'::jsonb,
 
   owner_id INT,
 

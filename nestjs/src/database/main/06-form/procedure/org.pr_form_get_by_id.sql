@@ -14,7 +14,7 @@ $BODY$
 
     DROP TABLE IF EXISTS FGBI_form_field CASCADE;
     CREATE TEMP TABLE FGBI_form_field AS
-    SELECT * FROM org.fn_form_get_field(p_form_id);
+    SELECT * FROM org.fn_form_get_field(p_form_id, null, null);
 
     SELECT json_agg(field)::jsonb
     INTO form_field_data

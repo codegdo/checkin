@@ -1,5 +1,5 @@
--- CREATE TABLE COMPONENT_TYPE
-CREATE TABLE IF NOT EXISTS dbo.component_type (
+-- CREATE TABLE COMPONENT
+CREATE TABLE IF NOT EXISTS org.component (
   id SERIAL,
   name VARCHAR(255),
 
@@ -17,8 +17,7 @@ CREATE TABLE IF NOT EXISTS dbo.component_type (
   FOREIGN KEY(form_type_id) REFERENCES dbo.form_type(id) ON DELETE SET NULL
 );
 
-
 INSERT
-INTO dbo.component_type (id, name, form_type_id)
+INTO org.component (id, name, form_type_id)
 VALUES
 (1, 'user_group_grid', 2);

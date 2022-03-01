@@ -1,5 +1,9 @@
 -- CREATE FUNCTION FN_FORM_GET_DATA_FOR_USER
-CREATE OR REPLACE FUNCTION org.fn_form_get_data_for_user(p_user_id int, p_form_id varchar)
+CREATE OR REPLACE FUNCTION org.fn_form_get_data_for_user(
+  p_form_id varchar,
+  p_user_id int,
+  p_biz_id int
+)
 RETURNS TABLE(
   id int,
   value text
@@ -65,22 +69,22 @@ $BODY$
     DROP TABLE IF EXISTS FGDFU_form_field CASCADE;
     CREATE TEMP TABLE FGDFU_form_field AS
     SELECT
-      row_number() over () as row_id, *
+      row_number() over () as row_num, *
     FROM (
       SELECT
         field_id,
         field_map,
         field_lookup
-      FROM org.fn_form_get_field(user_form_id)
+      FROM org.fn_form_get_field(user_form_id, p_user_id, p_biz_id)
       UNION
       SELECT
         field_id,
         field_map,
         field_lookup
-      FROM org.fn_form_get_component(user_form_id)
+      FROM org.fn_form_get_component(user_form_id, p_user_id, p_biz_id)
     ) fc;
 
-    SELECT max(ff.row_id)
+    SELECT max(ff.row_num)
     INTO _max
     FROM FGDFU_form_field ff;
 
@@ -90,7 +94,7 @@ $BODY$
       SELECT field_id, field_map
       INTO eval_id, map
       FROM FGDFU_form_field ff
-      WHERE ff.row_id = _min;
+      WHERE ff.row_num = _min;
 
       map_table := split_part(map, '.', 2);
       map_column := split_part(map, '.', 3);
@@ -122,6 +126,6 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-SELECT * FROM org.fn_form_get_data_for_user('1', '3');
+SELECT * FROM org.fn_form_get_data_for_user('3', 1, 1);
 
 DROP FUNCTION IF EXISTS org.fn_form_get_data_for_user;

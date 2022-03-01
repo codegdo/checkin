@@ -1,7 +1,11 @@
 -- CREATE FUNCTION FN_FORM_GET_COMPONENT
-CREATE OR REPLACE FUNCTION org.fn_form_get_component(p_form_id varchar)
+CREATE OR REPLACE FUNCTION org.fn_form_get_component(
+  p_form_id varchar,
+  p_user_id int,
+  p_biz_id int
+)
 RETURNS TABLE(
-  row_id bigint,
+  row_num bigint,
   form_id int,
   form_name varchar,
   form_label varchar,
@@ -45,7 +49,7 @@ $BODY$
     DROP TABLE IF EXISTS FGC_form_field CASCADE;
     CREATE TEMP TABLE FGC_form_field AS
     SELECT
-      row_number() over () as row_id,
+      row_number() over () as row_num,
       f.id f_id,
       f.name f_name,
       f.label f_label,
@@ -53,21 +57,21 @@ $BODY$
 
       fld.id fld_id,
       fld.name fld_name,
-      cf.label fld_label,
-      cf.description fld_description,
+      fc.label fld_label,
+      fc.description fld_description,
       fld.type fld_type,
       fld.role fld_role,
       fld.data fld_data,
       fld.value fld_value,
       fld.map fld_map,
       fld.lookup fld_lookup,
-      cf.position fld_position,
-      cf.parent_id fld_parent_id, --int
+      fc.position fld_position,
+      fc.parent_id fld_parent_id, --int
       --is_required
       CASE WHEN fld.is_required = true
         THEN true
       ELSE
-        CASE WHEN cf.is_required = true
+        CASE WHEN fc.is_required = true
           THEN true
         ELSE
           false
@@ -75,22 +79,22 @@ $BODY$
       END AS fld_is_required
     --
     FROM org.form f
-    INNER JOIN org.component_field cf ON cf.form_id = f.id
-    LEFT JOIN org.field fld ON fld.id = cf.field_id
+    INNER JOIN org.form_component fc ON fc.form_id = f.id
+    LEFT JOIN org.field fld ON fld.id = fc.field_id
     WHERE f.id = _id OR f.name = _name
-    ORDER BY cf.position;
+    ORDER BY fc.position;
 
     DROP TABLE IF EXISTS FGC_lookup CASCADE;
     CREATE TEMP TABLE FGC_lookup AS
     SELECT
-      row_number() over () as row_id,
+      row_number() over () as row_num,
       ff.fld_id,
       ff.fld_lookup
       --tff.has_dependent
     FROM FGC_form_field ff
     WHERE ff.fld_lookup IS NOT NULL;
 
-    SELECT max(l.row_id)
+    SELECT max(l.row_num)
     INTO max_id
     FROM FGC_lookup l;
 
@@ -99,9 +103,9 @@ $BODY$
       SELECT l.fld_id, l.fld_lookup
       INTO form_field_id, form_field_lookup
       FROM FGC_lookup l
-      WHERE l.row_id = min_id;
+      WHERE l.row_num = min_id;
 
-      SELECT dbo.fn_lookup_get_value(form_field_lookup) INTO lookup_data;
+      SELECT dbo.fn_lookup_get_value(form_field_lookup, p_user_id, p_biz_id) INTO lookup_data;
 
       UPDATE FGC_form_field ff
       SET fld_data = lookup_data
@@ -117,6 +121,6 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-SELECT * FROM org.fn_form_get_component('user_add');
+SELECT * FROM org.fn_form_get_component('user_add', 1, 1);
 
 DROP FUNCTION IF EXISTS org.fn_form_get_component;

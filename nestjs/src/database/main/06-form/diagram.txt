@@ -44,15 +44,15 @@ table form_field {
 ref: form_field.form_id > form.id
 ref: form_field.field_id > field.id
 
-table component_type {
+table component {
   id int
   name varchar
   form_type_id int
 }
 
-ref: component_type.form_type_id > form_type.id
+ref: component.form_type_id > form_type.id
 
-table component_field {
+table form_component {
   form_id int
   field_id int
   parent_id int
@@ -60,12 +60,12 @@ table component_field {
   is_required boolean
 }
 
-ref: component_field.form_id > form.id
-ref: component_field.field_id > field.id
+ref: form_component.form_id > form.id
+ref: form_component.field_id > field.id
 
 table field {
   id int
-  component_type_id int
+  component_id int
   object_id int
   org_id int
   parent_id int
@@ -82,5 +82,5 @@ table field {
   is_required boolean
 }
 
-ref: field.component_type_id > component_type.id
+ref: field.component_id > component.id
 ref: field.object_id > object.id

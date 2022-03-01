@@ -61,9 +61,15 @@ export class UserLoginDto {
 }
 
 export class UserFormDto {
+  @IsNumberString()
+  formId: number | string;
+
   @IsNumber()
   userId: number;
 
-  @IsNumberString()
-  formId: number | string;
+  @IsNumber()
+  loginId: number;
+
+  @IsNumber()
+  bizId: number;
 }

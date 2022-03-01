@@ -1,7 +1,11 @@
 -- CREATE FUNCTION FN_FORM_GET_FIELD
-CREATE OR REPLACE FUNCTION org.fn_form_get_field(p_form_id varchar)
+CREATE OR REPLACE FUNCTION org.fn_form_get_field(
+  p_form_id varchar,
+  p_user_id int,
+  p_biz_id int
+)
 RETURNS TABLE(
-  row_id bigint,
+  row_num bigint,
   form_id int,
   form_name varchar,
   form_label varchar,
@@ -45,7 +49,7 @@ $BODY$
     DROP TABLE IF EXISTS FGF_form_field CASCADE;
     CREATE TEMP TABLE FGF_form_field AS
     SELECT
-      row_number() over () as row_id,
+      row_number() over () as row_num,
       f.id f_id,
       f.name f_name,
       f.label f_label,
@@ -83,7 +87,7 @@ $BODY$
     DROP TABLE IF EXISTS FGF_lookup CASCADE;
     CREATE TEMP TABLE FGF_lookup AS
     SELECT
-      row_number() over () as row_id,
+      row_number() over () as row_num,
       ff.fld_id,
       ff.fld_lookup
       --ff.is_dependent
@@ -91,7 +95,7 @@ $BODY$
     FROM FGF_form_field ff
     WHERE ff.fld_lookup IS NOT NULL;
 
-    SELECT max(l.row_id)
+    SELECT max(l.row_num)
     INTO max_id
     FROM FGF_lookup l;
 
@@ -100,10 +104,10 @@ $BODY$
       SELECT l.fld_id, l.fld_lookup
       INTO form_field_id, form_field_lookup
       FROM FGF_lookup l
-      WHERE l.row_id = min_id;
+      WHERE l.row_num = min_id;
 
       --CASE LOOKUP
-      SELECT dbo.fn_lookup_get_value(form_field_lookup) INTO lookup_data;
+      SELECT dbo.fn_lookup_get_value(form_field_lookup, p_user_id, p_biz_id) INTO lookup_data;
 
       UPDATE FGF_form_field ff
       SET fld_data = lookup_data
@@ -119,6 +123,6 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-SELECT * FROM org.fn_form_get_field('1');
+SELECT * FROM org.fn_form_get_field('1', 1, 1);
 
 DROP FUNCTION IF EXISTS org.fn_form_get_field;

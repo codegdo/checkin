@@ -14,7 +14,7 @@ export const InputRadio: React.FC = (): JSX.Element => {
   return (
     <>
       {
-        data.map(({ key, value: text }: any) => {
+        data && data.map(({ key, value: text }: any) => {
           return (
             <label key={key}>
               <input type="radio" name={name} value={key} checked={key == value} onChange={handleChange} />
