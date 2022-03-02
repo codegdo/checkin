@@ -5,7 +5,7 @@ export interface SessionState {
   isLogin?: boolean;
   user?: { [x: string]: string | number | boolean } | null;
 
-  storeId?: number | null;
-  bizId?: number | null;
+  locationId?: number | null;
+  orgId?: number | null;
   accessToken?: string | null;
 }

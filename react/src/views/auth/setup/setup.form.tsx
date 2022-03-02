@@ -29,11 +29,11 @@ const SetupForm: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     if (submit == 'success' && submitData) {
-      const { user, bizId, accessToken } = submitData;
+      const { user, orgId, accessToken } = submitData;
       updateSession({
         isLogin: true,
         user,
-        bizId,
+        orgId,
         accessToken
       });
     }

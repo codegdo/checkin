@@ -15,7 +15,7 @@ export const InputSelect: React.FC = (): JSX.Element => {
     <span>
       <select defaultValue={value} onChange={handleChange} >
         {
-          data.map(({ key, value }: any, i: number) => {
+          data && data.map(({ key, value }: any, i: number) => {
             return <option key={i} value={key}>{value}</option>
           })
         }
