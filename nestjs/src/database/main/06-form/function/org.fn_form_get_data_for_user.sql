@@ -76,13 +76,13 @@ $BODY$
         field_id,
         field_map,
         field_lookup
-      FROM org.fn_form_get_field(user_form_id, null, p_login_id, p_biz_id)
+      FROM org.fn_form_get_field(user_form_id, p_login_id, p_biz_id)
       UNION
       SELECT
         field_id,
         field_map,
         field_lookup
-      FROM org.fn_form_get_field_component(user_form_id, null, p_login_id, p_biz_id)
+      FROM org.fn_form_get_field_component(user_form_id, p_login_id, p_biz_id)
     ) ff;
 
     SELECT max(ff.row_num)

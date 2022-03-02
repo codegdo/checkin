@@ -1,7 +1,6 @@
 -- CREATE FUNCTION FN_FORM_GET_FIELD_COMPONENT
 CREATE OR REPLACE FUNCTION org.fn_form_get_field_component(
   p_form_id varchar,
-  p_filter_id int,
   p_login_id int,
   p_biz_id int
 )
@@ -31,9 +30,6 @@ RETURNS TABLE(
 AS
 $BODY$
   DECLARE
-    filter_id int := 0;
-    filter_name varchar := '';
-
     rec_id int;
     rec_lookup varchar;
     rec_is_dependent boolean;
@@ -43,12 +39,6 @@ $BODY$
     row_max int;
     row_min int := 1;
   BEGIN
-
-    IF (SELECT p_form_id ~ '^\d+$') THEN
-      filter_id := p_form_id::int;
-    ELSE
-      filter_name := p_form_id::varchar;
-    END IF;
 
     DROP TABLE IF EXISTS FGC_form_field CASCADE;
     CREATE TEMP TABLE FGC_form_field AS
@@ -87,7 +77,7 @@ $BODY$
     FROM org.form f
     INNER JOIN org.form_component fc ON fc.form_id = f.id
     LEFT JOIN org.field fld ON fld.id = fc.field_id
-    WHERE f.id = filter_id OR f.name = filter_name
+    WHERE f.id = p_form_id
     ORDER BY fc.position;
 
     DROP TABLE IF EXISTS FGC_lookup CASCADE;

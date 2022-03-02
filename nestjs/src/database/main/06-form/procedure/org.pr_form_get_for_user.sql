@@ -9,47 +9,49 @@ CREATE OR REPLACE PROCEDURE org.pr_form_get_for_user(
 AS
 $BODY$
   DECLARE
-    formname varchar;
+    form_id int;
+    form_name varchar;
     form_field jsonb;
 
-    filter_id int := 0;
-    filter_name varchar := '';
+    filter_form_id int := 0;
+    filter_form_name varchar := '';
     
     row_max int;
     row_min int := 1;
   BEGIN
-
+    --SET
     IF (SELECT p_form_id ~ '^\d+$') THEN
-      filter_id := p_form_id::int;
+      filter_form_id := p_form_id::int;
     ELSE
-      filter_name := p_form_id::varchar;
+      filter_form_name := p_form_id::varchar;
     END IF;
 
-    --SET form_name
-    SELECT f.name
-    INTO formname
+    SELECT f.id, f.name
+    INTO form_id, form_name
     FROM org.form f
-    WHERE f.id = filter_id OR f.name = filter_name;
+    WHERE f.id = filter_form_id OR f.name = filter_form_name;
 
-    IF formname IS NOT NULL THEN
-
+    IF form_id IS NOT NULL THEN
+      --TEMP TABLE
       DROP TABLE IF EXISTS FGFU_form_field CASCADE;
       CREATE TEMP TABLE FGFU_form_field AS
-      SELECT * FROM org.fn_form_get_field(p_form_id, p_filter_id, p_login_id, p_biz_id);
+      SELECT * FROM org.fn_form_get_field(form_id, p_filter_id, p_login_id, p_biz_id);
 
       DROP TABLE IF EXISTS FGFU_form_component CASCADE;
       CREATE TEMP TABLE FGFU_form_component AS
-      SELECT * FROM org.fn_form_get_field_component(p_form_id, p_filter_id, p_login_id, p_biz_id);
+      SELECT * FROM org.fn_form_get_field_component(form_id, p_filter_id, p_login_id, p_biz_id);
 
+      --WITH DATA
       IF p_filter_id > 0 THEN
 
-        --
         DROP TABLE IF EXISTS FGFU_eval CASCADE;
         CREATE TEMP TABLE FGFU_eval(id int, value text);
         
-        INSERT INTO FGFU_eval(id, value)
-        SELECT id, value 
-        FROM org.fn_form_get_data_for_user(p_form_id, p_filter_id, p_login_id, p_biz_id);
+        IF form_name = 'user_form' THEN
+          INSERT INTO FGFU_eval(id, value)
+          SELECT id, value 
+          FROM org.fn_form_get_data_for_user(p_form_id, p_login_id, p_biz_id);
+        END IF;
 
         --SET FIELD VALUE
         SELECT max(ff.row_num)
@@ -84,27 +86,27 @@ $BODY$
 
       --MAP COMPONENT FIELD TO FIELD
 
-
+      --MAP FIELD TO FORM
       SELECT json_agg(field)::jsonb
       INTO form_field
       FROM (
         SELECT
-          field_id id,
-          field_name name,
-          field_label label,
-          field_description description,
-          field_type type,
-          field_role role,
-          field_data data,
-          field_value value,
-          field_lookup lookup,
-          field_map map,
-          field_position position,
-          field_parent_id "parentId",
-          field_is_required "isRequired",
-          field_has_dependent "hasDependent",
-          field_is_dependent "isDependent"
-        FROM FGFU_form_field
+          ff.field_id id,
+          ff.field_name name,
+          ff.field_label label,
+          ff.field_description description,
+          ff.field_type type,
+          ff.field_role role,
+          ff.field_data data,
+          ff.field_value value,
+          ff.field_lookup lookup,
+          ff.field_map map,
+          ff.field_position position,
+          ff.field_parent_id "parentId",
+          ff.field_is_required "isRequired",
+          ff.field_has_dependent "hasDependent",
+          ff.field_is_dependent "isDependent"
+        FROM FGFU_form_field ff
         ORDER BY field_position
       ) field;
 
@@ -112,12 +114,12 @@ $BODY$
       INTO data
       FROM (
         SELECT DISTINCT
-        form_id id,
-        form_name name,
-        form_label label,
-        form_data data,
-        form_field fields
-        FROM FGFU_form_field
+        f.form_id id,
+        f.form_name name,
+        f.form_label label,
+        f.form_data data,
+        f.form_field fields
+        FROM FGFU_form_field f
       ) form;
 
     END IF;
