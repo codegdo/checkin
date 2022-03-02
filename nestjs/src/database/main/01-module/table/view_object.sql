@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS dbo.view_object (
   view_id INT NOT NULL,
   object_id INT NOT NULL,
-  biz_id INT,
+  org_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY(view_id, object_id),
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS dbo.view_object (
 CREATE INDEX idx_view_object ON dbo.view_object(view_id, object_id);
 
 INSERT
-INTO dbo.view_object(view_id, object_id, biz_id)
+INTO dbo.view_object(view_id, object_id, org_id)
 VALUES
 --users
 ('200', '1', null),
@@ -26,7 +26,7 @@ VALUES
 ('203', '5', null),
 --language
 ('204', '6', null),
---store
+--location
 ('205', '7', null),
 --service
 ('206', '8', null),

@@ -418,3 +418,7 @@
 {"level":"error","message":"column reference \"form_name\" is ambiguous"}
 {"level":"error","message":"column reference \"form_name\" is ambiguous"}
 {"level":"error","message":"column reference \"form_name\" is ambiguous"}
+{"level":"error","message":"column \"p_org_id\" does not exist"}
+{"level":"error","message":"procedure sec.pr_user_setup(unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"invalid input syntax for type integer: \"[{\"key\":\"17\",\"value\":\"G Nail\"},{\"key\":\"26\",\"value\":\"gnail\"},{\"key\":\"27\",\"value\":\"1\"},{\"key\":\"28\",\"value\":\"G Nail Mira Mesa\"},{\"key\":\"29\",\"value\":\"12345 Auto Fill\"},{\"key\":\"30\",\"value\":\"USA\"},{\"key\":\"31\",\"value\":\"CA\"},{\"key\":\"32\",\"value\":\"San Diego\"},{\"key\":\"33\",\"value\":\"92126\"}]\""}
+{"level":"error","message":"column \"business_type_id\" is of type integer but expression is of type character varying"}

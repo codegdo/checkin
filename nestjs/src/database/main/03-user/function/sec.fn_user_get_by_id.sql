@@ -4,7 +4,7 @@ RETURNS TABLE (
   "id" int,
   "username" varchar,
   "password" varchar,
-  "bizId" int,
+  "orgId" int,
   "isActive" boolean,
 
   "firstName" varchar,
@@ -35,7 +35,7 @@ $BODY$
         u.id,
         u.username,
         u.password,
-        u.biz_id,
+        u.org_id,
         u.is_active,
 
         c.first_name,

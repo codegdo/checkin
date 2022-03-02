@@ -1,5 +1,5 @@
--- CREATE TABLE STORE
-CREATE TABLE IF NOT EXISTS org.store (
+-- CREATE TABLE LOCATION
+CREATE TABLE IF NOT EXISTS org.location (
   id SERIAL NOT NULL,
 
   name VARCHAR(95),
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS org.store (
 
   data JSONB,
 
-  biz_id INT,
+  org_id INT,
 
   is_active BOOLEAN DEFAULT TRUE,
 

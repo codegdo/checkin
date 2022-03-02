@@ -1,9 +1,9 @@
 -- CREATE FUNCTION FN_FORM_GET_DATA_FOR_USER
 CREATE OR REPLACE FUNCTION org.fn_form_get_data_for_user(
-  p_form_id varchar,
+  p_form_id int,
   p_filter_id int,
   p_login_id int,
-  p_biz_id int
+  p_org_id int
 )
 RETURNS TABLE(
   id int,
@@ -11,7 +11,7 @@ RETURNS TABLE(
 ) AS
 $BODY$
   DECLARE
-    user_form_id varchar;
+    user_form_id int;
     user_contact_id int;
     user_group_id int;
 
@@ -76,13 +76,13 @@ $BODY$
         field_id,
         field_map,
         field_lookup
-      FROM org.fn_form_get_field(user_form_id, p_login_id, p_biz_id)
+      FROM org.fn_form_get_field(user_form_id, null, p_login_id, p_org_id)
       UNION
       SELECT
         field_id,
         field_map,
         field_lookup
-      FROM org.fn_form_get_field_component(user_form_id, p_login_id, p_biz_id)
+      FROM org.fn_form_get_field_component(user_form_id, null, p_login_id, p_org_id)
     ) ff;
 
     SELECT max(ff.row_num)

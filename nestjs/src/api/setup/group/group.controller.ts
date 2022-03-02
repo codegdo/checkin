@@ -11,7 +11,7 @@ export class GroupController {
     @Param('groupId') groupId: number,
     @Query('formId') formId: number | string,
   ) {
-    const { id: loginId, bizId } = user;
+    const { id: loginId, orgId } = user;
 
     if (formId) {
 
@@ -20,7 +20,7 @@ export class GroupController {
         groupId = 0;
       }
 
-      //return this.userService.getForm({ formId, groupId, loginId, bizId });
+      //return this.userService.getForm({ formId, groupId, loginId, orgId });
       return { formId };
     }
 

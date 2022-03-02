@@ -63,17 +63,17 @@ export class AuthController {
     console.log(data);
 
     const { user, policy, nav } = data;
-    const { password, bizId, ...rest } = user;
-    const accessToken = this.jwtService.sign({ bizId });
+    const { password, orgId, ...rest } = user;
+    const accessToken = this.jwtService.sign({ orgId });
 
-    if (bizId) {
+    if (orgId) {
       session.data = { user, policy, nav };
 
       return {
         user: { ...rest },
         policy,
         nav,
-        bizId,
+        orgId,
         sid: session.id,
         accessToken,
       };
@@ -105,15 +105,15 @@ export class AuthController {
   @Public()
   @Post('setup')
   async setup(@Session() session: any, @Body() body: UserSetupDto) {
-    const { user, stores } = await this.authService.setup(body);
-    const { password, bizId, ...rest } = user;
-    const accessToken = this.jwtService.sign({ bizId });
+    const { user, locations } = await this.authService.setup(body);
+    const { password, orgId, ...rest } = user;
+    const accessToken = this.jwtService.sign({ orgId });
 
     session.user = user;
 
     return {
       user: { ...rest },
-      bizId,
+      orgId,
       sid: session.id,
       accessToken,
     };

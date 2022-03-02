@@ -18,5 +18,5 @@ CREATE TABLE IF NOT EXISTS dbo.form_type (
 INSERT
 INTO dbo.form_type (id, name, is_custom)
 VALUES
-('1', 'user_signup', '0'),
-('2', 'user_add', '0');
+('1', 'auth_signup', '0'),
+('2', 'user_form', '0');

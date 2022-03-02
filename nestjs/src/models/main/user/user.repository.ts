@@ -52,11 +52,11 @@ export class UserRepository extends Repository<User> {
   }
 
   async setupUser(dto: UserSetupDto): Promise<UserSetupData> {
-    const { loginId, data } = dto;
+    const { data, loginId } = dto;
 
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_setup($1, $2, $3, $4)`,
-      [loginId, data, null, null],
+      `CALL sec.pr_user_setup($1, $2, $3, $4, $5)`,
+      [data, loginId, null, null, null],
     );
 
     return result;

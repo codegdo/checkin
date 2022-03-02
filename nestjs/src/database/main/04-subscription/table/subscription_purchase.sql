@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS org.subscription_purchase (
   id SERIAL,
   subscription_id INT NOT NULL,
-  biz_id INT NOT NULL,
+  org_id INT NOT NULL,
 
   payment_method VARCHAR(25),
   status VARCHAR(45),

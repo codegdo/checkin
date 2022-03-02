@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS dbo.form_type_object (
   form_type_id INT NOT NULL,
   object_id INT NOT NULL,
-  biz_id INT,
+  org_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY(form_type_id, object_id),
@@ -13,13 +13,14 @@ CREATE TABLE IF NOT EXISTS dbo.form_type_object (
 CREATE INDEX idx_form_type_object  ON dbo.form_type_object (form_type_id, object_id);
 
 INSERT
-INTO dbo.form_type_object(form_type_id, object_id, biz_id)
+INTO dbo.form_type_object(form_type_id, object_id, org_id)
 VALUES
 --auth_signup
 ('1', '1', null),
 ('1', '2', null),
 ('1', '6', null),
 ('1', '15', null),
---user_add
+--user_form
 ('2', '1', null),
-('2', '4', null);
+('2', '4', null),
+('2', '7', null);

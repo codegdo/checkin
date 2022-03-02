@@ -35,7 +35,7 @@ export class UserController {
     @Query('formId') formId: number | string,
   ) {
 
-    const { id: loginId, bizId } = user;
+    const { id: loginId, orgId } = user;
 
     if (formId) {
 
@@ -44,7 +44,7 @@ export class UserController {
         userId = 0;
       }
 
-      return this.userService.getForm({ formId, userId, loginId, bizId });
+      return this.userService.getForm({ formId, filterId: userId, loginId, orgId });
     }
 
     // getUser

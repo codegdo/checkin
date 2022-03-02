@@ -3,25 +3,28 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_setup(
   p_login_id int,
   p_form_data json,
   OUT "user" json,
-  OUT "stores" json
+  OUT "locations" json,
+  OUT "modules" json
 )
 AS
 $BODY$
   DECLARE
     login_username varchar;
-    store_territory_id int;
-    user_biz_id int;
+    location_territory_id int;
+    user_org_id int;
+    user_group_id int;
+    user_group_type varchar;
   BEGIN
 
-    -- JSON form_data to table tmp_form_data
-    DROP TABLE IF EXISTS tmp_form_data CASCADE;
-    CREATE TEMP TABLE tmp_form_data AS
+    -- JSON form_data to table USU_form_data
+    DROP TABLE IF EXISTS USU_form_data CASCADE;
+    CREATE TEMP TABLE USU_form_data AS
     SELECT key AS id, value FROM json_to_recordset(p_form_data)
     AS rec ("key" int, "value" text);
 
-    -- CREATE a table tmp_data
-    DROP TABLE IF EXISTS tmp_data CASCADE;
-    CREATE TEMP TABLE tmp_data(
+    -- CREATE a table USU_data
+    DROP TABLE IF EXISTS USU_data CASCADE;
+    CREATE TEMP TABLE USU_data(
       id int,
       value varchar,
       map varchar,
@@ -29,37 +32,37 @@ $BODY$
     );
 
     --INSERT id and value
-    INSERT INTO tmp_data(id, value)
-    SELECT * FROM tmp_form_data;
+    INSERT INTO USU_data(id, value)
+    SELECT * FROM USU_form_data;
 
     --UPDATE map and lookup
-    UPDATE tmp_data
+    UPDATE USU_data
     SET map = f.map,
-        lookup = f.lookup
+      lookup = f.lookup
     FROM org.field f
-    WHERE tmp_data.id = f.id;
+    WHERE USU_data.id = f.id;
 
     --SET login username
     SELECT username
     INTO login_username
     FROM sec.user
-    WHERE id = p_login_id AND biz_id IS NULL;
+    WHERE id = p_login_id AND org_id IS NULL;
 
-    --SET store territory id
+    --SET location territory id
     SELECT id
-    INTO store_territory_id
+    INTO location_territory_id
     FROM(
       SELECT id
       FROM dbo.territory
       WHERE country_code = (
         SELECT DISTINCT value
-        FROM tmp_data
-        WHERE map = 'org.store.country'
+        FROM USU_data
+        WHERE map = 'org.location.country'
       )
       AND state_code = (
         SELECT DISTINCT value
-        FROM tmp_data
-        WHERE map = 'org.store.state'
+        FROM USU_data
+        WHERE map = 'org.location.state'
       )
     ) t;
 
@@ -67,45 +70,47 @@ $BODY$
     IF login_username IS NOT NULL THEN
 
       --INSERT
-      WITH b AS (
-        INSERT INTO org.business(
+      WITH o AS (
+        INSERT INTO sec.organization(
           name,
+          business_type_id,
           subdomain,
           owner_id,
           created_by
         )
         VALUES(
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.business.name'),
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.business.subdomain'),
+          (SELECT DISTINCT value FROM USU_data WHERE map = 'sec.organization.name'),
+          (SELECT DISTINCT value FROM USU_data WHERE map = 'sec.organization.business_type_id')::int,
+          (SELECT DISTINCT value FROM USU_data WHERE map = 'sec.organization.subdomain'),
           p_login_id,
           login_username
         )
         RETURNING id
       ), s AS (
-        INSERT INTO org.store(
+        INSERT INTO org.location(
           name,
           street_address,
           territory_id,
           city,
           postal_code,
-          biz_id,
+          org_id,
           created_by
         )
         VALUES(
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.store.name'),
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.store.street_address'),
-          store_territory_id,
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.store.city'),
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.store.postal_code'),
-          (SELECT id FROM b),
+          (SELECT DISTINCT value FROM USU_data WHERE map = 'org.location.name'),
+          (SELECT DISTINCT value FROM USU_data WHERE map = 'org.location.street_address'),
+          location_territory_id,
+          (SELECT DISTINCT value FROM USU_data WHERE map = 'org.location.city'),
+          (SELECT DISTINCT value FROM USU_data WHERE map = 'org.location.postal_code'),
+          (SELECT id FROM o),
           login_username
         )
         RETURNING id
       ), u AS (
         UPDATE sec.user
-        SET biz_id = (SELECT id FROM b)
+        SET org_id = (SELECT id FROM o)
         WHERE id = p_login_id
-        RETURNING id, username, contact_id, biz_id, group_id, is_active
+        RETURNING id, username, contact_id, org_id, group_id, is_active
       )
       SELECT json_agg(r)::json ->> 0
       INTO "user"
@@ -113,7 +118,7 @@ $BODY$
         SELECT
           u.id "id",
           u.username "username",
-          u.biz_id "bizId",
+          u.org_id "orgId",
           u.is_active,
           
           c.first_name "firstName",
@@ -130,17 +135,26 @@ $BODY$
         LEFT JOIN org.contact c ON c.id = u.contact_id
       ) r;
 
-      --SET user_biz_id
-      SELECT "user" ->> 'bizId' INTO user_biz_id;
+      --SET user_org_id
+      SELECT "user" ->> 'orgId' INTO user_org_id;
+      SELECT "user" ->> 'groupType' INTO user_group_type;
+      SELECT "user" ->> 'groupId' INTO user_group_id;
 
       SELECT json_agg(l)::json
-      INTO "stores"
+      INTO "locations"
       FROM (
         SELECT id, name 
-        FROM org.store
-        WHERE biz_id = user_biz_id
+        FROM org.location
+        WHERE org_id = user_org_id
         AND is_active IS NOT NULL
       ) l;
+
+      SELECT json_agg(m.*)::json
+      INTO "modules"
+      FROM (
+        SELECT * FROM dbo.fn_module_get_by_group_type(user_group_type)
+      ) m;
+
     ELSE
       RAISE EXCEPTION no_data_found;
     END IF;
@@ -150,4 +164,4 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-DROP PROCEDURE IF EXISTS sec.pr_user_setup(int, json, json, json);
+DROP PROCEDURE IF EXISTS sec.pr_user_setup(int, json, json, json, json);

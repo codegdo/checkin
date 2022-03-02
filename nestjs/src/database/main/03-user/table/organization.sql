@@ -1,5 +1,5 @@
--- CREATE TABLE BUSINESS
-CREATE TABLE IF NOT EXISTS org.business (
+-- CREATE TABLE ORGANIZATION
+CREATE TABLE IF NOT EXISTS sec.organization (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
 
@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS org.business (
 
   data JSONB,
 
+  business_type_id INT,
   owner_id INT,
 
   is_active BOOLEAN DEFAULT TRUE,
@@ -26,5 +27,7 @@ CREATE TABLE IF NOT EXISTS org.business (
   --
   PRIMARY KEY(id),
   UNIQUE(subdomain, owner_id),
+  FOREIGN KEY(business_type_id) REFERENCES dbo.business_type(id),
   FOREIGN KEY(owner_id) REFERENCES sec.user(id)
+  
 );

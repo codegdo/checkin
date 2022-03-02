@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS sec.policy (
   
   version_id INT,
   group_type_id INT,
-  biz_id INT,
+  org_id INT,
 
   is_active BOOLEAN DEFAULT TRUE,
 

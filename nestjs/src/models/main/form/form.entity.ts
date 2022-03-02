@@ -30,8 +30,8 @@ export class Form extends BaseEntity {
   @JoinColumn({ name: 'form_type_id' })
   formType: FormType;
 
-  @Column({ name: 'biz_id' })
-  bizId: number;
+  @Column({ name: 'org_id' })
+  orgId: number;
 
   @Column({ name: 'is_active' })
   isActive: boolean;

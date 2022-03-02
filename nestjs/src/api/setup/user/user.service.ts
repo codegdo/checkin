@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/models/main/user/user.entity';
 import { UserRepository, FormRepository } from 'src/models/main/repositories';
 import { ErrorService } from 'src/common/modules';
-import { UserFormDto } from 'src/models/main/dtos';
+import { FormDto } from 'src/models/main/dtos';
 
 @Injectable()
 export class UserService {
@@ -56,9 +56,9 @@ export class UserService {
 
   async delete(id) { }
 
-  async getForm(dto: UserFormDto) {
+  async getForm(dto: FormDto) {
     try {
-      return this.formRepository.getFormForUser(dto);
+      return this.formRepository.getForm(dto);
     } catch (e) {
       this.errorService.handleError(e);
     }

@@ -3,8 +3,8 @@ CREATE TABLE IF NOT EXISTS org.subscription_audit (
   id SERIAL NOT NULL,
   subscription_id INT,
   subscription_plan_id INT,
-  workspace_id INT,
-  biz_id INT,
+  store_id INT,
+  org_id INT,
   owner_id INT,
   
   is_active BOOLEAN,

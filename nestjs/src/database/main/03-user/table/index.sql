@@ -33,6 +33,26 @@ INTO dbo.policy_version(id, name)
 VALUES
 ('1', '1.0');
 
+-- CREATE TABLE BUSINESS TYPE
+CREATE TABLE IF NOT EXISTS dbo.business_type (
+  id SERIAL NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  category VARCHAR(255),
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  --
+  PRIMARY KEY(id)
+);
+
+INSERT
+INTO dbo.business_type(id, name, category)
+VALUES
+('1', 'Nail Salon', 'Service'),
+('2', 'Restaurant', 'Service'),
+--
+('1000', '--', 'Service');
+
 -- CREATE TABLE GROUP
 CREATE TABLE IF NOT EXISTS sec.group (
   id SERIAL NOT NULL,
@@ -41,7 +61,7 @@ CREATE TABLE IF NOT EXISTS sec.group (
   group_level INT DEFAULT 1,
 
   group_type_id INT,
-  biz_id INT,
+  org_id INT,
 
   is_owner BOOLEAN DEFAULT FALSE,
   is_active BOOLEAN DEFAULT TRUE,
@@ -56,7 +76,7 @@ CREATE TABLE IF NOT EXISTS sec.group (
 );
 
 INSERT
-INTO sec.group(name, description, is_owner, biz_id, group_type_id)
+INTO sec.group(name, description, is_owner, org_id, group_type_id)
 VALUES
 ('System Group', null, '0', null, '1'),
 ('Owner Group', null, '1', null, '2');
@@ -71,7 +91,7 @@ CREATE TABLE IF NOT EXISTS sec.policy (
   
   version_id INT,
   group_type_id INT,
-  biz_id INT,
+  org_id INT,
 
   is_active BOOLEAN DEFAULT TRUE,
 
@@ -130,7 +150,7 @@ CREATE TABLE IF NOT EXISTS sec.user (
   contact_id INT,
   group_id INT,
   form_id INT,
-  biz_id INT,
+  org_id INT,
 
   is_new_password BOOLEAN DEFAULT FALSE,
   is_active BOOLEAN DEFAULT FALSE,
@@ -165,8 +185,8 @@ CREATE TABLE IF NOT EXISTS sec.client (
   UNIQUE(phone_number)
 );
 
--- CREATE TABLE STORE
-CREATE TABLE IF NOT EXISTS org.store (
+-- CREATE TABLE LOCATION
+CREATE TABLE IF NOT EXISTS org.location (
   id SERIAL NOT NULL,
 
   name VARCHAR(95),
@@ -181,7 +201,7 @@ CREATE TABLE IF NOT EXISTS org.store (
 
   data JSONB,
 
-  biz_id INT,
+  org_id INT,
 
   is_active BOOLEAN DEFAULT TRUE,
 
@@ -194,8 +214,8 @@ CREATE TABLE IF NOT EXISTS org.store (
   FOREIGN KEY(territory_id) REFERENCES dbo.territory(id)
 );
 
--- CREATE TABLE BUSINESS
-CREATE TABLE IF NOT EXISTS org.business (
+-- CREATE TABLE ORGANIZATION
+CREATE TABLE IF NOT EXISTS sec.organization (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
 
@@ -209,8 +229,9 @@ CREATE TABLE IF NOT EXISTS org.business (
   website VARCHAR(45),
   subdomain VARCHAR(45) NOT NULL,
 
-  custom JSONB DEFAULT '[]'::jsonb,
+  data JSONB,
 
+  business_type_id INT,
   owner_id INT,
 
   is_active BOOLEAN DEFAULT TRUE,
@@ -222,14 +243,16 @@ CREATE TABLE IF NOT EXISTS org.business (
   --
   PRIMARY KEY(id),
   UNIQUE(subdomain, owner_id),
+  FOREIGN KEY(business_type_id) REFERENCES dbo.business_type(id),
   FOREIGN KEY(owner_id) REFERENCES sec.user(id)
+  
 );
 
 -- CREATE TABLE GROUP_POLICY
 CREATE TABLE IF NOT EXISTS sec.group_policy (
   group_id INT NOT NULL,
   policy_id INT NOT NULL,
-  biz_id INT,
+  org_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY(group_id, policy_id),
@@ -245,33 +268,33 @@ VALUES
 ('1', '1'),
 ('2', '2');
 
--- CREATE TABLE USER_STORE
-CREATE TABLE IF NOT EXISTS sec.user_store (
+-- CREATE TABLE USER_LOCATION
+CREATE TABLE IF NOT EXISTS sec.user_location (
   user_id INT NOT NULL,
-  store_id INT NOT NULL,
-  biz_id INT,
+  location_id INT NOT NULL,
+  org_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
-  PRIMARY KEY(user_id, store_id),
+  PRIMARY KEY(user_id, location_id),
   FOREIGN KEY(user_id) REFERENCES sec.user(id) ON DELETE SET NULL,
-  FOREIGN KEY(store_id) REFERENCES org.store(id) ON DELETE SET NULL
+  FOREIGN KEY(location_id) REFERENCES org.location(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_user_store ON sec.user_store(user_id, store_id);
+CREATE INDEX idx_user_location ON sec.user_location(user_id, location_id);
 
--- CREATE TABLE CLIENT_STORE
-CREATE TABLE IF NOT EXISTS sec.client_store (
+-- CREATE TABLE CLIENT_LOCATION
+CREATE TABLE IF NOT EXISTS sec.client_location (
   client_id INT NOT NULL,
-  store_id INT NOT NULL,
-  biz_id INT,
+  location_id INT NOT NULL,
+  org_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
-  PRIMARY KEY(client_id, store_id),
+  PRIMARY KEY(client_id, location_id),
   FOREIGN KEY(client_id) REFERENCES sec.client(id) ON DELETE SET NULL,
-  FOREIGN KEY(store_id) REFERENCES org.store(id) ON DELETE SET NULL
+  FOREIGN KEY(location_id) REFERENCES org.location(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_client_store ON sec.client_store(client_id, store_id);
+CREATE INDEX idx_client_location ON sec.client_location(client_id, location_id);
 
 
 -- DROP TABLES
@@ -279,14 +302,14 @@ CREATE INDEX idx_client_store ON sec.client_store(client_id, store_id);
 DROP TABLE IF EXISTS
 dbo.group_type,
 dbo.policy_version,
+dbo.business_type,
 sec.group,
 sec.policy,
 org.contact,
 sec.user,
 sec.client,
-org.store,
-org.business,
+sec.organization,
+org.location,
 sec.group_policy,
-sec.user_store,
-sec.client_store CASCADE;
-
+sec.user_location,
+sec.client_location CASCADE;

@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS sec.permission_level (
   permission_id INT NOT NULL,
   level_id INT NOT NULL,
-  biz_id INT,
+  org_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY(permission_id, level_id),

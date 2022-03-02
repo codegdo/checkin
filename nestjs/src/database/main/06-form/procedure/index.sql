@@ -1,120 +1,67 @@
--- CREATE PROCEDURE PR_FORM_GET_BY_ID
-CREATE OR REPLACE PROCEDURE org.pr_form_get_by_id(
-  p_form_id varchar,
-  OUT data json
-)
-AS
-$BODY$
-  DECLARE
-    form_field_data jsonb;
-  BEGIN
-    --DROP TABLE IF EXISTS tmp_eval CASCADE;
-    --CREATE TEMP TABLE tmp_eval AS
-    --SELECT * FROM org.fn_get_user();
-
-    DROP TABLE IF EXISTS FGBI_form_field CASCADE;
-    CREATE TEMP TABLE FGBI_form_field AS
-    SELECT * FROM org.fn_form_get_field(p_form_id, null, null, null);
-
-    SELECT json_agg(field)::jsonb
-    INTO form_field_data
-    FROM (
-      SELECT
-        field_id id,
-        field_name name,
-        field_label label,
-        field_description description,
-        field_type type,
-        field_role role,
-        field_data data,
-        field_value value,
-        field_lookup lookup,
-        field_map map,
-        field_position position,
-        field_parent_id "parentId",
-        field_is_required "isRequired"
-      FROM FGBI_form_field
-      ORDER BY field_position
-    ) field;
-
-    SELECT json_agg(form)::json
-    INTO data
-    FROM (
-      SELECT DISTINCT
-      form_id id,
-      form_name name,
-      form_label label,
-      form_data data,
-      form_field_data fields
-      FROM FGBI_form_field
-    ) form;
-
-  END;
-$BODY$
-LANGUAGE plpgsql;
-
--- CREATE PROCEDURE PR_FORM_GET_FOR_USER
-CREATE OR REPLACE PROCEDURE org.pr_form_get_for_user(
+-- CREATE PROCEDURE PR_FORM_GET
+CREATE OR REPLACE PROCEDURE org.pr_form_get(
   p_form_id varchar,
   p_filter_id int,
   p_login_id int,
-  p_biz_id int,
+  p_org_id int,
   OUT data json
 )
 AS
 $BODY$
   DECLARE
+    form_id int;
     form_name varchar;
     form_field jsonb;
 
-    filter_id int;
-    filter_name varchar;
-    
+    filter_form_id int := 0;
+    filter_form_name varchar := '';
+
     row_max int;
     row_min int := 1;
   BEGIN
-
+    --SET
     IF (SELECT p_form_id ~ '^\d+$') THEN
-      filter_id := p_form_id::int;
+      filter_form_id := p_form_id::int;
     ELSE
-      filter_name := p_form_id::varchar;
+      filter_form_name := p_form_id::varchar;
     END IF;
 
-    --SET form_name
-    SELECT f.name
-    INTO form_name
+    SELECT f.id, f.name
+    INTO form_id, form_name
     FROM org.form f
-    WHERE f.id = filter_id OR f.name = filter_name;
+    WHERE f.id = filter_form_id OR f.name = filter_form_name;
 
-    IF form_name IS NOT NULL THEN
+    IF form_id IS NOT NULL THEN
+      --TEMP TABLE
+      DROP TABLE IF EXISTS FG_form_field CASCADE;
+      CREATE TEMP TABLE FG_form_field AS
+      SELECT * FROM org.fn_form_get_field(form_id, p_login_id, p_org_id);
 
-      DROP TABLE IF EXISTS FGFU_form_field CASCADE;
-      CREATE TEMP TABLE FGFU_form_field AS
-      SELECT * FROM org.fn_form_get_field(p_form_id, p_filter_id, p_login_id, p_biz_id);
+      DROP TABLE IF EXISTS FG_form_component CASCADE;
+      CREATE TEMP TABLE FG_form_component AS
+      SELECT * FROM org.fn_form_get_field_component(form_id, p_login_id, p_org_id);
 
-      DROP TABLE IF EXISTS FGFU_form_component CASCADE;
-      CREATE TEMP TABLE FGFU_form_component AS
-      SELECT * FROM org.fn_form_get_field_component(p_form_id, p_filter_id, p_login_id, p_biz_id);
-
+      --WITH DATA
       IF p_filter_id > 0 THEN
 
-        --
-        DROP TABLE IF EXISTS FGFU_eval CASCADE;
-        CREATE TEMP TABLE FGFU_eval(id int, value text);
-        
-        INSERT INTO FGFU_eval(id, value)
-        SELECT id, value 
-        FROM org.fn_form_get_data_for_user(p_form_id, p_filter_id, p_login_id, p_biz_id);
+        DROP TABLE IF EXISTS FG_eval CASCADE;
+        CREATE TEMP TABLE FG_eval(id int, value text);
+
+        IF form_name = 'user_form' THEN
+          INSERT INTO FG_eval(id, value)
+          SELECT id, value
+          FROM org.fn_form_get_data_for_user(p_form_id, p_filter_id, p_login_id, p_org_id);
+        END IF;
 
         --SET FIELD VALUE
         SELECT max(ff.row_num)
         INTO row_max
-        FROM FGFU_form_field ff;
+        FROM FG_form_field ff;
 
         WHILE row_max >= row_min
         LOOP
-          UPDATE FGFU_form_field ff
-          SET field_value = (SELECT value FROM FGFU_eval e WHERE e.id = ff.field_id)
+          UPDATE FG_form_field ff
+          SET field_value = (SELECT value FROM FG_eval e WHERE e.id = ff.field_id)
           WHERE ff.row_num = row_min;
 
           row_min := row_min + 1;
@@ -125,12 +72,12 @@ $BODY$
 
         SELECT max(cf.row_num)
         INTO row_max
-        FROM FGFU_form_component cf;
+        FROM FG_form_component cf;
 
         WHILE row_max >= row_min
         LOOP
-          UPDATE FGFU_form_component cf
-          SET field_value = (SELECT value FROM FGFU_eval e WHERE e.id = cf.field_id)
+          UPDATE FG_form_component cf
+          SET field_value = (SELECT value FROM FG_eval e WHERE e.id = cf.field_id)
           WHERE cf.row_num = row_min;
 
           row_min := row_min + 1;
@@ -139,27 +86,27 @@ $BODY$
 
       --MAP COMPONENT FIELD TO FIELD
 
-
+      --MAP FIELD TO FORM
       SELECT json_agg(field)::jsonb
       INTO form_field
       FROM (
         SELECT
-          field_id id,
-          field_name name,
-          field_label label,
-          field_description description,
-          field_type type,
-          field_role role,
-          field_data data,
-          field_value value,
-          field_lookup lookup,
-          field_map map,
-          field_position position,
-          field_parent_id "parentId",
-          field_is_required "isRequired",
-          field_has_dependent "hasDependent",
-          field_is_dependent "isDependent"
-        FROM FGFU_form_field
+          ff.field_id id,
+          ff.field_name name,
+          ff.field_label label,
+          ff.field_description description,
+          ff.field_type type,
+          ff.field_role role,
+          ff.field_data data,
+          ff.field_value value,
+          ff.field_lookup lookup,
+          ff.field_map map,
+          ff.field_position position,
+          ff.field_parent_id "parentId",
+          ff.field_is_required "isRequired",
+          ff.field_has_dependent "hasDependent",
+          ff.field_is_dependent "isDependent"
+        FROM FG_form_field ff
         ORDER BY field_position
       ) field;
 
@@ -167,12 +114,12 @@ $BODY$
       INTO data
       FROM (
         SELECT DISTINCT
-        form_id id,
-        form_name name,
-        form_label label,
-        form_data data,
+        f.form_id id,
+        f.form_name name,
+        f.form_label label,
+        f.form_data data,
         form_field fields
-        FROM FGFU_form_field
+        FROM FG_form_field f
       ) form;
 
     END IF;
@@ -182,8 +129,6 @@ $BODY$
 LANGUAGE plpgsql;
 
 
-CALL org.pr_form_get_by_id('auth_signup', null);
+CALL org.pr_form_get('auth_signup', null, null, null, null);
 
-DROP PROCEDURE IF EXISTS org.pr_form_get_by_id(varchar, json);
-
-DROP PROCEDURE IF EXISTS org.pr_form_get_for_user(varchar, int, int, int, json);
+DROP PROCEDURE IF EXISTS org.pr_form_get(varchar, int, int, int, json);

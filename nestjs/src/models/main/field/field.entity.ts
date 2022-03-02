@@ -11,7 +11,7 @@ import {
   ManyToMany
 } from 'typeorm';
 import { Form } from '../form/form.entity';
-import { GridType } from '../grid/grid-type.entity';
+import { Component } from '../component/component.entity';
 
 import { ObjectEntity } from '../object/object.entity';
 
@@ -46,18 +46,24 @@ export class Field extends BaseEntity {
   @Column({ name: 'is_required' })
   isRequired: boolean;
 
-  @ManyToOne(() => GridType)
-  @JoinColumn({ name: 'grid_type_id', referencedColumnName: 'id' })
-  gridType: GridType;
+  @Column({ name: 'has_dependent' })
+  hasDependent: boolean;
+
+  @Column({ name: 'is_dependent' })
+  isDependent: boolean;
+
+  @ManyToOne(() => Component)
+  @JoinColumn({ name: 'component_id', referencedColumnName: 'id' })
+  component: Component;
 
   @ManyToMany(() => Form, (form: Form) => form.fields)
   forms: Form[];
 
   @Column({ name: 'object_id' })
-  objectId: boolean;
+  objectId: number;
 
-  @Column({ name: 'biz_id' })
-  bizId: boolean;
+  @Column({ name: 'org_id' })
+  orgId: number;
 
   @Column({ name: 'created_by' })
   createdBy: string;

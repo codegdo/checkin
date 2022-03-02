@@ -16,7 +16,7 @@ table form_type {
 table form_type_object {
   form_type_id int
   object_id int
-  biz_id int
+  org_id int
 }
 
 ref: form_type_object.form_type_id > form_type.id

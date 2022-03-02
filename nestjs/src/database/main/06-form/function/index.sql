@@ -1,9 +1,8 @@
 -- CREATE FUNCTION FN_FORM_GET_FIELD
 CREATE OR REPLACE FUNCTION org.fn_form_get_field(
-  p_form_id varchar,
-  p_filter_id int,
+  p_form_id int,
   p_login_id int,
-  p_biz_id int
+  p_org_id int
 )
 RETURNS TABLE(
   row_num bigint,
@@ -31,9 +30,6 @@ RETURNS TABLE(
 AS
 $BODY$
   DECLARE
-    filter_id int := 0;
-    filter_name varchar := '';
-
     rec_id int;
     rec_lookup varchar;
     rec_is_dependent boolean;
@@ -43,12 +39,6 @@ $BODY$
     row_max int;
     row_min int := 1;
   BEGIN
-
-    IF (SELECT p_form_id ~ '^\d+$') THEN
-      filter_id := p_form_id::int;
-    ELSE
-      filter_name := p_form_id::varchar;
-    END IF;
 
     DROP TABLE IF EXISTS FGF_form_field CASCADE;
     CREATE TEMP TABLE FGF_form_field AS
@@ -87,7 +77,7 @@ $BODY$
     FROM org.form f
     INNER JOIN org.form_field ff ON ff.form_id = f.id
     LEFT JOIN org.field fld ON fld.id = ff.field_id
-    WHERE f.id = filter_id OR f.name = filter_name
+    WHERE f.id = p_form_id
     ORDER BY ff.position;
 
     DROP TABLE IF EXISTS FGF_lookup CASCADE;
@@ -114,9 +104,9 @@ $BODY$
 
       --CASE LOOKUP
       IF rec_is_dependent is TRUE THEN
-        SELECT dbo.fn_lookup_get_value(rec_lookup, null, p_login_id, p_biz_id) INTO lookup_data;
+        SELECT dbo.fn_lookup_get_value(rec_lookup, p_login_id, p_org_id) INTO lookup_data;
       ELSE
-        SELECT dbo.fn_lookup_get_value(rec_lookup, null, p_login_id, p_biz_id) INTO lookup_data;
+        SELECT dbo.fn_lookup_get_value(rec_lookup, p_login_id, p_org_id) INTO lookup_data;
       END IF;
 
       UPDATE FGF_form_field ff
@@ -135,10 +125,9 @@ LANGUAGE plpgsql;
 
 -- CREATE FUNCTION FN_FORM_GET_FIELD_COMPONENT
 CREATE OR REPLACE FUNCTION org.fn_form_get_field_component(
-  p_form_id varchar,
-  p_filter_id int,
+  p_form_id int,
   p_login_id int,
-  p_biz_id int
+  p_org_id int
 )
 RETURNS TABLE(
   row_num bigint,
@@ -166,9 +155,6 @@ RETURNS TABLE(
 AS
 $BODY$
   DECLARE
-    filter_id int := 0;
-    filter_name varchar := '';
-
     rec_id int;
     rec_lookup varchar;
     rec_is_dependent boolean;
@@ -178,12 +164,6 @@ $BODY$
     row_max int;
     row_min int := 1;
   BEGIN
-
-    IF (SELECT p_form_id ~ '^\d+$') THEN
-      filter_id := p_form_id::int;
-    ELSE
-      filter_name := p_form_id::varchar;
-    END IF;
 
     DROP TABLE IF EXISTS FGC_form_field CASCADE;
     CREATE TEMP TABLE FGC_form_field AS
@@ -222,7 +202,7 @@ $BODY$
     FROM org.form f
     INNER JOIN org.form_component fc ON fc.form_id = f.id
     LEFT JOIN org.field fld ON fld.id = fc.field_id
-    WHERE f.id = filter_id OR f.name = filter_name
+    WHERE f.id = p_form_id
     ORDER BY fc.position;
 
     DROP TABLE IF EXISTS FGC_lookup CASCADE;
@@ -249,9 +229,9 @@ $BODY$
 
       --CASE LOOKUP
       IF rec_is_dependent is TRUE THEN
-        SELECT dbo.fn_lookup_get_value(rec_lookup, null, p_login_id, p_biz_id) INTO lookup_data;
+        SELECT dbo.fn_lookup_get_value(rec_lookup, p_login_id, p_org_id) INTO lookup_data;
       ELSE
-        SELECT dbo.fn_lookup_get_value(rec_lookup, null, p_login_id, p_biz_id) INTO lookup_data;
+        SELECT dbo.fn_lookup_get_value(rec_lookup, p_login_id, p_org_id) INTO lookup_data;
       END IF;
 
       UPDATE FGC_form_field ff
@@ -270,10 +250,10 @@ LANGUAGE plpgsql;
 
 -- CREATE FUNCTION FN_FORM_GET_DATA_FOR_USER
 CREATE OR REPLACE FUNCTION org.fn_form_get_data_for_user(
-  p_form_id varchar,
+  p_form_id int,
   p_filter_id int,
   p_login_id int,
-  p_biz_id int
+  p_org_id int
 )
 RETURNS TABLE(
   id int,
@@ -281,7 +261,7 @@ RETURNS TABLE(
 ) AS
 $BODY$
   DECLARE
-    user_form_id varchar;
+    user_form_id int;
     user_contact_id int;
     user_group_id int;
 
@@ -346,13 +326,13 @@ $BODY$
         field_id,
         field_map,
         field_lookup
-      FROM org.fn_form_get_field(user_form_id, null, p_login_id, p_biz_id)
+      FROM org.fn_form_get_field(user_form_id, null, p_login_id, p_org_id)
       UNION
       SELECT
         field_id,
         field_map,
         field_lookup
-      FROM org.fn_form_get_field_component(user_form_id, null, p_login_id, p_biz_id)
+      FROM org.fn_form_get_field_component(user_form_id, null, p_login_id, p_org_id)
     ) ff;
 
     SELECT max(ff.row_num)

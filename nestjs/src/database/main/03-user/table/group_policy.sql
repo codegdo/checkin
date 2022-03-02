@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS sec.group_policy (
   group_id INT NOT NULL,
   policy_id INT NOT NULL,
-  biz_id INT,
+  org_id INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   --
   PRIMARY KEY(group_id, policy_id),

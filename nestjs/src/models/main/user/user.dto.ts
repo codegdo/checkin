@@ -59,17 +59,3 @@ export class UserLoginDto {
   @IsString()
   password: string;
 }
-
-export class UserFormDto {
-  @IsNumberString()
-  formId: number | string;
-
-  @IsNumber()
-  userId: number;
-
-  @IsNumber()
-  loginId: number;
-
-  @IsNumber()
-  bizId: number;
-}

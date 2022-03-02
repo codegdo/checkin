@@ -24,11 +24,11 @@ export class Subscription extends BaseEntity {
   @JoinColumn({ name: 'subscription_plan_id' })
   subscriptionPlan: SubscriptionPlan;
 
-  @Column({ name: 'workspace_id' })
-  workspaceId: number;
+  @Column({ name: 'store_id' })
+  storeId: number;
 
-  @Column({ name: 'biz_id' })
-  bizId: number;
+  @Column({ name: 'org_id' })
+  orgId: number;
 
   @Column({ name: 'purchase_date' })
   purchaseDate: Date;

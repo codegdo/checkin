@@ -1,8 +1,8 @@
 -- CREATE FUNCTION FN_FORM_GET_FIELD_COMPONENT
 CREATE OR REPLACE FUNCTION org.fn_form_get_field_component(
-  p_form_id varchar,
+  p_form_id int,
   p_login_id int,
-  p_biz_id int
+  p_org_id int
 )
 RETURNS TABLE(
   row_num bigint,
@@ -104,9 +104,9 @@ $BODY$
 
       --CASE LOOKUP
       IF rec_is_dependent is TRUE THEN
-        SELECT dbo.fn_lookup_get_value(rec_lookup, null, p_login_id, p_biz_id) INTO lookup_data;
+        SELECT dbo.fn_lookup_get_value(rec_lookup, p_login_id, p_org_id) INTO lookup_data;
       ELSE
-        SELECT dbo.fn_lookup_get_value(rec_lookup, null, p_login_id, p_biz_id) INTO lookup_data;
+        SELECT dbo.fn_lookup_get_value(rec_lookup, p_login_id, p_org_id) INTO lookup_data;
       END IF;
 
       UPDATE FGC_form_field ff

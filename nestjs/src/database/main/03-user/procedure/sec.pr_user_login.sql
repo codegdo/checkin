@@ -2,8 +2,7 @@
 CREATE OR REPLACE PROCEDURE sec.pr_user_login(
   p_username varchar,
   OUT "user" json,
-  OUT "stores" json,
-  OUT "business" json,
+  OUT "locations" json,
   OUT "modules" json,
   OUT "permissions" json,
   OUT "policy" json
@@ -11,7 +10,7 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_login(
 AS
 $BODY$
   DECLARE
-      user_biz_id int;
+      user_org_id int;
       user_group_type varchar;
       user_group_id int;
   BEGIN
@@ -25,25 +24,25 @@ $BODY$
     IF "user" IS NOT NULL THEN
 
       --SET
-      SELECT "user" ->> 'bizId' INTO user_biz_id;
+      SELECT "user" ->> 'orgId' INTO user_org_id;
       SELECT "user" ->> 'groupType' INTO user_group_type;
       SELECT "user" ->> 'groupId' INTO user_group_id;
 
       IF user_group_type = 'system' THEN
 
       ELSE
-        IF user_biz_id IS NOT NULL THEN
-          --CHECK biz is_active
-          IF(SELECT 1 FROM org.business WHERE id = user_biz_id AND is_active is TRUE) THEN
+        IF user_org_id IS NOT NULL THEN
+          --CHECK org is_active
+          IF(SELECT 1 FROM sec.organization WHERE id = user_org_id AND is_active is TRUE) THEN
 
-            SELECT json_agg(s)::json
-            INTO "stores"
+            SELECT json_agg(l)::json
+            INTO "locations"
             FROM (
               SELECT id, name
-              FROM org.store
-              WHERE biz_id = user_biz_id
+              FROM org.location
+              WHERE org_id = user_org_id
               AND is_active = true
-            ) s;
+            ) l;
 
             SELECT json_agg(m.*)::json
             INTO "modules"

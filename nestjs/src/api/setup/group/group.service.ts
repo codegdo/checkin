@@ -14,7 +14,7 @@ export class GroupService {
 
   async getForm(dto: any) {
     try {
-      return this.formRepository.getFormForUser(dto);
+      return this.formRepository.getForm(dto);
     } catch (e) {
       this.errorService.handleError(e);
     }
