@@ -33,35 +33,35 @@ $BODY$
 
     IF form_id IS NOT NULL THEN
       --TEMP TABLE
-      DROP TABLE IF EXISTS FG_form_field CASCADE;
-      CREATE TEMP TABLE FG_form_field AS
-      SELECT * FROM org.fn_form_get_field(form_id, p_login_id, p_org_id);
+      DROP TABLE IF EXISTS PFG_form_field CASCADE;
+      CREATE TEMP TABLE PFG_form_field AS
+      SELECT * FROM org.fn_get_field(form_id, p_login_id, p_org_id);
 
-      DROP TABLE IF EXISTS FG_form_component CASCADE;
-      CREATE TEMP TABLE FG_form_component AS
-      SELECT * FROM org.fn_form_get_field_component(form_id, p_login_id, p_org_id);
+      DROP TABLE IF EXISTS PFG_form_component CASCADE;
+      CREATE TEMP TABLE PFG_form_component AS
+      SELECT * FROM org.fn_get_field_component(form_id, p_login_id, p_org_id);
 
       --WITH DATA
       IF p_filter_id > 0 THEN
 
-        DROP TABLE IF EXISTS FG_eval CASCADE;
-        CREATE TEMP TABLE FG_eval(id int, value text);
+        DROP TABLE IF EXISTS PFG_eval CASCADE;
+        CREATE TEMP TABLE PFG_eval(id int, value text);
 
         IF form_name = 'user_form' THEN
-          INSERT INTO FG_eval(id, value)
+          INSERT INTO PFG_eval(id, value)
           SELECT id, value
-          FROM org.fn_form_get_data_for_user(p_form_id, p_filter_id, p_login_id, p_org_id);
+          FROM org.fn_get_data_for_user(form_id, p_filter_id, p_login_id, p_org_id);
         END IF;
 
         --SET FIELD VALUE
         SELECT max(ff.row_num)
         INTO row_max
-        FROM FG_form_field ff;
+        FROM PFG_form_field ff;
 
         WHILE row_max >= row_min
         LOOP
-          UPDATE FG_form_field ff
-          SET field_value = (SELECT value FROM FG_eval e WHERE e.id = ff.field_id)
+          UPDATE PFG_form_field ff
+          SET field_value = (SELECT value FROM PFG_eval e WHERE e.id = ff.field_id)
           WHERE ff.row_num = row_min;
 
           row_min := row_min + 1;
@@ -72,12 +72,12 @@ $BODY$
 
         SELECT max(cf.row_num)
         INTO row_max
-        FROM FG_form_component cf;
+        FROM PFG_form_component cf;
 
         WHILE row_max >= row_min
         LOOP
-          UPDATE FG_form_component cf
-          SET field_value = (SELECT value FROM FG_eval e WHERE e.id = cf.field_id)
+          UPDATE PFG_form_component cf
+          SET field_value = (SELECT value FROM PFG_eval e WHERE e.id = cf.field_id)
           WHERE cf.row_num = row_min;
 
           row_min := row_min + 1;
@@ -106,7 +106,7 @@ $BODY$
           ff.field_is_required "isRequired",
           ff.field_has_dependent "hasDependent",
           ff.field_is_dependent "isDependent"
-        FROM FG_form_field ff
+        FROM PFG_form_field ff
         ORDER BY field_position
       ) field;
 
@@ -119,7 +119,7 @@ $BODY$
         f.form_label label,
         f.form_data data,
         form_field fields
-        FROM FG_form_field f
+        FROM PFG_form_field f
       ) form;
 
     END IF;
@@ -128,7 +128,7 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-
-CALL org.pr_form_get('auth_signup', null, null, null, null);
-
+--DROP PROCEDURES
+/*
 DROP PROCEDURE IF EXISTS org.pr_form_get(varchar, int, int, int, json);
+*/

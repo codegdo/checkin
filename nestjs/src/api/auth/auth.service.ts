@@ -99,8 +99,8 @@ export class AuthService {
       const type =
         option == 'phoneNumber' ? MessageEnum.MESSAGE : MessageEnum.EMAIL;
       const data = await this.userRepository.verifyUser(loginId);
-
-      return this.messageService.sendVerify({ type, context: data });
+      return { ok: true };
+      //return this.messageService.sendVerify({ type, context: data });
     } catch (e) {
       this.errorService.handleError(e);
     }
@@ -112,7 +112,7 @@ export class AuthService {
 
       console.log(data);
 
-      const { organizations, locations, user, modules, permissions, policy } = data;
+      const { user, modules, ...rest } = data;
       const { orgId, isActive } = user;
 
       if (orgId && !isActive) {
@@ -121,7 +121,7 @@ export class AuthService {
 
       const nav = modules && moduleViewObjectGroup(modules);
 
-      return { user, nav, permissions, policy };
+      return { user, nav, ...rest };
     } catch (e) {
       this.errorService.handleError(e);
     }
@@ -129,7 +129,11 @@ export class AuthService {
 
   async setup(dto: UserSetupDto) {
     try {
-      return this.userRepository.setupUser(dto);
+      const data = await this.userRepository.setupUser(dto);
+      const { modules, ...rest } = data;
+
+      const nav = modules && moduleViewObjectGroup(modules);
+      return { nav, ...rest };
     } catch (e) {
       this.errorService.handleError(e);
     }

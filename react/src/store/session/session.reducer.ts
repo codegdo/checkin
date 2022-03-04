@@ -5,8 +5,7 @@ const initialState: SessionState = {
   isLogin: false,
   user: null,
   locationId: null,
-  orgId: null,
-  accessToken: null,
+  orgId: null
 };
 
 export const sessionReducer = (

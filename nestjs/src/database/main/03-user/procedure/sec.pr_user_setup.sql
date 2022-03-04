@@ -1,10 +1,14 @@
 -- CREATE PROCEDURE USER_SETUP
 CREATE OR REPLACE PROCEDURE sec.pr_user_setup(
-  p_login_id int,
   p_form_data json,
+  p_login_id int,
+  
   OUT "user" json,
-  OUT "locations" json,
-  OUT "modules" json
+  OUT locations json,
+  OUT organizations json,
+  OUT modules json,
+  OUT permissions json,
+  OUT policies json
 )
 AS
 $BODY$
@@ -12,11 +16,9 @@ $BODY$
     login_username varchar;
     location_territory_id int;
     user_org_id int;
-    user_group_id int;
-    user_group_type varchar;
   BEGIN
 
-    -- JSON form_data to table USU_form_data
+    -- JSON form_data to table
     DROP TABLE IF EXISTS USU_form_data CASCADE;
     CREATE TEMP TABLE USU_form_data AS
     SELECT key AS id, value FROM json_to_recordset(p_form_data)
@@ -85,7 +87,7 @@ $BODY$
           p_login_id,
           login_username
         )
-        RETURNING id
+        RETURNING id, business_type_id
       ), s AS (
         INSERT INTO org.location(
           name,
@@ -110,50 +112,29 @@ $BODY$
         UPDATE sec.user
         SET org_id = (SELECT id FROM o)
         WHERE id = p_login_id
-        RETURNING id, username, contact_id, org_id, group_id, is_active
-      )
-      SELECT json_agg(r)::json ->> 0
-      INTO "user"
-      FROM (
-        SELECT
-          u.id "id",
-          u.username "username",
-          u.org_id "orgId",
-          u.is_active,
-          
-          c.first_name "firstName",
-          c.last_name "lastName",
-          c.email_address "emailAddress",
-          c.phone_number "phoneNumber",
-          
-          g.id "groupId",
-          g.is_owner,
-          gt.name "groupType"
-        FROM u
-        LEFT JOIN sec.group g ON g.id = u.group_id
-        LEFT JOIN dbo.group_type gt ON gt.id = g.group_type_id
-        LEFT JOIN org.contact c ON c.id = u.contact_id
-      ) r;
+        RETURNING id, org_id
+      ) 
+      SELECT u.org_id
+      INTO user_org_id 
+      FROM u;
 
-      --SET user_org_id
-      SELECT "user" ->> 'orgId' INTO user_org_id;
-      SELECT "user" ->> 'groupType' INTO user_group_type;
-      SELECT "user" ->> 'groupId' INTO user_group_id;
+      CAll sec.pr_user_setup_default();
 
-      SELECT json_agg(l)::json
-      INTO "locations"
-      FROM (
-        SELECT id, name 
-        FROM org.location
-        WHERE org_id = user_org_id
-        AND is_active IS NOT NULL
-      ) l;
-
-      SELECT json_agg(m.*)::json
-      INTO "modules"
-      FROM (
-        SELECT * FROM dbo.fn_module_get_by_group_type(user_group_type)
-      ) m;
+      SELECT
+        ua.users::jsonb ->> 0,
+        ua.locations,
+        ua.organizations,
+        ua.modules,
+        ua.permissions,
+        ua.policies
+      INTO
+        "user",
+        locations,
+        organizations,
+        modules,
+        permissions,
+        policies
+      FROM sec.fn_get_user_access(p_login_id) ua;
 
     ELSE
       RAISE EXCEPTION no_data_found;
@@ -164,4 +145,4 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-DROP PROCEDURE IF EXISTS sec.pr_user_setup(int, json, json, json, json);
+DROP PROCEDURE IF EXISTS sec.pr_user_setup(int, json, json, json, json, json, json, json);

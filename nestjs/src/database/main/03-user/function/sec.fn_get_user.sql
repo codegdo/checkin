@@ -1,5 +1,5 @@
--- CREATE FUNCTION USER_GET_BY_ID
-CREATE OR REPLACE FUNCTION sec.fn_user_get_by_id(p_user_id varchar)
+-- CREATE FUNCTION USER_GET
+CREATE OR REPLACE FUNCTION sec.fn_get_user(p_user_id varchar)
 RETURNS TABLE (
   "id" int,
   "username" varchar,
@@ -20,14 +20,14 @@ RETURNS TABLE (
 AS
 $BODY$
   DECLARE
-    _id int := 0;
-    _username varchar := '';
+    filter_id int := 0;
+    filter_username varchar := '';
   BEGIN
 
     IF (SELECT p_user_id ~ '^\d+$') THEN
-      _id := p_user_id::int;
+      filter_id := p_user_id::int;
     ELSE
-      _username := p_user_id::varchar;
+      filter_username := p_user_id::varchar;
     END IF;
 
     RETURN QUERY
@@ -51,12 +51,7 @@ $BODY$
       LEFT JOIN org.contact c ON c.id = u.contact_id
       LEFT JOIN sec.group g ON g.id = u.group_id
       LEFT JOIN dbo.group_type gt ON gt.id = g.group_type_id
-      WHERE u.id = _id OR u.username = _username;
+      WHERE u.id = filter_id OR u.username = filter_username;
   END;
 $BODY$
 LANGUAGE plpgsql;
-
-SELECT * FROM sec.fn_user_get_by_id('9');
-
-DROP FUNCTION IF EXISTS
-sec.fn_user_get_by_id;

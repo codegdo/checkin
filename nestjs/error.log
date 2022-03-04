@@ -422,3 +422,17 @@
 {"level":"error","message":"procedure sec.pr_user_setup(unknown, unknown, unknown, unknown) does not exist"}
 {"level":"error","message":"invalid input syntax for type integer: \"[{\"key\":\"17\",\"value\":\"G Nail\"},{\"key\":\"26\",\"value\":\"gnail\"},{\"key\":\"27\",\"value\":\"1\"},{\"key\":\"28\",\"value\":\"G Nail Mira Mesa\"},{\"key\":\"29\",\"value\":\"12345 Auto Fill\"},{\"key\":\"30\",\"value\":\"USA\"},{\"key\":\"31\",\"value\":\"CA\"},{\"key\":\"32\",\"value\":\"San Diego\"},{\"key\":\"33\",\"value\":\"92126\"}]\""}
 {"level":"error","message":"column \"business_type_id\" is of type integer but expression is of type character varying"}
+{"level":"error","message":"invalid input syntax for type integer: \"[{\"key\":\"17\",\"value\":\"Liam Nail\"},{\"key\":\"26\",\"value\":\"liamnail\"},{\"key\":\"27\",\"value\":\"1\"},{\"key\":\"28\",\"value\":\"Liam Nail Del Mar\"},{\"key\":\"29\",\"value\":\"1234 Delmar Height\"},{\"key\":\"30\",\"value\":\"USA\"},{\"key\":\"31\",\"value\":\"CA\"},{\"key\":\"32\",\"value\":\"Delmar\"},{\"key\":\"33\",\"value\":\"92126\"}]\""}
+{"level":"error","message":"function sec.pr_user_setup_default(unknown) does not exist"}
+{"level":"error","message":"function sec.pr_user_setup_default(unknown) does not exist"}
+{"level":"error","message":"procedure parameter \"data\" is an output parameter but corresponding argument is not writable"}
+{"level":"error","message":"Unexpected socket close"}
+{"level":"error","message":"Unexpected socket close"}
+{"level":"error","message":"Unexpected socket close"}
+{"level":"error","message":"Unexpected socket close"}
+{"level":"error","message":"Unexpected socket close"}
+{"code":21602,"level":"error","moreInfo":"https://www.twilio.com/docs/errors/21602","status":400}
+{"level":"error","message":"Unexpected socket close"}
+{"level":"error","message":"Unexpected socket close"}
+{"code":21602,"level":"error","moreInfo":"https://www.twilio.com/docs/errors/21602","status":400}
+{"level":"error","message":"Unexpected socket close"}

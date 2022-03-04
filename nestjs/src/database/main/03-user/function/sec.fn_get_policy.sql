@@ -1,5 +1,5 @@
--- CREATE FUNCTION POLICY_GET_BY_GROUP_ID
-CREATE OR REPLACE FUNCTION sec.fn_policy_get_by_group_id(p_group_id int)
+-- CREATE FUNCTION GET POLICY
+CREATE OR REPLACE FUNCTION sec.fn_get_policy(p_group_id int)
 RETURNS TABLE (
   "statement" jsonb,
   "version" varchar

@@ -1,11 +1,13 @@
 -- CREATE PROCEDURE USER_LOGIN
 CREATE OR REPLACE PROCEDURE sec.pr_user_login(
   p_username varchar,
+
   OUT "user" json,
-  OUT "locations" json,
-  OUT "modules" json,
-  OUT "permissions" json,
-  OUT "policy" json
+  OUT locations json,
+  OUT organizations json,
+  OUT modules json,
+  OUT permissions json,
+  OUT policies json
 )
 AS
 $BODY$
@@ -15,7 +17,7 @@ $BODY$
       user_group_id int;
   BEGIN
 
-    SELECT json_agg(u.*)::json ->> 0
+    SELECT json_agg(u)::json ->> 0
     INTO "user"
     FROM (
       SELECT * FROM sec.fn_user_get_by_id(p_username)

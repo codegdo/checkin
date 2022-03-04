@@ -37,6 +37,11 @@ export type UserVerifyData = TokenData<VerifyData> | null;
 export type UserSetupData = {
   user: UserData;
   locations: any[];
+  organizations: any[];
+  permissions: any[];
+  modules: any[];
+  policies: any;
+  nav: any;
 } | null;
 
 export type UserLoginData = {
@@ -45,6 +50,6 @@ export type UserLoginData = {
   organizations: any[];
   permissions: any[];
   modules: any[];
-  policy: any;
+  policies: any;
   nav: any;
 } | null;

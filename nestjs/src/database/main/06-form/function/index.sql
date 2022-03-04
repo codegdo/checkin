@@ -1,5 +1,5 @@
--- CREATE FUNCTION FN_FORM_GET_FIELD
-CREATE OR REPLACE FUNCTION org.fn_form_get_field(
+-- CREATE FUNCTION FN_GET_FIELD
+CREATE OR REPLACE FUNCTION org.fn_get_field(
   p_form_id int,
   p_login_id int,
   p_org_id int
@@ -123,8 +123,8 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
--- CREATE FUNCTION FN_FORM_GET_FIELD_COMPONENT
-CREATE OR REPLACE FUNCTION org.fn_form_get_field_component(
+-- CREATE FUNCTION FN_GET_FIELD_COMPONENT
+CREATE OR REPLACE FUNCTION org.fn_get_field_component(
   p_form_id int,
   p_login_id int,
   p_org_id int
@@ -248,8 +248,8 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
--- CREATE FUNCTION FN_FORM_GET_DATA_FOR_USER
-CREATE OR REPLACE FUNCTION org.fn_form_get_data_for_user(
+-- CREATE FUNCTION FN_GET_DATA_FOR_USER
+CREATE OR REPLACE FUNCTION org.fn_get_data_for_user(
   p_form_id int,
   p_filter_id int,
   p_login_id int,
@@ -273,7 +273,7 @@ $BODY$
     eval_id int;
     eval_value text;
 
-    map text;
+    map_data text;
     map_table text;
     map_column text;
 
@@ -326,13 +326,13 @@ $BODY$
         field_id,
         field_map,
         field_lookup
-      FROM org.fn_form_get_field(user_form_id, null, p_login_id, p_org_id)
+      FROM org.fn_get_field(user_form_id, p_login_id, p_org_id)
       UNION
       SELECT
         field_id,
         field_map,
         field_lookup
-      FROM org.fn_form_get_field_component(user_form_id, null, p_login_id, p_org_id)
+      FROM org.fn_get_field_component(user_form_id, p_login_id, p_org_id)
     ) ff;
 
     SELECT max(ff.row_num)
@@ -343,12 +343,12 @@ $BODY$
     LOOP
 
       SELECT field_id, field_map
-      INTO eval_id, map
+      INTO eval_id, map_data
       FROM FGDFU_form_field ff
       WHERE ff.row_num = row_min;
 
-      map_table := split_part(map, '.', 2);
-      map_column := split_part(map, '.', 3);
+      map_table := split_part(map_data, '.', 2);
+      map_column := split_part(map_data, '.', 3);
 
       CASE map_table
         WHEN 'user' THEN
@@ -378,12 +378,8 @@ $BODY$
 LANGUAGE plpgsql;
 
 -- DROP FUNCTIONS
-
-DROP FUNCTION IF EXISTS
-org.fn_form_get_field;
-
-DROP FUNCTION IF EXISTS
-org.fn_form_get_field_component;
-
-DROP FUNCTION IF EXISTS
-org.fn_form_get_data_for_user;
+/*
+DROP FUNCTION IF EXISTS org.fn_get_field;
+DROP FUNCTION IF EXISTS org.fn_get_field_component;
+DROP FUNCTION IF EXISTS org.fn_get_data_for_user;
+*/

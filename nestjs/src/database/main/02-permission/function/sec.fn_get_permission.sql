@@ -1,5 +1,5 @@
--- CREATE FUNCTION FN_PERMISSION_GET_ACCESS_LEVEL
-CREATE OR REPLACE FUNCTION sec.fn_permission_get_access_level()
+-- CREATE FUNCTION GET PERMISSION
+CREATE OR REPLACE FUNCTION sec.fn_get_permission()
 RETURNS TABLE (
   "type" varchar,
   "action" text

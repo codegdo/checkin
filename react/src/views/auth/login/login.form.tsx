@@ -2,19 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-import { useAction, useFetch } from '../../../hooks';
+import { useFetch, useLogin } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 
 import { Form, FormData } from '../../../components/form';
 
 const LoginForm: React.FC = (): JSX.Element => {
   const { isLogin } = useSelector((state: AppState) => state.session);
-  const { updateSession, updateNav, updatePolicy } = useAction();
 
   const [form, setForm] = useState<FormData>();
   const [{ status, result }, fetchLogin] = useFetch('/api/auth/login');
-  const [verified, setVerified] = useState(true);
-  const [completed, setCompleted] = useState(true);
+  const [{ isVerified, isSetupCompleted }, login] = useLogin();
 
   // load form
   useEffect(() => {
@@ -26,30 +24,7 @@ const LoginForm: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     if (status === 'success') {
-      const { user, orgId, accessToken, nav, policy } = result?.data;
-
-      console.log(result.data);
-
-      if (user && !user.isActive) {
-        updateSession({ user });
-        setVerified(false);
-      }
-
-      if (user && user.isActive && !orgId) {
-        updateSession({ user });
-        setCompleted(false);
-      }
-
-      if (user && orgId) {
-        updateSession({
-          isLogin: true,
-          user,
-          orgId,
-          accessToken
-        });
-        updateNav(nav);
-        updatePolicy(policy);
-      }
+      login(result.data);
     }
 
   }, [status]);
@@ -62,11 +37,11 @@ const LoginForm: React.FC = (): JSX.Element => {
     return <div>loading...</div>;
   }
 
-  if (!verified) {
+  if (!isVerified) {
     return <Navigate to="../verify" />
   }
 
-  if (!completed) {
+  if (!isSetupCompleted) {
     return <Navigate to="../setup" />
   }
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { useAction, useFetch } from '../../../hooks';
+import { useFetch, useLogin } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 import { Form, FormData } from '../../../components/form';
 import { Navigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ import { objectToKeyValue } from '../../../utils';
 
 const SetupForm: React.FC = (): JSX.Element => {
   const { isLogin, user } = useSelector((state: AppState) => state.session);
-  const { updateSession } = useAction();
+  const [_, login] = useLogin();
   const [{ status: submit, result: { data: submitData } }, postSetup] = useFetch('/api/auth/setup');
   const [{ status: loading, result: { data: formData } }, getForm] = useFetch('/api/auth/setup?formName=auth_setup');
   const [form, setForm] = useState<FormData>();
@@ -22,20 +22,14 @@ const SetupForm: React.FC = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    if (loading === 'success' && formData) {
+    if (loading === 'success') {
       setForm(formData);
     }
   }, [loading]);
 
   useEffect(() => {
-    if (submit == 'success' && submitData) {
-      const { user, orgId, accessToken } = submitData;
-      updateSession({
-        isLogin: true,
-        user,
-        orgId,
-        accessToken
-      });
+    if (submit == 'success') {
+      login(submitData);
     }
   }, [submit]);
 

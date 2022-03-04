@@ -55,8 +55,8 @@ export class UserRepository extends Repository<User> {
     const { data, loginId } = dto;
 
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_setup($1, $2, $3, $4, $5)`,
-      [data, loginId, null, null, null],
+      `CALL sec.pr_user_setup($1, $2, $3, $4, $5, $6, $7, $8)`,
+      [data, loginId, null, null, null, null, null, null],
     );
 
     return result;

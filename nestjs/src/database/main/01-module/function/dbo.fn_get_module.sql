@@ -1,5 +1,5 @@
--- CREATE FUNCTION MODULE_GET_BY_GROUP_TYPE
-CREATE OR REPLACE FUNCTION dbo.fn_module_get_by_group_type(p_group_type varchar)
+-- CREATE FUNCTION GET MODULE
+CREATE OR REPLACE FUNCTION dbo.fn_get_module(p_group_type varchar)
 RETURNS TABLE (
   module varchar,
   "moduleGroup" varchar,
@@ -70,6 +70,4 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-SELECT * FROM dbo.fn_module_get_by_group_type('');
-
-DROP FUNCTION IF EXISTS dbo.fn_module_get_by_group_type;
+--SELECT * FROM dbo.fn_get_module('');

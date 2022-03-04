@@ -7,5 +7,4 @@ export interface SessionState {
 
   locationId?: number | null;
   orgId?: number | null;
-  accessToken?: string | null;
 }
