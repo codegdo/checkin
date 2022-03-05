@@ -436,3 +436,4 @@
 {"level":"error","message":"Unexpected socket close"}
 {"code":21602,"level":"error","moreInfo":"https://www.twilio.com/docs/errors/21602","status":400}
 {"level":"error","message":"Unexpected socket close"}
+{"level":"error","message":"function org.fn_get_data_for_user(character varying, integer, integer, integer) does not exist"}

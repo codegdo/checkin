@@ -12,62 +12,38 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_login(
 AS
 $BODY$
   DECLARE
+      user_id int;
       user_org_id int;
-      user_group_type varchar;
+      user_is_active boolean;
+      
       user_group_id int;
+      user_group_type varchar;
   BEGIN
 
-    SELECT json_agg(u)::json ->> 0
-    INTO "user"
-    FROM (
-      SELECT * FROM sec.fn_user_get_by_id(p_username)
-    ) u;
+    SELECT id, "orgId", "groupType", "isActive"
+    INTO user_id, user_org_id, user_group_type, user_is_active
+    FROM sec.fn_get_user(p_username);
 
-    IF "user" IS NOT NULL THEN
-
-      --SET
-      SELECT "user" ->> 'orgId' INTO user_org_id;
-      SELECT "user" ->> 'groupType' INTO user_group_type;
-      SELECT "user" ->> 'groupId' INTO user_group_id;
+    IF user_id IS NOT NULL AND user_is_active IS TRUE AND user_org_id IS NOT NULL THEN
 
       IF user_group_type = 'system' THEN
 
       ELSE
-        IF user_org_id IS NOT NULL THEN
-          --CHECK org is_active
-          IF(SELECT 1 FROM sec.organization WHERE id = user_org_id AND is_active is TRUE) THEN
-
-            SELECT json_agg(l)::json
-            INTO "locations"
-            FROM (
-              SELECT id, name
-              FROM org.location
-              WHERE org_id = user_org_id
-              AND is_active = true
-            ) l;
-
-            SELECT json_agg(m.*)::json
-            INTO "modules"
-            FROM (
-              SELECT * FROM dbo.fn_module_get_by_group_type(user_group_type)
-            ) m;
-
-            SELECT json_agg(p.*)::json
-            INTO "permissions"
-            FROM (
-              SELECT * FROM sec.fn_permission_get_access_level()
-            ) p;
-
-            SELECT json_agg(p.*)::json ->> 0
-            INTO "policy"
-            FROM (
-              SELECT * FROM sec.fn_policy_get_by_group_id(user_group_id)
-            ) p;
-
-          ELSE
-            RAISE EXCEPTION no_data_found;
-          END IF;
-        END IF;
+        SELECT
+          ua.users::jsonb ->> 0,
+          ua.locations,
+          ua.organizations,
+          ua.modules,
+          ua.permissions,
+          ua.policies
+        INTO
+          "user",
+          locations,
+          organizations,
+          modules,
+          permissions,
+          policies
+        FROM sec.fn_get_user_access(user_id) ua;
       END IF;
     ELSE
       RAISE EXCEPTION no_data_found;
@@ -78,6 +54,6 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-CALL sec.pr_user_login('gdo', null, null, null, null, null);
+CALL sec.pr_user_login('gdo', null, null, null, null, null, null);
 
-DROP PROCEDURE IF EXISTS sec.pr_user_login(varchar, json, json, json, json, json);
+DROP PROCEDURE IF EXISTS sec.pr_user_login(varchar, json, json, json, json, json, json);
