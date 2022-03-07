@@ -189,8 +189,8 @@ VALUES
 ('emailAddress', 'field', 'text', null, 'org.contact.email_address', null, '0', '0', '1', '2', null, null, null),
 ('phoneNumber', 'field', 'text', null, 'org.contact.phone_number', null, '0', '0', '1', '2', null, null, null),
 ('streetAddress', 'field', 'text', null, 'org.contact.street_address', null, '0', '0', '0', '2', null, null, null),
-('country', 'field', 'select', null, 'org.contact.country', 'dbo.territory.country.country_code', '0', '0', '0', '2', null, null, null),
-('state', 'field', 'select', null, 'org.contact.state', 'dbo.territory.state.state_code', '0', '0', '0', '2', null, null, null),
+('country', 'field', 'select', null, 'org.contact.territory_id', 'dbo.territory.country.country_code', '0', '0', '0', '2', null, null, null),
+('state', 'field', 'select', null, 'org.contact.territory_id', 'dbo.territory.state.state_code', '0', '0', '0', '2', null, null, null),
 ('city', 'field', 'text', null, 'org.contact.city', null, '0', '0', '0', '2', null, null, null),
 ('postalCode', 'field', 'text', null, 'org.contact.postal_code', null, '0', '0', '0', '2', null, null, null),
 
@@ -201,8 +201,8 @@ VALUES
 --organization=15
 ('name', 'field', 'text', null, 'sec.organization.name', null, '0', '0', '1', '15', null, null, null),
 ('streetAddress', 'field', 'text', null, 'sec.organization.street_address', null, '0', '0', '0', '15', null, null, null),
-('country', 'field', 'select', null, 'sec.organization.country', 'dbo.territory.country.country_code', '0', '0', '0', '15', null, null, null),
-('state', 'field', 'select', null, 'sec.organization.state', 'dbo.territory.state.state_code', '0', '0', '0', '15', null, null, null),
+('country', 'field', 'select', null, 'sec.organization.territory_id', 'dbo.territory.country.country_code', '0', '0', '0', '15', null, null, null),
+('state', 'field', 'select', null, 'sec.organization.territory_id', 'dbo.territory.state.state_code', '0', '0', '0', '15', null, null, null),
 ('city', 'field', 'text', null, 'sec.organization.city', null, '0', '0', '0', '15', null, null, null),
 ('postalCode', 'field', 'text', null, 'sec.organization.postal_code', null, '0', '0', '0', '15', null, null, null),
 ('phoneNumber', 'field', 'text', null, 'sec.organization.phone_number', null, '0', '0', '0', '15', null, null, null),
@@ -213,8 +213,8 @@ VALUES
 --location=6
 ('name', 'field', 'text', null, 'org.location.name', null, '0', '0', '1', '6', null, null, null),
 ('streetAddress', 'field', 'text', null, 'org.location.street_address', null, '0', '0', '0', '6', null, null, null),
-('country', 'field', 'select', null, 'org.location.country', 'dbo.territory.country.country_code', '0', '0', '0', '6', null, null, null),
-('state', 'field', 'select', null, 'org.location.state', 'dbo.territory.state.state_code', '0', '0', '0', '6', null, null, null),
+('country', 'field', 'select', null, 'org.location.territory_id', 'dbo.territory.country.country_code', '0', '0', '0', '6', null, null, null),
+('state', 'field', 'select', null, 'org.location.territory_id', 'dbo.territory.state.state_code', '0', '0', '0', '6', null, null, null),
 ('city', 'field', 'text', null, 'org.location.city', null, '0', '0', '0', '6', null, null, null),
 ('postalCode', 'field', 'text', null, 'org.location.postal_code', null, '0', '0', '0', '6', null, null, null),
 ('phoneNumber', 'field', 'text', null, 'org.location.phone_number', null, '0', '0', '0', '6', null, null, null),
