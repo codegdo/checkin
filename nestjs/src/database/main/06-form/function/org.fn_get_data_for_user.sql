@@ -105,7 +105,7 @@ $BODY$
           SELECT user_data ->> map_column INTO eval_value;
         WHEN 'contact' THEN
           SELECT contact_data ->> map_column INTO eval_value;
-         WHEN 'group' THEN
+        WHEN 'group' THEN
           SELECT group_data ->> map_column INTO eval_value;
         ELSE
           eval_value := null;

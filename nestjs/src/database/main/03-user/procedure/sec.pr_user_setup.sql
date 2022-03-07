@@ -18,15 +18,16 @@ $BODY$
     user_org_id int;
   BEGIN
 
-    -- JSON form_data to table
-    DROP TABLE IF EXISTS USU_form_data CASCADE;
-    CREATE TEMP TABLE USU_form_data AS
-    SELECT key AS id, value FROM json_to_recordset(p_form_data)
+    --TEMP form_data
+    DROP TABLE IF EXISTS SPUSE_form_data CASCADE;
+    CREATE TEMP TABLE SPUSE_form_data AS
+    SELECT key AS id, value 
+    FROM json_to_recordset(p_form_data)
     AS rec ("key" int, "value" text);
 
-    -- CREATE a table USU_data
-    DROP TABLE IF EXISTS USU_data CASCADE;
-    CREATE TEMP TABLE USU_data(
+    --TEMP data
+    DROP TABLE IF EXISTS SPUSE_data CASCADE;
+    CREATE TEMP TABLE SPUSE_data(
       id int,
       value varchar,
       map varchar,
@@ -34,15 +35,15 @@ $BODY$
     );
 
     --INSERT id and value
-    INSERT INTO USU_data(id, value)
-    SELECT * FROM USU_form_data;
+    INSERT INTO SPUSE_data(id, value)
+    SELECT * FROM SPUSE_form_data;
 
     --UPDATE map and lookup
-    UPDATE USU_data
+    UPDATE SPUSE_data d
     SET map = f.map,
       lookup = f.lookup
     FROM org.field f
-    WHERE USU_data.id = f.id;
+    WHERE d.id = f.id;
 
     --SET login username
     SELECT username
@@ -58,17 +59,17 @@ $BODY$
       FROM dbo.territory
       WHERE country_code = (
         SELECT DISTINCT value
-        FROM USU_data
+        FROM SPUSE_data
         WHERE map = 'org.location.country'
       )
       AND state_code = (
         SELECT DISTINCT value
-        FROM USU_data
+        FROM SPUSE_data
         WHERE map = 'org.location.state'
       )
     ) t;
 
-    --CHECK user exists
+    --CHECK user exists and org is null
     IF login_username IS NOT NULL THEN
 
       --INSERT
@@ -99,11 +100,11 @@ $BODY$
           created_by
         )
         VALUES(
-          (SELECT DISTINCT value FROM USU_data WHERE map = 'org.location.name'),
-          (SELECT DISTINCT value FROM USU_data WHERE map = 'org.location.street_address'),
+          (SELECT DISTINCT value FROM SPUSE_data WHERE map = 'org.location.name'),
+          (SELECT DISTINCT value FROM SPUSE_data WHERE map = 'org.location.street_address'),
           location_territory_id,
-          (SELECT DISTINCT value FROM USU_data WHERE map = 'org.location.city'),
-          (SELECT DISTINCT value FROM USU_data WHERE map = 'org.location.postal_code'),
+          (SELECT DISTINCT value FROM SPUSE_data WHERE map = 'org.location.city'),
+          (SELECT DISTINCT value FROM SPUSE_data WHERE map = 'org.location.postal_code'),
           (SELECT id FROM o),
           login_username
         )

@@ -1,5 +1,5 @@
--- CREATE FUNCTION LOOKUP_GET_VALUE
-CREATE OR REPLACE FUNCTION dbo.fn_lookup_get_value(
+-- CREATE FUNCTION GET LOOKUP
+CREATE OR REPLACE FUNCTION dbo.fn_get_lookup(
   p_lookup text,
   p_login_id int,
   p_org_id int,

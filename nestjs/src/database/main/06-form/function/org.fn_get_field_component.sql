@@ -104,9 +104,19 @@ $BODY$
 
       --CASE LOOKUP
       IF rec_is_dependent is TRUE THEN
-        SELECT dbo.fn_lookup_get_value(rec_lookup, p_login_id, p_org_id) INTO lookup_data;
+        SELECT dbo.fn_get_lookup(
+          rec_lookup, 
+          p_login_id, 
+          p_org_id
+        ) 
+        INTO lookup_data;
       ELSE
-        SELECT dbo.fn_lookup_get_value(rec_lookup, p_login_id, p_org_id) INTO lookup_data;
+        SELECT dbo.fn_get_lookup(
+          rec_lookup, 
+          p_login_id, 
+          p_org_id
+        ) 
+        INTO lookup_data;
       END IF;
 
       UPDATE FGC_form_field ff

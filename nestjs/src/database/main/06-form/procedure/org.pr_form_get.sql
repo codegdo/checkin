@@ -26,6 +26,7 @@ $BODY$
       filter_form_name := p_form_id::varchar;
     END IF;
 
+    --GET
     SELECT f.id, f.name
     INTO form_id, form_name
     FROM org.form f
@@ -84,7 +85,7 @@ $BODY$
         END LOOP;
       END IF;
 
-      --MAP COMPONENT FIELD TO FIELD
+      --MAP COMPONENT FIELD TO PARENT
 
       --MAP FIELD TO FORM
       SELECT json_agg(field)::jsonb

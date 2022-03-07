@@ -23,65 +23,65 @@ $BODY$
     is_owner boolean := FALSE;
 
   BEGIN
+    --GET
+    SELECT json_agg(u)::json
+    INTO _users
+    FROM (
+      SELECT *
+      FROM sec.fn_get_user(p_user_id::varchar)
+    ) u;
 
-    IF(SELECT 1 FROM sec.user WHERE id = p_user_id AND is_active = TRUE) THEN
+    IF _users IS NOT NULL THEN
+      --SET
+      SELECT (SELECT _users ->> 0)::jsonb ->> 'orgId' INTO org_id;
+      SELECT (SELECT _users ->> 0)::jsonb ->> 'groupId' INTO group_id;
+      SELECT (SELECT _users ->> 0)::jsonb ->> 'groupType' INTO group_type;
+      SELECT (SELECT _users ->> 0)::jsonb ->> 'isOwner' INTO is_owner;
 
-        SELECT json_agg(u)::json
-        INTO _users
+      IF group_type = 'internal' AND is_owner = TRUE THEN
+        SELECT json_agg(l)::json
+        INTO _locations
         FROM (
           SELECT *
-          FROM sec.fn_get_user(p_user_id::varchar)
-        ) u;
-
-        --SET
-        SELECT (SELECT _users ->> 0)::jsonb ->> 'orgId' INTO org_id;
-        SELECT (SELECT _users ->> 0)::jsonb ->> 'groupId' INTO group_id;
-        SELECT (SELECT _users ->> 0)::jsonb ->> 'groupType' INTO group_type;
-        SELECT (SELECT _users ->> 0)::jsonb ->> 'isOwner' INTO is_owner;
-
-        IF group_type = 'internal' AND is_owner = TRUE THEN
-          SELECT json_agg(l)::json
-          INTO _locations
-          FROM (
-            SELECT *
-            FROM org.fn_get_location_for_org(org_id)
-          ) l;
-        ELSE
-          SELECT json_agg(l)::json
-          INTO _locations
-          FROM (
-            SELECT *
-            FROM org.fn_get_location_for_user(p_user_id)
-          ) l;
-        END IF;
-
-        SELECT json_agg(o)::json
-        INTO _organizations
+          FROM org.fn_get_location_for_org(org_id)
+        ) l;
+      ELSE
+        SELECT json_agg(l)::json
+        INTO _locations
         FROM (
-          SELECT o.id, o.name
-          FROM sec.organization o
-          WHERE o.id = org_id
-        ) o;
+          SELECT *
+          FROM org.fn_get_location_for_user(p_user_id)
+        ) l;
+      END IF;
 
-        SELECT json_agg(m)::json
-        INTO _modules
-        FROM (
-          SELECT * FROM dbo.fn_get_module(group_type)
-        ) m;
+      SELECT json_agg(o)::json
+      INTO _organizations
+      FROM (
+        SELECT o.id, o.name
+        FROM sec.organization o
+        WHERE o.id = org_id
+      ) o;
 
-        SELECT json_agg(p)::json
-        INTO _permissions
-        FROM (
-          SELECT * FROM sec.fn_get_permission()
-        ) p;
+      SELECT json_agg(m)::json
+      INTO _modules
+      FROM (
+        SELECT * FROM dbo.fn_get_module(group_type)
+      ) m;
 
-        SELECT json_agg(p)::json
-        INTO _policies
-        FROM (
-          SELECT * FROM sec.fn_get_policy(group_id)
-        ) p;
+      SELECT json_agg(p)::json
+      INTO _permissions
+      FROM (
+        SELECT * FROM sec.fn_get_permission()
+      ) p;
 
-        RAISE NOTICE 'ORG ID %', is_owner;
+      SELECT json_agg(p)::json
+      INTO _policies
+      FROM (
+        SELECT * FROM sec.fn_get_policy(group_id)
+      ) p;
+
+    ELSE
+      RAISE EXCEPTION no_data_found;
     END IF;
 
     RETURN QUERY
