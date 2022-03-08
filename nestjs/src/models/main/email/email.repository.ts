@@ -6,7 +6,7 @@ import { EmailData } from './email.type';
 export class EmailRepository extends Repository<Email> {
 
   async getEmailByName(name: string): Promise<EmailData[]> {
-    return this.manager.query(`SELECT * FROM org.fn_email_get_by_name($1)`, [
+    return this.manager.query(`SELECT * FROM org.fn_get_email($1)`, [
       name,
     ]);
   }

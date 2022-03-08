@@ -1,6 +1,5 @@
 -- CREATE PROCEDURE USER_SIGNUP
 CREATE OR REPLACE PROCEDURE sec.pr_user_signup(
-  p_form_name varchar,
   p_form_data json,
   OUT data json
 )
@@ -8,43 +7,13 @@ AS
 $BODY$
   DECLARE
     user_group_id int := 2;
-    user_form_id int;
   BEGIN
-
-    SELECT id 
-    INTO user_form_id 
-    FROM org.form 
-    WHERE name = p_form_name;
-
-    IF user_form_id IS NOT NULL THEN
-
-      -- JSON p_form_data to table tmp_form_data
-      DROP TABLE IF EXISTS tmp_form_data CASCADE;
-      CREATE TEMP TABLE tmp_form_data AS
-      SELECT key AS id, value FROM json_to_recordset(p_form_data)
-      AS rec ("key" int, "value" text);
-
-      -- CREATE a table tmp_data
-      DROP TABLE IF EXISTS tmp_data CASCADE;
-      CREATE TEMP TABLE tmp_data(
-        id int,
-        value varchar,
-        map varchar,
-        lookup varchar
-      );
-
-      --INSERT id and value
-      INSERT INTO tmp_data(id, value)
-      SELECT * FROM tmp_form_data;
-
-      --UPDATE map and lookup
-      UPDATE tmp_data
-      SET map = f.map,
-          lookup = f.lookup
-      FROM org.field f
-      WHERE tmp_data.id = f.id;
-
-      --INSERT
+    --TEMP
+    DROP TABLE IF EXISTS SPUSU_eval CASCADE;
+    CREATE TEMP TABLE SPUSU_eval AS
+    SELECT * FROM org.fn_get_eval(p_form_data);
+    
+    --INSERT
       WITH c AS (
         INSERT INTO org.contact(
           first_name,
@@ -53,10 +22,10 @@ $BODY$
           phone_number
         )
         VALUES(
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.contact.first_name'),
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.contact.last_name'),
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.contact.email_address'),
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'org.contact.phone_number')
+          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'org.contact.first_name'),
+          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'org.contact.last_name'),
+          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'org.contact.email_address'),
+          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'org.contact.phone_number')
         )
         RETURNING id, email_address, phone_number
       ), u AS (
@@ -65,14 +34,12 @@ $BODY$
           password,
           contact_id,
           group_id
-          --form_id
         )
         VALUES(
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'sec.user.username'),
-          (SELECT DISTINCT value FROM tmp_data WHERE map = 'sec.user.password'),
+          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'sec.user.username'),
+          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'sec.user.password'),
           (SELECT id FROM c),
           (user_group_id)
-          --(user_form_id)
         )
         RETURNING id, username, is_active, contact_id
       )
@@ -87,8 +54,7 @@ $BODY$
           c.email_address "emailAddress"
         FROM u LEFT JOIN c on c.id = u.contact_id
       ) r;
-
-    END IF;
+    
     COMMIT;
   END
 $BODY$
@@ -165,6 +131,45 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
+-- CREATE PROCEDURE ORG SET DEFAULT
+CREATE OR REPLACE PROCEDURE sec.pr_org_set_default(
+  p_org_id int,
+  p_login_id int
+) AS
+$BODY$
+  DECLARE
+    business_type varchar;
+    login_username varchar;
+  BEGIN
+    --SET business_type
+    SELECT bt.category
+    INTO business_type
+    FROM sec.organization o 
+    LEFT JOIN dbo.business_type bt ON o.business_type_id = bt.id
+    WHERE o.id = p_org_id;
+
+    --SET username
+    SELECT username
+    INTO login_username
+    FROM sec.user
+    WHERE id = p_login_id;
+
+    IF business_type = 'Service' THEN
+      
+      --INSERT GROUP
+      INSERT
+      INTO sec.group(name, group_type_id, org_id, created_by)
+      VALUES
+      ('Manager', '2', p_org_id, login_username),
+      ('Staff', '3', p_org_id, login_username);
+
+    END IF;
+
+    COMMIT;
+  END;
+$BODY$
+LANGUAGE plpgsql;
+
 -- CREATE PROCEDURE USER_SETUP
 CREATE OR REPLACE PROCEDURE sec.pr_user_setup(
   p_form_data json,
@@ -181,59 +186,18 @@ AS
 $BODY$
   DECLARE
     login_username varchar;
-    location_territory_id int;
-    user_org_id int;
+    org_id int;
   BEGIN
+    --TEMP
+    DROP TABLE IF EXISTS SPUSE_eval CASCADE;
+    CREATE TEMP TABLE SPUSE_eval AS
+    SELECT * FROM org.fn_get_eval(p_form_data);
 
-    -- JSON form_data to table
-    DROP TABLE IF EXISTS USU_form_data CASCADE;
-    CREATE TEMP TABLE USU_form_data AS
-    SELECT key AS id, value FROM json_to_recordset(p_form_data)
-    AS rec ("key" int, "value" text);
-
-    -- CREATE a table USU_data
-    DROP TABLE IF EXISTS USU_data CASCADE;
-    CREATE TEMP TABLE USU_data(
-      id int,
-      value varchar,
-      map varchar,
-      lookup varchar
-    );
-
-    --INSERT id and value
-    INSERT INTO USU_data(id, value)
-    SELECT * FROM USU_form_data;
-
-    --UPDATE map and lookup
-    UPDATE USU_data
-    SET map = f.map,
-      lookup = f.lookup
-    FROM org.field f
-    WHERE USU_data.id = f.id;
-
-    --SET login username
+    --SET username
     SELECT username
     INTO login_username
-    FROM sec.user
-    WHERE id = p_login_id AND org_id IS NULL;
-
-    --SET location territory id
-    SELECT id
-    INTO location_territory_id
-    FROM(
-      SELECT id
-      FROM dbo.territory
-      WHERE country_code = (
-        SELECT DISTINCT value
-        FROM USU_data
-        WHERE map = 'org.location.country'
-      )
-      AND state_code = (
-        SELECT DISTINCT value
-        FROM USU_data
-        WHERE map = 'org.location.state'
-      )
-    ) t;
+    FROM sec.user u
+    WHERE u.id = p_login_id AND u.org_id IS NULL;
 
     --CHECK user exists
     IF login_username IS NOT NULL THEN
@@ -248,9 +212,9 @@ $BODY$
           created_by
         )
         VALUES(
-          (SELECT DISTINCT value FROM USU_data WHERE map = 'sec.organization.name'),
-          (SELECT DISTINCT value FROM USU_data WHERE map = 'sec.organization.business_type_id')::int,
-          (SELECT DISTINCT value FROM USU_data WHERE map = 'sec.organization.subdomain'),
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'sec.organization.name'),
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'sec.organization.business_type_id')::INT,
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'sec.organization.subdomain'),
           p_login_id,
           login_username
         )
@@ -266,26 +230,26 @@ $BODY$
           created_by
         )
         VALUES(
-          (SELECT DISTINCT value FROM USU_data WHERE map = 'org.location.name'),
-          (SELECT DISTINCT value FROM USU_data WHERE map = 'org.location.street_address'),
-          location_territory_id,
-          (SELECT DISTINCT value FROM USU_data WHERE map = 'org.location.city'),
-          (SELECT DISTINCT value FROM USU_data WHERE map = 'org.location.postal_code'),
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.name'),
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.street_address'),
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.territory_id')::INT,
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.city'),
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.postal_code'),
           (SELECT id FROM o),
           login_username
         )
         RETURNING id
       ), u AS (
-        UPDATE sec.user
+        UPDATE sec.user u
         SET org_id = (SELECT id FROM o)
-        WHERE id = p_login_id
-        RETURNING id, org_id
+        WHERE u.id = p_login_id
+        RETURNING u.id, u.org_id
       ) 
       SELECT u.org_id
-      INTO user_org_id 
+      INTO org_id 
       FROM u;
 
-      CAll sec.pr_user_setup_default();
+      CAll sec.pr_org_set_default(org_id, p_login_id);
 
       SELECT
         ua.users::jsonb ->> 0,
@@ -315,71 +279,49 @@ LANGUAGE plpgsql;
 -- CREATE PROCEDURE USER_LOGIN
 CREATE OR REPLACE PROCEDURE sec.pr_user_login(
   p_username varchar,
+
   OUT "user" json,
-  OUT "locations" json,
-  OUT "modules" json,
-  OUT "permissions" json,
-  OUT "policy" json
+  OUT locations json,
+  OUT organizations json,
+  OUT modules json,
+  OUT permissions json,
+  OUT policies json
 )
 AS
 $BODY$
   DECLARE
+      user_id int;
       user_org_id int;
-      user_group_type varchar;
+      user_is_active boolean;
+      
       user_group_id int;
+      user_group_type varchar;
   BEGIN
 
-    SELECT json_agg(u.*)::json ->> 0
-    INTO "user"
-    FROM (
-      SELECT * FROM sec.fn_user_get_by_id(p_username)
-    ) u;
+    SELECT id, "orgId", "groupType", "isActive"
+    INTO user_id, user_org_id, user_group_type, user_is_active
+    FROM sec.fn_get_user(p_username);
 
-    IF "user" IS NOT NULL THEN
-
-      --SET
-      SELECT "user" ->> 'orgId' INTO user_org_id;
-      SELECT "user" ->> 'groupType' INTO user_group_type;
-      SELECT "user" ->> 'groupId' INTO user_group_id;
+    IF user_id IS NOT NULL AND user_is_active IS TRUE AND user_org_id IS NOT NULL THEN
 
       IF user_group_type = 'system' THEN
 
       ELSE
-        IF user_org_id IS NOT NULL THEN
-          --CHECK org is_active
-          IF(SELECT 1 FROM sec.organization WHERE id = user_org_id AND is_active is TRUE) THEN
-
-            SELECT json_agg(l)::json
-            INTO "locations"
-            FROM (
-              SELECT id, name
-              FROM org.location
-              WHERE org_id = user_org_id
-              AND is_active = true
-            ) l;
-
-            SELECT json_agg(m.*)::json
-            INTO "modules"
-            FROM (
-              SELECT * FROM dbo.fn_module_get_by_group_type(user_group_type)
-            ) m;
-
-            SELECT json_agg(p.*)::json
-            INTO "permissions"
-            FROM (
-              SELECT * FROM sec.fn_permission_get_access_level()
-            ) p;
-
-            SELECT json_agg(p.*)::json ->> 0
-            INTO "policy"
-            FROM (
-              SELECT * FROM sec.fn_policy_get_by_group_id(user_group_id)
-            ) p;
-
-          ELSE
-            RAISE EXCEPTION no_data_found;
-          END IF;
-        END IF;
+        SELECT
+          ua.users::jsonb ->> 0,
+          ua.locations,
+          ua.organizations,
+          ua.modules,
+          ua.permissions,
+          ua.policies
+        INTO
+          "user",
+          locations,
+          organizations,
+          modules,
+          permissions,
+          policies
+        FROM sec.fn_get_user_access(user_id) ua;
       END IF;
     ELSE
       RAISE EXCEPTION no_data_found;
@@ -390,11 +332,12 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
---DROP PROCEDURES
-/*
-DROP PROCEDURE IF EXISTS sec.pr_user_signup(varchar, json, json);
+/* DROP PROCEDURES
+
+DROP PROCEDURE IF EXISTS sec.pr_org_set_default(int, int);
+DROP PROCEDURE IF EXISTS sec.pr_user_signup(json, json);
 DROP PROCEDURE IF EXISTS sec.pr_user_verify(int, varchar, varchar, bigint, json);
 DROP PROCEDURE IF EXISTS sec.pr_user_confirm(varchar, json);
-DROP PROCEDURE IF EXISTS sec.pr_user_setup(int, json, json, json, json);
+DROP PROCEDURE IF EXISTS sec.pr_user_setup(json, int, json, json, json, json, json, json);
 DROP PROCEDURE IF EXISTS sec.pr_user_login(varchar, json, json, json, json, json);
 */

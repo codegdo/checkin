@@ -1,5 +1,5 @@
--- CREATE FUNCTION LOOKUP_GET_VALUE
-CREATE OR REPLACE FUNCTION dbo.fn_lookup_get_value(
+-- CREATE FUNCTION GET LOOKUP
+CREATE OR REPLACE FUNCTION dbo.fn_get_lookup(
   p_lookup text,
   p_login_id int,
   p_org_id int,
@@ -55,15 +55,15 @@ $BODY$
       EXECUTE string_sql INTO data;
     END IF;
 
-    IF lookup_table = 'location' THEN
+    IF lookup_table IN ('group', 'location') THEN
 
-       string_sql := FORMAT(
+      string_sql := FORMAT(
         $ex$
           SELECT json_agg(json_build_object('key', %4$s, 'value', %3$s))
           FROM (
             SELECT DISTINCT %3$s, %4$s
             FROM %1$s.%2$s
-            WHERE id = %5$s
+            WHERE org_id = %5$s
             ORDER BY %3$s
           ) t
         $ex$, lookup_schema, lookup_table, lookup_column, lookup_column_id, p_org_id
@@ -93,6 +93,7 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
--- DROP FUNCTIONS
+/* DROP FUNCTIONS
 
-DROP FUNCTION IF EXISTS dbo.fn_lookup_get_value;
+DROP FUNCTION IF EXISTS dbo.fn_get_lookup;
+*/

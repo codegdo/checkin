@@ -181,7 +181,7 @@ VALUES
 ('password', 'field', 'password', null, 'sec.user.password', null, '0', '0', '1', '1', null, null, null),
 ('passcode', 'field', 'text', null, 'sec.user.passcode', null, '0', '0', '1', '1', null, null, null),
 ('location', 'field', 'select', null, 'sec.user.location_id', 'org.location.name.id', '0', '0', '1', '1', null, null, null),
-('groupId', 'field', 'radio', null, 'sec.user.group_id', 'sec.group.name.id', '0', '0', '1', '1', null, null, null),
+('groupId', 'field', 'select', null, 'sec.user.group_id', 'sec.group.name.id', '0', '0', '1', '1', null, null, null),
 
 --contact=2
 ('firstName', 'field', 'text', null, 'org.contact.first_name', null, '0', '0', '1', '2', null, null, null),
@@ -303,7 +303,7 @@ VALUES
 ('3', '15', 'Name', '0', 15);
 
 
--- DROP TABLES
+/* DROP TABLES
 
 DROP TABLE IF EXISTS
 dbo.form_type,
@@ -313,3 +313,4 @@ org.component,
 org.field,
 org.form_field,
 org.form_component CASCADE;
+*/

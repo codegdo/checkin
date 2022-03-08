@@ -14,62 +14,20 @@ AS
 $BODY$
   DECLARE
     login_username varchar;
-    location_territory_id int;
-    user_org_id int;
+    org_id int;
   BEGIN
+    --TEMP
+    DROP TABLE IF EXISTS SPUSE_eval CASCADE;
+    CREATE TEMP TABLE SPUSE_eval AS
+    SELECT * FROM org.fn_get_eval(p_form_data);
 
-    --TEMP form_data
-    DROP TABLE IF EXISTS SPUSE_form_data CASCADE;
-    CREATE TEMP TABLE SPUSE_form_data AS
-    SELECT key AS id, value 
-    FROM json_to_recordset(p_form_data)
-    AS rec ("key" int, "value" text);
-
-    --TEMP data
-    DROP TABLE IF EXISTS SPUSE_data CASCADE;
-    CREATE TEMP TABLE SPUSE_data(
-      id int,
-      value varchar,
-      map varchar,
-      lookup varchar
-    );
-
-    --INSERT id and value
-    INSERT INTO SPUSE_data(id, value)
-    SELECT * FROM SPUSE_form_data;
-
-    --UPDATE map and lookup
-    UPDATE SPUSE_data d
-    SET map = f.map,
-      lookup = f.lookup
-    FROM org.field f
-    WHERE d.id = f.id;
-
-    --SET login username
+    --SET username
     SELECT username
     INTO login_username
-    FROM sec.user
-    WHERE id = p_login_id AND org_id IS NULL;
+    FROM sec.user u
+    WHERE u.id = p_login_id AND u.org_id IS NULL;
 
-    --SET location territory id
-    SELECT id
-    INTO location_territory_id
-    FROM(
-      SELECT id
-      FROM dbo.territory
-      WHERE country_code = (
-        SELECT DISTINCT value
-        FROM SPUSE_data
-        WHERE map = 'org.location.country'
-      )
-      AND state_code = (
-        SELECT DISTINCT value
-        FROM SPUSE_data
-        WHERE map = 'org.location.state'
-      )
-    ) t;
-
-    --CHECK user exists and org is null
+    --CHECK user exists
     IF login_username IS NOT NULL THEN
 
       --INSERT
@@ -82,9 +40,9 @@ $BODY$
           created_by
         )
         VALUES(
-          (SELECT DISTINCT value FROM USU_data WHERE map = 'sec.organization.name'),
-          (SELECT DISTINCT value FROM USU_data WHERE map = 'sec.organization.business_type_id')::int,
-          (SELECT DISTINCT value FROM USU_data WHERE map = 'sec.organization.subdomain'),
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'sec.organization.name'),
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'sec.organization.business_type_id')::INT,
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'sec.organization.subdomain'),
           p_login_id,
           login_username
         )
@@ -100,26 +58,26 @@ $BODY$
           created_by
         )
         VALUES(
-          (SELECT DISTINCT value FROM SPUSE_data WHERE map = 'org.location.name'),
-          (SELECT DISTINCT value FROM SPUSE_data WHERE map = 'org.location.street_address'),
-          location_territory_id,
-          (SELECT DISTINCT value FROM SPUSE_data WHERE map = 'org.location.city'),
-          (SELECT DISTINCT value FROM SPUSE_data WHERE map = 'org.location.postal_code'),
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.name'),
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.street_address'),
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.territory_id')::INT,
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.city'),
+          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.postal_code'),
           (SELECT id FROM o),
           login_username
         )
         RETURNING id
       ), u AS (
-        UPDATE sec.user
+        UPDATE sec.user u
         SET org_id = (SELECT id FROM o)
-        WHERE id = p_login_id
-        RETURNING id, org_id
+        WHERE u.id = p_login_id
+        RETURNING u.id, u.org_id
       ) 
       SELECT u.org_id
-      INTO user_org_id 
+      INTO org_id 
       FROM u;
 
-      CAll sec.pr_user_setup_default();
+      CAll sec.pr_org_set_default(org_id, p_login_id);
 
       SELECT
         ua.users::jsonb ->> 0,
@@ -146,4 +104,4 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-DROP PROCEDURE IF EXISTS sec.pr_user_setup(int, json, json, json, json, json, json, json);
+DROP PROCEDURE IF EXISTS sec.pr_user_setup(json, int, json, json, json, json, json, json);

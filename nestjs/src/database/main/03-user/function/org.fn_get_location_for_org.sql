@@ -8,7 +8,7 @@ $BODY$
   DECLARE
   BEGIN
     RETURN QUERY
-    SELECT *
+    SELECT l.id, l.name
     FROM org.location l
     WHERE l.org_id = p_org_id;
   END;

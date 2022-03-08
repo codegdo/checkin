@@ -104,9 +104,19 @@ $BODY$
 
       --CASE LOOKUP
       IF rec_is_dependent is TRUE THEN
-        SELECT dbo.fn_lookup_get_value(rec_lookup, p_login_id, p_org_id) INTO lookup_data;
+        SELECT dbo.fn_get_lookup(
+          rec_lookup, 
+          p_login_id, 
+          p_org_id
+        ) 
+        INTO lookup_data;
       ELSE
-        SELECT dbo.fn_lookup_get_value(rec_lookup, p_login_id, p_org_id) INTO lookup_data;
+        SELECT dbo.fn_get_lookup(
+          rec_lookup, 
+          p_login_id, 
+          p_org_id
+        ) 
+        INTO lookup_data;
       END IF;
 
       UPDATE FGF_form_field ff
@@ -229,9 +239,19 @@ $BODY$
 
       --CASE LOOKUP
       IF rec_is_dependent is TRUE THEN
-        SELECT dbo.fn_lookup_get_value(rec_lookup, p_login_id, p_org_id) INTO lookup_data;
+        SELECT dbo.fn_get_lookup(
+          rec_lookup, 
+          p_login_id, 
+          p_org_id
+        ) 
+        INTO lookup_data;
       ELSE
-        SELECT dbo.fn_lookup_get_value(rec_lookup, p_login_id, p_org_id) INTO lookup_data;
+        SELECT dbo.fn_get_lookup(
+          rec_lookup, 
+          p_login_id, 
+          p_org_id
+        ) 
+        INTO lookup_data;
       END IF;
 
       UPDATE FGC_form_field ff
@@ -248,8 +268,8 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
--- CREATE FUNCTION FN_GET_DATA_FOR_USER
-CREATE OR REPLACE FUNCTION org.fn_get_data_for_user(
+-- CREATE FUNCTION FN_GET_DATA_USER
+CREATE OR REPLACE FUNCTION org.fn_get_data_user(
   p_form_id int,
   p_filter_id int,
   p_login_id int,
@@ -280,8 +300,8 @@ $BODY$
     row_max int;
     row_min int := 1;
   BEGIN
-    DROP TABLE IF EXISTS FGDFU_eval CASCADE;
-    CREATE TEMP TABLE FGDFU_eval(id int, value text);
+    DROP TABLE IF EXISTS FGDU_eval CASCADE;
+    CREATE TEMP TABLE FGDU_eval(id int, value text);
 
     SELECT json_agg(data.*)::json ->> 0
     INTO user_data
@@ -317,8 +337,8 @@ $BODY$
       user_form_id := p_form_id;
     END IF;
 
-    DROP TABLE IF EXISTS FGDFU_form_field CASCADE;
-    CREATE TEMP TABLE FGDFU_form_field AS
+    DROP TABLE IF EXISTS FGDU_form_field CASCADE;
+    CREATE TEMP TABLE FGDU_form_field AS
     SELECT
       row_number() over () as row_num, *
     FROM (
@@ -337,14 +357,14 @@ $BODY$
 
     SELECT max(ff.row_num)
     INTO row_max
-    FROM FGDFU_form_field ff;
+    FROM FGDU_form_field ff;
 
     WHILE row_max >= row_min
     LOOP
 
       SELECT field_id, field_map
       INTO eval_id, map_data
-      FROM FGDFU_form_field ff
+      FROM FGDU_form_field ff
       WHERE ff.row_num = row_min;
 
       map_table := split_part(map_data, '.', 2);
@@ -355,13 +375,13 @@ $BODY$
           SELECT user_data ->> map_column INTO eval_value;
         WHEN 'contact' THEN
           SELECT contact_data ->> map_column INTO eval_value;
-         WHEN 'group' THEN
+        WHEN 'group' THEN
           SELECT group_data ->> map_column INTO eval_value;
         ELSE
           eval_value := null;
       END CASE;
 
-      INSERT INTO FGDFU_eval(id, value)
+      INSERT INTO FGDU_eval(id, value)
       VALUES (eval_id, eval_value);
 
       row_min := row_min + 1;
@@ -371,15 +391,113 @@ $BODY$
 
     RETURN QUERY
     SELECT *
-    FROM FGDFU_eval;
+    FROM FGDU_eval;
 
   END;
 $BODY$
 LANGUAGE plpgsql;
 
--- DROP FUNCTIONS
-/*
+-- CREATE FUNCTION FN_GET_EVAL
+CREATE OR REPLACE FUNCTION org.fn_get_eval(
+  p_form_data json
+)
+RETURNS TABLE(
+  id int,
+  value text,
+  map text,
+  lookup text
+) AS
+$BODY$
+  DECLARE
+    row_min int := 1;
+    row_max int;
+  BEGIN
+    --TEMP eval
+    DROP TABLE IF EXISTS OFGED_eval CASCADE;
+    CREATE TEMP TABLE OFGED_eval AS
+    SELECT r.key id, r.value, r.map, r.lookup
+    FROM json_to_recordset(p_form_data)
+    AS r ("key" int, "value" text, "map" text, "lookup" text);
+
+    --UPDATE map and lookup
+    UPDATE OFGED_eval e
+    SET map = f.map,
+        lookup = f.lookup
+    FROM org.field f
+    WHERE e.id = f.id;
+
+    --LOOKUP territory
+    DROP TABLE IF EXISTS OFGED_lookup_territory CASCADE;
+    CREATE TEMP TABLE OFGED_lookup_territory AS
+    SELECT 
+      lt.row_num, 
+      id, 
+      value, 
+      lt.map, 
+      lookup, 
+      lt.country_code, 
+      lt.state_code
+    FROM (
+      WITH e as (
+        SELECT 
+          e.id, 
+          e.value, 
+          e.map, 
+          e.lookup, 
+          row_number() OVER (PARTITION BY e.map) AS row_group
+        FROM OFGED_eval e
+        WHERE e.lookup IS NOT NULL AND split_part(e.lookup, '.', 2) = 'territory'
+      ), e1 as (
+        SELECT * FROM e WHERE row_group = 1
+      ), e2 as (
+        SELECT * FROM e WHERE row_group = 2
+      )
+      SELECT 
+        row_number() over() row_num, 
+        e1.map, 
+        e1.value country_code, 
+        e2.value state_code
+      FROM e1
+      LEFT JOIN e2 on e2.map = e1.map
+    ) lt;
+
+    --LOOP
+    SELECT max(lt.row_num)
+    INTO row_max
+    FROM OFGED_lookup_territory lt;
+
+    WHILE row_max >= row_min
+    LOOP
+        
+      UPDATE OFGED_lookup_territory lt
+      SET value = (
+        SELECT t.id
+        FROM dbo.territory t
+        WHERE t.country_code = lt.country_code
+        AND t.state_code = lt.state_code
+      )::varchar
+      WHERE lt.row_num = row_min;
+
+      row_min := row_min + 1;
+    END LOOP;
+
+    RETURN QUERY
+
+    SELECT lt.id, lt.value, lt.map, lt.lookup
+    FROM OFGED_lookup_territory lt
+    UNION
+    SELECT e.id, e.value, e.map, e.lookup
+    FROM OFGED_eval e
+    WHERE e.lookup IS NULL OR split_part(e.lookup, '.', 2) <> 'territory';
+
+  END;
+$BODY$
+LANGUAGE plpgsql;
+
+/* DROP FUNCTIONS
+
 DROP FUNCTION IF EXISTS org.fn_get_field;
 DROP FUNCTION IF EXISTS org.fn_get_field_component;
 DROP FUNCTION IF EXISTS org.fn_get_data_for_user;
+DROP FUNCTION IF EXISTS org.fn_get_eval;
 */

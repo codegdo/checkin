@@ -1,5 +1,5 @@
--- CREATE FUNCTION FN_GET_DATA_FOR_USER
-CREATE OR REPLACE FUNCTION org.fn_get_data_for_user(
+-- CREATE FUNCTION FN_GET_DATA_USER
+CREATE OR REPLACE FUNCTION org.fn_get_data_user(
   p_form_id int,
   p_filter_id int,
   p_login_id int,
@@ -30,8 +30,8 @@ $BODY$
     row_max int;
     row_min int := 1;
   BEGIN
-    DROP TABLE IF EXISTS FGDFU_eval CASCADE;
-    CREATE TEMP TABLE FGDFU_eval(id int, value text);
+    DROP TABLE IF EXISTS FGDU_eval CASCADE;
+    CREATE TEMP TABLE FGDU_eval(id int, value text);
 
     SELECT json_agg(data.*)::json ->> 0
     INTO user_data
@@ -67,8 +67,8 @@ $BODY$
       user_form_id := p_form_id;
     END IF;
 
-    DROP TABLE IF EXISTS FGDFU_form_field CASCADE;
-    CREATE TEMP TABLE FGDFU_form_field AS
+    DROP TABLE IF EXISTS FGDU_form_field CASCADE;
+    CREATE TEMP TABLE FGDU_form_field AS
     SELECT
       row_number() over () as row_num, *
     FROM (
@@ -87,14 +87,14 @@ $BODY$
 
     SELECT max(ff.row_num)
     INTO row_max
-    FROM FGDFU_form_field ff;
+    FROM FGDU_form_field ff;
 
     WHILE row_max >= row_min
     LOOP
 
       SELECT field_id, field_map
       INTO eval_id, map_data
-      FROM FGDFU_form_field ff
+      FROM FGDU_form_field ff
       WHERE ff.row_num = row_min;
 
       map_table := split_part(map_data, '.', 2);
@@ -111,7 +111,7 @@ $BODY$
           eval_value := null;
       END CASE;
 
-      INSERT INTO FGDFU_eval(id, value)
+      INSERT INTO FGDU_eval(id, value)
       VALUES (eval_id, eval_value);
 
       row_min := row_min + 1;
@@ -121,10 +121,10 @@ $BODY$
 
     RETURN QUERY
     SELECT *
-    FROM FGDFU_eval;
+    FROM FGDU_eval;
 
   END;
 $BODY$
 LANGUAGE plpgsql;
 
---SELECT * FROM org.fn_get_data_for_user('3', 1, 1, 1);
+--SELECT * FROM org.fn_get_data_user('3', 1, 1, 1);

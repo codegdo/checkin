@@ -1,5 +1,5 @@
--- CREATE FUNCTION FN_EMAIL_GET_BY_NAME
-CREATE OR REPLACE FUNCTION org.fn_email_get_by_name(p_name varchar)
+-- CREATE FUNCTION FN_GET_EMAIL
+CREATE OR REPLACE FUNCTION org.fn_get_email(p_email_id varchar)
 RETURNS TABLE (
   id int,
   name varchar,
@@ -20,8 +20,16 @@ RETURNS TABLE (
 AS
 $BODY$
   DECLARE
-
+    filter_id int := 0;
+    filter_name varchar := '';
   BEGIN
+
+    IF (SELECT p_user_id ~ '^\d+$') THEN
+      filter_id := p_email_id::int;
+    ELSE
+      filter_name := p_email_id::varchar;
+    END IF;
+
     RETURN QUERY
 
       SELECT
@@ -44,17 +52,10 @@ $BODY$
       LEFT JOIN dbo.email_type et ON et.id = e.email_type_id
       LEFT JOIN dbo.email_address ea ON ea.id = et.email_address_id
       LEFT JOIN dbo.email_from ef ON ef.id = et.email_from_id
-      WHERE et.name = p_name AND e.is_active = true;
+      WHERE e.id = filter_id OR et.name = filter_name;
 
   END;
 $BODY$
 LANGUAGE plpgsql;
 
--- CALL FUNCTIONS
-
-SELECT * FROM org.fn_email_get_by_name('verify');
-
--- DROP FUNCTIONS
-
-DROP FUNCTION IF EXISTS
-org.fn_email_get_by_name;
+--SELECT * FROM org.fn_get_email('verify');

@@ -51,7 +51,7 @@ $BODY$
         IF form_name = 'user_form' THEN
           INSERT INTO PFG_eval(id, value)
           SELECT id, value
-          FROM org.fn_get_data_for_user(form_id, p_filter_id, p_login_id, p_org_id);
+          FROM org.fn_get_data_user(form_id, p_filter_id, p_login_id, p_org_id);
         END IF;
 
         --SET FIELD VALUE

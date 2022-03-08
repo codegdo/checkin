@@ -25,14 +25,14 @@ import { FormTypeEnum } from '../form/form.type';
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
   async signupUser(dto: UserSignupDto): Promise<UserSignupData> {
-    let { formName, data } = dto;
+    let { data } = dto;
 
     // encrypt password
     data = await encryptKeyValue(2, data);
 
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_signup($1, $2, $3)`,
-      [formName, data, null],
+      `CALL sec.pr_user_signup($1, $2)`,
+      [data, null],
     );
 
     return result.data;
@@ -66,8 +66,8 @@ export class UserRepository extends Repository<User> {
     const { username, password } = dto;
 
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_login($1, $2, $3, $4, $5, $6)`,
-      [username, null, null, null, null, null],
+      `CALL sec.pr_user_login($1, $2, $3, $4, $5, $6, $7)`,
+      [username, null, null, null, null, null, null],
     );
 
     const {
@@ -103,7 +103,6 @@ export class UserRepository extends Repository<User> {
 }
 
 /*
-
 const {
       username,
       orgName,

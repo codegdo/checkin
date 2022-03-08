@@ -26,6 +26,7 @@ $BODY$
       filter_form_name := p_form_id::varchar;
     END IF;
 
+    --GET
     SELECT f.id, f.name
     INTO form_id, form_name
     FROM org.form f
@@ -50,7 +51,7 @@ $BODY$
         IF form_name = 'user_form' THEN
           INSERT INTO PFG_eval(id, value)
           SELECT id, value
-          FROM org.fn_get_data_for_user(form_id, p_filter_id, p_login_id, p_org_id);
+          FROM org.fn_get_data_user(form_id, p_filter_id, p_login_id, p_org_id);
         END IF;
 
         --SET FIELD VALUE
@@ -84,7 +85,7 @@ $BODY$
         END LOOP;
       END IF;
 
-      --MAP COMPONENT FIELD TO FIELD
+      --MAP COMPONENT FIELD TO PARENT
 
       --MAP FIELD TO FORM
       SELECT json_agg(field)::jsonb
@@ -128,7 +129,7 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
---DROP PROCEDURES
-/*
+/* DROP PROCEDURES
+
 DROP PROCEDURE IF EXISTS org.pr_form_get(varchar, int, int, int, json);
 */

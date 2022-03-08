@@ -55,7 +55,7 @@ $BODY$
       EXECUTE string_sql INTO data;
     END IF;
 
-    IF lookup_table = 'location' THEN
+    IF lookup_table IN ('group', 'location') THEN
 
       string_sql := FORMAT(
         $ex$
@@ -63,7 +63,7 @@ $BODY$
           FROM (
             SELECT DISTINCT %3$s, %4$s
             FROM %1$s.%2$s
-            WHERE id = %5$s
+            WHERE org_id = %5$s
             ORDER BY %3$s
           ) t
         $ex$, lookup_schema, lookup_table, lookup_column, lookup_column_id, p_org_id
@@ -93,8 +93,4 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
--- DROP FUNCTIONS
-
-DROP FUNCTION IF EXISTS dbo.fn_lookup_get_value;
-
-SELECT dbo.fn_lookup_get_value('dbo.group_type.name.id', 1, 1);
+--SELECT dbo.fn_lookup_get_value('dbo.group_type.name.id', 1, 1);
