@@ -34,7 +34,6 @@ const SetupForm: React.FC = (): JSX.Element => {
   }, [submit]);
 
   const handleSubmit = (values: any) => {
-    console.log(JSON.stringify(objectToKeyValue(values)));
     void postSetup({
       body: {
         loginId: user?.id,

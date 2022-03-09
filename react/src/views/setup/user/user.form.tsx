@@ -1,39 +1,49 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams, useLocation, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 import { Form, FormData } from '../../../components/form';
 import { useFetch } from '../../../hooks';
+import { objectToKeyValue } from '../../../utils';
+import { AppState } from '../../../store/reducers';
 
 const UserForm: React.FC = (): JSX.Element => {
   const { id = 0 } = useParams();
   const { search } = useLocation();
   const navigate = useNavigate();
-  const [form, setForm] = useState<FormData>();
-  //const [{ status: submit, result: { data: submitData } }, postSignup] = useFetch('/api/auth/signup');
-  const [{ status: loading, result: { data: formData } }, getForm] = useFetch(`/api/setup/users/${id}${search}`);
 
-  const [{ status: submit, result }, postUser] = useFetch('/api/setup/users');
-  //const [{ status: loading, result: formData}, getForm] = useFetch('/api/setup/users/new?name=user_add');
+  const { user } = useSelector((state: AppState) => state.session);
+  const [form, setForm] = useState<FormData>();
+
+  const [{ status: submit, result: { data: submitData } }, postUser] = useFetch('/api/setup/users');
+  const [{ status: loading, result: { data: formData } }, getForm] = useFetch(`/api/setup/users/${id}${search}`);
 
   // load form
   useEffect(() => {
     void (async () => {
       await getForm();
     })();
-    // void (async () => {
-    //   const json: any = (await import('./user.form.json')).default;
-    //   setForm(json);
-    // })();
   }, []);
 
   useEffect(() => {
     if (loading === 'success' && formData) {
       setForm(formData);
-      console.log(formData);
     }
   }, [loading]);
 
+  useEffect(() => {
+    if (submit == 'success') {
+      console.log(submitData);
+    }
+  }, [submit]);
+
   const handleSubmit = (values: any) => {
-    void postUser({ body: values });
+    console.log('test');
+    void postUser({
+      body: {
+        data: JSON.stringify(objectToKeyValue(values))
+      }
+    });
   };
 
   const handleCallback = (name: string) => {
@@ -48,7 +58,7 @@ const UserForm: React.FC = (): JSX.Element => {
   return (
     <>
       {submit === 'error' && <div>Error</div>}
-      <Form form={form} status={submit} onSubmit={handleSubmit} onCallback={handleCallback} />
+      <Form form={form} isKey={true} status={submit} onSubmit={handleSubmit} onCallback={handleCallback} />
     </>
   );
 };

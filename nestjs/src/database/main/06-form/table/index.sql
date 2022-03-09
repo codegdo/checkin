@@ -265,11 +265,15 @@ VALUES
 ('2', '32', 'City', '7'),
 ('2', '33', 'Postal Code', '8'),
 --user_form
-('3', '1', 'Username', '0'),
-('3', '2', 'Password', '1'),
-('3', '3', 'Passcode', '2'),
-('3', '4', 'Location', '3'),
-('3', '5', 'Group', '4');
+('3', '6', 'First Name', '0'),
+('3', '7', 'Last Name', '1'),
+('3', '1', 'Username', '2'),
+('3', '2', 'Password', '3'),
+('3', '3', 'Passcode', '4'),
+('3', '8', 'Email Address', '5'),
+('3', '9', 'Phone Number', '6'),
+('3', '4', 'Location', '7'),
+('3', '5', 'Group', '8');
 
 -- CREATE TABLE FORM_COMPONENT
 CREATE TABLE IF NOT EXISTS org.form_component(

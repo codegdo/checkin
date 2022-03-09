@@ -56,39 +56,6 @@ export class AuthController {
   }
 
   @Public()
-  @Post('login')
-  async login(@Session() session: any, @Body() body: UserLoginDto) {
-    const data = await this.authService.login(body);
-
-    console.log(data);
-
-    const { user, policies, nav } = data;
-    const { password, orgId, ...rest } = user;
-    const accessToken = this.jwtService.sign({ orgId });
-
-    if (orgId) {
-      session.data = { user, policies, nav };
-
-      return {
-        user: { ...rest },
-        policies,
-        nav,
-        orgId,
-        sid: session.id,
-        accessToken,
-      };
-    }
-
-    return {
-      user: {
-        ...rest,
-        emailAddress: maskValue(MaskEnum.EMAIL, rest.emailAddress),
-        phoneNumber: maskValue(MaskEnum.PHONE, rest.phoneNumber),
-      },
-    };
-  }
-
-  @Public()
   @Post('confirm')
   async confirm(@Body('key') key: string) {
     return this.authService.confirm(key);
@@ -105,20 +72,48 @@ export class AuthController {
   @Public()
   @Post('setup')
   async setup(@Session() session: any, @Body() body: UserSetupDto) {
-    const { user, locations, policies, nav } = await this.authService.setup(body);
-    const { password, orgId, ...rest } = user;
+    const { user, ...rest } = await this.authService.setup(body);
+
+    const { password, ..._user } = user;
+    const { orgId } = _user;
     const accessToken = this.jwtService.sign({ orgId });
 
-    session.user = user;
+    session.data = { user: _user, ...rest };
 
     return {
-      user: { ...rest },
+      ...session.data,
       orgId,
-      policies,
-      nav,
-      locations,
       sid: session.id,
-      accessToken,
+      accessToken
+    };
+  }
+
+  @Public()
+  @Post('login')
+  async login(@Session() session: any, @Body() body: UserLoginDto) {
+    const { user, ...rest } = await this.authService.login(body);
+
+    const { password, ..._user } = user;
+    const { orgId } = _user;
+    const accessToken = this.jwtService.sign({ orgId });
+
+    if (orgId) {
+      session.data = { user: _user, ...rest };
+
+      return {
+        ...session.data,
+        orgId,
+        sid: session.id,
+        accessToken
+      };
+    }
+
+    return {
+      user: {
+        ..._user,
+        emailAddress: maskValue(MaskEnum.EMAIL, _user.emailAddress),
+        phoneNumber: maskValue(MaskEnum.PHONE, _user.phoneNumber),
+      },
     };
   }
 

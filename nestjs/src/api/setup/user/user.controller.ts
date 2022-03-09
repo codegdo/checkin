@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { } from 'src/models/main/dtos';
+import { UserCreateDto } from 'src/models/main/dtos';
 import { Serialize, CurrentUser } from 'src/common/decorators';
 import { PaginationQueryDto } from 'src/common/dtos';
 import { User } from 'src/models/main/entities';
@@ -53,8 +53,10 @@ export class UserController {
   }
 
   @Post('users')
-  createUser(@CurrentUser() user: User, @Body() body: any) {
-    return this.userService.createUser(body);
+  createUser(@CurrentUser() user: User, @Body() body: UserCreateDto) {
+
+    return body;
+    //return this.userService.createUser(body);
   }
 
   @Patch('users/:id')

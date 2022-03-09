@@ -59,3 +59,10 @@ export class UserLoginDto {
   @IsString()
   password: string;
 }
+
+export class UserCreateDto {
+  @IsJSON()
+  @IsNotEmpty()
+  @IsString()
+  data: string;
+}

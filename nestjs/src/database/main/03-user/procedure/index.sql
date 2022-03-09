@@ -131,45 +131,6 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
--- CREATE PROCEDURE ORG SET DEFAULT
-CREATE OR REPLACE PROCEDURE sec.pr_org_set_default(
-  p_org_id int,
-  p_login_id int
-) AS
-$BODY$
-  DECLARE
-    business_type varchar;
-    login_username varchar;
-  BEGIN
-    --SET business_type
-    SELECT bt.category
-    INTO business_type
-    FROM sec.organization o 
-    LEFT JOIN dbo.business_type bt ON o.business_type_id = bt.id
-    WHERE o.id = p_org_id;
-
-    --SET username
-    SELECT username
-    INTO login_username
-    FROM sec.user
-    WHERE id = p_login_id;
-
-    IF business_type = 'Service' THEN
-      
-      --INSERT GROUP
-      INSERT
-      INTO sec.group(name, group_type_id, org_id, created_by)
-      VALUES
-      ('Manager', '2', p_org_id, login_username),
-      ('Staff', '3', p_org_id, login_username);
-
-    END IF;
-
-    COMMIT;
-  END;
-$BODY$
-LANGUAGE plpgsql;
-
 -- CREATE PROCEDURE USER_SETUP
 CREATE OR REPLACE PROCEDURE sec.pr_user_setup(
   p_form_data json,
@@ -187,6 +148,8 @@ $BODY$
   DECLARE
     login_username varchar;
     org_id int;
+
+    _groups json;
   BEGIN
     --TEMP
     DROP TABLE IF EXISTS SPUSE_eval CASCADE;
@@ -249,7 +212,8 @@ $BODY$
       INTO org_id 
       FROM u;
 
-      CAll sec.pr_org_set_default(org_id, p_login_id);
+      --SET DEFAULT
+      PERFORM sec.fn_set_org_default(org_id, p_login_id);
 
       SELECT
         ua.users::jsonb ->> 0,
@@ -334,7 +298,6 @@ LANGUAGE plpgsql;
 
 /* DROP PROCEDURES
 
-DROP PROCEDURE IF EXISTS sec.pr_org_set_default(int, int);
 DROP PROCEDURE IF EXISTS sec.pr_user_signup(json, json);
 DROP PROCEDURE IF EXISTS sec.pr_user_verify(int, varchar, varchar, bigint, json);
 DROP PROCEDURE IF EXISTS sec.pr_user_confirm(varchar, json);

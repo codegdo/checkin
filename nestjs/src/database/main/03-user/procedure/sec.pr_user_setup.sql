@@ -15,6 +15,8 @@ $BODY$
   DECLARE
     login_username varchar;
     org_id int;
+
+    _groups json;
   BEGIN
     --TEMP
     DROP TABLE IF EXISTS SPUSE_eval CASCADE;
@@ -77,7 +79,8 @@ $BODY$
       INTO org_id 
       FROM u;
 
-      CAll sec.pr_org_set_default(org_id, p_login_id);
+      --SET DEFAULT
+      PERFORM sec.fn_set_org_default(org_id, p_login_id);
 
       SELECT
         ua.users::jsonb ->> 0,
@@ -104,4 +107,4 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-DROP PROCEDURE IF EXISTS sec.pr_user_setup(json, int, json, json, json, json, json, json);
+--DROP PROCEDURE IF EXISTS sec.pr_user_setup(json, int, json, json, json, json, json, json);

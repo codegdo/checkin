@@ -108,7 +108,7 @@ $BODY$
           ff.field_has_dependent "hasDependent",
           ff.field_is_dependent "isDependent"
         FROM PFG_form_field ff
-        ORDER BY field_position
+        ORDER BY ff.field_position
       ) field;
 
       SELECT json_agg(form)::json

@@ -23,9 +23,7 @@ CREATE TABLE IF NOT EXISTS sec.policy (
 );
 
 INSERT
-INTO sec.policy(name, description, statement, version_id, group_type_id)
+INTO sec.policy(name, version_id, group_type_id)
 VALUES
-('System Access', 'All access','{"effect":"allow","action":"*","resource":"*"}', '1', '1'),
-('Admin Access', 'Full access','{"effect":"allow","action":"*","resource":"*"}', '1', '2'),
-('Manager Access', 'Some access','{"effect":"allow","action":"*","resource":"*"}', '1', '2'),
-('Employee Access', 'Less access','{"effect":"allow","action":"*","resource":"*"}', '1', '3');
+('System Access', '1', '1'),
+('Admin Access', '1', '2');
