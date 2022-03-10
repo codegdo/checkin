@@ -18,8 +18,8 @@ CREATE TABLE IF NOT EXISTS dbo.form_type (
 INSERT
 INTO dbo.form_type (id, name, is_custom)
 VALUES
-('1', 'auth_signup', '0'),
-('2', 'user_form', '0');
+('1', 'Signup', '0'),
+('2', 'User', '0');
 
 -- CREATE TABLE FORM_TYPE_OBJECT
 CREATE TABLE IF NOT EXISTS dbo.form_type_object (
@@ -113,7 +113,7 @@ INTO org.form (name, label, description, form_type_id, org_id, is_publish)
 VALUES
 ('auth_signup', 'Signup', null, '1', null, '1'),
 ('auth_setup', 'Setup', null, '1', null, '1'),
-('user_form', 'Users', null, '2', null, '1');
+('setup_users', 'Users', null, '2', null, '1');
 
 -- CREATE TABLE COMPONENT
 CREATE TABLE IF NOT EXISTS org.component (

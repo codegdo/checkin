@@ -7,7 +7,9 @@ import { useFetch } from '../../../hooks';
 import { objectToKeyValue } from '../../../utils';
 import { AppState } from '../../../store/reducers';
 
-const UserForm: React.FC = (): JSX.Element => {
+const UserForm: React.FC = (props): JSX.Element => {
+  console.log('USER ADD', props);
+
   const { id = 0 } = useParams();
   const { search } = useLocation();
   const navigate = useNavigate();
@@ -38,10 +40,11 @@ const UserForm: React.FC = (): JSX.Element => {
   }, [submit]);
 
   const handleSubmit = (values: any) => {
-    console.log('test');
     void postUser({
       body: {
-        data: JSON.stringify(objectToKeyValue(values))
+        data: JSON.stringify(objectToKeyValue(values)),
+        formId: form?.id,
+        userId: id == 'new' ? 0 : id
       }
     });
   };

@@ -11,6 +11,7 @@ $BODY$
   DECLARE
     form_id int;
     form_name varchar;
+    form_type varchar;
     form_field jsonb;
 
     filter_form_id int := 0;
@@ -27,10 +28,24 @@ $BODY$
     END IF;
 
     --GET
-    SELECT f.id, f.name
-    INTO form_id, form_name
+    SELECT f.id, f.name, ft.name
+    INTO form_id, form_name, form_type
     FROM org.form f
-    WHERE f.id = filter_form_id OR f.name = filter_form_name;
+    LEFT JOIN dbo.form_type ft ON f.form_type_id = ft.id
+    WHERE (f.id = filter_form_id OR f.name = filter_form_name)
+    AND f.org_id = p_org_id
+    AND f.is_publish IS TRUE;
+
+    -- DEFAULT
+    IF form_id IS NULL THEN
+      SELECT f.id, f.name, ft.name
+      INTO form_id, form_name, form_type
+      FROM org.form f
+      LEFT JOIN dbo.form_type ft ON f.form_type_id = ft.id
+      WHERE (f.id = filter_form_id OR f.name = filter_form_name)
+      AND f.org_id IS NULL
+      AND f.is_publish IS TRUE;
+    END IF;
 
     IF form_id IS NOT NULL THEN
       --TEMP TABLE
@@ -48,7 +63,7 @@ $BODY$
         DROP TABLE IF EXISTS PFG_eval CASCADE;
         CREATE TEMP TABLE PFG_eval(id int, value text);
 
-        IF form_name = 'user_form' THEN
+        IF form_type = 'User' THEN
           INSERT INTO PFG_eval(id, value)
           SELECT id, value
           FROM org.fn_get_data_user(form_id, p_filter_id, p_login_id, p_org_id);
@@ -129,6 +144,5 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
-DROP PROCEDURE IF EXISTS org.pr_form_get(varchar, int, int, int, json);
-
---CALL org.pr_form_get('3', 1, 1, 1, null);
+--DROP PROCEDURE IF EXISTS org.pr_form_get(varchar, int, int, int, json);
+--CALL org.pr_form_get('auth_signup', 1, 1, 1, null);

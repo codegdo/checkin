@@ -63,4 +63,4 @@ INTO org.form (name, label, description, form_type_id, org_id, is_publish)
 VALUES
 ('auth_signup', 'Signup', null, '1', null, '1'),
 ('auth_setup', 'Setup', null, '1', null, '1'),
-('user_form', 'Users', null, '2', null, '1');
+('setup_users', 'Users', null, '2', null, '1');

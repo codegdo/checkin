@@ -61,8 +61,16 @@ export class UserLoginDto {
 }
 
 export class UserCreateDto {
+
   @IsJSON()
   @IsNotEmpty()
   @IsString()
   data: string;
+
+  @IsNumber()
+  formId: number;
+
+  @IsNumber()
+  userId: number;
+
 }
