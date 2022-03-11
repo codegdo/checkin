@@ -22,7 +22,6 @@ CREATE TABLE IF NOT EXISTS sec.user (
   --
   PRIMARY KEY(id),
   UNIQUE(username),
-  UNIQUE(passcode),
   FOREIGN KEY(group_id) REFERENCES sec.group(id),
   FOREIGN KEY(contact_id) REFERENCES org.contact(id)
 );

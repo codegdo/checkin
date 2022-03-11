@@ -54,9 +54,9 @@ export class UserController {
 
   @Post('users')
   createUser(@CurrentUser() user: User, @Body() body: UserCreateDto) {
+    const { id: loginId } = user;
 
-    return body;
-    //return this.userService.createUser(body);
+    return this.userService.createUser({ ...body, loginId });
   }
 
   @Patch('users/:id')

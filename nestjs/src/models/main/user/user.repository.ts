@@ -94,14 +94,14 @@ export class UserRepository extends Repository<User> {
   }
 
   async createUser(dto: UserCreateDto) {
-    let { data } = dto;
+    let { data, formId, userId, loginId } = dto;
 
     // encrypt password
     data = await encryptKeyValue(2, data);
 
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_save($1, $2)`,
-      [data, null],
+      `CALL sec.pr_user_save($1, $2, 3$, 4$, 5$)`,
+      [data, formId, userId, loginId, null],
     );
 
     return result.data;

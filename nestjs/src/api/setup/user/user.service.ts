@@ -7,8 +7,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from 'src/models/main/user/user.entity';
 import { UserRepository, FormRepository } from 'src/models/main/repositories';
-import { ErrorService } from 'src/common/modules';
-import { FormDto } from 'src/models/main/dtos';
+import { ErrorMessageEnum, ErrorService } from 'src/common/modules';
+import { FormDto, UserCreateDto } from 'src/models/main/dtos';
 
 @Injectable()
 export class UserService {
@@ -42,13 +42,17 @@ export class UserService {
     return user;
   }
 
-  async createUser(dto) {
-    const user = this.userRepository.create(dto);
-
+  async createUser(dto: UserCreateDto) {
     try {
-      return this.userRepository.save(user);
-    } catch (err) {
-      throw new ConflictException('Duplicate username');
+      const data = await this.userRepository.createUser(dto);
+
+      if (!data) {
+        throw new NotFoundException(ErrorMessageEnum.NOT_FOUND);
+      }
+
+      return data;
+    } catch (e) {
+      this.errorService.handleError(e);
     }
   }
 

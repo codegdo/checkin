@@ -7,6 +7,7 @@ import {
   IsNumber,
   IsNumberString,
   IsObject,
+  IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
@@ -72,5 +73,9 @@ export class UserCreateDto {
 
   @IsNumber()
   userId: number;
+
+  @IsNumber()
+  @IsOptional()
+  loginId: number;
 
 }
