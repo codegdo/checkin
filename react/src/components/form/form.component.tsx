@@ -51,6 +51,12 @@ export const Form: React.FC<FormProps> = ({ form, status, isKey = false, isMap =
     }
   }, [form]);
 
+  useEffect(() => {
+    if (status == 'success') {
+      setData(data)
+    }
+  }, [status]);
+
   return (
     <form>
       <FormContext.Provider value={{ data, values, errors, status, submit, formSchema, isKey, isMap, handleClick }}>

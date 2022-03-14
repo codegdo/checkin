@@ -86,12 +86,14 @@ $BODY$
         --UPDATE
         WITH u AS (
           UPDATE sec.user _u
-          SET (
-            username = SELECT DISTINCT value FROM PUSV_eval WHERE map = 'sec.user.username'
-          )
+          SET 
+            username = (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'sec.user.username')
           WHERE _u.id = p_user_id
-          RETURNING _u.contact_id
+          RETURNING _u.id
         )
+        SELECT id
+        INTO data
+        FROM u;
       END IF;
 
     END IF;

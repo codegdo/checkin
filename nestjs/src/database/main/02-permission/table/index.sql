@@ -101,13 +101,6 @@ VALUES
 ('4', '32'),
 ('4', '33');
 
--- SELECT TABLES
-
-SELECT type, string_agg(name, ',') as access
-FROM sec.permission p
-LEFT JOIN sec.permission_level pl on p.id = pl.permission_id
-LEFT JOIN sec.level l on l.id = pl.level_id
-GROUP BY type;
 
 /* DROP TABLES
 
