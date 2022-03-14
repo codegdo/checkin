@@ -15,6 +15,8 @@ $BODY$
     lookup_table text := split_part(p_lookup, '.', 2);
     lookup_column text := split_part(p_lookup, '.', 3);
     lookup_column_id text := split_part(p_lookup, '.', 4);
+    --lookup_filter text := split_part(p_lookup, '.', 5);
+    --lookup_operator text := split_part(p_lookup, '.', 6);
     string_sql text;
   BEGIN
 

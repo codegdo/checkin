@@ -65,7 +65,7 @@ $BODY$
       SELECT json_agg(m)::json
       INTO _modules
       FROM (
-        SELECT * FROM dbo.fn_get_module(group_type)
+        SELECT * FROM dbo.fn_get_module(p_user_id)
       ) m;
 
       SELECT json_agg(p)::json

@@ -109,9 +109,10 @@ LEFT JOIN sec.permission_level pl on p.id = pl.permission_id
 LEFT JOIN sec.level l on l.id = pl.level_id
 GROUP BY type;
 
--- DROP TABLES
+/* DROP TABLES
 
 DROP TABLE IF EXISTS
 sec.permission,
 sec.level,
 sec.permission_level CASCADE;
+*/

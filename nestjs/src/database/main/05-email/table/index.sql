@@ -94,14 +94,12 @@ INTO org.email (name, subject, body, text, email_type_id, org_id)
 VALUES
 ('Verify Confirmation', 'Your Verification Code', '<html><body><p>Hi {{name}},</p><p>Your verification code is {{key}}, please enter the code to confirm.</p><p>If you believe you received this email in error, please contact us at <a href="mailto:suport@codegdo.com">support@codegdo.com</a></p><p>Thank you,<br>The Codegdo Team</p></body></html>', 'Your verification code is {{key}}.', '1', null);
 
--- SELECT TABLES
 
-SELECT * FROM org.email;
-
--- DROP TABLES
+/* DROP TABLES
 
 DROP TABLE IF EXISTS
 dbo.email_address,
 dbo.email_from,
 dbo.email_type,
 org.email CASCADE;
+*/

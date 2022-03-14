@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams, useLocation, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import { Form, FormData } from '../../../components/form';
-import { useFetch } from '../../../hooks';
+import { Form, FormData, Modal } from '../../../components';
+import { useFetch, useModal } from '../../../hooks';
 import { objectToKeyValue } from '../../../utils';
 import { AppState } from '../../../store/reducers';
 
@@ -16,6 +16,7 @@ const UserForm: React.FC = (props): JSX.Element => {
 
   const { user } = useSelector((state: AppState) => state.session);
   const [form, setForm] = useState<FormData>();
+  const [isShow, toggle] = useModal(true);
 
   const [{ status: submit, result: { data: submitData } }, postUser] = useFetch('/api/setup/users');
   const [{ status: loading, result: { data: formData } }, getForm] = useFetch(`/api/setup/users/${id}${search}`);
@@ -54,6 +55,10 @@ const UserForm: React.FC = (props): JSX.Element => {
     navigate(-1);
   };
 
+  const handleModal = () => {
+
+  }
+
   if (!form) {
     return <div>loading...</div>;
   }
@@ -62,6 +67,7 @@ const UserForm: React.FC = (props): JSX.Element => {
     <>
       {submit === 'error' && <div>Error</div>}
       <Form form={form} isKey={true} status={submit} onSubmit={handleSubmit} onCallback={handleCallback} />
+      <Modal show={isShow} onModal={handleModal} />
     </>
   );
 };

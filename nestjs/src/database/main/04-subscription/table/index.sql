@@ -102,11 +102,8 @@ CREATE TABLE IF NOT EXISTS org.subscription_module (
 
 CREATE INDEX idx_subscription_module ON org.subscription_module(subscription_id, module_id);
 
--- SELECT TABLES
 
-SELECT * FROM dbo.subscription_plan;
-
--- DROP TABLES
+/* DROP TABLES
 
 DROP TABLE IF EXISTS
 dbo.subscription_plan,
@@ -114,3 +111,4 @@ org.subscription,
 org.subscription_audit,
 org.subscription_purchase,
 org.subscription_module CASCADE;
+*/

@@ -10,7 +10,12 @@ import {
 import { User } from './user.entity';
 import { TokenEnum } from '../token/token.type';
 
-import { UserSignupDto, UserSetupDto, UserLoginDto, UserCreateDto } from './user.dto';
+import {
+  UserSignupDto,
+  UserSetupDto,
+  UserLoginDto,
+  UserCreateDto,
+} from './user.dto';
 
 import {
   UserSignupData,
@@ -100,7 +105,7 @@ export class UserRepository extends Repository<User> {
     data = await encryptKeyValue(2, data);
 
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_save($1, $2, 3$, 4$, 5$)`,
+      `CALL sec.pr_user_save($1, $2, $3, $4, $5)`,
       [data, formId, userId, loginId, null],
     );
 

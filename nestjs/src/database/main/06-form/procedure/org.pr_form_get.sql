@@ -14,25 +14,23 @@ $BODY$
     form_type varchar;
     form_field jsonb;
 
-    filter_form_id int := 0;
-    filter_form_name varchar := '';
-
     row_max int;
     row_min int := 1;
   BEGIN
-    --SET
-    IF (SELECT p_form_id ~ '^\d+$') THEN
-      filter_form_id := p_form_id::int;
-    ELSE
-      filter_form_name := p_form_id::varchar;
-    END IF;
 
     --GET
     SELECT f.id, f.name, ft.name
     INTO form_id, form_name, form_type
     FROM org.form f
     LEFT JOIN dbo.form_type ft ON f.form_type_id = ft.id
-    WHERE (f.id = filter_form_id OR f.name = filter_form_name)
+    WHERE (
+      CASE
+        WHEN (p_form_id ~ '^\d+$') THEN
+          f.id = CAST(p_form_id as int)
+        ELSE
+          f.name = p_form_id
+      END
+    )
     AND f.org_id = p_org_id
     AND f.is_publish IS TRUE;
 
@@ -42,7 +40,14 @@ $BODY$
       INTO form_id, form_name, form_type
       FROM org.form f
       LEFT JOIN dbo.form_type ft ON f.form_type_id = ft.id
-      WHERE (f.id = filter_form_id OR f.name = filter_form_name)
+      WHERE (
+        CASE
+          WHEN (p_form_id ~ '^\d+$') THEN
+            f.id = CAST(p_form_id as int)
+          ELSE
+            f.name = p_form_id
+        END
+      )
       AND f.org_id IS NULL
       AND f.is_publish IS TRUE;
     END IF;

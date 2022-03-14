@@ -125,7 +125,7 @@ VALUES
 ('213', 'checkouts',    'grid', '20', '12', '0', '1', '1'),
 --account
 ('300', 'profile',      'form', '30', '0', '1', '1', '1'),
-('301', 'business', 'form', '30', '1', '0', '1', '1'),
+('301', 'organization', 'form', '30', '1', '0', '1', '1'),
 ('302', 'subscription', 'form', '30', '2', '0', '1', '1'),
 --help
 ('400', 'supports',     'grid', '40', '0', '1', '1', '1'),
@@ -331,7 +331,7 @@ VALUES
 --profile
 ('300', '1', null),
 ('300', '2', null),
---business
+--organization
 ('301', '16', null),
 --subscription
 ('302', '17', null),
@@ -350,7 +350,7 @@ VALUES
 --order
 ('1400', '21', null);
 
--- DROP TABLES
+/* DROP TABLES
 
 DROP TABLE IF EXISTS
 dbo.feature,
@@ -360,4 +360,4 @@ dbo.module_view,
 dbo.view,
 dbo.view_object,
 dbo.object CASCADE;
-
+*/

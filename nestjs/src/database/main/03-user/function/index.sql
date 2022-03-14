@@ -56,15 +56,8 @@ RETURNS TABLE (
 AS
 $BODY$
   DECLARE
-    filter_id int := 0;
-    filter_username varchar := '';
+    
   BEGIN
-
-    IF (SELECT p_user_id ~ '^\d+$') THEN
-      filter_id := p_user_id::int;
-    ELSE
-      filter_username := p_user_id::varchar;
-    END IF;
 
     RETURN QUERY
       SELECT
@@ -87,7 +80,14 @@ $BODY$
       LEFT JOIN org.contact c ON c.id = u.contact_id
       LEFT JOIN sec.group g ON g.id = u.group_id
       LEFT JOIN dbo.group_type gt ON gt.id = g.group_type_id
-      WHERE u.id = filter_id OR u.username = filter_username;
+      WHERE (
+        CASE
+          WHEN (p_user_id ~ '^\d+$') THEN
+            u.id = CAST(p_user_id as int)
+          ELSE
+            u.username = p_user_id
+        END
+      );
   END;
 $BODY$
 LANGUAGE plpgsql;
@@ -183,7 +183,7 @@ $BODY$
       SELECT json_agg(m)::json
       INTO _modules
       FROM (
-        SELECT * FROM dbo.fn_get_module(group_type)
+        SELECT * FROM dbo.fn_get_module(p_user_id)
       ) m;
 
       SELECT json_agg(p)::json

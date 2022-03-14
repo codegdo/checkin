@@ -19,8 +19,8 @@ $BODY$
     _groups json;
   BEGIN
     --TEMP
-    DROP TABLE IF EXISTS SPUSE_eval CASCADE;
-    CREATE TEMP TABLE SPUSE_eval AS
+    DROP TABLE IF EXISTS PUSE_eval CASCADE;
+    CREATE TEMP TABLE PUSE_eval AS
     SELECT * FROM org.fn_get_eval(p_form_data);
 
     --SET username
@@ -42,9 +42,9 @@ $BODY$
           created_by
         )
         VALUES(
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'sec.organization.name'),
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'sec.organization.business_type_id')::INT,
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'sec.organization.subdomain'),
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'sec.organization.name'),
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'sec.organization.business_type_id')::INT,
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'sec.organization.subdomain'),
           p_login_id,
           login_username
         )
@@ -60,11 +60,11 @@ $BODY$
           created_by
         )
         VALUES(
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.name'),
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.street_address'),
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.territory_id')::INT,
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.city'),
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.postal_code'),
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'org.location.name'),
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'org.location.street_address'),
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'org.location.territory_id')::INT,
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'org.location.city'),
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'org.location.postal_code'),
           (SELECT id FROM o),
           login_username
         )

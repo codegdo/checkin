@@ -48,7 +48,7 @@ VALUES
 --profile
 ('300', '1', null),
 ('300', '2', null),
---business
+--organization
 ('301', '16', null),
 --subscription
 ('302', '17', null),

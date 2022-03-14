@@ -296,7 +296,7 @@ CREATE TABLE IF NOT EXISTS sec.client_location (
 CREATE INDEX idx_client_location ON sec.client_location(client_id, location_id);
 
 
--- DROP TABLES
+/* DROP TABLES
 
 DROP TABLE IF EXISTS
 dbo.group_type,
@@ -312,3 +312,4 @@ org.location,
 sec.group_policy,
 sec.user_location,
 sec.client_location CASCADE;
+*/

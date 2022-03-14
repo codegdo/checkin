@@ -9,8 +9,8 @@ $BODY$
     user_group_id int := 2;
   BEGIN
     --TEMP
-    DROP TABLE IF EXISTS SPUSU_eval CASCADE;
-    CREATE TEMP TABLE SPUSU_eval AS
+    DROP TABLE IF EXISTS PUSU_eval CASCADE;
+    CREATE TEMP TABLE PUSU_eval AS
     SELECT * FROM org.fn_get_eval(p_form_data);
     
     --INSERT
@@ -22,10 +22,10 @@ $BODY$
           phone_number
         )
         VALUES(
-          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'org.contact.first_name'),
-          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'org.contact.last_name'),
-          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'org.contact.email_address'),
-          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'org.contact.phone_number')
+          (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'org.contact.first_name'),
+          (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'org.contact.last_name'),
+          (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'org.contact.email_address'),
+          (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'org.contact.phone_number')
         )
         RETURNING id, email_address, phone_number
       ), u AS (
@@ -36,8 +36,8 @@ $BODY$
           group_id
         )
         VALUES(
-          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'sec.user.username'),
-          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'sec.user.password'),
+          (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'sec.user.username'),
+          (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'sec.user.password'),
           (SELECT id FROM c),
           (user_group_id)
         )

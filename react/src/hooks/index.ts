@@ -9,4 +9,5 @@ export * from './use-auth.hook';
 export * from './use-authorize.hook';
 export * from './use-query.hook';
 export * from './use-toggle.hook';
+export * from './use-modal.hook';
 export * from './use-template.hook';

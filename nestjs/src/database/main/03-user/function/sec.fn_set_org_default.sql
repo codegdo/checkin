@@ -16,7 +16,7 @@ $BODY$
     INTO business_type
     FROM sec.organization o
     LEFT JOIN dbo.business_type bt ON o.business_type_id = bt.id
-    WHERE o.id = p_org_id;
+    WHERE o.id = p_org_id AND o.is_active = true;
 
     --SET username
     SELECT username

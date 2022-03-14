@@ -9,8 +9,8 @@ $BODY$
     user_group_id int := 2;
   BEGIN
     --TEMP
-    DROP TABLE IF EXISTS SPUSU_eval CASCADE;
-    CREATE TEMP TABLE SPUSU_eval AS
+    DROP TABLE IF EXISTS PUSU_eval CASCADE;
+    CREATE TEMP TABLE PUSU_eval AS
     SELECT * FROM org.fn_get_eval(p_form_data);
     
     --INSERT
@@ -22,10 +22,10 @@ $BODY$
           phone_number
         )
         VALUES(
-          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'org.contact.first_name'),
-          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'org.contact.last_name'),
-          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'org.contact.email_address'),
-          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'org.contact.phone_number')
+          (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'org.contact.first_name'),
+          (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'org.contact.last_name'),
+          (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'org.contact.email_address'),
+          (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'org.contact.phone_number')
         )
         RETURNING id, email_address, phone_number
       ), u AS (
@@ -36,8 +36,8 @@ $BODY$
           group_id
         )
         VALUES(
-          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'sec.user.username'),
-          (SELECT DISTINCT value FROM SPUSU_eval WHERE map = 'sec.user.password'),
+          (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'sec.user.username'),
+          (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'sec.user.password'),
           (SELECT id FROM c),
           (user_group_id)
         )
@@ -152,8 +152,8 @@ $BODY$
     _groups json;
   BEGIN
     --TEMP
-    DROP TABLE IF EXISTS SPUSE_eval CASCADE;
-    CREATE TEMP TABLE SPUSE_eval AS
+    DROP TABLE IF EXISTS PUSE_eval CASCADE;
+    CREATE TEMP TABLE PUSE_eval AS
     SELECT * FROM org.fn_get_eval(p_form_data);
 
     --SET username
@@ -175,9 +175,9 @@ $BODY$
           created_by
         )
         VALUES(
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'sec.organization.name'),
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'sec.organization.business_type_id')::INT,
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'sec.organization.subdomain'),
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'sec.organization.name'),
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'sec.organization.business_type_id')::INT,
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'sec.organization.subdomain'),
           p_login_id,
           login_username
         )
@@ -193,11 +193,11 @@ $BODY$
           created_by
         )
         VALUES(
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.name'),
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.street_address'),
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.territory_id')::INT,
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.city'),
-          (SELECT DISTINCT value FROM SPUSE_eval WHERE map = 'org.location.postal_code'),
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'org.location.name'),
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'org.location.street_address'),
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'org.location.territory_id')::INT,
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'org.location.city'),
+          (SELECT DISTINCT value FROM PUSE_eval WHERE map = 'org.location.postal_code'),
           (SELECT id FROM o),
           login_username
         )
@@ -289,6 +289,109 @@ $BODY$
       END IF;
     ELSE
       RAISE EXCEPTION no_data_found;
+    END IF;
+
+    COMMIT;
+  END
+$BODY$
+LANGUAGE plpgsql;
+
+-- CREATE PROCEDURE USER_SAVE
+CREATE OR REPLACE PROCEDURE sec.pr_user_save(
+  p_form_data json,
+  p_form_id int,
+  p_user_id int,
+  p_login_id int,
+
+  OUT data jsonb
+)
+AS
+$BODY$
+  DECLARE
+    login_username varchar;
+    org_id int;
+  BEGIN
+    --TEMP
+    DROP TABLE IF EXISTS PUSV_eval CASCADE;
+    CREATE TEMP TABLE PUSV_eval AS
+    SELECT * FROM org.fn_get_eval(p_form_data);
+
+    --SET vars
+    SELECT u.username, u.org_id
+    INTO login_username, org_id
+    FROM sec.user u
+    WHERE u.id = p_login_id;
+
+    --CHECK login exists
+    IF login_username IS NOT NULL THEN
+
+      --CHECK
+      IF p_user_id = 0 THEN
+
+        --INSERT
+        WITH c AS (
+          INSERT INTO org.contact(
+            first_name,
+            last_name,
+            email_address,
+            phone_number
+          )
+          VALUES(
+            (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'org.contact.first_name'),
+            (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'org.contact.last_name'),
+            (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'org.contact.email_address'),
+            (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'org.contact.phone_number')
+          )
+          RETURNING id, email_address, phone_number
+        ), u AS (
+          INSERT INTO sec.user(
+            username,
+            password,
+            passcode,
+            contact_id,
+            group_id,
+            form_id,
+            org_id,
+            is_new_password,
+            is_active,
+            created_by
+          )
+          VALUES(
+            (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'sec.user.username'),
+            (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'sec.user.password'),
+            (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'sec.user.passcode'),
+            (SELECT id FROM c),
+            (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'sec.user.group_id')::int,
+            (p_form_id),
+            (org_id),
+            (true),
+            (true),
+            (login_username)
+          )
+          RETURNING id, username, is_active, contact_id
+        ), ul AS (
+          INSERT INTO sec.user_location(user_id, location_id)
+          VALUES(
+            (SELECT id FROM u),
+            (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'sec.user.location_id')::int
+          )
+        )
+        SELECT id
+        INTO data
+        FROM u;
+
+      ELSE
+        --UPDATE
+        WITH u AS (
+          UPDATE sec.user _u
+          SET (
+            username = SELECT DISTINCT value FROM PUSV_eval WHERE map = 'sec.user.username'
+          )
+          WHERE _u.id = p_user_id
+          RETURNING _u.contact_id
+        )
+      END IF;
+
     END IF;
 
     COMMIT;

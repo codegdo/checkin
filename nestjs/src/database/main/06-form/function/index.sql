@@ -413,22 +413,22 @@ $BODY$
     row_max int;
   BEGIN
     --TEMP eval
-    DROP TABLE IF EXISTS OFGED_eval CASCADE;
-    CREATE TEMP TABLE OFGED_eval AS
+    DROP TABLE IF EXISTS FGE_eval CASCADE;
+    CREATE TEMP TABLE FGE_eval AS
     SELECT r.key id, r.value, r.map, r.lookup
     FROM json_to_recordset(p_form_data)
     AS r ("key" int, "value" text, "map" text, "lookup" text);
 
     --UPDATE map and lookup
-    UPDATE OFGED_eval e
+    UPDATE FGE_eval e
     SET map = f.map,
         lookup = f.lookup
     FROM org.field f
     WHERE e.id = f.id;
 
     --LOOKUP territory
-    DROP TABLE IF EXISTS OFGED_lookup_territory CASCADE;
-    CREATE TEMP TABLE OFGED_lookup_territory AS
+    DROP TABLE IF EXISTS FGE_lookup_territory CASCADE;
+    CREATE TEMP TABLE FGE_lookup_territory AS
     SELECT 
       lt.row_num, 
       id, 
@@ -445,7 +445,7 @@ $BODY$
           e.map, 
           e.lookup, 
           row_number() OVER (PARTITION BY e.map) AS row_group
-        FROM OFGED_eval e
+        FROM FGE_eval e
         WHERE e.lookup IS NOT NULL AND split_part(e.lookup, '.', 2) = 'territory'
       ), e1 as (
         SELECT * FROM e WHERE row_group = 1
@@ -464,12 +464,12 @@ $BODY$
     --LOOP
     SELECT max(lt.row_num)
     INTO row_max
-    FROM OFGED_lookup_territory lt;
+    FROM FGE_lookup_territory lt;
 
     WHILE row_max >= row_min
     LOOP
         
-      UPDATE OFGED_lookup_territory lt
+      UPDATE FGE_lookup_territory lt
       SET value = (
         SELECT t.id
         FROM dbo.territory t
@@ -484,10 +484,10 @@ $BODY$
     RETURN QUERY
 
     SELECT lt.id, lt.value, lt.map, lt.lookup
-    FROM OFGED_lookup_territory lt
+    FROM FGE_lookup_territory lt
     UNION
     SELECT e.id, e.value, e.map, e.lookup
-    FROM OFGED_eval e
+    FROM FGE_eval e
     WHERE e.lookup IS NULL OR split_part(e.lookup, '.', 2) <> 'territory';
 
   END;

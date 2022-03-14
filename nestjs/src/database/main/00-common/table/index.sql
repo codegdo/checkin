@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS sec.session (
 -- CREATE TABLE TOKEN
 CREATE TABLE IF NOT EXISTS sec.token (
   id UUID DEFAULT uuid_generate_v4() NOT NULL,
-  
+
   key VARCHAR(100),
   type VARCHAR(100),
   data JSONB,
@@ -117,12 +117,11 @@ VALUES
 ('6000', '--', '--', '--', '--', 'Americas'),
 ('6001', 'United States', 'USA', '--', '--', 'Americas');
 
--- DROP TABLES
+/* DROP TABLES
 
 DROP TABLE IF EXISTS
 sec.session,
 sec.token,
 log.error,
 dbo.territory CASCADE;
-
--- END
+*/
