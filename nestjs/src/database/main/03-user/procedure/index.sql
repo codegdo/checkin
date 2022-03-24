@@ -373,7 +373,7 @@ $BODY$
           INSERT INTO sec.user_location(user_id, location_id)
           VALUES(
             (SELECT id FROM u),
-            (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'sec.user.location_id')::int
+            (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'sec.user_location.location_id')::int
           )
         )
         SELECT id

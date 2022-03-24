@@ -1,4 +1,4 @@
-import { InputElementType } from "../form/form.type";
+import { InputElementType } from '../form/form.type';
 
 // INPUT
 export type InputType = {
@@ -18,11 +18,14 @@ export type InputData = Partial<InputType>;
 
 export type InputProps = {
   input?: InputData;
+  status?: string;
   onChange?: (value?: string) => void;
 } & InputData;
 
 export type InputContextProps = {
   input: InputData;
-  value?: string;
-  handleChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  value: string | undefined;
+  handleChange?: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
 };

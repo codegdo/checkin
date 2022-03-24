@@ -119,6 +119,10 @@ export class UserRepository extends Repository<User> {
     );
     return user;
   }
+
+  async getAllUsers() {
+    return [];
+  }
 }
 
 /*

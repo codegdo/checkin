@@ -14,10 +14,12 @@ $BODY$
     user_form_id int;
     user_contact_id int;
     user_group_id int;
+    user_location_id int;
 
     user_data json;
     contact_data json;
     group_data json;
+    location_data json;
     policy_data json;
 
     eval_id int;
@@ -33,11 +35,20 @@ $BODY$
     DROP TABLE IF EXISTS FGDU_eval CASCADE;
     CREATE TEMP TABLE FGDU_eval(id int, value text);
 
-    SELECT json_agg(data.*)::json ->> 0
+    SELECT json_agg(data)::json ->> 0
     INTO user_data
     FROM (
-      SELECT *
+      SELECT
+        u.username,
+        u.password,
+        u.passcode,
+        u.contact_id,
+        u.group_id,
+        u.form_id,
+        ul.location_id
       FROM sec.user u
+      INNER JOIN sec.user_location ul ON ul.user_id = u.id
+      LEFT JOIN org.location l ON l.id = ul.location_id
       WHERE u.id = p_filter_id
     ) data;
 
@@ -45,8 +56,9 @@ $BODY$
     SELECT user_data ->> 'contact_id' INTO user_contact_id;
     SELECT user_data ->> 'group_id' INTO user_group_id;
     SELECT user_data ->> 'form_id' INTO user_form_id;
+    SELECT user_data ->> 'location_id' INTO user_location_id;
 
-    SELECT json_agg(data.*)::json ->> 0
+    SELECT json_agg(data)::json ->> 0
     INTO contact_data
     FROM (
       SELECT *
@@ -54,12 +66,20 @@ $BODY$
       WHERE c.id = user_contact_id
     ) data;
 
-    SELECT json_agg(data.*)::json ->> 0
+    SELECT json_agg(data)::json ->> 0
     INTO group_data
     FROM (
       SELECT *
       FROM sec.group g
       WHERE g.id = user_group_id
+    ) data;
+
+    SELECT json_agg(data)::json ->> 0
+    INTO location_data
+    FROM (
+      SELECT *
+      FROM sec.user_location ul
+      WHERE ul.location_id = user_location_id
     ) data;
 
     --REPLACE
@@ -105,6 +125,8 @@ $BODY$
           SELECT user_data ->> map_column INTO eval_value;
         WHEN 'contact' THEN
           SELECT contact_data ->> map_column INTO eval_value;
+        WHEN 'user_location' THEN
+          SELECT location_data ->> map_column INTO eval_value;
         WHEN 'group' THEN
           SELECT group_data ->> map_column INTO eval_value;
         ELSE

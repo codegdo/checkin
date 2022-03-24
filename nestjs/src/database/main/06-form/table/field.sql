@@ -39,7 +39,7 @@ VALUES
 ('username', 'field', 'text', null, 'sec.user.username', null, '0', '0', '1', '1', null, null, null),
 ('password', 'field', 'password', null, 'sec.user.password', null, '0', '0', '1', '1', null, null, null),
 ('passcode', 'field', 'text', null, 'sec.user.passcode', null, '0', '0', '1', '1', null, null, null),
-('location', 'field', 'select', null, 'sec.user.location_id', 'org.location.name.id', '0', '0', '1', '1', null, null, null),
+('location', 'field', 'select', null, 'sec.user_location.location_id', 'org.location.name.id', '0', '0', '1', '1', null, null, null),
 ('groupId', 'field', 'select', null, 'sec.user.group_id', 'sec.group.name.id', '0', '0', '1', '1', null, null, null),
 
 --contact=2

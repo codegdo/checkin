@@ -3,7 +3,7 @@ import { useRoutes } from 'react-router-dom';
 import { NotFound } from '../../components/page';
 import { Template, lazy } from '../../components/template/template.component';
 
-const Index = Template(lazy(() => import('./setup.index'), 1000));
+const Index = Template(lazy(() => import('./setup.index')));
 const UserList = Template(lazy(() => import('./user/user.list')));
 const UserForm = Template(lazy(() => import('./user/user.form')));
 const ClientList = Template(lazy(() => import('./client/client.list')));

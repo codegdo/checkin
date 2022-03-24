@@ -14,10 +14,10 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
     throw new Error('Require FORMFIELD Nested In FORMCONTEXT');
   }
 
-  const { values, errors, submit, formSchema, isKey, isMap } = context;
+  const { values, errors, status, submit, formSchema, isKey, isMap } = context;
 
   const data = field || props;
-  const { id, label, description, name, map = '', value: initialValue, defaultValue = '' } = data;
+  const { id, label, description, name, map = '', value: initialValue } = data;
   const mapTable = map?.split('.')[1];
   const fieldSchema = formValidationSchema(data);
 
@@ -28,14 +28,17 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
   useEffect(() => {
 
     isMap ?
-      values[mapTable] = { ...values[mapTable], [key]: initialValue || defaultValue } :
-      values[key] = initialValue || defaultValue;
+      values[mapTable] = { ...values[mapTable], [key]: initialValue } :
+      values[key] = initialValue;
 
     formSchema[key] = fieldSchema;
   }, []);
 
   useEffect(() => {
-    setIsError(errors[key] ? true : false);
+    if (submit == 'submit') {
+      setIsError(errors[key] ? true : false);
+    }
+
   }, [submit]);
 
   const handleChange = (value?: string) => {
@@ -60,6 +63,7 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
       <Label label={label} description={description} />
       <Input
         input={data}
+        status={status}
         onChange={handleChange}
       />
     </div>

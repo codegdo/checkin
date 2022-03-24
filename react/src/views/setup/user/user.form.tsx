@@ -51,8 +51,9 @@ const UserForm: React.FC = (props): JSX.Element => {
   };
 
   const handleCallback = (name: string) => {
-    console.log(name);
-    navigate(-1);
+    if (name == 'cancel') {
+      navigate(-1);
+    }
   };
 
   const handleModal = () => {
