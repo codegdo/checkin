@@ -92,13 +92,19 @@ export class AuthController {
   @Post('login')
   async login(@Session() session: any, @Body() body: UserLoginDto) {
     const { user, ...rest } = await this.authService.login(body);
+    const { locations } = rest;
 
     const { password, ..._user } = user;
     const { orgId } = _user;
     const accessToken = this.jwtService.sign({ orgId });
 
     if (orgId) {
-      session.data = { user: _user, ...rest };
+      session.data = {
+        user: _user,
+        orgId,
+        locationId: locations[0]?.id,
+        ...rest
+      };
 
       return {
         ...session.data,

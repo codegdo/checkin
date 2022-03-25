@@ -23,7 +23,7 @@ export class ApiGuard implements CanActivate {
     private reflector: Reflector,
     private jwtService: JwtService,
     private sessionRepository: SessionRepository,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
@@ -59,7 +59,7 @@ export class ApiGuard implements CanActivate {
 
     const { data } = request.session;
 
-    console.log('API GUARD SESSION USER', data);
+    console.log('API GUARD SESSION USER', request.session);
 
     //
     if (data) {

@@ -3,12 +3,12 @@ import { useAction } from "./use-action.hook";
 
 export const useLogin = (): any => {
 
-  const { updateSession, updateNav, updatePolicy } = useAction();
+  const { updateSession, updateNav, updateLocation, updatePolicy } = useAction();
   const [isVerified, setIsVerified] = useState(true);
   const [isSetupCompleted, setIsSetupCompleted] = useState(true);
 
   const login = (data: any) => {
-    const { user, orgId, accessToken, nav, policies } = data;
+    const { user, orgId, locations, nav, policies } = data;
 
     // Require user verify confirm
     if (user && !user.isActive) {
@@ -27,9 +27,11 @@ export const useLogin = (): any => {
       updateSession({
         isLogin: true,
         user,
-        orgId
+        orgId,
+        locationId: locations[0]?.id
       });
       updateNav(nav);
+      updateLocation(locations);
       updatePolicy(policies);
     }
   }

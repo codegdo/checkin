@@ -33,13 +33,15 @@ $BODY$
           username,
           password,
           contact_id,
-          group_id
+          group_id,
+          created_by
         )
         VALUES(
           (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'sec.user.username'),
           (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'sec.user.password'),
           (SELECT id FROM c),
-          (user_group_id)
+          (user_group_id),
+          (SELECT DISTINCT value FROM PUSU_eval WHERE map = 'sec.user.username')
         )
         RETURNING id, username, is_active, contact_id
       )
@@ -406,6 +408,7 @@ LANGUAGE plpgsql;
 DROP PROCEDURE IF EXISTS sec.pr_user_signup(json, json);
 DROP PROCEDURE IF EXISTS sec.pr_user_verify(int, varchar, varchar, bigint, json);
 DROP PROCEDURE IF EXISTS sec.pr_user_confirm(varchar, json);
+DROP PROCEDURE IF EXISTS sec.pr_user_login(varchar, json, json, json, json, json, json);
 DROP PROCEDURE IF EXISTS sec.pr_user_setup(json, int, json, json, json, json, json, json);
-DROP PROCEDURE IF EXISTS sec.pr_user_login(varchar, json, json, json, json, json);
+DROP PROCEDURE IF EXISTS sec.pr_user_save(json, int, int, int, jsonb);
 */

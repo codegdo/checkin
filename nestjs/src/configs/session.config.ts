@@ -23,12 +23,13 @@ export const sessionConfig = registerAs('session', () => ((async () => {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: false
+        secure: false,
+        maxAge: 3600000 // 60000
       },
       store: new TypeormStore({
-        cleanupLimit: 0,
+        cleanupLimit: 2,
         limitSubquery: false, // If using MariaDB.
-        ttl: 360,
+        //ttl: 3600000,
       }).connect(connection.getRepository(Session)),
     };
   } catch (err) {
