@@ -1,21 +1,22 @@
--- CREATE FUNCTION USER_GET
+-- CREATE FUNCTION GET_USER
 CREATE OR REPLACE FUNCTION sec.fn_get_user(p_user_id varchar)
 RETURNS TABLE (
-  "id" int,
-  "username" varchar,
-  "password" varchar,
-  "orgId" int,
-  "isActive" boolean,
+  id int,
+  username varchar,
+  password varchar,
+  org_id int,
+  is_active boolean,
 
-  "firstName" varchar,
-  "lastName" varchar,
-  "emailAddress" varchar,
-  "phoneNumber" varchar,
+  first_name varchar,
+  last_name varchar,
+  email_address varchar,
+  phone_number varchar,
 
-  "groupId" int,
-  "groupLevel" int,
-  "groupType" varchar,
-  "isOwner" boolean
+  group_id int,
+  group_level int,
+  group_name varchar,
+  group_type varchar,
+  is_owner boolean
 )
 AS
 $BODY$
@@ -38,6 +39,7 @@ $BODY$
 
         g.id,
         g.group_level,
+        g.name,
         gt.name,
         g.is_owner
       FROM sec.user u

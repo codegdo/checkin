@@ -20,7 +20,7 @@ $BODY$
       user_group_type varchar;
   BEGIN
 
-    SELECT id, "orgId", "groupType", "isActive"
+    SELECT id, org_id, group_type, is_active
     INTO user_id, user_org_id, user_group_type, user_is_active
     FROM sec.fn_get_user(p_username);
 
@@ -30,7 +30,7 @@ $BODY$
 
       ELSE
         SELECT
-          ua.users::jsonb ->> 0,
+          ua.user,
           ua.locations,
           ua.organizations,
           ua.modules,

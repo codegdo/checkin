@@ -8,7 +8,7 @@ export const useLogin = (): any => {
   const [isSetupCompleted, setIsSetupCompleted] = useState(true);
 
   const login = (data: any) => {
-    const { user, orgId, locations, nav, policies } = data;
+    const { user, orgId, locationId, locations, nav, policies } = data;
 
     // Require user verify confirm
     if (user && !user.isActive) {
@@ -28,7 +28,7 @@ export const useLogin = (): any => {
         isLogin: true,
         user,
         orgId,
-        locationId: locations[0]?.id
+        locationId
       });
       updateNav(nav);
       updateLocation(locations);

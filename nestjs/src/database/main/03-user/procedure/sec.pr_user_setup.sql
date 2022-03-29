@@ -83,7 +83,7 @@ $BODY$
       PERFORM sec.fn_set_org_default(org_id, p_login_id);
 
       SELECT
-        ua.users::jsonb ->> 0,
+        ua.user,
         ua.locations,
         ua.organizations,
         ua.modules,

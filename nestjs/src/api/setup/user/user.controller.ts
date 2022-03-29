@@ -13,25 +13,30 @@ import { UserCreateDto } from 'src/models/main/dtos';
 import { Serialize, CurrentUser } from 'src/common/decorators';
 import { PagingQueryDto } from 'src/common/dtos';
 import { User } from 'src/models/main/entities';
+import { SessionUser } from 'src/models/main/user/user.type';
 
 @Controller('setup')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userService: UserService) { }
 
   @Get('users')
   //@Serialize(UserData)
-  getAllUsers(@CurrentUser() user: User, @Query() query: PagingQueryDto) {
-    return this.userService.getAllUsers(query);
+  getAllUsers(
+    @CurrentUser() user: SessionUser,
+    @Query() query: PagingQueryDto
+  ) {
+    const { orgId, locationId } = user;
+    return this.userService.getAllUsers(orgId, locationId);
   }
 
   @Get('users/:userId')
   //@Serialize(UserData)
   getUser(
-    @CurrentUser() user: User,
+    @CurrentUser() user: SessionUser,
     @Param('userId') userId: number,
     @Query('formId') formId: number | string,
   ) {
-    const { id: loginId, orgId } = user;
+    const { loginId, orgId } = user;
 
     if (formId) {
       // getFormForUser
@@ -52,15 +57,15 @@ export class UserController {
   }
 
   @Post('users')
-  createUser(@CurrentUser() user: User, @Body() body: UserCreateDto) {
-    const { id: loginId } = user;
+  createUser(@CurrentUser() user: SessionUser, @Body() body: UserCreateDto) {
+    const { loginId } = user;
 
     return this.userService.createUser({ ...body, loginId });
   }
 
   @Patch('users/:id')
   updateUser(
-    @CurrentUser() user: User,
+    @CurrentUser() user: SessionUser,
     @Param('id') id: number,
     @Body() body: any,
   ) {
@@ -68,5 +73,5 @@ export class UserController {
   }
 
   @Delete('users/:id')
-  deleteUser(@CurrentUser() user: User, @Param('id') id: number) {}
+  deleteUser(@CurrentUser() user: SessionUser, @Param('id') id: number) { }
 }

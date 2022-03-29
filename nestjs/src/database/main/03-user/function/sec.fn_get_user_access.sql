@@ -1,7 +1,7 @@
 -- CREATE FUNCTION GET USER ACCESS
 CREATE OR REPLACE FUNCTION sec.fn_get_user_access(p_user_id int)
 RETURNS TABLE(
-  users json,
+  "user" json,
   locations json,
   organizations json,
   modules json,
@@ -10,7 +10,7 @@ RETURNS TABLE(
 ) AS
 $BODY$
   DECLARE
-    _users json;
+    _user json;
     _locations json;
     _organizations json;
     _modules json;
@@ -24,19 +24,32 @@ $BODY$
 
   BEGIN
     --GET
-    SELECT json_agg(u)::json
-    INTO _users
+    SELECT json_agg(_u)::json ->> 0
+    INTO _user
     FROM (
-      SELECT *
-      FROM sec.fn_get_user(p_user_id::varchar)
-    ) u;
+      SELECT
+        u.id "id",
+        u.username "username",
+        u.password "password",
+        u.org_id "orgId",
+        u.is_active "isActive",
+        u.first_name "firstName",
+        u.last_name "lastName",
+        u.email_address "emailAddress",
+        u.phone_number "phoneNumber",
+        u.group_id "groupId",
+        u.group_level "groupLevel",
+        u.group_type "groupType",
+        u.is_owner "isOwner"
+      FROM sec.fn_get_user(p_user_id::varchar) u
+    ) _u;
 
-    IF _users IS NOT NULL THEN
+    IF _user IS NOT NULL THEN
       --SET
-      SELECT (SELECT _users ->> 0)::jsonb ->> 'orgId' INTO org_id;
-      SELECT (SELECT _users ->> 0)::jsonb ->> 'groupId' INTO group_id;
-      SELECT (SELECT _users ->> 0)::jsonb ->> 'groupType' INTO group_type;
-      SELECT (SELECT _users ->> 0)::jsonb ->> 'isOwner' INTO is_owner;
+      SELECT (SELECT _user)::jsonb ->> 'orgId' INTO org_id;
+      SELECT (SELECT _user)::jsonb ->> 'groupId' INTO group_id;
+      SELECT (SELECT _user)::jsonb ->> 'groupType' INTO group_type;
+      SELECT (SELECT _user)::jsonb ->> 'isOwner' INTO is_owner;
 
       IF group_type = 'internal' AND is_owner = TRUE THEN
         SELECT json_agg(l)::json
@@ -86,7 +99,7 @@ $BODY$
 
     RETURN QUERY
       SELECT
-      _users,
+      _user,
       _locations,
       _organizations,
       _modules,

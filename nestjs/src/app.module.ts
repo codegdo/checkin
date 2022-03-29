@@ -4,17 +4,22 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 //import { WinstonModule } from 'nest-winston';
 
-import { GuardModule, SessionModule, MessageModule } from './common/modules';
-
-import { LoggerMiddleware } from './common/middlewares';
-
+import { MyMiddleware } from './common/middlewares';
+import {
+  GuardModule,
+  SessionModule,
+  MessageModule,
+  ErrorModule
+} from './common/modules';
 import {
   AuthModule,
   UserModule,
   CheckinModule,
   ClientModule,
   CalendarModule,
-  StoreModule,
+  //LocationModule,
+  GroupModule,
+  ReloadModule
 } from './api';
 
 import {
@@ -26,8 +31,6 @@ import {
   twilioConfig,
   winstonConfig,
 } from './configs';
-import { ErrorModule } from './common/modules/error/error.module';
-import { GroupModule } from './api/setup/group/group.module';
 
 @Module({
   imports: [
@@ -54,32 +57,20 @@ import { GroupModule } from './api/setup/group/group.module';
         configService.get('database.checkin'),
       inject: [ConfigService],
     }),
-    SessionModule.forRootAsync({
-      useFactory: async (configService: ConfigService) => {
-        return {
-          options: await configService.get('session')(),
-        };
-      },
-      inject: [ConfigService],
-    }),
 
-    // WinstonModule.forRootAsync({
-    //   useFactory: async (configService: ConfigService) =>
-    //     configService.get('winston'),
-    //   inject: [ConfigService],
-    // }),
-
+    SessionModule,
     GuardModule,
     MessageModule,
+    ErrorModule,
+
     AuthModule,
     UserModule,
-
     CheckinModule,
     ClientModule,
     CalendarModule,
-    StoreModule,
-    ErrorModule,
+    //LocationModule,
     GroupModule,
+    ReloadModule
   ],
   controllers: [],
   providers: [
@@ -100,6 +91,6 @@ export class AppModule {
   constructor() { }
 
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes('*');
+    consumer.apply(MyMiddleware).forRoutes('*');
   }
 }

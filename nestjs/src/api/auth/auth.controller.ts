@@ -108,8 +108,6 @@ export class AuthController {
 
       return {
         ...session.data,
-        orgId,
-        sid: session.id,
         accessToken
       };
     }
@@ -125,10 +123,12 @@ export class AuthController {
 
   @Public()
   @Get('logout')
-  logout(@Session() session: any, @CurrentUser() user: User) {
+  logout(
+    @Session() session: any
+  ) {
     console.log(session.id);
 
-    if (session.user) {
+    if (session.data) {
       session.destroy();
     }
 

@@ -49,8 +49,8 @@ $BODY$
       INTO data
       FROM (
         SELECT
-          u.id,
-          u.username,
+          u.id "id",
+          u.username "username",
           u.is_active "isActive",
           c.phone_number "phoneNumber",
           c.email_address "emailAddress"

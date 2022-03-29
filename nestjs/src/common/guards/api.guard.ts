@@ -27,6 +27,7 @@ export class ApiGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
+    const session = request.session;
     const authToken = request.header('Authorization');
     const apiToken = request.header('X-Api-Token');
     const refererHeader = request.header('Referer');
@@ -57,13 +58,25 @@ export class ApiGuard implements CanActivate {
       }
     }
 
-    const { data } = request.session;
+    const { data } = session;
 
-    console.log('API GUARD SESSION USER', request.session);
+    console.log('API GUARD SESSION USER', session);
 
     //
     if (data) {
-      request.currentUser = data.user;
+      const { user, locationId, orgId } = data;
+      const { id: loginId, groupType, groupLevel, isOwner } = user;
+
+      request.currentUser = {
+        sessionId: session.id,
+        loginId,
+        locationId,
+        orgId,
+        groupType,
+        groupLevel,
+        isOwner
+      };
+
       return true;
     }
 

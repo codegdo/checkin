@@ -20,12 +20,12 @@ export class UserService {
     private formRepository: FormRepository,
 
     private readonly errorService: ErrorService, //private repo: MainRepository //@Inject(MainRepository)
-  ) {}
+  ) { }
 
-  async getAllUsers(query) {
-    const { limit, offset } = query;
+  async getAllUsers(orgId, locationId) {
+    //const { limit, offset } = query;
 
-    return this.userRepository.getAllUsers();
+    return this.userRepository.getAllUsers(orgId, locationId);
   }
 
   async getUser(id) {
@@ -52,9 +52,9 @@ export class UserService {
     }
   }
 
-  async updateUser(id, updateUserDto) {}
+  async updateUser(id, updateUserDto) { }
 
-  async delete(id) {}
+  async delete(id) { }
 
   async getForm(dto: FormDto) {
     try {

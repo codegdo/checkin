@@ -1,9 +1,5 @@
-export * from './logger/logger.type';
-export * from './logger/logger.module';
-
 export * from './session/session.module';
 export * from './guard/guard.module';
-
 
 export * from './error/error.type';
 export * from './error/error.module';

@@ -53,3 +53,13 @@ export type UserLoginData = {
   policies: any;
   nav: any;
 } | null;
+
+export type SessionUser = {
+  sessionId: string;
+  loginId: number;
+  orgId: number;
+  locationId: number;
+  groupType: string;
+  groupLevel: number;
+  isOwner: boolean;
+}

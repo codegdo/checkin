@@ -34,64 +34,6 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
--- CREATE FUNCTION USER_GET
-CREATE OR REPLACE FUNCTION sec.fn_get_user(p_user_id varchar)
-RETURNS TABLE (
-  "id" int,
-  "username" varchar,
-  "password" varchar,
-  "orgId" int,
-  "isActive" boolean,
-
-  "firstName" varchar,
-  "lastName" varchar,
-  "emailAddress" varchar,
-  "phoneNumber" varchar,
-
-  "groupId" int,
-  "groupLevel" int,
-  "groupType" varchar,
-  "isOwner" boolean
-)
-AS
-$BODY$
-  DECLARE
-    
-  BEGIN
-
-    RETURN QUERY
-      SELECT
-        u.id,
-        u.username,
-        u.password,
-        u.org_id,
-        u.is_active,
-
-        c.first_name,
-        c.last_name,
-        c.email_address,
-        c.phone_number,
-
-        g.id,
-        g.group_level,
-        gt.name,
-        g.is_owner
-      FROM sec.user u
-      LEFT JOIN org.contact c ON c.id = u.contact_id
-      LEFT JOIN sec.group g ON g.id = u.group_id
-      LEFT JOIN dbo.group_type gt ON gt.id = g.group_type_id
-      WHERE (
-        CASE
-          WHEN (p_user_id ~ '^\d+$') THEN
-            u.id = CAST(p_user_id as int)
-          ELSE
-            u.username = p_user_id
-        END
-      );
-  END;
-$BODY$
-LANGUAGE plpgsql;
-
 -- CREATE FUNCTION GET POLICY
 CREATE OR REPLACE FUNCTION sec.fn_get_policy(p_group_id int)
 RETURNS TABLE (
@@ -119,7 +61,7 @@ LANGUAGE plpgsql;
 -- CREATE FUNCTION GET USER ACCESS
 CREATE OR REPLACE FUNCTION sec.fn_get_user_access(p_user_id int)
 RETURNS TABLE(
-  users json,
+  "user" json,
   locations json,
   organizations json,
   modules json,
@@ -128,7 +70,7 @@ RETURNS TABLE(
 ) AS
 $BODY$
   DECLARE
-    _users json;
+    _user json;
     _locations json;
     _organizations json;
     _modules json;
@@ -142,19 +84,32 @@ $BODY$
 
   BEGIN
     --GET
-    SELECT json_agg(u)::json
-    INTO _users
+    SELECT json_agg(_u)::json ->> 0
+    INTO _user
     FROM (
-      SELECT *
-      FROM sec.fn_get_user(p_user_id::varchar)
-    ) u;
+      SELECT
+        u.id "id",
+        u.username "username",
+        u.password "password",
+        u.org_id "orgId",
+        u.is_active "isActive",
+        u.first_name "firstName",
+        u.last_name "lastName",
+        u.email_address "emailAddress",
+        u.phone_number "phoneNumber",
+        u.group_id "groupId",
+        u.group_level "groupLevel",
+        u.group_type "groupType",
+        u.is_owner "isOwner"
+      FROM sec.fn_get_user(p_user_id::varchar) u
+    ) _u;
 
-    IF _users IS NOT NULL THEN
+    IF _user IS NOT NULL THEN
       --SET
-      SELECT (SELECT _users ->> 0)::jsonb ->> 'orgId' INTO org_id;
-      SELECT (SELECT _users ->> 0)::jsonb ->> 'groupId' INTO group_id;
-      SELECT (SELECT _users ->> 0)::jsonb ->> 'groupType' INTO group_type;
-      SELECT (SELECT _users ->> 0)::jsonb ->> 'isOwner' INTO is_owner;
+      SELECT (SELECT _user)::jsonb ->> 'orgId' INTO org_id;
+      SELECT (SELECT _user)::jsonb ->> 'groupId' INTO group_id;
+      SELECT (SELECT _user)::jsonb ->> 'groupType' INTO group_type;
+      SELECT (SELECT _user)::jsonb ->> 'isOwner' INTO is_owner;
 
       IF group_type = 'internal' AND is_owner = TRUE THEN
         SELECT json_agg(l)::json
@@ -204,12 +159,121 @@ $BODY$
 
     RETURN QUERY
       SELECT
-      _users,
+      _user,
       _locations,
       _organizations,
       _modules,
       _permissions,
       _policies;
+  END;
+$BODY$
+LANGUAGE plpgsql;
+
+-- CREATE FUNCTION GET_USER
+CREATE OR REPLACE FUNCTION sec.fn_get_user(p_user_id varchar)
+RETURNS TABLE (
+  id int,
+  username varchar,
+  password varchar,
+  org_id int,
+  is_active boolean,
+
+  first_name varchar,
+  last_name varchar,
+  email_address varchar,
+  phone_number varchar,
+
+  group_id int,
+  group_level int,
+  group_name varchar,
+  group_type varchar,
+  is_owner boolean
+)
+AS
+$BODY$
+  DECLARE
+
+  BEGIN
+
+    RETURN QUERY
+      SELECT
+        u.id,
+        u.username,
+        u.password,
+        u.org_id,
+        u.is_active,
+
+        c.first_name,
+        c.last_name,
+        c.email_address,
+        c.phone_number,
+
+        g.id,
+        g.group_level,
+        g.name,
+        gt.name,
+        g.is_owner
+      FROM sec.user u
+      LEFT JOIN org.contact c ON c.id = u.contact_id
+      LEFT JOIN sec.group g ON g.id = u.group_id
+      LEFT JOIN dbo.group_type gt ON gt.id = g.group_type_id
+      WHERE (
+        CASE
+          WHEN (p_user_id ~ '^\d+$') THEN
+            u.id = CAST(p_user_id as int)
+          ELSE
+            u.username = p_user_id
+        END
+      );
+  END;
+$BODY$
+LANGUAGE plpgsql;
+
+-- CREATE FUNCTION GET_USER_FOR_ORG
+CREATE OR REPLACE FUNCTION sec.fn_get_user_for_org(p_org_id int)
+RETURNS TABLE (
+  id int,
+  username varchar,
+  org_id int,
+  is_active boolean,
+
+  first_name varchar,
+  last_name varchar,
+  email_address varchar,
+  phone_number varchar,
+
+  group_level int,
+  group_name varchar,
+  group_type varchar,
+  is_owner boolean
+)
+AS
+$BODY$
+  DECLARE
+  BEGIN
+    RETURN QUERY
+
+    SELECT
+      u.id,
+      u.username,
+      u.org_id,
+      u.is_active,
+
+      c.first_name,
+      c.last_name,
+      c.email_address,
+      c.phone_number,
+
+      g.group_level,
+      g.name,
+      gt.name,
+      g.is_owner
+    FROM sec.user u
+    LEFT JOIN org.contact c ON c.id = u.contact_id
+    LEFT JOIN sec.group g ON g.id = u.group_id
+    LEFT JOIN dbo.group_type gt ON gt.id = g.group_type_id
+    WHERE u.org_id = p_org_id;
+
   END;
 $BODY$
 LANGUAGE plpgsql;
@@ -286,8 +350,9 @@ LANGUAGE plpgsql;
 
 DROP FUNCTION IF EXISTS sec.fn_get_location_for_org;
 DROP FUNCTION IF EXISTS sec.fn_get_location_for_user;
-DROP FUNCTION IF EXISTS sec.fn_get_user;
-DROP FUNCTION IF EXISTS sec.fn_get_user_access;
 DROP FUNCTION IF EXISTS sec.fn_get_policy;
+DROP FUNCTION IF EXISTS sec.fn_get_user_access;
+DROP FUNCTION IF EXISTS sec.fn_get_user_for_org;
+DROP FUNCTION IF EXISTS sec.fn_get_user;
 DROP FUNCTION IF EXISTS sec.fn_set_org_default;
 */

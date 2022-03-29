@@ -120,8 +120,13 @@ export class UserRepository extends Repository<User> {
     return user;
   }
 
-  async getAllUsers() {
-    return [];
+  async getAllUsers(orgId: number, locationId: number) {
+    const [result] = await this.manager.query(
+      `CALL sec.pr_user_get_all($1, $2, $3)`,
+      [orgId, locationId, null],
+    );
+
+    return result.data;
   }
 }
 

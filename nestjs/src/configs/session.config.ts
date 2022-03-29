@@ -27,7 +27,7 @@ export const sessionConfig = registerAs('session', () => ((async () => {
         maxAge: 3600000 // 60000
       },
       store: new TypeormStore({
-        cleanupLimit: 2,
+        cleanupLimit: 10,
         limitSubquery: false, // If using MariaDB.
         //ttl: 3600000,
       }).connect(connection.getRepository(Session)),

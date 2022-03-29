@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { useFetch } from '../../../hooks';
+import { useFetch, useReload } from '../../../hooks';
 
 const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
 
   const [{ status: loading, result: { data } }, getUsers] = useFetch(`/api/setup/users`);
+  const [{ locationId }, reload] = useReload();
   const [users, setUsers] = useState<any>();
 
   // load form
@@ -13,7 +14,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
     void (async () => {
       await getUsers();
     })();
-  }, []);
+  }, [locationId]);
 
   useEffect(() => {
     if (loading === 'success') {
@@ -21,7 +22,11 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
     }
   }, [loading]);
 
-  return <div>USER <Link to={`new?formId=${route}_${page}`}>Add</Link></div>;
+  const handleReload = () => {
+    reload();
+  }
+
+  return <div><button type="button" onClick={handleReload}>reload</button>USER <Link to={`new?formId=${route}_${page}`}>Add</Link></div>;
 };
 
 export default UserList;
