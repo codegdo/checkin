@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { CurrentUser } from 'src/common/decorators';
+import { CurrentUser } from 'src/decorators';
 import { SessionUser } from 'src/models/main/user/user.type';
 import { ReloadService } from './reload.service';
 

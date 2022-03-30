@@ -10,8 +10,8 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserCreateDto } from 'src/models/main/dtos';
-import { Serialize, CurrentUser } from 'src/common/decorators';
-import { PagingQueryDto } from 'src/common/dtos';
+import { Serialize, CurrentUser } from 'src/decorators';
+import { PagingQueryDto } from 'src/dtos';
 import { User } from 'src/models/main/entities';
 import { SessionUser } from 'src/models/main/user/user.type';
 

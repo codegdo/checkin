@@ -15,7 +15,7 @@ import {
   EmailRepository
 } from 'src/models/main/repositories';
 //import { CheckinRepository } from 'src/models/checkin/repositories';
-import { ErrorService } from 'src/common/modules';
+import { ErrorService } from 'src/common';
 
 @Module({
   imports: [

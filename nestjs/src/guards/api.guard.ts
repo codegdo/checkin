@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
-import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { IS_PUBLIC_KEY, IS_RESTRICT_KEY } from '../decorators';
 import { JwtService } from '@nestjs/jwt';
 import { SessionRepository } from 'src/models/main/repositories';
-import { IS_RESTRICTED_KEY } from '../decorators/restricted.decorator';
+
 
 declare module 'express' {
   export interface Request {
@@ -33,16 +33,13 @@ export class ApiGuard implements CanActivate {
     const refererHeader = request.header('Referer');
 
     const isPublish = this.reflector.get(IS_PUBLIC_KEY, context.getHandler());
-    const isRestricted = this.reflector.get(
-      IS_RESTRICTED_KEY,
-      context.getHandler(),
-    );
+    const isRestrict = this.reflector.get(IS_RESTRICT_KEY, context.getHandler());
 
     if (isPublish) {
       return true;
     }
 
-    if (isRestricted) {
+    if (isRestrict) {
       if (!apiToken) {
         return false;
       }
@@ -58,12 +55,11 @@ export class ApiGuard implements CanActivate {
       }
     }
 
-    const { data } = session;
-
     console.log('API GUARD SESSION USER', session);
 
     //
-    if (data) {
+    if (session.data) {
+      const { data } = session;
       const { user, locationId, orgId } = data;
       const { id: loginId, groupType, groupLevel, isOwner } = user;
 

@@ -4,22 +4,26 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 //import { WinstonModule } from 'nest-winston';
 
-import { MyMiddleware } from './common/middlewares';
+import { MyMiddleware } from './middlewares';
+
 import {
   GuardModule,
   SessionModule,
   MessageModule,
   ErrorModule
-} from './common/modules';
+} from './common';
+
 import {
   AuthModule,
-  UserModule,
+
   CheckinModule,
   ClientModule,
-  CalendarModule,
+  ReloadModule,
+
+  SetupCalendarModule,
   //LocationModule,
   GroupModule,
-  ReloadModule
+  UserModule,
 } from './api';
 
 import {
@@ -57,20 +61,21 @@ import {
         configService.get('database.checkin'),
       inject: [ConfigService],
     }),
-
-    SessionModule,
+    // common
+    ErrorModule,
     GuardModule,
     MessageModule,
-    ErrorModule,
-
+    SessionModule,
+    // api
     AuthModule,
-    UserModule,
     CheckinModule,
     ClientModule,
-    CalendarModule,
+    ReloadModule,
+
+    SetupCalendarModule,
     //LocationModule,
     GroupModule,
-    ReloadModule
+    UserModule,
   ],
   controllers: [],
   providers: [

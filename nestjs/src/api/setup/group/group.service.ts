@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ErrorService } from 'src/common/modules';
+import { ErrorService } from 'src/common';
 import { FormRepository } from 'src/models/main/repositories';
 
 @Injectable()

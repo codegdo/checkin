@@ -1,5 +1,5 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { CurrentUser } from 'src/common/decorators';
+import { CurrentUser } from 'src/decorators';
 import { User } from 'src/models/main/entities';
 
 @Controller('setup')

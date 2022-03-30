@@ -26,14 +26,14 @@ import {
   ErrorService,
   MessageAuthService,
   MessageEnum,
-} from 'src/common/modules';
+} from 'src/common';
 import {
   UserLoginDto,
   UserSetupDto,
   UserSignupDto,
   UserVerifyDto,
 } from 'src/models/main/dtos';
-import { moduleViewObjectGroup } from 'src/common/utils/module-view-object-group.util';
+import { moduleViewObjectGroup } from 'src/utils/module-view-object-group.util';
 
 @Injectable()
 export class AuthService {

@@ -5,7 +5,7 @@ import {
   encryptKeyValue,
   trimObjectKey,
   validatePassword,
-} from 'src/common/utils';
+} from 'src/utils';
 
 import { User } from './user.entity';
 import { TokenEnum } from '../token/token.type';
@@ -24,7 +24,7 @@ import {
   UserLoginData,
 } from './user.type';
 import { ConflictException } from '@nestjs/common';
-import { ErrorMessageEnum } from 'src/common/modules/error/error.type';
+import { ErrorMessageEnum } from 'src/common/error/error.type';
 import { FormTypeEnum } from '../form/form.type';
 
 @EntityRepository(User)

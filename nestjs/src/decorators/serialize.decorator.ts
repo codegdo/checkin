@@ -2,7 +2,7 @@ import { UseInterceptors } from '@nestjs/common';
 import { SerializeInterceptor } from '../interceptors/serialize.interceptor';
 
 interface ClassConstructor {
-  new (...args: any): {};
+  new(...args: any): {};
 }
 
 export function Serialize(dto: ClassConstructor) {

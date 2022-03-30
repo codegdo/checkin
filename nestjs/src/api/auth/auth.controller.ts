@@ -18,8 +18,8 @@ import {
   UserVerifyDto,
 } from '../../models/main/dtos';
 import { User } from 'src/models/main/entities';
-import { CurrentUser, Public, Serialize } from 'src/common/decorators';
-import { MaskEnum, maskValue } from 'src/common/utils';
+import { CurrentUser, Public, Serialize } from 'src/decorators';
+import { MaskEnum, maskValue } from 'src/utils';
 
 @Controller('auth')
 export class AuthController {

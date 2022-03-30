@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from 'src/models/main/user/user.entity';
 import { UserRepository, FormRepository } from 'src/models/main/repositories';
-import { ErrorMessageEnum, ErrorService } from 'src/common/modules';
+import { ErrorMessageEnum, ErrorService } from 'src/common';
 import { FormDto, UserCreateDto } from 'src/models/main/dtos';
 
 @Injectable()

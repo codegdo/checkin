@@ -1,4 +1,4 @@
 export * from './public.decorator';
-export * from './restricted.decorator';
+export * from './restrict.decorator';
 export * from './serialize.decorator';
 export * from './current-user.decorator';
