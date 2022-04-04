@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS org.gridview (
   gridview_type_id INT,
   org_id INT,
 
-  data JSONB NOT NULL DEFAULT '[]'::jsonb,
+  data JSONB NOT NULL DEFAULT '{}'::jsonb,
 
   is_active BOOLEAN DEFAULT TRUE,
 
@@ -78,6 +78,11 @@ CREATE TABLE IF NOT EXISTS org.gridview (
   FOREIGN KEY(gridview_type_id) REFERENCES dbo.gridview_type(id) ON DELETE SET NULL
 );
 
+INSERT
+INTO org.gridview (gridview_type_id, org_id)
+VALUES
+(1, 1);
+
 /* DROP TABLES
 
 DROP TABLE IF EXISTS
@@ -85,3 +90,40 @@ dbo.gridview_type,
 dbo.gridview_column,
 org.gridview CASCADE;
 */
+
+
+
+
+select
+gc.id,
+--gc.name,
+gc.label,
+--gc.type,
+gc.sort_order,
+--gc.data,
+--gc.lookup,
+gc.is_visible
+--gc.is_config,
+--gc.label_enable,
+--gc.sort_order_enable,
+--gc.is_visible_enable
+from dbo.gridview_type gt
+left join dbo.gridview_column gc ON gc.gridview_type_id = gt.id
+where gt.id = 1;
+
+select
+gc.id,
+gv.org_id 
+from dbo.gridview_type gt
+left join org.gridview gv on gv.gridview_type_id = gt.id
+left join dbo.gridview_column gc ON gc.gridview_type_id = gt.id
+where gt.id = 1;
+
+select
+gt.id,
+gv.id gv_id,
+gv.org_id
+from dbo.gridview_type gt
+left join org.gridview gv on gv.gridview_type_id = gt.id
+where gv.org_id = 1 or gv.org_id is null;
+
