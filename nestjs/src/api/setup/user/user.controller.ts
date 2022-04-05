@@ -25,8 +25,8 @@ export class UserController {
     @CurrentUser() user: SessionUser,
     @Query() query: PagingQueryDto
   ) {
-    const { orgId, locationId } = user;
-    return this.userService.getAllUsers(orgId, locationId);
+    const { groupType, orgId, locationId } = user;
+    return this.userService.getAllUsers(groupType, orgId, locationId);
   }
 
   @Get('users/:userId')

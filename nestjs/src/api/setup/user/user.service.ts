@@ -22,10 +22,10 @@ export class UserService {
     private readonly errorService: ErrorService, //private repo: MainRepository //@Inject(MainRepository)
   ) { }
 
-  async getAllUsers(orgId, locationId) {
+  async getAllUsers(groupType, orgId, locationId) {
     //const { limit, offset } = query;
 
-    return this.userRepository.getAllUsers(orgId, locationId);
+    return this.userRepository.getAllUsers(groupType, orgId, locationId);
   }
 
   async getUser(id) {

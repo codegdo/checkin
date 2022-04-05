@@ -1,12 +1,8 @@
 -- CREATE TABLE GRIDVIEW
-CREATE TABLE IF NOT EXISTS org.gridview (
+CREATE TABLE IF NOT EXISTS dbo.gridview (
   id SERIAL,
-  gridview_type_id INT,
-  org_id INT,
-
-  data JSONB NOT NULL DEFAULT '[]'::jsonb,
-
-  is_active BOOLEAN DEFAULT TRUE,
+  name VARCHAR(255),
+  view_id INT,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
@@ -14,10 +10,10 @@ CREATE TABLE IF NOT EXISTS org.gridview (
   updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
-  FOREIGN KEY(gridview_type_id) REFERENCES dbo.gridview_type(id) ON DELETE SET NULL
+  FOREIGN KEY(view_id) REFERENCES dbo.view(id) ON DELETE SET NULL
 );
 
 INSERT
-INTO org.gridview (gridview_type_id, org_id)
+INTO dbo.gridview (id, name)
 VALUES
-(1, 2);
+('1', 'setup_users');

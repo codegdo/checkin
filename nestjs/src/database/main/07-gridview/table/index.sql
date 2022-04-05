@@ -1,18 +1,20 @@
--- CREATE TABLE GRIDVIEW_TYPE
-CREATE TABLE IF NOT EXISTS dbo.gridview_type (
+-- CREATE TABLE GRIDVIEW
+CREATE TABLE IF NOT EXISTS dbo.gridview (
   id SERIAL,
   name VARCHAR(255),
+  view_id INT,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
   created_by VARCHAR(45) DEFAULT CURRENT_USER,
   updated_by VARCHAR(45),
   --
-  PRIMARY KEY(id)
+  PRIMARY KEY(id),
+  FOREIGN KEY(view_id) REFERENCES dbo.view(id) ON DELETE SET NULL
 );
 
 INSERT
-INTO dbo.gridview_type (id, name)
+INTO dbo.gridview (id, name)
 VALUES
 ('1', 'setup_users');
 
@@ -28,13 +30,17 @@ CREATE TABLE IF NOT EXISTS dbo.gridview_column (
 
   lookup VARCHAR(95),
 
-  gridview_type_id INT,
+  gridview_id INT,
 
+  is_default BOOLEAN DEFAULT FALSE,
+  is_search BOOLEAN DEFAULT TRUE,
   is_visible BOOLEAN DEFAULT TRUE,
   is_config BOOLEAN DEFAULT TRUE,
   
   label_enable BOOLEAN DEFAULT TRUE,
   sort_order_enable BOOLEAN DEFAULT TRUE,
+  is_default_enable BOOLEAN DEFAULT TRUE,
+  is_search_enable BOOLEAN DEFAULT TRUE,
   is_visible_enable BOOLEAN DEFAULT TRUE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -42,32 +48,32 @@ CREATE TABLE IF NOT EXISTS dbo.gridview_column (
   created_by VARCHAR(45) DEFAULT CURRENT_USER,
   updated_by VARCHAR(45),
   --
-  PRIMARY KEY(id)
+  PRIMARY KEY(id),
+  FOREIGN KEY(gridview_id) REFERENCES dbo.gridview(id) ON DELETE SET NULL
 );
 
 INSERT
-INTO dbo.gridview_column (name, label, type, sort_order, gridview_type_id)
+INTO dbo.gridview_column (name, label, type, sort_order, gridview_id, is_config, is_default, is_search)
 VALUES
 --user=1
-('username', 'username', 'text', 1, 1),
-('firstName', 'First Name', 'text', 2, 1),
-('lastName', 'Last Name', 'text', 3, 1),
-('emailAddress', 'Email Address', 'text', 4, 1),
-('phoneNumber', 'Phone Number', 'text', 5, 1),
-('level', 'Level', 'text', 6, 1),
-('group', 'Group', 'text', 7, 1),
-('type', 'Type', 'text', 8, 1),
-('isActive', 'Active', 'text', 9, 1);
+('id', 'Id', 'text', 0, 1, 0, 0, 0),
+('username', 'Username', 'text', 1, 1, 1, 1, 1),
+('firstName', 'First Name', 'text', 2, 1, 1, 0),
+('lastName', 'Last Name', 'text', 3, 1, 1, 0),
+('emailAddress', 'Email Address', 'text', 4, 1, 1, 0),
+('phoneNumber', 'Phone Number', 'text', 5, 1, 1, 0),
+('level', 'Level', 'text', 6, 1, 1, 0),
+('group', 'Group', 'text', 7, 1, 1, 0),
+('type', 'Type', 'text', 8, 1, 1, 0),
+('isActive', 'Active', 'text', 9, 1, 1, 0);
 
--- CREATE TABLE GRIDVIEW
-CREATE TABLE IF NOT EXISTS org.gridview (
+-- CREATE TABLE GRIDVIEW CONFIG
+CREATE TABLE IF NOT EXISTS org.gridview_config (
   id SERIAL,
-  gridview_type_id INT,
+  gridview_id INT,
   org_id INT,
 
-  data JSONB NOT NULL DEFAULT '{}'::jsonb,
-
-  is_active BOOLEAN DEFAULT TRUE,
+  data JSONB NOT NULL DEFAULT '[]'::jsonb,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
@@ -75,55 +81,82 @@ CREATE TABLE IF NOT EXISTS org.gridview (
   updated_by VARCHAR(45),
   --
   PRIMARY KEY(id),
-  FOREIGN KEY(gridview_type_id) REFERENCES dbo.gridview_type(id) ON DELETE SET NULL
+  FOREIGN KEY(gridview_id) REFERENCES dbo.gridview(id) ON DELETE SET NULL
 );
 
 INSERT
-INTO org.gridview (gridview_type_id, org_id)
+INTO org.gridview_config (gridview_id, org_id, data)
 VALUES
-(1, 1);
+(1, 1, '{
+	"username": {
+    "label": "Username",
+    "sortOrder": 1,
+    "isDefault": 1,
+    "isSearch": 1,
+    "isVisible": 1
+  },
+  "firstName": {
+    "label": "First Name",
+    "sortOrder": 2,
+    "isDefault": 0,
+    "isSearch": 1,
+    "isVisible": 1
+  },
+  "lastName": {
+    "label": "Last Name",
+    "sortOrder": 3,
+    "isDefault": 0,
+    "isSearch": 1,
+    "isVisible": 1
+  },
+  "emailAddress": {
+    "label": "Email Address",
+    "sortOrder": 4,
+    "isDefault": 0,
+    "isSearch": 1,
+    "isVisible": 1
+  },
+  "phoneNumber": {
+    "label": "Phone Number",
+    "sortOrder": 5,
+    "isDefault": 0,
+    "isSearch": 1,
+    "isVisible": 1
+  },
+  "level": {
+    "label": "Level",
+    "sortOrder": 6,
+    "isDefault": 0,
+    "isSearch": 1,
+    "isVisible": 1
+  },
+  "group": {
+    "label": "Group",
+    "sortOrder": 7,
+    "isDefault": 0,
+    "isSearch": 1,
+    "isVisible": 1
+  },
+  "type": {
+    "label": "Type",
+    "sortOrder": 8,
+    "isDefault": 0,
+    "isSearch": 1,
+    "isVisible": 1
+  },
+  "isActive": {
+    "label": "Active",
+    "sortOrder": 9,
+    "isDefault": 0,
+    "isSearch": 1,
+    "isVisible": 1
+  }
+}');
 
 /* DROP TABLES
 
 DROP TABLE IF EXISTS
-dbo.gridview_type,
+dbo.gridview,
 dbo.gridview_column,
-org.gridview CASCADE;
+org.gridview_config CASCADE;
 */
-
-
-
-
-select
-gc.id,
---gc.name,
-gc.label,
---gc.type,
-gc.sort_order,
---gc.data,
---gc.lookup,
-gc.is_visible
---gc.is_config,
---gc.label_enable,
---gc.sort_order_enable,
---gc.is_visible_enable
-from dbo.gridview_type gt
-left join dbo.gridview_column gc ON gc.gridview_type_id = gt.id
-where gt.id = 1;
-
-select
-gc.id,
-gv.org_id 
-from dbo.gridview_type gt
-left join org.gridview gv on gv.gridview_type_id = gt.id
-left join dbo.gridview_column gc ON gc.gridview_type_id = gt.id
-where gt.id = 1;
-
-select
-gt.id,
-gv.id gv_id,
-gv.org_id
-from dbo.gridview_type gt
-left join org.gridview gv on gv.gridview_type_id = gt.id
-where gv.org_id = 1 or gv.org_id is null;
-
