@@ -126,7 +126,7 @@ export class UserRepository extends Repository<User> {
       [loginType, orgId, locationId, null, null, null],
     );
 
-    return result.data;
+    return result;
   }
 }
 
