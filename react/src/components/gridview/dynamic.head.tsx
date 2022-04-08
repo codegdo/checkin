@@ -1,5 +1,11 @@
 import React from 'react';
 
-export const DynamicHead: React.FC = (): JSX.Element => {
-  return <tr><th>head</th></tr>
+export const DynamicHead: React.FC<any> = ({ columns }): JSX.Element => {
+  return <tr>
+    {
+      columns && columns.map((column: any, i: any) => {
+        return <th key={i}>{column.label}</th>
+      })
+    }
+  </tr>
 }

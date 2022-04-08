@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Column, Control, Gridview, Render } from '../../../components/gridview';
+import { Column, Control, Field, Gridview, Render } from '../../../components/gridview';
 
 import { useFetch, useReload } from '../../../hooks';
 
@@ -8,7 +8,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
 
   const [{ status: loading, result: { data: dataSource } }, getUsers] = useFetch(`/api/setup/users`);
   const [{ locationId }, reload] = useReload();
-  const [{ users, columns, search }, setData] = useState<any>({});
+  const [{ grid, columns, fields, users }, setData] = useState<any>({});
 
   // load form
   useEffect(() => {
@@ -32,44 +32,21 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
       USER <Link to={`new?formId=${route}_${page}`}>Add</Link> <button type="button" onClick={handleReload}>reload</button>
     </header>
 
-    <Gridview data={users} columns={columns} search={search}>
+    <Gridview data={users} columns={columns} fields={fields}>
       <Render>
-        <Column name="username" title="Username"></Column>
-        <Column name="emailAddress" title="Email Address"></Column>
+        <Column name="username" title="Username" />
+        <Column name="emailAddress" title="Email Address" />
       </Render>
-      <Control />
+      <Control>
+        <Field />
+      </Control>
     </Gridview>
 
     <Gridview
       data={users}
       columns={columns}
-      search={search}
+      fields={fields}
     />
-
-    <table>
-      <thead>
-        <tr>
-          {
-            columns && columns.map((c: any, i: any) => {
-              return <th key={i}>{c.label}</th>
-            })
-          }
-        </tr>
-      </thead>
-      <tbody>
-        {
-          users && users.map((item: any, i: any) => {
-            return <tr key={i}>
-              {
-                Object.keys(item).map((key, i) => {
-                  return <td key={i}>{String(item[key])}</td>
-                })
-              }
-            </tr>
-          })
-        }
-      </tbody>
-    </table>
   </div>;
 };
 
