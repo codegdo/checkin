@@ -33,84 +33,16 @@ CREATE TABLE IF NOT EXISTS dbo.gridview_column (
 );
 
 INSERT
-INTO dbo.gridview_column (name, label, type, sort_order, gridview_id, is_config, is_default, is_search)
+INTO dbo.gridview_column (name, label, type, sort_order, gridview_id, is_config, is_default, is_search, is_visible)
 VALUES
 --user=1
-('id', 'Id', 'text', 0, 1, 0, 0, 0),
-('username', 'Username', 'text', 1, 1, 1, 1, 1),
-('firstName', 'First Name', 'text', 2, 1, 1, 0),
-('lastName', 'Last Name', 'text', 3, 1, 1, 0),
-('emailAddress', 'Email Address', 'text', 4, 1, 1, 0),
-('phoneNumber', 'Phone Number', 'text', 5, 1, 1, 0),
-('level', 'Level', 'text', 6, 1, 1, 0),
-('group', 'Group', 'text', 7, 1, 1, 0),
-('type', 'Type', 'text', 8, 1, 1, 0),
-('isActive', 'Active', 'text', 9, 1, 1, 0);
-
-
-
-{
-	"username": {
-    "label": "Username",
-    "sortOrder": 1,
-    "isDefault": 1,
-    "isSearch": 1,
-    "isVisible": 1
-  },
-  "firstName": {
-    "label": "First Name",
-    "sortOrder": 2,
-    "isDefault": 0,
-    "isSearch": 1,
-    "isVisible": 1
-  },
-  "lastName": {
-    "label": "Last Name",
-    "sortOrder": 3,
-    "isDefault": 0,
-    "isSearch": 1,
-    "isVisible": 1
-  },
-  "emailAddress": {
-    "label": "Email Address",
-    "sortOrder": 4,
-    "isDefault": 0,
-    "isSearch": 1,
-    "isVisible": 1
-  },
-  "phoneNumber": {
-    "label": "Phone Number",
-    "sortOrder": 5,
-    "isDefault": 0,
-    "isSearch": 1,
-    "isVisible": 1
-  },
-  "level": {
-    "label": "Level",
-    "sortOrder": 6,
-    "isDefault": 0,
-    "isSearch": 1,
-    "isVisible": 1
-  },
-  "group": {
-    "label": "Group",
-    "sortOrder": 7,
-    "isDefault": 0,
-    "isSearch": 1,
-    "isVisible": 1
-  },
-  "type": {
-    "label": "Type",
-    "sortOrder": 8,
-    "isDefault": 0,
-    "isSearch": 1,
-    "isVisible": 1
-  },
-  "isActive": {
-    "label": "Active",
-    "sortOrder": 9,
-    "isDefault": 0,
-    "isSearch": 1,
-    "isVisible": 1
-  },
-}
+('id', 'Id', 'text', 0, 1, '0', '0', '0', '1'),
+('username', 'Username', 'text', 1, 1, '1', '1', '1', '1'),
+('firstName', 'First Name', 'text', 2, '1', '1', '0', '1', '1'),
+('lastName', 'Last Name', 'text', 3, '1', '1', '0', '1', '1'),
+('emailAddress', 'Email Address', 'text', 4, '1', '1', '0', '1', '1'),
+('phoneNumber', 'Phone Number', 'text', 5, '1', '1', '0', '1', '1'),
+('level', 'Level', 'text', 6, '1', '1', '0', '1', '1'),
+('group', 'Group', 'text', 7, '1', '1', '0', '1', '1'),
+('type', 'Type', 'text', 8, '1', '1', '0', '1', '1'),
+('isActive', 'Active', 'text', 9, '1', '1', '0', '1', '1');

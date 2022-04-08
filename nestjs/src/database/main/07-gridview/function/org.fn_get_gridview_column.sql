@@ -1,5 +1,5 @@
--- CREATE FUNCTION FN_GET_GRIDVIEW
-CREATE OR REPLACE FUNCTION org.fn_get_gridview(
+-- CREATE FUNCTION FN_GET_GRIDVIEW_COLUMN
+CREATE OR REPLACE FUNCTION org.fn_get_gridview_column(
   p_gridview_id varchar,
   p_org_id int
 )
@@ -53,6 +53,8 @@ $BODY$
       gc.is_config,
       gc.label_enable,
       gc.sort_order_enable,
+      gc.is_default_enable,
+      gc.is_search_enable,
       gc.is_visible_enable,
       gcf.data config
     FROM dbo.gridview gv
@@ -68,3 +70,4 @@ $BODY$
 $BODY$
 LANGUAGE plpgsql;
 
+--SELECT * FROM org.fn_get_gridview_column('setup_users', 1);

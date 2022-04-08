@@ -2,6 +2,7 @@
 CREATE TABLE IF NOT EXISTS dbo.gridview (
   id SERIAL,
   name VARCHAR(255),
+  with_paging INT DEFAULT 25,
   view_id INT,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -53,25 +54,26 @@ CREATE TABLE IF NOT EXISTS dbo.gridview_column (
 );
 
 INSERT
-INTO dbo.gridview_column (name, label, type, sort_order, gridview_id, is_config, is_default, is_search)
+INTO dbo.gridview_column (name, label, type, sort_order, gridview_id, is_config, is_default, is_search, is_visible)
 VALUES
 --user=1
-('id', 'Id', 'text', 0, 1, 0, 0, 0),
-('username', 'Username', 'text', 1, 1, 1, 1, 1),
-('firstName', 'First Name', 'text', 2, 1, 1, 0),
-('lastName', 'Last Name', 'text', 3, 1, 1, 0),
-('emailAddress', 'Email Address', 'text', 4, 1, 1, 0),
-('phoneNumber', 'Phone Number', 'text', 5, 1, 1, 0),
-('level', 'Level', 'text', 6, 1, 1, 0),
-('group', 'Group', 'text', 7, 1, 1, 0),
-('type', 'Type', 'text', 8, 1, 1, 0),
-('isActive', 'Active', 'text', 9, 1, 1, 0);
+('id', 'Id', 'text', 0, 1, '0', '0', '0', '1'),
+('username', 'Username', 'text', 1, 1, '1', '1', '1', '1'),
+('firstName', 'First Name', 'text', 2, '1', '1', '0', '1', '1'),
+('lastName', 'Last Name', 'text', 3, '1', '1', '0', '1', '1'),
+('emailAddress', 'Email Address', 'text', 4, '1', '1', '0', '1', '1'),
+('phoneNumber', 'Phone Number', 'text', 5, '1', '1', '0', '1', '1'),
+('level', 'Level', 'text', 6, '1', '1', '0', '1', '1'),
+('group', 'Group', 'text', 7, '1', '1', '0', '1', '1'),
+('type', 'Type', 'text', 8, '1', '1', '0', '1', '1'),
+('isActive', 'Active', 'text', 9, '1', '1', '0', '1', '1');
 
 -- CREATE TABLE GRIDVIEW CONFIG
 CREATE TABLE IF NOT EXISTS org.gridview_config (
   id SERIAL,
   gridview_id INT,
   org_id INT,
+  with_paging INT,
 
   data JSONB NOT NULL DEFAULT '[]'::jsonb,
 
@@ -85,9 +87,9 @@ CREATE TABLE IF NOT EXISTS org.gridview_config (
 );
 
 INSERT
-INTO org.gridview_config (gridview_id, org_id, data)
+INTO org.gridview_config (gridview_id, org_id, with_paging, data)
 VALUES
-(1, 1, '{
+(1, 1, 20, '{
 	"username": {
     "label": "Username",
     "sortOrder": 1,

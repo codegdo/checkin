@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS org.gridview_config (
   id SERIAL,
   gridview_id INT,
   org_id INT,
+  with_paging INT,
 
   data JSONB NOT NULL DEFAULT '[]'::jsonb,
 
@@ -16,9 +17,9 @@ CREATE TABLE IF NOT EXISTS org.gridview_config (
 );
 
 INSERT
-INTO org.gridview_config (gridview_id, org_id, data)
+INTO org.gridview_config (gridview_id, org_id, with_paging, data)
 VALUES
-(1, 1, '{
+(1, 1, 20, '{
 	"username": {
     "label": "Username",
     "sortOrder": 1,

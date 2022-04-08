@@ -2,6 +2,7 @@
 CREATE TABLE IF NOT EXISTS dbo.gridview (
   id SERIAL,
   name VARCHAR(255),
+  with_paging INT DEFAULT 25,
   view_id INT,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
