@@ -7,3 +7,4 @@ export * from './flatten-object.util';
 export * from './trim-values.util';
 export * from './object-to-key-value.util';
 export * from './array-to-object-key.util';
+export * from './children-to-object-key.util';

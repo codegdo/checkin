@@ -38,7 +38,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
         <Column name="emailAddress" title="Email Address" />
       </Render>
       <Control>
-        <Field />
+        <Field name="username" />
       </Control>
     </Gridview>
 
