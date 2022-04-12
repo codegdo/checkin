@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { RowContext } from './render.row';
+import { RowContext } from './static.row';
 
 export const Column: React.FC<any> = ({ name }): JSX.Element => {
   const context = useContext(RowContext);

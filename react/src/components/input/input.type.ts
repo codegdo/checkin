@@ -19,7 +19,9 @@ export type InputData = Partial<InputType>;
 export type InputProps = {
   input?: InputData;
   status?: string;
-  onChange?: (value?: string) => void;
+  onChange?: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void
 } & InputData;
 
 export type InputContextProps = {

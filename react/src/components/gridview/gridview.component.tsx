@@ -1,15 +1,18 @@
 import React from 'react';
-import { GridviewDynamic } from './gridview.dynamic';
-import { GridviewContextProps, GridviewProps } from './gridview.type';
+import { Control } from './gridview.control';
+import { Render } from './gridview.render';
+import { GridViewContextProps, GridViewProps } from './gridview.type';
 
-export const GridviewContext = React.createContext<GridviewContextProps>(undefined);
+export const GridViewContext = React.createContext<GridViewContextProps>(undefined);
 
-export const Gridview: React.FC<GridviewProps> = ({ data, columns, fields, children }): JSX.Element => {
+export const GridView: React.FC<GridViewProps> = ({ data, columns, fields, children, onSearch, ...props }): JSX.Element => {
+
+
   return <div className="gridview">
-    <GridviewContext.Provider value={{ data, columns, fields }}>
+    <GridViewContext.Provider value={{ data, columns, fields }}>
       {
-        children ? children : <GridviewDynamic />
+        children ? children : <><Control /><Render /></>
       }
-    </GridviewContext.Provider>
+    </GridViewContext.Provider>
   </div>
 }

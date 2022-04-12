@@ -41,9 +41,9 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
 
   }, [submit]);
 
-  const handleChange = (value?: string) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 
-    const { error } = Joi.object({ [key]: fieldSchema }).validate({ [key]: value });
+    const { error } = Joi.object({ [key]: fieldSchema }).validate({ [key]: event.target.value });
 
     if (error) {
       errors[key] = error.details[0].message;
@@ -52,8 +52,8 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
     }
 
     isMap ?
-      values[mapTable] = { ...values[mapTable], [key]: value } :
-      values[key] = value;
+      values[mapTable] = { ...values[mapTable], [key]: event.target.value } :
+      values[key] = event.target.value;
 
     setIsError(error ? true : false);
   }

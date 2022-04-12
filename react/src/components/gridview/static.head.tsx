@@ -1,6 +1,6 @@
 import React, { Children, isValidElement } from 'react';
 
-export const RenderHead: React.FC = ({ children }): JSX.Element => {
+export const StaticHead: React.FC = ({ children }): JSX.Element => {
   return <tr>
     {
       Children.map(children, (child): JSX.Element | null => {

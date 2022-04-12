@@ -1,16 +1,18 @@
 import React, { useContext } from 'react';
-import { Input } from '../input';
 import { ControlContext } from './gridview.control';
 
-export const Field: React.FC<any> = (): JSX.Element => {
+export const Field: React.FC<any> = ({ input, ...props }): JSX.Element => {
 
   const context = useContext(ControlContext);
 
   if (!context) {
-    throw new Error('Require Field nested in CONTROLCOTEXT');
+    throw new Error('Required CONTEXT');
   }
 
-  const { handleChange } = context;
+  const { values, handleChange } = context;
 
-  return <><Input onChange={handleChange} /></>
+  const data = input || props;
+  const { name, type = 'text' } = data;
+
+  return <><input type={type} name={name} value={values[name] || ''} onChange={handleChange} /></>
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Column, Control, Field, Gridview, Render } from '../../../components/gridview';
+import { Column, Control, Field, GridView, Render } from '../../../components/gridview';
 
 import { useFetch, useReload } from '../../../hooks';
 
@@ -8,7 +8,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
 
   const [{ status: loading, result: { data: dataSource } }, getUsers] = useFetch(`/api/setup/users`);
   const [{ locationId }, reload] = useReload();
-  const [{ grid, columns, fields, users }, setData] = useState<any>({});
+  const [{ config, columns, fields, users }, setData] = useState<any>({});
 
   // load form
   useEffect(() => {
@@ -19,7 +19,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
 
   useEffect(() => {
     if (loading === 'success') {
-      setData(dataSource);
+      setData({ ...dataSource });
     }
   }, [loading]);
 
@@ -32,17 +32,18 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
       USER <Link to={`new?formId=${route}_${page}`}>Add</Link> <button type="button" onClick={handleReload}>reload</button>
     </header>
 
-    <Gridview data={users} columns={columns} fields={fields}>
+    <GridView data={users}>
+      <Control>
+        <Field name="username" type="text" isDefault={true} />
+        <Field name="emailAddress" type="text" />
+      </Control>
       <Render>
         <Column name="username" title="Username" />
         <Column name="emailAddress" title="Email Address" />
       </Render>
-      <Control>
-        <Field name="username" />
-      </Control>
-    </Gridview>
+    </GridView>
 
-    <Gridview
+    <GridView
       data={users}
       columns={columns}
       fields={fields}

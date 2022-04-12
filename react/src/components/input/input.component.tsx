@@ -20,7 +20,7 @@ export const Input: React.FC<InputProps> = ({ input, status, onChange, ...props 
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setValue(event.target.value);
-    onChange && onChange(event.target.value);
+    onChange && onChange(event);
   };
 
   return (

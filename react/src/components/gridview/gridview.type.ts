@@ -1,10 +1,16 @@
-export type GridviewProps = {
-  data: any,
-  columns: any,
-  fields: any
+export type GridViewProps = {
+  config?: any,
+  data?: any,
+  columns?: any,
+  fields?: any,
+  onSearch?: () => void
 }
-export type GridviewContextProps = {
+export type GridViewContextProps = {
   data: any,
   columns: any,
   fields: any
-} | undefined
+} | undefined;
+
+export type ControlSearchProps = {
+  data?: any
+}

@@ -5,7 +5,7 @@ export const InputSelect: React.FC = (): JSX.Element => {
   const context = useContext(InputContext);
 
   if (!context) {
-    throw new Error('Require INPUTTEXT Nested In INPUTCONTEXT');
+    throw new Error('Require INPUT nested in INPUTCONTEXT');
   }
 
   const { input, value: _value, handleChange } = context;
