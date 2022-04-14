@@ -1,21 +1,25 @@
-import React, { Children, isValidElement } from 'react';
-import { ControlButton } from './control.button';
-import { Field } from './gridview.field';
-import { ControlSearchProps } from './gridview.type';
+import React, { Children, isValidElement, useContext } from 'react';
 
-export const ControlSearch: React.FC<ControlSearchProps> = ({ data, children }): JSX.Element => {
+import { ControlContext } from './gridview.control';
+import { Data } from './gridview.data';
+
+export const Search: React.FC = ({ children }): JSX.Element | null => {
+  const context = useContext(ControlContext);
+
+  if (!context) {
+    throw new Error('Required CONTEXT');
+  }
+
+  const { data } = context;
 
   return <div className="search">
     {
-      children ? Children.map(children, (child): JSX.Element | null => {
-        if (isValidElement(child) && typeof (child.type) !== 'string') {
-          return child.props.isDefault ? child : null
-        }
-        return null;
-      }) : data && data.map((item: any, i: any) => {
-        return item.isDefault ? <Field input={item} key={i} /> : null
+      children ? Children.toArray(children).filter(
+        child => (isValidElement(child) && typeof child.type !== 'string' && child.type.name == 'Data' && child.props.isSearch && child.props.isDefault)
+      ) as React.ReactElement[] : data && data.map((item: any, i: any) => {
+        return item.isSearch && item.isDefault ? <Data input={item} key={i} /> : null;
       })
     }
-    <ControlButton />
   </div>
+
 }

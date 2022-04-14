@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Column, Control, Field, GridView, Render } from '../../../components/gridview';
-
+//import { Column, Control, Field, GridView, Render } from '../../../components/gridview';
+import { Columns, Data, GridView } from '../../../components/gridview';
 import { useFetch, useReload } from '../../../hooks';
 
 const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
@@ -33,20 +33,15 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
     </header>
 
     <GridView data={users}>
-      <Control>
-        <Field name="username" type="text" isDefault={true} />
-        <Field name="emailAddress" type="text" />
-      </Control>
-      <Render>
-        <Column name="username" title="Username" />
-        <Column name="emailAddress" title="Email Address" />
-      </Render>
+      <Columns>
+        <Data name="username" label="Username" type="text" isDefault={true} isSearch={true} />
+        <Data name="emailAddress" label="Email Address" type="text" />
+      </Columns>
     </GridView>
 
     <GridView
       data={users}
       columns={columns}
-      fields={fields}
     />
   </div>;
 };

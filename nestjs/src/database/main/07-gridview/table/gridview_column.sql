@@ -38,11 +38,11 @@ VALUES
 --user=1
 ('id', 'Id', 'text', 0, 1, '0', '0', '0', '1'),
 ('username', 'Username', 'text', 1, 1, '1', '1', '1', '1'),
-('firstName', 'First Name', 'text', 2, '1', '1', '0', '1', '1'),
-('lastName', 'Last Name', 'text', 3, '1', '1', '0', '1', '1'),
-('emailAddress', 'Email Address', 'text', 4, '1', '1', '0', '1', '1'),
-('phoneNumber', 'Phone Number', 'text', 5, '1', '1', '0', '1', '1'),
-('level', 'Level', 'text', 6, '1', '1', '0', '1', '1'),
-('group', 'Group', 'text', 7, '1', '1', '0', '1', '1'),
-('type', 'Type', 'text', 8, '1', '1', '0', '1', '1'),
-('isActive', 'Active', 'text', 9, '1', '1', '0', '1', '1');
+('firstName', 'First Name', 'text', 2, '1', '1', '0', '0', '1'),
+('lastName', 'Last Name', 'text', 3, '1', '1', '0', '0', '1'),
+('emailAddress', 'Email Address', 'text', 4, '1', '1', '0', '0', '1'),
+('phoneNumber', 'Phone Number', 'text', 5, '1', '1', '0', '0', '1'),
+('level', 'Level', 'text', 6, '1', '1', '0', '0', '1'),
+('group', 'Group', 'text', 7, '1', '1', '0', '0', '1'),
+('type', 'Type', 'text', 8, '1', '1', '0', '0', '1'),
+('isActive', 'Active', 'text', 9, '1', '1', '0', '0', '1');

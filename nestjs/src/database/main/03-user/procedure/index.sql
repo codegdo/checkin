@@ -41,9 +41,8 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_get_all(
   p_org_id int,
   p_location_id int,
 
-  OUT grid json,
+  OUT config json,
   OUT columns json,
-  OUT fields json,
   OUT users json
 )
 AS
@@ -52,11 +51,9 @@ $BODY$
   BEGIN
 
   SELECT json_agg(r)::json
-  INTO grid
+  INTO config
   FROM (
     SELECT
-    gv.id "id",
-    gv.name "name",
     gv.with_paging "withPaging"
     FROM org.fn_get_gridview('setup_users', p_org_id) gv
   ) r;
@@ -67,21 +64,11 @@ $BODY$
     SELECT
     gv.id "id",
     gv.name "name",
-    gv.label "label"
-    FROM
-    org.fn_get_gridview_column('setup_users', p_org_id) gv
-    WHERE gv.is_visible = true
-  ) r;
-
-  SELECT json_agg(r)::json
-  INTO fields
-  FROM (
-    SELECT
-    gv.id "id",
-    gv.name "name",
     gv.label "label",
     gv.type "type",
-    gv.data "data"
+    gv.data "data",
+    gv.is_default "isDefault",
+    gv.is_search "isSearch"
     FROM
     org.fn_get_gridview_column('setup_users', p_org_id) gv
     WHERE gv.is_visible = true
@@ -489,7 +476,7 @@ LANGUAGE plpgsql;
 /* DROP PROCEDURES
 
 DROP PROCEDURE IF EXISTS sec.pr_user_confirm(varchar, json);
-DROP PROCEDURE IF EXISTS sec.pr_user_get_all(varchar, integer, integer, json, json, json, json);
+DROP PROCEDURE IF EXISTS sec.pr_user_get_all(varchar, integer, integer, json, json, json);
 DROP PROCEDURE IF EXISTS sec.pr_user_login(varchar, json, json, json, json, json, json);
 DROP PROCEDURE IF EXISTS sec.pr_user_save(json, int, int, int, jsonb);
 DROP PROCEDURE IF EXISTS sec.pr_user_setup(json, int, json, json, json, json, json, json);

@@ -1,48 +1,19 @@
-import React from 'react';
-import { DynamicRender } from './dynamic.render';
-import { StaticRender } from './static.render';
+import React, { useContext } from 'react';
+import { GridViewContext } from './gridview.component';
+import { Control } from './gridview.control';
+import { Paging } from './gridview.paging';
+import { Table } from './gridview.table';
 
-export const Render: React.FC = ({ children }): JSX.Element => {
-  return children ? <StaticRender>{children}</StaticRender> : <DynamicRender />
-}
+export const Render: React.FC = ({ children }): JSX.Element | null => {
+  const context = useContext(GridViewContext);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* 
-Children.toArray(children).sort((a, b) => { return a < b ? 1 : -1 })
-
-Children.map(components, (child): JSX.Element | null => {
-  if (isValidElement(child) && typeof (child.type) !== 'string') {
-    return <>
-      {
-        child.type.name == 'Control' && child
-      }
-      {
-        child.type.name == 'Render' && child
-      }
-    </>
+  if (!context) {
+    throw new Error('Required CONTEXT');
   }
-  return null
-}) 
-*/
+
+  return <>
+    <Control>{children}</Control>
+    <Table>{children}</Table>
+    <Paging></Paging>
+  </>
+}

@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { arrayToObjectValue, childrenToObjectValue } from '../../utils';
 
-import { DynamicControl } from './dynamic.control';
+
+import { Filter } from './control.filter';
+import { Search } from './control.search';
+import { arrayToObjectValue, childrenToObjectValue } from '../../utils';
 import { GridViewContext } from './gridview.component';
-import { StaticControl } from './static.control';
 
 export const ControlContext = React.createContext<any>(undefined);
 
@@ -15,23 +16,19 @@ export const Control: React.FC = ({ children }): JSX.Element => {
     throw new Error('Required CONTEXT');
   }
 
-  const { fields } = context;
+  const { columns } = context;
 
   const initialValues = childrenToObjectValue(children);
   const [values, setValues] = useState(initialValues);
 
   useEffect(() => {
 
-    if (!children && fields) {
-      const data = arrayToObjectValue({ key: 'name', values: fields });
+    if (!children && columns) {
+      const data = arrayToObjectValue({ key: 'name', values: columns });
       setValues({ ...data });
     }
 
-  }, [fields]);
-
-  useEffect(() => {
-    console.log('CHANGE EFFECT:', values);
-  }, [values]);
+  }, [columns]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const name = event.target.name;
@@ -45,10 +42,9 @@ export const Control: React.FC = ({ children }): JSX.Element => {
   }
 
   return <div className="control">
-    <ControlContext.Provider value={{ values, handleChange, handleClick }}>
-      {
-        children ? <StaticControl>{children}</StaticControl> : <DynamicControl data={fields} />
-      }
+    <ControlContext.Provider value={{ data: columns, values, handleChange, handleClick }}>
+      <Search>{children}</Search>
+      <Filter>{children}</Filter>
     </ControlContext.Provider>
   </div>
 }
