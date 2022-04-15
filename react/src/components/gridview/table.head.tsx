@@ -15,10 +15,16 @@ export const THead: React.FC = ({ children }): JSX.Element | null => {
       children ? <tr>
         {
           Children.map(children, (child): JSX.Element | null => {
-            if (!(isValidElement(child) && typeof child.type !== 'string' && child.type.name == 'Data')) {
-              return null;
+            if (isValidElement(child) && typeof child.type !== 'string') {
+              if (child.type.name == 'Data') {
+                return <th>{child.props.label}</th>;
+              } else if (child.type.name == 'DataBound') {
+                return <th>{child.props.label}</th>;
+              } else {
+                return null;
+              }
             }
-            return <th>{child.props.label}</th>;
+            return null;
           })
         }
       </tr> : <tr>

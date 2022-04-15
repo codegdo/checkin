@@ -1,7 +1,7 @@
 import React, { Children, isValidElement, useContext } from 'react';
 import { GridViewContext } from './gridview.component';
-
-export const RowContext = React.createContext<any>(undefined);
+import { TB } from './table.tb';
+import { TD } from './table.td';
 
 export const TBody: React.FC = ({ children }): JSX.Element | null => {
   const context = useContext(GridViewContext);
@@ -21,15 +21,22 @@ export const TBody: React.FC = ({ children }): JSX.Element | null => {
   }
 
   return <tbody>
+
     {
       data.map((item: any, i: any) => {
         return <tr key={i}>
           {
             children ? Children.map(children, (child): JSX.Element | null => {
-              if (!(isValidElement(child) && typeof child.type !== 'string' && child.type.name == 'Data')) {
-                return null;
+              if (isValidElement(child) && typeof child.type !== 'string') {
+                if (child.type.name == 'Data') {
+                  return <TD data={item} {...child.props} />;
+                } else if (child.type.name == 'DataBound') {
+                  return <TB data={item}>{child.props.children}</TB>;
+                } else {
+                  return null;
+                }
               }
-              return <td>{String(item[child.props.name])}</td>;
+              return null;
             }) : columns && columns.map((col: any, j: any) => {
               return <td key={j}>{String(item[col.name])}</td>;
             })
@@ -37,6 +44,7 @@ export const TBody: React.FC = ({ children }): JSX.Element | null => {
         </tr>
       })
     }
+
   </tbody>
 
 }
