@@ -11,7 +11,9 @@ type FieldProps = {
   };
 };
 
-export const childrenToObjectValue = (children: ReactNode): { [x: string]: string } => {
+export const childrenToObjectValue = (
+  children: ReactNode
+): { [x: string]: string } => {
   let value = {};
 
   Children.forEach(children, (child) => {
@@ -24,7 +26,10 @@ export const childrenToObjectValue = (children: ReactNode): { [x: string]: strin
   return value;
 };
 
-export const arrayToObjectValue = ({ key, values }: ObjectKeyParam): { [x: string]: string } => {
+export const arrayToObjectValue = ({
+  key,
+  values,
+}: ObjectKeyParam): { [x: string]: string } => {
   return values.reduce((value, i) => {
     return { ...value, [i[key]]: '' };
   }, {});

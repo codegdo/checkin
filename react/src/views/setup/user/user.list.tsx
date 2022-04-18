@@ -8,7 +8,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
 
   const [{ status: loading, result: { data: dataSource } }, getUsers] = useFetch(`/api/setup/users`);
   const [{ locationId }, reload] = useReload();
-  const [{ config, columns, fields, users }, setData] = useState<any>({});
+  const [data, setData] = useState<any>();
 
   // load form
   useEffect(() => {
@@ -27,12 +27,16 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
     reload();
   }
 
+  if (!data) {
+    return <div>loading...</div>;
+  }
+
   return <div>
     <header>
       USER <Link to={`new?formId=${route}_${page}`}>Add</Link> <button type="button" onClick={handleReload}>reload</button>
     </header>
 
-    <GridView data={users}>
+    <GridView data={data.users}>
       <Columns>
         <Data name="username" label="Username" type="text" isDefault={true} isSearch={true} />
         <Data name="emailAddress" label="Email Address" type="text" />
@@ -43,8 +47,8 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
     </GridView>
 
     <GridView
-      data={users}
-      columns={columns}
+      data={data.users}
+      columns={data.columns}
       controls={{}}
     />
   </div>;
