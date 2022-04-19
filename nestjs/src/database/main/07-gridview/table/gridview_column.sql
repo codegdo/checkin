@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS dbo.gridview_column (
 
   gridview_id INT,
 
+  is_key BOOLEAN DEFAULT FALSE,
   is_default BOOLEAN DEFAULT FALSE,
   is_search BOOLEAN DEFAULT TRUE,
   is_visible BOOLEAN DEFAULT TRUE,
@@ -33,16 +34,16 @@ CREATE TABLE IF NOT EXISTS dbo.gridview_column (
 );
 
 INSERT
-INTO dbo.gridview_column (name, label, type, sort_order, gridview_id, is_config, is_default, is_search, is_visible)
+INTO dbo.gridview_column (name, label, type, sort_order, gridview_id, is_config, is_default, is_search, is_visible, is_key)
 VALUES
 --user=1
-('id', 'Id', 'text', 0, 1, '0', '0', '0', '1'),
-('username', 'Username', 'text', 1, 1, '1', '1', '1', '1'),
-('firstName', 'First Name', 'text', 2, '1', '1', '0', '0', '1'),
-('lastName', 'Last Name', 'text', 3, '1', '1', '0', '0', '1'),
-('emailAddress', 'Email Address', 'text', 4, '1', '1', '0', '0', '1'),
-('phoneNumber', 'Phone Number', 'text', 5, '1', '1', '0', '0', '1'),
-('level', 'Level', 'text', 6, '1', '1', '0', '0', '1'),
-('group', 'Group', 'text', 7, '1', '1', '0', '0', '1'),
-('type', 'Type', 'text', 8, '1', '1', '0', '0', '1'),
-('isActive', 'Active', 'text', 9, '1', '1', '0', '0', '1');
+('id', 'Id', 'text', 0, 1, '0', '0', '0', '1', '1'),
+('username', 'Username', 'text', 1, 1, '1', '1', '1', '1', '0'),
+('firstName', 'First Name', 'text', 2, '1', '1', '0', '0', '1', '0'),
+('lastName', 'Last Name', 'text', 3, '1', '1', '0', '0', '1', '0'),
+('emailAddress', 'Email Address', 'text', 4, '1', '1', '0', '0', '1', '0'),
+('phoneNumber', 'Phone Number', 'text', 5, '1', '1', '0', '0', '1', '0'),
+('level', 'Level', 'text', 6, '1', '1', '0', '0', '1', '0'),
+('group', 'Group', 'text', 7, '1', '1', '0', '0', '1', '0'),
+('type', 'Type', 'text', 8, '1', '1', '0', '0', '1', '0'),
+('isActive', 'Active', 'text', 9, '1', '1', '0', '0', '1', '0');

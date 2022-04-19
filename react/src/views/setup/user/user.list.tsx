@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 //import { Column, Control, Field, GridView, Render } from '../../../components/gridview';
-import { BoundLink, Columns, Data, DataBound, GridView } from '../../../components/gridview';
+import { Columns, DataColumn, DataBound, DataBoundItem, GridView } from '../../../components/gridview';
 import { useFetch, useReload } from '../../../hooks';
 
 const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
@@ -36,12 +36,17 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
       USER <Link to={`new?formId=${route}_${page}`}>Add</Link> <button type="button" onClick={handleReload}>reload</button>
     </header>
 
-    <GridView data={data.users}>
+    <GridView data={data.users} keyColumn={{
+      type: "link",
+      param: "id",
+      query: "formId=setup_users"
+    }}>
       <Columns>
-        <Data name="username" label="Username" type="text" isDefault={true} isSearch={true} />
-        <Data name="emailAddress" label="Email Address" type="text" />
-        <DataBound label="edit">
-          <BoundLink name="edit" label="edit" param="id" query="formId=setup_users" />
+        <DataColumn name="id" label="Id" type="text" isKey={true} />
+        <DataColumn name="username" label="Username" type="text" isDefault={true} isSearch={true} />
+        <DataColumn name="emailAddress" label="Email Address" type="text" />
+        <DataBound label="Action">
+          <DataBoundItem name="edit" label="Edit" type="link" param="id" query="formId=setup_users" />
         </DataBound>
       </Columns>
     </GridView>
@@ -49,7 +54,15 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
     <GridView
       data={data.users}
       columns={data.columns}
-      controls={{}}
+      boundColumns={[{
+        label: "Action",
+        data: [{}]
+      }]}
+      keyColumn={{
+        type: "link",
+        param: "id",
+        query: "formId=setup_users"
+      }}
     />
   </div>;
 };

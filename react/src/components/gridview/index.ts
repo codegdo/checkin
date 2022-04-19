@@ -1,5 +1,5 @@
 export * from './gridview.component';
 export * from './gridview.columns';
-export * from './gridview.data';
+export * from './gridview.datacolumn';
 export * from './gridview.databound';
-export * from './bound.link';
+export * from './gridview.databound-item';

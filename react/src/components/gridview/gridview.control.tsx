@@ -8,7 +8,7 @@ import { GridViewContext } from './gridview.component';
 
 export const ControlContext = React.createContext<any>(undefined);
 
-export const Control: React.FC = ({ children }): JSX.Element => {
+export const Control: React.FC<any> = ({ children }): JSX.Element => {
 
   const context = useContext(GridViewContext);
 

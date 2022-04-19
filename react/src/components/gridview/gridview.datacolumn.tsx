@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { ControlContext } from './gridview.control';
 
-export const Data: React.FC<any> = ({ input, ...props }): JSX.Element => {
+export const DataColumn: React.FC<any> = ({ input, ...props }): JSX.Element => {
 
   const context = useContext(ControlContext);
 

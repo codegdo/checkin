@@ -18,8 +18,8 @@ const UserForm: React.FC = (props): JSX.Element => {
   const [form, setForm] = useState<FormData>();
   const [isShow, toggle] = useModal(true);
 
-  const [{ status: submit, result: { data: submitData } }, postUser] = useFetch('/api/setup/users');
-  const [{ status: loading, result: { data: formData } }, getForm] = useFetch(`/api/setup/users/${id}${search}`);
+  const [{ status: submit, result: { data: dataSubmit } }, postUser] = useFetch('/api/setup/users');
+  const [{ status: loading, result: { data: dataForm } }, getForm] = useFetch(`/api/setup/users/${id}${search}`);
 
   // load form
   useEffect(() => {
@@ -29,14 +29,14 @@ const UserForm: React.FC = (props): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    if (loading === 'success' && formData) {
-      setForm(formData);
+    if (loading === 'success' && dataForm) {
+      setForm(dataForm);
     }
   }, [loading]);
 
   useEffect(() => {
     if (submit == 'success') {
-      console.log(submitData);
+      console.log(dataSubmit);
     }
   }, [submit]);
 

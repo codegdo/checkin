@@ -4,7 +4,7 @@ import { Control } from './gridview.control';
 import { Paging } from './gridview.paging';
 import { Table } from './gridview.table';
 
-export const Render: React.FC = ({ children }): JSX.Element | null => {
+export const Render: React.FC<any> = ({ children }): JSX.Element | null => {
   const context = useContext(GridViewContext);
 
   if (!context) {

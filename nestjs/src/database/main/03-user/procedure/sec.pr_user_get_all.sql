@@ -31,7 +31,8 @@ $BODY$
     gv.type "type",
     gv.data "data",
     gv.is_default "isDefault",
-    gv.is_search "isSearch"
+    gv.is_search "isSearch",
+    gv.is_key "isKey"
     FROM
     org.fn_get_gridview_column('setup_users', p_org_id) gv
     WHERE gv.is_visible = true
