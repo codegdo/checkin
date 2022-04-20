@@ -1,10 +1,19 @@
-import React from 'react';
-import { KeyColumn } from './gridview.keycolumn';
+import React, { useContext } from 'react';
+import { GridViewKey } from './gridview.key';
+import { RowContext } from './table.tr';
 
-export const TD: React.FC<any> = (props): JSX.Element => {
+export const TData: React.FC<any> = (props): JSX.Element => {
 
-  const { dataRow, name, isKey } = props;
+  const rowContext = useContext(RowContext);
+
+  if (!rowContext) {
+    throw new Error('Required CONTEXT');
+  }
+
+  const { dataRow } = rowContext;
+
+  const { name, isKey } = props;
   const text = String(dataRow[name]);
 
-  return isKey ? <KeyColumn {...props} /> : <td>{text}</td>
+  return isKey ? <td><GridViewKey {...props} /></td> : <td>{text}</td>
 }

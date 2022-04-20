@@ -1,8 +1,6 @@
-import React, { Children, isValidElement, useContext } from 'react';
+import React, { Children, useContext } from 'react';
 import { GridViewContext } from './gridview.component';
-import { DataProps } from './gridview.type';
-import { TB } from './table.tb';
-import { TD } from './table.td';
+import { TRow } from './table.tr';
 
 export const TBody: React.FC<any> = ({ children }): JSX.Element | null => {
   const context = useContext(GridViewContext);
@@ -14,48 +12,21 @@ export const TBody: React.FC<any> = ({ children }): JSX.Element | null => {
   const { data, columns, boundColumns } = context;
 
   if (!data || data.length == 0) {
+    const colspans = (children ? Children.count(children) : columns?.length + boundColumns?.length) || 100;
+
     return <tbody>
       <tr>
-        <td colSpan={(children ? Children.count(children) : columns?.length) || 100}>no data</td>
+        <td colSpan={colspans}>no data</td>
       </tr>
     </tbody>;
   }
 
   return <tbody>
-
     {
       data.map((item: any, i: any) => {
-        return <tr key={i}>
-          {
-            children ? Children.map(children, (child): JSX.Element | null => {
-              if (isValidElement(child) && typeof child.type !== 'string') {
-
-                const { children } = child.props as DataProps;
-
-                if (child.type.name == 'DataColumn') {
-                  return <TD dataRow={item} {...child.props} />;
-                } else if (child.type.name == 'DataBound') {
-                  return <TB dataRow={item}>{children}</TB>;
-                } else {
-                  return null;
-                }
-              }
-              return null;
-            }) : columns && <>
-              {
-                columns.map((column: any, j: any) => {
-                  return <TD dataRow={item} {...column} key={j} />;
-                })
-              }
-              {
-                boundColumns && <td>edit</td>
-              }
-            </>
-          }
-        </tr>
+        return <TRow dataRow={item} key={i}>{children}</TRow>
       })
     }
-
   </tbody>
 
 }

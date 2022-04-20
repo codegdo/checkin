@@ -1,7 +1,7 @@
 import React, { Children, isValidElement, useContext } from 'react';
 
 import { ControlContext } from './gridview.control';
-import { DataColumn } from './gridview.datacolumn';
+import { DataColumn } from './gridview.data-column';
 
 export const Filter: React.FC<any> = ({ children }): JSX.Element | null => {
   const context = useContext(ControlContext);

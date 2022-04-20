@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 //import { Column, Control, Field, GridView, Render } from '../../../components/gridview';
-import { Columns, DataColumn, DataBound, DataBoundItem, GridView } from '../../../components/gridview';
+import { Columns, DataColumn, DataBound, DataItem, GridView } from '../../../components/gridview';
 import { useFetch, useReload } from '../../../hooks';
 
 const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
@@ -46,7 +46,8 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
         <DataColumn name="username" label="Username" type="text" isDefault={true} isSearch={true} />
         <DataColumn name="emailAddress" label="Email Address" type="text" />
         <DataBound label="Action">
-          <DataBoundItem name="edit" label="Edit" type="link" param="id" query="formId=setup_users" />
+          <DataItem name="edit" label="Edit" type="link" param="id" query="formId=setup_users" />
+          <DataItem>te</DataItem>
         </DataBound>
       </Columns>
     </GridView>
