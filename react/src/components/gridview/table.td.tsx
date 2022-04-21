@@ -1,19 +1,21 @@
-import React, { useContext } from 'react';
-import { GridViewKey } from './gridview.key';
-import { RowContext } from './table.tr';
+import React, { Children, isValidElement } from 'react';
+import { GridViewItem } from './gridview.item';
 
-export const TData: React.FC<any> = (props): JSX.Element => {
+export const TD: React.FC<any> = ({ children, ...props }): JSX.Element => {
 
-  const rowContext = useContext(RowContext);
+  return <td>
+    {
+      children ? Children.map(children, child => {
 
-  if (!rowContext) {
-    throw new Error('Required CONTEXT');
-  }
-
-  const { dataRow } = rowContext;
-
-  const { name, isKey } = props;
-  const text = String(dataRow[name]);
-
-  return isKey ? <td><GridViewKey {...props} /></td> : <td>{text}</td>
+        if (isValidElement(child) && typeof child.type !== 'string') {
+          if (child.type.name == 'DataItem') {
+            return <GridViewItem {...child.props} />;
+          } else {
+            return null;
+          }
+        }
+        return null;
+      }) : <GridViewItem {...props} />
+    }
+  </td>
 }

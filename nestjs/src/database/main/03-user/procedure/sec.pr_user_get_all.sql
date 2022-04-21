@@ -30,7 +30,7 @@ $BODY$
     gv.label "label",
     gv.type "type",
     gv.data "data",
-    gv.is_default "isDefault",
+    gv.is_primary "isPrimary",
     gv.is_search "isSearch",
     gv.is_key "isKey"
     FROM

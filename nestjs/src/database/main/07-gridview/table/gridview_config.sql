@@ -23,63 +23,63 @@ VALUES
 	"username": {
     "label": "Username",
     "sortOrder": 1,
-    "isDefault": 1,
+    "isPrimary": 1,
     "isSearch": 1,
     "isVisible": 1
   },
   "firstName": {
     "label": "First Name",
     "sortOrder": 2,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   },
   "lastName": {
     "label": "Last Name",
     "sortOrder": 3,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   },
   "emailAddress": {
     "label": "Email Address",
     "sortOrder": 4,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   },
   "phoneNumber": {
     "label": "Phone Number",
     "sortOrder": 5,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   },
   "level": {
     "label": "Level",
     "sortOrder": 6,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   },
   "group": {
     "label": "Group",
     "sortOrder": 7,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   },
   "type": {
     "label": "Type",
     "sortOrder": 8,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   },
   "isActive": {
     "label": "Active",
     "sortOrder": 9,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   }

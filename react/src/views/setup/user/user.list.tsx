@@ -27,6 +27,13 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
     reload();
   }
 
+  const handleSearch = () => { }
+
+  const handleCallback = () => {
+
+    console.log('click');
+  }
+
   if (!data) {
     return <div>loading...</div>;
   }
@@ -36,18 +43,23 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
       USER <Link to={`new?formId=${route}_${page}`}>Add</Link> <button type="button" onClick={handleReload}>reload</button>
     </header>
 
-    <GridView data={data.users} keyColumn={{
+    <GridView data={data.users} customColumns={{
       type: "link",
       param: "id",
       query: "formId=setup_users"
     }}>
       <Columns>
         <DataColumn name="id" label="Id" type="text" isKey={true} />
-        <DataColumn name="username" label="Username" type="text" isDefault={true} isSearch={true} />
+        <DataColumn name="username" label="Username" type="text" isPrimary={true} isSearch={true} />
         <DataColumn name="emailAddress" label="Email Address" type="text" />
         <DataBound label="Action">
-          <DataItem name="edit" label="Edit" type="link" param="id" query="formId=setup_users" />
-          <DataItem>te</DataItem>
+          <DataItem name="edit" label="Edit" type="link" data={
+            {
+              path: null,
+              param: "id",
+              query: "formId=setup_users"
+            }
+          } />
         </DataBound>
       </Columns>
     </GridView>
@@ -57,13 +69,30 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
       columns={data.columns}
       boundColumns={[{
         label: "Action",
-        data: [{}]
+        data: [{
+          name: "edit",
+          label: "Edit",
+          type: "link",
+          data: {
+            path: null,
+            param: "id",
+            query: "formId=setup_users"
+          }
+        }]
       }]}
-      keyColumn={{
-        type: "link",
-        param: "id",
-        query: "formId=setup_users"
+      customColumns={{
+        id: {
+          type: "checkbox",
+          name: "check",
+          data: {
+            path: null,
+            param: "id",
+            query: "formId=setup_users"
+          }
+        }
       }}
+      onSearch={handleSearch}
+      onCallback={handleCallback}
     />
   </div>;
 };

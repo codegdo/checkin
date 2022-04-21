@@ -15,9 +15,9 @@ export const Filter: React.FC<any> = ({ children }): JSX.Element | null => {
   return <div className="filter">
     {
       children ? Children.toArray(children).filter(
-        child => (isValidElement(child) && typeof child.type !== 'string' && child.type.name == 'Data' && child.props.isSearch && !child.props.isDefault)
+        child => (isValidElement(child) && typeof child.type !== 'string' && child.type.name == 'DataColumn' && child.props.isSearch && !child.props.isPrimary)
       ) as React.ReactElement[] : data && data.map((item: any, i: any) => {
-        return item.isSearch && !item.isDefault ? <DataColumn input={item} key={i} /> : null;
+        return item.isSearch && !item.isPrimary ? <DataColumn input={item} key={i} /> : null;
       })
     }
   </div>

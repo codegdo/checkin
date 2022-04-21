@@ -34,14 +34,14 @@ CREATE TABLE IF NOT EXISTS dbo.gridview_column (
   gridview_id INT,
 
   is_key BOOLEAN DEFAULT FALSE,
-  is_default BOOLEAN DEFAULT FALSE,
+  is_primary BOOLEAN DEFAULT FALSE,
   is_search BOOLEAN DEFAULT TRUE,
   is_visible BOOLEAN DEFAULT TRUE,
   is_config BOOLEAN DEFAULT TRUE,
   
   label_enable BOOLEAN DEFAULT TRUE,
   sort_order_enable BOOLEAN DEFAULT TRUE,
-  is_default_enable BOOLEAN DEFAULT TRUE,
+  is_primary_enable BOOLEAN DEFAULT TRUE,
   is_search_enable BOOLEAN DEFAULT TRUE,
   is_visible_enable BOOLEAN DEFAULT TRUE,
 
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS dbo.gridview_column (
 );
 
 INSERT
-INTO dbo.gridview_column (name, label, type, sort_order, gridview_id, is_config, is_default, is_search, is_visible, is_key)
+INTO dbo.gridview_column (name, label, type, sort_order, gridview_id, is_config, is_primary, is_search, is_visible, is_key)
 VALUES
 --user=1
 ('id', 'Id', 'text', 0, 1, '0', '0', '0', '1', '1'),
@@ -94,63 +94,63 @@ VALUES
 	"username": {
     "label": "Username",
     "sortOrder": 1,
-    "isDefault": 1,
+    "isPrimary": 1,
     "isSearch": 1,
     "isVisible": 1
   },
   "firstName": {
     "label": "First Name",
     "sortOrder": 2,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   },
   "lastName": {
     "label": "Last Name",
     "sortOrder": 3,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   },
   "emailAddress": {
     "label": "Email Address",
     "sortOrder": 4,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   },
   "phoneNumber": {
     "label": "Phone Number",
     "sortOrder": 5,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   },
   "level": {
     "label": "Level",
     "sortOrder": 6,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   },
   "group": {
     "label": "Group",
     "sortOrder": 7,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   },
   "type": {
     "label": "Type",
     "sortOrder": 8,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   },
   "isActive": {
     "label": "Active",
     "sortOrder": 9,
-    "isDefault": 0,
+    "isPrimary": 0,
     "isSearch": 0,
     "isVisible": 1
   }

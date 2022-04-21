@@ -2,9 +2,10 @@ export type GridViewProps = {
   data?: any;
   columns?: any;
   boundColumns?: any;
-  keyColumn?: any;
+  customColumns?: any;
   children?: any;
   onSearch?: () => void;
+  onCallback?: () => void;
 }
 export type GridViewContextProps = GridViewProps | undefined;
 
