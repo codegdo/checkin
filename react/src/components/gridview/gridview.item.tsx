@@ -23,9 +23,7 @@ export const GridViewItem: React.FC<any> = (props): JSX.Element => {
   const { dataRow, onRowClick } = rowContext;
 
   const custom = { ...props, ...customColumns[props.name] };
-
   const { type, name, label, data } = custom;
-
   const value = String(dataRow[props.name] || label || name);
 
   const handleClick = () => {

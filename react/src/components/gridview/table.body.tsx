@@ -1,6 +1,6 @@
 import React, { Children, useContext } from 'react';
 import { GridViewContext } from './gridview.component';
-import { TRow } from './table.tr';
+import { TR } from './table.tr';
 
 export const TBody: React.FC<any> = ({ children }): JSX.Element | null => {
   const context = useContext(GridViewContext);
@@ -23,8 +23,8 @@ export const TBody: React.FC<any> = ({ children }): JSX.Element | null => {
 
   return <tbody>
     {
-      data.map((item: any, i: any) => {
-        return <TRow dataRow={item} key={i}>{children}</TRow>
+      data.map((item, i) => {
+        return <TR dataRow={item} key={i}>{children}</TR>
       })
     }
   </tbody>

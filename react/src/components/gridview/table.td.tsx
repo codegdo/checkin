@@ -14,7 +14,15 @@ export const TD: React.FC<any> = ({ children, ...props }): JSX.Element => {
             return null;
           }
         }
-        return null;
+
+        if (typeof child == 'string' && child == 'CHILDREN') {
+          const { data = [] } = props;
+
+          return data.map((item: any, i: any) => {
+            return <GridViewItem {...item} key={i} />;
+          });
+        }
+
       }) : <GridViewItem {...props} />
     }
   </td>

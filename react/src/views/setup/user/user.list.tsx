@@ -2,13 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 //import { Column, Control, Field, GridView, Render } from '../../../components/gridview';
 import { Columns, DataColumn, DataBound, DataItem, GridView } from '../../../components/gridview';
+import { GridViewProps } from '../../../components/gridview/gridview.type';
 import { useFetch, useReload } from '../../../hooks';
+
+type DataSource = {
+  users: [],
+  columns: []
+}
+
+type UserData = {
+  id: string;
+}
 
 const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
 
   const [{ status: loading, result: { data: dataSource } }, getUsers] = useFetch(`/api/setup/users`);
   const [{ locationId }, reload] = useReload();
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<DataSource>();
 
   // load form
   useEffect(() => {
@@ -38,16 +48,26 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
     return <div>loading...</div>;
   }
 
+  const gridviewProps: GridViewProps<UserData> = {
+    data: data.users,
+    customColumns: {
+      id: {
+        type: "link",
+        data: {
+          path: null,
+          param: "id",
+          query: "formId=setup_users"
+        }
+      }
+    }
+  }
+
   return <div>
     <header>
       USER <Link to={`new?formId=${route}_${page}`}>Add</Link> <button type="button" onClick={handleReload}>reload</button>
     </header>
 
-    <GridView data={data.users} customColumns={{
-      type: "link",
-      param: "id",
-      query: "formId=setup_users"
-    }}>
+    <GridView {...gridviewProps}>
       <Columns>
         <DataColumn name="id" label="Id" type="text" isKey={true} />
         <DataColumn name="username" label="Username" type="text" isPrimary={true} isSearch={true} />
@@ -82,8 +102,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
       }]}
       customColumns={{
         id: {
-          type: "checkbox",
-          name: "check",
+          type: "link",
           data: {
             path: null,
             param: "id",

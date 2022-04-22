@@ -17,10 +17,9 @@ export const THead: React.FC<any> = ({ children }): JSX.Element | null => {
         children ? Children.map(children, (child): JSX.Element | null => {
           if (isValidElement(child) && typeof child.type !== 'string') {
             const { name, label } = child.props as DataProps;
+            const typeName = child.type.name;
 
-            if (child.type.name == 'DataColumn') {
-              return <th>{label || name}</th>;
-            } else if (child.type.name == 'DataBound') {
+            if (typeName == 'DataColumn' || typeName == 'DataBound') {
               return <th>{label || name}</th>;
             } else {
               return null;
@@ -35,7 +34,10 @@ export const THead: React.FC<any> = ({ children }): JSX.Element | null => {
             })
           }
           {
-            boundColumns && <th>th</th>
+            boundColumns && boundColumns.map((column: any, i: any) => {
+              const { name, label } = column;
+              return <th key={i}>{label || name}</th>;
+            })
           }
         </>
       }

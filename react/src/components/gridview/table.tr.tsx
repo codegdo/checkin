@@ -6,7 +6,7 @@ import { TD } from './table.td';
 
 export const RowContext = React.createContext<any>(undefined);
 
-export const TRow: React.FC<any> = ({ dataRow, children }): JSX.Element => {
+export const TR: React.FC<any> = ({ dataRow, children }): JSX.Element => {
   const context = useContext(GridViewContext);
 
   if (!context) {
@@ -21,23 +21,15 @@ export const TRow: React.FC<any> = ({ dataRow, children }): JSX.Element => {
     console.log(toggle);
   }, [toggle]);
 
-  const onRowClick = (value: any) => {
+  const onRowClick = (data: any) => {
 
-    if (toggle) {
-      setToggle(false);
-    } else {
-      setToggle(true);
+    setToggle(!toggle);
+
+    if (onCallback) {
+      toggle ? onCallback() : onCallback();
     }
 
-    console.log(value);
-
-    //setToggle(!toggle);
-
-    //console.log(toggle);
-    onCallback && onCallback();
   }
-
-
 
   return <tr className={toggle ? 'active' : ''}>
     <RowContext.Provider value={{ dataRow, onRowClick }}>
@@ -50,7 +42,7 @@ export const TRow: React.FC<any> = ({ dataRow, children }): JSX.Element => {
             if (child.type.name == 'DataColumn') {
               return <TD {...child.props} />;
             } else if (child.type.name == 'DataBound') {
-              return <TD dataRow={dataRow}>{children}</TD>;
+              return <TD>{children}</TD>;
             } else {
               return null;
             }
@@ -58,12 +50,14 @@ export const TRow: React.FC<any> = ({ dataRow, children }): JSX.Element => {
           return null;
         }) : columns && <>
           {
-            columns.map((column: any, i: any) => {
+            columns.map((column, i: any) => {
               return <TD {...column} key={i} />;
             })
           }
           {
-            boundColumns && <td>edit</td>
+            boundColumns && boundColumns.map((column: any, i: any) => {
+              return <TD {...column} key={i}>CHILDREN</TD>;
+            })
           }
         </>
       }

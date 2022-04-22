@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { Render } from './gridview.render';
 
 import { GridViewContextProps, GridViewProps } from './gridview.type';
 
-export const GridViewContext = React.createContext<GridViewContextProps>(undefined);
+export const GridViewContext = (<T extends Object>() => React.createContext<GridViewContextProps<T>>(undefined))();
 
-export const GridView: React.FC<GridViewProps> = ({ children, ...props }): JSX.Element => {
+export const GridView = <T extends Object>(props: PropsWithChildren<GridViewProps<T>>): JSX.Element => {
+  const { children } = props;
 
   return <div className="gridview">
     <GridViewContext.Provider value={{ ...props }}>
@@ -13,3 +14,6 @@ export const GridView: React.FC<GridViewProps> = ({ children, ...props }): JSX.E
     </GridViewContext.Provider>
   </div>
 }
+
+
+
