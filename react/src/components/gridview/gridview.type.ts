@@ -1,18 +1,23 @@
+export type DataColumnProps = {
+  id?: number;
+  name?: string;
+  label?: string;
+  type?: string;
+  data?: any;
+  isDefault?: boolean;
+  isSearch?: boolean;
+  isKey?: boolean;
+  isPrimary?: boolean;
+};
+
 export type GridViewConfig = {
   columns?: any;
   customs?: any;
 };
-export type GridViewColumn = {
-  id: number;
-  name: string;
-  label: string;
-  type: string;
-  data: any;
-};
 
 export type GridViewProps<T> = {
   data?: Array<T>;
-  columns?: GridViewColumn[];
+  columns?: DataColumnProps[];
   config?: GridViewConfig;
   boundColumns?: any;
   customColumns?: any;
@@ -20,11 +25,3 @@ export type GridViewProps<T> = {
   onCallback?: () => void;
 };
 
-export type DataProps = {
-  name?: string;
-  label?: string;
-  type?: string;
-  isDefault?: boolean;
-  isSearch?: boolean;
-  children?: any;
-};

@@ -1,7 +1,8 @@
-import React, { Children, isValidElement } from 'react';
+import React, { Children, isValidElement, PropsWithChildren } from 'react';
 import { GridViewItem } from './gridview.item';
+import { DataColumnProps } from './gridview.type';
 
-export const TD: React.FC<any> = ({ children, ...props }): JSX.Element => {
+export const TD: React.FC<PropsWithChildren<DataColumnProps>> = ({ children, ...props }): JSX.Element => {
 
   return <td>
     {

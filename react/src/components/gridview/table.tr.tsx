@@ -1,19 +1,28 @@
-import React, { Children, isValidElement, useContext, useEffect, useState } from 'react';
+import React, { Children, isValidElement, PropsWithChildren, useContext, useEffect, useState } from 'react';
 
 import { GridViewContext } from './gridview.component';
-import { DataProps } from './gridview.type';
+import { DataColumnProps } from './gridview.type';
 import { TD } from './table.td';
 
-export const RowContext = React.createContext<any>(undefined);
+type TRProps<T> = {
+  dataRow: T
+}
 
-export const TR: React.FC<any> = ({ dataRow, children }): JSX.Element => {
+type TRContextProps<T> = TRProps<T> & { customColumns: any, onRowClick: any }
+
+export const TRContext = (<T extends Record<string, any>>() => React.createContext<TRContextProps<T> | undefined>(undefined))();
+
+export const TR = <T extends Object>(props: PropsWithChildren<TRProps<T>>): JSX.Element => {
   const context = useContext(GridViewContext);
 
   if (!context) {
     throw new Error('Required CONTEXT');
   }
 
-  const { columns, boundColumns, customColumns, onCallback } = context;
+  const { columns, config = {}, onCallback } = context;
+  const { columns: configColumns, customs: customColumns } = config;
+
+  const { dataRow, children } = props;
 
   const [toggle, setToggle] = useState(false);
 
@@ -32,17 +41,15 @@ export const TR: React.FC<any> = ({ dataRow, children }): JSX.Element => {
   }
 
   return <tr className={toggle ? 'active' : ''}>
-    <RowContext.Provider value={{ customColumns, dataRow, onRowClick }}>
+    <TRContext.Provider value={{ dataRow, customColumns, onRowClick }}>
       {
         children ? Children.map(children, (child): JSX.Element | null => {
           if (isValidElement(child) && typeof child.type !== 'string') {
 
-            const { children } = child.props as DataProps;
+            const { children } = child.props as PropsWithChildren<DataColumnProps>;
 
             if (child.type.name == 'DataColumn') {
-              return <TD {...child.props} />;
-            } else if (child.type.name == 'DataBound') {
-              return <TD>{children}</TD>;
+              return children ? <TD {...child.props}>{children}</TD> : <TD {...child.props} />;
             } else {
               return null;
             }
@@ -55,12 +62,12 @@ export const TR: React.FC<any> = ({ dataRow, children }): JSX.Element => {
             })
           }
           {
-            boundColumns && boundColumns.map((column: any, i: any) => {
+            configColumns && configColumns.map((column: any, i: any) => {
               return <TD {...column} key={i}>CHILDREN</TD>;
             })
           }
         </>
       }
-    </RowContext.Provider>
+    </TRContext.Provider>
   </tr>
 }

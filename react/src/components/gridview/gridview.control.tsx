@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
 
 
 import { Filter } from './control.filter';
@@ -8,7 +8,7 @@ import { GridViewContext } from './gridview.component';
 
 export const ControlContext = React.createContext<any>(undefined);
 
-export const Control: React.FC<any> = ({ children }): JSX.Element => {
+export const Control: React.FC<{ children: ReactNode | undefined }> = ({ children }): JSX.Element => {
 
   const context = useContext(GridViewContext);
 

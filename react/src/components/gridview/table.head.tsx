@@ -1,25 +1,26 @@
-import React, { Children, isValidElement, useContext } from 'react';
+import React, { Children, isValidElement, ReactNode, useContext } from 'react';
 import { GridViewContext } from './gridview.component';
-import { DataProps } from './gridview.type';
+import { DataColumnProps } from './gridview.type';
 
-export const THead: React.FC<any> = ({ children }): JSX.Element | null => {
+export const THead: React.FC<{ children: ReactNode | undefined }> = ({ children }): JSX.Element | null => {
   const context = useContext(GridViewContext);
 
   if (!context) {
     throw new Error('Required CONTEXT');
   }
 
-  const { columns, boundColumns } = context;
+  const { columns, config = {} } = context;
+  const { columns: configColumns } = config;
 
   return <thead>
     <tr>
       {
         children ? Children.map(children, (child): JSX.Element | null => {
           if (isValidElement(child) && typeof child.type !== 'string') {
-            const { name, label } = child.props as DataProps;
+            const { name, label } = child.props as DataColumnProps;
             const typeName = child.type.name;
 
-            if (typeName == 'DataColumn' || typeName == 'DataBound') {
+            if (typeName == 'DataColumn') {
               return <th>{label || name}</th>;
             } else {
               return null;
@@ -34,7 +35,7 @@ export const THead: React.FC<any> = ({ children }): JSX.Element | null => {
             })
           }
           {
-            boundColumns && boundColumns.map((column: any, i: any) => {
+            configColumns && configColumns.map((column: any, i: any) => {
               const { name, label } = column;
               return <th key={i}>{label || name}</th>;
             })

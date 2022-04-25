@@ -10,7 +10,7 @@ export const GridView = <T extends Object>(props: PropsWithChildren<GridViewProp
 
   return <div className="gridview">
     <GridViewContext.Provider value={{ ...props }}>
-      {children ? children : <Render />}
+      {children ? children : <Render>{undefined}</Render>}
     </GridViewContext.Provider>
   </div>
 }

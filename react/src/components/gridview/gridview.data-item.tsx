@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
+import { DataColumnProps } from './gridview.type';
 
-export const DataItem: React.FC<any> = ({ children }): JSX.Element => {
+export const DataItem: React.FC<PropsWithChildren<DataColumnProps>> = ({ children }): JSX.Element => {
   return <>{children}</>
 }

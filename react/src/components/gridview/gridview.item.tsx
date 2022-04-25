@@ -2,28 +2,29 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { stringifyParam } from '../../utils/stringify-param.util';
 import { stringifyQuery } from '../../utils/stringify-query.util';
+import { DataColumnProps } from './gridview.type';
 
-import { RowContext } from './table.tr';
+import { TRContext } from './table.tr';
 
-export const GridViewItem: React.FC<any> = (props): JSX.Element => {
+export const GridViewItem: React.FC<DataColumnProps> = (props): JSX.Element => {
 
-  const rowContext = useContext(RowContext);
+  const rowContext = useContext(TRContext);
 
   if (!rowContext) {
     throw new Error('Required ROW CONTEXT');
   }
 
-  const { customColumns = {}, dataRow, onRowClick } = rowContext;
-
-  const custom = { ...props, ...customColumns[props.name] };
-  const { type, name, label, data } = custom;
-  const value = String(dataRow[props.name] || label || name);
+  const { dataRow, customColumns = {}, onRowClick } = rowContext;
+  const { name: key = '' } = props;
+  const { type, name, label, data }: DataColumnProps = { ...props, ...customColumns[key] };
+  const { [key]: val, id } = dataRow;
+  const value = String(val || label || name);
 
   const handleClick = () => {
     onRowClick && onRowClick({
-      id: dataRow.id,
+      id,
       name,
-      key: props.name,
+      key,
       value
     });
   }

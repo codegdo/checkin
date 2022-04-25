@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Columns, DataColumn, DataBound, DataItem, GridView } from '../../../components/gridview';
-import { GridViewProps } from '../../../components/gridview/gridview.type';
+import { Columns, DataColumn, DataItem, GridView } from '../../../components/gridview';
+
 import { useFetch, useReload } from '../../../hooks';
 
 type DataSource = {
@@ -9,7 +9,7 @@ type DataSource = {
   columns: []
 }
 
-type UserData = {
+export type UserData = {
   id: string;
 }
 
@@ -52,13 +52,15 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
       USER <Link to={`new?formId=${route}_${page}`}>Add</Link> <button type="button" onClick={handleReload}>reload</button>
     </header>
 
-    <GridView<UserData> data={data.users} customColumns={{
-      id: {
-        type: "link",
-        data: {
-          path: null,
-          param: "id",
-          query: "formId=setup_users"
+    <GridView<UserData> data={data.users} config={{
+      customs: {
+        id: {
+          type: "link",
+          data: {
+            path: null,
+            param: "id",
+            query: "formId=setup_users"
+          }
         }
       }
     }}>
@@ -66,7 +68,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
         <DataColumn name="id" label="Id" type="text" isKey={true} />
         <DataColumn name="username" label="Username" type="text" isPrimary={true} isSearch={true} />
         <DataColumn name="emailAddress" label="Email Address" type="text" />
-        <DataBound label="Action">
+        <DataColumn name="action" label="Action">
           <DataItem name="edit" label="Edit" type="link" data={
             {
               path: null,
@@ -74,33 +76,35 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
               query: "formId=setup_users"
             }
           } />
-        </DataBound>
+        </DataColumn>
       </Columns>
     </GridView>
 
     <GridView
       data={data.users}
       columns={data.columns}
-      boundColumns={[{
-        label: "Action",
-        data: [{
-          name: "edit",
-          label: "Edit",
-          type: "link",
-          data: {
-            path: null,
-            param: "id",
-            query: "formId=setup_users"
-          }
-        }]
-      }]}
-      customColumns={{
-        id: {
-          type: "link",
-          data: {
-            path: null,
-            param: "id",
-            query: "formId=setup_users"
+      config={{
+        columns: [{
+          label: "Action",
+          data: [{
+            name: "edit",
+            label: "Edit",
+            type: "link",
+            data: {
+              path: null,
+              param: "id",
+              query: "formId=setup_users"
+            }
+          }]
+        }],
+        customs: {
+          id: {
+            type: "link",
+            data: {
+              path: null,
+              param: "id",
+              query: "formId=setup_users"
+            }
           }
         }
       }}
