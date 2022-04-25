@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-//import { Column, Control, Field, GridView, Render } from '../../../components/gridview';
 import { Columns, DataColumn, DataBound, DataItem, GridView } from '../../../components/gridview';
 import { GridViewProps } from '../../../components/gridview/gridview.type';
 import { useFetch, useReload } from '../../../hooks';
@@ -48,9 +47,12 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
     return <div>loading...</div>;
   }
 
-  const gridviewProps: GridViewProps<UserData> = {
-    data: data.users,
-    customColumns: {
+  return <div>
+    <header>
+      USER <Link to={`new?formId=${route}_${page}`}>Add</Link> <button type="button" onClick={handleReload}>reload</button>
+    </header>
+
+    <GridView<UserData> data={data.users} customColumns={{
       id: {
         type: "link",
         data: {
@@ -59,15 +61,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
           query: "formId=setup_users"
         }
       }
-    }
-  }
-
-  return <div>
-    <header>
-      USER <Link to={`new?formId=${route}_${page}`}>Add</Link> <button type="button" onClick={handleReload}>reload</button>
-    </header>
-
-    <GridView {...gridviewProps}>
+    }}>
       <Columns>
         <DataColumn name="id" label="Id" type="text" isKey={true} />
         <DataColumn name="username" label="Username" type="text" isPrimary={true} isSearch={true} />

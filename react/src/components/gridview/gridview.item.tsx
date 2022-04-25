@@ -2,25 +2,18 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { stringifyParam } from '../../utils/stringify-param.util';
 import { stringifyQuery } from '../../utils/stringify-query.util';
-import { GridViewContext } from './gridview.component';
 
 import { RowContext } from './table.tr';
 
 export const GridViewItem: React.FC<any> = (props): JSX.Element => {
 
-  const context = useContext(GridViewContext);
   const rowContext = useContext(RowContext);
-
-  if (!context) {
-    throw new Error('Required CONTEXT');
-  }
 
   if (!rowContext) {
     throw new Error('Required ROW CONTEXT');
   }
 
-  const { customColumns = {} } = context;
-  const { dataRow, onRowClick } = rowContext;
+  const { customColumns = {}, dataRow, onRowClick } = rowContext;
 
   const custom = { ...props, ...customColumns[props.name] };
   const { type, name, label, data } = custom;

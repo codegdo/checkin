@@ -13,7 +13,7 @@ export const TR: React.FC<any> = ({ dataRow, children }): JSX.Element => {
     throw new Error('Required CONTEXT');
   }
 
-  const { columns, boundColumns, onCallback } = context;
+  const { columns, boundColumns, customColumns, onCallback } = context;
 
   const [toggle, setToggle] = useState(false);
 
@@ -32,7 +32,7 @@ export const TR: React.FC<any> = ({ dataRow, children }): JSX.Element => {
   }
 
   return <tr className={toggle ? 'active' : ''}>
-    <RowContext.Provider value={{ dataRow, onRowClick }}>
+    <RowContext.Provider value={{ customColumns, dataRow, onRowClick }}>
       {
         children ? Children.map(children, (child): JSX.Element | null => {
           if (isValidElement(child) && typeof child.type !== 'string') {
