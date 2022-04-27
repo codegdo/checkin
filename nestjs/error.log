@@ -7,3 +7,7 @@
 {"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
 {"level":"error","message":"column gv.is_default does not exist"}
 {"level":"error","message":"column gv.is_default does not exist"}
+{"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"OFFSET must not be negative"}
+{"level":"error","message":"OFFSET must not be negative"}

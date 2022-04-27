@@ -1,6 +1,7 @@
 import { Exclude, Expose, Type } from 'class-transformer';
 import {
   IsDefined,
+  IsInt,
   IsJSON,
   IsNotEmpty,
   IsNotEmptyObject,
@@ -8,6 +9,7 @@ import {
   IsNumberString,
   IsObject,
   IsOptional,
+  IsPositive,
   IsString,
   ValidateNested,
 } from 'class-validator';
@@ -79,3 +81,48 @@ export class UserCreateDto {
   loginId: number;
 
 }
+
+export class UserQueryDto {
+
+  @IsOptional()
+  username: string;
+
+  @IsOptional()
+  firstName: string;
+
+  @IsOptional()
+  lastName: string;
+
+  @IsOptional()
+  emailAddress: string;
+
+  @IsOptional()
+  phoneNumber: string;
+
+  @IsOptional()
+  location: string;
+
+  @IsOptional()
+  group: string;
+
+  @IsOptional()
+  type: string;
+
+  @IsOptional()
+  isActive: string;
+
+  @IsOptional()
+  @IsNumber()
+  limit: number;
+
+  @IsOptional()
+  @IsNumber()
+  offset: number;
+
+  @IsOptional()
+  sortColumn: string;
+
+  @IsOptional()
+  sortDirection: string;
+}
+

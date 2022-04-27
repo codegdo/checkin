@@ -22,6 +22,7 @@ import {
   UserVerifyData,
   UserSetupData,
   UserLoginData,
+  UserQueryAll,
 } from './user.type';
 import { ConflictException } from '@nestjs/common';
 import { ErrorMessageEnum } from 'src/common/error/error.type';
@@ -120,10 +121,12 @@ export class UserRepository extends Repository<User> {
     return user;
   }
 
-  async getAllUsers(loginType: string, orgId: number, locationId: number) {
+  async getAllUsers({ user, query }: UserQueryAll) {
+    const { groupType, orgId } = user;
+    const { username, firstName, lastName, emailAddress, phoneNumber, location, group, type, limit, offset, sortColumn, sortDirection } = query;
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_get_all($1, $2, $3, $4, $5, $6)`,
-      [loginType, orgId, locationId, null, null, null],
+      `CALL sec.pr_user_get_all($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)`,
+      [groupType, orgId, username, firstName, lastName, emailAddress, phoneNumber, location, group, type, limit, offset, sortColumn, sortDirection, null, null, null],
     );
 
     return result;

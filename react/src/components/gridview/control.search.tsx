@@ -2,6 +2,7 @@ import React, { Children, isValidElement, useContext } from 'react';
 
 import { ControlContext } from './gridview.control';
 import { DataColumn } from './gridview.data-column';
+import { DataColumnProps } from './gridview.type';
 
 export const Search: React.FC<any> = ({ children }): JSX.Element | null => {
   const context = useContext(ControlContext);
@@ -13,13 +14,8 @@ export const Search: React.FC<any> = ({ children }): JSX.Element | null => {
   const { data } = context;
 
   return <div className="search">
-    {
-      children ? Children.toArray(children).filter(
-        child => (isValidElement(child) && typeof child.type !== 'string' && child.type.name == 'DataColumn' && child.props.isSearch && child.props.isPrimary)
-      ) as React.ReactElement[] : data && data.map((item: any, i: any) => {
-        return item.isSearch && item.isPrimary ? <DataColumn input={item} key={i} /> : null;
-      })
-    }
+    <input type="search" />
+    <button type="button">Search</button>
   </div>
 
 }

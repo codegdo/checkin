@@ -1,4 +1,5 @@
 import { TokenData } from '../token/token.type';
+import { UserQueryDto } from './user.dto';
 
 export type UserData = {
   id: number;
@@ -54,7 +55,7 @@ export type UserLoginData = {
   nav: any;
 } | null;
 
-export type SessionUser = {
+export type UserSession = {
   sessionId: string;
   loginId: number;
   orgId: number;
@@ -62,4 +63,9 @@ export type SessionUser = {
   groupType: string;
   groupLevel: number;
   isOwner: boolean;
+}
+
+export type UserQueryAll = {
+  user: UserSession,
+  query: UserQueryDto
 }

@@ -9,11 +9,10 @@ import {
   Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserCreateDto } from 'src/models/main/dtos';
+import { UserCreateDto, UserQueryDto } from 'src/models/main/dtos';
 import { Serialize, CurrentUser } from 'src/decorators';
-import { PagingQueryDto } from 'src/dtos';
 import { User } from 'src/models/main/entities';
-import { SessionUser } from 'src/models/main/user/user.type';
+import { UserSession } from 'src/models/main/user/user.type';
 
 @Controller('setup')
 export class UserController {
@@ -22,17 +21,16 @@ export class UserController {
   @Get('users')
   //@Serialize(UserData)
   getAllUsers(
-    @CurrentUser() user: SessionUser,
-    @Query() query: PagingQueryDto
+    @CurrentUser() user: UserSession,
+    @Query() query: UserQueryDto
   ) {
-    const { groupType, orgId, locationId } = user;
-    return this.userService.getAllUsers(groupType, orgId, locationId);
+    return this.userService.getAllUsers({ user, query });
   }
 
   @Get('users/:userId')
   //@Serialize(UserData)
   getUser(
-    @CurrentUser() user: SessionUser,
+    @CurrentUser() user: UserSession,
     @Param('userId') userId: number,
     @Query('formId') formId: number | string,
   ) {
@@ -57,7 +55,7 @@ export class UserController {
   }
 
   @Post('users')
-  createUser(@CurrentUser() user: SessionUser, @Body() body: UserCreateDto) {
+  createUser(@CurrentUser() user: UserSession, @Body() body: UserCreateDto) {
     const { loginId } = user;
 
     return this.userService.createUser({ ...body, loginId });
@@ -65,7 +63,7 @@ export class UserController {
 
   @Patch('users/:id')
   updateUser(
-    @CurrentUser() user: SessionUser,
+    @CurrentUser() user: UserSession,
     @Param('id') id: number,
     @Body() body: any,
   ) {
@@ -73,5 +71,5 @@ export class UserController {
   }
 
   @Delete('users/:id')
-  deleteUser(@CurrentUser() user: SessionUser, @Param('id') id: number) { }
+  deleteUser(@CurrentUser() user: UserSession, @Param('id') id: number) { }
 }

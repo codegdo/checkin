@@ -9,6 +9,7 @@ import { User } from 'src/models/main/user/user.entity';
 import { UserRepository, FormRepository } from 'src/models/main/repositories';
 import { ErrorMessageEnum, ErrorService } from 'src/common';
 import { FormDto, UserCreateDto } from 'src/models/main/dtos';
+import { UserQueryAll } from 'src/models/main/user/user.type';
 
 @Injectable()
 export class UserService {
@@ -22,10 +23,8 @@ export class UserService {
     private readonly errorService: ErrorService, //private repo: MainRepository //@Inject(MainRepository)
   ) { }
 
-  async getAllUsers(groupType, orgId, locationId) {
-    //const { limit, offset } = query;
-
-    return this.userRepository.getAllUsers(groupType, orgId, locationId);
+  async getAllUsers(userQuery: UserQueryAll) {
+    return this.userRepository.getAllUsers(userQuery);
   }
 
   async getUser(id) {

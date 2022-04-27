@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Columns, DataColumn, DataItem, GridView } from '../../../components/gridview';
 
 import { useFetch, useReload } from '../../../hooks';
@@ -14,8 +14,10 @@ export type UserData = {
 }
 
 const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
+  const { search } = useLocation();
 
-  const [{ status: loading, result: { data: dataSource } }, getUsers] = useFetch(`/api/setup/users`);
+  console.log(location);
+  const [{ status: loading, result: { data: dataSource } }, getUsers] = useFetch(`/api/setup/users${search}`);
   const [{ locationId }, reload] = useReload();
   const [data, setData] = useState<DataSource>();
 

@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { CurrentUser } from 'src/decorators';
-import { SessionUser } from 'src/models/main/user/user.type';
+import { UserSession } from 'src/models/main/user/user.type';
 import { ReloadService } from './reload.service';
 
 @Controller('reload')
@@ -11,7 +11,7 @@ export class ReloadController {
 
   @Post('session')
   async session(
-    @CurrentUser() user: SessionUser,
+    @CurrentUser() user: UserSession,
     @Body() body: any
   ) {
     return user;
