@@ -11,3 +11,5 @@
 {"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
 {"level":"error","message":"OFFSET must not be negative"}
 {"level":"error","message":"OFFSET must not be negative"}
+{"level":"error","message":"column \"l.name\" must appear in the GROUP BY clause or be used in an aggregate function"}
+{"level":"error","message":"column \"l.name\" must appear in the GROUP BY clause or be used in an aggregate function"}

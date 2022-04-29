@@ -45,7 +45,7 @@ VALUES
     "label": "Email Address",
     "sortOrder": 4,
     "isPrimary": 0,
-    "isSearch": 0,
+    "isSearch": 1,
     "isVisible": 1
   },
   "phoneNumber": {

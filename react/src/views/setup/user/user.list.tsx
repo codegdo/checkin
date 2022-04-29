@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Columns, DataColumn, DataItem, GridView } from '../../../components/gridview';
+import { DataQuery } from '../../../components/gridview/gridview.type';
 
-import { useFetch, useReload } from '../../../hooks';
+import { useFetch } from '../../../hooks';
 
 type DataSource = {
   users: [],
@@ -15,18 +16,17 @@ export type UserData = {
 
 const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
   const { search } = useLocation();
+  const navigate = useNavigate();
 
-  console.log(location);
-  const [{ status: loading, result: { data: dataSource } }, getUsers] = useFetch(`/api/setup/users${search}`);
-  const [{ locationId }, reload] = useReload();
+  const [{ status: loading, result: { data: dataSource } }, getUsers] = useFetch();
   const [data, setData] = useState<DataSource>();
 
   // load form
   useEffect(() => {
-    void (async () => {
-      await getUsers();
+    (async () => {
+      await getUsers({ url: `/api/setup/users${search}` });
     })();
-  }, [locationId]);
+  }, [search]);
 
   useEffect(() => {
     if (loading === 'success') {
@@ -34,16 +34,13 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
     }
   }, [loading]);
 
-  const handleReload = () => {
-    reload();
-  }
-
-  const handleSearch = () => { }
-
-  const handleCallback = () => {
-
-    console.log('click');
-  }
+  const handleCallback = useCallback(async ({ name, search }: DataQuery) => {
+    if (name == 'search') {
+      navigate(`/setup/users${search}`);
+    } else {
+      navigate(`/setup/users${search}`);
+    }
+  }, []);
 
   if (!data) {
     return <div>loading...</div>;
@@ -51,7 +48,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
 
   return <div>
     <header>
-      USER <Link to={`new?formId=${route}_${page}`}>Add</Link> <button type="button" onClick={handleReload}>reload</button>
+      USER <Link to={`new?formId=${route}_${page}`}>Add</Link>
     </header>
 
     <GridView<UserData> data={data.users} config={{
@@ -65,10 +62,12 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
           }
         }
       }
-    }}>
+    }}
+      status={loading}
+      onCallback={handleCallback}>
       <Columns>
         <DataColumn name="id" label="Id" type="text" isKey={true} />
-        <DataColumn name="username" label="Username" type="text" isPrimary={true} isSearch={true} />
+        <DataColumn name="username" label="Username" type="text" isDefault={true} isSearch={true} />
         <DataColumn name="emailAddress" label="Email Address" type="text" />
         <DataColumn name="action" label="Action">
           <DataItem name="edit" label="Edit" type="link" data={
@@ -110,7 +109,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
           }
         }
       }}
-      onSearch={handleSearch}
+      status={loading}
       onCallback={handleCallback}
     />
   </div>;

@@ -43,7 +43,7 @@ $BODY$
     gv.label "label",
     gv.type "type",
     gv.data "data",
-    gv.is_primary "isPrimary",
+    gv.is_default "isDefault",
     gv.is_search "isSearch",
     gv.is_key "isKey"
     FROM
@@ -71,40 +71,40 @@ $BODY$
     LEFT JOIN org.location l ON l.id = ul.location_id
     WHERE
       CASE WHEN p_login_type = 'system' THEN true ELSE ul.location_id IS NOT NULL END
-      AND (u.username LIKE ('%' || p_username || '%') OR p_username IS NULL)
-      AND (u.first_name LIKE ('%' || p_first_name || '%') OR p_first_name IS NULL)
-      AND (u.last_name LIKE ('%' || p_last_name || '%') OR p_last_name IS NULL)
-      AND (u.email_address LIKE ('%' || p_email_address || '%') OR p_email_address IS NULL)
-      AND (u.phone_number LIKE ('%' || p_phone_number || '%') OR p_phone_number IS NULL)
-      AND (l.name LIKE ('%' || p_location || '%') OR p_location IS NULL)
-      AND (u.group_name LIKE ('%' || p_group || '%') OR p_group IS NULL)
-      AND (u.group_type LIKE ('%' || p_type || '%') OR p_type IS NULL)
-    GROUP BY u.id, u.username, u.first_name, u.last_name, u.email_address, u.phone_number, u.group_level, u.group_name, u.group_type, u.is_active
+      AND (u.username LIKE '%' || p_username || '%' OR p_username IS NULL)
+      AND (u.first_name LIKE '%' || p_first_name || '%' OR p_first_name IS NULL)
+      AND (u.last_name LIKE '%' || p_last_name || '%' OR p_last_name IS NULL)
+      AND (u.email_address LIKE '%' || p_email_address || '%' OR p_email_address IS NULL)
+      AND (u.phone_number LIKE '%' || p_phone_number || '%' OR p_phone_number IS NULL)
+      AND (l.name LIKE '%' || p_location || '%' OR p_location IS NULL)
+      AND (u.group_name LIKE '%' || p_group || '%' OR p_group IS NULL)
+      AND (u.group_type LIKE '%' || p_type || '%' OR p_type IS NULL)
+    GROUP BY u.id, u.username, u.first_name, u.last_name, u.email_address, u.phone_number, l.name, u.group_level, u.group_name, u.group_type, u.is_active
     ORDER BY
       CASE WHEN p_sort_column = '' AND p_sort_direction = '' THEN u.id END DESC,
-      CASE WHEN p_sort_column = 'id' AND p_sort_direction = 'ASC' THEN u.id END ASC,
-      CASE WHEN p_sort_column = 'id' AND p_sort_direction = 'DESC' THEN u.id END DESC,
-      CASE WHEN p_sort_column = 'username' AND p_sort_direction = 'ASC' THEN u.id END ASC,
-      CASE WHEN p_sort_column = 'username' AND p_sort_direction = 'DESC' THEN u.id END DESC,
-      CASE WHEN p_sort_column = 'firstName' AND p_sort_direction = 'ASC' THEN u.id END ASC,
-      CASE WHEN p_sort_column = 'firstName' AND p_sort_direction = 'DESC' THEN u.id END DESC,
-      CASE WHEN p_sort_column = 'lastName' AND p_sort_direction = 'ASC' THEN u.id END ASC,
-      CASE WHEN p_sort_column = 'lastName' AND p_sort_direction = 'DESC' THEN u.id END DESC,
-      CASE WHEN p_sort_column = 'emailAddress' AND p_sort_direction = 'ASC' THEN u.id END ASC,
-      CASE WHEN p_sort_column = 'emailAddress' AND p_sort_direction = 'DESC' THEN u.id END DESC,
-      CASE WHEN p_sort_column = 'phoneNumber' AND p_sort_direction = 'ASC' THEN u.id END ASC,
-      CASE WHEN p_sort_column = 'phoneNumber' AND p_sort_direction = 'DESC' THEN u.id END DESC,
-      CASE WHEN p_sort_column = 'location' AND p_sort_direction = 'ASC' THEN u.id END ASC,
-      CASE WHEN p_sort_column = 'location' AND p_sort_direction = 'DESC' THEN u.id END DESC,
-      CASE WHEN p_sort_column = 'level' AND p_sort_direction = 'ASC' THEN u.id END ASC,
-      CASE WHEN p_sort_column = 'level' AND p_sort_direction = 'DESC' THEN u.id END DESC,
-      CASE WHEN p_sort_column = 'group' AND p_sort_direction = 'ASC' THEN u.id END ASC,
-      CASE WHEN p_sort_column = 'group' AND p_sort_direction = 'DESC' THEN u.id END DESC,
-      CASE WHEN p_sort_column = 'type' AND p_sort_direction = 'ASC' THEN u.id END ASC,
-      CASE WHEN p_sort_column = 'type' AND p_sort_direction = 'DESC' THEN u.id END DESC,
-      CASE WHEN p_sort_column = 'isActive' AND p_sort_direction = 'ASC' THEN u.id END ASC,
-      CASE WHEN p_sort_column = 'isActive' AND p_sort_direction = 'DESC' THEN u.id END DESC
-	LIMIT p_limit
+      CASE WHEN p_sort_column = 'id' AND p_sort_direction = 'asc' THEN u.id END ASC,
+      CASE WHEN p_sort_column = 'id' AND p_sort_direction = 'desc' THEN u.id END DESC,
+      CASE WHEN p_sort_column = 'username' AND p_sort_direction = 'asc' THEN u.username END ASC,
+      CASE WHEN p_sort_column = 'username' AND p_sort_direction = 'desc' THEN u.username END DESC,
+      CASE WHEN p_sort_column = 'firstName' AND p_sort_direction = 'asc' THEN u.first_name END ASC,
+      CASE WHEN p_sort_column = 'firstName' AND p_sort_direction = 'desc' THEN u.first_name END DESC,
+      CASE WHEN p_sort_column = 'lastName' AND p_sort_direction = 'asc' THEN u.last_name END ASC,
+      CASE WHEN p_sort_column = 'lastName' AND p_sort_direction = 'desc' THEN u.last_name END DESC,
+      CASE WHEN p_sort_column = 'emailAddress' AND p_sort_direction = 'asc' THEN u.email_address END ASC,
+      CASE WHEN p_sort_column = 'emailAddress' AND p_sort_direction = 'desc' THEN u.email_address END DESC,
+      CASE WHEN p_sort_column = 'phoneNumber' AND p_sort_direction = 'asc' THEN u.phone_number END ASC,
+      CASE WHEN p_sort_column = 'phoneNumber' AND p_sort_direction = 'desc' THEN u.phone_number END DESC,
+      CASE WHEN p_sort_column = 'location' AND p_sort_direction = 'asc' THEN l.name END ASC,
+      CASE WHEN p_sort_column = 'location' AND p_sort_direction = 'desc' THEN l.name END DESC,
+      CASE WHEN p_sort_column = 'level' AND p_sort_direction = 'asc' THEN u.group_level END ASC,
+      CASE WHEN p_sort_column = 'level' AND p_sort_direction = 'desc' THEN u.group_level END DESC,
+      CASE WHEN p_sort_column = 'group' AND p_sort_direction = 'asc' THEN u.group_name END ASC,
+      CASE WHEN p_sort_column = 'group' AND p_sort_direction = 'desc' THEN u.group_name END DESC,
+      CASE WHEN p_sort_column = 'type' AND p_sort_direction = 'asc' THEN u.group_type END ASC,
+      CASE WHEN p_sort_column = 'type' AND p_sort_direction = 'desc' THEN u.group_type END DESC,
+      CASE WHEN p_sort_column = 'isActive' AND p_sort_direction = 'asc' THEN u.is_active END ASC,
+      CASE WHEN p_sort_column = 'isActive' AND p_sort_direction = 'desc' THEN u.is_active END DESC
+    LIMIT p_limit
     OFFSET p_offset
   ) r;
 

@@ -38,9 +38,9 @@ export const useFetch = (
 
   const callback = useCallback(
     async (option?: RequestOption) => {
-      url = url || option?.url;
+      const _url = url || option?.url;
 
-      if (!url) {
+      if (!_url) {
         console.warn('Invalid fetch url');
         return;
       }
@@ -48,7 +48,7 @@ export const useFetch = (
       try {
         dispatch({ type: 'LOADING' });
         //
-        const result = await http.request(url, option);
+        const result = await http.request(_url, option);
         console.log('FETCH', result);
         //
         dispatch({ type: 'SUCCESS', payload: result });
@@ -61,7 +61,7 @@ export const useFetch = (
         }
       }
     },
-    [url]
+    []
   );
 
   return [state, callback];
