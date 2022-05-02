@@ -14,22 +14,23 @@ export type CurrentQuery = {
   search: {
     keys: string[];
     value: string | null;
-  },
+  };
   sort: {
     column: string | null;
     direction: string | null;
-  }
-}
+  };
+};
 
 export type DataQuery = {
   name: string;
   dataQuery: CurrentQuery;
   search: string;
-}
+};
 
 export type GridViewConfig = {
   columns?: any;
   customs?: any;
+  paging?: any;
 };
 
 export type GridViewProps<T> = {

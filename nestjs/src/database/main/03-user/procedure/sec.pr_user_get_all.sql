@@ -2,28 +2,18 @@
 CREATE OR REPLACE PROCEDURE sec.pr_user_get_all(
   p_login_type varchar,
   p_org_id int,
-
-  p_username varchar,
-  p_first_name varchar,
-  p_last_name varchar,
-  p_email_address varchar,
-  p_phone_number varchar,
-  p_location varchar,
-  p_group varchar,
-  p_type varchar,
-
-  p_limit int,
-  p_offset int,
-  p_sort_column varchar,
-  p_sort_direction varchar,
+  p_query json,
 
   OUT config json,
   OUT columns json,
-  OUT users json
+  OUT users json,
+  OUT count int
 )
 AS
 $BODY$
   DECLARE
+   _limit int = COALESCE(p_query ->> 'limit', NULL):: int;
+   _offset int = COALESCE(p_query ->> 'offset', NULL):: int;
   BEGIN
 
   SELECT json_agg(r)::json ->> 0
@@ -51,68 +41,36 @@ $BODY$
     WHERE gv.is_visible = true
   ) r;
 
-  SELECT json_agg(r)::json
-  INTO users
+  WITH u AS (
+    SELECT *
+    FROM sec.fn_get_user_for_org(p_org_id, p_query)
+    WHERE CASE WHEN p_login_type = 'system' THEN true ELSE is_owner IS false END
+  )
+  SELECT json_agg(r)::json, (SELECT count(*) FROM u)
+  INTO users, count
   FROM (
-    SELECT
+    SELECT 
       u.id "id",
       u.username "username",
       u.first_name "firstName",
       u.last_name "lastName",
       u.email_address "emailAddress",
       u.phone_number "phoneNumber",
-      string_agg(l.name, ', ') "location",
+      u.location "location",
       u.group_level "level",
       u.group_name "group",
       u.group_type "type",
       u.is_active "isActive"
-    FROM (SELECT * FROM sec.fn_get_user_for_org(p_org_id)) u
-    LEFT JOIN sec.user_location ul ON ul.user_id = u.id
-    LEFT JOIN org.location l ON l.id = ul.location_id
-    WHERE
-      CASE WHEN p_login_type = 'system' THEN true ELSE ul.location_id IS NOT NULL END
-      AND (u.username LIKE '%' || p_username || '%' OR p_username IS NULL)
-      AND (u.first_name LIKE '%' || p_first_name || '%' OR p_first_name IS NULL)
-      AND (u.last_name LIKE '%' || p_last_name || '%' OR p_last_name IS NULL)
-      AND (u.email_address LIKE '%' || p_email_address || '%' OR p_email_address IS NULL)
-      AND (u.phone_number LIKE '%' || p_phone_number || '%' OR p_phone_number IS NULL)
-      AND (l.name LIKE '%' || p_location || '%' OR p_location IS NULL)
-      AND (u.group_name LIKE '%' || p_group || '%' OR p_group IS NULL)
-      AND (u.group_type LIKE '%' || p_type || '%' OR p_type IS NULL)
-    GROUP BY u.id, u.username, u.first_name, u.last_name, u.email_address, u.phone_number, l.name, u.group_level, u.group_name, u.group_type, u.is_active
-    ORDER BY
-      CASE WHEN p_sort_column = '' AND p_sort_direction = '' THEN u.id END DESC,
-      CASE WHEN p_sort_column = 'id' AND p_sort_direction = 'asc' THEN u.id END ASC,
-      CASE WHEN p_sort_column = 'id' AND p_sort_direction = 'desc' THEN u.id END DESC,
-      CASE WHEN p_sort_column = 'username' AND p_sort_direction = 'asc' THEN u.username END ASC,
-      CASE WHEN p_sort_column = 'username' AND p_sort_direction = 'desc' THEN u.username END DESC,
-      CASE WHEN p_sort_column = 'firstName' AND p_sort_direction = 'asc' THEN u.first_name END ASC,
-      CASE WHEN p_sort_column = 'firstName' AND p_sort_direction = 'desc' THEN u.first_name END DESC,
-      CASE WHEN p_sort_column = 'lastName' AND p_sort_direction = 'asc' THEN u.last_name END ASC,
-      CASE WHEN p_sort_column = 'lastName' AND p_sort_direction = 'desc' THEN u.last_name END DESC,
-      CASE WHEN p_sort_column = 'emailAddress' AND p_sort_direction = 'asc' THEN u.email_address END ASC,
-      CASE WHEN p_sort_column = 'emailAddress' AND p_sort_direction = 'desc' THEN u.email_address END DESC,
-      CASE WHEN p_sort_column = 'phoneNumber' AND p_sort_direction = 'asc' THEN u.phone_number END ASC,
-      CASE WHEN p_sort_column = 'phoneNumber' AND p_sort_direction = 'desc' THEN u.phone_number END DESC,
-      CASE WHEN p_sort_column = 'location' AND p_sort_direction = 'asc' THEN l.name END ASC,
-      CASE WHEN p_sort_column = 'location' AND p_sort_direction = 'desc' THEN l.name END DESC,
-      CASE WHEN p_sort_column = 'level' AND p_sort_direction = 'asc' THEN u.group_level END ASC,
-      CASE WHEN p_sort_column = 'level' AND p_sort_direction = 'desc' THEN u.group_level END DESC,
-      CASE WHEN p_sort_column = 'group' AND p_sort_direction = 'asc' THEN u.group_name END ASC,
-      CASE WHEN p_sort_column = 'group' AND p_sort_direction = 'desc' THEN u.group_name END DESC,
-      CASE WHEN p_sort_column = 'type' AND p_sort_direction = 'asc' THEN u.group_type END ASC,
-      CASE WHEN p_sort_column = 'type' AND p_sort_direction = 'desc' THEN u.group_type END DESC,
-      CASE WHEN p_sort_column = 'isActive' AND p_sort_direction = 'asc' THEN u.is_active END ASC,
-      CASE WHEN p_sort_column = 'isActive' AND p_sort_direction = 'desc' THEN u.is_active END DESC
-    LIMIT p_limit
-    OFFSET p_offset
+    FROM u
+    LIMIT _limit
+    OFFSET _offset
   ) r;
 
   END;
 $BODY$
 LANGUAGE plpgsql;
 
---CALL sec.pr_user_get_all('internal',1, null, null, null, null, null, null, null, null, null, null, null, null, null,null,null);
+--CALL sec.pr_user_get_all('internal',6, null, null, null, null, null);
 
 
 

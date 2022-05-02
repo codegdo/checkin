@@ -6,8 +6,9 @@ import { DataQuery } from '../../../components/gridview/gridview.type';
 import { useFetch } from '../../../hooks';
 
 type DataSource = {
-  users: [],
-  columns: []
+  users: [];
+  columns: [];
+  total: number;
 }
 
 export type UserData = {
@@ -68,7 +69,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
       <Columns>
         <DataColumn name="id" label="Id" type="text" isKey={true} />
         <DataColumn name="username" label="Username" type="text" isDefault={true} isSearch={true} />
-        <DataColumn name="emailAddress" label="Email Address" type="text" />
+        <DataColumn name="emailAddress" label="Email Address" type="text" isSearch={true} />
         <DataColumn name="action" label="Action">
           <DataItem name="edit" label="Edit" type="link" data={
             {
@@ -107,6 +108,9 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
               query: "formId=setup_users"
             }
           }
+        },
+        paging: {
+          total: data.total
         }
       }}
       status={loading}

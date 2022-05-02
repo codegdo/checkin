@@ -12,7 +12,25 @@ export const Paging: React.FC = (): JSX.Element => {
     throw new Error('Required CONTEXT');
   }
 
-  const { columns } = context;
+  const { config, onSearch } = context;
 
-  return <div className="paging">paging</div>
+  const pageLimit = 5;
+  const pageTotal = config?.paging?.total || 0;
+
+  const count = (limit: number, total: number) => {
+    return new Array(Math.floor(total / limit)).fill(limit).concat(total % limit).filter(i => i).length;
+  }
+  const range = (start: number, end: number) => {
+    const length = end - start + 1;
+    return Array.from({ length }, (_, i) => start + i);
+  };
+
+  console.log(typeof config?.paging);
+  console.log(count(pageLimit, pageTotal));
+
+  return <div className="paging">
+
+    paging
+
+  </div>
 }

@@ -1,11 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { randomInt } from 'crypto';
 
-import {
-  encryptKeyValue,
-  trimObjectKey,
-  validatePassword,
-} from 'src/utils';
+import { encryptKeyValue, trimObjectKey, validatePassword } from 'src/utils';
 
 import { User } from './user.entity';
 import { TokenEnum } from '../token/token.type';
@@ -123,10 +119,9 @@ export class UserRepository extends Repository<User> {
 
   async getAllUsers({ user, query }: UserQueryAll) {
     const { groupType, orgId } = user;
-    const { username, firstName, lastName, emailAddress, phoneNumber, location, group, type, limit, offset, sortColumn, sortDirection } = query;
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_get_all($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)`,
-      [groupType, orgId, username, firstName, lastName, emailAddress, phoneNumber, location, group, type, limit, offset, sortColumn, sortDirection, null, null, null],
+      `CALL sec.pr_user_get_all($1, $2, $3, $4, $5, $6, $7)`,
+      [groupType, orgId, JSON.stringify(query), null, null, null, null],
     );
 
     return result;
