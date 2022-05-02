@@ -7,7 +7,7 @@ CREATE OR REPLACE PROCEDURE sec.pr_user_get_all(
   OUT config json,
   OUT columns json,
   OUT users json,
-  OUT count int
+  OUT total int
 )
 AS
 $BODY$
@@ -47,7 +47,7 @@ $BODY$
     WHERE CASE WHEN p_login_type = 'system' THEN true ELSE is_owner IS false END
   )
   SELECT json_agg(r)::json, (SELECT count(*) FROM u)
-  INTO users, count
+  INTO users, total
   FROM (
     SELECT 
       u.id "id",

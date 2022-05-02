@@ -64,10 +64,11 @@ VALUES
 ('lastName', 'Last Name', 'text', 3, '1', '1', '0', '0', '1', '0'),
 ('emailAddress', 'Email Address', 'text', 4, '1', '1', '0', '0', '1', '0'),
 ('phoneNumber', 'Phone Number', 'text', 5, '1', '1', '0', '0', '1', '0'),
-('level', 'Level', 'text', 6, '1', '1', '0', '0', '1', '0'),
-('group', 'Group', 'text', 7, '1', '1', '0', '0', '1', '0'),
-('type', 'Type', 'text', 8, '1', '1', '0', '0', '1', '0'),
-('isActive', 'Active', 'text', 9, '1', '1', '0', '0', '1', '0');
+('location', 'Locations', 'text', 6, '1', '1', '0', '0', '1', '0'),
+('level', 'Level', 'text', 7, '1', '1', '0', '0', '1', '0'),
+('group', 'Group', 'text', 8, '1', '1', '0', '0', '1', '0'),
+('type', 'Type', 'text', 9, '1', '1', '0', '0', '1', '0'),
+('isActive', 'Active', 'text', 10, '1', '1', '0', '0', '1', '0');
 
 -- CREATE TABLE GRIDVIEW CONFIG
 CREATE TABLE IF NOT EXISTS org.gridview_config (
