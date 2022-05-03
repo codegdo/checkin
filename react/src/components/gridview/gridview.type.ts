@@ -19,6 +19,10 @@ export type CurrentQuery = {
     column: string | null;
     direction: string | null;
   };
+  paging: {
+    limit: number;
+    offset: number;
+  }
 };
 
 export type DataQuery = {
@@ -30,7 +34,7 @@ export type DataQuery = {
 export type GridViewConfig = {
   columns?: any;
   customs?: any;
-  paging?: any;
+  pagination?: any;
 };
 
 export type GridViewProps<T> = {

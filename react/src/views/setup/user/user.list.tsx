@@ -21,13 +21,18 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
 
   const [{ status: loading, result: { data: dataSource } }, getUsers] = useFetch();
   const [data, setData] = useState<DataSource>();
+  const [query, setQuery] = useState<string | undefined>();
 
   // load form
   useEffect(() => {
     (async () => {
-      await getUsers({ url: `/api/setup/users${search}` });
+      search && await getUsers({ url: `/api/setup/users${search}` });
     })();
   }, [search]);
+
+  useEffect(() => {
+    query && navigate(`/setup/users${query}`);
+  }, [query]);
 
   useEffect(() => {
     if (loading === 'success') {
@@ -35,16 +40,18 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
     }
   }, [loading]);
 
-  const handleCallback = useCallback(async ({ name, search }: DataQuery) => {
-    if (name == 'search') {
-      navigate(`/setup/users${search}`);
+  const handleCallback = ({ name, search }: DataQuery) => {
+    //
+    if (name == 'load') {
+      setQuery(search)
     } else {
       navigate(`/setup/users${search}`);
     }
-  }, []);
+
+  };
 
   if (!data) {
-    return <div>loading...</div>;
+    //return <div>loading...</div>;
   }
 
   return <div>
@@ -52,7 +59,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
       USER <Link to={`new?formId=${route}_${page}`}>Add</Link>
     </header>
 
-    <GridView<UserData> data={data.users} config={{
+    {/* <GridView<UserData> data={data?.users} config={{
       customs: {
         id: {
           type: "link",
@@ -80,11 +87,11 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
           } />
         </DataColumn>
       </Columns>
-    </GridView>
+    </GridView> */}
 
     <GridView
-      data={data.users}
-      columns={data.columns}
+      data={data?.users}
+      columns={data?.columns}
       config={{
         columns: [{
           label: "Action",
@@ -109,8 +116,9 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
             }
           }
         },
-        paging: {
-          total: data.total
+        pagination: {
+          total: data?.total,
+          limit: 4
         }
       }}
       status={loading}

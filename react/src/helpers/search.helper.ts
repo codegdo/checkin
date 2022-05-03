@@ -40,12 +40,14 @@ export const filterSearchKeyColumns = ({ key, columns = [] }: ObjectKeyColumns):
   }, []);
 };
 
-export const stringifySearchQuery = ({ search, sort }: CurrentQuery): string => {
+export const stringifySearchQuery = ({ search, sort, paging }: CurrentQuery): string => {
   const { keys, value } = search;
   const { column, direction } = sort;
+  const { limit, offset } = paging;
   const strSearch = keys.map(key => value ? key + `=${value}` : '').filter(Boolean).join('&');
   const strSort = column ? `sortColumn=${column}&sortDirection=${direction}` : '';
-  const query = [strSearch, strSort].filter(Boolean).join('&');
+  const strPaging = `limit=${limit}&offset=${offset}`;
+  const query = [strSearch, strSort, strPaging].filter(Boolean).join('&');
 
   return query ? `?${query}` : query;
 }

@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { pageCount, pageRange } from '../../helpers';
 
 import { GridViewContext } from './gridview.component';
 
@@ -12,29 +13,25 @@ export const Paging: React.FC = (): JSX.Element => {
     throw new Error('Required CONTEXT');
   }
 
-  const { config, onSearch } = context;
+  const { config, currentQuery: { paging }, status, onSearch } = context;
 
-  const pageLimit = 2;
-  const pageTotal = config?.paging?.total || 0;
+  const pageLimit = paging.limit;
+  const pageTotal = config?.pagination?.total || 0;
   const current = 1;
 
-  const boundary = 2;
-  const sibling = 0;
+  const boundary = 1;
+  const sibling = 1;
 
-  const getCount = (limit: number, total: number) => {
-    return new Array(Math.floor(total / limit)).fill(limit).concat(total % limit).filter(i => i);
-  }
+  const count = pageCount(pageLimit, pageTotal).length;
 
-  const range = (start: number, end: number) => {
-    const length = end - start + 1;
-    return Array.from({ length }, (_, i) => start + i);
-  };
+  const endStart = Math.min(boundary, count);
+  const startEnd = Math.max(count - boundary + 1, boundary + 1);
+  const startMiddle = Math.max(Math.min(current - sibling, count - boundary - sibling * 2 - 1), boundary + 2);
+  const endMiddle = Math.min(Math.max(current + sibling, boundary + sibling * 2 + 2), count - boundary - 1);
 
-  const count = getCount(pageLimit, pageTotal).length;
-
-  const startPages = range(1, Math.min(boundary, count));
-  const endPages = range(Math.max(count - boundary + 1, boundary), count);
-  const middlePages = range(current - sibling, current + sibling)
+  const startPages = pageRange(1, endStart);
+  const endPages = pageRange(startEnd, count);
+  const middlePages = pageRange(startMiddle, endMiddle);
 
   const pages = [...startPages, ...middlePages, ...endPages];
 
@@ -43,9 +40,19 @@ export const Paging: React.FC = (): JSX.Element => {
   console.log('MIDDLE', middlePages);
   console.log('PAGES', pages);
 
+  const handleClick = (page: number) => {
+    console.log(page);
+    paging.offset = (page - 1) * paging.limit;
+    onSearch && onSearch('search');
+  }
+
   return <div className="paging">
 
-    paging
+    {
+      pages.map(page => {
+        return <span onClick={() => handleClick(page)} key={page}>{page}</span>
+      })
+    }
 
   </div>
 }
