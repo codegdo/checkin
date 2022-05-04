@@ -1,11 +1,10 @@
-import React, { StrictMode } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import React from 'react';
+import { HistoryRouter } from "redux-first-history/rr6";
 import { AppRoute } from './app.route';
+import { history } from './app.store';
 
 export const App: React.FC = (): JSX.Element | null => {
-  return <StrictMode>
-    <BrowserRouter>
-      <AppRoute />
-    </BrowserRouter>
-  </StrictMode>;
+  return <HistoryRouter history={history}>
+    <AppRoute />
+  </HistoryRouter>;
 }

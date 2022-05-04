@@ -1,7 +1,14 @@
 import { AnyAction, combineReducers, Reducer } from 'redux';
+import { createReduxHistoryContext } from 'redux-first-history';
+import { createBrowserHistory } from 'history';
 import { persistReducer } from 'redux-persist';
 import { PersistPartial } from 'redux-persist/es/persistReducer';
 import storage from 'redux-persist/lib/storage';
+
+const { routerReducer } = createReduxHistoryContext({
+  history: createBrowserHistory(),
+  //other options if needed
+});
 
 import { sessionReducer } from './session/session.reducer';
 import { layoutReducer } from './layout/layout.reducer';
@@ -17,7 +24,8 @@ export const appReducer = combineReducers({
   layout: layoutReducer,
   nav: navReducer,
   policy: policyReducer,
-  locations: locationReducer
+  locations: locationReducer,
+  router: routerReducer,
 });
 
 const rootReducer = (state: AppState | undefined, action: AnyAction): AppState => {

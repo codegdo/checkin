@@ -13,12 +13,12 @@ export const Paging: React.FC = (): JSX.Element => {
     throw new Error('Required CONTEXT');
   }
 
-  const { config, currentQuery: { paging }, status, onSearch } = context;
+  const { config = {}, currentQuery: { paging }, status, onSearch } = context;
 
+  const { pagination } = config;
   const pageLimit = paging.limit;
-  const pageTotal = config?.pagination?.total || 0;
+  const pageTotal = pagination?.total || 0;
   const current = 1;
-
   const boundary = 1;
   const sibling = 1;
 
