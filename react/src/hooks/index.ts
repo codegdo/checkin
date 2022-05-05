@@ -12,3 +12,4 @@ export * from './use-query.hook';
 export * from './use-toggle.hook';
 export * from './use-modal.hook';
 export * from './use-template.hook';
+export * from './use-redirect.hook';

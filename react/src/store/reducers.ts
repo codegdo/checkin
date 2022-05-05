@@ -15,7 +15,7 @@ import { initialSessionState, sessionReducer } from './session/session.reducer';
 import { initialLayoutState, layoutReducer } from './layout/layout.reducer';
 import { initialNavState, navReducer } from './nav/nav.reducer';
 import { initialPolicyState, policyReducer } from './policy/policy.reducer';
-import { locationReducer } from './location/location.reducer';
+import { initialLocationState, locationReducer } from './location/location.reducer';
 
 export type AppState = ReturnType<typeof appReducer>;
 type RootReducer = ReturnType<typeof rootReducer>;
@@ -40,7 +40,7 @@ const rootReducer = (state: AppState | undefined, action: AnyAction): AppState =
       layout: initialLayoutState,
       nav: initialNavState,
       policy: initialPolicyState,
-      locations: initialPolicyState,
+      locations: initialLocationState,
       router: state?.router || {},
     };
   }

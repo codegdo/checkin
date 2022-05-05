@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
-import { useFetch, useLogin } from '../../../hooks';
+import { RedirectState, useFetch, useLogin, useRedirect } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 
 import { Form, FormData } from '../../../components/form';
 
 const LoginForm: React.FC = (): JSX.Element => {
   const { user } = useSelector((state: AppState) => state.session);
+  const { state } = useLocation();
+  const redirect = useRedirect(state as RedirectState);
 
   const [form, setForm] = useState<FormData>();
   const [{ status, result }, fetchLogin] = useFetch('/api/auth/login');
@@ -46,7 +48,7 @@ const LoginForm: React.FC = (): JSX.Element => {
   }
 
   if (user) {
-    return <Navigate to="/" />
+    return <Navigate to={redirect} />
   }
 
   return (
