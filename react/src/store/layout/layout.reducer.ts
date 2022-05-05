@@ -1,17 +1,14 @@
 import { AnyAction } from 'redux';
-import {
-  LayoutState,
-  UPDATE_LAYOUT,
-} from './layout.type';
+import { LayoutState, LAYOUT_UPDATE } from './layout.type';
 
-const initialState: LayoutState = {};
+export const initialLayoutState: LayoutState = {};
 
 export const layoutReducer = (
-  state = initialState,
+  state = initialLayoutState,
   action: AnyAction
 ): LayoutState => {
   switch (action.type) {
-    case UPDATE_LAYOUT: {
+    case LAYOUT_UPDATE: {
       return {
         ...state,
         ...action.payload,

@@ -1,6 +1,6 @@
-export const UPDATE_LOCATION = 'location/UPDATE_LOCATION';
-export const DELETE_LOCATION = 'location/DELETE_LOCATION';
+export const LOCATION_UPDATE = 'location/LOCATION_UPDATE';
+export const LOCATION_DELETE = 'location/LOCATION_DELETE';
 
 export interface LocationState {
-  [x: string]: any
+  [x: string]: any;
 }

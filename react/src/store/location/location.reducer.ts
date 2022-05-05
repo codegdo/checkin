@@ -1,20 +1,20 @@
 import { AnyAction } from 'redux';
-import { LocationState, UPDATE_LOCATION, DELETE_LOCATION } from './location.type';
+import { LocationState, LOCATION_UPDATE, LOCATION_DELETE } from './location.type';
 
-const initialState: LocationState = {};
+export const initialLocationState: LocationState = {};
 
 export const locationReducer = (
-  state = initialState,
+  state = initialLocationState,
   action: AnyAction
 ): LocationState => {
   switch (action.type) {
-    case UPDATE_LOCATION: {
+    case LOCATION_UPDATE: {
       return {
         ...state,
         ...action.payload,
       };
     }
-    case DELETE_LOCATION: {
+    case LOCATION_DELETE: {
       return {
         ...state,
       };

@@ -1,3 +1,5 @@
-export const UPDATE_LAYOUT = 'layout/UPDATE_LAYOUT';
+export const LAYOUT_UPDATE = 'layout/LAYOUT_UPDATE';
 
-export interface LayoutState { [x: string]: string }
+export interface LayoutState {
+  [x: string]: string;
+}

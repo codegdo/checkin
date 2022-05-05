@@ -2,9 +2,10 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { HistoryRouter } from "redux-first-history/rr6";
 
 import './assets/css/index.scss';
-import { store, persistor } from './app.store';
+import { store, persistor, history } from './app.store';
 import { App } from './app.component';
 
 ((_window: Window): void => {
@@ -15,7 +16,9 @@ import { App } from './app.component';
     <React.StrictMode>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <App />
+          <HistoryRouter history={history}>
+            <App />
+          </HistoryRouter>
         </PersistGate>
       </Provider>
     </React.StrictMode>

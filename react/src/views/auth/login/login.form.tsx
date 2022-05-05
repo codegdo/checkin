@@ -8,11 +8,11 @@ import { AppState } from '../../../store/reducers';
 import { Form, FormData } from '../../../components/form';
 
 const LoginForm: React.FC = (): JSX.Element => {
-  const { isLogin } = useSelector((state: AppState) => state.session);
+  const { user } = useSelector((state: AppState) => state.session);
 
   const [form, setForm] = useState<FormData>();
   const [{ status, result }, fetchLogin] = useFetch('/api/auth/login');
-  const [{ isVerified, isSetupCompleted }, login] = useLogin();
+  const [{ isUserVerified, isUserSetupCompleted }, login] = useLogin();
 
   // load form
   useEffect(() => {
@@ -37,15 +37,15 @@ const LoginForm: React.FC = (): JSX.Element => {
     return <div>loading...</div>;
   }
 
-  if (!isVerified) {
+  if (!isUserVerified) {
     return <Navigate to="../verify" />
   }
 
-  if (!isSetupCompleted) {
+  if (!isUserSetupCompleted) {
     return <Navigate to="../setup" />
   }
 
-  if (isLogin) {
+  if (user) {
     return <Navigate to="/" />
   }
 

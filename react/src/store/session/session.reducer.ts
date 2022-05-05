@@ -1,26 +1,21 @@
 import { AnyAction } from 'redux';
-import { SessionState, UPDATE_SESSION, DELETE_SESSION } from './session.type';
+import { SessionState, SESSION_UPDATE, SESSION_DELETE } from './session.type';
 
-const initialState: SessionState = {
-  isLogin: false,
-  user: null,
-  locationId: null,
-  orgId: null
-};
+export const initialSessionState: SessionState = {};
 
 export const sessionReducer = (
-  state = initialState,
+  state = initialSessionState,
   action: AnyAction
 ): SessionState => {
   switch (action.type) {
-    case UPDATE_SESSION: {
+    case SESSION_UPDATE: {
       console.log(action.payload);
       return {
         ...state,
         ...action.payload,
       };
     }
-    case DELETE_SESSION: {
+    case SESSION_DELETE: {
       return {
         ...state,
       };

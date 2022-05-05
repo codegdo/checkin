@@ -1,15 +1,15 @@
 import { AnyAction } from 'redux';
-import { LocationState, UPDATE_LOCATION, DELETE_LOCATION } from './location.type';
+import { LocationState, LOCATION_UPDATE, LOCATION_DELETE } from './location.type';
 
 export function updateLocation(newLocation: LocationState): AnyAction {
   return {
-    type: UPDATE_LOCATION,
+    type: LOCATION_UPDATE,
     payload: newLocation,
   };
 }
 
 export function deleteLocation(): AnyAction {
   return {
-    type: DELETE_LOCATION,
+    type: LOCATION_DELETE,
   };
 }

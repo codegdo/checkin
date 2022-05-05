@@ -1,11 +1,14 @@
 import { AnyAction } from 'redux';
-import { PolicyState, UPDATE_POLICY } from './policy.type';
+import { PolicyState, POLICY_UPDATE } from './policy.type';
 
-const initialState: PolicyState = {};
+export const initialPolicyState: PolicyState = {};
 
-export const policyReducer = (state = initialState, action: AnyAction): PolicyState => {
+export const policyReducer = (
+  state = initialPolicyState,
+  action: AnyAction
+): PolicyState => {
   switch (action.type) {
-    case UPDATE_POLICY: {
+    case POLICY_UPDATE: {
       return {
         ...state,
         ...action.payload,

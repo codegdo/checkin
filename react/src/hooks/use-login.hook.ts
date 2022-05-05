@@ -1,11 +1,10 @@
-import { useState } from "react";
-import { useAction } from "./use-action.hook";
+import { useState } from 'react';
+import { useAction } from './use-action.hook';
 
 export const useLogin = (): any => {
-
   const { updateSession, updateNav, updateLocation, updatePolicy } = useAction();
-  const [isVerified, setIsVerified] = useState(true);
-  const [isSetupCompleted, setIsSetupCompleted] = useState(true);
+  const [isUserVerified, setUserIsVerified] = useState(true);
+  const [isUserSetupCompleted, setUserIsSetupCompleted] = useState(true);
 
   const login = (data: any) => {
     const { user, orgId, locationId, locations, nav, policies } = data;
@@ -13,28 +12,27 @@ export const useLogin = (): any => {
     // Require user verify confirm
     if (user && !user.isActive) {
       updateSession({ user });
-      setIsVerified(false);
+      setUserIsVerified(false);
     }
 
     // Require user complete setup
     if (user && user.isActive && !orgId) {
       updateSession({ user });
-      setIsSetupCompleted(false);
+      setUserIsSetupCompleted(false);
     }
 
     // User login
     if (user && orgId) {
       updateSession({
-        isLogin: true,
         user,
         orgId,
-        locationId
+        locationId,
       });
       updateNav(nav);
       updateLocation(locations);
       updatePolicy(policies);
     }
-  }
+  };
 
-  return [{ isVerified, isSetupCompleted }, login]
-}
+  return [{ isUserVerified, isUserSetupCompleted }, login];
+};

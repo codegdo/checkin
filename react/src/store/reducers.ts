@@ -7,13 +7,14 @@ import storage from 'redux-persist/lib/storage';
 
 const { routerReducer } = createReduxHistoryContext({
   history: createBrowserHistory(),
-  //other options if needed
+  routerReducerKey: 'router',
+  savePreviousLocations: 1,
 });
 
-import { sessionReducer } from './session/session.reducer';
-import { layoutReducer } from './layout/layout.reducer';
-import { navReducer } from './nav/nav.reducer';
-import { policyReducer } from './policy/policy.reducer';
+import { initialSessionState, sessionReducer } from './session/session.reducer';
+import { initialLayoutState, layoutReducer } from './layout/layout.reducer';
+import { initialNavState, navReducer } from './nav/nav.reducer';
+import { initialPolicyState, policyReducer } from './policy/policy.reducer';
 import { locationReducer } from './location/location.reducer';
 
 export type AppState = ReturnType<typeof appReducer>;
@@ -30,9 +31,18 @@ export const appReducer = combineReducers({
 
 const rootReducer = (state: AppState | undefined, action: AnyAction): AppState => {
   // reset store
-  if (action.type === 'session/DELETE_SESSION') {
-    void storage.removeItem('persist:root');
-    state = undefined;
+  if (action.type === 'session/SESSION_DELETE') {
+    storage.removeItem('persist:root');
+
+    state = {
+      ...state,
+      session: initialSessionState,
+      layout: initialLayoutState,
+      nav: initialNavState,
+      policy: initialPolicyState,
+      locations: initialPolicyState,
+      router: state?.router || {},
+    };
   }
   return appReducer(state, action);
 };
