@@ -15,6 +15,11 @@ CREATE INDEX idx_view_object ON dbo.view_object(view_id, object_id);
 INSERT
 INTO dbo.view_object(view_id, object_id, org_id)
 VALUES
+--internals
+('100', '1', null),
+('100', '2', null),
+('101', '1', null),
+('101', '2', null),
 --users
 ('200', '1', null),
 ('200', '2', null),

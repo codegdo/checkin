@@ -2,11 +2,11 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { HistoryRouter } from "redux-first-history/rr6";
 
 import './assets/css/index.scss';
-import { store, persistor, history } from './app.store';
+import { store, persistor } from './app.store';
 import { App } from './app.component';
+import { BrowserRouter } from 'react-router-dom';
 
 ((_window: Window): void => {
   const container = document.getElementById('root') as HTMLElement;
@@ -16,9 +16,9 @@ import { App } from './app.component';
     <React.StrictMode>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <HistoryRouter history={history}>
+          <BrowserRouter>
             <App />
-          </HistoryRouter>
+          </BrowserRouter>
         </PersistGate>
       </Provider>
     </React.StrictMode>

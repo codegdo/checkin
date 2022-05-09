@@ -9,14 +9,14 @@
   margin: 2rem 1rem;
   width: 15px;
   height: 15px;
-  border: 1px solid $silver;
+  border: 1px solid silver;
   border-radius: 100px;
 
   @include transition();
 
   &.checked {
-    background-color: $gray;
-    border-color: $gray;
+    background-color: gray;
+    border-color: gray;
   }
 }
 
@@ -42,7 +42,7 @@
 
 .numpad-key button {
   font-size: 18px;
-  background: $shade;
+  background: gray;
   width: 80px;
   height: 80px;
   border: none;
@@ -56,9 +56,9 @@
   @include transition();
 
   &:hover {
-    background: darken($shade, 10);
+    background: darken(gray, 10);
   }
   &:active {
-    background: $shade;
+    background: gray;
   }
 }

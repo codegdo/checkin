@@ -1,0 +1,37 @@
+$black: rgb(0, 0, 0);
+$white: rgb(255, 255, 255);
+
+$red: rgb(255, 0, 0);
+$yellow: rgb(255, 255, 0);
+$blue: rgb(0, 0, 255);
+
+$orange: rgb(255, 165, 0);
+$purple: rgb(160, 32, 240);
+$green: rgb(0, 128, 0);
+
+$light: darken($white, 0);
+$dark: lighten($black, 0);
+
+$primary: darken($purple, 20);
+$secondary: lighten($green, 20);
+
+:root {
+  --light-color: #{$light};
+  --dark-color: #{$dark};
+
+  --primary-color: #{$primary};
+  --secondary-color: #{$secondary};
+
+  --link-color: var(--primary-color);
+  --link-color-hover: var(--primary-color);
+  --link-color-muted: var(--primary-color);
+
+  --font-family: Helvetica, sans-serif;
+  --font-size: 1rem;
+  --font-color: var(--dark-color);
+  --background-color: var(--light-color);
+
+  --transition: 250ms ease-out;
+  --shadow: 2px 5px 20px rgba(0, 0, 0, 0.2);
+  --gradient: linear-gradient(60deg, red, green, blue, yellow);
+}

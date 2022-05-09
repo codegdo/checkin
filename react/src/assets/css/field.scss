@@ -17,7 +17,7 @@
 
 .description,
 .text {
-  color: $gray;
+  color: gray;
 }
 
 // INPUT ELEMENTS
@@ -60,12 +60,12 @@
 .field {
   &._error {
     input {
-      border-color: $red-light;
+      border-color: red;
     }
 
     input:-webkit-autofill:hover,
     input:-webkit-autofill:focus {
-      border-color: $red-light;
+      border-color: red;
     }
   }
 }

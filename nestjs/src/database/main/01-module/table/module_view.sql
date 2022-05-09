@@ -14,6 +14,9 @@ CREATE INDEX idx_module_view ON dbo.module_view(module_id, view_id);
 INSERT
 INTO dbo.module_view(module_id, view_id, org_id)
 VALUES
+--config
+('1', '100', null),
+('1', '101', null),
 --setup
 ('2', '200', null),
 ('2', '201', null),

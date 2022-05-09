@@ -1,28 +1,11 @@
-$black: #000;
-$dark: #202124;
-$darkgray: #50535a;
-$gray: #808080;
-$silver: #c0c0c0;
-$shade: #f3f3f3;
-$light: #fafafa;
-$white: #fff;
-
-$purple: #736ecb;
-$blue: #3f51b5;
-
-$green: #4caf50;
-
-$red: #d93025;
-$red-medium: lighten($red, 20);
-$red-light: lighten($red, 30);
-$red-fade: lighten($red, 40);
-
 $base-font-family: Helvetica, sans-serif;
 $base-font-size: 1rem;
-$base-font-color: $dark;
+$base-font-color: var(--secondary);
 
 $icon-font-family: 'Material Icons';
 $icon-font-size: 24px;
+
+$link-color: var(--primary);
 
 $input-height: 40px;
 $input-padding: 8px 16px;

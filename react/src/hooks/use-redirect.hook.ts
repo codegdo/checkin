@@ -1,10 +1,5 @@
-import { Location, Action } from 'history';
+import { Location } from 'react-router-dom';
 import { concatUrl } from "../utils/concat-url.util";
-
-type PreviousLocation = {
-  location?: Location | null | undefined;
-  action?: Action | null | undefined;
-};
 
 export enum RedirectTypeEnum {
   SessionTimeout = 'SESSION_TIMEOUT'
@@ -12,7 +7,7 @@ export enum RedirectTypeEnum {
 
 export type RedirectState = {
   type: RedirectTypeEnum;
-  previousLocations?: PreviousLocation[];
+  previousLocation: Location;
 } | null
 
 export const useRedirect = (state: RedirectState): string => {
@@ -21,14 +16,11 @@ export const useRedirect = (state: RedirectState): string => {
     return '/';
   }
 
-  const { type, previousLocations } = state;
+  const { type, previousLocation } = state;
 
   switch (type) {
     case 'SESSION_TIMEOUT':
-      const locations = [...[previousLocations]].pop() || [];
-      const location = [...locations].pop()?.location || {};
-
-      return location ? concatUrl(location) : '/';
+      return previousLocation ? concatUrl(previousLocation) : '/';
     default:
       return '/';
   }

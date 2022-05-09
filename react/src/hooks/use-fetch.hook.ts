@@ -1,5 +1,5 @@
 import { useCallback, useReducer } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { http, RequestOption } from '../services';
 import { RedirectState, RedirectTypeEnum } from './use-redirect.hook';
 
@@ -35,6 +35,7 @@ export const useFetch = (
   url?: string
 ): [State, (option?: RequestOption) => Promise<void>] => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const location = useLocation();
   const navigate = useNavigate();
 
   const callback = useCallback(
@@ -58,7 +59,7 @@ export const useFetch = (
         dispatch({ type: 'FAILURE', payload: err });
         //
         if (err.data?.message === 'Session Timeout') {
-          navigate('/auth/logout', { state: { type: RedirectTypeEnum.SessionTimeout } as RedirectState });
+          navigate('/auth/logout', { state: { type: RedirectTypeEnum.SessionTimeout, previousLocation: location } as RedirectState });
         }
       }
     },

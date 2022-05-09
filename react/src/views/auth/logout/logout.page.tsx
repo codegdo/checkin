@@ -9,7 +9,7 @@ import { returnTypeAssertion } from '../../../utils';
 type StateAssertionType = RedirectState;
 
 const Logout: React.FC = (): JSX.Element => {
-  const { session: { user }, router: { previousLocations } } = useSelector((state: AppState) => state);
+  const { session: { user } } = useSelector((state: AppState) => state);
   const { state } = useLocation();
 
   const navigate = useNavigate();
@@ -23,19 +23,15 @@ const Logout: React.FC = (): JSX.Element => {
 
     switch (assertionState?.type) {
       case stateTypeEnum.SessionTimeout:
-        _state = { ...assertionState, previousLocations };
-
+        _state = { ...assertionState };
         break;
     }
   }
 
   useEffect(() => {
-    !user && navigate('/', { state: _state });
-  }, [user]);
-
-  useEffect(() => {
     logout();
-  }, []);
+    !user && navigate('/auth/login', { state: _state });
+  }, [user]);
 
   return <div>logout...</div>;
 };
