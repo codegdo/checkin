@@ -3,24 +3,34 @@ import { useSelector } from 'react-redux';
 import { TemplateProps } from '../components';
 import { AppState } from '../store/reducers';
 
-export const useAuthorize = ({ route = '', page = '' }: TemplateProps): boolean => {
+export const useAuthorize = ({ route = '', page = '' }: TemplateProps): { [key: string]: boolean } => {
   const { nav, policy, session } = useSelector((state: AppState) => state);
   const { user } = session;
   const { modules = {}, views = {} } = nav;
 
+  const match = ['auth', 'home'].includes(route);
+  const found = modules[route];
+  const view = views[page];
+
+  let hasAccess = true;
+  let hasSystemOrg = true;
+
   return useMemo(() => {
 
     if (user) {
-      const match = ['auth', 'home'].includes(route);
-      const found = modules[route];
-      const view = views[page];
-
       if (!match && !found) {
-        return false;
+        hasAccess = false;
       }
 
+      if (user.groupType == 'system') {
+        hasAccess = true;
+
+        if (user.orgId == null && !['auth', 'admin'].includes(route)) {
+          hasSystemOrg = false;
+        }
+      }
     }
 
-    return true;
+    return { hasAccess, hasSystemOrg };
   }, []);
 };

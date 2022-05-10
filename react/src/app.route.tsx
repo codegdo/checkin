@@ -3,13 +3,17 @@ import { useRoutes } from 'react-router-dom';
 
 import { RouteGuard } from './components/route/route.guard';
 import { NotFound } from './components/page';
-import { AuthRoute, CheckinRoute, ClockinRoute, ConfigRoute, SetupRoute, AccountRoute, CalendarRoute, HomeRoute } from './views';
+import { AuthRoute, CheckinRoute, ClockinRoute, ConfigRoute, AdminRoute, SetupRoute, AccountRoute, CalendarRoute, HomeRoute } from './views';
 
 export const AppRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
     {
       path: '/*',
       element: <RouteGuard path='/*' element={<HomeRoute />} />
+    },
+    {
+      path: '/admin/*',
+      element: <RouteGuard path='/*' element={<AdminRoute />} />
     },
     {
       path: '/config/*',

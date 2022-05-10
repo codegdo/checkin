@@ -6,3 +6,4 @@ export * from './config/config.route';
 export * from './setup/setup.route';
 export * from './account/account.route';
 export * from './calendar/calendar.route';
+export * from './admin/admin.route';

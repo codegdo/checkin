@@ -6,7 +6,7 @@ import { TemplateProps } from '../components';
 import { useMemo } from 'react';
 import { stringTemplate, TemplateData } from '../helpers';
 
-export const useTemplate = ({ route, page }: TemplateProps): TemplateData => {
+export const useTemplate = ({ route = '', page = '' }: TemplateProps): TemplateData => {
   const { user } = useSelector((state: AppState) => state.session);
   const type = user?.groupType as string;
   const defaultTemplate = (templates as Record<string, string>)[type];
@@ -17,8 +17,9 @@ export const useTemplate = ({ route, page }: TemplateProps): TemplateData => {
     console.log('PAGE:', page);
 
     let template = templates.base || `<Content {...props} />`;
+    const match = ['auth'].includes(route);
 
-    if (user && !['auth'].includes(route as string)) {
+    if (user && !match) {
       template = defaultTemplate;
     }
 

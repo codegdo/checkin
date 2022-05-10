@@ -10,7 +10,7 @@ $purple: rgb(160, 32, 240);
 $green: rgb(0, 128, 0);
 
 $light: darken($white, 0);
-$dark: lighten($black, 0);
+$dark: lighten($black, 10);
 
 $primary: darken($purple, 20);
 $secondary: lighten($green, 20);
