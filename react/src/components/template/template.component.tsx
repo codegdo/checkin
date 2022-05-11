@@ -21,20 +21,20 @@ export const lazy = <T extends ComponentType<any>>(factory: () => Promise<{ defa
 export const Template = (Component: React.FC<TemplateProps>) => (options: TemplateProps): JSX.Element | null => {
   const { route, page } = options;
   const { template, fallback } = useTemplate(options);
-  const { hasAccess, hasSystemOrg } = useAuthorize(options);
+  const { hasAccess, requiredOrg } = useAuthorize(options);
 
   if (!hasAccess) {
     Component = UnAuthorize;
   }
 
-  if (!hasSystemOrg) {
+  if (requiredOrg) {
     Component = AdminRedirect;
   }
 
   //const Content = hasAccess ? (hasOrg ? Component : AdminRedirect) : UnAuthorize;
 
   console.log('TEMPLATE HAS ACCESS', hasAccess);
-  console.log('TEMPLATE HAS ORG', hasSystemOrg);
+  console.log('TEMPLATE REQUIRED ORG', requiredOrg);
 
   useLayoutEffect(() => {
     const pageId = route ? `${route}_${page}` : page;
