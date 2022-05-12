@@ -35,6 +35,7 @@ import {
   twilioConfig,
   winstonConfig,
 } from './configs';
+import { OrganizationModule } from './api/admin/organization/organization.module';
 
 @Module({
   imports: [
@@ -76,6 +77,7 @@ import {
     //LocationModule,
     GroupModule,
     UserModule,
+    OrganizationModule,
   ],
   controllers: [],
   providers: [

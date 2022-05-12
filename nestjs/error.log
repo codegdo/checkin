@@ -13,3 +13,30 @@
 {"level":"error","message":"OFFSET must not be negative"}
 {"level":"error","message":"column \"l.name\" must appear in the GROUP BY clause or be used in an aggregate function"}
 {"level":"error","message":"column \"l.name\" must appear in the GROUP BY clause or be used in an aggregate function"}
+{"level":"error","message":"generateKeyPair is not a function"}
+{"level":"error","message":"jose.toPEM is not a function"}
+{"level":"error","message":"The first argument must be of type string or an instance of Buffer, ArrayBuffer, or Array or an Array-like Object. Received an instance of Object"}
+{"level":"error","message":"jose.JWK.asKeyStore(...).toJSON is not a function"}
+{"level":"error","message":"publicKey is not iterable"}
+{"level":"error","message":"error:1E08010C:DECODER routines::unsupported"}
+{"level":"error","message":"error:1E08010C:DECODER routines::unsupported"}
+{"level":"error","message":"Failed to read private key"}
+{"level":"error","message":"error:1E08010C:DECODER routines::unsupported"}
+{"level":"error","message":"Expected \"jwk\" to be an Object"}
+{"level":"error","message":"Expected \"jwk.e\" to be a String"}
+{"level":"error","message":"error:1E08010C:DECODER routines::unsupported"}
+{"level":"error","message":"error:1E08010C:DECODER routines::unsupported"}
+{"level":"error","message":"Unexpected token o in JSON at position 1"}
+{"level":"error","message":"Unexpected token o in JSON at position 1"}
+{"level":"error","message":"invalid algorithm"}
+{"level":"error","message":"error:1E08010C:DECODER routines::unsupported"}
+{"level":"error","message":"Expected \"jwk.d\" to be a String"}
+{"level":"error","message":"Unable to connect to the database. Retrying (1)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (2)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (3)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (4)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (5)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (6)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (7)..."}
+{"level":"error","message":"Unable to connect to the database. Retrying (8)..."}
+{"level":"error","message":"error:1E08010C:DECODER routines::unsupported"}

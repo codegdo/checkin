@@ -20,6 +20,7 @@ import {
 import { User } from 'src/models/main/entities';
 import { CurrentUser, Public, Serialize } from 'src/decorators';
 import { MaskEnum, maskValue } from 'src/utils';
+import { ThisMonthList } from 'twilio/lib/rest/api/v2010/account/usage/record/thisMonth';
 
 @Controller('auth')
 export class AuthController {
@@ -27,6 +28,14 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
   ) { }
+
+  private async getToken(sid: number) {
+    const [accessToken] = await Promise.all([
+      this.jwtService.signAsync({ sid }, { algorithm: 'RS256', expiresIn: 60 * 60 })
+    ]);
+
+    return { accessToken }
+  }
 
   @Public()
   @Get('signup')
@@ -73,17 +82,14 @@ export class AuthController {
   @Post('setup')
   async setup(@Session() session: any, @Body() body: UserSetupDto) {
     const { user, ...rest } = await this.authService.setup(body);
-
-    const { password, ..._user } = user;
-    const { orgId } = _user;
-    const accessToken = this.jwtService.sign({ orgId });
+    const { password, orgId, ..._user } = user;
+    const { accessToken } = await this.getToken(session.id);
 
     session.data = { user: _user, ...rest };
 
     return {
       ...session.data,
       orgId,
-      sid: session.id,
       accessToken
     };
   }
@@ -92,17 +98,13 @@ export class AuthController {
   @Post('login')
   async login(@Session() session: any, @Body() body: UserLoginDto) {
     const { user, ...rest } = await this.authService.login(body);
-    const { locations } = rest;
-
-    const { password, ..._user } = user;
-    const { orgId } = _user;
-    const accessToken = this.jwtService.sign({ orgId });
+    const { password, orgId, ..._user } = user;
+    const { accessToken } = await this.getToken(session.id);
 
     if (orgId) {
       session.data = {
         user: _user,
         orgId,
-        locationId: locations[0]?.id,
         ...rest
       };
 
