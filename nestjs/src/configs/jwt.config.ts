@@ -24,9 +24,9 @@ export const jwtConfig = registerAs('jwt', async () => {
 
       switch (requestType) {
         case JwtSecretRequestType.SIGN:
-          return privateKey || secret;
+          return privateKey;
         case JwtSecretRequestType.VERIFY:
-          return publicKey || secret;
+          return publicKey;
         default:
           return secret;
       }
