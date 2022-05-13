@@ -26,7 +26,7 @@ export class ApiGuard implements CanActivate {
     private reflector: Reflector,
     private jwtService: JwtService,
     private sessionRepository: SessionRepository,
-  ) { }
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
@@ -36,12 +36,18 @@ export class ApiGuard implements CanActivate {
     const refererHeader = request.header('Referer');
 
     const isPublish = this.reflector.get(IS_PUBLIC_KEY, context.getHandler());
-    const isRestrict = this.reflector.get(IS_RESTRICT_KEY, context.getHandler());
+    const isRestrict = this.reflector.get(
+      IS_RESTRICT_KEY,
+      context.getHandler(),
+    );
 
-    const accessToken = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaWQiOiJscVRBZjZYS0s2YW1jd2JCZmlqeEZuMDRyV0lpRk5VaSIsImlhdCI6MTY1MjM5NDc5NCwiZXhwIjoxNjUyMzk4Mzk0fQ.CgUxiEZi8ulEh10ozD0dYL1IhR9dWFRnmiw_ZGzMJTLOEarsaIDZiF2oxQp4iL7NqX6wteWYfftrJ01XBSPPGCM5-i17IotWNEjwzjZ0XVMFfJvPQok4aHIBKCTm8oYGGI7-_3kV1LD6_Gz-eEQhetatZpzdGm01NJt033JZzZupCtNDneft6N9FJJrfqA4MmxULt0YhXCgba07ptIzNICZYhEfUbnEe6B1qN454FzB8De2bkCeSf2VmzQ3tTubCc1nIk6S4ZCuZ7JZ-KqOS_Z5ulkbbeZJUDf_sq031eGbrDEi6LGjXoUeLYEJAhSL7zOcq5wbuA5F4o4uGfoXTpw';
+    const accessToken =
+      'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaWQiOiJCYWpjWEpYd21PRHVNdmswWFM3c0dYWnl4RnlBRjEtZyIsImlhdCI6MTY1MjQxODYwOSwiZXhwIjoxNjUyNDIyMjA5fQ.KTTWY8bTo7TCOBnihNVZMZbxq6biywzfBJOgLXlBbhFLqXgeuO7nG9trYXPH3w4GVl_t3RPeNcLwuNJz2ojl2b2MHTQrumhvB_IzFAxSzt5Bay1lTZkS27TyYndi_DCL2hPL6LOvtJLhCI9_FcCIign5FqBgbJwvh-KkCFVYI68HO1Ymsl-tVpfWHd1_OF0I5U63SKyaAr50lNFAW_IrCk_owwU4htNwxjZEdtvE20Nw6lc3wO_N8TZdyr24UHryOc-9uLaJvg8aYtKWUeUq9fG6vplIK9N00a2iK6Vn3QWYnbkU0QIqJxGAIxCSx3sz6juBM2Lb9YHjpb_s0niilg';
 
     try {
-      const token = await this.jwtService.verify(accessToken);
+      const token = await this.jwtService.verify(accessToken, {
+        algorithms: ['RS256'],
+      });
       console.log('VERIFY TOKEN', token);
     } catch (e) {
       console.log(e);
@@ -82,12 +88,11 @@ export class ApiGuard implements CanActivate {
           if (found) {
             const { json } = found;
             const { data: jsonData } = JSON.parse(json);
-            request.currentUser = { ...jsonData?.user }
+            request.currentUser = { ...jsonData?.user };
             return true;
           }
         }
       }
-
     }
 
     throw new HttpException('Session Timeout', 404);
