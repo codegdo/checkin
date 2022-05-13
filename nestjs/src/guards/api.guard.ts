@@ -26,7 +26,7 @@ export class ApiGuard implements CanActivate {
     private reflector: Reflector,
     private jwtService: JwtService,
     private sessionRepository: SessionRepository,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
@@ -41,18 +41,6 @@ export class ApiGuard implements CanActivate {
       context.getHandler(),
     );
 
-    const accessToken =
-      'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzaWQiOiJCYWpjWEpYd21PRHVNdmswWFM3c0dYWnl4RnlBRjEtZyIsImlhdCI6MTY1MjQxODYwOSwiZXhwIjoxNjUyNDIyMjA5fQ.KTTWY8bTo7TCOBnihNVZMZbxq6biywzfBJOgLXlBbhFLqXgeuO7nG9trYXPH3w4GVl_t3RPeNcLwuNJz2ojl2b2MHTQrumhvB_IzFAxSzt5Bay1lTZkS27TyYndi_DCL2hPL6LOvtJLhCI9_FcCIign5FqBgbJwvh-KkCFVYI68HO1Ymsl-tVpfWHd1_OF0I5U63SKyaAr50lNFAW_IrCk_owwU4htNwxjZEdtvE20Nw6lc3wO_N8TZdyr24UHryOc-9uLaJvg8aYtKWUeUq9fG6vplIK9N00a2iK6Vn3QWYnbkU0QIqJxGAIxCSx3sz6juBM2Lb9YHjpb_s0niilg';
-
-    try {
-      const token = await this.jwtService.verify(accessToken, {
-        algorithms: ['RS256'],
-      });
-      console.log('VERIFY TOKEN', token);
-    } catch (e) {
-      console.log(e);
-    }
-
     if (isPublish) {
       return true;
     }
@@ -61,19 +49,23 @@ export class ApiGuard implements CanActivate {
 
     // 1. BROWSER - check request use session
     if (sessionData) {
-      request.currentUser = { ...sessionData.user };
+      const { user, locationId, orgId } = sessionData;
+      request.currentUser = { ...user, locationId, orgId };
       return true;
     }
 
     // 2. MOBILE APP - check request header with jwt auth token
     if (authToken) {
-      const key = authToken.replace('Bearer', '').trim();
+      const accessToken = authToken.replace('Bearer', '').trim();
       let token;
 
       try {
-        token = await this.jwtService.verify(key);
+        token = await this.jwtService.verify(accessToken, {
+          algorithms: ['RS256'],
+        });
       } catch (e) {
         console.log(e);
+        return false;
       }
 
       if (token) {
@@ -88,7 +80,8 @@ export class ApiGuard implements CanActivate {
           if (found) {
             const { json } = found;
             const { data: jsonData } = JSON.parse(json);
-            request.currentUser = { ...jsonData?.user };
+            const { user, locationId, orgId } = jsonData;
+            request.currentUser = { ...user, locationId, orgId };
             return true;
           }
         }

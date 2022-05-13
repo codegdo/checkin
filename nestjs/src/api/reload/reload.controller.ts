@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Session } from '@nestjs/common';
 import { CurrentUser } from 'src/decorators';
 import { UserSession } from 'src/models/main/user/user.type';
 import { ReloadService } from './reload.service';
@@ -9,11 +9,15 @@ export class ReloadController {
     private readonly reloadService: ReloadService
   ) { }
 
-  @Post('session')
-  async session(
-    @CurrentUser() user: UserSession,
-    @Body() body: any
+  @Post('location')
+  async location(
+    @Session() session: any,
+    @Body('locationId') locationId: number
   ) {
-    return user;
+
+    session.data.locationId = locationId;
+
+    return { locationId };
   }
+
 }

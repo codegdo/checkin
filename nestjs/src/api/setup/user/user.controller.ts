@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  Session,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserCreateDto, UserQueryDto } from 'src/models/main/dtos';
@@ -19,7 +20,6 @@ export class UserController {
   constructor(private readonly userService: UserService) { }
 
   @Get('users')
-  //@Serialize(UserData)
   getAllUsers(
     @CurrentUser() user: UserSession,
     @Query() query: UserQueryDto
@@ -28,7 +28,6 @@ export class UserController {
   }
 
   @Get('users/:userId')
-  //@Serialize(UserData)
   getUser(
     @CurrentUser() user: UserSession,
     @Param('userId') userId: number,

@@ -104,6 +104,7 @@ export class AuthController {
     if (orgId) {
       session.data = {
         user: _user,
+        locationId: null,
         orgId,
         ...rest
       };

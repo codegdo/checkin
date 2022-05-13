@@ -8,7 +8,6 @@ import { UserSession } from 'src/models/main/types';
 export class OrganizationController {
 
   @Get('organizations')
-  //@Serialize(UserData)
   getAllUsers(
     @CurrentUser() user: UserSession,
     @Query() query: UserQueryDto

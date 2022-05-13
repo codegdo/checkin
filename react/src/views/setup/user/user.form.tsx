@@ -23,7 +23,7 @@ const UserForm: React.FC = (props): JSX.Element => {
 
   // load form
   useEffect(() => {
-    void (async () => {
+    (async () => {
       await getForm();
     })();
   }, []);

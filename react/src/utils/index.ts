@@ -8,4 +8,5 @@ export * from './trim-values.util';
 export * from './object-to-key-value.util';
 export * from './array-to-object-key.util';
 export * from './array-to-key-value.util';
+export * from './array-to-ids-list.util';
 export * from './return-type-assertion.util';

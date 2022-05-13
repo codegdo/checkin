@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { arrayToIdsList } from '../utils';
 import { useAction } from './use-action.hook';
 
 export const useLogin = (): any => {
@@ -7,7 +8,7 @@ export const useLogin = (): any => {
   const [isUserSetupCompleted, setUserIsSetupCompleted] = useState(true);
 
   const login = (data: any) => {
-    const { user, orgId, locationId, locations, nav, policies } = data;
+    const { user, locationId, orgId, locations, nav, policies } = data;
 
     // Require user verify confirm
     if (user && !user.isActive) {
@@ -29,7 +30,7 @@ export const useLogin = (): any => {
         locationId,
       });
       updateNav(nav);
-      updateLocation(locations);
+      updateLocation(arrayToIdsList({ key: 'id', values: locations }));
       updatePolicy(policies);
     }
   };

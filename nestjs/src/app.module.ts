@@ -36,6 +36,7 @@ import {
   winstonConfig,
 } from './configs';
 import { OrganizationModule } from './api/admin/organization/organization.module';
+import { HomeModule } from './api/home/home.module';
 
 @Module({
   imports: [
@@ -78,6 +79,7 @@ import { OrganizationModule } from './api/admin/organization/organization.module
     GroupModule,
     UserModule,
     OrganizationModule,
+    HomeModule,
   ],
   controllers: [],
   providers: [

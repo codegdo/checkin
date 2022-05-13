@@ -12,6 +12,10 @@ export const HomeRoute: React.FC = (): JSX.Element => {
       element: <Index route="home" page="index" />
     },
     {
+      path: '/welcome',
+      element: <Index route="home" page="index" />
+    },
+    {
       path: '*',
       element: <NotFound page="not-found" />
     },

@@ -5,11 +5,11 @@
   @include transition();
 
   &._error {
-    background-color: $red;
+    background-color: red;
     color: $white;
   }
   &._success {
-    background-color: $green;
+    background-color: green;
     color: $white;
   }
 }

@@ -13,7 +13,7 @@ const LoginForm: React.FC = (): JSX.Element => {
   const redirect = useRedirect(state as RedirectState);
 
   const [form, setForm] = useState<FormData>();
-  const [{ status, result }, fetchLogin] = useFetch('/api/auth/login');
+  const [{ status, result }, getLogin] = useFetch('/api/auth/login');
   const [{ isUserVerified, isUserSetupCompleted }, login] = useLogin();
 
   // load form
@@ -32,7 +32,7 @@ const LoginForm: React.FC = (): JSX.Element => {
   }, [status]);
 
   const handleSubmit = (values: any) => {
-    void fetchLogin({ body: values });
+    void getLogin({ body: values });
   };
 
   if (!form) {
