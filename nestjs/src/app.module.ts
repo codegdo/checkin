@@ -10,7 +10,7 @@ import {
   GuardModule,
   SessionModule,
   MessageModule,
-  ErrorModule
+  LoggerModule
 } from './common';
 
 import {
@@ -24,6 +24,8 @@ import {
   //LocationModule,
   GroupModule,
   UserModule,
+
+  OrganizationModule
 } from './api';
 
 import {
@@ -35,7 +37,7 @@ import {
   twilioConfig,
   winstonConfig,
 } from './configs';
-import { OrganizationModule } from './api/admin/organization/organization.module';
+
 import { HomeModule } from './api/home/home.module';
 
 @Module({
@@ -64,7 +66,7 @@ import { HomeModule } from './api/home/home.module';
       inject: [ConfigService],
     }),
     // common
-    ErrorModule,
+    LoggerModule,
     GuardModule,
     MessageModule,
     SessionModule,
@@ -78,6 +80,7 @@ import { HomeModule } from './api/home/home.module';
     //LocationModule,
     GroupModule,
     UserModule,
+
     OrganizationModule,
     HomeModule,
   ],

@@ -22,8 +22,8 @@ import {
 } from 'src/models/main/repositories';
 //import { CheckinRepository } from 'src/models/checkin/repositories';
 import {
-  ErrorMessageEnum,
-  ErrorService,
+  LoggerMessageEnum,
+  LoggerService,
   MessageAuthService,
   MessageEnum,
 } from 'src/common';
@@ -72,7 +72,7 @@ export class AuthService {
     // private readonly logger: Logger,
 
     private readonly messageService: MessageAuthService,
-    private readonly errorService: ErrorService,
+    private readonly loggerService: LoggerService,
   ) { }
 
   async signup(dto: UserSignupDto) {
@@ -80,12 +80,12 @@ export class AuthService {
       const data = await this.userRepository.signupUser(dto);
 
       if (!data) {
-        throw new NotFoundException(ErrorMessageEnum.NOT_FOUND);
+        throw new NotFoundException(LoggerMessageEnum.NOT_FOUND);
       }
 
       return data;
     } catch (e) {
-      this.errorService.handleError(e);
+      this.loggerService.handleError(e);
     }
   }
 
@@ -102,7 +102,7 @@ export class AuthService {
       return { ok: true };
       //return this.messageService.sendVerify({ type, context: data });
     } catch (e) {
-      this.errorService.handleError(e);
+      this.loggerService.handleError(e);
     }
   }
 
@@ -116,14 +116,14 @@ export class AuthService {
       const { orgId, isActive } = user;
 
       if (orgId && !isActive) {
-        throw new BadRequestException(ErrorMessageEnum.ACCOUNT_UNACTIVE);
+        throw new BadRequestException(LoggerMessageEnum.ACCOUNT_UNACTIVE);
       }
 
       const nav = modules && moduleViewObjectGroup(modules);
 
       return { user, nav, ...rest };
     } catch (e) {
-      this.errorService.handleError(e);
+      this.loggerService.handleError(e);
     }
   }
 
@@ -135,7 +135,7 @@ export class AuthService {
       const nav = modules && moduleViewObjectGroup(modules);
       return { nav, ...rest };
     } catch (e) {
-      this.errorService.handleError(e);
+      this.loggerService.handleError(e);
     }
   }
 
@@ -143,7 +143,7 @@ export class AuthService {
     try {
       return await this.userRepository.confirmUser(key);
     } catch (e) {
-      this.errorService.handleError(e);
+      this.loggerService.handleError(e);
     }
   }
 
@@ -156,7 +156,7 @@ export class AuthService {
         orgId: null
       });
     } catch (e) {
-      this.errorService.handleError(e);
+      this.loggerService.handleError(e);
     }
   }
 }

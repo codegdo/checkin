@@ -12,11 +12,7 @@ export type RedirectState = {
 
 export const useRedirect = (state: RedirectState): string => {
 
-  if (!state) {
-    return '/';
-  }
-
-  const { type, previousLocation } = state;
+  const { type, previousLocation } = state || {};
 
   switch (type) {
     case 'SESSION_TIMEOUT':

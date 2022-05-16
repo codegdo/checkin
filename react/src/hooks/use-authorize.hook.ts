@@ -34,17 +34,19 @@ export const useAuthorize = ({
         auth.hasAccess = true;
       }
 
-      if (locationId == null && route !== '/') {
-        auth.requiredLocation = true;
-      }
-
       if (groupType == 'system') {
         auth.hasAccess = true;
 
         if (orgId == null && route !== 'admin') {
           auth.requiredOrg = true;
         }
+      } else {
+
+        if (locationId == null && route !== '/') {
+          auth.requiredLocation = true;
+        }
       }
+
     }
 
     return auth;

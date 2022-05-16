@@ -33,7 +33,6 @@ export class ApiGuard implements CanActivate {
     const { data: sessionData } = request.session;
     const authToken = request.header('Authorization');
     const apiToken = request.header('X-Api-Token');
-    const refererHeader = request.header('Referer');
 
     const isPublish = this.reflector.get(IS_PUBLIC_KEY, context.getHandler());
     const isRestrict = this.reflector.get(

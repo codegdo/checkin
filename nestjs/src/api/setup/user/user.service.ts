@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from 'src/models/main/user/user.entity';
 import { UserRepository, FormRepository } from 'src/models/main/repositories';
-import { ErrorMessageEnum, ErrorService } from 'src/common';
+import { LoggerMessageEnum, LoggerService } from 'src/common';
 import { FormDto, UserCreateDto } from 'src/models/main/dtos';
 import { UserQueryAll } from 'src/models/main/user/user.type';
 
@@ -20,7 +20,7 @@ export class UserService {
     @InjectRepository(FormRepository)
     private formRepository: FormRepository,
 
-    private readonly errorService: ErrorService, //private repo: MainRepository //@Inject(MainRepository)
+    private readonly loggerService: LoggerService, //private repo: MainRepository //@Inject(MainRepository)
   ) { }
 
   async getAllUsers(userQuery: UserQueryAll) {
@@ -42,12 +42,12 @@ export class UserService {
       const data = await this.userRepository.createUser(dto);
 
       if (!data) {
-        throw new NotFoundException(ErrorMessageEnum.NOT_FOUND);
+        throw new NotFoundException(LoggerMessageEnum.NOT_FOUND);
       }
 
       return data;
     } catch (e) {
-      this.errorService.handleError(e);
+      this.loggerService.handleError(e);
     }
   }
 
@@ -59,7 +59,7 @@ export class UserService {
     try {
       return this.formRepository.getForm(dto);
     } catch (e) {
-      this.errorService.handleError(e);
+      this.loggerService.handleError(e);
     }
   }
 }

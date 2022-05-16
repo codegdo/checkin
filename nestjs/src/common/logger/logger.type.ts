@@ -1,4 +1,4 @@
-export enum ErrorMessageEnum {
+export enum LoggerMessageEnum {
   NOT_MATCH = 'no_match',
   NOT_FOUND = 'no_data_found',
   UNIQUE_VIOLATION = 'unique_violation',

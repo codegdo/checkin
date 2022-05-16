@@ -1,9 +1,5 @@
 import {
-  Inject,
   Injectable,
-  InternalServerErrorException,
-  Logger,
-  LoggerService,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InjectTwilio, TwilioClient } from 'nestjs-twilio';
@@ -15,7 +11,7 @@ import { arrayToObjectKey } from 'src/utils/array-to-object-keys.util';
 import { EmailData } from 'src/models/main/email/email.type';
 import { TokenData } from 'src/models/main/token/token.type';
 import { MessageOptions, MessageEnum, VerifyEmailKey, VerifyMessageKey, VerifyTokenData } from './message.type';
-import { ErrorService } from '../error/error.service';
+import { LoggerService } from '../logger/logger.service';
 
 
 @Injectable()
@@ -31,7 +27,7 @@ export class MessageAuthService {
     @InjectTwilio()
     private readonly client: TwilioClient,
 
-    private readonly errorService: ErrorService,
+    private readonly loggerService: LoggerService,
   ) { }
 
   async sendVerify(
@@ -90,7 +86,7 @@ export class MessageAuthService {
       }
 
     } catch (e) {
-      this.errorService.handleError(e);
+      this.loggerService.handleError(e);
     }
   }
 }

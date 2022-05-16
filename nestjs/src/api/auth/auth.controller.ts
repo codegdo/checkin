@@ -104,7 +104,7 @@ export class AuthController {
     if (orgId) {
       session.data = {
         user: _user,
-        locationId: null,
+        locationId: rest.locations.length > 1 ? null : rest.locations[0].id,
         orgId,
         ...rest
       };

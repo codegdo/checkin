@@ -15,7 +15,7 @@ import {
   EmailRepository
 } from 'src/models/main/repositories';
 //import { CheckinRepository } from 'src/models/checkin/repositories';
-import { ErrorService } from 'src/common';
+import { LoggerService } from 'src/common';
 
 @Module({
   imports: [
@@ -32,6 +32,6 @@ import { ErrorService } from 'src/common';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, ErrorService],
+  providers: [AuthService, LoggerService],
 })
 export class AuthModule { }

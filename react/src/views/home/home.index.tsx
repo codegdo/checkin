@@ -17,6 +17,12 @@ const Home: React.FC = (): JSX.Element => {
     }
   }, [status]);
 
+  useEffect(() => {
+    if (locations.list.length == 1) {
+      navigate('/welcome');
+    }
+  }, []);
+
   const handleClick = (locationId: number) => {
     if (session.locationId !== locationId) {
       postReload({

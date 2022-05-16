@@ -21,7 +21,7 @@ import {
   UserQueryAll,
 } from './user.type';
 import { ConflictException } from '@nestjs/common';
-import { ErrorMessageEnum } from 'src/common/error/error.type';
+import { LoggerMessageEnum } from 'src/common';
 import { FormTypeEnum } from '../form/form.type';
 
 @EntityRepository(User)
@@ -82,7 +82,7 @@ export class UserRepository extends Repository<User> {
     if (isValidate) {
       return { user: _user, ...rest };
     } else {
-      throw new ConflictException(ErrorMessageEnum.NOT_MATCH);
+      throw new ConflictException(LoggerMessageEnum.NOT_MATCH);
     }
   }
 

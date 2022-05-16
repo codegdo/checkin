@@ -6,7 +6,7 @@ import { TwilioModule } from 'nestjs-twilio';
 
 import { EmailRepository } from 'src/models/main/repositories';
 import { MessageAuthService } from './message-auth.service';
-import { ErrorService } from '../error/error.service';
+import { LoggerService } from '../logger/logger.service';
 
 
 @Global()
@@ -28,7 +28,7 @@ import { ErrorService } from '../error/error.service';
       inject: [ConfigService],
     }),
   ],
-  providers: [MessageAuthService, ErrorService],
+  providers: [MessageAuthService, LoggerService],
   exports: [MessageAuthService]
 })
 export class MessageModule { }
