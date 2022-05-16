@@ -6,6 +6,7 @@ import * as Navs from '../nav';
 // *require import as default
 import UnAuthorize from '../page/unauthorize.page';
 import AdminRedirect from '../page/admin-redirect.page';
+import HomeRedirect from '../page/home-redirect.page';
 
 export type TemplateProps = {
   route?: string;
@@ -21,7 +22,7 @@ export const lazy = <T extends ComponentType<any>>(factory: () => Promise<{ defa
 export const Template = (Component: React.FC<TemplateProps>) => (options: TemplateProps): JSX.Element | null => {
   const { route, page } = options;
   const { template, fallback } = useTemplate(options);
-  const { hasAccess, requiredOrg } = useAuthorize(options);
+  const { hasAccess, requiredLocation, requiredOrg } = useAuthorize(options);
 
   if (!hasAccess) {
     Component = UnAuthorize;
@@ -31,9 +32,14 @@ export const Template = (Component: React.FC<TemplateProps>) => (options: Templa
     Component = AdminRedirect;
   }
 
+  if (requiredLocation) {
+    Component = HomeRedirect;
+  }
+
   //const Content = hasAccess ? (hasOrg ? Component : AdminRedirect) : UnAuthorize;
 
   console.log('TEMPLATE HAS ACCESS', hasAccess);
+  console.log('TEMPLATE REQUIRED LOCATION', requiredLocation);
   console.log('TEMPLATE REQUIRED ORG', requiredOrg);
 
   useLayoutEffect(() => {

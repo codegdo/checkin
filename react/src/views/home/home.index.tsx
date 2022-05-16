@@ -1,17 +1,19 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
 import { useAction, useFetch } from '../../hooks';
 import { AppState } from '../../store/reducers';
-import { LocationState } from '../../store/types';
 
 const Home: React.FC = (): JSX.Element => {
   const { session, locations } = useSelector((state: AppState) => state);
   const { updateSession } = useAction();
+  const navigate = useNavigate();
   const [{ status, result: { data } }, postReload] = useFetch('/api/reload/location');
 
   useEffect(() => {
     if (status === 'success') {
-      updateSession({ ...session, locationId: data.locationId })
+      updateSession({ ...session, locationId: data.locationId });
+      navigate('/welcome');
     }
   }, [status]);
 
@@ -22,6 +24,8 @@ const Home: React.FC = (): JSX.Element => {
           locationId
         }
       });
+    } else {
+      navigate('/welcome');
     }
   };
 

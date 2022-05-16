@@ -4,9 +4,11 @@ import { Template } from '../../components/template/template.component';
 const NotFound = Template(lazy(() => import('./notfound.page')));
 const UnAuthorize = Template(lazy(() => import('./unauthorize.page')));
 const AdminRedirect = Template(lazy(() => import('./admin-redirect.page')));
+const HomeRedirect = Template(lazy(() => import('./home-redirect.page')));
 
 export {
   NotFound,
   UnAuthorize,
-  AdminRedirect
+  AdminRedirect,
+  HomeRedirect
 };

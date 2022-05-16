@@ -4,16 +4,17 @@ import { Template } from '../../components/template/template.component';
 const NotFound = Template(lazy(() => import('../../components/page/notfound.page')));
 
 const Index = Template(lazy(() => import('./home.index')));
+const Welcome = Template(lazy(() => import('./welcome/welcome')));
 
 export const HomeRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
     {
       path: '/',
-      element: <Index route="home" page="index" />
+      element: <Index route="/" page="index" />
     },
     {
       path: '/welcome',
-      element: <Index route="home" page="index" />
+      element: <Welcome route="home" page="welcome" />
     },
     {
       path: '*',

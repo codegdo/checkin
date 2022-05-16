@@ -8,15 +8,16 @@ export const useAuthorize = ({
   page = '',
 }: TemplateProps): { [key: string]: boolean } => {
   const { nav, policy, session } = useSelector((state: AppState) => state);
-  const { user } = session;
+  const { user, locationId } = session;
   const { modules = {}, views = {} } = nav;
 
   const isPublic = ['auth'].includes(route);
-  const module = modules[route] || ['home'].includes(route);
+  const module = modules[route] || ['/', 'home'].includes(route);
   const view = views[page];
 
   const auth = {
     hasAccess: false,
+    requiredLocation: false,
     requiredOrg: false,
   };
 
@@ -33,6 +34,10 @@ export const useAuthorize = ({
         auth.hasAccess = true;
       }
 
+      if (locationId == null && route !== '/') {
+        auth.requiredLocation = true;
+      }
+
       if (groupType == 'system') {
         auth.hasAccess = true;
 
@@ -45,4 +50,3 @@ export const useAuthorize = ({
     return auth;
   }, []);
 };
-

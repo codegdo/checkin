@@ -14,7 +14,7 @@ export const ConfigRoute: React.FC = (): JSX.Element => {
     },
     {
       path: '*',
-      element: <NotFound page="not-found" />
+      element: <NotFound route="config" page="not-found" />
     },
   ]);
 
