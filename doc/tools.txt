@@ -5,3 +5,5 @@ https://fonts.google.com
 https://brandcrowd.com
 https://pexels.com
 https://thenounproject.com
+
+https://react-svgr.com/playground/

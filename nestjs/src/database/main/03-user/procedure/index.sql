@@ -39,6 +39,7 @@ LANGUAGE plpgsql;
 CREATE OR REPLACE PROCEDURE sec.pr_user_get_all(
   p_login_type varchar,
   p_org_id int,
+  p_location_id int,
   p_query json,
 
   OUT config json,
@@ -80,7 +81,7 @@ $BODY$
 
   WITH u AS (
     SELECT *
-    FROM sec.fn_get_user_for_org(p_org_id, p_query)
+    FROM sec.fn_get_user_for_org(p_org_id, p_location_id, p_query)
     WHERE CASE WHEN p_login_type = 'system' THEN true ELSE is_owner IS false END
   )
   SELECT json_agg(r)::json, (SELECT count(*) FROM u)
@@ -93,7 +94,7 @@ $BODY$
       u.last_name "lastName",
       u.email_address "emailAddress",
       u.phone_number "phoneNumber",
-      u.location "location",
+      --u.location "location",
       u.group_level "level",
       u.group_name "group",
       u.group_type "type",
