@@ -10,7 +10,7 @@ const defaultView: ViewOptions = {
 
 const Appointment: React.FC = (): JSX.Element => {
 
-  const [{ loading, result }, fetchAppointments] = useFetch();
+  const [{ status, response }, fetchAppointments] = useFetch();
 
   const [view, setView] = useState(defaultView);
   const [events, setEvents] = useState<any>();
@@ -26,8 +26,8 @@ const Appointment: React.FC = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    if (loading === 'success') {
-      console.log(result);
+    if (status === 'success') {
+      console.log(response);
 
       setView({
         ...view,
@@ -50,16 +50,16 @@ const Appointment: React.FC = (): JSX.Element => {
         end: '',
       }]);
     }
-  }, [loading]);
+  }, [status]);
 
-  if (loading === 'pending') {
+  if (status === 'pending') {
     return <div>loading...</div>
   }
 
   return (
     <div>
       <Calendar
-        loading={loading}
+        loading={status}
         view={view}
         events={events}
         resources={resources}

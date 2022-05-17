@@ -10,8 +10,8 @@ import { objectToKeyValue } from '../../../utils';
 const SetupForm: React.FC = (): JSX.Element => {
   const { isLogin, user } = useSelector((state: AppState) => state.session);
   const [_, login] = useLogin();
-  const [{ status: submit, result: { data: submitData } }, postSetup] = useFetch('/api/auth/setup');
-  const [{ status: loading, result: { data: formData } }, getForm] = useFetch('/api/auth/setup?formName=auth_setup');
+  const [{ status: submit, response: { data: submitData } }, postSetup] = useFetch('/api/auth/setup');
+  const [{ status: loading, response: { data: formData } }, getForm] = useFetch('/api/auth/setup?formName=auth_setup');
   const [form, setForm] = useState<FormData>();
 
   // load form

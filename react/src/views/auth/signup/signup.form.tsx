@@ -8,8 +8,8 @@ import { objectToKeyValue } from '../../../utils';
 const SignupForm: React.FC = (): JSX.Element => {
 
   const { updateSession } = useAction();
-  const [{ status: submit, result: { data: submitData } }, postSignup] = useFetch('/api/auth/signup');
-  const [{ status: loading, result: { data: formData } }, getForm] = useFetch('/api/auth/signup?formName=auth_signup');
+  const [{ status: submit, response: { data: submitData } }, postSignup] = useFetch('/api/auth/signup');
+  const [{ status: loading, response: { data: formData } }, getForm] = useFetch('/api/auth/signup?formName=auth_signup');
   const [form, setForm] = useState<FormData>();
   const [verified, setVerified] = useState(false);
 

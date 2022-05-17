@@ -13,7 +13,7 @@ const LoginForm: React.FC = (): JSX.Element => {
   const redirect = useRedirect(state as RedirectState);
 
   const [form, setForm] = useState<FormData>();
-  const [{ status, result }, getLogin] = useFetch('/api/auth/login');
+  const [{ status, response }, getLogin] = useFetch('/api/auth/login');
   const [{ isUserVerified, isUserSetupCompleted }, login] = useLogin();
 
   // load form
@@ -26,7 +26,7 @@ const LoginForm: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     if (status === 'success') {
-      login(result.data);
+      login(response.data);
     }
 
   }, [status]);

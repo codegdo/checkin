@@ -4,16 +4,16 @@ import { useFetch } from '../../../hooks';
 import { sessionStore } from '../../../services';
 
 const Client: React.FC = (): JSX.Element => {
-  const [{ status, result }, fetchCheckin] = useFetch('/api/checkin/clients');
+  const [{ status, response }, fetchCheckin] = useFetch('/api/checkin/clients');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     if (status === 'error') {
-      setMessage(result.data.message);
+      setMessage(response.data.message);
     }
     if (status === 'success') {
       setMessage('');
-      console.log(result.data);
+      console.log(response.data);
     }
   }, [status]);
 

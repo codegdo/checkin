@@ -8,7 +8,7 @@ const Home: React.FC = (): JSX.Element => {
   const { session, locations } = useSelector((state: AppState) => state);
   const { updateSession } = useAction();
   const navigate = useNavigate();
-  const [{ status, result: { data } }, postReload] = useFetch('/api/reload/location');
+  const [{ status, response: { data } }, postReload] = useFetch('/api/reload/location');
 
   useEffect(() => {
     if (status === 'success') {

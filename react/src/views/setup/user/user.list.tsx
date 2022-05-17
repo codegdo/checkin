@@ -19,7 +19,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
   const { search } = useLocation();
   const navigate = useNavigate();
 
-  const [{ status: loading, result: { data: dataSource } }, getUsers] = useFetch();
+  const [{ status: loading, response: { data: dataSource } }, getUsers] = useFetch();
   const [data, setData] = useState<DataSource>();
   const [query, setQuery] = useState<string | undefined>();
 

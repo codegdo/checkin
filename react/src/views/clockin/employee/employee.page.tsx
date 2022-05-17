@@ -4,16 +4,16 @@ import { useFetch } from '../../../hooks';
 import { sessionStore } from '../../../services';
 
 const Employee: React.FC = (): JSX.Element => {
-  const [{ status, result }, fetchCheckout] = useFetch('/api/checkout/employees');
+  const [{ status, response }, fetchCheckout] = useFetch('/api/checkout/employees');
   const [message, setMessage] = useState('');
 
   useEffect(() => {
     if (status === 'error') {
-      setMessage(result.data.message);
+      setMessage(response.data.message);
     }
     if (status === 'success') {
       setMessage('');
-      console.log(result.data);
+      console.log(response.data);
     }
   }, [status]);
 

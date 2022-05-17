@@ -4,19 +4,19 @@ import { useFetch } from '../../../hooks';
 
 const Calendar: React.FC = (): JSX.Element => {
 
-  const [{ loading, result }, fetchCalendars] = useFetch('/api/scheduler/calendars');
+  const [{ status, response }, fetchCalendars] = useFetch('/api/scheduler/calendars');
 
   useEffect(() => {
     void fetchCalendars();
   }, []);
 
   useEffect(() => {
-    if (loading === 'success') {
-      console.log(result);
+    if (status === 'success') {
+      console.log(response);
     }
-  }, [loading]);
+  }, [status]);
 
-  if (loading === 'pending') {
+  if (status === 'pending') {
     return <div>loading...</div>
   }
 
