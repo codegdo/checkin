@@ -118,10 +118,10 @@ export class UserRepository extends Repository<User> {
   }
 
   async getAllUsers({ user, query }: UserQueryAll) {
-    const { groupType, orgId } = user;
+    const { groupType, orgId, locationId } = user;
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_get_all($1, $2, $3, $4, $5, $6, $7)`,
-      [groupType, orgId, JSON.stringify(query), null, null, null, null],
+      `CALL sec.pr_user_get_all($1, $2, $3, $4, $5, $6, $7, $8)`,
+      [groupType, orgId, locationId, JSON.stringify(query), null, null, null, null],
     );
 
     return result;

@@ -291,7 +291,7 @@ $BODY$
     LEFT JOIN dbo.group_type gt ON gt.id = g.group_type_id
     LEFT JOIN sec.user_location ul ON ul.user_id = u.id
     LEFT JOIN org.location l ON l.id = ul.location_id
-    WHERE u.org_id = p_org_id AND l.id = p_location_id
+    WHERE u.org_id = p_org_id AND l.id = p_location_id AND
       CASE WHEN _username IS NULL
         AND _first_name IS NULL
         AND _last_name IS NULL

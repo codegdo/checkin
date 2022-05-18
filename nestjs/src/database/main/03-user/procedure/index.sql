@@ -499,7 +499,7 @@ LANGUAGE plpgsql;
 /* DROP PROCEDURES
 
 DROP PROCEDURE IF EXISTS sec.pr_user_confirm(varchar, json);
-DROP PROCEDURE IF EXISTS sec.pr_user_get_all(varchar, integer, json, json, json, json, int);
+DROP PROCEDURE IF EXISTS sec.pr_user_get_all(varchar, integer, integer, json, json, json, json, int);
 DROP PROCEDURE IF EXISTS sec.pr_user_login(varchar, json, json, json, json, json, json);
 DROP PROCEDURE IF EXISTS sec.pr_user_save(json, int, int, int, jsonb);
 DROP PROCEDURE IF EXISTS sec.pr_user_setup(json, int, json, json, json, json, json, json);

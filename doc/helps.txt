@@ -1,10 +1,28 @@
 $ ssh-keygen -t rsa -b 4096 -m PEM -f jwtRS256.key
 
-https://travistidwell.com/jsencrypt/demo/
-https://8gwifi.org/RSAFunctionality?keysize=1024
+// MAC //
 
-sudo lsof -i :3000
-kill -9 {PID}
+-- stop and start running port
+$ sudo lsof -i :3000
+$ kill -9 {PID}
 
-net stop winnat
-net start winnat
+
+// WINDOW //
+
+-- stop and start running port
+$ net stop winnat
+$ net start winnat
+
+-- map port android emulator
+step 1
+start > control panel > system > advance system setting > enviroment vaiables > edit or add path
+C:\Users\<your-username>\AppData\Local\Android\Sdk\platform-tools
+
+step 2
+$ adb devices
+  List of devices attached
+  emulator-5554   device <--- emulator
+  2681523e        device <-- real device
+
+$ adb -s emulator-5554 reverse tcp:3000 tcp:3000
+$ adb -s 2681572e reverse tcp:3000 tcp:3000 
