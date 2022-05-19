@@ -1,9 +1,24 @@
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
-import React from 'react';
+
+import { useFetch } from '../../hooks';
 
 export const Timer: React.FC = (): JSX.Element => {
 
-  const handlePress = () => { }
+  const [{ status, response }, getLogin] = useFetch('/api/auth/login');
+
+  useEffect(() => {
+    console.log(status);
+  }, [status]);
+
+  const handlePress = () => {
+    void getLogin({
+      body: {
+        username: 'gdo',
+        password: '123456'
+      }
+    });
+  }
 
   return <View style={styles.timer}>
     <TouchableOpacity style={styles.button} onPress={handlePress}>

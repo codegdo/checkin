@@ -32,7 +32,7 @@ const LoginForm: React.FC = (): JSX.Element => {
   }, [status]);
 
   const handleSubmit = (values: any) => {
-    void getLogin({ body: values });
+    getLogin({ body: values });
   };
 
   if (!form) {

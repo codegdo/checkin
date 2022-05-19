@@ -97,6 +97,7 @@ export class AuthController {
   @Public()
   @Post('login')
   async login(@Session() session: any, @Body() body: UserLoginDto) {
+    console.log(body);
     const { user, ...rest } = await this.authService.login(body);
     const { password, orgId, ..._user } = user;
     const { accessToken } = await this.getToken(session.id);
