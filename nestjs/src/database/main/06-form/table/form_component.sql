@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS org.form_component(
   form_id INT NOT NULL,
   field_id INT NOT NULL,
 
-  label VARCHAR(255),
+  title VARCHAR(255),
   description TEXT,
 
   position INT DEFAULT 0,
@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS org.form_component(
 CREATE INDEX idx_form_component  ON org.form_component (form_id, field_id);
 
 INSERT
-INTO org.form_component(form_id, field_id, label, position, parent_id)
+INTO org.form_component(form_id, field_id, title, position, parent_id)
 VALUES
 --user_group_grid
 ('3', '15', 'Name', '0', 15);

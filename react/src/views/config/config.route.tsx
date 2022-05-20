@@ -1,7 +1,7 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import { NotFound } from '../../components/page';
-import { Template } from '../../components/template/template.component';
+import { Template, lazy } from '../../components/template/template.component';
 
 
 const Index = Template(lazy(() => import('./config.index')));

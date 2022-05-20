@@ -23,6 +23,9 @@ export class Form extends BaseEntity {
   @Column({ name: 'name' })
   name: string;
 
+  @Column({ name: 'title' })
+  title: string;
+
   @Column({ name: 'description' })
   description: string;
 

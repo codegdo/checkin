@@ -1,7 +1,7 @@
 {
   "id": 1,
-  "label": "Signup",
   "name": "Signup",
+  "title": "Signup",
   "description": null,
   "data": [
     {
@@ -30,8 +30,8 @@
     },
     {
       "id": 5,
-      "label": null,
       "name": "Singup",
+      "title": null,
       "description": null,
       "type": "title",
       "role": "element",
@@ -42,8 +42,8 @@
     },
     {
       "id": 6,
-      "label": "Signup",
       "name": "submit",
+      "title": "Signup",
       "type": "button",
       "role": "element",
       "data": [],
@@ -53,8 +53,8 @@
     },
     {
       "id": 7,
-      "label": "Login",
       "name": null,
+      "title": "Login",
       "description": null,
       "type": "link",
       "role": "element",
@@ -67,8 +67,8 @@
   "fields": [
     {
       "id": 3,
-      "label": "First Name",
       "name": "firstName",
+      "title": "First Name",
       "description": null,
       "type": "text",
       "role": "field",
@@ -83,8 +83,8 @@
     },
     {
       "id": 4,
-      "label": "Last Name",
       "name": "lastName",
+      "title": "Last Name",
       "description": null,
       "type": "text",
       "role": "field",
@@ -99,8 +99,8 @@
     },
     {
       "id": 5,
-      "label": "Email Address",
       "name": "emailAddress",
+      "title": "Email Address",
       "description": null,
       "type": "email",
       "role": "field",
@@ -115,8 +115,8 @@
     },
     {
       "id": 6,
-      "label": "Phone Number",
       "name": "phoneNumber",
+      "title": "Phone Number",
       "description": null,
       "type": "text",
       "role": "field",
@@ -131,8 +131,8 @@
     },
     {
       "id": 7,
-      "label": "Username",
       "name": "username",
+      "title": "Username",
       "description": null,
       "type": "text",
       "role": "field",
@@ -147,8 +147,8 @@
     },
     {
       "id": 8,
-      "label": "Password",
       "name": "password",
+      "title": "Password",
       "description": null,
       "type": "password",
       "role": "field",

@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-nati
 
 import { useFetch } from '../../hooks';
 
-export const Timer: React.FC = (): JSX.Element => {
+export const Timer: React.FC = () => {
 
   const [{ status, response }, getLogin] = useFetch('/api/auth/login');
 
@@ -11,7 +11,8 @@ export const Timer: React.FC = (): JSX.Element => {
     console.log(status);
   }, [status]);
 
-  const handlePress = () => {
+  const handlePress = (key: string) => {
+    console.log(key);
     void getLogin({
       body: {
         username: 'gdo',
@@ -21,7 +22,7 @@ export const Timer: React.FC = (): JSX.Element => {
   }
 
   return <View style={styles.timer}>
-    <TouchableOpacity style={styles.button} onPress={handlePress}>
+    <TouchableOpacity style={styles.button} onPress={() => handlePress("start")}>
       <Text style={styles.text}>Start</Text>
     </TouchableOpacity>
   </View>

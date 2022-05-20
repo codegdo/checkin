@@ -2,7 +2,7 @@ import React from 'react';
 import { useLoading } from '../../hooks';
 type ButtonData = {
   name?: string;
-  label?: string;
+  title?: string;
   type?: "button" | "submit" | "reset";
 }
 
@@ -15,7 +15,7 @@ type ButtonProps = {
 export const Button: React.FC<ButtonProps> = ({ button, status, onClick, children, ...props }): JSX.Element => {
 
   const data = button || props;
-  const { name = 'click', label = 'Button', type = 'button' } = data;
+  const { name = 'click', title = 'Button', type = 'button' } = data;
 
   const isLoading = useLoading(status);
 
@@ -27,7 +27,7 @@ export const Button: React.FC<ButtonProps> = ({ button, status, onClick, childre
   return (
     <button disabled={isLoading} name={name} type={type} onClick={e => handleClick(e)}>
       {
-        children || label
+        children || title
       }
     </button>
   )

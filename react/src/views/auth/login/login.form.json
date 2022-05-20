@@ -1,6 +1,6 @@
 {
   "id": 1,
-  "label": "Login",
+  "title": "Login",
   "description": null,
   "name": "login",
   "data": [
@@ -30,8 +30,8 @@
     },
     {
       "id": "f-title",
-      "label": "Login",
       "name": "login",
+      "title": "Login",
       "description": null,
       "type": "title",
       "role": "inline",
@@ -42,8 +42,8 @@
     },
     {
       "id": "f-submit",
-      "label": "Login",
       "name": "submit",
+      "title": "Login",
       "type": "button",
       "role": "inline",
       "data": [],
@@ -53,8 +53,8 @@
     },
     {
       "id": "f-signup",
-      "label": "Signup",
       "name": null,
+      "title": "Signup",
       "description": null,
       "type": "link",
       "role": "inline",
@@ -67,9 +67,9 @@
   "fields": [
     {
       "id": 3,
-      "label": "Username",
-      "description": null,
       "name": "username",
+      "title": "Username",
+      "description": null,
       "type": "text",
       "role": "field",
       "data": null,
@@ -82,9 +82,9 @@
     },
     {
       "id": 4,
-      "label": "Password",
-      "description": null,
       "name": "password",
+      "title": "Password",
+      "description": null,
       "type": "password",
       "role": "field",
       "data": null,

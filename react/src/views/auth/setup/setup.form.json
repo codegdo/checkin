@@ -1,7 +1,7 @@
 {
   "id": null,
-  "label": "Setup",
   "name": "auth_setup",
+  "title": "Setup",
   "description": null,
   "data": [
     {
@@ -30,8 +30,8 @@
     },
     {
       "id": "f-title",
-      "label": "Setup",
       "name": "setup_title",
+      "title": "Setup",
       "description": null,
       "type": "title",
       "role": "inline",
@@ -42,8 +42,8 @@
     },
     {
       "id": "f-submit",
-      "label": "Submit",
       "name": "submit",
+      "title": "Submit",
       "type": "button",
       "role": "inline",
       "data": [],
@@ -53,8 +53,8 @@
     },
     {
       "id": "f-cancel",
-      "label": "Cancel",
       "name": null,
+      "title": "Cancel",
       "description": null,
       "type": "link",
       "role": "inline",
@@ -67,8 +67,8 @@
   "fields": [
     {
       "id": 0,
-      "label": "Organization Name",
       "name": "organization_name",
+      "title": "Organization Name",
       "description": null,
       "type": "text",
       "role": "field",
@@ -83,8 +83,8 @@
     },
     {
       "id": 1,
-      "label": "Subdomain",
       "name": "organization_subdomain",
+      "title": "Subdomain",
       "description": null,
       "type": "text",
       "role": "field",
@@ -98,8 +98,8 @@
     },
     {
       "id": 2,
-      "label": "Location Name",
       "name": "location_name",
+      "title": "Location Name",
       "description": null,
       "type": "text",
       "role": "field",
@@ -113,8 +113,8 @@
     },
     {
       "id": 3,
-      "label": "Street Address",
       "name": "location_street_address",
+      "title": "Street Address",
       "description": null,
       "type": "text",
       "role": "field",
@@ -128,8 +128,8 @@
     },
     {
       "id": 4,
-      "label": "Country",
       "name": "location_country",
+      "title": "Country",
       "description": null,
       "type": "select",
       "role": "field",
@@ -144,8 +144,8 @@
     },
     {
       "id": 5,
-      "label": "State",
       "name": "location_state",
+      "title": "State",
       "description": null,
       "type": "select",
       "role": "field",
@@ -160,8 +160,8 @@
     },
     {
       "id": 6,
-      "label": "City",
       "name": "location_city",
+      "title": "City",
       "description": null,
       "type": "text",
       "role": "field",
@@ -176,8 +176,8 @@
     },
     {
       "id": 7,
-      "label": "Postal Code",
       "name": "location_postal_code",
+      "title": "Postal Code",
       "description": null,
       "type": "text",
       "role": "field",

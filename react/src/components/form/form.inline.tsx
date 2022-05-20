@@ -15,7 +15,7 @@ export const FormInline: React.FC<InlineProps> = ({ inline, ...props }): JSX.Ele
   const { status, handleClick } = context;
 
   const element = inline || props;
-  const { label, description, name, type, value } = element;
+  const { title, description, name, type, value } = element;
 
   //console.log('INLINE', data);
 
@@ -24,17 +24,17 @@ export const FormInline: React.FC<InlineProps> = ({ inline, ...props }): JSX.Ele
       return <Button
         type={type}
         name={name}
-        label={label}
+        title={title}
         status={status}
         onClick={handleClick}
       />;
     case 'link':
-      return <Link to={value || '../not-found'}>{label}</Link>;
+      return <Link to={value || '../not-found'}>{title}</Link>;
     case 'label':
-      return <Label label={label} />;
+      return <Label title={title} />;
     case 'title':
       return <Title
-        name={label}
+        title={title}
         description={description}
       />;
     default: return null;

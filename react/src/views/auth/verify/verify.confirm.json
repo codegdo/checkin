@@ -1,7 +1,7 @@
 {
   "id": null,
-  "label": "Verify",
   "name": "verify",
+  "title": "Verify",
   "description": null,
   "data": [
     {
@@ -30,8 +30,8 @@
     },
     {
       "id": "f-title",
-      "label": "Verify you're a human",
       "name": "verify_confirm",
+      "title": "Verify you're a human",
       "description": null,
       "type": "title",
       "role": "inline",
@@ -42,8 +42,8 @@
     },
     {
       "id": "f-submit",
-      "label": "Submit",
       "name": "submit",
+      "title": "Submit",
       "type": "button",
       "role": "inline",
       "data": [],
@@ -53,8 +53,8 @@
     },
     {
       "id": "f-cancel",
-      "label": "Cancel",
       "name": "cancel",
+      "title": "Cancel",
       "type": "button",
       "role": "inline",
       "data": [],
@@ -66,8 +66,8 @@
   "fields": [
     {
       "id": null,
-      "label": "Please enter the verification code",
       "name": "key",
+      "title": "Please enter the verification code",
       "description": null,
       "type": "text",
       "role": "field",

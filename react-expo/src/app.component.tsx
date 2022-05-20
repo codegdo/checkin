@@ -1,9 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Timer } from './components/timer/timer.component';
 
-export default function App() {
+export const App: React.FC = () => {
   return (
     <View style={styles.container}>
       <Timer />
@@ -19,3 +19,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+

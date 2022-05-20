@@ -12,8 +12,8 @@ type RoleElementType = 'block' | 'field' | 'inline';
 // FIELD
 export type FieldType = {
   id: number;
-  label: string;
   name: string;
+  title: string;
   description: string;
 
   type: InputElementType;
@@ -39,17 +39,17 @@ export type FieldProps = {
 
 export type FieldContextProps =
   | {
-      data?: FieldData;
-      value: string;
-      handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    }
+    data?: FieldData;
+    value: string;
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  }
   | undefined;
 
 // BLOCK
 export type BlockType = {
   id: number;
-  label: string;
   name: string;
+  title: string;
   description: string;
 
   type: BlockElementType;
@@ -70,8 +70,8 @@ export type BlockProps = {
 // INLINE
 export type InlineType = {
   id: number;
-  label: string;
   name: string;
+  title: string;
   description: string;
 
   type: InlineElementType;
@@ -93,8 +93,8 @@ export type InlineProps = {
 // FORM
 export type FormType = {
   id: number;
-  label: string;
   name: string;
+  title: string;
   description: string;
   data: any;
   fields: FieldData[];
@@ -113,16 +113,16 @@ export type FormProps = {
 
 export type FormContextProps =
   | {
-      data?: FormData;
-      values?: any;
-      errors?: any;
-      submit?: string;
-      status?: string;
-      formSchema?: any;
-      isKey?: boolean;
-      isMap?: boolean;
-      handleClick: (name: string) => void;
-    }
+    data?: FormData;
+    values?: any;
+    errors?: any;
+    submit?: string;
+    status?: string;
+    formSchema?: any;
+    isKey?: boolean;
+    isMap?: boolean;
+    handleClick: (name: string) => void;
+  }
   | undefined;
 
 export type NormalizeData = Partial<FormData & BlockData & FieldData>;

@@ -39,9 +39,9 @@ export const useFetch = (
   const navigate = useNavigate();
 
   const callback = useCallback(async (option?: RequestOption) => {
-    const _url = url || option?.url;
+    const pathUrl = url || option?.url;
 
-    if (!_url) {
+    if (!pathUrl) {
       console.warn('Invalid fetch url');
       return;
     }
@@ -49,12 +49,12 @@ export const useFetch = (
     try {
       dispatch({ type: 'LOADING' });
       //
-      const response = await http.request(_url, option);
-      console.log('FETCH', response);
-      //
+      const response = await http.request(pathUrl, option);
+
       dispatch({ type: 'SUCCESS', payload: response });
+      console.log('FETCH', response);
     } catch (err: any) {
-      console.log('FETCH', err);
+
       dispatch({ type: 'FAILURE', payload: err });
       //
       if (err.data?.message === 'Session Timeout') {
@@ -65,6 +65,7 @@ export const useFetch = (
           } as RedirectState,
         });
       }
+      console.log('FETCH', err);
     }
   }, []);
 

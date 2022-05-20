@@ -1,19 +1,19 @@
 import React from 'react';
 
 type TitleProps = {
-  name?: string;
+  title?: string;
   description?: string;
 }
 
-export const Title: React.FC<TitleProps> = ({ name, description }): JSX.Element | null => {
+export const Title: React.FC<TitleProps> = ({ title, description }): JSX.Element | null => {
 
-  if (!name && !description) {
+  if (!title && !description) {
     return null;
   }
 
   return (
     <div>
-      {name && <strong>{name}</strong>}
+      {title && <strong>{title}</strong>}
       {description && <span>{description}</span>}
     </div>
   )

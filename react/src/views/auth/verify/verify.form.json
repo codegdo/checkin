@@ -1,7 +1,7 @@
 {
   "id": null,
-  "label": "Verify",
   "name": "verify",
+  "title": "Verify",
   "description": null,
   "data": [
     {
@@ -30,8 +30,8 @@
     },
     {
       "id": "f-title",
-      "label": "Login Verification",
       "name": "login_verify",
+      "title": "Login Verification",
       "description": "To continue logging in, we need you to complete one of the following",
       "type": "title",
       "role": "inline",
@@ -42,8 +42,8 @@
     },
     {
       "id": "f-submit",
-      "label": "Send",
       "name": "submit",
+      "title": "Send",
       "type": "button",
       "role": "inline",
       "data": [],
@@ -53,8 +53,8 @@
     },
     {
       "id": "f-cancel",
-      "label": "Cancel",
       "name": null,
+      "title": "Cancel",
       "description": null,
       "type": "link",
       "role": "inline",
@@ -67,8 +67,8 @@
   "fields": [
     {
       "id": 3,
-      "label": null,
       "name": "option",
+      "title": null,
       "description": null,
       "type": "radio",
       "role": "field",

@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS org.form_field (
   form_id INT NOT NULL,
   field_id INT NOT NULL,
-  label VARCHAR(255),
+  title VARCHAR(255),
   description TEXT,
 
   position INT DEFAULT 0,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS org.form_field (
 CREATE INDEX idx_form_field  ON org.form_field (form_id, field_id);
 
 INSERT
-INTO org.form_field(form_id, field_id, label, position)
+INTO org.form_field(form_id, field_id, title, position)
 VALUES
 --auth_signup
 ('1', '6', 'First Name', '0'),

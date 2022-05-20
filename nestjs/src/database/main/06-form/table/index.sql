@@ -52,7 +52,7 @@ VALUES
 CREATE TABLE IF NOT EXISTS org.form (
   id SERIAL,
   name VARCHAR(95),
-  label VARCHAR(95),
+  title VARCHAR(95),
   description VARCHAR(255),
 
   data JSONB NOT NULL DEFAULT '[
@@ -82,7 +82,7 @@ CREATE TABLE IF NOT EXISTS org.form (
     },
     {
       "id": "f_button",
-      "label": "Submit",
+      "title": "Submit",
       "name": "submit",
       "type": "button",
       "role": "inline",
@@ -109,7 +109,7 @@ CREATE TABLE IF NOT EXISTS org.form (
 );
 
 INSERT
-INTO org.form (name, label, description, form_type_id, org_id, is_publish)
+INTO org.form (name, title, description, form_type_id, org_id, is_publish)
 VALUES
 ('auth_signup', 'Signup', null, '1', null, '1'),
 ('auth_setup', 'Setup', null, '1', null, '1'),
@@ -224,7 +224,7 @@ VALUES
 CREATE TABLE IF NOT EXISTS org.form_field (
   form_id INT NOT NULL,
   field_id INT NOT NULL,
-  label VARCHAR(255),
+  title VARCHAR(255),
   description TEXT,
 
   position INT DEFAULT 0,
@@ -245,7 +245,7 @@ CREATE TABLE IF NOT EXISTS org.form_field (
 CREATE INDEX idx_form_field  ON org.form_field (form_id, field_id);
 
 INSERT
-INTO org.form_field(form_id, field_id, label, position)
+INTO org.form_field(form_id, field_id, title, position)
 VALUES
 --auth_signup
 ('1', '6', 'First Name', '0'),
@@ -280,7 +280,7 @@ CREATE TABLE IF NOT EXISTS org.form_component(
   form_id INT NOT NULL,
   field_id INT NOT NULL,
 
-  label VARCHAR(255),
+  title VARCHAR(255),
   description TEXT,
 
   position INT DEFAULT 0,
@@ -301,7 +301,7 @@ CREATE TABLE IF NOT EXISTS org.form_component(
 CREATE INDEX idx_form_component  ON org.form_component (form_id, field_id);
 
 INSERT
-INTO org.form_component(form_id, field_id, label, position, parent_id)
+INTO org.form_component(form_id, field_id, title, position, parent_id)
 VALUES
 --user_group_grid
 ('3', '15', 'Name', '0', 15);

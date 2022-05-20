@@ -114,7 +114,7 @@ $BODY$
         SELECT
           ff.field_id id,
           ff.field_name name,
-          ff.field_label label,
+          ff.field_title title,
           ff.field_description description,
           ff.field_type type,
           ff.field_role role,
@@ -137,7 +137,7 @@ $BODY$
         SELECT DISTINCT
         f.form_id id,
         f.form_name name,
-        f.form_label label,
+        f.form_title title,
         f.form_data data,
         form_field fields
         FROM PFG_form_field f

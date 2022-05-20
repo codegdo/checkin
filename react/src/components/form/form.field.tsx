@@ -17,7 +17,7 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
   const { values, errors, status, submit, formSchema, isKey, isMap } = context;
 
   const data = field || props;
-  const { id, label, description, name, map = '', value: initialValue } = data;
+  const { id, name, title, description, map = '', value: initialValue } = data;
   const mapTable = map?.split('.')[1];
   const fieldSchema = formValidationSchema(data);
 
@@ -60,7 +60,7 @@ export const FormField: React.FC<FieldProps> = ({ field, ...props }): JSX.Elemen
 
   return (
     <div className={isError ? 'field _error' : 'field'}>
-      <Label label={label} description={description} />
+      <Label title={title} description={description} />
       <Input
         input={data}
         status={status}

@@ -1,5 +1,5 @@
 import queryString from 'query-string';
-import { configs } from '../app.config';
+import { BASE_URL } from '../app.config';
 
 export type HttpResponse<T> = Response & {
   data?: T;
@@ -32,7 +32,7 @@ class HttpService {
     this.contentType = 'application/json';
     this.credentials = 'include';
     this.withCredentials = true;
-    this.baseUrl = configs?.baseUrl;
+    this.baseUrl = BASE_URL;
   }
 
   private getUrl({ baseUrl, pathUrl, params }: RequestUrl): string {
@@ -52,7 +52,11 @@ class HttpService {
     const url = this.getUrl({ baseUrl, pathUrl, params });
 
     option = {
-      headers: { 'Content-Type': this.contentType, 'Accept': this.contentType, ...headers },
+      headers: {
+        'Content-Type': this.contentType,
+        'Accept': this.contentType,
+        ...headers
+      },
       method: method || (body ? 'POST' : 'GET'),
       body: JSON.stringify(body),
       credentials: this.credentials,
@@ -68,7 +72,11 @@ class HttpService {
     const url = this.getUrl({ baseUrl, pathUrl, params });
 
     option = {
-      headers: { 'Content-Type': this.contentType, ...headers },
+      headers: {
+        'Content-Type': this.contentType,
+        'Accept': this.contentType,
+        ...headers
+      },
       method: 'GET',
       credentials: this.credentials,
       withCredentials: this.withCredentials,
@@ -83,7 +91,11 @@ class HttpService {
     const url = this.getUrl({ baseUrl, pathUrl });
 
     option = {
-      headers: { 'Content-Type': this.contentType, ...headers },
+      headers: {
+        'Content-Type': this.contentType,
+        'Accept': this.contentType,
+        ...headers
+      },
       method: 'POST',
       body: JSON.stringify(body),
       credentials: this.credentials,
@@ -99,7 +111,11 @@ class HttpService {
     const url = this.getUrl({ baseUrl, pathUrl });
 
     option = {
-      headers: { 'Content-Type': this.contentType, ...headers },
+      headers: {
+        'Content-Type': this.contentType,
+        'Accept': this.contentType,
+        ...headers
+      },
       method: 'PATCH',
       body: JSON.stringify(body),
       credentials: this.credentials,
@@ -115,7 +131,11 @@ class HttpService {
     const url = this.getUrl({ baseUrl, pathUrl });
 
     option = {
-      headers: { 'Content-Type': this.contentType, ...headers },
+      headers: {
+        'Content-Type': this.contentType,
+        'Accept': this.contentType,
+        ...headers
+      },
       method: 'DELETE',
       body: JSON.stringify(body),
       credentials: this.credentials,

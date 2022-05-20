@@ -1,7 +1,7 @@
 {
   "id": null,
-  "label": "User",
   "name": "user_add",
+  "title": "User",
   "description": null,
   "data": [
     {
@@ -30,8 +30,8 @@
     },
     {
       "id": "f-title",
-      "label": "Setup",
       "name": "setup_title",
+      "title": "Setup",
       "description": null,
       "type": "title",
       "role": "inline",
@@ -42,8 +42,8 @@
     },
     {
       "id": "f-cancel",
-      "label": "Cancel",
       "name": "cancel",
+      "title": "Cancel",
       "type": "button",
       "role": "inline",
       "data": null,
@@ -53,8 +53,8 @@
     },
     {
       "id": "f-submit",
-      "label": "Submit",
       "name": "submit",
+      "title": "Submit",
       "type": "button",
       "role": "inline",
       "data": [],
@@ -66,8 +66,8 @@
   "fields": [
     {
       "id": 1,
-      "label": "Username",
       "name": "user_name",
+      "title": "Username",
       "description": null,
       "type": "text",
       "role": "field",
@@ -81,8 +81,8 @@
     },
     {
       "id": 2,
-      "label": "Password",
       "name": "user_password",
+      "title": "Password",
       "description": null,
       "type": "text",
       "role": "field",
@@ -96,8 +96,8 @@
     },
     {
       "id": 3,
-      "label": "Access Type",
       "name": "user_access_type",
+      "title": "Access Type",
       "description": null,
       "type": "radio",
       "role": "field",

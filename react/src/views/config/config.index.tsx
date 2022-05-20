@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import React from 'react';
 //import { Navigate, Route, Routes } from 'react-router-dom';
 
 //import { Partial } from '../../components/template/partial.component';

@@ -1,7 +1,7 @@
 {
   "id": 1,
-  "label": "Verification",
   "name": "Resend",
+  "title": "Verification",
   "description": null,
   "data": [
     {
@@ -30,7 +30,7 @@
     },
     {
       "id": 5,
-      "label": null,
+      "title": null,
       "name": "Verification",
       "description": null,
       "type": "title",
@@ -42,8 +42,8 @@
     },
     {
       "id": 6,
-      "label": "Resend",
       "name": "submit",
+      "title": "Resend",
       "type": "button",
       "role": "element",
       "data": [],
@@ -55,8 +55,8 @@
   "fields": [
     {
       "id": 6,
-      "label": "Username",
       "name": "username",
+      "title": "Username",
       "description": null,
       "type": "text",
       "role": "field",

@@ -1,19 +1,19 @@
 import React from 'react';
 
 type LabelProps = {
-  label?: string;
+  title?: string;
   description?: string;
 }
 
-export const Label: React.FC<LabelProps> = ({ label, description }): JSX.Element | null => {
+export const Label: React.FC<LabelProps> = ({ title, description }): JSX.Element | null => {
 
-  if (!label && !description) {
+  if (!title && !description) {
     return null;
   }
 
   return (
     <span>
-      {label && <label>{label}</label>}
+      {title && <label>{title}</label>}
       {description && <small>{description}</small>}
     </span>
   )
