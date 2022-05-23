@@ -15,36 +15,35 @@ export type TemplateProps = {
 
 export const lazy = <T extends ComponentType<any>>(factory: () => Promise<{ default: T }>, minLoadTimeMs = 0): React.LazyExoticComponent<T> => {
   return _lazy(() => {
-    return Promise.all([factory(), new Promise((resolve) => setTimeout(resolve, minLoadTimeMs))]).then(([moduleExports]) => moduleExports)
+    return Promise.all([factory(), new Promise((resolve) => setTimeout(resolve, minLoadTimeMs))]).then(([moduleExports]) => moduleExports);
   });
 }
 
 export const Template = (Component: React.FC<TemplateProps>) => (options: TemplateProps): JSX.Element | null => {
   const { route, page } = options;
   const { template, fallback } = useTemplate(options);
-  const { hasAccess, requiredLocation, requiredOrg } = useAuthorize(options);
+  const { isPublish, hasAccess, requiredLocation, requiredOrg } = useAuthorize(options);
 
-  if (!hasAccess) {
-    Component = UnAuthorize;
+  if (!isPublish) {
+    if (!hasAccess) {
+      Component = UnAuthorize;
+    }
+
+    if (requiredOrg) {
+      Component = AdminRedirect;
+    }
+
+    if (requiredLocation) {
+      Component = HomeRedirect;
+    }
   }
-
-  if (requiredOrg) {
-    Component = AdminRedirect;
-  }
-
-  if (requiredLocation) {
-    Component = HomeRedirect;
-  }
-
-  //const Content = hasAccess ? (hasOrg ? Component : AdminRedirect) : UnAuthorize;
 
   console.log('TEMPLATE HAS ACCESS', hasAccess);
   console.log('TEMPLATE REQUIRED LOCATION', requiredLocation);
   console.log('TEMPLATE REQUIRED ORG', requiredOrg);
 
   useLayoutEffect(() => {
-    const pageId = route ? `${route}_${page}` : page;
-    document.body.setAttribute('data-view', pageId);
+    document.body.setAttribute('data-view', `${route}_${page}`);
   }, [page]);
 
   const jsxTemplate = useMemo(() => {

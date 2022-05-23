@@ -16,6 +16,7 @@ export const useAuthorize = ({
   const view = views[page];
 
   const auth = {
+    isPublic,
     hasAccess: false,
     requiredLocation: false,
     requiredOrg: false,
@@ -36,19 +37,15 @@ export const useAuthorize = ({
 
       if (groupType == 'system') {
         auth.hasAccess = true;
-
         if (orgId == null && route !== 'admin') {
           auth.requiredOrg = true;
         }
       } else {
-
         if (locationId == null && route !== '/') {
           auth.requiredLocation = true;
         }
       }
-
     }
-
     return auth;
   }, []);
 };

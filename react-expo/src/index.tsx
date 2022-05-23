@@ -1,24 +1,19 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
 import { registerRootComponent } from 'expo';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
+import { store, persistor } from './app.store';
 import { App } from './app.component';
 
 const Root: React.FC = () => {
   return (
-    <View style={styles.container}>
-      <App />
-    </View>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <App />
+      </PersistGate>
+    </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default registerRootComponent(Root);
