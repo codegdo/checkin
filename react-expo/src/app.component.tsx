@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import { Timer } from './components/timer/timer.component';
-import { Login } from './screens/auth/login/login.form';
+import { LoginForm } from './screens/auth/login/login.form';
 
 export const App: React.FC = () => {
   const state = useSelector((state: any) => state);
@@ -12,7 +12,7 @@ export const App: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Login />
+      <LoginForm />
       <Timer />
     </View>
   );

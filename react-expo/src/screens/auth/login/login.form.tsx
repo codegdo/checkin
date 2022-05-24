@@ -4,7 +4,7 @@ import { } from 'react-native';
 import * as data from './login.json';
 import { Form } from '../../../components';
 
-export const Login: React.FC = () => {
+export const LoginForm: React.FC = () => {
   const [form, setForm] = useState<any>();
 
   // load form
