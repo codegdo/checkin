@@ -1,19 +1,19 @@
-import React, { lazy, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useRoutes } from 'react-router-dom';
 import { ACCESS_TOKEN } from '../../app.config';
 
-import { Template } from '../../components/template/template.component';
+import { Template, lazyLoad } from '../../components/template/template.component';
 import { useLogout } from '../../hooks';
 import { cookieStore, sessionStore } from '../../services';
 import { AppState } from '../../store/reducers';
 
-const Index = Template(lazy(() => import('./clockin.index')));
-const Location = Template(lazy(() => import('./clockin.location')));
-const NotFound = Template(lazy(() => import('../../components/page/notfound.page')));
+const Index = Template(lazyLoad(() => import('./clockin.index')));
+const Location = Template(lazyLoad(() => import('./clockin.location')));
+const NotFound = Template(lazyLoad(() => import('../../components/page/notfound.page')));
 
 export const ClockinRoute: React.FC = (): JSX.Element => {
-  const { user, accessToken } = useSelector((state: AppState) => state.session);
+  const { user } = useSelector((state: AppState) => state.session);
   const navigate = useNavigate();
   const logout = useLogout();
   //const auth = useAuth();
@@ -22,10 +22,10 @@ export const ClockinRoute: React.FC = (): JSX.Element => {
 
     if (user) {
 
-      if (accessToken) {
-        sessionStore.setItem(ACCESS_TOKEN, accessToken);
-        cookieStore.setCookie(ACCESS_TOKEN, accessToken, 1);
-      }
+      // if (accessToken) {
+      //   sessionStore.setItem(ACCESS_TOKEN, accessToken);
+      //   cookieStore.setCookie(ACCESS_TOKEN, accessToken, 1);
+      // }
 
       logout();
     }

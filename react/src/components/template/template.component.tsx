@@ -1,4 +1,4 @@
-import React, { ComponentType, lazy as _lazy, Suspense, useLayoutEffect, useMemo, useRef } from 'react';
+import React, { ComponentType, lazy, Suspense, useLayoutEffect, useMemo, useRef } from 'react';
 import JsxParser from 'react-jsx-parser';
 
 import { useTemplate, useAuthorize } from '../../hooks';
@@ -6,6 +6,7 @@ import * as Navs from '../nav';
 import UnAuthorize from '../page/unauthorize.page';
 import AdminRedirect from '../page/admin-redirect.page';
 import HomeRedirect from '../page/home-redirect.page';
+
 //import { Page } from './template.page';
 
 export type TemplateProps = {
@@ -13,8 +14,8 @@ export type TemplateProps = {
   page: string;
 }
 
-export const lazy = <T extends ComponentType<any>>(factory: () => Promise<{ default: T }>, minLoadTimeMs = 0): React.LazyExoticComponent<T> => {
-  return _lazy(() => {
+export const lazyLoad = <T extends ComponentType<any>>(factory: () => Promise<{ default: T }>, minLoadTimeMs = 0): React.LazyExoticComponent<T> => {
+  return lazy(() => {
     return Promise.all([factory(), new Promise((resolve) => setTimeout(resolve, minLoadTimeMs))]).then(([moduleExports]) => moduleExports);
   });
 }
@@ -23,7 +24,7 @@ export const Template = (Component: React.FC<TemplateProps>) => (options: Templa
   const { route, page } = options;
   const { template, fallback } = useTemplate(options);
   const { isPublish, hasAccess, requiredLocation, requiredOrg } = useAuthorize(options);
-  //const [fallback, setFallback] = React.useState<any>(null);
+  //const [fallback, setFallback] = React.useState<any>(route);
 
   if (!isPublish) {
     if (!hasAccess) {
@@ -59,10 +60,8 @@ export const Template = (Component: React.FC<TemplateProps>) => (options: Templa
     return <JsxParser renderInWrapper={false} jsx={fallback} />
   }, []);
 
-  return <>
-    <Suspense fallback={jsxFallback}>
-      {jsxTemplate}
-    </Suspense>
-  </>
+  return <Suspense fallback={jsxFallback}>
+    {jsxTemplate}
+  </Suspense>
 };
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import { NotFound } from '../../components/page';
-import { Template, lazy } from '../../components/template/template.component';
+import { Template, lazyLoad } from '../../components/template/template.component';
 
 
-const Index = Template(lazy(() => import('./config.index')));
+const Index = Template(lazyLoad(() => import('./config.index')));
 
 export const ConfigRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([

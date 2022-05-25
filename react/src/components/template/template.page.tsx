@@ -1,22 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { Children, isValidElement, useEffect, useState } from 'react';
 
 export const Page: React.FC<any> = ({ onFallback, children }) => {
 
   const [fallback, setFallback] = useState(null);
 
   useEffect(() => {
-    console.log('PAGE', (children == fallback));
     setFallback(() => children);
-  }, [fallback]);
+  }, [children]);
 
 
   useEffect(() => {
-    onFallback(() => fallback);
+    if (!(children == fallback)) {
+      //onFallback(() => fallback);
+      //console.log('PAGE', (children == fallback));
+    }
   }, [onFallback]);
 
-  return <>{children}</>;
+
+  console.log('PAGE', (children == fallback));
+  if (children !== fallback) {
+    onFallback(() => fallback);
+    console.log('PAGE', (children == fallback));
+  }
+
+
+  return <>
+    {
+      children
+    }
+  </>;
 
 }
+
+/*
+Children.map(children, (child): JSX.Element | null => {
+    console.log(child.props);
+    return React.cloneElement(child, {
+      fallback: children
+    })
+  })
+*/
 
 
 

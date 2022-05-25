@@ -1,5 +1,8 @@
-export const LOCATION_UPDATE = 'location/LOCATION_UPDATE';
-export const LOCATION_DELETE = 'location/LOCATION_DELETE';
+export const LOCATION_RETRIEVE = 'location/RETRIEVE';
+export const LOCATION_CREATE = 'location/CREATE';
+export const LOCATION_UPDATE = 'location/UPDATE';
+export const LOCATION_DELETE = 'location/DELETE';
+export const LOCATION_DELETE_ALL = 'location/DELETE_ALL';
 
 export interface LocationState {
   [x: string]: any;

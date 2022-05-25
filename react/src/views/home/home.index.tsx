@@ -18,7 +18,7 @@ const Home: React.FC = (): JSX.Element => {
   }, [status]);
 
   useEffect(() => {
-    if (locations.list.length == 1) {
+    if (locations.length == 1) {
       navigate('/welcome');
     }
   }, []);
@@ -37,8 +37,9 @@ const Home: React.FC = (): JSX.Element => {
 
   return <div>
     {
-      locations && locations.list.map((id: any, i: any) => {
-        return <div id={id} key={i} onClick={() => handleClick(id)}>{locations.ids[id].name}</div>
+      locations.map((location: any, i: any) => {
+        const { id, name } = location;
+        return <div id={id} key={i} onClick={() => handleClick(id)}>{name}</div>
       })
     }
   </div>;

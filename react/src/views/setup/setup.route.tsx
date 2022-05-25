@@ -1,16 +1,16 @@
 import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import { NotFound } from '../../components/page';
-import { Template, lazy } from '../../components/template/template.component';
+import { Template, lazyLoad } from '../../components/template/template.component';
 
-const Index = Template(lazy(() => import('./setup.index')));
-const UserList = Template(lazy(() => import('./user/user.list')));
-const UserForm = Template(lazy(() => import('./user/user.form')));
-const ClientList = Template(lazy(() => import('./client/client.list')));
-const GroupList = Template(lazy(() => import('./group/group.list')));
-const GroupForm = Template(lazy(() => import('./group/group.form')));
-const PolicyList = Template(lazy(() => import('./policy/policy.list')));
-const PolicyForm = Template(lazy(() => import('./policy/policy.form')));
+const Index = Template(lazyLoad(() => import('./setup.index')));
+const UserList = Template(lazyLoad(() => import('./user/user.list')));
+const UserForm = Template(lazyLoad(() => import('./user/user.form')));
+const ClientList = Template(lazyLoad(() => import('./client/client.list')));
+const GroupList = Template(lazyLoad(() => import('./group/group.list')));
+const GroupForm = Template(lazyLoad(() => import('./group/group.form')));
+const PolicyList = Template(lazyLoad(() => import('./policy/policy.list')));
+const PolicyForm = Template(lazyLoad(() => import('./policy/policy.form')));
 
 export const SetupRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([

@@ -1,9 +1,9 @@
 import React from 'react';
 import { useRoutes } from 'react-router-dom';
 
-import { Template, lazy } from '../../components/template/template.component';
+import { Template, lazyLoad } from '../../components/template/template.component';
 
-const Auth = Template(lazy(() => import('./auth.index')));
+const Auth = Template(lazyLoad(() => import('./auth.index')));
 
 export const AuthRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([

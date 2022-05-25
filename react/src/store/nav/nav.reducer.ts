@@ -1,18 +1,18 @@
 import { AnyAction } from 'redux';
-import { NavState, NAV_UPDATE } from './nav.type';
+import { NavState, NAV_RETRIEVE } from './nav.type';
 
 export const initialNavState: NavState = {};
 
-export const navReducer = (state = initialNavState, action: AnyAction): NavState => {
-  switch (action.type) {
-    case NAV_UPDATE: {
-      return {
-        ...state,
-        ...action.payload,
-      };
+export const navReducer = (
+  nav = initialNavState,
+  { type, payload }: AnyAction
+): NavState => {
+  switch (type) {
+    case NAV_RETRIEVE: {
+      return { ...payload };
     }
     default: {
-      return state;
+      return nav;
     }
   }
 };

@@ -1,5 +1,9 @@
-export const POLICY_UPDATE = 'policy/POLICY_UPDATE';
+export const POLICY_RETRIEVE = 'policy/RETRIEVE';
+export const POLICY_CREATE = 'policy/CREATE';
+export const POLICY_UPDATE = 'policy/UPDATE';
+export const POLICY_DELETE = 'policy/DELETE';
+export const POLICY_DELETE_ALL = 'policy/DELETE_ALL';
 
-export type PolicyState = {
+export interface PolicyState {
   [x: string]: any;
-};
+}

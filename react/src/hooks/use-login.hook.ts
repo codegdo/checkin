@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { arrayToIdsList } from '../utils';
 import { useAction } from './use-action.hook';
 
 export const useLogin = (): any => {
-  const { updateSession, updateNav, updateLocation, updatePolicy } = useAction();
+  const { updateSession, retrieveNav, retrieveLocation, retrievePolicy } = useAction();
   const [isUserVerified, setIsUserVerified] = useState(true);
   const [isUserSetupCompleted, setIsUserSetupCompleted] = useState(true);
 
@@ -31,9 +30,9 @@ export const useLogin = (): any => {
         orgId,
         locationId,
       });
-      updateNav(nav);
-      updateLocation(arrayToIdsList({ key: 'id', values: locations }));
-      updatePolicy(policies);
+      retrieveNav(nav);
+      retrieveLocation(locations);
+      retrievePolicy(policies);
     }
   };
 

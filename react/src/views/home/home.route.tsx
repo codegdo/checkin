@@ -1,10 +1,10 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import { useRoutes } from 'react-router-dom';
-import { Template } from '../../components/template/template.component';
-const NotFound = Template(lazy(() => import('../../components/page/notfound.page')));
+import { Template, lazyLoad } from '../../components/template/template.component';
+const NotFound = Template(lazyLoad(() => import('../../components/page/notfound.page')));
 
-const Index = Template(lazy(() => import('./home.index')));
-const Welcome = Template(lazy(() => import('./welcome/welcome')));
+const Index = Template(lazyLoad(() => import('./home.index')));
+const Welcome = Template(lazyLoad(() => import('./welcome/welcome')));
 
 export const HomeRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
@@ -18,7 +18,7 @@ export const HomeRoute: React.FC = (): JSX.Element => {
     },
     {
       path: '*',
-      element: <NotFound page="not-found" />
+      element: <NotFound route="home" page="not-found" />
     },
   ]);
 
