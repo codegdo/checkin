@@ -1,29 +1,22 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { Timer } from './components/timer/timer.component';
 import { LoginForm } from './screens/auth/login/login.form';
 
-export const App: React.FC = () => {
-  const state = useSelector((state: any) => state);
+const Stack = createNativeStackNavigator();
 
-  console.log(state);
+export const App: React.FC = () => {
 
   return (
-    <View style={styles.container}>
-      <LoginForm />
-      <Timer />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Group>
+          <Stack.Screen name="Login" component={LoginForm}></Stack.Screen>
+        </Stack.Group>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
