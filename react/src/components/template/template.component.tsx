@@ -40,14 +40,14 @@ export const Template = (Component: React.FC<TemplateProps>) => (options: Templa
     }
   }
 
+  const components: any = { Content: Component, ...Navs };
+  const props = { ...options, hasAccess };
+
   useLayoutEffect(() => {
     document.body.setAttribute('data-view', `${route}_${page}`);
   }, [page]);
 
   const jsxTemplate = useMemo(() => {
-    const components: any = { Content: Component, ...Navs };
-    const props = { ...options, hasAccess };
-
     return <JsxParser
       allowUnknownElements={false}
       renderInWrapper={false}

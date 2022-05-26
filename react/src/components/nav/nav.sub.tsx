@@ -1,9 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../store/reducers';
 
-export const NavSub: React.FC<{ name: string }> = (props): JSX.Element | null => {
+export const NavSub: React.FC = React.memo((): JSX.Element | null => {
   const { nav } = useSelector((state: AppState) => state);
   const { views } = nav;
 
@@ -29,4 +29,4 @@ export const NavSub: React.FC<{ name: string }> = (props): JSX.Element | null =>
       }
     </>
   )
-}
+});

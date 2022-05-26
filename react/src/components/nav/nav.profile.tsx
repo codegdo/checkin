@@ -1,10 +1,10 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { AppState } from '../../store/reducers';
-import { NavModuleGroup } from './nav.type';
+import { NavGroup } from './nav.type';
 
-export const NavProfile: React.FC<{ name: string }> = (props): JSX.Element | null => {
+export const NavProfile: React.FC = React.memo((): JSX.Element | null => {
   const { nav } = useSelector((state: AppState) => state);
   const { modules } = nav;
 
@@ -21,7 +21,7 @@ export const NavProfile: React.FC<{ name: string }> = (props): JSX.Element | nul
 
           const { label, group } = modules[key];
 
-          return (group !== NavModuleGroup.SOLUTION) ? <li key={i}>
+          return (group !== NavGroup.SOLUTION) ? <li key={i}>
             <NavLink to={`/${key}`}>{label}</NavLink>
           </li> : null
         })
@@ -29,4 +29,4 @@ export const NavProfile: React.FC<{ name: string }> = (props): JSX.Element | nul
       <NavLink to={`/auth/logout`}>logout</NavLink>
     </>
   )
-}
+});

@@ -6,6 +6,7 @@ export type TemplateData = {
 }
 
 export const stringTemplate = (template = ''): TemplateData => {
+
   const components = {
     content: '<Content {...props} />',
     navMain: '<NavMain {...props}/>',
