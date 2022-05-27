@@ -1,27 +1,28 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { createStyles } from '../assets/styles';
+import { lightTheme, ThemeData } from '../assets/styles/themes';
 
 interface ProvideValue {
-  styles: any;
-  theme: any;
-  setTheme: (newTheme: any) => void;
+  styles: ReturnType<typeof createStyles>;
+  theme: ThemeData;
+  setTheme: (newTheme: ThemeData) => void;
 }
 
 export interface Props {
-  initial: any;
+  initial: ThemeData;
   children?: React.ReactNode;
 }
 
 export const ThemeContext = React.createContext<ProvideValue>({
-  styles: createStyles({}),
-  theme: {},
-  setTheme: (newTheme: any) => console.log('theme is not render')
+  styles: createStyles(lightTheme),
+  theme: lightTheme,
+  setTheme: (newTheme: ThemeData) => console.log('no theme')
 });
 
 export const ThemeProvider = React.memo<Props>((props) => {
-  const [theme, setTheme] = useState(props.initial);
+  const [theme, setTheme] = useState<ThemeData>(props.initial);
 
-  const callback = useCallback((newTheme) => {
+  const setThemeCallback = useCallback((newTheme: ThemeData) => {
     setTheme({ ...newTheme })
   }, []);
 
@@ -29,7 +30,7 @@ export const ThemeProvider = React.memo<Props>((props) => {
     return {
       styles: createStyles(theme),
       theme,
-      setTheme: callback
+      setTheme: setThemeCallback
     }
   }, [theme]);
 

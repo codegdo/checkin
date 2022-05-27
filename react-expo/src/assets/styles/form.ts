@@ -1,16 +1,17 @@
 import { StyleSheet } from 'react-native';
+import { ThemeData } from './themes';
 
-export const formStyle = (theme) => {
-
+export const formStyle = (theme: ThemeData) => {
+  const { COLOR, FONT_SIZE } = theme;
   const styles = StyleSheet.create({
     form: {
-      borderWidth: 1,
-      borderColor: "thistle",
-      borderRadius: 50,
+      width: "100%",
+      //borderWidth: 1,
+      //borderColor: COLOR.black,
+      //borderRadius: 50,
     },
     formHeader: {
-      color: 'red',
-      fontSize: 20
+      fontSize: FONT_SIZE.p
     }
   });
 
