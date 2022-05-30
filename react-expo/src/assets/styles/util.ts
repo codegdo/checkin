@@ -7,11 +7,16 @@ export const utilStyle = (theme: ThemeData) => {
   const styles = StyleSheet.create({
     statusBar: {
       backgroundColor: COLOR.barBackground,
-      barStyle: COLOR.barStyle
-    }
+      barStyle: COLOR.barStyle,
+    },
+    center: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   });
 
   return {
-    statusBar: styles.statusBar
-  }
-}
+    'status-bar': styles.statusBar,
+    center: styles.center,
+  };
+};

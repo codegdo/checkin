@@ -1,11 +1,14 @@
 {
   "id": 1,
+  "className": "form",
+  "name": "login",
   "title": "Login",
   "description": null,
-  "name": "login",
   "data": [
     {
-      "id": "f-header",
+      "id": "header",
+      "className": "form-header",
+      "title": null,
       "type": "header",
       "role": "block",
       "data": [],
@@ -13,7 +16,9 @@
       "parentId": null
     },
     {
-      "id": "f-main",
+      "id": "main",
+      "className": "form-main",
+      "title": null,
       "type": "main",
       "role": "block",
       "data": [],
@@ -21,7 +26,9 @@
       "parentId": null
     },
     {
-      "id": "f-footer",
+      "id": "footer",
+      "className": "form-footer",
+      "title": null,
       "type": "footer",
       "role": "block",
       "data": [],
@@ -29,7 +36,7 @@
       "parentId": null
     },
     {
-      "id": "f-title",
+      "id": "title",
       "name": "login",
       "title": "Login",
       "description": null,
@@ -38,21 +45,24 @@
       "data": [],
       "value": null,
       "position": 0,
-      "parentId": "f-header"
+      "parentId": "header"
     },
     {
-      "id": "f-submit",
+      "id": "submit",
+      "className": "button",
       "name": "submit",
       "title": "Login",
+      "description": null,
       "type": "button",
       "role": "inline",
       "data": [],
       "value": null,
       "position": 0,
-      "parentId": "f-footer"
+      "parentId": "footer"
     },
     {
-      "id": "f-signup",
+      "id": "redirect",
+      "className": "link",
       "name": null,
       "title": "Signup",
       "description": null,
@@ -61,12 +71,13 @@
       "data": null,
       "value": "/auth/signup",
       "position": 0,
-      "parentId": "f-footer"
+      "parentId": "footer"
     }
   ],
   "fields": [
     {
       "id": 3,
+      "className": "field",
       "name": "username",
       "title": "Username",
       "description": null,
@@ -76,12 +87,13 @@
       "value": "",
       "isRequired": true,
       "position": 0,
-      "parentId": "f-main",
+      "parentId": "main",
       "map": "sec.user.username",
       "lookup": null
     },
     {
       "id": 4,
+      "className": "field",
       "name": "password",
       "title": "Password",
       "description": null,
@@ -91,7 +103,7 @@
       "value": "",
       "isRequired": true,
       "position": 0,
-      "parentId": "f-main",
+      "parentId": "main",
       "map": "sec.user.password",
       "lookup": null
     }

@@ -3,10 +3,14 @@ import { View, TextInput } from 'react-native';
 
 import { ThemeContext } from '../../contexts/theme.context';
 
-export const Input: React.FC = () => {
+type Props = {
+  placeholder?: string;
+}
+
+export const Input: React.FC<Props> = (props) => {
   const { styles: { input } } = useContext(ThemeContext);
 
   return <>
-    <TextInput style={input} />
+    <TextInput style={input} placeholder={props.placeholder} />
   </>
 }

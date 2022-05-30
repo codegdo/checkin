@@ -2,23 +2,20 @@ import { StyleSheet } from 'react-native';
 import { ThemeData } from './themes';
 
 export const inputStyle = (theme: ThemeData) => {
-
-  const { COLOR, FONT_SIZE } = theme;
+  const { COLOR, SIZE, ROUNDING } = theme;
 
   const styles = StyleSheet.create({
     input: {
       backgroundColor: COLOR.onBackground,
       padding: 10,
-      fontSize: FONT_SIZE.p
+      fontSize: SIZE.input,
+      borderRadius: ROUNDING.input,
     },
-    inputText: {
-
-    }
+    label: {},
   });
 
   return {
     input: styles.input,
-    inputText: styles.inputText
-  }
-}
-
+    label: styles.label,
+  };
+};

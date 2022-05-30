@@ -1,7 +1,8 @@
-import { StatusBarStyle } from "react-native";
+import { StatusBarStyle } from 'react-native';
 
+export type ThemeBackground = {};
 export type ThemeColor = {
-  barStyle: StatusBarStyle | null | undefined;
+  barStyle: 'default' | 'light-content' | 'dark-content';
   barBackground: string;
 
   background: string;
@@ -10,8 +11,10 @@ export type ThemeColor = {
   white: string;
   black: string;
   gray: string;
+
   light: string;
   dark: string;
+
   primary: string;
   onPrimary: string;
   secondary: string;
@@ -28,30 +31,42 @@ export type ThemeColor = {
   onPurple: string;
   green: string;
   onGreen: string;
-}
-export type ThemeFontSize = {
+};
+export type ThemeSize = {
   h1: number;
   h2: number;
   h3: number;
-  p: number;
+  text: number;
+  input: number;
   small: number;
-}
+};
 export type ThemeSpacing = {
+  input: number;
   small: number;
   medium: number;
   large: number;
-}
+};
+export type ThemeRounding = {
+  input: number;
+  small: number;
+  medium: number;
+  large: number;
+};
+
 export type ThemeData = {
   COLOR: ThemeColor;
-  FONT_SIZE: ThemeFontSize;
+  SIZE: ThemeSize;
   SPACING: ThemeSpacing;
-}
+  ROUNDING: ThemeRounding;
+};
+
 export type Theme = {
   id: number;
   name: string;
   title: string;
   data: string;
-}
+};
+
 export const lightTheme: ThemeData = {
   COLOR: {
     //status bar
@@ -85,20 +100,28 @@ export const lightTheme: ThemeData = {
     purple: '',
     onPurple: '',
     green: '',
-    onGreen: ''
+    onGreen: '',
   },
-  FONT_SIZE: {
+  SIZE: {
     h1: 76,
     h2: 47,
     h3: 29,
-    p: 18,
-    small: 11
+    text: 18,
+    input: 18,
+    small: 11,
   },
   SPACING: {
+    input: 8,
     small: 8,
     medium: 16,
-    large: 32
-  }
+    large: 32,
+  },
+  ROUNDING: {
+    input: 8,
+    small: 8,
+    medium: 16,
+    large: 32,
+  },
 };
 
 export const darkTheme: ThemeData = {
@@ -133,20 +156,28 @@ export const darkTheme: ThemeData = {
     purple: '',
     onPurple: '',
     green: '',
-    onGreen: ''
+    onGreen: '',
   },
-  FONT_SIZE: {
+  SIZE: {
     h1: 76,
     h2: 47,
     h3: 29,
-    p: 18,
-    small: 11
+    text: 18,
+    input: 18,
+    small: 11,
   },
   SPACING: {
+    input: 8,
     small: 8,
     medium: 16,
-    large: 32
-  }
+    large: 32,
+  },
+  ROUNDING: {
+    input: 8,
+    small: 8,
+    medium: 16,
+    large: 32,
+  },
 };
 
 export const themes: Theme[] = [
@@ -154,6 +185,6 @@ export const themes: Theme[] = [
     id: 1,
     name: 'LIGHT',
     title: 'Light Theme',
-    data: "{}"
-  }
-]
+    data: '{}',
+  },
+];

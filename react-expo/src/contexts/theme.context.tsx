@@ -2,8 +2,10 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { createStyles } from '../assets/styles';
 import { lightTheme, ThemeData } from '../assets/styles/themes';
 
+export type StylesType = ReturnType<typeof createStyles>;
+
 interface ProvideValue {
-  styles: ReturnType<typeof createStyles>;
+  styles: StylesType;
   theme: ThemeData;
   setTheme: (newTheme: ThemeData) => void;
 }
