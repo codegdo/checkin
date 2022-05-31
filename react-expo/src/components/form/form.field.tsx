@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { ThemeContext } from '../../contexts/theme.context';
 import { cssStyle } from '../../utils';
 import { Input } from '../input/input.component';
+import { Element } from '../element/element.component';
 
 type Props = {
   id: string;
@@ -20,7 +21,12 @@ export const Field: React.FC<Props> = ({ className = 'field', ...props }) => {
   const field = cssStyle(className, styles);
 
   console.log(props);
+
   return <View style={field}>
-    <Input {...props} />
+    {
+      ['button', 'link'].includes(props.type)
+        ? <Element {...props} />
+        : <Input {...props} />
+    }
   </View>
 }

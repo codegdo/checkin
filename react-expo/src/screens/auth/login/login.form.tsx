@@ -47,6 +47,12 @@ export const LoginForm: React.FC = () => {
             name="password"
             placeholder="Password"
           />
+          <Field
+            id="3"
+            type="button"
+            name="submit"
+            title="Login"
+          />
         </Block>
       </Form>
 

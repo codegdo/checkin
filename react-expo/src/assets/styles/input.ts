@@ -8,8 +8,8 @@ export const inputStyle = (theme: ThemeData) => {
     input: {
       backgroundColor: COLOR.onBackground,
       padding: 10,
-      fontSize: SIZE.input,
-      borderRadius: ROUNDING.input,
+      fontSize: SIZE.text,
+      borderRadius: ROUNDING.small,
     },
     label: {},
   });

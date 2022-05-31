@@ -6,7 +6,7 @@ export const utilStyle = (theme: ThemeData) => {
 
   const styles = StyleSheet.create({
     statusBar: {
-      backgroundColor: COLOR.barBackground,
+      backgroundColor: COLOR.background,
       barStyle: COLOR.barStyle,
     },
     center: {

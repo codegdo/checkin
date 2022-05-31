@@ -1,9 +1,5 @@
-import { StatusBarStyle } from 'react-native';
-
-export type ThemeBackground = {};
 export type ThemeColor = {
   barStyle: 'default' | 'light-content' | 'dark-content';
-  barBackground: string;
 
   background: string;
   onBackground: string;
@@ -37,17 +33,14 @@ export type ThemeSize = {
   h2: number;
   h3: number;
   text: number;
-  input: number;
   small: number;
 };
 export type ThemeSpacing = {
-  input: number;
   small: number;
   medium: number;
   large: number;
 };
 export type ThemeRounding = {
-  input: number;
   small: number;
   medium: number;
   large: number;
@@ -67,117 +60,79 @@ export type Theme = {
   data: string;
 };
 
+const color: ThemeColor = {
+  // status bar
+  barStyle: 'default',
+  // background
+  background: '#efefef',
+  onBackground: '#dddddd',
+  //
+  white: '#ffffff',
+  black: '#000000',
+  gray: '#dddddd',
+  //
+  light: '',
+  dark: '',
+  // brand
+  primary: '',
+  onPrimary: '',
+  secondary: '',
+  onSecondary: '',
+  // primary
+  red: '',
+  onRed: '',
+  yellow: '',
+  onYellow: '',
+  blue: '',
+  onBlue: '',
+  // secondary
+  orange: '',
+  onOrange: '',
+  purple: '',
+  onPurple: '',
+  green: '',
+  onGreen: ''
+};
+const size: ThemeSize = {
+  h1: 76,
+  h2: 47,
+  h3: 29,
+  text: 18,
+  small: 11
+};
+const spacing: ThemeSpacing = {
+  small: 8,
+  medium: 16,
+  large: 32
+};
+const rounding: ThemeRounding = {
+  small: 8,
+  medium: 16,
+  large: 32
+};
+
 export const lightTheme: ThemeData = {
   COLOR: {
-    //status bar
+    ...color,
     barStyle: 'dark-content',
-    barBackground: '#efefef',
-
     background: '#efefef',
-    onBackground: '#dddddd',
-    //
-    white: '#ffffff',
-    black: '#000000',
-    gray: '#dddddd',
-    //
-    light: '',
-    dark: '',
-    // brand
-    primary: '',
-    onPrimary: '',
-    secondary: '',
-    onSecondary: '',
-    // primary
-    red: '',
-    onRed: '',
-    yellow: '',
-    onYellow: '',
-    blue: '',
-    onBlue: '',
-    // secondary
-    orange: '',
-    onOrange: '',
-    purple: '',
-    onPurple: '',
-    green: '',
-    onGreen: '',
+    onBackground: '#dddddd'
   },
-  SIZE: {
-    h1: 76,
-    h2: 47,
-    h3: 29,
-    text: 18,
-    input: 18,
-    small: 11,
-  },
-  SPACING: {
-    input: 8,
-    small: 8,
-    medium: 16,
-    large: 32,
-  },
-  ROUNDING: {
-    input: 8,
-    small: 8,
-    medium: 16,
-    large: 32,
-  },
+  SIZE: { ...size },
+  SPACING: { ...spacing },
+  ROUNDING: { ...rounding },
 };
 
 export const darkTheme: ThemeData = {
   COLOR: {
-    //status bar
+    ...color,
     barStyle: 'light-content',
-    barBackground: '#444444',
     background: '#444444',
-    onBackground: '#cccccc',
-    //
-    white: '#000000',
-    black: '#ffffff',
-    gray: '#dddddd',
-    //
-    light: '',
-    dark: '',
-    // brand
-    primary: '',
-    onPrimary: '',
-    secondary: '',
-    onSecondary: '',
-    // primary
-    red: '',
-    onRed: '',
-    yellow: '',
-    onYellow: '',
-    blue: '',
-    onBlue: '',
-    // secondary
-    orange: '',
-    onOrange: '',
-    purple: '',
-    onPurple: '',
-    green: '',
-    onGreen: '',
+    onBackground: '#cccccc'
   },
-  SIZE: {
-    h1: 76,
-    h2: 47,
-    h3: 29,
-    text: 18,
-    input: 18,
-    small: 11,
-  },
-  SPACING: {
-    input: 8,
-    small: 8,
-    medium: 16,
-    large: 32,
-  },
-  ROUNDING: {
-    input: 8,
-    small: 8,
-    medium: 16,
-    large: 32,
-  },
+  SIZE: { ...size },
+  SPACING: { ...spacing },
+  ROUNDING: { ...rounding }
 };
 
 export const themes: Theme[] = [
