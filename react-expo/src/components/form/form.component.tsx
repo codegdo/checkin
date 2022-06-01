@@ -1,21 +1,20 @@
-import React, { useContext } from 'react';
-import { View, Text } from 'react-native';
-import { FormProvider } from '../../contexts/form.context';
+import React, { useRef } from 'react';
+import { View } from 'react-native';
 
-import { ThemeContext } from '../../contexts/theme.context';
+import { FormProvider } from '../../contexts/form.context';
 import { useStyle } from '../../hooks';
 import { FormRender } from './form.render';
 
-type Props = {
+type FormProps = {
   className?: string;
 }
 
-export const Form: React.FC<Props> = ({ className = 'form', children, ...props }) => {
-  const { styles } = useContext(ThemeContext);
-  const [form] = useStyle(className, styles);
+export const Form: React.FC<FormProps> = ({ className = 'form', children }) => {
+  const [formStyle] = useStyle(className);
+  const { current: values } = useRef({});
 
-  return <View style={form}>
-    <FormProvider>
+  return <View style={formStyle}>
+    <FormProvider values={values}>
       {
         children ? children : <FormRender />
       }

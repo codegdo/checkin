@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View } from 'react-native';
 
-import { ThemeContext } from '../../contexts/theme.context';
 import { useStyle } from '../../hooks';
 import { Input } from '../input/input.component';
 import { Element } from '../element/element.component';
+import { FormContext } from '../../contexts/form.context';
 
 type Props = {
   id: string;
@@ -12,21 +12,31 @@ type Props = {
   name: string;
   className?: string;
   title?: string;
+  value?: string;
   placeholder?: string;
   role?: string;
 }
 
 export const Field: React.FC<Props> = ({ className = 'field', ...props }) => {
-  const { styles } = useContext(ThemeContext);
-  const [field, ...rest] = useStyle(className, styles);
+  const { values } = useContext(FormContext);
+  const [fieldStyle, classNames] = useStyle(className);
+  const isElement = ['button', 'link'].includes(props.type);
 
-  console.log(rest);
+  useEffect(() => {
 
-  return <View style={field}>
+    if (!isElement) {
+      values[props.name] = props.value;
+
+      console.log('FIELD T', values);
+    }
+
+  }, []);
+
+  return <View style={fieldStyle}>
     {
-      ['button', 'link'].includes(props.type)
-        ? <Element {...props} />
-        : <Input {...props} />
+      isElement
+        ? <Element {...props} className={classNames} />
+        : <Input {...props} className={classNames} />
     }
   </View>
 }

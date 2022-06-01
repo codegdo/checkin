@@ -4,25 +4,25 @@ import { lightTheme, ThemeData } from '../assets/styles/themes';
 
 export type StylesType = ReturnType<typeof createStyles>;
 
-interface ProvideValue {
+type ThemeContextProps = {
   styles: StylesType;
   theme: ThemeData;
   setTheme: (newTheme: ThemeData) => void;
 }
 
-export interface Props {
+export type ThemeProps = {
   initial: ThemeData;
   children?: React.ReactNode;
 }
 
-export const ThemeContext = React.createContext<ProvideValue>({
+export const ThemeContext = React.createContext<ThemeContextProps>({
   styles: createStyles(lightTheme),
   theme: lightTheme,
   setTheme: (newTheme: ThemeData) => console.log('no theme')
 });
 
-export const ThemeProvider = React.memo<Props>((props) => {
-  const [theme, setTheme] = useState<ThemeData>(props.initial);
+export const ThemeProvider = React.memo<ThemeProps>(({ initial, children }) => {
+  const [theme, setTheme] = useState<ThemeData>(initial);
 
   const setThemeCallback = useCallback((newTheme: ThemeData) => {
     setTheme({ ...newTheme })
@@ -37,6 +37,6 @@ export const ThemeProvider = React.memo<Props>((props) => {
   }, [theme]);
 
   return <ThemeContext.Provider value={value}>
-    {props.children}
+    {children}
   </ThemeContext.Provider>
 });

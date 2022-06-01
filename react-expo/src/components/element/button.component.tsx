@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 
 type Props = {
@@ -7,7 +7,9 @@ type Props = {
   value?: string;
   title?: string;
   className?: string;
+  css?: [];
   callback?: () => void;
+  children?: ReactNode;
 }
 
 export const Button: React.FC<Props> = (props) => {

@@ -1,9 +1,22 @@
-import React from 'react';
+import React, { ReactNode, useMemo } from 'react';
 
-export const FormContext = React.createContext<null>(null);
+export type FormContextProps = {
+  values: any
+} | undefined;
 
-export const FormProvider: React.FC = (props) => {
-  return <FormContext.Provider value={null}>
-    {props.children}
+type FormProviderProps = FormContextProps;
+
+export const FormContext = React.createContext<FormContextProps>(undefined);
+
+export const FormProvider: React.FC<FormProviderProps> = ({ children, ...props }) => {
+
+  // const value = useMemo(() => {
+  //   return {
+  //     values
+  //   }
+  // }, []);
+
+  return <FormContext.Provider value={{ ...props }}>
+    {children}
   </FormContext.Provider>
 }

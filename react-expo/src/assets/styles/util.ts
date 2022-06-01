@@ -13,10 +13,17 @@ export const utilStyle = (theme: ThemeData) => {
       justifyContent: 'center',
       alignItems: 'center',
     },
+    hide: {
+      height: 0,
+      width: 0,
+      opacity: 0,
+      transform: [{ scale: 0 }]
+    }
   });
 
   return {
     'status-bar': styles.statusBar,
     center: styles.center,
+    hide: styles.hide
   };
 };

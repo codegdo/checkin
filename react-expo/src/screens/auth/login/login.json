@@ -37,6 +37,7 @@
     },
     {
       "id": "title",
+      "className": "button",
       "name": "login",
       "title": "Login",
       "description": null,

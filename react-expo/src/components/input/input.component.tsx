@@ -1,16 +1,28 @@
 import React, { useContext } from 'react';
-import { View, TextInput } from 'react-native';
+import { View, Text, TextInput } from 'react-native';
 
-import { ThemeContext } from '../../contexts/theme.context';
+import { InputRender as render } from './input.render';
+import { useStyle } from '../../hooks';
 
 type Props = {
+  id: string;
+  type: string;
+  name: string;
+  value?: string;
+  className?: string;
+  title?: string;
   placeholder?: string;
 }
 
-export const Input: React.FC<Props> = (props) => {
-  const { styles: { input } } = useContext(ThemeContext);
+export const Input: React.FC<Props> = ({ title, className = 'label : input', ...props }) => {
+  const [labelStyle, classNames] = useStyle(className);
 
   return <>
-    <TextInput style={input} placeholder={props.placeholder} />
+    {
+      title && <Text style={labelStyle}>{title}</Text>
+    }
+    {
+      render({ ...props, className: classNames })
+    }
   </>
 }
