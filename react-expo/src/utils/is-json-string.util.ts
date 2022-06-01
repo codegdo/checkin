@@ -1,4 +1,4 @@
-export const isJsonString = (str) => {
+export const isJsonString = (str: string) => {
   try {
     const json = JSON.parse(str);
 

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { View } from 'react-native';
 
 import { ThemeContext } from '../../contexts/theme.context';
-import { cssStyle } from '../../utils';
+import { useStyle } from '../../hooks';
 import { Input } from '../input/input.component';
 import { Element } from '../element/element.component';
 
@@ -18,9 +18,9 @@ type Props = {
 
 export const Field: React.FC<Props> = ({ className = 'field', ...props }) => {
   const { styles } = useContext(ThemeContext);
-  const field = cssStyle(className, styles);
+  const [field, ...rest] = useStyle(className, styles);
 
-  console.log(props);
+  console.log(rest);
 
   return <View style={field}>
     {

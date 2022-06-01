@@ -40,18 +40,21 @@ export const LoginForm: React.FC = () => {
             type="email"
             name="username"
             placeholder="Username"
+            className="field : label : input"
           />
           <Field
             id="2"
             type="password"
             name="password"
             placeholder="Password"
+            className="field : label : input"
           />
           <Field
             id="3"
             type="button"
             name="submit"
             title="Login"
+            className="field : button : text"
           />
         </Block>
       </Form>
