@@ -3,7 +3,7 @@ import { Session } from 'src/models/main/entities';
 import { createConnection } from 'typeorm';
 import { registerAs } from "@nestjs/config";
 
-export const sessionConfig = registerAs('session', () => ((async () => {
+export const sessionConfig = registerAs('session', () => ((async (config) => {
 
   try {
     const connection = await createConnection({
