@@ -15,8 +15,17 @@ export const typeormConfig = registerAs('database', () => {
     ...defaultOptions,
     database: process.env.DATABASE_MAIN,
     name: 'default',
-    entities: [__dirname + '/../schemas/main/**/*.entity{.ts,.js}'],
+    entities: [__dirname + '/../models/main/**/*.entity{.ts,.js}'],
   }
 
-  return { mainConnection }
+  const sessionConnection = {
+    ...defaultOptions,
+    database: process.env.DATABASE_MAIN,
+    name: 'default',
+    synchronize: true,
+    logging: false,
+    entities: [__dirname + '/../models/main/session/*.entity{.ts,.js}']
+  }
+
+  return { mainConnection, sessionConnection }
 });

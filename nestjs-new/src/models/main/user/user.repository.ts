@@ -1,9 +1,9 @@
 import { Repository } from 'typeorm';
 
-import { CustomRepository } from 'src/decorators';
+import { EntityRepository } from 'src/decorators';
 import { User } from './user.entity';
 
-@CustomRepository(User)
+@EntityRepository(User)
 export class UserRepository extends Repository<User> {
 
   async getUser(username: string) {

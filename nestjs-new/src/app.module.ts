@@ -5,7 +5,7 @@ import { DataSource } from 'typeorm';
 import { NestSessionOptions, SessionModule } from 'nestjs-session';
 
 import { typeormConfig, sessionConfig } from './configs';
-import { UserModule } from './api/setup/user/user.module';
+import { UserModule } from './api';
 
 
 @Module({
@@ -20,8 +20,8 @@ import { UserModule } from './api/setup/user/user.module';
     SessionModule.forRootAsync({
       inject: [ConfigService],
       useFactory: async (config: ConfigService): Promise<NestSessionOptions> => {
-        const dbConfig = config.get('database.mainConnection');
-        const session = await config.get('session')(dbConfig);
+        const sessionConnection = config.get('database.sessionConnection');
+        const session = await config.get('session')(sessionConnection);
 
         return { session };
       },
