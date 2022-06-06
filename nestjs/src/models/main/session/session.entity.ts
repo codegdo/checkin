@@ -1,5 +1,7 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { ISession } from 'connect-typeorm';
+
+import { ISession } from 'src/common';
+
 
 @Entity({ database: 'main', schema: 'sec', name: 'session' })
 export class Session implements ISession {

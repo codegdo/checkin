@@ -1,39 +1,25 @@
-import { TypeormStore } from 'connect-typeorm/out';
-import { Session } from 'src/models/main/entities';
-import { createConnection } from 'typeorm';
+
 import { registerAs } from "@nestjs/config";
+import { SessionStore } from "src/common";
+import { Session } from "src/models/main/session/session.entity";
+import { DataSource } from "typeorm";
 
-export const sessionConfig = registerAs('session', () => ((async (config) => {
+export const sessionConfig = registerAs('session', () => ((async (sessionConnection) => {
 
-  try {
-    const connection = await createConnection({
-      type: 'postgres',
-      host: process.env.POSTGRES_HOST,
-      username: process.env.POSTGRES_USERNAME,
-      password: process.env.POSTGRES_PASSWORD,
-      port: +process.env.POSTGRES_PORT,
-      database: process.env.DATABASE_MAIN,
+  const dataSource = await new DataSource(sessionConnection).initialize();
 
-      synchronize: true,
-      entities: [__dirname + '/../models/main/session/*.entity{.ts,.js}']
-    });
-
-    return {
-      secret: process.env.SESSION_SECRET,
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-        secure: false,
-        maxAge: 3600000 // 60000
-      },
-      store: new TypeormStore({
-        cleanupLimit: 10,
-        limitSubquery: false, // If using MariaDB.
-        //ttl: 3600000,
-      }).connect(connection.getRepository(Session)),
-    };
-  } catch (err) {
-    console.log(err);
+  return {
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false,
+      maxAge: 3600000 // 60000
+    },
+    store: new SessionStore({
+      cleanupLimit: 10,
+      limitSubquery: false,
+      //ttl: 3600000,
+    }).connect(dataSource.getRepository(Session))
   }
-
 })));

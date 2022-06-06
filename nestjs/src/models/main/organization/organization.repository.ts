@@ -1,4 +1,6 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
+
+import { EntityRepository } from 'src/decorators';
 import { Organization } from './organization.entity';
 
 @EntityRepository(Organization)

@@ -1,6 +1,9 @@
-import { EntityRepository, Repository } from 'typeorm';
+import { ConflictException } from '@nestjs/common';
+import { Repository } from 'typeorm';
 import { randomInt } from 'crypto';
 
+
+import { EntityRepository } from 'src/decorators';
 import { encryptKeyValue, trimObjectKey, validatePassword } from 'src/utils';
 
 import { User } from './user.entity';
@@ -20,7 +23,7 @@ import {
   UserLoginData,
   UserQueryAll,
 } from './user.type';
-import { ConflictException } from '@nestjs/common';
+
 import { LoggerMessageEnum } from 'src/common';
 import { FormTypeEnum } from '../form/form.type';
 

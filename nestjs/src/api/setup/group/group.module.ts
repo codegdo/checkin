@@ -2,11 +2,12 @@ import { Module } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { GroupController } from './group.controller';
 import { FormRepository, GroupRepository } from 'src/models/main/repositories';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmExModule } from 'src/common';
+
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([FormRepository, GroupRepository], 'default'),
+    TypeOrmExModule.forFeature([FormRepository, GroupRepository], 'default'),
   ],
   providers: [GroupService],
   controllers: [GroupController]

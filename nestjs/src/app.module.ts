@@ -1,14 +1,15 @@
 import { MiddlewareConsumer, Module, ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { NestSessionOptions, SessionModule } from 'nestjs-session';
 //import { WinstonModule } from 'nest-winston';
 
 import { MyMiddleware } from './middlewares';
 
 import {
   GuardModule,
-  SessionModule,
+  //SessionModule,
   MessageModule,
   LoggerModule
 } from './common';
@@ -30,7 +31,7 @@ import {
 
 import {
   appConfig,
-  dbConfig,
+  typeormConfig,
   jwtConfig,
   mailerConfig,
   sessionConfig,
@@ -40,12 +41,13 @@ import {
 
 import { HomeModule } from './api/home/home.module';
 
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [
         appConfig,
-        dbConfig,
+        typeormConfig,
         sessionConfig,
         mailerConfig,
         jwtConfig,
@@ -55,21 +57,31 @@ import { HomeModule } from './api/home/home.module';
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
-      useFactory: (configService: ConfigService) =>
-        configService.get('database.main'),
       inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        return config.get('database.mainConnection');
+      }
     }),
     TypeOrmModule.forRootAsync({
-      name: 'checkin',
-      useFactory: (configService: ConfigService) =>
-        configService.get('database.checkin'),
       inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        return config.get('database.checkinConnection');
+      }
+    }),
+    SessionModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: async (config: ConfigService): Promise<NestSessionOptions> => {
+        const sessionConnection = config.get('database.sessionConnection');
+        const session = await config.get('session')(sessionConnection);
+
+        return { session };
+      },
     }),
     // common
     LoggerModule,
     GuardModule,
     MessageModule,
-    SessionModule,
+    //SessionModule,
     // api
     AuthModule,
     CheckinModule,

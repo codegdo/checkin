@@ -74,7 +74,7 @@ export class ApiGuard implements CanActivate {
         const isExpired = exp < currentTimestamp;
 
         if (!isExpired) {
-          const found = await this.sessionRepository.findOne({ id: sid });
+          const found = await this.sessionRepository.findOne({ where: { id: sid } });
 
           if (found) {
             const { json } = found;

@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
@@ -15,11 +14,12 @@ import {
   EmailRepository
 } from 'src/models/main/repositories';
 //import { CheckinRepository } from 'src/models/checkin/repositories';
-import { LoggerService } from 'src/common';
+import { LoggerService, TypeOrmExModule } from 'src/common';
+
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature(
+    TypeOrmExModule.forFeature(
       [FormRepository, OrganizationRepository, UserRepository, ContactRepository, GroupRepository, TokenRepository, EmailRepository],
       'default',
     ),

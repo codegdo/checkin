@@ -1,8 +1,7 @@
-import { createConnection, Connection, ConnectionOptions } from 'typeorm';
 import { registerAs } from '@nestjs/config';
 
-export const dbConfig = registerAs('database', () => {
-  const options: ConnectionOptions = {
+export const typeormConfig = registerAs('database', () => {
+  const defaultOptions = {
     type: 'postgres',
     host: process.env.POSTGRES_HOST,
     username: process.env.POSTGRES_USERNAME,
@@ -10,24 +9,30 @@ export const dbConfig = registerAs('database', () => {
     port: +process.env.POSTGRES_PORT,
     synchronize: false,
     logging: true,
-    cli: {
-      migrationsDir: 'src/database/migrations',
-    },
-  };
+  }
 
-  const main: ConnectionOptions = {
-    ...options,
+  const mainConnection = {
+    ...defaultOptions,
     database: process.env.DATABASE_MAIN,
     name: 'default',
     entities: [__dirname + '/../models/main/**/*.entity{.ts,.js}'],
-  };
+  }
 
-  const checkin: ConnectionOptions = {
-    ...options,
+  const sessionConnection = {
+    ...defaultOptions,
+    database: process.env.DATABASE_MAIN,
+    name: 'default',
+    synchronize: true,
+    logging: false,
+    entities: [__dirname + '/../models/main/session/*.entity{.ts,.js}']
+  }
+
+  const checkinConnection = {
+    ...defaultOptions,
     database: process.env.DATABASE_CHECKIN,
     name: process.env.DATABASE_CHECKIN,
     entities: [__dirname + '/../models/checkin/**/*.entity{.ts,.js}'],
-  };
+  }
 
-  return { main, checkin };
+  return { mainConnection, sessionConnection, checkinConnection }
 });

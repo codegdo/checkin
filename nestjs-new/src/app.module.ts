@@ -6,6 +6,7 @@ import { NestSessionOptions, SessionModule } from 'nestjs-session';
 
 import { typeormConfig, sessionConfig } from './configs';
 import { UserModule } from './api';
+import { AuthModule } from './api/auth/auth.module';
 
 
 @Module({
@@ -26,7 +27,8 @@ import { UserModule } from './api';
         return { session };
       },
     }),
-    UserModule
+    UserModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],

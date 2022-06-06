@@ -3,9 +3,8 @@ import {
   NotFoundException,
   Injectable,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { InjectConnection, InjectRepository } from '@nestjs/typeorm';
-import { Connection } from 'typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 
 //import { PinoLogger, InjectPinoLogger } from 'nestjs-pino';
 //import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
@@ -38,11 +37,11 @@ import { moduleViewObjectGroup } from 'src/utils/module-view-object-group.util';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectConnection()
-    private connection: Connection,
+    @InjectDataSource('default')
+    private dataSource: DataSource,
 
-    @InjectConnection('checkin')
-    private connection2: Connection,
+    //@InjectDataSource('checkin')
+    //private dataSource2: DataSource,
 
     @InjectRepository(OrganizationRepository)
     private orgRepository: OrganizationRepository,
@@ -109,8 +108,6 @@ export class AuthService {
   async login(dto: UserLoginDto) {
     try {
       const data = await this.userRepository.loginUser(dto);
-
-      console.log(data);
 
       const { user, modules, ...rest } = data;
       const { orgId, isActive } = user;

@@ -1,17 +1,19 @@
 import { registerAs } from "@nestjs/config";
 import { Token } from "src/models/main/entities";
-import { createConnection, getConnection } from "typeorm";
+import { DataSource } from "typeorm";
 import { format, transports } from "winston";
 import * as Transport from 'winston-transport';
 
 export default class PgTransport extends Transport {
+  private dataSource;
 
-  constructor(connection) {
-    super(connection);
+  constructor(dataSource: DataSource) {
+    super();
+    this.dataSource = dataSource;
   }
 
   private async insert() {
-    console.log('CONNECTION', await getConnection().getRepository(Token).find());
+    console.log('CONNECTION', await this.dataSource.getRepository(Token).find());
   }
 
   log(info, callback) {
@@ -28,7 +30,7 @@ export default class PgTransport extends Transport {
 
 export const winstonConfig = registerAs('winston', async () => {
 
-  const connection = createConnection({
+  const dataSource = new DataSource({
     type: 'postgres',
     host: process.env.POSTGRES_HOST,
     username: process.env.POSTGRES_USERNAME,
@@ -37,6 +39,8 @@ export const winstonConfig = registerAs('winston', async () => {
     database: process.env.DATABASE_MAIN,
     name: 'default'
   });
+
+  await dataSource.initialize();
 
   return {
     exitOnError: false,
@@ -57,7 +61,7 @@ export const winstonConfig = registerAs('winston', async () => {
           format.simple()
         )
       }),
-      new PgTransport(connection)
+      new PgTransport(dataSource)
     ],
   }
 });
