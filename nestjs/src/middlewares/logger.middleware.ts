@@ -1,9 +1,12 @@
 import * as winston from 'winston';
 import * as Transport from 'winston-transport';
-import { getConnection } from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import * as dotenv from 'dotenv';
 
 import { ErrorEntity } from 'src/models/main/entities';
 import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
+import { typeormConfig } from 'src/configs';
+
 
 export enum LogLevel {
   INFO = 'info',
@@ -11,25 +14,35 @@ export enum LogLevel {
   WARN = 'warn'
 }
 
+dotenv.config();
+
+const { errorConnection } = typeormConfig();
+const dataSource = new DataSource(errorConnection as DataSourceOptions);
+
 class WinstonTransport extends Transport {
   private error = null;
   private info = null;
 
-  constructor() {
+  constructor(private dataSource: DataSource) {
     super();
     this.error = this.error;
     this.info = this.info;
+    this.dataSource = dataSource;
   }
 
   private async insert({ message, stack }, { meta: { req } }) {
 
+    await this.dataSource.initialize();
+
     const { url, headers: { host } } = req;
+    const errorRepository = this.dataSource.getRepository(ErrorEntity);
+    const error = new ErrorEntity();
+    error.message = message;
+    error.host = host;
+    error.url = url;
+    error.stack = stack;
 
-    const connection = await getConnection();
-    const repository = connection.getRepository(ErrorEntity);
-    const data = repository.create({ message, host, url, stack });
-
-    await repository.save(data);
+    await errorRepository.save(error);
 
     this.info = null;
     this.error = null;
@@ -80,6 +93,6 @@ export const logger = winston.createLogger({
         nestWinstonModuleUtilities.format.nestLike('App', { prettyPrint: true }),
       ),
     }),
-    new WinstonTransport()
+    new WinstonTransport(dataSource)
   ]
 });

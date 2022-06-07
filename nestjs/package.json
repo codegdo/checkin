@@ -33,6 +33,7 @@
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "create-nestjs-middleware-module": "^0.2.1",
+    "dotenv": "^16.0.1",
     "express-session": "^1.17.2",
     "express-winston": "^4.2.0",
     "handlebars": "^4.7.7",

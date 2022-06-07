@@ -41,3 +41,13 @@
 {"level":"error","message":"Unable to connect to the database. Retrying (8)..."}
 {"level":"error","message":"error:1E08010C:DECODER routines::unsupported"}
 {"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
+{"level":"error","message":"procedure sec.pr_user_get_all(unknown, unknown, unknown, unknown, unknown, unknown, unknown) does not exist"}
