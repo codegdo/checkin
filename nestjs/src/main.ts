@@ -1,16 +1,16 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import * as expressWinston from 'express-winston';
-//import * as dotenv from 'dotenv';
 
 import { AppModule } from './app.module';
-import { logger } from './middlewares';
-
-//dotenv.config();
+import { createLogger } from './middlewares';
 
 async function bootstrap() {
 
   //const app = await NestFactory.create(AppModule);
-  const app = await NestFactory.create(AppModule, { logger });
+  const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
+  const logger = createLogger(configService);
 
   app.setGlobalPrefix('api');
   app.enableCors({
@@ -20,6 +20,7 @@ async function bootstrap() {
     exposedHeaders: ['Authorization ', 'Expiry', 'X-Api-Token'],
   });
 
+  app.useLogger(logger);
   app.use(
     expressWinston.logger({
       winstonInstance: logger

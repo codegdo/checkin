@@ -6,7 +6,11 @@ import { DataSource } from "typeorm";
 
 export const sessionConfig = registerAs('session', () => ((async (sessionConnection) => {
 
-  const dataSource = await new DataSource(sessionConnection).initialize();
+  const dataSource = new DataSource(sessionConnection);
+
+  if (!dataSource.isInitialized) {
+    await dataSource.initialize();
+  }
 
   return {
     secret: process.env.SESSION_SECRET,

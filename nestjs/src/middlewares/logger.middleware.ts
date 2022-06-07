@@ -1,23 +1,16 @@
 import * as winston from 'winston';
 import * as Transport from 'winston-transport';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import * as dotenv from 'dotenv';
+import { ConfigService } from '@nestjs/config';
 
 import { ErrorEntity } from 'src/models/main/entities';
 import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
-import { typeormConfig } from 'src/configs';
-
 
 export enum LogLevel {
   INFO = 'info',
   ERROR = 'error',
   WARN = 'warn'
 }
-
-dotenv.config();
-
-const { errorConnection } = typeormConfig();
-const dataSource = new DataSource(errorConnection as DataSourceOptions);
 
 class WinstonTransport extends Transport {
   private error = null;
@@ -32,7 +25,9 @@ class WinstonTransport extends Transport {
 
   private async insert({ message, stack }, { meta: { req } }) {
 
-    await this.dataSource.initialize();
+    if (!this.dataSource.isInitialized) {
+      await this.dataSource.initialize();
+    }
 
     const { url, headers: { host } } = req;
     const errorRepository = this.dataSource.getRepository(ErrorEntity);
@@ -74,25 +69,31 @@ class WinstonTransport extends Transport {
   }
 }
 
-export const logger = winston.createLogger({
-  exitOnError: false,
-  transports: [
-    new winston.transports.File({
-      filename: 'error.log',
-      level: LogLevel.ERROR,
-      format: winston.format.json()
-    }),
-    new winston.transports.Http({
-      level: LogLevel.WARN,
-      format: winston.format.json()
-    }),
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.ms(),
-        nestWinstonModuleUtilities.format.nestLike('App', { prettyPrint: true }),
-      ),
-    }),
-    new WinstonTransport(dataSource)
-  ]
-});
+export const createLogger = (configService: ConfigService) => {
+
+  const configOption = configService.get<DataSourceOptions>('database.errorConnection');
+  const dataSource = new DataSource(configOption);
+
+  return winston.createLogger({
+    exitOnError: false,
+    transports: [
+      new winston.transports.File({
+        filename: 'error.log',
+        level: LogLevel.ERROR,
+        format: winston.format.json()
+      }),
+      new winston.transports.Http({
+        level: LogLevel.WARN,
+        format: winston.format.json()
+      }),
+      new winston.transports.Console({
+        format: winston.format.combine(
+          winston.format.timestamp(),
+          winston.format.ms(),
+          nestWinstonModuleUtilities.format.nestLike('App', { prettyPrint: true }),
+        ),
+      }),
+      new WinstonTransport(dataSource)
+    ]
+  });
+} 

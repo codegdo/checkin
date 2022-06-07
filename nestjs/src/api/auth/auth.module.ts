@@ -16,7 +16,6 @@ import {
 //import { CheckinRepository } from 'src/models/checkin/repositories';
 import { LoggerService, TypeOrmExModule } from 'src/common';
 
-
 @Module({
   imports: [
     TypeOrmExModule.forFeature(
