@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
-    const { data } = request?.session;
+    //const { data } = request?.session;
     console.log('AUTH_GUARD');
     return true;
   }

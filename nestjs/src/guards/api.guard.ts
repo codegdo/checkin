@@ -20,6 +20,12 @@ declare module 'express' {
   }
 }
 
+declare module 'express-session' {
+  export interface SessionData {
+    data: { [key: string]: any };
+  }
+}
+
 @Injectable()
 export class ApiGuard implements CanActivate {
   constructor(

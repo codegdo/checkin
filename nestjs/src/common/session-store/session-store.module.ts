@@ -73,14 +73,14 @@ export class SessionStore extends Store {
 
     if (this.cleanupLimit) {
       const sessionIds = await this.getSessionIds();
+
       try {
-        await this.createQueryBuilder()
+        await this.repository
+          .createQueryBuilder('session')
           .delete()
-          .where(`id IN (${sessionIds})`)
-          .execute();
+          .where(`id IN (${sessionIds})`);
       } catch (err) {
-        callback && callback(err);
-        this.handleError(err);
+        console.log(err);
       }
     }
 

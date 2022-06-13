@@ -4,7 +4,6 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 
 import { ErrorEntity } from 'src/models/main/entities';
-import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
 
 export enum LogLevel {
   INFO = 'info',
@@ -90,7 +89,7 @@ export const createLogger = (configService: ConfigService) => {
         format: winston.format.combine(
           winston.format.timestamp(),
           winston.format.ms(),
-          nestWinstonModuleUtilities.format.nestLike('App', { prettyPrint: true }),
+          winston.format.colorize(),
         ),
       }),
       new WinstonTransport(dataSource)
