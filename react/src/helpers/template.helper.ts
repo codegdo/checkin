@@ -15,10 +15,10 @@ export const stringTemplate = (template = ''): TemplateData => {
   }
 
   const placeholders = {
-    content: '<div class="loader">...</div>',
-    navMain: '<div class="loader">...</div>',
-    navProfile: '<div class="loader">...</div>',
-    navSub: '<div class="loader">...</div>'
+    content: '',
+    navMain: '<NavMain {...props}/>',
+    navProfile: '<NavProfile {...props} />',
+    navSub: '<NavSub {...props} />'
   }
 
   return {

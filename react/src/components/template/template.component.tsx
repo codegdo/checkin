@@ -1,30 +1,26 @@
-import React, { ComponentType, lazy, Suspense, useLayoutEffect, useMemo, useRef } from 'react';
+import React, { ComponentType, lazy, Suspense, useLayoutEffect, useMemo } from 'react';
 import JsxParser from 'react-jsx-parser';
 
 import { useTemplate, useAuthorize } from '../../hooks';
 import * as Navs from '../nav';
 import UnAuthorize from '../page/unauthorize.page';
-import AdminRedirect from '../page/admin-redirect.page';
-import HomeRedirect from '../page/home-redirect.page';
-
-//import { Page } from './template.page';
+import { AdminRedirect, HomeRedirect } from '../redirect';
 
 export type TemplateProps = {
   route?: string;
   page: string;
 }
 
-export const lazyLoad = <T extends ComponentType<any>>(factory: () => Promise<{ default: T }>, minLoadTimeMs = 0): React.LazyExoticComponent<T> => {
+export const lazyLoad = <T extends ComponentType<{}>>(factory: () => Promise<{ default: T }>, minLoadTimeMs = 0): React.LazyExoticComponent<T> => {
   return lazy(() => {
     return Promise.all([factory(), new Promise((resolve) => setTimeout(resolve, minLoadTimeMs))]).then(([moduleExports]) => moduleExports);
   });
 }
 
-export const Template = (Component: React.FC<TemplateProps>) => (options: TemplateProps): JSX.Element | null => {
-  const { route, page } = options;
-  const { template, fallback } = useTemplate(options);
-  const { isPublish, hasAccess, requiredLocation, requiredOrg } = useAuthorize(options);
-  //const [fallback, setFallback] = React.useState<any>(route);
+export const Template = (Component: React.FC<TemplateProps | {}>) => (props: TemplateProps): JSX.Element | null => {
+  const { route, page } = props;
+  const { template, fallback } = useTemplate(props);
+  const { isPublish, hasAccess, requiredLocation, requiredOrg } = useAuthorize(props);
 
   if (!isPublish) {
     if (!hasAccess) {
@@ -40,9 +36,6 @@ export const Template = (Component: React.FC<TemplateProps>) => (options: Templa
     }
   }
 
-  const components: any = { Content: Component, ...Navs };
-  const props = { ...options, hasAccess };
-
   useLayoutEffect(() => {
     document.body.setAttribute('data-view', `${route}_${page}`);
   }, [page]);
@@ -51,13 +44,18 @@ export const Template = (Component: React.FC<TemplateProps>) => (options: Templa
     return <JsxParser
       allowUnknownElements={false}
       renderInWrapper={false}
-      bindings={{ props }}
-      components={{ ...components }}
+      bindings={{ props: { ...props, hasAccess } }}
+      components={{ Content: Component, ...Navs }}
       jsx={template} />
   }, []);
 
   const jsxFallback = useMemo(() => {
-    return <JsxParser renderInWrapper={false} jsx={fallback} />
+    return <JsxParser
+      allowUnknownElements={false}
+      renderInWrapper={false}
+      bindings={{ props }}
+      components={{ ...Navs }}
+      jsx={fallback} />
   }, []);
 
   return <Suspense fallback={jsxFallback}>

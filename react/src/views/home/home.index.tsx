@@ -5,6 +5,23 @@ import { useAction, useFetch } from '../../hooks';
 import { AppState } from '../../store/reducers';
 
 const Home: React.FC = (): JSX.Element => {
+  const { locations } = useSelector((state: AppState) => state);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (locations.length == 0) {
+      navigate('/welcome');
+    }
+  }, []);
+
+  return <div>Welcome</div>;
+};
+
+export default Home;
+
+/*
+
+const Home: React.FC = (): JSX.Element => {
   const { session, locations } = useSelector((state: AppState) => state);
   const { updateSession } = useAction();
   const navigate = useNavigate();
@@ -44,5 +61,4 @@ const Home: React.FC = (): JSX.Element => {
     }
   </div>;
 };
-
-export default Home;
+*/
