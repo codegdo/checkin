@@ -34,7 +34,7 @@ export const LoginForm: React.FC = () => {
     <View style={container}>
 
       <Form>
-        <Block>
+        <Block className="form-main">
           <Field
             id="1"
             type="email"
@@ -49,12 +49,15 @@ export const LoginForm: React.FC = () => {
             placeholder="Password"
             className="field : label : input"
           />
+
+        </Block>
+        <Block className="form-footer">
           <Field
             id="3"
             type="button"
             name="submit"
             title="Login"
-            className="field : button : text"
+            className="field : button : button-text"
           />
         </Block>
       </Form>

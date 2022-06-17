@@ -2,7 +2,10 @@ export type ThemeColor = {
   barStyle: 'default' | 'light-content' | 'dark-content';
 
   background: string;
-  onBackground: string;
+  overBackground: string;
+
+  button: string;
+  overButton: string;
 
   white: string;
   black: string;
@@ -12,21 +15,21 @@ export type ThemeColor = {
   dark: string;
 
   primary: string;
-  onPrimary: string;
+  overPrimary: string;
   secondary: string;
-  onSecondary: string;
+  overSecondary: string;
   red: string;
-  onRed: string;
+  overRed: string;
   yellow: string;
-  onYellow: string;
+  overYellow: string;
   blue: string;
-  onBlue: string;
+  overBlue: string;
   orange: string;
-  onOrange: string;
+  overOrange: string;
   purple: string;
-  onPurple: string;
+  overPurple: string;
   green: string;
-  onGreen: string;
+  overGreen: string;
 };
 export type ThemeSize = {
   h1: number;
@@ -65,7 +68,10 @@ const color: ThemeColor = {
   barStyle: 'default',
   // background
   background: '#efefef',
-  onBackground: '#dddddd',
+  overBackground: '#dddddd',
+  // button
+  button: '#444444',
+  overButton: '#ffffff',
   //
   white: '#ffffff',
   black: '#000000',
@@ -75,23 +81,23 @@ const color: ThemeColor = {
   dark: '',
   // brand
   primary: '',
-  onPrimary: '',
+  overPrimary: '',
   secondary: '',
-  onSecondary: '',
+  overSecondary: '',
   // primary
   red: '',
-  onRed: '',
+  overRed: '',
   yellow: '',
-  onYellow: '',
+  overYellow: '',
   blue: '',
-  onBlue: '',
+  overBlue: '',
   // secondary
   orange: '',
-  onOrange: '',
+  overOrange: '',
   purple: '',
-  onPurple: '',
+  overPurple: '',
   green: '',
-  onGreen: ''
+  overGreen: ''
 };
 const size: ThemeSize = {
   h1: 76,
@@ -116,7 +122,7 @@ export const lightTheme: ThemeData = {
     ...color,
     barStyle: 'dark-content',
     background: '#efefef',
-    onBackground: '#dddddd'
+    overBackground: '#dddddd'
   },
   SIZE: { ...size },
   SPACING: { ...spacing },
@@ -128,7 +134,9 @@ export const darkTheme: ThemeData = {
     ...color,
     barStyle: 'light-content',
     background: '#444444',
-    onBackground: '#cccccc'
+    overBackground: '#cccccc',
+    button: '#000000',
+    overButton: '#ffffff',
   },
   SIZE: { ...size },
   SPACING: { ...spacing },

@@ -1,12 +1,20 @@
 import React, { ReactNode, useMemo } from 'react';
 
 export type FormContextProps = {
-  values: any
-} | undefined;
+  form: Record<string, string | undefined>;
+  error: Record<string, string | undefined>;
+  callback: (key?: string, value?: string) => void;
+};
 
 type FormProviderProps = FormContextProps;
 
-export const FormContext = React.createContext<FormContextProps>(undefined);
+const initialProps: FormContextProps = {
+  form: {},
+  error: {},
+  callback: () => console.log('no callback')
+}
+
+export const FormContext = React.createContext<FormContextProps>(initialProps);
 
 export const FormProvider: React.FC<FormProviderProps> = ({ children, ...props }) => {
 

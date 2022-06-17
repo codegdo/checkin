@@ -1,30 +1,21 @@
-import React, { ReactNode } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { Text, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { useStyle } from '../../hooks';
+import { ElementButton } from './element.type';
 
-type Props = {
-  name: string;
-  type: string;
-  value?: string;
-  title?: string;
-  className?: string;
-  callback?: () => void;
-}
-
-export const Button: React.FC<Props> = (props) => {
+export const Button: React.FC<ElementButton> = (props) => {
   const {
     name,
-    type,
     value,
     title = 'Button',
-    className = 'button',
-    callback } = props;
+    className = 'button : button-text',
+    onClick } = props;
 
-  const handlePress = (key: string, val: string | undefined) => {
-    callback && callback();
-  };
+  const [buttonStyle, classNames] = useStyle(className);
+  const [textStyle] = useStyle(classNames);
 
-  return <TouchableOpacity onPress={() => handlePress(name, value)}>
-    <Text>{title}</Text>
-  </TouchableOpacity>
+  return <TouchableHighlight underlayColor='rgba(0,0,0,.5)' style={buttonStyle} onPress={() => onClick && onClick(name, value)}>
+    <Text style={textStyle}>{title}</Text>
+  </TouchableHighlight>
 
 }

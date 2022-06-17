@@ -6,7 +6,7 @@ export const inputStyle = (theme: ThemeData) => {
 
   const styles = StyleSheet.create({
     input: {
-      backgroundColor: COLOR.onBackground,
+      backgroundColor: COLOR.overBackground,
       padding: 10,
       fontSize: SIZE.text,
       borderRadius: ROUNDING.small,

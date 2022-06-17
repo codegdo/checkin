@@ -2,24 +2,22 @@ import React, { useContext } from 'react';
 import { TextInput } from 'react-native';
 
 import { useStyle } from '../../hooks';
+import { InputProps, InputTextData } from './input.type';
 
-type Props = {
-  type: string;
-  value?: string;
-  placeholder?: string;
-  className?: string;
-
-}
-
-export const InputText: React.FC<Props> = (props) => {
-  const { type = 'text', value = '', placeholder = '', className = 'input' } = props;
+export const InputText: React.FC<InputProps> = (props) => {
+  const { name, type = 'text', value = '', placeholder = '', className = 'input', onChange } = props;
   const [inputStyle] = useStyle(className);
+
+  const handleChange = (input: InputTextData) => {
+    onChange && onChange(input);
+  }
 
   return <TextInput
     secureTextEntry={type == 'password' ? true : false}
     style={inputStyle}
     value={value}
     placeholder={placeholder}
-    onChangeText={() => console.log('change t')}
+    autoCapitalize='none'
+    onChangeText={text => handleChange({ name, type, text })}
   />
 }

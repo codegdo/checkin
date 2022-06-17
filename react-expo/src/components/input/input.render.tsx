@@ -1,15 +1,10 @@
 import React from 'react';
+
 import { InputText } from './input.text';
+import { InputProps } from './input.type';
 
-type Props = {
-  type: string;
-  value?: string;
-  placeholder?: string;
-  className?: string;
-}
-
-export const InputRender: React.FC<Props> = ({ type, ...props }) => {
-  switch (type) {
+export const InputRender: React.FC<InputProps> = ({ ...props }) => {
+  switch (props.type) {
     case 'text':
     case 'email':
     case 'password':

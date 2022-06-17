@@ -1,20 +1,24 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { View } from 'react-native';
 
 import { FormProvider } from '../../contexts/form.context';
 import { useStyle } from '../../hooks';
 import { FormRender } from './form.render';
+import { FormProps } from './form.type';
 
-type FormProps = {
-  className?: string;
-}
-
-export const Form: React.FC<FormProps> = ({ className = 'form', children }) => {
+export const Form: React.FC<FormProps> = ({ className = 'form', onSubmit, children }) => {
   const [formStyle] = useStyle(className);
-  const { current: values } = useRef({});
+  const { current: form } = useRef({});
+  const { current: error } = useRef({});
+
+  const handleCallback = useCallback((key, value) => {
+    console.log(form);
+    console.log(key);
+    //onSubmit && onSubmit();
+  }, []);
 
   return <View style={formStyle}>
-    <FormProvider values={values}>
+    <FormProvider form={form} error={error} callback={handleCallback}>
       {
         children ? children : <FormRender />
       }

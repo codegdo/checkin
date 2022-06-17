@@ -9,17 +9,26 @@ export const formStyle = (theme: ThemeData) => {
     },
     formHeader: {
       fontSize: SIZE.h1,
+      paddingVertical: 10
     },
-    formMain: {},
-    formFooter: {},
-    formBlock: {},
-    formField: {},
+    formMain: {
+      paddingVertical: 10
+    },
+    formFooter: {
+      paddingVertical: 10
+    },
+    Block: {},
+    Field: {
+      marginBottom: 15
+    },
   });
 
   return {
     form: styles.form,
     'form-header': styles.formHeader,
-    'form-block': styles.formBlock,
-    'form-field': styles.formField,
+    'form-main': styles.formMain,
+    'form-footer': styles.formFooter,
+    block: styles.Block,
+    field: styles.Field,
   };
 };
