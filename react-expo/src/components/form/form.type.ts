@@ -1,4 +1,4 @@
 export type FormProps = {
   className?: string;
-  onSubmit?: () => void;
+  onSubmit?: (values: Record<string, string>) => Promise<void>;
 }

@@ -1,69 +1,57 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, Button } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect, useState } from 'react';
 
-
-import * as data from './login.json';
-import { Form } from '../../../components';
-import { ThemeContext } from '../../../contexts/theme.context';
-import { darkTheme, lightTheme } from '../../../assets/styles/themes';
-import { Block } from '../../../components/form/form.block';
-import { Field } from '../../../components/form/form.field';
-import { cssStyle } from '../../../utils';
+import * as json from './login.json';
+import { Form, Block, Field, Container } from '../../../components';
+import { useFetch, useLogin } from '../../../hooks';
 
 export const LoginForm: React.FC = () => {
-  const { styles, setTheme } = useContext(ThemeContext);
-  const wrapper = cssStyle('wrapper', styles);
-  const container = cssStyle('container center', styles);
+  const [{ status, response: { data } }, getLogin] = useFetch('/api/auth/login');
+  const [_, login] = useLogin();
   const [form, setForm] = useState<any>();
 
   // load form
   useEffect(() => {
-    setForm(data);
+    setForm(json);
   }, []);
 
-  const handleLight = () => {
-    setTheme(lightTheme);
+  // login
+  useEffect(() => {
+    if (data?.user) {
+      login(data);
+    }
+  }, [data]);
+
+  const handleSubmit = async (values: Record<string, string>): Promise<void> => {
+    await getLogin({ body: values });
   }
 
-  const handleDark = () => {
-    setTheme(darkTheme);
-  }
-
-  return <SafeAreaView style={wrapper}>
-    <View style={container}>
-
-      <Form>
-        <Block className="form-main">
-          <Field
-            id="1"
-            type="email"
-            name="username"
-            placeholder="Username"
-            className="field : label : input"
-          />
-          <Field
-            id="2"
-            type="password"
-            name="password"
-            placeholder="Password"
-            className="field : label : input"
-          />
-
-        </Block>
-        <Block className="form-footer">
-          <Field
-            id="3"
-            type="button"
-            name="submit"
-            title="Login"
-            className="field : button : button-text"
-          />
-        </Block>
-      </Form>
-
-      <Button title="Light" onPress={handleLight} />
-      <Button title="Dark" onPress={handleDark} />
-    </View>
-  </SafeAreaView>
+  return <Container>
+    <Form onSubmit={handleSubmit}>
+      <Block className="form-main">
+        <Field
+          id="1"
+          type="email"
+          name="username"
+          placeholder="Username"
+          className="form-field:label:input"
+        />
+        <Field
+          id="2"
+          type="password"
+          name="password"
+          placeholder="Password"
+          className="form-field:label:input"
+        />
+      </Block>
+      <Block className="form-footer">
+        <Field
+          id="3"
+          type="button"
+          name="submit"
+          title="Login"
+          className="form-field:button:button-text"
+        />
+      </Block>
+    </Form>
+  </Container>
 }

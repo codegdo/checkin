@@ -135,7 +135,7 @@ export const darkTheme: ThemeData = {
     barStyle: 'light-content',
     background: '#444444',
     overBackground: '#cccccc',
-    button: '#000000',
+    button: '#222222',
     overButton: '#ffffff',
   },
   SIZE: { ...size },

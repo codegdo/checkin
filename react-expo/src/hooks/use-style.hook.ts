@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { StyleProp, ViewStyle } from 'react-native';
-import { StylesType, ThemeContext } from '../contexts/theme.context';
+import { ViewStyle } from 'react-native';
+import { ThemeContext } from '../contexts/theme.context';
 import { cssStyle } from '../utils';
 
 export const useStyle = (className: string): [ViewStyle, string] => {

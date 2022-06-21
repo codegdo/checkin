@@ -1,5 +1,5 @@
-export const SESSION_UPDATE = 'session/SESSION_UPDATE';
-export const SESSION_DELETE = 'session/SESSION_DELETE';
+export const SESSION_UPDATE = 'session/UPDATE';
+export const SESSION_DELETE = 'session/DELETE';
 
 export interface SessionState {
   isLogin?: boolean;

@@ -17,8 +17,8 @@ export const formStyle = (theme: ThemeData) => {
     formFooter: {
       paddingVertical: 10
     },
-    Block: {},
-    Field: {
+    formBlock: {},
+    formField: {
       marginBottom: 15
     },
   });
@@ -28,7 +28,7 @@ export const formStyle = (theme: ThemeData) => {
     'form-header': styles.formHeader,
     'form-main': styles.formMain,
     'form-footer': styles.formFooter,
-    block: styles.Block,
-    field: styles.Field,
+    'form-block': styles.formBlock,
+    'form-field': styles.formField,
   };
 };
