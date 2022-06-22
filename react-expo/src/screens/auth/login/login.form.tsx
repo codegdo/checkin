@@ -33,14 +33,14 @@ export const LoginForm: React.FC = () => {
           type="email"
           name="username"
           placeholder="Username"
-          className="form-field:label:input"
+          className="form-field.label.input"
         />
         <Field
           id="2"
           type="password"
           name="password"
           placeholder="Password"
-          className="form-field:label:input"
+          className="form-field.label.input"
         />
       </Block>
       <Block className="form-footer">
@@ -49,7 +49,7 @@ export const LoginForm: React.FC = () => {
           type="button"
           name="submit"
           title="Login"
-          className="form-field:button:button-text"
+          className="form-field.button.button-text"
         />
       </Block>
     </Form>
