@@ -1,10 +1,10 @@
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 export const getTabBarStyle = (route) => {
-  const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+  const routeName = getFocusedRouteNameFromRoute(route) ?? 'home';
 
   console.log(routeName);
 
-  let display = (['Setup'].includes(routeName)) ? 'none' : 'flex';
+  const display = (['setup', 'calendar-modal'].includes(routeName)) ? 'none' : 'flex';
   return { display }
 }

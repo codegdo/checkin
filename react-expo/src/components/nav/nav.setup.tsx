@@ -11,16 +11,16 @@ export enum NavGroup {
 }
 
 const list = {
-  setup: { label: 'setup' },
-  config: { label: 'config' }
+  user: { label: 'user' },
+  client: { label: 'client' }
 }
 
-export const Nav: React.FC = React.memo(({ navigation }): JSX.Element | null => {
+export const NavSetup: React.FC = React.memo(({ navigation }): JSX.Element | null => {
   const { nav } = useSelector((state: AppState) => state);
   const { modules = list } = nav;
 
   if (!modules) {
-    return <Button title="Setup" onPress={() => navigation.push('Setup')} />;
+    return <Button title="Setup" onPress={() => navigation.push('setup')} />;
   }
 
   return (
@@ -30,7 +30,7 @@ export const Nav: React.FC = React.memo(({ navigation }): JSX.Element | null => 
 
           const { label, group } = modules[key];
 
-          return (group !== NavGroup.SOLUTION) ? <Text key={label}>{label}</Text> : null
+          return (group !== NavGroup.SOLUTION) ? <Button title={label} onPress={() => navigation.push(label)} key={label} /> : null
         })
       }
     </>

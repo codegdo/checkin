@@ -3,4 +3,4 @@ export * from './form/form.component';
 export * from './form/form.block';
 export * from './form/form.field';
 
-export * from './nav/nav.component';
+export * from './nav/nav.menu';

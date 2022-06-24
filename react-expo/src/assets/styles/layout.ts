@@ -8,7 +8,7 @@ export const layoutStyle = (theme: ThemeData) => {
     wrapper: {
       flex: 1,
       backgroundColor: COLOR.background,
-      paddingHorizontal: SPACING.small,
+      paddingHorizontal: SPACING.medium,
     },
     container: {
       flex: 1,

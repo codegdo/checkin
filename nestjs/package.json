@@ -34,7 +34,7 @@
     "class-validator": "^0.13.1",
     "express-session": "^1.17.2",
     "express-winston": "^4.2.0",
-    "googleapis": "^103.0.0",
+    "googleapis": "^104.0.0",
     "handlebars": "^4.7.7",
     "jwk-to-pem": "^2.0.5",
     "nestjs-session": "^2.0.0",

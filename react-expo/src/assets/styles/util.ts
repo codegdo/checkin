@@ -9,6 +9,12 @@ export const utilStyle = (theme: ThemeData) => {
       backgroundColor: COLOR.background,
       barStyle: COLOR.barStyle,
     },
+    headerBar: {
+      backgroundColor: COLOR.background,
+    },
+    headerTitle: {
+
+    },
     center: {
       justifyContent: 'center',
       alignItems: 'center',
@@ -23,6 +29,8 @@ export const utilStyle = (theme: ThemeData) => {
 
   return {
     'status-bar': styles.statusBar,
+    'header-bar': styles.headerBar,
+    'header-title': styles.headerTitle,
     center: styles.center,
     hide: styles.hide
   };
