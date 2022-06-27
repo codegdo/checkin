@@ -25,7 +25,7 @@ export const LoginForm: React.FC = () => {
     await getLogin({ body: values });
   }
 
-  return <Container>
+  return <Container className='container center'>
     <Form onSubmit={handleSubmit}>
       <Block className="form-main">
         <Field

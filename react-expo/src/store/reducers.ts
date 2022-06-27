@@ -23,7 +23,7 @@ export const appReducer = combineReducers({
 
 const rootReducer = (state: AppState | undefined, action: AnyAction): AppState => {
   // reset store
-  if (action.type === 'session/SESSION_DELETE') {
+  if (action.type === 'session/DELETE') {
     //storage.removeItem('persist:root');
 
     state = {

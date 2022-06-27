@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Text, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
+import { useLogout } from '../../hooks';
 import { AppState } from '../../store/reducers';
 import { Container } from '../container/container.component';
 
@@ -18,6 +19,7 @@ const list = {
 
 export const NavMenu: React.FC = React.memo(({ navigation }): JSX.Element | null => {
   const { nav } = useSelector((state: AppState) => state);
+  const [_, logout] = useLogout();
   const { modules = list } = nav;
 
   if (!modules) {
@@ -37,6 +39,7 @@ export const NavMenu: React.FC = React.memo(({ navigation }): JSX.Element | null
             </TouchableOpacity> : null
         })
       }
+      <Button title="Logout" onPress={() => logout()} />
     </Container>
   )
 });
