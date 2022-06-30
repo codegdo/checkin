@@ -3,7 +3,7 @@ import React, { ReactNode, useMemo } from 'react';
 export type FormContextProps = {
   form: Record<string, string | undefined>;
   error: Record<string, string | undefined>;
-  callback: (key?: string, value?: string) => void;
+  onSubmit: (key?: string, value?: string) => void;
 };
 
 type FormProviderProps = FormContextProps;
@@ -11,7 +11,7 @@ type FormProviderProps = FormContextProps;
 const initialProps: FormContextProps = {
   form: {},
   error: {},
-  callback: () => console.log('no callback')
+  onSubmit: () => console.log('no onSubmit')
 }
 
 export const FormContext = React.createContext<FormContextProps>(initialProps);

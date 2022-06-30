@@ -19,10 +19,10 @@ export const NavSub: React.FC = React.memo((): JSX.Element | null => {
     <>
       {
         view && Object.keys(view).map(key => {
-          const { label } = view[key];
+          const { title } = view[key];
 
           return <li key={key}>
-            {<NavLink to={`/${root}/${key}`}>{label}</NavLink>}
+            {<NavLink to={`/${root}/${key}`}>{title}</NavLink>}
           </li>
 
         })

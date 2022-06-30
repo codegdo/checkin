@@ -1,14 +1,14 @@
 type ModuleViewObjectData = {
   module: string;
-  moduleLabel: string;
+  moduleTitle: string;
   moduleGroup: string;
 
   view: string;
-  viewLabel: string;
+  viewTitle: string;
   viewGroup: string;
 
   object: string;
-  objectLabel: string;
+  objectTitle: string;
 }
 
 type ModuleViewObjectReturn = {
@@ -82,19 +82,19 @@ function mapNav(nav: ModuleViewObjectPolicy, i: ModuleViewObjectData) {
 
   const m = {
     //name: i.module,
-    label: i.moduleLabel || i.module,
+    title: i.moduleTitle || i.module,
     group: i.moduleGroup,
     //type: PermissionType.MODULE
   };
   const v = {
     //name: i.view,
-    label: i.viewLabel || i.view,
+    title: i.viewTitle || i.view,
     group: i.viewGroup,
     //type: PermissionType.VIEW
   };
   const o = {
     name: i.object,
-    label: i.objectLabel || i.object,
+    title: i.objectTitle || i.object,
     //type: PermissionType.OBJECT
   };
 

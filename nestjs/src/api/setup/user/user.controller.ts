@@ -56,7 +56,6 @@ export class UserController {
   @Post('users')
   createUser(@CurrentUser() user: UserSession, @Body() body: UserCreateDto) {
     const { loginId } = user;
-
     return this.userService.createUser({ ...body, loginId });
   }
 

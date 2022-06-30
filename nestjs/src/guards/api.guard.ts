@@ -13,6 +13,7 @@ import * as jwktopem from 'jwk-to-pem';
 
 import { IS_PUBLIC_KEY, IS_RESTRICT_KEY } from '../decorators';
 import { SessionRepository } from 'src/models/main/repositories';
+import session from 'express-session';
 
 declare module 'express' {
   export interface Request {
@@ -55,7 +56,15 @@ export class ApiGuard implements CanActivate {
     // 1. BROWSER - check request use session
     if (sessionData) {
       const { user, locationId, orgId } = sessionData;
-      request.currentUser = { ...user, locationId, orgId };
+      request.currentUser = {
+        loginId: user.id,
+        groupType: user.groupType,
+        groupLevel: user.groupLevel,
+        isOwner: user.isOwner,
+        locationId,
+        orgId,
+        sessionId: request.session.id
+      };
       return true;
     }
 

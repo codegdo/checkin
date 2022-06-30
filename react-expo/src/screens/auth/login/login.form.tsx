@@ -34,6 +34,7 @@ export const LoginForm: React.FC = () => {
           name="username"
           placeholder="Username"
           className="form-field.label.input"
+          isRequired={true}
         />
         <Field
           id="2"
@@ -41,6 +42,7 @@ export const LoginForm: React.FC = () => {
           name="password"
           placeholder="Password"
           className="form-field.label.input"
+          isRequired={true}
         />
       </Block>
       <Block className="form-footer">

@@ -19,10 +19,10 @@ export const NavProfile: React.FC = React.memo((): JSX.Element | null => {
       {
         Object.keys(modules).map((key, i) => {
 
-          const { label, group } = modules[key];
+          const { title, group } = modules[key];
 
           return (group !== NavGroup.SOLUTION) ? <li key={i}>
-            <NavLink to={`/${key}`}>{label}</NavLink>
+            <NavLink to={`/${key}`}>{title}</NavLink>
           </li> : null
         })
       }
