@@ -1,5 +1,6 @@
 export type FormProps = {
   className?: string;
+  data?: any;
   callback?: (values: Record<string, string>) => Promise<void>;
 }
 

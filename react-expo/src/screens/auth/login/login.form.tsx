@@ -21,12 +21,12 @@ export const LoginForm: React.FC = () => {
     }
   }, [data]);
 
-  const handleSubmit = async (values: Record<string, string>): Promise<void> => {
+  const handleCallback = async (values: Record<string, string>): Promise<void> => {
     await getLogin({ body: values });
   }
 
   return <Container className='container center'>
-    <Form onSubmit={handleSubmit}>
+    <Form data={form} callback={handleCallback}>
       <Block className="form-main">
         <Field
           id="1"

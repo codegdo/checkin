@@ -6,7 +6,7 @@ import { useStyle } from '../../hooks';
 import { FormRender } from './form.render';
 import { FormProps } from './form.type';
 
-export const Form: React.FC<FormProps> = ({ className = 'form', callback, children }) => {
+export const Form: React.FC<FormProps> = ({ data, className = 'form', callback, children }) => {
 
   const [formStyle] = useStyle(className);
   const { current: form } = useRef({});
@@ -19,7 +19,7 @@ export const Form: React.FC<FormProps> = ({ className = 'form', callback, childr
   };
 
   return <View style={formStyle}>
-    <FormProvider form={form} error={error} onSubmit={handleSubmit}>
+    <FormProvider data={data} form={form} error={error} onSubmit={handleSubmit}>
       {
         children ? children : <FormRender />
       }

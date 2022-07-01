@@ -1,6 +1,7 @@
 import React, { ReactNode, useMemo } from 'react';
 
 export type FormContextProps = {
+  data?: any;
   form: Record<string, string | undefined>;
   error: Record<string, string | undefined>;
   onSubmit: (key?: string, value?: string) => void;
