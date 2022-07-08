@@ -5,7 +5,7 @@ import { InputRender as render } from './input.render';
 import { useStyle } from '../../hooks';
 import { InputProps, InputData } from './input.type';
 
-export const Input: React.FC<InputProps> = ({ title, className = 'label : input', onChange, ...props }) => {
+export const Input: React.FC<InputProps> = ({ title, className = 'label.input', onChange, ...props }) => {
   const [labelStyle, classNames] = useStyle(className);
 
   const [value, setValue] = useState(props.value);

@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
 import * as json from './login.json';
-import { Form, Block, Field, Container } from '../../../components';
+import { Form, Block, Field, FormData, Container } from '../../../components';
 import { useFetch, useLogin } from '../../../hooks';
+import { normalizeForm } from '../../../helpers';
 
 export const LoginForm: React.FC = () => {
   const [{ status, response: { data } }, getLogin] = useFetch('/api/auth/login');
   const [_, login] = useLogin();
-  const [form, setForm] = useState<any>();
+  const [form, setForm] = useState<FormData | undefined>();
 
   // load form
   useEffect(() => {
-    setForm(json);
+    setForm(normalizeForm(json));
   }, []);
 
   // login
@@ -27,7 +28,7 @@ export const LoginForm: React.FC = () => {
 
   return <Container className='container center'>
     <Form data={form} callback={handleCallback}>
-      <Block className="form-main">
+      {/* <Block className="form-main">
         <Field
           id="1"
           type="email"
@@ -53,7 +54,7 @@ export const LoginForm: React.FC = () => {
           title="Login"
           className="form-field.button.button-text"
         />
-      </Block>
+      </Block> */}
     </Form>
   </Container>
 }

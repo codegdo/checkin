@@ -2,6 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   HttpException,
+  Inject,
   Injectable,
 } from '@nestjs/common';
 import { Request } from 'express';
@@ -12,8 +13,9 @@ import * as fs from 'fs';
 import * as jwktopem from 'jwk-to-pem';
 
 import { IS_PUBLIC_KEY, IS_RESTRICT_KEY } from '../decorators';
-import { SessionRepository } from 'src/models/main/repositories';
-import session from 'express-session';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Session } from 'src/models/main/entities';
 
 declare module 'express' {
   export interface Request {
@@ -32,7 +34,9 @@ export class ApiGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,
-    private sessionRepository: SessionRepository,
+
+    @InjectRepository(Session)
+    private sessionRepository: Repository<Session>,
   ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -65,6 +69,7 @@ export class ApiGuard implements CanActivate {
         orgId,
         sessionId: request.session.id
       };
+
       return true;
     }
 

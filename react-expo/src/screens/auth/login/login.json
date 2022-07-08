@@ -37,7 +37,7 @@
     },
     {
       "id": "title",
-      "className": "button",
+      "className": "title",
       "name": "login",
       "title": "Login",
       "description": null,
@@ -50,7 +50,7 @@
     },
     {
       "id": "submit",
-      "className": "button",
+      "className": "form-field.button.button-text",
       "name": "submit",
       "title": "Login",
       "description": null,
@@ -78,7 +78,7 @@
   "fields": [
     {
       "id": 3,
-      "className": "field",
+      "className": "form-field.label.input",
       "name": "username",
       "title": "Username",
       "description": null,
@@ -94,7 +94,7 @@
     },
     {
       "id": 4,
-      "className": "field",
+      "className": "form-field.label.input",
       "name": "password",
       "title": "Password",
       "description": null,

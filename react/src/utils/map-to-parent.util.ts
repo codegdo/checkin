@@ -1,9 +1,9 @@
-interface Item {
+type Item = {
   id: string;
   role: 'block';
-  data: any[];
+  data: Item[];
   position: number;
-  parentId: string;
+  parentId: number | string;
 }
 
 export function mapToParent(list: Item[], item: Item): void {

@@ -8,7 +8,7 @@ export const Button: React.FC<ElementButton> = (props) => {
     name,
     value,
     title = 'Button',
-    className = 'button : button-text',
+    className = 'button.button-text',
     onClick } = props;
 
   const [buttonStyle, classNames] = useStyle(className);

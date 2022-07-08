@@ -7,26 +7,24 @@ import { ConfigService } from '@nestjs/config';
 import { ApiGuard } from '../../guards/api.guard';
 import { AuthGuard } from '../../guards/auth.guard';
 import { SessionRepository } from 'src/models/main/repositories';
-
+import { Session } from 'src/models/main/entities';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([SessionRepository]),
+    TypeOrmModule.forFeature([Session], 'default'),
     JwtModule.registerAsync({
-      useFactory: async (configService: ConfigService) => configService.get('jwt'),
+      useFactory: async (config: ConfigService) => config.get('jwt'),
       inject: [ConfigService]
     })
   ],
   providers: [
     {
       provide: APP_GUARD,
-      useClass: ApiGuard,
-      inject: [SessionRepository]
+      useClass: ApiGuard
     },
     {
       provide: APP_GUARD,
-      useClass: AuthGuard,
-      inject: []
+      useClass: AuthGuard
     }
   ]
 })

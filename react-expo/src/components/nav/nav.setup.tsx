@@ -15,7 +15,7 @@ const list = {
   client: { label: 'client' }
 }
 
-export const NavSetup: React.FC = React.memo(({ navigation }): JSX.Element | null => {
+export const NavSetup = React.memo(({ navigation }): JSX.Element | null => {
   const { nav } = useSelector((state: AppState) => state);
   const { modules = list } = nav;
 

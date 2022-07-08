@@ -11,7 +11,7 @@ import { FieldProps } from './form.type';
 export const Field: React.FC<FieldProps> = ({ className = 'form-field', ...props }) => {
   const { form, onSubmit } = useContext(FormContext);
   const [fieldStyle, classNames] = useStyle(className);
-  const isElement = ['button', 'link'].includes(props.type);
+  const isElement = ['button', 'link', 'title'].includes(props.type);
 
   useEffect(() => {
 

@@ -17,7 +17,7 @@ const list = {
   config: { label: 'config' }
 }
 
-export const NavMenu: React.FC = React.memo(({ navigation }): JSX.Element | null => {
+export const NavMenu = React.memo(({ navigation }): JSX.Element | null => {
   const { nav } = useSelector((state: AppState) => state);
   const [_, logout] = useLogout();
   const { modules = list } = nav;

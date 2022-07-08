@@ -1,6 +1,6 @@
 type ObjectKeyParam = {
   key: string;
-  values: any[];
+  values: [];
 };
 
 export const arrayToObjectKey = <T>({ key, values }: ObjectKeyParam): T => {

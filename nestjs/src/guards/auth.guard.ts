@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,
-    private sessionRepository: SessionRepository,
+    //private sessionRepository: SessionRepository,
   ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

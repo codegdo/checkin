@@ -1,5 +1,5 @@
-export type InputProps = {
-  id: string;
+export interface InputProps {
+  id?: number | string;
   type: string;
   name: string;
   value?: string;
