@@ -10,7 +10,7 @@ import { AppState } from '../../../store/reducers';
 const UserForm: React.FC = (props): JSX.Element => {
   console.log('USER ADD', props);
 
-  const { id = 0 } = useParams();
+  const { id = '0' } = useParams();
   const { search } = useLocation();
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ const UserForm: React.FC = (props): JSX.Element => {
   const [form, setForm] = useState<FormData>();
   const [isShow, toggle] = useModal(true);
 
-  const [{ status: submit, response: { data: dataSubmit } }, postUser] = useFetch('/api/setup/users');
+  const [{ status: submit, response: { data: dataSubmit } }, postUser] = useFetch(`/api/setup/users`);
   const [{ status: loading, response: { data: dataForm } }, getForm] = useFetch(`/api/setup/users/${id}${search}`);
 
   // load form
@@ -41,11 +41,22 @@ const UserForm: React.FC = (props): JSX.Element => {
   }, [submit]);
 
   const handleSubmit = (values: any) => {
+    let userId = id;
+
+    if (isNaN(parseInt(id))) {
+      if (id == 'new') {
+        userId = '0';
+      } else {
+        alert('invalid url');
+        return;
+      }
+    }
+
     void postUser({
       body: {
         data: JSON.stringify(objectToKeyValue(values)),
         formId: form?.id,
-        userId: id == 'new' ? 0 : id
+        userId
       }
     });
   };

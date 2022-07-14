@@ -154,8 +154,13 @@ CREATE TABLE IF NOT EXISTS org.field (
   lookup VARCHAR(95),
 
   has_dependent BOOLEAN DEFAULT FALSE,
+  
   is_dependent BOOLEAN DEFAULT FALSE,
   is_required BOOLEAN DEFAULT FALSE,
+
+  is_new BOOLEAN DEFAULT TRUE,
+  is_review BOOLEAN DEFAULT TRUE,
+  is_unique BOOLEAN DEFAULT FALSE,
 
   dependent_id INT REFERENCES org.field(id) ON DELETE SET NULL,
   parent_id INT REFERENCES org.field(id) ON DELETE SET NULL,
@@ -174,51 +179,51 @@ CREATE TABLE IF NOT EXISTS org.field (
 );
 
 INSERT
-INTO org.field (name, role, type, value, map, lookup, has_dependent, is_dependent, is_required, object_id, component_id, dependent_id, parent_id)
+INTO org.field (name, role, type, value, map, lookup, has_dependent, is_dependent, is_required, is_new, is_review, is_unique, object_id, component_id, dependent_id, parent_id)
 VALUES
 --user=1
-('username', 'field', 'text', null, 'sec.user.username', null, '0', '0', '1', '1', null, null, null),
-('password', 'field', 'password', null, 'sec.user.password', null, '0', '0', '1', '1', null, null, null),
-('passcode', 'field', 'text', null, 'sec.user.passcode', null, '0', '0', '1', '1', null, null, null),
-('location', 'field', 'select', null, 'sec.user_location.location_id', 'org.location.name.id', '0', '0', '1', '1', null, null, null),
-('groupId', 'field', 'select', null, 'sec.user.group_id', 'sec.group.name.id', '0', '0', '1', '1', null, null, null),
+('username', 'field', 'text', null, 'sec.user.username', null, '0', '0', '1', '1', '1', '1', '1', null, null, null),
+('password', 'field', 'password', null, 'sec.user.password', null, '0', '0', '1', '1', '0', '0', '1', null, null, null),
+('passcode', 'field', 'text', null, 'sec.user.passcode', null, '0', '0', '1', '1', '1', '0', '1', null, null, null),
+('location', 'field', 'select', null, 'sec.user_location.location_id', 'org.location.name.id', '0', '0', '1', '1', '1', '0', '1', null, null, null),
+('groupId', 'field', 'select', null, 'sec.user.group_id', 'sec.group.name.id', '0', '0', '1', '1', '1', '0', '1', null, null, null),
 
 --contact=2
-('firstName', 'field', 'text', null, 'org.contact.first_name', null, '0', '0', '1', '2', null, null, null),
-('lastName', 'field', 'text', null, 'org.contact.last_name', null, '0', '0', '1', '2', null, null, null),
-('emailAddress', 'field', 'text', null, 'org.contact.email_address', null, '0', '0', '1', '2', null, null, null),
-('phoneNumber', 'field', 'text', null, 'org.contact.phone_number', null, '0', '0', '1', '2', null, null, null),
-('streetAddress', 'field', 'text', null, 'org.contact.street_address', null, '0', '0', '0', '2', null, null, null),
-('country', 'field', 'select', null, 'org.contact.territory_id', 'dbo.territory.country.country_code', '0', '0', '0', '2', null, null, null),
-('state', 'field', 'select', null, 'org.contact.territory_id', 'dbo.territory.state.state_code', '0', '0', '0', '2', null, null, null),
-('city', 'field', 'text', null, 'org.contact.city', null, '0', '0', '0', '2', null, null, null),
-('postalCode', 'field', 'text', null, 'org.contact.postal_code', null, '0', '0', '0', '2', null, null, null),
+('firstName', 'field', 'text', null, 'org.contact.first_name', null, '0', '0', '1', '1', '1', '0', '2', null, null, null),
+('lastName', 'field', 'text', null, 'org.contact.last_name', null, '0', '0', '1', '1', '1', '0', '2', null, null, null),
+('emailAddress', 'field', 'text', null, 'org.contact.email_address', null, '0', '0', '1', '1', '1', '0', '2', null, null, null),
+('phoneNumber', 'field', 'text', null, 'org.contact.phone_number', null, '0', '0', '1', '1', '1', '0', '2', null, null, null),
+('streetAddress', 'field', 'text', null, 'org.contact.street_address', null, '0', '0', '0', '1', '1', '0', '2', null, null, null),
+('country', 'field', 'select', null, 'org.contact.territory_id', 'dbo.territory.country.country_code', '0', '0', '0', '1', '1', '0', '2', null, null, null),
+('state', 'field', 'select', null, 'org.contact.territory_id', 'dbo.territory.state.state_code', '0', '0', '0', '1', '1', '0', '2', null, null, null),
+('city', 'field', 'text', null, 'org.contact.city', null, '0', '0', '0', '1', '1', '0', '2', null, null, null),
+('postalCode', 'field', 'text', null, 'org.contact.postal_code', null, '0', '0', '0', '1', '1', '0', '2', null, null, null),
 
 --group=4
-('groupGrid', 'component', 'grid', null, 'sec.group', null, '0', '0', '1', '4', '1', null, null),
-('name', 'field', 'text', null, 'sec.group.name', null, '0', '0', '1', '4', '1', null, '14'),
+('groupGrid', 'component', 'grid', null, 'sec.group', null, '0', '0', '1', '1', '1', '0', '4', '1', null, null),
+('name', 'field', 'text', null, 'sec.group.name', null, '0', '0', '1', '1', '1', '0', '4', '1', null, '14'),
 
 --organization=15
-('name', 'field', 'text', null, 'sec.organization.name', null, '0', '0', '1', '15', null, null, null),
-('streetAddress', 'field', 'text', null, 'sec.organization.street_address', null, '0', '0', '0', '15', null, null, null),
-('country', 'field', 'select', null, 'sec.organization.territory_id', 'dbo.territory.country.country_code', '0', '0', '0', '15', null, null, null),
-('state', 'field', 'select', null, 'sec.organization.territory_id', 'dbo.territory.state.state_code', '0', '0', '0', '15', null, null, null),
-('city', 'field', 'text', null, 'sec.organization.city', null, '0', '0', '0', '15', null, null, null),
-('postalCode', 'field', 'text', null, 'sec.organization.postal_code', null, '0', '0', '0', '15', null, null, null),
-('phoneNumber', 'field', 'text', null, 'sec.organization.phone_number', null, '0', '0', '0', '15', null, null, null),
-('faxNumber', 'field', 'text', null, 'sec.organization.fax_number', null, '0', '0', '0', '15', null, null, null),
-('website', 'field', 'text', null, 'sec.organization.website', null, '0', '0', '0', '15', null, null, null),
-('subdomain', 'field', 'text', null, 'sec.organization.subdomain', null, '0', '0', '1', '15', null, null, null),
-('businessType', 'field', 'select', null, 'sec.organization.business_type_id', 'dbo.business_type.name.id', '0', '0', '1', '15', null, null, null),
+('name', 'field', 'text', null, 'sec.organization.name', null, '0', '0', '1', '1', '1', '0', '15', null, null, null),
+('streetAddress', 'field', 'text', null, 'sec.organization.street_address', null, '0', '0', '0', '1', '1', '0', '15', null, null, null),
+('country', 'field', 'select', null, 'sec.organization.territory_id', 'dbo.territory.country.country_code', '0', '0', '0', '1', '1', '0', '15', null, null, null),
+('state', 'field', 'select', null, 'sec.organization.territory_id', 'dbo.territory.state.state_code', '0', '0', '0', '1', '1', '0', '15', null, null, null),
+('city', 'field', 'text', null, 'sec.organization.city', null, '0', '0', '0', '1', '1', '0', '15', null, null, null),
+('postalCode', 'field', 'text', null, 'sec.organization.postal_code', null, '0', '0', '0', '1', '1', '0', '15', null, null, null),
+('phoneNumber', 'field', 'text', null, 'sec.organization.phone_number', null, '0', '0', '0', '1', '1', '0', '15', null, null, null),
+('faxNumber', 'field', 'text', null, 'sec.organization.fax_number', null, '0', '0', '0', '1', '1', '0', '15', null, null, null),
+('website', 'field', 'text', null, 'sec.organization.website', null, '0', '0', '0', '1', '1', '0', '15', null, null, null),
+('subdomain', 'field', 'text', null, 'sec.organization.subdomain', null, '0', '0', '1', '1', '1', '0', '15', null, null, null),
+('businessType', 'field', 'select', null, 'sec.organization.business_type_id', 'dbo.business_type.name.id', '0', '0', '1', '1', '1', '0', '15', null, null, null),
 --location=6
-('name', 'field', 'text', null, 'org.location.name', null, '0', '0', '1', '6', null, null, null),
-('streetAddress', 'field', 'text', null, 'org.location.street_address', null, '0', '0', '0', '6', null, null, null),
-('country', 'field', 'select', null, 'org.location.territory_id', 'dbo.territory.country.country_code', '0', '0', '0', '6', null, null, null),
-('state', 'field', 'select', null, 'org.location.territory_id', 'dbo.territory.state.state_code', '0', '0', '0', '6', null, null, null),
-('city', 'field', 'text', null, 'org.location.city', null, '0', '0', '0', '6', null, null, null),
-('postalCode', 'field', 'text', null, 'org.location.postal_code', null, '0', '0', '0', '6', null, null, null),
-('phoneNumber', 'field', 'text', null, 'org.location.phone_number', null, '0', '0', '0', '6', null, null, null),
-('faxNumber', 'field', 'text', null, 'org.location.fax_number', null, '0', '0', '0', '6', null, null, null);
+('name', 'field', 'text', null, 'org.location.name', null, '0', '0', '1', '1', '1', '0', '6', null, null, null),
+('streetAddress', 'field', 'text', null, 'org.location.street_address', null, '0', '0', '0', '1', '1', '0', '6', null, null, null),
+('country', 'field', 'select', null, 'org.location.territory_id', 'dbo.territory.country.country_code', '0', '0', '0', '1', '1', '0', '6', null, null, null),
+('state', 'field', 'select', null, 'org.location.territory_id', 'dbo.territory.state.state_code', '0', '0', '0', '1', '1', '0', '6', null, null, null),
+('city', 'field', 'text', null, 'org.location.city', null, '0', '0', '0', '1', '1', '0', '6', null, null, null),
+('postalCode', 'field', 'text', null, 'org.location.postal_code', null, '0', '0', '0', '1', '1', '0', '6', null, null, null),
+('phoneNumber', 'field', 'text', null, 'org.location.phone_number', null, '0', '0', '0', '1', '1', '0', '6', null, null, null),
+('faxNumber', 'field', 'text', null, 'org.location.fax_number', null, '0', '0', '0', '1', '1', '0', '6', null, null, null);
 
 -- CREATE TABLE FORM_FIELD
 CREATE TABLE IF NOT EXISTS org.form_field (

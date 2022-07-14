@@ -54,18 +54,11 @@ export class UserController {
   }
 
   @Post('users')
-  createUser(@CurrentUser() user: UserSession, @Body() body: UserCreateDto) {
+  createUser(
+    @CurrentUser() user: UserSession,
+    @Body() body: UserCreateDto) {
     const { loginId } = user;
     return this.userService.createUser({ ...body, loginId });
-  }
-
-  @Patch('users/:id')
-  updateUser(
-    @CurrentUser() user: UserSession,
-    @Param('id') id: number,
-    @Body() body: any,
-  ) {
-    return this.userService.updateUser(id, body);
   }
 
   @Delete('users/:id')

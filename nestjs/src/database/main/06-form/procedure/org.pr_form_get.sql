@@ -32,7 +32,7 @@ $BODY$
       END
     )
     AND f.org_id = p_org_id
-    AND f.is_publish IS TRUE;
+    AND f.is_publish IS true;
 
     -- DEFAULT
     IF form_id IS NULL THEN
@@ -49,7 +49,7 @@ $BODY$
         END
       )
       AND f.org_id IS NULL
-      AND f.is_publish IS TRUE;
+      AND f.is_publish IS true;
     END IF;
 
     IF form_id IS NOT NULL THEN
@@ -124,10 +124,19 @@ $BODY$
           ff.field_map map,
           ff.field_position position,
           ff.field_parent_id "parentId",
-          ff.field_is_required "isRequired",
           ff.field_has_dependent "hasDependent",
-          ff.field_is_dependent "isDependent"
+          ff.field_is_dependent "isDependent",
+          ff.field_is_required "isRequired",
+          ff.field_is_unique "isUnique"
         FROM PFG_form_field ff
+        WHERE (
+          CASE
+            WHEN (p_filter_id > 0) THEN
+              ff.field_is_review IS true
+            ELSE
+              ff.field_is_new IS true
+          END
+        )
         ORDER BY ff.field_position
       ) field;
 

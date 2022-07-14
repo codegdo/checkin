@@ -102,7 +102,9 @@ export class UserRepository extends Repository<User> {
     let { data, formId, userId, loginId } = dto;
 
     // encrypt password
-    data = await encryptKeyValue(2, data);
+    if (userId == 0) {
+      data = await encryptKeyValue(2, data);
+    }
 
     const [result] = await this.manager.query(
       `CALL sec.pr_user_save($1, $2, $3, $4, $5)`,

@@ -11,7 +11,7 @@ AS
 $BODY$
   DECLARE
     login_username varchar;
-    org_id int;
+    login_org_id int;
   BEGIN
     --TEMP
     DROP TABLE IF EXISTS PUSV_eval CASCADE;
@@ -20,7 +20,7 @@ $BODY$
 
     --SET vars
     SELECT u.username, u.org_id
-    INTO login_username, org_id
+    INTO login_username, login_org_id
     FROM sec.user u
     WHERE u.id = p_login_id;
 
@@ -83,19 +83,36 @@ $BODY$
         FROM u;
 
       ELSE
-        --UPDATE
-        WITH u AS (
-          UPDATE sec.user _u
-          SET 
-            username = (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'sec.user.username')
-          WHERE _u.id = p_user_id
-          RETURNING _u.id
-        )
-        SELECT id
-        INTO data
-        FROM u;
-      END IF;
 
+        SELECT json_agg(u)::json ->> 0
+        INTO data
+        FROM (
+          SELECT id, contact_id
+          FROM sec.user
+          WHERE id = p_user_id AND org_id = login_org_id
+        ) u;
+
+        --SELECT json_build_object('id', u.id, 'contact_id', u.contact_id)
+        --INTO data
+        --FROM sec.user u
+        --WHERE u.id = p_user_id;
+
+        IF data IS NOT NULL THEN
+            --UPDATE
+            UPDATE sec.user u
+            SET
+              --username = (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'sec.user.username')
+              passcode = (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'sec.user.passcode')
+            WHERE u.id = p_user_id;
+
+            UPDATE org.contact c
+            SET
+              first_name = (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'org.contact.first_name'),
+              last_name = (SELECT DISTINCT value FROM PUSV_eval WHERE map = 'org.contact.last_name')
+            WHERE c.id = (data ->> 'contact_id')::int;
+        END IF;
+
+      END IF;
     END IF;
 
     COMMIT;

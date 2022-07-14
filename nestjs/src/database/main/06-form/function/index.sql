@@ -23,9 +23,13 @@ RETURNS TABLE(
   field_lookup varchar,
   field_position int,
   field_parent_id varchar,
-  field_is_required boolean,
+  
   field_has_dependent boolean,
-  field_is_dependent boolean
+  field_is_dependent boolean,
+  field_is_required boolean,
+  field_is_new boolean,
+  field_is_review boolean,
+  field_is_unique boolean
 )
 AS
 $BODY$
@@ -61,6 +65,8 @@ $BODY$
       fld.lookup fld_lookup,
       ff.position fld_position,
       ff.parent_id fld_parent_id, --varchar
+      fld.has_dependent fld_has_dependent,
+      fld.is_dependent fld_is_dependent,
       --is_required
       CASE WHEN fld.is_required = true
         THEN true
@@ -72,8 +78,9 @@ $BODY$
         END
       END AS fld_is_required,
       --
-      fld.has_dependent fld_has_dependent,
-      fld.is_dependent fld_is_dependent
+      fld.is_new fld_is_new,
+      fld.is_review fld_is_review,
+      fld.is_unique fld_is_unique
     FROM org.form f
     INNER JOIN org.form_field ff ON ff.form_id = f.id
     LEFT JOIN org.field fld ON fld.id = ff.field_id

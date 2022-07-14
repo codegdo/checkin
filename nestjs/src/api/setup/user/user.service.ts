@@ -51,7 +51,10 @@ export class UserService {
     }
   }
 
-  async updateUser(id, updateUserDto) { }
+  async updateUser(dto: UserCreateDto) {
+    console.log('UPDATE USER', dto);
+    return {}
+  }
 
   async delete(id) { }
 
