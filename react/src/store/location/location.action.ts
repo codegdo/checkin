@@ -1,9 +1,9 @@
 import { AnyAction } from 'redux';
-import { LocationState, LOCATION_RETRIEVE, LOCATION_CREATE, LOCATION_UPDATE, LOCATION_DELETE, LOCATION_DELETE_ALL } from './location.type';
+import { LocationState, LOCATION_GET, LOCATION_CREATE, LOCATION_UPDATE, LOCATION_DELETE, LOCATION_DELETE_ALL } from './location.type';
 
-export function retrieveLocation(payload: LocationState[]): AnyAction {
+export function getLocations(payload: LocationState[]): AnyAction {
   return {
-    type: LOCATION_RETRIEVE,
+    type: LOCATION_GET,
     payload
   };
 }
@@ -29,7 +29,7 @@ export function deleteLocation(payload: number): AnyAction {
   };
 }
 
-export function deleteAllLocation(): AnyAction {
+export function deleteAllLocations(): AnyAction {
   return {
     type: LOCATION_DELETE_ALL
   };

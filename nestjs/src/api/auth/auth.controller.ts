@@ -107,6 +107,7 @@ export class AuthController {
         user: _user,
         locationId: rest.locations.length > 1 ? null : rest.locations[0].id,
         orgId,
+        refresh: false,
         ...rest
       };
 

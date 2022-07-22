@@ -1,9 +1,9 @@
 import { AnyAction } from 'redux';
-import { NavState, NAV_RETRIEVE } from './nav.type';
+import { NavState, NAV_GET } from './nav.type';
 
-export function retrieveNav(payload: NavState[]): AnyAction {
+export function getNav(payload: NavState): AnyAction {
   return {
-    type: NAV_RETRIEVE,
+    type: NAV_GET,
     payload
   };
 }

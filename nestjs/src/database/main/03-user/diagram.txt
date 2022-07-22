@@ -25,7 +25,6 @@ table organization {
 table location {
   id int
   org_id int
-  owner_id int
 
   name varchar
   street_address varchar

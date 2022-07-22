@@ -1,7 +1,7 @@
 import React, { ComponentType, lazy, Suspense, useLayoutEffect, useMemo } from 'react';
 import JsxParser from 'react-jsx-parser';
 
-import { useTemplate, useAuthorize } from '../../hooks';
+import { useTemplate, useAuthorize, useTracking } from '../../hooks';
 import * as Navs from '../nav';
 import UnAuthorize from '../page/unauthorize.page';
 import { AdminRedirect, HomeRedirect } from '../redirect';
@@ -20,6 +20,7 @@ export const lazyLoad = <T extends ComponentType<{}>>(factory: () => Promise<{ d
 export const Template = (Component: React.FC<TemplateProps | {}>) => (props: TemplateProps): JSX.Element | null => {
   const { route, page } = props;
   const { template, fallback } = useTemplate(props);
+  const [setTracking] = useTracking(route, page);
   const { isPublish, hasAccess, requiredLocation, requiredOrg } = useAuthorize(props);
 
   if (!isPublish) {
@@ -36,11 +37,10 @@ export const Template = (Component: React.FC<TemplateProps | {}>) => (props: Tem
     }
   }
 
-  useLayoutEffect(() => {
-    document.body.setAttribute('data-view', `${route}_${page}`);
-  }, [page]);
-
   const jsxTemplate = useMemo(() => {
+
+    setTracking();
+
     return <JsxParser
       allowUnknownElements={false}
       renderInWrapper={false}

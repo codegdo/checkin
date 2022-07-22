@@ -1,9 +1,9 @@
 import { AnyAction } from 'redux';
-import { PolicyState, POLICY_RETRIEVE, POLICY_CREATE, POLICY_UPDATE, POLICY_DELETE, POLICY_DELETE_ALL } from './policy.type';
+import { PolicyState, POLICY_GET, POLICY_CREATE, POLICY_UPDATE, POLICY_DELETE, POLICY_DELETE_ALL } from './policy.type';
 
-export function retrievePolicy(payload: PolicyState[]): AnyAction {
+export function getPolicies(payload: PolicyState[]): AnyAction {
   return {
-    type: POLICY_RETRIEVE,
+    type: POLICY_GET,
     payload
   };
 }
@@ -29,7 +29,7 @@ export function deletePolicy(payload: number): AnyAction {
   };
 }
 
-export function deleteAllPolicy(): AnyAction {
+export function deleteAllPolicies(): AnyAction {
   return {
     type: POLICY_DELETE_ALL
   };

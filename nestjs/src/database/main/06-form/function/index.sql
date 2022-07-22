@@ -71,11 +71,12 @@ $BODY$
       CASE WHEN fld.is_required = true
         THEN true
       ELSE
-        CASE WHEN ff.is_required = true
-          THEN true
-        ELSE
-          false
-        END
+        ff.is_required
+        --CASE WHEN ff.is_required = true
+          --THEN true
+        --ELSE
+          --false
+        --END
       END AS fld_is_required,
       --
       fld.is_new fld_is_new,

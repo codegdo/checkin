@@ -1,4 +1,4 @@
-export const NAV_RETRIEVE = 'nav/RETRIEVE';
+export const NAV_GET = 'nav/GET';
 
 export interface NavState {
   [x: string]: any;

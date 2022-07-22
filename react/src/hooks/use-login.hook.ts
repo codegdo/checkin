@@ -2,37 +2,40 @@ import { useState } from 'react';
 import { useAction } from './use-action.hook';
 
 export const useLogin = (): any => {
-  const { updateSession, retrieveNav, retrieveLocation, retrievePolicy } = useAction();
+  const { getSession, getNav, getLocations, getPolicies } = useAction();
   const [isUserVerified, setIsUserVerified] = useState(true);
   const [isUserSetupCompleted, setIsUserSetupCompleted] = useState(true);
 
   const login = (data: any) => {
     const { user, locationId, orgId, locations, nav, policies } = data;
 
+    // check user
     if (user) {
-      // require user verify confirm
-      if (!user.isActive) {
-        setIsUserVerified(false);
+
+      // has org
+      if (orgId) {
+        getSession({
+          user,
+          orgId,
+          locationId,
+        });
+        getNav(nav);
+        getLocations(locations);
+        getPolicies(policies);
+
+      } else {
+        // verify confirm
+        if (!user.isActive) {
+          setIsUserVerified(false);
+        }
+
+        // complete setup
+        if (user.isActive && !orgId) {
+          setIsUserSetupCompleted(false);
+        }
+
+        getSession({ user });
       }
-
-      // require user complete setup
-      if (user.isActive && !orgId) {
-        setIsUserSetupCompleted(false);
-      }
-
-      updateSession({ user });
-    }
-
-    // User login
-    if (user && orgId) {
-      updateSession({
-        user,
-        orgId,
-        locationId,
-      });
-      retrieveNav(nav);
-      retrieveLocation(locations);
-      retrievePolicy(policies);
     }
   };
 

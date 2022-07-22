@@ -106,6 +106,7 @@ class CookieStorageService {
   getCookie(name: string) {
     let key = name + "=";
     let cookies = document.cookie.split(';');
+
     for (let i = 0; i < cookies.length; i++) {
       let c = cookies[i];
       while (c.charAt(0) == ' ') {

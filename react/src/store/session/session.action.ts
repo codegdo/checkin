@@ -1,10 +1,17 @@
 import { AnyAction } from 'redux';
-import { SessionState, SESSION_UPDATE, SESSION_DELETE } from './session.type';
+import { SessionState, SESSION_GET, SESSION_UPDATE, SESSION_DELETE } from './session.type';
 
-export function updateSession(newSession: SessionState): AnyAction {
+export function getSession(payload: SessionState): AnyAction {
+  return {
+    type: SESSION_GET,
+    payload,
+  };
+}
+
+export function updateSession(payload: SessionState): AnyAction {
   return {
     type: SESSION_UPDATE,
-    payload: newSession,
+    payload,
   };
 }
 
