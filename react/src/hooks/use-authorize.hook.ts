@@ -28,7 +28,7 @@ export const useAuthorize = ({
       return auth;
     }
 
-    if (user) {
+    if (user && user.isActive) {
       const { groupType, orgId } = user;
 
       if (module) {

@@ -40,6 +40,7 @@ const LoginForm: React.FC = (): JSX.Element => {
   }
 
   if (!isUserVerified) {
+    console.log('verify');
     return <Navigate to="../verify" />
   }
 
@@ -47,7 +48,8 @@ const LoginForm: React.FC = (): JSX.Element => {
     return <Navigate to="../setup" />
   }
 
-  if (user) {
+  if (user && user.isActive) {
+    console.log('REDIRECT');
     return <Navigate to={redirect} />
   }
 

@@ -26,6 +26,7 @@ export const useLogin = (): any => {
       } else {
         // verify confirm
         if (!user.isActive) {
+          console.log('VERIFY CONFIRM');
           setIsUserVerified(false);
         }
 
