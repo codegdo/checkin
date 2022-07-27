@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "complilerOptions": {
+    "types": ["jest"]
+  },
+  "include": ["src", "tests"]
+}

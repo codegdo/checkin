@@ -21,9 +21,11 @@ export const Template = (Component: React.FC<TemplateProps | {}>) => (props: Tem
   const { route, page } = props;
   const { template, fallback } = useTemplate(props);
   const [setTracking] = useTracking(route, page);
-  const { isPublish, hasAccess, requiredLocation, requiredOrg } = useAuthorize(props);
+  const { isPublic, hasAccess, requiredLocation, requiredOrg } = useAuthorize(props);
 
-  if (!isPublish) {
+  console.log('ISPUBLIC', isPublic);
+
+  if (!isPublic) {
     if (!hasAccess) {
       Component = UnAuthorize;
     }

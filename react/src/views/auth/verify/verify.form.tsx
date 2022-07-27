@@ -53,11 +53,11 @@ const VerifyForm: React.FC = (): JSX.Element => {
     return <Navigate to="../login" />;
   }
 
-  if (user && user.isActive && !orgId) {
+  if (user.isActive && !orgId) {
     return <Navigate to="../setup" />;
   }
 
-  if (user) {
+  if (user.isActive && orgId) {
     return <Navigate to="/" />;
   }
 
