@@ -18,31 +18,47 @@ export const useAuthorize = ({
   const auth = {
     isPublic,
     hasAccess: false,
-    requiredLocation: false,
-    requiredOrg: false,
+    requireLocation: false,
+    requireOrg: false,
+    requireUserVerified: false,
+    requireUserSetupCompleted: false,
   };
 
   return useMemo(() => {
     if (isPublic) {
       auth.hasAccess = true;
-      return auth;
-    }
 
-    if (user && user.isActive) {
-      const { groupType, orgId } = user;
+      if (user) {
+        const { isActive, orgId } = user;
 
-      if (module) {
-        auth.hasAccess = true;
-      }
-
-      if (groupType == 'system') {
-        auth.hasAccess = true;
-        if (orgId == null && route !== 'admin') {
-          auth.requiredOrg = true;
+        if (!isActive && !orgId) {
+          auth.requireUserVerified = true;
         }
-      } else {
-        if (locationId == null && route !== '/') {
-          auth.requiredLocation = true;
+
+        if (isActive && !orgId) {
+          auth.requireUserSetupCompleted = true;
+        }
+      }
+    } else {
+      if (user) {
+        const { groupType, orgId, isActive } = user;
+
+        if (isActive) {
+          if (module) {
+            auth.hasAccess = true;
+          }
+
+          if (groupType == 'system') {
+            auth.hasAccess = true;
+
+            if (orgId == null && route !== 'admin') {
+              auth.requireOrg = true;
+            }
+          } else {
+            if (locationId == null && route !== '/') {
+              auth.requireLocation = true;
+            }
+          }
         }
       }
     }
