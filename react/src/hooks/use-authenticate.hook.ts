@@ -1,8 +1,11 @@
+import { useSelector } from 'react-redux';
 import { ACCESS_TOKEN } from "../app.config";
 import { cookieStore, sessionStore } from "../services";
+import { AppState } from '../store/reducers';
 
-export const useAuth = (): boolean => {
-  let auth = true;
+export const useAuth = (): { [key: string]: boolean } => {
+  const { user } = useSelector((state: AppState) => state.session);
+  let auth = false;
 
   const token = sessionStore.getItem(ACCESS_TOKEN);
 
@@ -15,5 +18,9 @@ export const useAuth = (): boolean => {
     auth = false;
   }
 
-  return auth;
+  if (user && user.isActive) {
+    auth = true;
+  }
+
+  return { auth };
 }

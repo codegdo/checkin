@@ -21,21 +21,19 @@ export const Template = (Component: React.FC<TemplateProps | {}>) => (props: Tem
   const { route, page } = props;
   const { template, fallback } = useTemplate(props);
   const [setTracking] = useTracking(route, page);
-  const { isPublic, hasAccess, requireLocation, requireOrg } = useAuthorize(props);
-
-  console.log('ISPUBLIC', isPublic);
+  const { isPublic, hasAccess, hasLocation, hasOrg } = useAuthorize(props);
 
   if (!isPublic) {
     if (!hasAccess) {
       Component = UnAuthorize;
     }
 
-    if (requireOrg) {
-      Component = AdminRedirect;
+    if (!hasOrg) {
+      //Component = AdminRedirect;
     }
 
-    if (requireLocation) {
-      Component = HomeRedirect;
+    if (!hasLocation) {
+      //Component = HomeRedirect;
     }
   }
 
