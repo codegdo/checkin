@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Search } from '../search/search.component';
+import { GridViewContext } from './gridview.context';
 
 interface HeaderProps {
   columns?: any;
 }
 
-export const Header: React.FC<HeaderProps> = (props): JSX.Element => {
-  console.log(props);
-  return <div>Control</div>
+export const Header: React.FC<HeaderProps> = ({ columns }): JSX.Element => {
+  const { columns: cols = [] } = useContext(GridViewContext);
+
+  return <Search filters={columns} />
 }

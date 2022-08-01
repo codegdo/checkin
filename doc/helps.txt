@@ -26,3 +26,8 @@ $ adb devices
 
 $ adb -s emulator-5554 reverse tcp:5000 tcp:5000
 $ adb -s 2681572e reverse tcp:5000 tcp:5000 
+
+-- npm update latest version
+npm i -g npm-check-updates
+ncu -u
+npm install

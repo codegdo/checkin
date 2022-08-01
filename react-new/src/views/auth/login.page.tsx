@@ -5,7 +5,7 @@ import { Block } from '../../components/form/form.block';
 import { Field } from '../../components/form/form.field';
 import { GridView } from '../../components/gridview/gridview.component';
 import { Column } from '../../components/gridview/gridview.column';
-import { Button } from '../../components/element/element.component';
+import { Button } from '../../components/element/element.button';
 
 const form = {
   title: 'Login',
@@ -31,10 +31,10 @@ export const Login: React.FC = (): JSX.Element => {
         <Field type="text" name="username" />
       </Block>
     </Form>
-    <GridView>
-      {/* <Column type="text" name="username">
+    <GridView data={[{ username: 'john' }]}>
+      <Column type="text" name="username">
         <Button />
-      </Column> */}
+      </Column>
       <Field type="text" name="username" />
     </GridView>
   </>

@@ -3,11 +3,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { NestSessionOptions, SessionModule } from 'nestjs-session';
+import { ScheduleModule } from '@nestjs/schedule';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 import { typeormConfig, sessionConfig } from './configs';
 import { UserModule } from './api';
 import { AuthModule } from './api/auth/auth.module';
-
 
 @Module({
   imports: [
@@ -27,6 +28,8 @@ import { AuthModule } from './api/auth/auth.module';
         return { session };
       },
     }),
+    EventEmitterModule.forRoot(),
+    ScheduleModule.forRoot(),
     UserModule,
     AuthModule
   ],

@@ -16,6 +16,11 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ children }): 
     children && Children.toArray(children).map((child) => {
       if (isValidElement(child) && typeof child.type !== 'string' && child.type.name == 'Column') {
         const { props } = child;
+
+        if (props.children) {
+
+        }
+
         cols.push({ ...props });
       }
     });
