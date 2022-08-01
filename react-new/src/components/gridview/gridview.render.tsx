@@ -5,12 +5,10 @@ import { Main } from './gridview.main';
 
 
 interface RenderProps {
-  data?: any[]
+  columns?: any[]
 }
 
 export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ children }): JSX.Element => {
-
-  console.log('CHILDREN', Children.toArray(children));
 
   const columns = useMemo(() => {
     const cols: any[] = [];
@@ -25,11 +23,9 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ children }): 
     return cols;
   }, []);
 
-  console.log(columns);
-
   return <>
-    <Header />
-    <Main />
+    <Header columns={columns} />
+    <Main columns={columns} />
     <Footer />
   </>
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
 interface ColumnProps {
   id?: string | number;
@@ -7,6 +7,6 @@ interface ColumnProps {
   role?: string;
 }
 
-export const Column: React.FC<ColumnProps> = (props): JSX.Element => {
-  return <div>{props.name}</div>
+export const Column: React.FC<PropsWithChildren<ColumnProps>> = ({ children }): JSX.Element => {
+  return <>{children}</>
 }

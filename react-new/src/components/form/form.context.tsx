@@ -5,8 +5,8 @@ export interface FormContextProps {
   form: Record<string, string | undefined>;
   error: Record<string, string | undefined>;
   validation: Record<string, string | undefined>;
-  status: string;
-  onClick: (key?: string, value?: string) => void;
+  status: string | undefined;
+  onCallback: (key?: string, value?: string) => void;
 };
 
 type FormProviderProps = FormContextProps;
@@ -17,7 +17,7 @@ const initialProps: FormContextProps = {
   error: {},
   validation: {},
   status: '',
-  onClick: () => console.log('onClick')
+  onCallback: () => console.log('onCallback')
 }
 
 export const FormContext = React.createContext<FormContextProps>(initialProps);
