@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { Form } from '../../components/form/form.component';
-import { Block } from '../../components/form/form.block';
-import { Field } from '../../components/form/form.field';
-import { GridView } from '../../components/gridview/gridview.component';
-import { Column } from '../../components/gridview/gridview.column';
-import { Button } from '../../components/element/element.button';
+import { Form } from '../../../components/form/form.component';
+import { Block } from '../../../components/form/form.block';
+import { Field } from '../../../components/form/form.field';
+import { GridView } from '../../../components/gridview/gridview.component';
+import { Column } from '../../../components/gridview/gridview.column';
+import { Button } from '../../../components/element/element.button';
 
 const form = {
   title: 'Login',
@@ -24,13 +24,18 @@ const form = {
   }]
 }
 
-export const Login: React.FC = (): JSX.Element => {
+const Login: React.FC = (props): JSX.Element => {
+
+  console.log(props);
+
   return <>
+
     <Form title="Login">
       <Block>
         <Field type="text" name="username" />
       </Block>
     </Form>
+
     <GridView data={[{ username: 'john' }]}>
       <Column type="text" name="username">
         <Button />
@@ -39,3 +44,5 @@ export const Login: React.FC = (): JSX.Element => {
     </GridView>
   </>
 }
+
+export default Login;
