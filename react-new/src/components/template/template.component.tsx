@@ -18,10 +18,10 @@ export const lazyload = <T extends ComponentType<{}>>(factory: () => Promise<{ d
 const html = DOMPurify.sanitize(`
   <div>
     <header>
-      <data id="nav"></data>
+      <data id="jsx_nav"></data>
     </header>
     <main>
-      <data id="main"></data>
+      <data id="jsx_main"></data>
     </main>
   </div>
 `);
@@ -40,9 +40,9 @@ export const Template = (Component: React.FC<TemplateProps | {}>) => (props: Tem
           const { attribs } = domNode;
 
           switch (attribs.id) {
-            case 'main':
+            case 'jsx_main':
               return fallback ? <div>loading</div> : <Component {...props} />
-            case 'nav':
+            case 'jsx_nav':
               return <Nav {...props} />
             default:
               return;

@@ -15,16 +15,16 @@ export const Form: React.FC<PropsWithChildren<FormProps>> = ({ data, title, stat
   const { current: error } = useRef({});
   const { current: validation } = useRef({});
 
-  const handleCallback = () => {
+  const handleClick = () => {
     onClick && onClick();
   }
 
   return <form>
     {title && <header>{title}</header>}
     <main>
-      <FormProvider data={data} form={form} error={error} validation={validation} status={status} onCallback={handleCallback}>
+      <FormProvider data={data} form={form} error={error} validation={validation} status={status} onClick={handleClick}>
         {
-          children ? <Render>{children}</Render> : <Render data={data?.data} />
+          children ? <Render>{children}</Render> : <Render />
         }
       </FormProvider>
     </main>
