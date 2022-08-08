@@ -6,6 +6,8 @@ import { Field } from '../../../components/form/form.field';
 import { GridView } from '../../../components/gridview/gridview.component';
 import { Column } from '../../../components/gridview/gridview.column';
 import { Button } from '../../../components/element/element.button';
+import { Group } from '../../../components/form/form.group';
+import { Grid } from '../../../components/form/form.grid';
 
 const form = {
   title: 'Login',
@@ -32,15 +34,20 @@ const Login: React.FC = (props): JSX.Element => {
 
     <Form title="Login">
       <Block>
-        <Field type="text" name="username" />
+        <Field type="text" name="username" label="Username" />
+        <Group>
+          <Field type="text" name="firstName" label="First Name" />
+          <Field type="text" name="lastName" label="Last Name" />
+        </Group>
+        <Grid>
+          <Field type="text" name="firstName" label="First Name" />
+          <Field type="text" name="lastName" label="Last Name" />
+        </Grid>
       </Block>
     </Form>
 
     <GridView data={[{ username: 'john' }]}>
-      <Column type="text" name="username">
-        <Button />
-      </Column>
-      <Field type="text" name="username" />
+      <Column name="username" />
     </GridView>
   </>
 }

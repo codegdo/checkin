@@ -1,5 +1,14 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
+import { Render } from './form.render';
 
-export const Group: React.FC = (): JSX.Element => {
-  return <></>
+interface BlockProps {
+  data?: any
+}
+
+export const Group: React.FC<PropsWithChildren<BlockProps>> = ({ children, data }): JSX.Element => {
+  return <div>
+    {
+      children ? children : data && <Render data={data} />
+    }
+  </div>
 }

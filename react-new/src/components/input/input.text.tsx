@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
+import { InputProps } from './input.type';
 
-interface InputTextProps {
-  name: string;
-  value?: string;
-  onChange?: (key: string, value: string) => void;
-}
-export const InputText: React.FC<InputTextProps> = ({ name, value: intialValue = '', onChange }): JSX.Element => {
+export const InputText: React.FC<InputProps> = ({ name, value: intialValue = '', onChange }): JSX.Element => {
 
   const [value, setValue] = useState(intialValue);
 

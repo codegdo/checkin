@@ -1,17 +1,26 @@
 import React, { PropsWithChildren } from 'react';
-import { TableProps } from './table.component';
+import { TableProps } from './table.type';
 
-type TableProviderProps = TableProps;
+type Data = {
+  name?: string;
+  label?: string;
+};
 
-const initialProps: TableProps = {
-  data: null,
-  columns: null,
-  onCallback: () => console.log('onCallback')
-}
+type Column = {
+  name?: string;
+  label?: string;
+};
 
-export const TableContext = React.createContext<TableProps>(initialProps);
+const initialProps = {
+  data: [],
+  columns: [],
+  status: '',
+  onClick: () => { }
+};
 
-export const TableProvider: React.FC<PropsWithChildren<TableProviderProps>> = ({ children, ...props }) => {
+export const TableContext = React.createContext<TableProps<Data, Column>>(initialProps);
+
+export const TableProvider = <Data, Column>({ children, ...props }: PropsWithChildren<TableProps<Data, Column>>): JSX.Element => {
   return <TableContext.Provider value={{ ...props }}>
     {children}
   </TableContext.Provider>

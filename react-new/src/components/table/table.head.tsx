@@ -9,7 +9,7 @@ export const THead: React.FC = (): JSX.Element => {
       {
         columns.map((col, i) => {
           return <th key={i}>
-            {col.name}
+            {col.label || col.name}
           </th>
         })
       }

@@ -1,13 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { InputText } from './input.text';
-
-interface InputProps {
-  id?: string | number;
-  type: string;
-  name: string;
-  value?: string;
-  onChange?: (key: string, value: string) => void;
-}
+import { InputProps } from './input.type';
 
 export const Input: React.FC<InputProps> = ({ onChange, ...props }): JSX.Element | null => {
 

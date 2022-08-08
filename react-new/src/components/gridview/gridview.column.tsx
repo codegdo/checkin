@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from 'react';
 interface ColumnProps {
   id?: string | number;
   name: string;
-  type: string;
+  type?: string;
   role?: string;
 }
 

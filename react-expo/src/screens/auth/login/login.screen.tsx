@@ -5,7 +5,7 @@ import { Form, Block, Field, FormData, Container } from '../../../components';
 import { useFetch, useLogin } from '../../../hooks';
 import { normalizeForm } from '../../../helpers';
 
-export const LoginForm: React.FC = () => {
+export const LoginScreen: React.FC = () => {
   const [{ status, response: { data } }, getLogin] = useFetch('/api/auth/login');
   const [_, login] = useLogin();
   const [form, setForm] = useState<FormData | undefined>();

@@ -6,7 +6,7 @@ interface FieldProps {
   id?: string | number;
   name: string;
   type: string;
-  title?: string;
+  label?: string;
   description?: string;
   value?: string;
 }
@@ -14,7 +14,7 @@ interface FieldProps {
 export const Field: React.FC<FieldProps> = (props): JSX.Element => {
 
   const { form } = useContext(FormContext);
-  const { title, description, name, type, value } = props;
+  const { label, description, name, type, value } = props;
 
   useEffect(() => {
     form[props.name] = value;
@@ -27,8 +27,8 @@ export const Field: React.FC<FieldProps> = (props): JSX.Element => {
 
   return <div>
     {
-      (title || description) && <span>
-        {title && <label>{title}</label>}
+      (label || description) && <span>
+        {label && <label>{label}</label>}
         {description && <small>{description}</small>}
       </span>
     }
