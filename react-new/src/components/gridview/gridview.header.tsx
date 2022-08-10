@@ -1,13 +1,17 @@
 import React, { useContext } from 'react';
 import { Search } from '../search/search.component';
 import { GridViewContext } from './gridview.context';
+import { HeaderProps } from './gridview.type';
 
-interface HeaderProps {
-  columns?: any;
-}
+export const Header: React.FC<HeaderProps> = (props): JSX.Element => {
 
-export const Header: React.FC<HeaderProps> = ({ columns }): JSX.Element => {
-  const { columns: cols = [] } = useContext(GridViewContext);
+  const ctx = useContext(GridViewContext);
 
-  return <Search filters={columns} />
+  if (!ctx) {
+    throw new Error();
+  }
+
+  const { columns = [], onClick } = ctx;
+
+  return <Search filters={[...props.columns || [], ...columns]} onClick={onClick} />
 }

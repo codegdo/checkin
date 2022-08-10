@@ -1,20 +1,17 @@
 import React from 'react';
+import { PagingProps } from './paging.type';
+import { paging } from '../../helpers';
 
-interface PagingProps {
-  className?: string;
-  filters?: any[];
-  onClick?: () => void;
-}
+export const Paging: React.FC<PagingProps> = ({ className = 'search', total = 20, onClick }): JSX.Element => {
 
-export const Paging: React.FC<PagingProps> = ({ className = 'search', filters = [], onClick }): JSX.Element => {
+  const handleClick = (payload: { key: string, value?: string }) => {
+    console.log(payload);
 
-  const handleClick = () => {
-    onClick && onClick();
+    console.log(paging.count(3, 20));
+    onClick && onClick(payload);
   }
 
   return <div className={className}>
-    <input type="text" />
-    <button type="button" name="search" onClick={handleClick}>Search</button>
-    <button type="button" name="clear" onClick={handleClick}>Clear</button>
+    <button type="button" name="paging" onClick={() => handleClick({ key: 'paging' })}>Paging</button>
   </div>
 }

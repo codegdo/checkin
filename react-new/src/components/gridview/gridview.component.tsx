@@ -1,18 +1,16 @@
 import React, { PropsWithChildren } from 'react';
 import { GridViewProvider } from './gridview.context';
 import { Render } from './gridview.render';
+import { GridViewProps } from './gridview.type';
 
-export interface GridViewProps {
-  data?: any;
-  columns?: any;
-  status?: string | undefined;
-  onClick?: () => void;
-}
+export const GridView = <T extends Object>({ children, onClick, ...props }: PropsWithChildren<GridViewProps<T>>): JSX.Element => {
 
-export const GridView: React.FC<PropsWithChildren<GridViewProps>> = ({ children, ...props }): JSX.Element => {
+  const handleClick = () => {
+    console.log('CLICK');
+  }
 
   return <div>
-    <GridViewProvider {...props}>
+    <GridViewProvider<T> {...props} onClick={handleClick}>
       {
         children ? <Render>{children}</Render> : <Render />
       }

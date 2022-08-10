@@ -1,21 +1,21 @@
 import React, { useContext } from 'react';
 import { TableContext } from './table.context';
+import { TR } from './table.tr';
 
 export const TBody: React.FC = (): JSX.Element => {
-  const { data = [], columns = [] } = useContext(TableContext);
+
+  const ctx = useContext(TableContext);
+
+  if (!ctx) {
+    throw new Error();
+  }
+
+  const { data = [] } = ctx;
 
   return <tbody>
     {
       data.map((item, i) => {
-        return <tr key={i}>
-          {
-            columns.map((col, j) => {
-              const { name } = col;
-
-              return <td key={j}>{item[name]}</td>
-            })
-          }
-        </tr>
+        return <TR data={item} key={i} />
       })
     }
   </tbody>

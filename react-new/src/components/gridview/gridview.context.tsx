@@ -1,23 +1,9 @@
 import React, { PropsWithChildren } from 'react';
+import { GridViewProps } from './gridview.type';
 
-export interface GridViewContextProps {
-  data?: any;
-  columns?: any;
-  status?: string;
-  onCallback?: (key?: string, value?: string) => void;
-};
+export const GridViewContext = React.createContext<GridViewProps<{ [key: string]: any }> | undefined>(undefined);
 
-type GridViewProviderProps = GridViewContextProps;
-
-const initialProps: GridViewContextProps = {
-  data: null,
-  columns: null,
-  onCallback: () => console.log('onCallback')
-}
-
-export const GridViewContext = React.createContext<GridViewContextProps>(initialProps);
-
-export const GridViewProvider: React.FC<PropsWithChildren<GridViewProviderProps>> = ({ children, ...props }) => {
+export const GridViewProvider = <T extends Object>({ children, ...props }: PropsWithChildren<GridViewProps<T>>): JSX.Element => {
   return <GridViewContext.Provider value={{ ...props }}>
     {children}
   </GridViewContext.Provider>

@@ -1,14 +1,17 @@
 import React, { useContext } from 'react';
 import { Table } from '../table/table.component';
 import { GridViewContext } from './gridview.context';
+import { MainProps } from './gridview.type';
 
-interface MainProps {
-  columns?: any;
-}
+export const Main: React.FC<MainProps> = (props): JSX.Element => {
 
-export const Main: React.FC<MainProps> = ({ columns }): JSX.Element => {
+  const ctx = useContext(GridViewContext);
 
-  const { data, columns: cols = [] } = useContext(GridViewContext);
+  if (!ctx) {
+    throw new Error();
+  }
 
-  return <Table data={data} columns={[...columns, ...cols]} />
+  const { data, columns = [] } = ctx;
+
+  return <Table data={data} columns={[...props.columns || [], ...columns]} />
 }

@@ -2,7 +2,14 @@ import React, { useContext } from 'react';
 import { TableContext } from './table.context';
 
 export const THead: React.FC = (): JSX.Element => {
-  const { columns = [] } = useContext(TableContext);
+
+  const ctx = useContext(TableContext);
+
+  if (!ctx) {
+    throw new Error();
+  }
+
+  const { columns = [] } = ctx;
 
   return <thead>
     <tr>

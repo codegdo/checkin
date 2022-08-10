@@ -1,12 +1,7 @@
 import React, { PropsWithChildren } from 'react';
+import { GridviewColumnProps } from './gridview.type';
 
-interface ColumnProps {
-  id?: string | number;
-  name: string;
-  type?: string;
-  role?: string;
-}
 
-export const Column: React.FC<PropsWithChildren<ColumnProps>> = ({ children }): JSX.Element => {
+export const Column: React.FC<PropsWithChildren<GridviewColumnProps>> = ({ children }): JSX.Element => {
   return <>{children}</>
 }

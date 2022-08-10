@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Paging } from '../paging/paging.component';
+import { GridViewContext } from './gridview.context';
 
-interface FooterProps { }
+export const Footer: React.FC = (): JSX.Element => {
 
-export const Footer: React.FC = (props): JSX.Element => {
-  return <div>Pagination</div>
+  const ctx = useContext(GridViewContext);
+
+  if (!ctx) {
+    throw new Error();
+  }
+
+  const { total, onClick } = ctx;
+
+  return <Paging total={total} onClick={onClick} />
+
 }

@@ -1,17 +1,14 @@
 import React, { Children, isValidElement, PropsWithChildren, useMemo } from 'react';
+import { ColumnProps } from '../table/table.type';
 import { Footer } from './gridview.footer';
 import { Header } from './gridview.header';
 import { Main } from './gridview.main';
-
-
-interface RenderProps {
-  columns?: any[]
-}
+import { RenderProps } from './gridview.type';
 
 export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ children }): JSX.Element => {
 
   const columns = useMemo(() => {
-    const cols: any[] = [];
+    const cols: ColumnProps[] = [];
 
     children && Children.toArray(children).map((child) => {
       if (isValidElement(child) && typeof child.type !== 'string' && child.type.name == 'Column') {
