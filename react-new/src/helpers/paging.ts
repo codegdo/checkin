@@ -1,13 +1,37 @@
 class Paging {
   constructor() { }
 
-  count(limit: number, total: number) {
+  count(limit: number, total: number): number[] {
     return new Array(Math.floor(total / limit)).fill(limit).concat(total % limit).filter(i => i);
   }
 
   range(start: number, end: number) {
     const length = end - start + 1;
     return Array.from({ length }, (_, i) => start + i);
+  }
+
+  get(option: { count?: number, current?: number, boundary?: number, sibling?: number } = {}) {
+    const { count = 0, current = 1, boundary = 1, sibling = 1 } = option;
+    const startEnd = Math.min(boundary, count);
+    const endStart = Math.max(count - boundary + 1, boundary + 1);
+
+    const startSibling = Math.min(current - sibling, count - boundary - (sibling * 2) - 1);
+    const endSibling = Math.max(current + sibling, boundary + (sibling * 2) + 2);
+
+    const startMiddle = Math.max(startSibling, boundary + 2);
+    const endMiddle = Math.min(endSibling, count - boundary - 1);
+
+    const startBoundary = boundary + 1 < count - boundary ? [boundary + 1] : [];
+    const endBoundary = count - boundary > boundary ? [count - boundary] : [];
+
+    const startEllipsis = (startSibling > boundary + 2) ? ['start-ellipsis'] : [...startBoundary];
+    const endEllipsis = (endSibling < count - boundary - 1) ? ['end-ellipsis'] : [...endBoundary];
+
+    const startPage = this.range(1, startEnd);
+    const endPage = this.range(endStart, count);
+    const middlePage = this.range(startMiddle, endMiddle);
+
+    return [...startPage, ...startEllipsis, ...middlePage, ...endEllipsis, ...endPage];
   }
 }
 

@@ -1,4 +1,4 @@
-export const usePagination = () => {};
+export const usePagination = () => { };
 
 /*
 
@@ -69,8 +69,8 @@ const itemList = [
   ...(siblingsEnd < count - boundaryCount - 1
     ? ['end-ellipsis']
     : count - boundaryCount > boundaryCount
-    ? [count - boundaryCount]
-    : []),
+      ? [count - boundaryCount]
+      : []),
 
   ...endPages,
   ...(hideNextButton ? [] : ['next']),

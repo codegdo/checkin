@@ -26,6 +26,7 @@ export const Paging: React.FC = (): JSX.Element => {
 
   const endStart = Math.min(boundary, count);
   const startEnd = Math.max(count - boundary + 1, boundary + 1);
+
   const startMiddle = Math.max(Math.min(current - sibling, count - boundary - sibling * 2 - 1), boundary + 2);
   const endMiddle = Math.min(Math.max(current + sibling, boundary + sibling * 2 + 2), count - boundary - 1);
 
