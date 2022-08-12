@@ -1,11 +1,34 @@
-class Paging {
+class PagingHelper {
   constructor() { }
 
-  count(limit: number, total: number): number[] {
+  chunk(list: any[] = [], limit: number = 1): any[] {
+    // list = [1, 2, 3, 4, 5]
+    // limit = 2
+    // output = [[1, 2], [3, 4], [5]]
+    return list.reduce((acc, item, index) => {
+      const chunk = Math.floor(index / limit);
+
+      if (!acc[chunk]) {
+        acc[chunk] = []
+      }
+
+      acc[chunk].push(item);
+
+      return acc;
+    }, []);
+  }
+
+  count(total: number, limit: number): number[] {
+    // total = [1, 2, 3, 4, 5].length
+    // limit = 2
+    // output = [2, 2, 1]
     return new Array(Math.floor(total / limit)).fill(limit).concat(total % limit).filter(i => i);
   }
 
   range(start: number, end: number) {
+    // start = 2
+    // end = 5
+    // output = [2, 3, 4, 5]
     const length = end - start + 1;
     return Array.from({ length }, (_, i) => start + i);
   }
@@ -35,7 +58,7 @@ class Paging {
   }
 }
 
-export const paging = new Paging();
+export const pagingHelper = new PagingHelper();
 
 /*
 

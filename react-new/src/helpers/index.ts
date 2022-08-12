@@ -1,1 +1,1 @@
-export * from './paging';
+export * from './paging.helper';

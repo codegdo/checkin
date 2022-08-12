@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Paging } from '../paging/paging.component';
+import { Pagination } from '../pagination/pagination.component';
 import { GridViewContext } from './gridview.context';
 
 export const Footer: React.FC = (): JSX.Element => {
@@ -12,6 +12,6 @@ export const Footer: React.FC = (): JSX.Element => {
 
   const { total, onClick } = ctx;
 
-  return <Paging total={total} onClick={onClick} />
+  return <Pagination count={total} onClick={onClick} />
 
 }

@@ -1,7 +1,7 @@
-export const splitChunks = (array: any = [], size = 1): [] => {
+export const splitChunks = (array: any = [], limit = 1): [] => {
 
   return array.reduce((arr: any, item: any, index: number) => {
-    const chunk = Math.floor(index / size);
+    const chunk = Math.floor(index / limit);
 
     if (!arr[chunk]) {
       arr[chunk] = []
