@@ -5,7 +5,7 @@ import { Header } from './gridview.header';
 import { Main } from './gridview.main';
 import { RenderProps } from './gridview.type';
 
-export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ children }): JSX.Element => {
+export const Render = <T extends Object>({ children }: PropsWithChildren<RenderProps<T>>): JSX.Element => {
 
   const columns = useMemo(() => {
     const cols: ColumnProps[] = [];
@@ -27,7 +27,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ children }): 
 
   return <>
     <Header columns={columns} />
-    <Main columns={columns} />
+    <Main<T> columns={columns} />
     <Footer />
   </>
 }

@@ -2,7 +2,7 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { InjectTwilio, TwilioClient } from 'nestjs-twilio';
+import { TwilioService } from 'nestjs-twilio';
 import { MailerService } from '@nestjs-modules/mailer';
 import handlebars from 'handlebars';
 
@@ -24,8 +24,7 @@ export class MessageAuthService {
     @InjectRepository(EmailRepository)
     private emailRepository: EmailRepository,
 
-    @InjectTwilio()
-    private readonly client: TwilioClient,
+    private readonly twilioService: TwilioService,
 
     private readonly loggerService: LoggerService,
   ) { }
@@ -57,7 +56,7 @@ export class MessageAuthService {
 
           console.log(data);
 
-          await this.client.messages.create({
+          await this.twilioService.client.messages.create({
             body,
             from: process.env.TWILIO_PHONE_NUMBER,
             to: phoneNumber,

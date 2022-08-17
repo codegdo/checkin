@@ -6,8 +6,8 @@ import { Field } from '../../../components/form/form.field';
 import { GridView } from '../../../components/gridview/gridview.component';
 import { Column } from '../../../components/gridview/gridview.column';
 import { Button } from '../../../components/element/element.button';
-import { Group } from '../../../components/form/form.group';
-import { Grid } from '../../../components/form/form.grid';
+import { FieldGroup } from '../../../components/form/form.group';
+import { FieldGrid } from '../../../components/form/form.grid';
 
 const form = {
   title: 'Login',
@@ -26,27 +26,32 @@ const form = {
   }]
 }
 
+type Users = {
+  username: string
+}
+
+const users: Array<Users> = [{ username: 'john' }];
+
 const Login: React.FC = (props): JSX.Element => {
 
   console.log(props);
 
   return <>
-
     <Form title="Login">
       <Block>
         <Field type="text" name="username" label="Username" />
-        <Group>
+        <FieldGroup>
           <Field type="text" name="firstName" label="First Name" />
           <Field type="text" name="lastName" label="Last Name" />
-        </Group>
-        <Grid>
+        </FieldGroup>
+        <FieldGrid>
           <Field type="text" name="firstName" label="First Name" />
           <Field type="text" name="lastName" label="Last Name" />
-        </Grid>
+        </FieldGrid>
       </Block>
     </Form>
 
-    <GridView data={[{ username: 'john' }]}>
+    <GridView<Users> data={users}>
       <Column name="username" />
     </GridView>
   </>

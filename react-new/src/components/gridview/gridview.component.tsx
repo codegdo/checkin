@@ -1,9 +1,8 @@
 import React, { PropsWithChildren, useRef } from 'react';
-import { GridViewProvider } from './gridview.context';
 import { Render } from './gridview.render';
-import { GridViewProps, SearchQuery } from './gridview.type';
+import { GridViewContextProps, GridViewProps, SearchQuery } from './gridview.type';
 
-const defaultQuery: SearchQuery = {
+export const defaultQuery: SearchQuery = {
   searchKeys: [],
   searchValue: '',
   sortColumn: '',
@@ -12,19 +11,23 @@ const defaultQuery: SearchQuery = {
   pageOffset: 0
 }
 
-export const GridView = <T extends Object>({ className = 'gridview', children, onClick, ...props }: PropsWithChildren<GridViewProps<T>>): JSX.Element => {
+export const GridViewContext = React.createContext<GridViewContextProps<Object> | null>(null);
+
+export const GridView = <T extends Object>({ className = 'gridview', children, onCallback, ...props }: PropsWithChildren<GridViewProps<T>>): JSX.Element => {
 
   const { current: searchQuery } = useRef(defaultQuery);
 
-  const handleClick = (payload: { key?: string, value?: string }) => {
+  const handleCallback = (payload: { key?: string, value?: string }) => {
     console.log('CLICK', payload);
   }
 
   return <div className={className}>
-    <GridViewProvider<T> {...props} searchQuery={searchQuery} onClick={handleClick}>
+
+    <GridViewContext.Provider value={{ ...props, searchQuery, onCallback: handleCallback }}>
       {
-        children ? <Render>{children}</Render> : <Render />
+        children ? <Render<T>>{children}</Render> : <Render<T> />
       }
-    </GridViewProvider>
+    </GridViewContext.Provider>
+
   </div>
 }

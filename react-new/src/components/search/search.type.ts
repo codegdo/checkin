@@ -2,5 +2,5 @@
 export interface SearchProps {
   className?: string;
   filters?: any[];
-  onClick?: (payload: { key?: string, value?: string }) => void;
+  onCallback?: (payload: { key?: string, name?: string, value?: string }) => void;
 }

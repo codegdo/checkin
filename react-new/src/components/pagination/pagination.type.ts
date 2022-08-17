@@ -6,5 +6,5 @@ export interface PaginationProps {
   sibling?: number;
   status?: string;
   disabled?: boolean;
-  onClick?: (payload: { key?: string, value?: string }) => void;
+  onCallback?: (payload: { key?: string, name?: string, value?: string }) => void;
 }

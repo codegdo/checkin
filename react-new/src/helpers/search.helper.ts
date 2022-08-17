@@ -1,3 +1,5 @@
+import { SearchQuery } from "../components/gridview/gridview.type";
+
 class SearchHelper {
   constructor() { }
 
@@ -12,10 +14,20 @@ class SearchHelper {
 
   }
 
-  stringify(option: { keys?: [], value?: string, column?: number, direction?: number, limit?: number, offset?: number } = {}) {
-    const { keys = [], value = '', column = null, direction = null, limit = 10, offset = 0 } = option;
-    const searchString = this.mapKeys(keys, value);
+  stringify({
+    searchKeys = [],
+    searchValue = '',
+    sortColumn = '',
+    sortDirection = 'asc',
+    pageLimit = 0,
+    pageOffset = 0 }: SearchQuery) {
 
+    const searchString = this.mapKeys(searchKeys, searchValue);
+    const sortString = sortColumn ? `sortColumn=${sortColumn}&sortDirection=${sortDirection}` : '';
+    const pageString = pageLimit ? `limit=${pageLimit}&offset=${pageOffset}` : '';
+    const queryString = [searchString, sortString, pageString].filter(Boolean).join('&');
+
+    return queryString ? `?${queryString}` : '';
   }
 }
 

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { TableContext } from './table.context';
+import { TableContext } from './table.component';
 
 export const TR: React.FC<any> = ({ data }): JSX.Element => {
   const ctx = useContext(TableContext);

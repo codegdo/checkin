@@ -7,22 +7,22 @@ export interface FormProps {
   description?: string;
   data?: any;
   status?: string | undefined;
-  onClick?: (key?: string, value?: string) => void;
+  onCallback?: (key?: string, value?: string) => void;
 }
 
-export const Form: React.FC<PropsWithChildren<FormProps>> = ({ data, title, status, children, onClick, ...props }): JSX.Element => {
+export const Form: React.FC<PropsWithChildren<FormProps>> = ({ data, title, status, children, onCallback, ...props }): JSX.Element => {
   const { current: form } = useRef({});
   const { current: error } = useRef({});
   const { current: validation } = useRef({});
 
-  const handleClick = () => {
-    onClick && onClick();
+  const handleCallback = () => {
+    onCallback && onCallback();
   }
 
   return <form>
     {title && <header>{title}</header>}
     <main>
-      <FormProvider data={data} form={form} error={error} validation={validation} status={status} onClick={handleClick}>
+      <FormProvider data={data} form={form} error={error} validation={validation} status={status} onCallback={handleCallback}>
         {
           children ? <Render>{children}</Render> : <Render />
         }

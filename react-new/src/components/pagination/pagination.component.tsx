@@ -3,7 +3,7 @@ import { PaginationProps } from './pagination.type';
 import { pagingHelper } from '../../helpers';
 
 
-export const Pagination: React.FC<PaginationProps> = ({ className = 'pagination', count = 10, current = 1, sibling = 1, boundary = 1, onClick }): JSX.Element => {
+export const Pagination: React.FC<PaginationProps> = ({ className = 'pagination', count = 10, current = 1, sibling = 1, boundary = 1, onCallback }): JSX.Element => {
 
   const [option, setOption] = useState<{ count: number, current: number, sibling: number, boundary: number }>({ count, current, sibling, boundary });
 
@@ -17,7 +17,7 @@ export const Pagination: React.FC<PaginationProps> = ({ className = 'pagination'
       setOption({ ...option, current: parseInt(payload.value) });
     }
 
-    onClick && onClick(payload);
+    onCallback && onCallback(payload);
   }
 
   return <div className={className}>

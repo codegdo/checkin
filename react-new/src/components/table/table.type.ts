@@ -12,6 +12,8 @@ export interface TableProps<T> {
   columns?: ColumnProps[];
   className?: string;
   status?: string;
-  onClick?: (payload: { key?: string, value?: string }) => void;
+  onCallback?: (payload: { key?: string, name?: string, value?: string }) => void;
 }
+
+export interface TBodyProps<_T> { }
 
