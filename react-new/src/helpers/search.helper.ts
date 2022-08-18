@@ -14,7 +14,48 @@ class SearchHelper {
 
   }
 
-  stringify({
+  filter<T>(object: T, keys: Array<keyof T>, query: string): boolean {
+
+    if (query === '') {
+      return true;
+    }
+
+    const expression = keys.map(key => {
+      const value = object[key];
+
+      if (typeof value === 'string' || typeof value === 'number') {
+        return value.toString().includes(query);
+      }
+
+      return false;
+    });
+
+    return expression.some(expression => expression);
+
+  }
+
+  sort<T>(a: T, b: T, key: keyof T, direction: string) {
+
+    let x = 0;
+
+    if (direction !== 'desc' && direction !== 'asc') {
+      return 0;
+    }
+
+    if (a[key] > b[key]) {
+      x = 1;
+    };
+
+    if (a[key] < b[key]) {
+      x = -1
+    };
+
+    return direction === 'desc' ? x * -1 : x;
+  }
+
+  search() { }
+
+  query({
     searchKeys = [],
     searchValue = '',
     sortColumn = '',

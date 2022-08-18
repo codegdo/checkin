@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useRef } from 'react';
+import React, { PropsWithChildren, useRef, useState } from 'react';
 import { Render } from './gridview.render';
 import { GridViewContextProps, GridViewProps, SearchQuery } from './gridview.type';
 
@@ -16,6 +16,7 @@ export const GridViewContext = React.createContext<GridViewContextProps<Object> 
 export const GridView = <T extends Object>({ className = 'gridview', children, onCallback, ...props }: PropsWithChildren<GridViewProps<T>>): JSX.Element => {
 
   const { current: searchQuery } = useRef(defaultQuery);
+  const [data, setData] = useState();
 
   const handleCallback = (payload: { key?: string, value?: string }) => {
     console.log('CLICK', payload);
