@@ -11,16 +11,26 @@ export const defaultQuery: SearchQuery = {
   pageOffset: 0
 }
 
+type Unpacked<T> =
+  T extends Array<infer U>
+  ? U
+  : T;
+
 export const GridViewContext = React.createContext<GridViewContextProps<Object> | null>(null);
 
 export const GridView = <T extends Object>({ className = 'gridview', children, onCallback, ...props }: PropsWithChildren<GridViewProps<T>>): JSX.Element => {
 
   const { current: searchQuery } = useRef(defaultQuery);
-  const [data, setData] = useState();
+  //const [data, setData] = useState();
 
-  const handleCallback = (payload: { key?: string, value?: string }) => {
+  const handleCallback = (payload: { key?: string, name?: string, value?: string }) => {
     console.log('CLICK', payload);
   }
+
+  if (props.data) {
+    //const {username} = props.data[0];
+  }
+
 
   return <div className={className}>
 

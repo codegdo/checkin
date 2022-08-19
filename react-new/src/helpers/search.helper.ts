@@ -14,24 +14,38 @@ class SearchHelper {
 
   }
 
-  filter<T>(object: T, keys: Array<keyof T>, query: string): boolean {
+  search<T>(object: T, keys: Array<keyof T>, value: string): boolean {
 
-    if (query === '') {
+    if (value === '') {
       return true;
     }
 
     const expression = keys.map(key => {
-      const value = object[key];
+      const val = object[key];
 
-      if (typeof value === 'string' || typeof value === 'number') {
-        return value.toString().includes(query);
+      if (typeof val === 'string' || typeof val === 'number') {
+        return val.toString().includes(value);
       }
 
       return false;
     });
 
+    // some [true, false] = true
     return expression.some(expression => expression);
+  }
 
+  filter<T>(object: T, keys: Array<keyof T>): boolean {
+
+    const expression = keys.map(key => {
+      // object = undefined, null, NaN
+      // string = ''
+      // number = 0
+      // boolean = false
+      return object[key] ? true : false;
+    });
+
+    // every [true, false] = false
+    return expression.every(expression => expression);
   }
 
   sort<T>(a: T, b: T, key: keyof T, direction: string) {
@@ -52,8 +66,6 @@ class SearchHelper {
 
     return direction === 'desc' ? x * -1 : x;
   }
-
-  search() { }
 
   query({
     searchKeys = [],
