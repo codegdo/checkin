@@ -1,4 +1,4 @@
-import React, { ComponentType, lazy, Suspense, useMemo } from 'react';
+import React, { ComponentType, lazy, Suspense, useEffect, useMemo } from 'react';
 import parse, { HTMLReactParserOptions } from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import { Nav } from '../nav/nav.component';
@@ -17,19 +17,19 @@ export const lazyload = <T extends ComponentType<{}>>(factory: () => Promise<{ d
 const html = DOMPurify.sanitize(`
   <div>
     <header>
-      <data id="jsx_nav"></data>
+      <jsx id="jsx_nav"></jsx>
     </header>
     <main>
-      <data id="jsx_main"></data>
+      <jsx id="jsx_main"></jsx>
     </main>
   </div>
-`);
+`, { ADD_TAGS: ['jsx'] });
 
 interface Options {
   fallback: boolean;
 }
 
-export const Template = (Component: React.FC<TemplateProps | {}>) => (props: TemplateProps): JSX.Element | null => {
+export const Template = (Component: React.FC<TemplateProps | {}>) => (props: TemplateProps): JSX.Element => {
 
   const options = ({ fallback }: Options): HTMLReactParserOptions => {
     return {

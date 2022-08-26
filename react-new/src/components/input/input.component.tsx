@@ -5,7 +5,9 @@ import { InputProps } from './input.type';
 export const Input: React.FC<InputProps> = ({ onChange, ...props }): JSX.Element | null => {
 
   switch (props.type) {
-    case 'text': return <InputText {...props} onChange={onChange} />;
+    case 'text':
+    case 'password': return <InputText {...props} onChange={onChange} />;
+
     default: return null;
   }
 }

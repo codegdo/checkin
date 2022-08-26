@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { InputProps } from './input.type';
 
-export const InputText: React.FC<InputProps> = ({ name, value: intialValue = '', onChange }): JSX.Element => {
+export const InputText: React.FC<InputProps> = ({ type, name, value: intialValue = '', onChange }): JSX.Element => {
 
   const [value, setValue] = useState(intialValue);
 
@@ -11,5 +11,5 @@ export const InputText: React.FC<InputProps> = ({ name, value: intialValue = '',
     onChange && onChange(name, target.value);
   }
 
-  return <input type="text" name={name} value={value} onChange={handleChange} />
+  return <input type={type} name={name} value={value} onChange={handleChange} />
 }

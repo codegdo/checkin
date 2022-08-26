@@ -26,12 +26,6 @@ const form = {
   }]
 }
 
-type Users = {
-  username: string
-}
-
-const users: Array<Users> = [{ username: 'john' }];
-
 const Login: React.FC = (props): JSX.Element => {
 
   console.log(props);
@@ -40,6 +34,7 @@ const Login: React.FC = (props): JSX.Element => {
     <Form title="Login">
       <Block>
         <Field type="text" name="username" label="Username" />
+        <Field type="password" name="password" label="Password" />
         <FieldGroup>
           <Field type="text" name="firstName" label="First Name" />
           <Field type="text" name="lastName" label="Last Name" />
@@ -50,10 +45,6 @@ const Login: React.FC = (props): JSX.Element => {
         </FieldGrid>
       </Block>
     </Form>
-
-    <GridView<Users> data={users}>
-      <Column name="username" />
-    </GridView>
   </>
 }
 

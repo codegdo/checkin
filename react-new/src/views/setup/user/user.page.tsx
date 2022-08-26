@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Column } from '../../../components/gridview/gridview.column';
 import { GridView } from '../../../components/gridview/gridview.component';
 
@@ -19,6 +19,15 @@ const users: Array<Users> = [
 ];
 
 const User = (): JSX.Element => {
+
+  useState();
+
+  //useFetch();
+
+  useEffect(() => {
+    // fetch
+  }, []);
+
   return <>
     <GridView<Users> data={users}>
       <Column name="username" />

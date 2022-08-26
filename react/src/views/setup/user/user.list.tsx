@@ -23,7 +23,7 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
   const [data, setData] = useState<DataSource>();
   const [query, setQuery] = useState<string | undefined>();
 
-  // load form
+  // load data
   useEffect(() => {
     (async () => {
       search && await getUsers({ url: `/api/setup/users${search}` });
@@ -31,14 +31,14 @@ const UserList: React.FC<any> = ({ route, page }): JSX.Element => {
   }, [search]);
 
   useEffect(() => {
-    query && navigate(`/setup/users${query}`);
-  }, [query]);
-
-  useEffect(() => {
     if (loading === 'success') {
       setData({ ...dataSource });
     }
   }, [loading]);
+
+  useEffect(() => {
+    query && navigate(`/setup/users${query}`);
+  }, [query]);
 
   const handleCallback = ({ name, search }: DataQuery) => {
     //
