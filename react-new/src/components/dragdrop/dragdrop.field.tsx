@@ -1,65 +1,70 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 
 export const DragDropField: React.FC<any> = (props): JSX.Element => {
   const { id } = props;
   const ref = useRef<HTMLDivElement>(null);
 
-  const [{ }, drag] = useDrag(
+  const [{ opacity }, drag] = useDrag(
     () => ({
       type: 'field',
       item: { ...props, ref },
+      collect: monitor => ({
+        opacity: monitor.isDragging() ? 0 : 1,
+      }),
       end: (item, monitor) => {
-        const dropResult = monitor.getDropResult() as any;
 
-        if (item && dropResult) {
-          const { ref } = item;
+        const didDrop = monitor.didDrop();
 
-          if (!ref.current) {
-            return;
-          }
-
-          ref.current.style.removeProperty('color');
-          console.log('END', item);
-          console.log('DROP', dropResult);
+        if (!didDrop) {
+          console.log('Did DROP');
         }
 
-      },
-      collect: (monitor) => ({
-        opacity: monitor.isDragging() ? 0.5 : 1
-      })
+      }
     }),
-    []
+    [id]
   )
 
-  const [{ canDrop }, drop] = useDrop(() => ({
+  const [{ isOver }, drop] = useDrop(() => ({
     accept: ['block', 'field'],
     canDrop: () => false,
-    hover: (item: any) => {
-      const { ref } = item;
-
+    hover: (item: any, monitor) => {
+      // if not hover ref is undefine
       if (!ref.current) {
         return;
       }
-
+      // if hover refId is same as dragId
       if (item.id == id) {
         return;
       }
+      // if hover over 
+      if (monitor.isOver({ shallow: true })) {
+        // if (item.ref.current.offsetTop < ref.current.offsetTop) {
+        //   ref.current.style.borderBottom = '1px solid';
+        // }
+        // if (item.ref.current.offsetTop > ref.current.offsetTop) {
+        //   ref.current.style.borderTop = '1px solid';
+        // }
+        console.log(monitor.getClientOffset());
+        return;
+      }
 
-      ref.current.style.color = 'red';
+      console.log('hoverREF', ref);
+      console.log('dragREF', item.ref);
       console.log('HOVERITEM', props);
       console.log('DRAGITEM', item);
     },
     collect: monitor => ({
-      isOver: monitor.isOver(),
-      isDraggingOver: monitor.isOver({ shallow: true }),
-      canDrop: monitor.canDrop(),
+      isOver: monitor.isOver({ shallow: true })
     }),
   }), []);
 
   drag(drop(ref));
 
+  const border = isOver ? {} : { border: 'none' };
+
+
   return (
-    <div id={id} ref={ref}>Draggable</div>
+    <div id={id} ref={ref} style={{ ...border, opacity }}>Draggable</div>
   );
 };

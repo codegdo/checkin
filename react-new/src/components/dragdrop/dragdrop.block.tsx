@@ -6,39 +6,49 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
   const { id, data } = props;
   const ref = useRef<HTMLDivElement>(null);
 
-  const [{ }, drag] = useDrag(
+  const [{ opacity }, drag] = useDrag(
     () => ({
       type: 'block',
       item: { ...props, ref },
+      collect: monitor => ({
+        opacity: monitor.isDragging() ? 0 : 1,
+      }),
       end: (item, monitor) => {
-        const dropResult = monitor.getDropResult() as any;
+        const didDrop = monitor.didDrop();
 
-        if (item && dropResult) {
-          const { ref } = item;
-
-          if (!ref.current) {
-            return;
-          }
-
-          console.log('END', item);
-          console.log('DROP', dropResult);
+        if (!didDrop) {
+          console.log('Did DROP');
         }
-      },
-      collect: (monitor) => ({
-        opacity: monitor.isDragging() ? 0.5 : 1
-      })
+
+      }
     }),
-    []
+    [id]
   );
 
-  const [{ canDrop }, drop] = useDrop(
+  const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
       accept: ['block', 'field'],
       drop: () => ({ ...props }),
-      hover: (item: any) => {
+      hover: (item: any, monitor) => {
+        // if not hover ref is undefine
         if (!ref.current) {
           return;
         }
+        // if hover refId is same as dragId
+        if (item.id == id) {
+          return;
+        }
+        // if hover over 
+        if (monitor.isOver({ shallow: true })) {
+          if (item.ref.current.offsetTop < ref.current.offsetTop) {
+            ref.current.style.borderBottom = '1px solid';
+          }
+          if (item.ref.current.offsetTop > ref.current.offsetTop) {
+            ref.current.style.borderTop = '1px solid';
+          }
+          return;
+        }
+
         // same target
         if (item.id == id) {
           return;
@@ -52,20 +62,25 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
           return;
         }
 
+
+
+        console.log('hoverREF', ref);
+        console.log('dragREF', item.ref);
         console.log('HOVERID', id);
         console.log('DRAGITEM', item);
       },
       collect: monitor => ({
-        isOver: monitor.isOver(),
-        isDraggingOver: monitor.isOver({ shallow: true }),
+        isOver: monitor.isOver({ shallow: true }),
         canDrop: monitor.canDrop(),
       }),
     }), []);
 
   drag(drop(ref));
 
+  const border = isOver ? {} : { border: 'none' };
+
   return (
-    <div className='drop' id={id} ref={ref}>
+    <div className='drop' id={id} ref={ref} style={{ ...border, opacity }}>
       {
         <Render data={[...data]} />
       }
