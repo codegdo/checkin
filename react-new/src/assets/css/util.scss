@@ -1,0 +1,21 @@
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1 1;
+}
+
+.hidden {
+  display: none;
+  visibility: hidden;
+}
+
+.invisible {
+  visibility: hidden;
+}

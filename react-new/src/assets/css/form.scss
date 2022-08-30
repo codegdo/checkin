@@ -1,0 +1,43 @@
+// FORM COMPONENT
+.form {
+  margin: 0;
+  padding: 0;
+}
+//.form-header {}
+.form-main {
+  margin: 1.5rem 0;
+}
+.form-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+
+  .item {
+    span {
+      display: block;
+      height: 40px;
+      padding: 8px 0;
+    }
+  }
+
+  .item_submit .button {
+    padding: 8px 80px;
+    width: 100%;
+  }
+  .item_register,
+  .item_login {
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+}
+
+// MODIFIER
+.form {
+  &._error {
+    .input-message {
+      display: block;
+      color: red;
+    }
+  }
+}

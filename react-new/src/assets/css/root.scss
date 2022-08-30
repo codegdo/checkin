@@ -1,0 +1,32 @@
+//https://coolors.co/palette/000000-14213d-fca311-e5e5e5-ffffff
+$black: rgb(0, 0, 0);
+$white: rgb(255, 255, 255);
+$blue: rgb(20, 33, 61);
+$yellow: rgb(252, 163, 17);
+
+$light: darken($white, 0);
+$dark: lighten($black, 0);
+
+$primary: darken($yellow, 0);
+$secondary: lighten($blue, 0);
+
+:root {
+  --light-color: #{$light};
+  --dark-color: #{$dark};
+
+  --primary-color: #{$primary};
+  --secondary-color: #{$secondary};
+
+  --link-color: var(--primary-color);
+  --link-color-hover: var(--primary-color);
+  --link-color-muted: var(--primary-color);
+
+  --font-family: Helvetica, sans-serif;
+  --font-size: 1rem;
+  --font-color: var(--dark-color);
+  --background-color: var(--light-color);
+
+  --transition: 250ms ease-out;
+  --shadow: 2px 5px 20px rgba(0, 0, 0, 0.2);
+  --gradient: linear-gradient(60deg, red, green, blue, yellow);
+}

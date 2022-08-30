@@ -1,0 +1,26 @@
+.button {
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  appearance: none;
+  position: relative;
+  outline: none;
+  box-sizing: border-box;
+  text-align: center;
+
+  background: $blue;
+  color: $white;
+  border-radius: $button-border-radius;
+  height: $button-height;
+  padding: $button-padding;
+
+  @include transition();
+
+  &:hover {
+    background: darken($blue, 20);
+  }
+  &:active {
+    background: $blue;
+  }
+}

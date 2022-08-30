@@ -1,6 +1,7 @@
 import React, { } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DragDropBlock } from './dragdrop.block';
 import { Render } from './dragdrop.render';
 
 export interface DragDropProps {
@@ -12,7 +13,9 @@ export const DragDrop: React.FC<DragDropProps> = ({ data, onCallback, ...props }
 
   return <>
     <DndProvider backend={HTML5Backend}>
-      <Render data={data} />
+      <DragDropBlock id="0" role="block">
+        <Render data={data} />
+      </DragDropBlock>
     </DndProvider>
   </>
 }

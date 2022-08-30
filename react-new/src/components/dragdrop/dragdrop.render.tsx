@@ -11,11 +11,11 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ data = [], pa
 
   return <>
     {
-      data.map((item, i) => {
+      data.map((item, i, data) => {
         const { role } = item;
         switch (role) {
-          case 'block': return <DragDropBlock key={i} {...item} />
-          case 'field': return <DragDropField key={i} {...item} />
+          case 'block': return <DragDropBlock key={i} index={i} list={data} {...item} />
+          case 'field': return <DragDropField key={i} index={i} list={data} {...item} />
           default: return null;
         }
       })

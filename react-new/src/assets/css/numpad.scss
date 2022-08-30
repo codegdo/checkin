@@ -1,0 +1,64 @@
+.numpad-input,
+.numpad-message,
+.numpad-key {
+  text-align: center;
+}
+
+.numpad-input i {
+  display: inline-block;
+  margin: 2rem 1rem;
+  width: 15px;
+  height: 15px;
+  border: 1px solid silver;
+  border-radius: 100px;
+
+  @include transition();
+
+  &.checked {
+    background-color: gray;
+    border-color: gray;
+  }
+}
+
+.numpad-input input {
+  border: none;
+  text-align: center;
+  font-size: 29px;
+  height: 60px;
+  letter-spacing: 0.3rem;
+  background: none;
+
+  &:hover {
+    box-shadow: none;
+  }
+  &::placeholder {
+    letter-spacing: 0;
+  }
+}
+
+.numpad-message p {
+  padding: 1rem 0;
+}
+
+.numpad-key button {
+  font-size: 18px;
+  background: gray;
+  width: 80px;
+  height: 80px;
+  border: none;
+  border-radius: 800px;
+  margin: 1rem;
+
+  &[name='key'] {
+    font-size: 24px;
+  }
+
+  @include transition();
+
+  &:hover {
+    background: darken(gray, 10);
+  }
+  &:active {
+    background: gray;
+  }
+}
