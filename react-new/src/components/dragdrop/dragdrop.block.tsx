@@ -1,17 +1,19 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
+import { getEmptyImage } from 'react-dnd-html5-backend';
 import { Render } from './dragdrop.render';
 
 export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
   const { id, index, list, data, children } = props;
   const ref = useRef<HTMLDivElement>(null);
-  let _y = 0;
+  let _x = 0, _y = 0;
 
-  const [{ isDragging }, drag] = useDrag(
+  const [{ opacity, isDragging }, drag, preview] = useDrag(
     () => ({
       type: 'block',
       item: { ...props, ref },
       collect: monitor => ({
+        opacity: monitor.isDragging() ? .1 : 1,
         isDragging: monitor.isDragging(),
       }),
       end: (item, monitor) => {
@@ -31,7 +33,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
       accept: ['block', 'field'],
       drop: () => ({ ...props }),
       hover: (item: any, monitor) => {
-        const { y } = monitor.getClientOffset() as {
+        const { x, y } = monitor.getClientOffset() as {
           x: number
           y: number
         }
@@ -59,35 +61,48 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
         // if hoverRefOver 
         if (monitor.isOver({ shallow: true })) {
 
-          if (_y == y) {
-            return;
-          }
+          const parentNode: any = ref.current.parentNode;
 
-          _y = y;
+          if (parentNode) {
+            if (parentNode.style.display == 'flex') {
 
-          if (index == 0 || index == (list.length - 1)) {
-            if (y < ref.current.offsetTop + ref.current.offsetHeight / 2) {
-              // ref.current.style.borderTop = '1px solid';
-              // ref.current.style.borderBottom = '0px solid';
-              ref.current.classList.add('top');
-              ref.current.classList.remove('bottom');
+              if (_x == x) {
+                return;
+              }
+              _x = x;
+
+              if (index == 0 || index == (list.length - 1)) {
+                if (x < ref.current.offsetLeft + ref.current.offsetWidth / 2) {
+                  ref.current.classList.add('left');
+                  ref.current.classList.remove('right');
+                } else {
+                  ref.current.classList.add('right');
+                  ref.current.classList.remove('left');
+                }
+              } else {
+                ref.current.classList.add('right');
+              }
+
             } else {
-              // ref.current.style.borderTop = '0px solid';
-              // ref.current.style.borderBottom = '1px solid';
-              ref.current.classList.add('bottom');
-              ref.current.classList.remove('top');
+              if (_y == y) {
+                return;
+              }
+
+              _y = y;
+
+              if (index == 0 || index == (list.length - 1)) {
+                if (y < ref.current.offsetTop + ref.current.offsetHeight / 2) {
+                  ref.current.classList.add('top');
+                  ref.current.classList.remove('bottom');
+                } else {
+                  ref.current.classList.add('bottom');
+                  ref.current.classList.remove('top');
+                }
+              } else {
+                ref.current.classList.add('bottom');
+              }
             }
-          } else {
-            //ref.current.style.borderBottom = '1px solid';
-            ref.current.classList.add('bottom');
-
           }
-
-
-          console.log(y);
-          console.log('hoverREF', ref);
-
-          return;
         }
 
         //console.log('hoverREF', ref);
@@ -114,11 +129,19 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
     display = { display: 'none' }
   }
 
+  useEffect(() => {
+    preview(getEmptyImage(), { captureDraggingState: false })
+  }, [])
+
   return (
-    <div className={`drop ${over}`} id={id} ref={ref} style={{ ...display }}>
-      {
-        children ? children : <Render data={[...data]} />
-      }
+
+    <div className={`drop ${over}`} id={id} ref={ref} style={{ opacity }}>
+      <div className="content">
+        {
+          children ? children : <Render data={[...data]} />
+        }
+      </div>
     </div>
+
   );
 };

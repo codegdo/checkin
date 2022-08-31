@@ -8,10 +8,12 @@ const data: any[] = [
     data: [
       {
         id: 2,
+        name: 'firstName',
         role: 'field'
       },
       {
         id: 3,
+        name: 'lastName',
         role: 'field'
       }
     ]
@@ -22,10 +24,12 @@ const data: any[] = [
     data: [
       {
         id: 5,
+        name: 'emailAddress',
         role: 'field'
       },
       {
         id: 6,
+        name: 'phoneNumber',
         role: 'field'
       }
     ]
