@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import { dragdropHelper } from '../../helpers';
 import { Render } from './dragdrop.render';
 
 export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
@@ -53,62 +54,53 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
         if (id == 0) {
           return;
         }
+
         // parent
-        if (item.ref.current.parentNode.id == id) {
-          //return;
-        }
+        //if (item.ref.current.parentNode.id == id) {
+        //return;
+        //}
 
         // if hoverRefOver 
         if (monitor.isOver({ shallow: true })) {
 
-          const parentNode: any = ref.current.parentNode;
+          const display = dragdropHelper.parentNodeDisplay(ref.current.parentNode as HTMLElement);
 
-          if (parentNode) {
-            if (parentNode.style.display == 'flex') {
+          if (display == 'row') {
+            if (_x == x) {
+              return;
+            }
 
-              if (_x == x) {
-                return;
-              }
-              _x = x;
+            _x = x;
 
-              if (index == 0 || index == (list.length - 1)) {
-                if (x < ref.current.offsetLeft + ref.current.offsetWidth / 2) {
-                  ref.current.classList.add('left');
-                  ref.current.classList.remove('right');
-                } else {
-                  ref.current.classList.add('right');
-                  ref.current.classList.remove('left');
-                }
-              } else {
-                ref.current.classList.add('right');
-              }
-
+            if (x < ref.current.offsetLeft + ref.current.offsetWidth / 2) {
+              ref.current.classList.add('left');
+              ref.current.classList.remove('right');
             } else {
-              if (_y == y) {
-                return;
-              }
+              ref.current.classList.add('right');
+              ref.current.classList.remove('left');
+            }
+          } else {
+            if (_y == y) {
+              return;
+            }
 
-              _y = y;
+            _y = y;
 
-              if (index == 0 || index == (list.length - 1)) {
-                if (y < ref.current.offsetTop + ref.current.offsetHeight / 2) {
-                  ref.current.classList.add('top');
-                  ref.current.classList.remove('bottom');
-                } else {
-                  ref.current.classList.add('bottom');
-                  ref.current.classList.remove('top');
-                }
-              } else {
-                ref.current.classList.add('bottom');
-              }
+            if (y < ref.current.offsetTop + ref.current.offsetHeight / 2) {
+              ref.current.classList.add('top');
+              ref.current.classList.remove('bottom');
+            } else {
+              ref.current.classList.add('bottom');
+              ref.current.classList.remove('top');
             }
           }
+
+          console.log(y);
+          console.log('hoverREF', ref);
+
+          return;
         }
 
-        //console.log('hoverREF', ref);
-        //console.log('dragREF', item.ref);
-        //console.log('HOVERID', id);
-        //console.log('DRAGITEM', item);
       },
       collect: monitor => ({
         isOver: monitor.isOver({ shallow: true }),
@@ -118,24 +110,13 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
 
   drag(drop(ref));
 
-  let display = {};
-  let over = '';
-
-  if (isOver) {
-    over = 'over';
-  }
-
-  if (isDragging) {
-    display = { display: 'none' }
-  }
-
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: false })
   }, [])
 
   return (
 
-    <div className={`drop ${over}`} id={id} ref={ref} style={{ opacity }}>
+    <div className={`drop ${isOver ? 'hover' : ''}`} id={id} ref={ref} style={{ opacity }}>
       <div className="content">
         {
           children ? children : <Render data={[...data]} />

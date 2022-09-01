@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import { dragdropHelper } from '../../helpers';
 
 export const DragDropField: React.FC<any> = (props): JSX.Element => {
   const { id, name, index, list } = props;
@@ -51,60 +52,35 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
       // if hoverRefOver 
       if (monitor.isOver({ shallow: true })) {
 
-        const parentNode: any = ref.current.parentNode;
+        const display = dragdropHelper.parentNodeDisplay(ref.current.parentNode as HTMLElement);
 
-        if (parentNode) {
-          if (parentNode.style.display == 'flex') {
+        if (display == 'row') {
+          if (_x == x) {
+            return;
+          }
 
-            if (_x == x) {
-              return;
-            }
-            _x = x;
+          _x = x;
 
-            if (index == 0 || index == (list.length - 1)) {
-              if (x < ref.current.offsetLeft + ref.current.offsetWidth / 2) {
-                ref.current.classList.add('left');
-                ref.current.classList.remove('right');
-              } else {
-                ref.current.classList.add('right');
-                ref.current.classList.remove('left');
-              }
-            } else {
-              ref.current.classList.add('right');
-            }
-
+          if (x < ref.current.offsetLeft + ref.current.offsetWidth / 2) {
+            ref.current.classList.add('left');
+            ref.current.classList.remove('right');
           } else {
-            if (_y == y) {
-              return;
-            }
+            ref.current.classList.add('right');
+            ref.current.classList.remove('left');
+          }
+        } else {
+          if (_y == y) {
+            return;
+          }
 
-            _y = y;
+          _y = y;
 
-            // if (index == 0) {
-            //   ref.current.classList.add('top');
-            // } else if (index == (list.length - 1)) {
-            //   ref.current.classList.add('bottom');
-            // } else {
-            //   if (y < ref.current.offsetTop + ref.current.offsetHeight / 2) {
-            //     ref.current.classList.add('top');
-            //     ref.current.classList.remove('bottom');
-            //   } else {
-            //     ref.current.classList.add('bottom');
-            //     ref.current.classList.remove('top');
-            //   }
-            // }
-
-            if (index == 0 || index == (list.length - 1)) {
-              if (y < ref.current.offsetTop + ref.current.offsetHeight / 2) {
-                ref.current.classList.add('top');
-                ref.current.classList.remove('bottom');
-              } else {
-                ref.current.classList.add('bottom');
-                ref.current.classList.remove('top');
-              }
-            } else {
-              ref.current.classList.add('bottom');
-            }
+          if (y < ref.current.offsetTop + ref.current.offsetHeight / 2) {
+            ref.current.classList.add('top');
+            ref.current.classList.remove('bottom');
+          } else {
+            ref.current.classList.add('bottom');
+            ref.current.classList.remove('top');
           }
         }
 
@@ -130,19 +106,8 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
   drag(drop(ref));
 
-  let display = {};
-  let over = '';
-
-  if (isOver) {
-    over = 'over';
-  }
-
-  if (isDragging) {
-    display = { display: 'none' }
-  }
-
   return (
-    <div className={`drag ${over}`} id={id} ref={ref} style={{ opacity }}>
+    <div className={`drag ${isOver ? 'hover' : ''}`} id={id} ref={ref} style={{ opacity }}>
       <div className="content">{name}</div>
     </div>
   );
