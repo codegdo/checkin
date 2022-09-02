@@ -8,7 +8,7 @@ interface RenderProps {
   data?: any[]
 }
 
-export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ children, data }): JSX.Element | null => {
+export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ data, children }): JSX.Element | null => {
   console.log('DATA', data);
   return <>
     {

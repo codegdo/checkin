@@ -15,15 +15,15 @@ const Index: React.FC = (): JSX.Element => {
 
 
   useEffect(() => {
-
-  }, []);
+    console.log(form);
+  }, [form]);
 
   if (!form) {
     return <div>loading...</div>
   }
 
   return <div>
-    <DragDrop data={[]} />
+    <DragDrop data={form} />
   </div>;
 };
 

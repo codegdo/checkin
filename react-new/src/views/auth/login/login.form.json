@@ -17,7 +17,7 @@
       "type": "main",
       "role": "block",
       "data": [],
-      "position": 1,
+      "position": 3,
       "parentId": null
     },
     {
@@ -25,7 +25,7 @@
       "type": "footer",
       "role": "block",
       "data": [],
-      "position": 2,
+      "position": 6,
       "parentId": null
     },
     {
@@ -34,33 +34,33 @@
       "title": "Login",
       "description": null,
       "type": "title",
-      "role": "inline",
+      "role": "field",
       "data": [],
       "value": null,
-      "position": 0,
+      "position": 2,
       "parentId": "f-header"
     },
     {
       "id": "f-submit",
       "name": "submit",
-      "title": "Login",
+      "label": "Login",
       "type": "button",
-      "role": "inline",
+      "role": "field",
       "data": [],
       "value": null,
-      "position": 0,
+      "position": 7,
       "parentId": "f-footer"
     },
     {
       "id": "f-signup",
-      "name": null,
-      "title": "Signup",
+      "name": "signup",
+      "label": "Signup",
       "description": null,
       "type": "link",
-      "role": "inline",
+      "role": "field",
       "data": null,
       "value": "/auth/signup",
-      "position": 0,
+      "position": 8,
       "parentId": "f-footer"
     }
   ],
@@ -68,14 +68,14 @@
     {
       "id": 3,
       "name": "username",
-      "title": "Username",
+      "label": "Username",
       "description": null,
       "type": "text",
       "role": "field",
       "data": null,
       "value": "",
       "isRequired": true,
-      "position": 0,
+      "position": 4,
       "parentId": "f-main",
       "map": "sec.user.username",
       "lookup": null
@@ -83,14 +83,14 @@
     {
       "id": 4,
       "name": "password",
-      "title": "Password",
+      "label": "Password",
       "description": null,
       "type": "password",
       "role": "field",
       "data": null,
       "value": "",
       "isRequired": true,
-      "position": 0,
+      "position": 5,
       "parentId": "f-main",
       "map": "sec.user.password",
       "lookup": null
