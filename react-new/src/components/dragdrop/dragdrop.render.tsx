@@ -17,21 +17,17 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ data }): JSX.
     throw new Error();
   }
 
-  const { state, moveItem } = ctx;
+  const { state, current, moveItem } = ctx;
 
-  const list: any[] = (data ? data : formHelper.mapToParent(state.data)) || [];
-
-  useEffect(() => {
-    console.log(state.data)
-  }, [state]);
+  const list: any[] = (data ? data : formHelper.mapField(state.data)) || [];
 
   return <>
     {
       list.map((item, i, list) => {
-        const { role } = item;
+        const { role, position } = item;
         switch (role) {
-          case 'block': return <DragDropBlock key={i} index={i} list={list} {...item} />
-          case 'field': return <DragDropField key={i} index={i} list={list} moveItem={moveItem} {...item} />
+          case 'block': return <DragDropBlock key={i} position={position} hover={current} list={list} moveItem={moveItem} {...item} />
+          case 'field': return <DragDropField key={i} position={position} hover={current} list={list} moveItem={moveItem} {...item} />
           default: return null;
         }
       })

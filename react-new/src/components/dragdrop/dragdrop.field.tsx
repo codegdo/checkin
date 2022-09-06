@@ -5,8 +5,7 @@ import { dragdropHelper } from '../../helpers';
 
 export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
-
-  const { id, name, index, list, moveItem } = props;
+  const { id, name, position, moveItem } = props;
   const ref = useRef<HTMLDivElement>(null);
 
   let _x = 0, _y = 0;
@@ -20,14 +19,15 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
         isDragging: monitor.isDragging()
       }),
       end: (item, monitor) => {
-
+        const dragIndex = item.position;
+        const hover = props.hover;
         const didDrop = monitor.didDrop();
 
-        moveItem();
-        if (!didDrop) {
-          console.log('Did DROP');
+        if (didDrop) {
+          moveItem();
+          console.log('dragIndex', dragIndex);
+          console.log('hover', hover);
         }
-
       }
     }),
     [id]
@@ -37,10 +37,6 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     accept: ['block', 'field'],
     canDrop: () => false,
     hover: (item: any, monitor) => {
-      const { x, y } = monitor.getClientOffset() as {
-        x: number
-        y: number
-      }
 
       // if not hoverRef is undefine
       if (!ref.current) {
@@ -50,6 +46,11 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
       // if dragId is same as hoverRefId
       if (item.id == id) {
         return;
+      }
+
+      const { x, y } = monitor.getClientOffset() as {
+        x: number
+        y: number
       }
 
       // if hoverRefOver 
@@ -63,6 +64,7 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
           }
 
           _x = x;
+          props.hover.item = props;
 
           if (x < ref.current.offsetLeft + ref.current.offsetWidth / 2) {
             ref.current.classList.add('left');
@@ -77,6 +79,7 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
           }
 
           _y = y;
+          props.hover.item = props;
 
           if (y < ref.current.offsetTop + ref.current.offsetHeight / 2) {
             ref.current.classList.add('top');
@@ -87,16 +90,9 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
           }
         }
 
-        console.log(y);
-        console.log('hoverREF', ref);
-
         return;
       }
 
-      //console.log('hoverREF', ref);
-      //console.log('dragREF', item.ref);
-      //console.log('HOVERITEM', props);
-      //console.log('DRAGITEM', item);
     },
     collect: monitor => ({
       isOver: monitor.isOver({ shallow: true })
@@ -110,7 +106,7 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
   drag(drop(ref));
 
   return (
-    <div className={`drag ${isOver ? 'hover' : ''}`} id={id} ref={ref} style={{ opacity }}>
+    <div className={`drag ${isOver ? 'hover' : ''}`} id={id} ref={ref} tabIndex={position} style={{ opacity }}>
       <div className="content">{name}</div>
     </div>
   );

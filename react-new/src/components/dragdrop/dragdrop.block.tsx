@@ -5,7 +5,7 @@ import { dragdropHelper } from '../../helpers';
 import { Render } from './dragdrop.render';
 
 export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
-  const { id, index, list, data, children } = props;
+  const { id, position, data, moveItem, children } = props;
   const ref = useRef<HTMLDivElement>(null);
   let _x = 0, _y = 0;
 
@@ -18,11 +18,18 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
         isDragging: monitor.isDragging(),
       }),
       end: (item, monitor) => {
+        const dragIndex = item.position;
+        const hover = props.hover;
         const didDrop = monitor.didDrop();
 
-        if (!didDrop) {
-          console.log('Did DROP');
+        if (didDrop) {
+          moveItem();
+          console.log('dragIndex', dragIndex);
+          console.log('hover', hover);
         }
+
+        console.log('dragIndex', dragIndex);
+        console.log('hover', hover);
 
       }
     }),
@@ -32,12 +39,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
       accept: ['block', 'field'],
-      drop: () => ({ ...props }),
       hover: (item: any, monitor) => {
-        const { x, y } = monitor.getClientOffset() as {
-          x: number
-          y: number
-        }
 
         // if not hoverRef is undefine
         if (!ref.current) {
@@ -53,6 +55,11 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
         // root parent
         if (id == 0) {
           return;
+        }
+
+        const { x, y } = monitor.getClientOffset() as {
+          x: number
+          y: number
         }
 
         // parent
@@ -71,6 +78,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
             }
 
             _x = x;
+            props.hover.item = props;
 
             if (x < ref.current.offsetLeft + ref.current.offsetWidth / 2) {
               ref.current.classList.add('left');
@@ -85,6 +93,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
             }
 
             _y = y;
+            props.hover.item = props;
 
             if (y < ref.current.offsetTop + ref.current.offsetHeight / 2) {
               ref.current.classList.add('top');
@@ -116,7 +125,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
 
   return (
 
-    <div className={`drop ${isOver ? 'hover' : ''}`} id={id} ref={ref} style={{ opacity }}>
+    <div className={`drop ${isOver ? 'hover' : ''}`} id={id} ref={ref} tabIndex={position} style={{ opacity }}>
       <div className="content">
         {
           children ? children : <Render data={[...data]} />

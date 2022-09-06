@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useEffect, useReducer } from 'react';
+import React, { PropsWithChildren, useCallback, useEffect, useReducer, useRef } from 'react';
 import update from 'immutability-helper'
 import { initialState, reducer } from './dragdrop.reducer';
 import { DragDropContextProps, DragDropProps } from './dragdrop.type';
@@ -7,11 +7,16 @@ export const DragDropContext = React.createContext<DragDropContextProps | null>(
 
 export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ children, data, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  let { current } = useRef({});
 
   useEffect(() => {
+    const payload = [...data.data, ...data.fields].sort((a, b) => {
+      return a.position - b.position;
+    }).filter((item, index) => { item.position = index; return item; });
+
     dispatch({
       type: 'INIT',
-      payload: [...data.data, ...data.fields]
+      payload
     });
   }, []);
 
@@ -31,14 +36,14 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
       ]
     });
 
-    console.log('MOVE ITEM', items);
+    //console.log('MOVE ITEM', items);
   }, [state]);
 
   const handleCallback = useCallback(() => {
 
   }, []);
 
-  return <DragDropContext.Provider value={{ data, state, moveItem, onCallback: handleCallback }}>
+  return <DragDropContext.Provider value={{ data, state, current, moveItem, onCallback: handleCallback }}>
     {children}
   </DragDropContext.Provider>
 }

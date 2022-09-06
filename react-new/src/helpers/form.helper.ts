@@ -32,12 +32,13 @@ class FormHelper {
     return list;
   }
 
-  mapToParent(data: any) {
+  mapField(data: any) {
     console.log('mapToParent');
     const _data = JSON.parse(JSON.stringify(data));
     const list: any[] = [];
 
-    _data.forEach((item: any) => {
+    _data.forEach((item: any, index: number) => {
+      item.position = index;
       return mapToParent(list, item);
     });
 
