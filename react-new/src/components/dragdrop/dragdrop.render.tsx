@@ -17,7 +17,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ data }): JSX.
     throw new Error();
   }
 
-  const { state } = ctx;
+  const { state, moveItem } = ctx;
 
   const list: any[] = (data ? data : formHelper.mapToParent(state.data)) || [];
 
@@ -31,7 +31,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ data }): JSX.
         const { role } = item;
         switch (role) {
           case 'block': return <DragDropBlock key={i} index={i} list={list} {...item} />
-          case 'field': return <DragDropField key={i} index={i} list={list} {...item} />
+          case 'field': return <DragDropField key={i} index={i} list={list} moveItem={moveItem} {...item} />
           default: return null;
         }
       })

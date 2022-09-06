@@ -4,7 +4,9 @@ import { getEmptyImage } from 'react-dnd-html5-backend';
 import { dragdropHelper } from '../../helpers';
 
 export const DragDropField: React.FC<any> = (props): JSX.Element => {
-  const { id, name, index, list } = props;
+
+
+  const { id, name, index, list, moveItem } = props;
   const ref = useRef<HTMLDivElement>(null);
 
   let _x = 0, _y = 0;
@@ -21,6 +23,7 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
         const didDrop = monitor.didDrop();
 
+        moveItem();
         if (!didDrop) {
           console.log('Did DROP');
         }

@@ -9,11 +9,14 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    dispatch({ type: 'INIT', payload: [...data.data, ...data.fields] });
+    dispatch({
+      type: 'INIT',
+      payload: [...data.data, ...data.fields]
+    });
   }, []);
 
   useEffect(() => {
-    console.log('MOVE ITEM CALL', moveItem());
+    //console.log('MOVE ITEM CALL', moveItem());
   });
 
   const moveItem = useCallback(() => {
@@ -28,8 +31,8 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
       ]
     });
 
-    console.log('MOVE ITEM', state.data);
-  }, []);
+    console.log('MOVE ITEM', items);
+  }, [state]);
 
   const handleCallback = useCallback(() => {
 
