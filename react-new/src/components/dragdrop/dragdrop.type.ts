@@ -4,7 +4,7 @@ export interface DragDropProps {
 }
 
 export interface DragDropContextProps extends DragDropProps {
-  data?: any;
+  data: any;
   state: DragDropState;
   current?: any;
   moveItem: () => void;
@@ -17,5 +17,5 @@ export type DragDropAction = {
 };
 
 export type DragDropState = {
-  data?: any[];
+  data: any[];
 };

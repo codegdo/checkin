@@ -21,3 +21,16 @@
 .content {
   padding: 1rem;
 }
+.content.empty:before {
+  content: 'drop...';
+  display: block;
+  background: #f8f8f8;
+  padding: 1rem;
+  color: #ddd;
+  border: 1px dashed #f8f8f8;
+  transition: all 0.5s ease-out;
+}
+
+.center .content.empty:before {
+  border: 1px dashed #000;
+}

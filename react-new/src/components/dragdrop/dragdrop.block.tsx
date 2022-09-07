@@ -18,8 +18,6 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
         isDragging: monitor.isDragging(),
       }),
       end: (item, monitor) => {
-        //const dragItem = item;
-        //const hoverItem = props.hover.item;
         const didDrop = monitor.didDrop();
 
         if (didDrop) {
@@ -74,13 +72,26 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
             _x = x;
             props.drop.item = props;
 
-            if (x < ref.current.offsetLeft + ref.current.offsetWidth / 2) {
-              ref.current.classList.add('left');
-              ref.current.classList.remove('right');
+            if (data.length == 0) {
+              if (x < ref.current.offsetLeft + ref.current.offsetWidth / 2 - 16) {
+                ref.current.classList.add('left');
+                ref.current.classList.remove('right');
+                props.drop.offset = 'center';
+              }
             } else {
-              ref.current.classList.add('right');
-              ref.current.classList.remove('left');
+              if (x < ref.current.offsetLeft + ref.current.offsetWidth / 2) {
+                ref.current.classList.add('left');
+                ref.current.classList.remove('right');
+                props.drop.offset = 'left';
+              } else {
+                ref.current.classList.add('right');
+                ref.current.classList.remove('left');
+                props.drop.offset = 'right';
+              }
             }
+
+
+
           } else {
             if (_y == y) {
               return;
@@ -89,14 +100,39 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
             _y = y;
             props.drop.item = props;
 
-            if (y < ref.current.offsetTop + ref.current.offsetHeight / 2) {
-              ref.current.classList.add('top');
-              ref.current.classList.remove('bottom');
+            if (data.length == 0) {
+              console.log(ref.current.offsetTop);
+              console.log(ref.current.offsetHeight / 2);
+
+              if (y < ref.current.offsetTop + 16) {
+                ref.current.classList.add('top');
+                ref.current.classList.remove('bottom');
+                ref.current.classList.remove('center');
+                props.drop.offset = 'top';
+              } else if (y > ref.current.offsetTop + 16 && y < ref.current.offsetTop + 16 + 50) {
+                ref.current.classList.add('center');
+                ref.current.classList.remove('top');
+                ref.current.classList.remove('bottom');
+                props.drop.offset = 'center';
+              } else {
+                ref.current.classList.add('bottom');
+                ref.current.classList.remove('top');
+                ref.current.classList.remove('center');
+                props.drop.offset = 'button';
+              }
             } else {
-              ref.current.classList.add('bottom');
-              ref.current.classList.remove('top');
+              if (y < ref.current.offsetTop + ref.current.offsetHeight / 2) {
+                ref.current.classList.add('top');
+                ref.current.classList.remove('bottom');
+                props.drop.offset = 'top';
+              } else {
+                ref.current.classList.add('bottom');
+                ref.current.classList.remove('top');
+                props.drop.offset = 'button';
+              }
             }
           }
+
           return;
         }
 
@@ -105,7 +141,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
         isOver: monitor.isOver({ shallow: true }),
         canDrop: monitor.canDrop(),
       }),
-    }), []);
+    }), [id, moveItem]);
 
   drag(drop(ref));
 
@@ -116,7 +152,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
   return (
 
     <div className={`drop ${isOver ? 'hover' : ''}`} id={id} ref={ref} tabIndex={position} style={{ opacity }}>
-      <div className="content">
+      <div className={`content ${data?.length == 0 ? 'empty' : ''}`}>
         {
           children ? children : <Render data={[...data]} />
         }

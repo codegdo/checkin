@@ -24,11 +24,12 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
         const didDrop = monitor.didDrop();
 
         if (didDrop) {
+          console.log('DROP', item);
           moveItem(item);
         }
       }
     }),
-    [id]
+    [id, moveItem]
   );
 
   const [{ isOver }, drop] = useDrop(() => ({
@@ -67,9 +68,11 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
           if (x < ref.current.offsetLeft + ref.current.offsetWidth / 2) {
             ref.current.classList.add('left');
             ref.current.classList.remove('right');
+            props.drop.offset = 'left';
           } else {
             ref.current.classList.add('right');
             ref.current.classList.remove('left');
+            props.drop.offset = 'right';
           }
         } else {
           if (_y == y) {
@@ -82,9 +85,11 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
           if (y < ref.current.offsetTop + ref.current.offsetHeight / 2) {
             ref.current.classList.add('top');
             ref.current.classList.remove('bottom');
+            props.drop.offset = 'top';
           } else {
             ref.current.classList.add('bottom');
             ref.current.classList.remove('top');
+            props.drop.offset = 'button';
           }
         }
 
@@ -95,7 +100,7 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     collect: monitor => ({
       isOver: monitor.isOver({ shallow: true })
     }),
-  }), []);
+  }), [id]);
 
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: false })

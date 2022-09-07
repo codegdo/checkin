@@ -1,5 +1,5 @@
 import React, { PropsWithChildren, useCallback, useEffect, useReducer, useRef } from 'react';
-import update from 'immutability-helper'
+import update from 'immutability-helper';
 import { initialState, reducer } from './dragdrop.reducer';
 import { DragDropContextProps, DragDropProps } from './dragdrop.type';
 
@@ -24,20 +24,27 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
     //console.log('MOVE ITEM CALL', moveItem());
   });
 
-  const moveItem = useCallback((dragItem) => {
-    // const dragIndex = 6;
-    // const hoverIndex = 7;
+  const moveItem = useCallback((item: any) => {
+
+    dispatch({
+      type: 'MOVE_ITEM',
+      payload: item
+    });
+
+    // const dragIndex = dragItem.position;
+    // const hoverIndex = dragItem.drop.item.position;
     // const i = state.data[dragIndex];
 
     // const items = update(state.data, {
     //   $splice: [
     //     [dragIndex, 1],
     //     [hoverIndex, 0, i as any]
-    //   ]
+    //   ],
+    //   $apply: arr => arr.filter((a, index) => { a.position = index; return a; })
     // });
 
     //console.log('MOVE ITEM', items);
-    console.log('dragItem', dragItem);
+    //console.log('dragItem', dragItem);
     //console.log('hoverItem', hoverItem);
   }, [state]);
 
