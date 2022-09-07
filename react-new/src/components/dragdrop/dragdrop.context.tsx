@@ -7,7 +7,7 @@ export const DragDropContext = React.createContext<DragDropContextProps | null>(
 
 export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ children, data, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  let { current } = useRef({});
+  const { current } = useRef({});
 
   useEffect(() => {
     const payload = [...data.data, ...data.fields].sort((a, b) => {
@@ -24,19 +24,21 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
     //console.log('MOVE ITEM CALL', moveItem());
   });
 
-  const moveItem = useCallback(() => {
-    const dragIndex = 6;
-    const hoverIndex = 7;
-    const i = state.data[dragIndex];
+  const moveItem = useCallback((dragItem) => {
+    // const dragIndex = 6;
+    // const hoverIndex = 7;
+    // const i = state.data[dragIndex];
 
-    const items = update(state.data, {
-      $splice: [
-        [dragIndex, 1],
-        [hoverIndex, 0, i as any]
-      ]
-    });
+    // const items = update(state.data, {
+    //   $splice: [
+    //     [dragIndex, 1],
+    //     [hoverIndex, 0, i as any]
+    //   ]
+    // });
 
     //console.log('MOVE ITEM', items);
+    console.log('dragItem', dragItem);
+    //console.log('hoverItem', hoverItem);
   }, [state]);
 
   const handleCallback = useCallback(() => {

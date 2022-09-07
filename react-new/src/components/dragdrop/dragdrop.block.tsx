@@ -18,19 +18,13 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
         isDragging: monitor.isDragging(),
       }),
       end: (item, monitor) => {
-        const dragIndex = item.position;
-        const hover = props.hover;
+        //const dragItem = item;
+        //const hoverItem = props.hover.item;
         const didDrop = monitor.didDrop();
 
         if (didDrop) {
-          moveItem();
-          console.log('dragIndex', dragIndex);
-          console.log('hover', hover);
+          moveItem(item);
         }
-
-        console.log('dragIndex', dragIndex);
-        console.log('hover', hover);
-
       }
     }),
     [id]
@@ -78,7 +72,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
             }
 
             _x = x;
-            props.hover.item = props;
+            props.drop.item = props;
 
             if (x < ref.current.offsetLeft + ref.current.offsetWidth / 2) {
               ref.current.classList.add('left');
@@ -93,7 +87,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
             }
 
             _y = y;
-            props.hover.item = props;
+            props.drop.item = props;
 
             if (y < ref.current.offsetTop + ref.current.offsetHeight / 2) {
               ref.current.classList.add('top');
@@ -103,10 +97,6 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
               ref.current.classList.remove('top');
             }
           }
-
-          console.log(y);
-          console.log('hoverREF', ref);
-
           return;
         }
 
