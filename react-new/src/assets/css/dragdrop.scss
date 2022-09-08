@@ -1,27 +1,37 @@
-.drop,
-.drag {
+.dd-block,
+.dd-field {
   border: 1px dashed #eee;
   transition: all 0.5s ease-out;
   margin: 1px;
 }
 
-.top {
+.dragging {
+  opacity: 0.1;
+  border: 1px dashed #eee !important;
+}
+
+.dragging .over {
+  border: 1px dashed #eee !important;
+}
+
+.move-top {
   border-top-color: #000;
 }
-.bottom {
+.move-bottom {
   border-bottom-color: #000;
 }
-.left {
+.move-left {
   border-left-color: #000;
 }
-.right {
+.move-right {
   border-right-color: #000;
 }
 
-.content {
+.dd-content {
   padding: 1rem;
 }
-.content.empty:before {
+
+.dd-content:empty:before {
   content: 'drop...';
   display: block;
   background: #f8f8f8;
@@ -31,6 +41,6 @@
   transition: all 0.5s ease-out;
 }
 
-.center .content.empty:before {
+.hover-center .content.empty:before {
   border: 1px dashed #000;
 }

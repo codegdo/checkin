@@ -5,26 +5,24 @@ import { dragdropHelper } from '../../helpers';
 
 export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
-  const { id, name, position, moveItem } = props;
+  const { id, name, position, list, moveItem } = props;
   const ref = useRef<HTMLDivElement>(null);
 
   let _x = 0, _y = 0;
 
-  const [{ opacity, isDragging }, drag, preview] = useDrag(
+  const [{ isDragging }, drag, preview] = useDrag(
     () => ({
       type: 'field',
       item: { ...props, ref },
       collect: monitor => ({
-        opacity: monitor.isDragging() ? .1 : 1,
         isDragging: monitor.isDragging()
       }),
       end: (item, monitor) => {
-        //const dragItem = item;
-        //const hoverItem = props.hover.item;
         const didDrop = monitor.didDrop();
 
+        console.log('FIELD DROP', list);
+
         if (didDrop) {
-          console.log('DROP', item);
           moveItem(item);
         }
       }
@@ -37,70 +35,88 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     canDrop: () => false,
     hover: (item: any, monitor) => {
 
-      // if not hoverRef is undefine
       if (!ref.current) {
         return;
       }
 
-      // if dragId is same as hoverRefId
-      if (item.id == id) {
+      const dragIndex = item.position;
+      const hoverIndex = position;
+
+      // don't replace items with themselves
+      if (dragIndex === hoverIndex) {
+        props.drop.item = null;
         return;
       }
-
-      const { x, y } = monitor.getClientOffset() as {
+      // determine rectangle on screen
+      const hoverBoundingRect = ref.current?.getBoundingClientRect() as {
+        top: number;
+        right: number;
+        bottom: number;
+        left: number;
+        width: number;
+        height: number;
+        x: number;
+        y: number;
+      };
+      // determine mouse position
+      const clientOffset = monitor.getClientOffset() as {
         x: number
         y: number
       }
+      // get vertical middle
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      // get pixels to the top
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      // get horizontal middle
+      const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
+      // get pixels to the left
+      const hoverClientX = clientOffset.x - hoverBoundingRect.left;
 
-      // if hoverRefOver 
+      // check hover ref isOver 
       if (monitor.isOver({ shallow: true })) {
-
         const display = dragdropHelper.parentNodeDisplay(ref.current.parentNode as HTMLElement);
 
         if (display == 'row') {
-          if (_x == x) {
-            return;
-          }
+          if (_x == clientOffset.x) return;
 
-          _x = x;
+          _x = clientOffset.x;
           props.drop.item = props;
 
-          if (x < ref.current.offsetLeft + ref.current.offsetWidth / 2) {
-            ref.current.classList.add('left');
-            ref.current.classList.remove('right');
+          // dragging left
+          if (hoverClientX < hoverMiddleX) {
+            ref.current.classList.add('move-left');
+            ref.current.classList.remove('move-right');
             props.drop.offset = 'left';
           } else {
-            ref.current.classList.add('right');
-            ref.current.classList.remove('left');
+            ref.current.classList.add('move-right');
+            ref.current.classList.remove('move-left');
             props.drop.offset = 'right';
           }
-        } else {
-          if (_y == y) {
-            return;
-          }
 
-          _y = y;
+        } else {
+          if (_y == clientOffset.y) return;
+
+          _y = clientOffset.y;
           props.drop.item = props;
 
-          if (y < ref.current.offsetTop + ref.current.offsetHeight / 2) {
-            ref.current.classList.add('top');
-            ref.current.classList.remove('bottom');
+          // dragging down
+          if (hoverClientY < hoverMiddleY) {
+            ref.current.classList.add('move-top');
+            ref.current.classList.remove('move-bottom');
             props.drop.offset = 'top';
           } else {
-            ref.current.classList.add('bottom');
-            ref.current.classList.remove('top');
-            props.drop.offset = 'button';
+            ref.current.classList.add('move-bottom');
+            ref.current.classList.remove('move-top');
+            props.drop.offset = 'bottom';
           }
         }
-
-        return;
       }
 
     },
     collect: monitor => ({
       isOver: monitor.isOver({ shallow: true })
     }),
-  }), [id]);
+  }), [id, moveItem]);
 
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: false })
@@ -108,9 +124,11 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
   drag(drop(ref));
 
+  const className = `dd-field${isOver ? ' over' : ''}${isDragging ? ' dragging' : ''}`;
+
   return (
-    <div className={`drag ${isOver ? 'hover' : ''}`} id={id} ref={ref} tabIndex={position} style={{ opacity }}>
-      <div className="content">{name}</div>
+    <div className={className} id={id} ref={ref} tabIndex={position}>
+      <div className="dd-content">{name}</div>
     </div>
   );
 };
