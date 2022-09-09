@@ -7,8 +7,6 @@ import { DragDropProvider } from './dragdrop.context';
 import { Render } from './dragdrop.render';
 import { DragDropProps } from './dragdrop.type';
 
-
-
 export const DragDrop: React.FC<DragDropProps> = ({ onCallback, ...props }): JSX.Element => {
 
   return (

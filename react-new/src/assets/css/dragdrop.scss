@@ -41,6 +41,6 @@
   transition: all 0.5s ease-out;
 }
 
-.hover-center .content.empty:before {
-  border: 1px dashed #000;
+.move-middle .dd-content:empty:before {
+  border-color: #000;
 }

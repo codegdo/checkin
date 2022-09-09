@@ -25,7 +25,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
         }
       }
     }),
-    [id, moveItem]
+    [id, list, moveItem]
   );
 
   const [{ isOver }, drop] = useDrop(
@@ -102,14 +102,18 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
             props.drop.item = props;
 
             // dragging down
-            if (hoverClientY < hoverMiddleY) {
+            if (hoverClientY < hoverMiddleY - (data.length == 0 ? 25 : 0)) {
               ref.current.classList.add('move-top');
-              ref.current.classList.remove('move-bottom');
+              ref.current.classList.remove('move-bottom', 'move-middle');
               props.drop.offset = 'top';
-            } else {
+            } else if (hoverClientY > hoverMiddleY + (data.length == 0 ? 25 : 0)) {
               ref.current.classList.add('move-bottom');
-              ref.current.classList.remove('move-top');
+              ref.current.classList.remove('move-top', 'move-middle');
               props.drop.offset = 'bottom';
+            } else {
+              ref.current.classList.add('move-middle');
+              ref.current.classList.remove('move-top', 'move-bottom');
+              props.drop.offset = 'middle';
             }
           }
         }
@@ -118,7 +122,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
         isOver: monitor.isOver({ shallow: true }),
         canDrop: monitor.canDrop(),
       }),
-    }), [id, moveItem]);
+    }), [id, list, moveItem]);
 
   drag(drop(ref));
 

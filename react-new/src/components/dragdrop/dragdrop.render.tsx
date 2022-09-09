@@ -18,7 +18,11 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ data }): JSX.
   }
 
   const { state, current, moveItem } = ctx;
-  const list: any[] = (data ? data : formHelper.mapField(state.data)) || [];
+  const list: any[] = data || formHelper.mapField(state.data) || [];
+
+  useEffect(() => {
+    console.log('STATE CHANGE', state);
+  }, [state]);
 
   return <>
     {

@@ -27,7 +27,7 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
         }
       }
     }),
-    [id, moveItem]
+    [id, list, moveItem]
   );
 
   const [{ isOver }, drop] = useDrop(() => ({
@@ -116,7 +116,7 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     collect: monitor => ({
       isOver: monitor.isOver({ shallow: true })
     }),
-  }), [id, moveItem]);
+  }), [id, list, moveItem]);
 
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: false })

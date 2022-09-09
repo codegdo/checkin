@@ -19,6 +19,10 @@ class DragDropHelper {
     return direction;
   }
 
+  totalItems() {
+
+  }
+
 }
 
 export const dragdropHelper = new DragDropHelper();

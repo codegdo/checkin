@@ -1,5 +1,4 @@
 import React, { PropsWithChildren, useCallback, useEffect, useReducer, useRef } from 'react';
-import update from 'immutability-helper';
 import { initialState, reducer } from './dragdrop.reducer';
 import { DragDropContextProps, DragDropProps } from './dragdrop.type';
 
@@ -20,9 +19,6 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
     });
   }, []);
 
-  useEffect(() => {
-    //console.log('MOVE ITEM CALL', moveItem());
-  });
 
   const moveItem = useCallback((item: any) => {
 
