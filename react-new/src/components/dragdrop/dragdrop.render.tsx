@@ -20,10 +20,6 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
   const { state, current, moveItem } = ctx;
   const list: any[] = data || formHelper.mapField(state.data) || [];
 
-  useEffect(() => {
-    console.log('STATE CHANGE', state);
-  }, [state]);
-
   return <>
     {
       list.map((item, i, list) => {
