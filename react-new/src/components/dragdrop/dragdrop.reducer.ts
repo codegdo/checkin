@@ -34,10 +34,10 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
       const offset = payload.drop.offset;
 
       // get dragItems count
-      const dragCounts = dragdropHelper.totalCount(payload);
+      const dragCounts = dragdropHelper.totalCount(payload) + 1;
 
       // get dropItems count
-      const dropCounts = dragdropHelper.totalCount(payload.drop.item);
+      const dropCounts = dragdropHelper.totalCount(payload.drop.item) + 1;
 
       console.log('dragItem', payload);
       console.log('dragCounts', dragCounts);
@@ -219,15 +219,8 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         } else if (dragPosition < dropPosition && (offset == 'bottom' || offset == 'right')) {
           dropIndex = dropIndex + dropCounts - dragCounts;
           console.log('TOP BOTTOM', dropIndex);
-        } else if (
-          dragPosition > dropPosition &&
-          dragParentId == dropId &&
-          (offset == 'bottom' || offset == 'right')
-        ) {
-          dropIndex = dropIndex + dropCounts - dragCounts;
-          console.log('BOTTOM PARENT', dropIndex);
         } else if (dragPosition > dropPosition && (offset == 'bottom' || offset == 'right')) {
-          dropIndex = dropIndex + dropCounts - dragCounts; // -1
+          dropIndex = dropIndex + dropCounts - dragCounts;
           console.log('BOTTOM', dropIndex);
         } else if (dragPosition > dropPosition && (offset == 'top' || offset == 'left')) {
           // dropIndex = dropIndex - dragCounts + dropCounts;

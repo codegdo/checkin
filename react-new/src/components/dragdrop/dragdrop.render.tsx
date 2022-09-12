@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useContext, useEffect } from 'react';
+import React, { memo, PropsWithChildren, useContext, useEffect } from 'react';
 import { formHelper } from '../../helpers';
 import { DragDropBlock } from './dragdrop.block';
 import { DragDropContext } from './dragdrop.context';
@@ -9,7 +9,7 @@ interface RenderProps {
   data?: any[]
 }
 
-export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ data }): JSX.Element => {
+export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }): JSX.Element => {
 
   const ctx = useContext((DragDropContext as Object) as React.Context<DragDropContextProps>);
 
@@ -36,4 +36,4 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ data }): JSX.
       })
     }
   </>
-}
+})

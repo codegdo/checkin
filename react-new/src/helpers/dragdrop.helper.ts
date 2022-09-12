@@ -30,7 +30,7 @@ class DragDropHelper {
 
     console.log(total);
 
-    return total + 1;
+    return total;
   }
 }
 
