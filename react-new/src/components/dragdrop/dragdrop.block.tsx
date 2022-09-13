@@ -78,11 +78,18 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
         if (monitor.isOver({ shallow: true })) {
           const display = dragdropHelper.parentNodeDisplay(ref.current.parentNode as HTMLElement);
 
+          if (props.drop.item == null) {
+            props.drop.item = props;
+          } else {
+            if (props.drop.item.id !== props.id) {
+              props.drop.item = props;
+            }
+          }
+
           if (display == 'row') {
             if (_x == clientOffset.x) return;
 
             _x = clientOffset.x;
-            props.drop.item = props;
 
             // dragging left
             if (hoverClientX < hoverMiddleX) {
@@ -99,7 +106,6 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
             if (_y == clientOffset.y) return;
 
             _y = clientOffset.y;
-            props.drop.item = props;
 
             // dragging down
             if (hoverClientY < hoverMiddleY - (data.length == 0 ? 25 : 0)) {

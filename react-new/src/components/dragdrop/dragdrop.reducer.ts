@@ -34,10 +34,10 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
       const offset = payload.drop.offset;
 
       // get dragItems count
-      const dragCounts = dragdropHelper.totalCount(payload) + 1;
+      const [dragCounts, dragIds] = dragdropHelper.totalCount(payload);
 
       // get dropItems count
-      const dropCounts = dragdropHelper.totalCount(payload.drop.item) + 1;
+      const [dropCounts, dropIds] = dragdropHelper.totalCount(payload.drop.item);
 
       const fromTop = dragPosition < dropPosition;
       const fromBottom = dragPosition > dropPosition;
@@ -48,6 +48,9 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
       dragItem.parentId = offset == 'middle' ? dropId : dropParentId;
 
       let dragItems: any = [];
+
+      console.log('dragIds', dragIds);
+      console.log('dropIds', dropIds);
 
       if (dragType === 'field' && dropType === 'field') {
         if (fromTop && overTop) {
@@ -65,10 +68,17 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
           dropIndex = dropIndex + dropCounts - dragCounts;
           console.log(`${dragType}to${dropType} (drag-from-top and drop-over-bottom)`);
         } else if (fromBottom && overBottom) {
-          // check drag is in drop parent // formHelper.getCount... check if it is parent
-          dropIndex = dropIndex + dropCounts - dragCounts;
-          console.log(`${dragType}to${dropType} (drag-from-bottom and drop-over-bottom)`); //bug
+          // check drag is in drop parent 
+          if (dropIds.includes(dragId)) {
+            dropIndex = dropIndex + dropCounts - dragCounts;
+          } else {
+            dropIndex = dropIndex + dropCounts;
+          }
+          console.log(`${dragType}to${dropType} (drag-from-bottom and drop-over-bottom)`);
         } else if (fromBottom && overTop) {
+          if (dropIds.includes(dragId)) {
+            dropIndex = dropIndex - 1;
+          }
           console.log(`${dragType}to${dropType} (drag-from-bottom and drop-over-top)`);
         } else if (fromTop && offset == 'middle') {
           console.log(`${dragType}to${dropType} (drag-from-top and drop-over-middle)`);

@@ -1,5 +1,5 @@
 class DragDropHelper {
-  constructor() {}
+  constructor() { }
 
   parentNodeDisplay(parentNode: HTMLElement | null): string {
     let direction = 'column';
@@ -19,18 +19,22 @@ class DragDropHelper {
     return direction;
   }
 
-  totalCount({ data }) {
-    let total = 0;
+  totalCount({ id, data }): [number, string[]] {
+    const ids = this.count(data, [id]);
+
+    return [ids.length, ids]
+  }
+
+  private count(data, ids = []) {
 
     if (data instanceof Array) {
-      total = data.reduce((a, v) => {
-        return a + (v.role == 'block' ? this.totalCount(v) : 0);
+      data.reduce((a, v) => {
+        ids.push(v.id.toString());
+        return a + (v.role == 'block' ? this.count(v.data, ids) : 0);
       }, data.length);
     }
 
-    console.log(total);
-
-    return total;
+    return ids;
   }
 }
 
