@@ -77,10 +77,22 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
         const display = dragdropHelper.parentNodeDisplay(ref.current.parentNode as HTMLElement);
 
         if (props.drop.item == null) {
-          props.drop.item = props;
+          props.drop.item = {
+            id: props.id,
+            data: props.data,
+            position: props.position,
+            role: props.role,
+            parentId: props.parentId
+          };
         } else {
           if (props.drop.item.id !== props.id) {
-            props.drop.item = props;
+            props.drop.item = {
+              id: props.id,
+              data: props.data,
+              position: props.position,
+              role: props.role,
+              parentId: props.parentId
+            };
           }
         }
 
