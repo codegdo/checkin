@@ -5,14 +5,14 @@ import { dragdropHelper } from '../../helpers';
 import { Render } from './dragdrop.render';
 
 export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
-  const { id, position, data, list, moveItem, children } = props;
+  const { id, role, position, data, list, parentId, moveItem, children } = props;
   const ref = useRef<HTMLDivElement>(null);
   let _x = 0, _y = 0;
 
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
       type: 'block',
-      item: { ...props, ref },
+      item: { ...props },
       collect: monitor => ({
         isDragging: monitor.isDragging(),
       }),
@@ -46,7 +46,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
 
         // don't replace items with themselves
         if (dragIndex === hoverIndex) {
-          props.drop.item = null;
+          props.current.drop = {};
           return;
         }
         // determine rectangle on screen
@@ -78,24 +78,22 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
         if (monitor.isOver({ shallow: true })) {
           const display = dragdropHelper.parentNodeDisplay(ref.current.parentNode as HTMLElement);
 
-          if (props.drop.item == null) {
-            props.drop.item = {
-              id: props.id,
-              data: props.data,
-              position: props.position,
-              role: props.role,
-              parentId: props.parentId
+          if (props.current.drop == null) {
+            props.current.drop = {
+              id,
+              data,
+              position,
+              role,
+              parentId
             };
-          } else {
-            if (props.drop.item.id !== props.id) {
-              props.drop.item = {
-                id: props.id,
-                data: props.data,
-                position: props.position,
-                role: props.role,
-                parentId: props.parentId
-              };
-            }
+          } else if (props.current.drop.id !== props.id) {
+            props.current.drop = {
+              id,
+              data,
+              position,
+              role,
+              parentId
+            };
           }
 
           if (display == 'row') {
@@ -107,11 +105,11 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
             if (hoverClientX < hoverMiddleX) {
               ref.current.classList.add('move-left');
               ref.current.classList.remove('move-right');
-              props.drop.offset = 'left';
+              props.current.drop.offset = 'left';
             } else {
               ref.current.classList.add('move-right');
               ref.current.classList.remove('move-left');
-              props.drop.offset = 'right';
+              props.current.drop.offset = 'right';
             }
 
           } else {
@@ -123,15 +121,15 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
             if (hoverClientY < hoverMiddleY - (data.length == 0 ? 25 : 0)) {
               ref.current.classList.add('move-top');
               ref.current.classList.remove('move-bottom', 'move-middle');
-              props.drop.offset = 'top';
+              props.current.drop.offset = 'top';
             } else if (hoverClientY > hoverMiddleY + (data.length == 0 ? 25 : 0)) {
               ref.current.classList.add('move-bottom');
               ref.current.classList.remove('move-top', 'move-middle');
-              props.drop.offset = 'bottom';
+              props.current.drop.offset = 'bottom';
             } else {
               ref.current.classList.add('move-middle');
               ref.current.classList.remove('move-top', 'move-bottom');
-              props.drop.offset = 'middle';
+              props.current.drop.offset = 'middle';
             }
           }
         }

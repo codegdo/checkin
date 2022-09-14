@@ -20,7 +20,7 @@ class DragDropHelper {
   }
 
   totalCount({ id, data }): [number, string[]] {
-    const ids = this.count(data, [id]);
+    const ids = this.count(data, [id.toString()]);
 
     return [ids.length, ids]
   }

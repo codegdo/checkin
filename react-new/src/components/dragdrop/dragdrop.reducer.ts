@@ -13,34 +13,32 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
     case 'MOVE_ITEM':
       let {
         id: dragId,
-        position: dragIndex,
         role: dragType,
+        position: dragIndex,
         parentId: dragParentId,
-        position: dragPosition,
+        current
       } = payload;
 
-      if (!payload.drop.item) {
+      if (current.drop == null) {
         return state;
       }
 
       let {
         id: dropId,
-        position: dropIndex,
         role: dropType,
+        position: dropIndex,
         parentId: dropParentId,
-        position: dropPosition,
-      } = payload.drop.item;
-
-      const offset = payload.drop.offset;
+        offset
+      } = current.drop;
 
       // get dragItems count
       const [dragCounts, dragIds] = dragdropHelper.totalCount(payload);
 
       // get dropItems count
-      const [dropCounts, dropIds] = dragdropHelper.totalCount(payload.drop.item);
+      const [dropCounts, dropIds] = dragdropHelper.totalCount(current.drop);
 
-      const fromTop = dragPosition < dropPosition;
-      const fromBottom = dragPosition > dropPosition;
+      const fromTop = dragIndex < dropIndex;
+      const fromBottom = dragIndex > dropIndex;
       const overTop = offset == 'top' || offset == 'left';
       const overBottom = offset == 'bottom' || offset == 'right';
 
