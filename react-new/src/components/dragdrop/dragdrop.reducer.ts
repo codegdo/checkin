@@ -16,7 +16,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         role: dragType,
         position: dragIndex,
         parentId: dragParentId,
-        current
+        current,
       } = payload;
 
       if (current.drop == null) {
@@ -28,7 +28,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         role: dropType,
         position: dropIndex,
         parentId: dropParentId,
-        offset
+        offset,
       } = current.drop;
 
       // get dragItems count
@@ -66,7 +66,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
           dropIndex = dropIndex + dropCounts - dragCounts;
           console.log(`${dragType}to${dropType} (drag-from-top and drop-over-bottom)`);
         } else if (fromBottom && overBottom) {
-          // check drag is in drop parent 
+          // check drag is in drop parent
           if (dropIds.includes(dragId)) {
             dropIndex = dropIndex + dropCounts - dragCounts;
           } else {
@@ -74,9 +74,6 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
           }
           console.log(`${dragType}to${dropType} (drag-from-bottom and drop-over-bottom)`);
         } else if (fromBottom && overTop) {
-          if (dropIds.includes(dragId)) {
-            dropIndex = dropIndex - 1;
-          }
           console.log(`${dragType}to${dropType} (drag-from-bottom and drop-over-top)`);
         } else if (fromTop && offset == 'middle') {
           console.log(`${dragType}to${dropType} (drag-from-top and drop-over-middle)`);
@@ -111,7 +108,6 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
       console.log('NEXT STATE', nextState);
 
       return nextState;
-
 
     /*
     if (dragType === 'field' && dropType === 'field') {
