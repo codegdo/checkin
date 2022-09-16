@@ -2,11 +2,11 @@ import React, { useRef } from 'react';
 import { useDrag } from 'react-dnd';
 
 export const DragItem: React.FC<any> = (props): JSX.Element => {
-  const { current } = props;
+  const { current, addItem } = props;
   const [{ opacity, isDragging }, drag] = useDrag(
     () => ({
       type: 'block',
-      item: { id: '1', role: 'field', current },
+      item: { id: 100, name: 'new', role: 'field', position: null, parentId: null, current },
       collect: monitor => ({
         opacity: monitor.isDragging() ? .1 : 1,
         isDragging: monitor.isDragging(),
@@ -19,7 +19,7 @@ export const DragItem: React.FC<any> = (props): JSX.Element => {
         console.log('DROP RESULT', dropResult);
 
         if (didDrop) {
-          console.log('Did DROP');
+          addItem(item);
         }
 
       }

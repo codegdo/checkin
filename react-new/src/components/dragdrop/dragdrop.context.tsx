@@ -44,11 +44,19 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
     //console.log('hoverItem', hoverItem);
   }, [state]);
 
+  const addItem = useCallback((item: any) => {
+
+    dispatch({
+      type: 'ADD_ITEM',
+      payload: item
+    });
+  }, [state]);
+
   const handleCallback = useCallback(() => {
 
   }, []);
 
-  return <DragDropContext.Provider value={{ data, state, current, moveItem, onCallback: handleCallback }}>
+  return <DragDropContext.Provider value={{ data, state, current, moveItem, addItem, onCallback: handleCallback }}>
     {children}
   </DragDropContext.Provider>
 }

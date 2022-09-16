@@ -10,6 +10,6 @@ export const Drag = (): JSX.Element => {
     throw new Error();
   }
 
-  const { current } = ctx;
-  return <DragItem current={current} />
+  const { current, addItem } = ctx;
+  return <DragItem current={current} addItem={addItem} />
 }
