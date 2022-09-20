@@ -17,7 +17,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
     throw new Error();
   }
 
-  const { state, current, moveItem } = ctx;
+  const { state, current, focus, setFocus, moveItem } = ctx;
   const list: any[] = data || formHelper.mapField(state.data) || [];
 
   return <>
@@ -25,8 +25,26 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
       list.map((item, i, list) => {
         const { role, position } = item;
         switch (role) {
-          case 'block': return <DragDropBlock key={i} position={position} current={current} list={list} moveItem={moveItem} {...item} />
-          case 'field': return <DragDropField key={i} position={position} current={current} list={list} moveItem={moveItem} {...item} />
+          case 'block':
+            return <DragDropBlock
+              key={i}
+              position={position}
+              current={current}
+              list={list}
+              focus={focus}
+              setFocus={setFocus}
+              moveItem={moveItem}
+              {...item} />
+          case 'field':
+            return <DragDropField
+              key={i}
+              position={position}
+              current={current}
+              list={list}
+              focus={focus}
+              setFocus={setFocus}
+              moveItem={moveItem}
+              {...item} />
           default: return null;
         }
       })

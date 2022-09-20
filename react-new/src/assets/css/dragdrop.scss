@@ -3,6 +3,7 @@
   border: 1px dashed #eee;
   transition: all 0.5s ease-out;
   margin: 1px;
+  position: relative;
 }
 
 .dragging {
@@ -25,6 +26,11 @@
 }
 .move-right {
   border-right-color: #000;
+}
+
+.dd-toolbar {
+  position: absolute;
+  top: -100%;
 }
 
 .dd-content {

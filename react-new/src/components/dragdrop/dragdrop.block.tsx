@@ -5,14 +5,37 @@ import { dragdropHelper } from '../../helpers';
 import { Render } from './dragdrop.render';
 
 export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
-  const { id, role, position, data, list, parentId, moveItem, children } = props;
+  const { id, role, position, data, list, parentId, focus, setFocus, moveItem, children } = props;
   const ref = useRef<HTMLDivElement>(null);
+  const toolbar = useRef<HTMLDivElement>(null);
+
   let _x = 0, _y = 0;
 
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
       type: 'block',
       item: { ...props },
+      canDrag: (monitor) => {
+
+        // const clientOffset = monitor.getClientOffset() as {
+        //   x: number
+        //   y: number
+        // }
+
+        // console.log(focus);
+        // console.log('CAN DRAG REF', ref);
+
+        // if (ref.current && ref.current.id == '0') {
+        //   console.log('CAN DRAG', clientOffset);
+        //   return false;
+        // }
+
+        if (focus) {
+          setFocus(focus == id ? '' : id);
+        }
+
+        return true;
+      },
       collect: monitor => ({
         isDragging: monitor.isDragging(),
       }),
@@ -146,10 +169,33 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
     preview(getEmptyImage(), { captureDraggingState: false })
   }, []);
 
+  useEffect(() => {
+    props.current.toolbar = focus == id ? toolbar.current : null;
+
+    console.log('FOCUS', focus);
+  }, [focus]);
+
   const className = `dd-block${isDragging ? ' dragging' : ''}${isOver ? ' _over' : ''}${data?.length == 0 ? ' _empty' : ''}`;
 
+  const handleFocusClick = (event: any) => {
+    setFocus(focus == id ? '' : id);
+
+  }
+
+  const handleButtonClick = (event: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+    alert();
+  }
+
+
   return (
-    <div className={className} id={id} ref={ref} tabIndex={position}>
+    <div className={focus == id ? `${className} focus` : `${className}`} id={id} ref={ref} tabIndex={position} onClick={handleFocusClick}>
+      {
+        focus == id && <div ref={toolbar} className={isDragging ? 'dd-toolbar hidden' : 'dd-toolbar'}>
+          <button type="button" onClick={handleButtonClick}>delete</button>
+        </div>
+      }
       <div className={`dd-content`}>
         {
           children ? children : <Render data={[...data]} />

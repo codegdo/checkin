@@ -3,7 +3,7 @@ import { dragdropHelper } from '../../helpers';
 import { DragDropAction, DragDropState } from './dragdrop.type';
 
 export const initialState = {
-  data: [],
+  data: []
 };
 
 export const reducer = (state: DragDropState, { type, payload }: DragDropAction) => {
@@ -11,6 +11,9 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
     case 'INIT':
       return { ...state, data: [...payload] };
     case 'MOVE_ITEM':
+      if (!payload.current.drop) {
+        return state
+      };
 
       const { dragIndex, dropIndex, dragCounts, parentId } = dragdropHelper.findDragDropIndex(payload);
       const dragItems: any = [];
@@ -39,6 +42,10 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
 
       return moveState;
     case 'ADD_ITEM':
+      if (!payload.current.drop) {
+        return state
+      };
+
       const found = dragdropHelper.findDragDropIndex(payload);
 
       const dragItem = {

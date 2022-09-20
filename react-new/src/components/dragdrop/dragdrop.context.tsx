@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useEffect, useReducer, useRef } from 'react';
+import React, { PropsWithChildren, useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { initialState, reducer } from './dragdrop.reducer';
 import { DragDropContextProps, DragDropProps } from './dragdrop.type';
 
@@ -7,6 +7,7 @@ export const DragDropContext = React.createContext<DragDropContextProps | null>(
 export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ children, data, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { current } = useRef({});
+  const [focus, setFocus] = useState('');
 
   useEffect(() => {
     const payload = [...data.data, ...data.fields].sort((a, b) => {
@@ -52,11 +53,16 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
     });
   }, [state]);
 
+
   const handleCallback = useCallback(() => {
 
   }, []);
 
-  return <DragDropContext.Provider value={{ data, state, current, moveItem, addItem, onCallback: handleCallback }}>
+  const handleFocus = (id: string) => {
+    setFocus(id);
+  }
+
+  return <DragDropContext.Provider value={{ data, state, current, focus, setFocus: handleFocus, moveItem, addItem, onCallback: handleCallback }}>
     {children}
   </DragDropContext.Provider>
 }
