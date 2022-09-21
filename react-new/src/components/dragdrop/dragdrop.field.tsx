@@ -5,7 +5,7 @@ import { dragdropHelper } from '../../helpers';
 
 export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
-  const { id, name, role, position, data, list, parentId, focus, setFocus, moveItem } = props;
+  const { id, name, role, position, data, parentId, focus, setFocus, moveItem } = props;
   const ref = useRef<HTMLDivElement>(null);
   const toolbar = useRef<HTMLDivElement>(null);
 
@@ -38,9 +38,8 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
         //   //return false;
         // }
 
-        if (focus) {
-          setFocus(focus == id ? '' : id);
-        }
+
+        setFocus(null);
 
         return true;
       },
@@ -57,7 +56,7 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
         }
       }
     }),
-    [id, list, moveItem]
+    [id, moveItem]
   );
 
   const [{ isOver }, drop] = useDrop(() => ({
@@ -162,7 +161,7 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     collect: monitor => ({
       isOver: monitor.isOver({ shallow: true })
     }),
-  }), [id, list, moveItem]);
+  }), [id, moveItem]);
 
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: false })
@@ -170,8 +169,6 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
   useEffect(() => {
     props.current.toolbar = focus == id ? toolbar.current : null;
-
-    console.log('FOCUS', focus);
   }, [focus]);
 
   drag(drop(ref));
@@ -179,8 +176,10 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
   const className = `dd-field${isOver ? ' over' : ''}${isDragging ? ' dragging' : ''}`;
 
   const handleFocusClick = (event: any) => {
-    setFocus(focus == id ? '' : id);
+    event.preventDefault();
+    event.stopPropagation();
 
+    setFocus(focus?.id == id ? null : { id, clickMe });
   }
 
   const handleButtonClick = (event: any) => {
@@ -189,10 +188,14 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     alert();
   }
 
+  const clickMe = () => {
+    alert('CLICK');
+  }
+
   return (
-    <div className={focus == id ? `${className} focus` : `${className}`} id={id} ref={ref} tabIndex={position} onClick={handleFocusClick}>
+    <div className={focus?.id == id ? `${className} focus` : `${className}`} id={id} ref={ref} tabIndex={position} onClick={handleFocusClick}>
       {
-        focus == id && <div ref={toolbar} className={isDragging ? 'dd-toolbar hidden' : 'dd-toolbar'}>
+        focus?.id == id && <div ref={toolbar} className={isDragging ? 'dd-toolbar hidden' : 'dd-toolbar'}>
           <button type="button" onClick={handleButtonClick}>delete</button>
         </div>
       }

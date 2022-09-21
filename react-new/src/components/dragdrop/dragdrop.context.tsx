@@ -7,7 +7,7 @@ export const DragDropContext = React.createContext<DragDropContextProps | null>(
 export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ children, data, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { current } = useRef({});
-  const [focus, setFocus] = useState('');
+  const [focus, setFocus] = useState(null);
 
   useEffect(() => {
     const payload = [...data.data, ...data.fields].sort((a, b) => {

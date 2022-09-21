@@ -1,15 +1,25 @@
 import React, { useContext } from 'react';
-import { DragItem } from './drag.item';
 import { DragDropContext } from './dragdrop.context';
 import { DragDropContextProps } from './dragdrop.type';
 
-export const Drag = (): JSX.Element => {
+export const DragDropEditor: React.FC = () => {
+
   const ctx = useContext((DragDropContext as Object) as React.Context<DragDropContextProps>);
 
   if (!ctx) {
     throw new Error();
   }
 
-  const { current, addItem } = ctx;
-  return <DragItem current={current} addItem={addItem} />
+  const { focus, setFocus } = ctx;
+
+  const handleClick = () => {
+    focus?.clickMe();
+    setFocus(null);
+  }
+
+  return <>
+    {
+      focus && <button onClick={handleClick}>click</button>
+    }
+  </>
 }

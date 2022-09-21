@@ -11,12 +11,19 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
     case 'INIT':
       return { ...state, data: [...payload] };
     case 'MOVE_ITEM':
+
       if (!payload.current.drop) {
         return state
       };
 
-      const { dragIndex, dropIndex, dragCounts, parentId } = dragdropHelper.findDragDropIndex(payload);
+      const dropId = payload.current.drop.id.toString();
+      const { dragIndex, dropIndex, dragCounts, dragIds, parentId } = dragdropHelper.findDragDropIndex(payload);
       const dragItems: any = [];
+
+      // prevent drag block drop over nest children
+      if (dragIds.includes(dropId)) {
+        return state;
+      }
 
       state.data[dragIndex].parentId = parentId;
 

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useDrag } from 'react-dnd';
 
-export const DragItem: React.FC<any> = (props): JSX.Element => {
+export const DraggableItem: React.FC<any> = (props): JSX.Element => {
   const { current, addItem } = props;
   const [{ opacity, isDragging }, drag] = useDrag(
     () => ({
