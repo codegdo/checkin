@@ -26,7 +26,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
         const didDrop = monitor.didDrop();
 
         if (didDrop) {
-          console.log('BLOCK DROP', item);
+          console.log('BLOCK DROP', ref.current);
           moveItem(item);
         }
       }
@@ -37,6 +37,11 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
   const [{ isOver }, drop] = useDrop(
     () => ({
       accept: ['block', 'field'],
+      drop: () => {
+        if (ref.current) {
+          ref.current.style.transition = 'none';
+        }
+      },
       hover: (item: any, monitor) => {
         if (!ref.current) {
           return;
@@ -102,6 +107,10 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
             };
           }
 
+          if (ref.current.hasAttribute('style')) {
+            ref.current.removeAttribute('style');
+          }
+
           if (display == 'row') {
             if (_x == clientOffset.x) return;
 
@@ -109,12 +118,12 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
 
             // dragging left
             if (hoverClientX < hoverMiddleX) {
-              ref.current.classList.add('move-left');
-              ref.current.classList.remove('move-right');
+              ref.current.classList.add('on-left');
+              ref.current.classList.remove('on-right');
               props.current.drop.offset = 'left';
-            } else {
-              ref.current.classList.add('move-right');
-              ref.current.classList.remove('move-left');
+            } else if (hoverClientX > hoverMiddleX) {
+              ref.current.classList.add('on-right');
+              ref.current.classList.remove('on-left');
               props.current.drop.offset = 'right';
             }
 
@@ -125,16 +134,16 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
 
             // dragging down
             if (hoverClientY < hoverMiddleY - (data.length == 0 ? 25 : 0)) {
-              ref.current.classList.add('move-top');
-              ref.current.classList.remove('move-bottom', 'move-middle');
+              ref.current.classList.add('on-top');
+              ref.current.classList.remove('on-bottom', 'on-middle');
               props.current.drop.offset = 'top';
             } else if (hoverClientY > hoverMiddleY + (data.length == 0 ? 25 : 0)) {
-              ref.current.classList.add('move-bottom');
-              ref.current.classList.remove('move-top', 'move-middle');
+              ref.current.classList.add('on-bottom');
+              ref.current.classList.remove('on-top', 'on-middle');
               props.current.drop.offset = 'bottom';
             } else {
-              ref.current.classList.add('move-middle');
-              ref.current.classList.remove('move-top', 'move-bottom');
+              ref.current.classList.add('on-middle');
+              ref.current.classList.remove('on-top', 'on-bottom');
               props.current.drop.offset = 'middle';
             }
           }
@@ -156,7 +165,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
     //props.current.toolbar = focus?.id == id ? toolbar.current : null;
   }, [focus]);
 
-  const className = `dd-block${isDragging ? ' dragging' : ''}${isOver ? ' _over' : ''}${data?.length == 0 ? ' _empty' : ''}`;
+  const className = `dd-block${isDragging ? ' dragging' : ''}${isOver ? ' _over' : ''}${data?.length == 0 ? ' _empty' : ''}${focus?.id == id ? ' focus' : ''}`;
 
   const handleFocusClick = (event: any) => {
 
@@ -175,7 +184,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
 
 
   return (
-    <div className={focus?.id == id ? `${className} focus` : `${className}`} id={id} ref={ref} tabIndex={position} onClick={handleFocusClick}>
+    <div className={className} id={id} ref={ref} tabIndex={position} onClick={handleFocusClick}>
       {
         focus?.id == id && <div ref={toolbar} className={isDragging ? 'dd-toolbar hidden' : 'dd-toolbar'}>
           <button type="button" onClick={handleButtonClick}>delete</button>

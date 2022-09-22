@@ -11,20 +11,20 @@
   border: 1px dashed #eee !important;
 }
 
-.dragging .over {
+.dragging ._over {
   border: 1px dashed #eee !important;
 }
 
-.move-top {
+.on-top {
   border-top-color: #000;
 }
-.move-bottom {
+.on-bottom {
   border-bottom-color: #000;
 }
-.move-left {
+.on-left {
   border-left-color: #000;
 }
-.move-right {
+.on-right {
   border-right-color: #000;
 }
 
@@ -46,6 +46,6 @@
   transition: all 0.5s ease-out;
 }
 
-.move-middle .dd-content:empty:before {
+.on-middle .dd-content:empty:before {
   border-color: #000;
 }

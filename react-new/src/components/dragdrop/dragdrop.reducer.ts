@@ -13,8 +13,12 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
     case 'MOVE_ITEM':
 
       if (!payload.current.drop) {
-        return state
+        return state;
       };
+
+      if (!payload.current.drop.offset) {
+        return state;
+      }
 
       const dropId = payload.current.drop.id.toString();
       const { dragIndex, dropIndex, dragCounts, dragIds, parentId } = dragdropHelper.findDragDropIndex(payload);
@@ -24,6 +28,8 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
       if (dragIds.includes(dropId)) {
         return state;
       }
+
+      console.log('AAAA', payload);
 
       state.data[dragIndex].parentId = parentId;
 

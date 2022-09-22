@@ -18,7 +18,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
   }
 
   const { state, current, focus, setFocus, moveItem } = ctx;
-  const list: any[] = data || formHelper.mapField(state.data) || [];
+  const list: any[] = data === undefined ? formHelper.mapField(state.data) : data || [];
 
   return <>
     {

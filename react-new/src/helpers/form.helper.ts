@@ -33,7 +33,6 @@ class FormHelper {
   }
 
   mapField(data: any) {
-    console.log('mapToParent');
     const _data = JSON.parse(JSON.stringify(data));
     const list: any[] = [];
 

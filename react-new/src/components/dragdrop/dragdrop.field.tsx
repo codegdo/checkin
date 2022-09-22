@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { dragdropHelper } from '../../helpers';
+import { debounce } from '../../utils';
 
 export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
@@ -15,30 +16,9 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     () => ({
       type: 'field',
       item: { ...props },
-      canDrag: (monitor) => {
+      canDrag: () => {
 
-        // const clientOffset = monitor.getClientOffset() as {
-        //   x: number
-        //   y: number
-        // }
-
-
-        // console.log('CAN DRAG REF', ref);
-
-        // if (props.current.toolbar) {
-        //   console.log('CAN DRAG FOCUS', focus);
-        //   props.current.toobar = null;
-
-        // }
-
-        // if (ref.current && ref.current.classList.contains('focus')) {
-        //   console.log('CAN DRAG', clientOffset);
-        //   console.log('CAN DRAG PROPS', props);
-
-        //   //return false;
-        // }
-
-
+        console.log('CAN DRAG', ref.current);
         setFocus(null);
 
         return true;
@@ -49,9 +29,8 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
       end: (item, monitor) => {
         const didDrop = monitor.didDrop();
 
-        console.log('FIELD DROP', item);
-
         if (didDrop) {
+
           moveItem(item);
         }
       }
@@ -61,7 +40,11 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ['block', 'field'],
-    canDrop: () => false,
+    drop: () => {
+      if (ref.current) {
+        ref.current.style.transition = 'none';
+      }
+    },
     hover: (item: any, monitor) => {
 
       if (!ref.current) {
@@ -104,7 +87,6 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
       // check hover ref isOver 
       if (monitor.isOver({ shallow: true })) {
         const display = dragdropHelper.parentNodeDisplay(ref.current.parentNode as HTMLElement);
-
         if (props.current.drop == null) {
           props.current.drop = {
             id,
@@ -123,6 +105,10 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
           };
         }
 
+        if (ref.current.hasAttribute('style')) {
+          ref.current.removeAttribute('style');
+        }
+
         if (display == 'row') {
           if (_x == clientOffset.x) return;
 
@@ -130,12 +116,12 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
           // dragging left
           if (hoverClientX < hoverMiddleX) {
-            ref.current.classList.add('move-left');
-            ref.current.classList.remove('move-right');
+            ref.current.classList.add('on-left');
+            ref.current.classList.remove('on-right');
             props.current.drop.offset = 'left';
-          } else {
-            ref.current.classList.add('move-right');
-            ref.current.classList.remove('move-left');
+          } else if (hoverClientX > hoverMiddleX) {
+            ref.current.classList.add('on-right');
+            ref.current.classList.remove('on-left');
             props.current.drop.offset = 'right';
           }
 
@@ -146,12 +132,12 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
           // dragging down
           if (hoverClientY < hoverMiddleY) {
-            ref.current.classList.add('move-top');
-            ref.current.classList.remove('move-bottom');
+            ref.current.classList.add('on-top');
+            ref.current.classList.remove('on-bottom');
             props.current.drop.offset = 'top';
-          } else {
-            ref.current.classList.add('move-bottom');
-            ref.current.classList.remove('move-top');
+          } else if (hoverClientY > hoverMiddleY) {
+            ref.current.classList.add('on-bottom');
+            ref.current.classList.remove('on-top');
             props.current.drop.offset = 'bottom';
           }
         }
@@ -168,12 +154,10 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    props.current.toolbar = focus == id ? toolbar.current : null;
+    //props.current.toolbar = focus == id ? toolbar.current : null;
   }, [focus]);
 
-  drag(drop(ref));
-
-  const className = `dd-field${isOver ? ' over' : ''}${isDragging ? ' dragging' : ''}`;
+  const className = `dd-field${isOver ? ' _over' : ''}${isDragging ? ' dragging' : ''}${focus?.id == id ? ' focus' : ''}`;
 
   const handleFocusClick = (event: any) => {
     event.preventDefault();
@@ -189,11 +173,18 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
   }
 
   const clickMe = () => {
-    alert('CLICK');
+    alert(`CLICK ${id}`);
   }
 
+  drag(drop(ref));
+
   return (
-    <div className={focus?.id == id ? `${className} focus` : `${className}`} id={id} ref={ref} tabIndex={position} onClick={handleFocusClick}>
+    <div
+      className={className}
+      id={id}
+      ref={ref}
+      tabIndex={position}
+      onClick={handleFocusClick}>
       {
         focus?.id == id && <div ref={toolbar} className={isDragging ? 'dd-toolbar hidden' : 'dd-toolbar'}>
           <button type="button" onClick={handleButtonClick}>delete</button>
