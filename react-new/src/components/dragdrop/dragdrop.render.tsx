@@ -1,4 +1,6 @@
 import React, { memo, PropsWithChildren, useContext, useEffect } from 'react';
+//import { useAutoAnimate } from "@formkit/auto-animate/react";
+
 import { formHelper } from '../../helpers';
 import { DragDropBlock } from './dragdrop.block';
 import { DragDropContext } from './dragdrop.context';
@@ -16,6 +18,8 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
   if (!ctx) {
     throw new Error();
   }
+
+  //const [ref] = useAutoAnimate<HTMLDivElement>({ duration: 120 });
 
   const { state, current, focus, setFocus, moveItem } = ctx;
   const list: any[] = data === undefined ? formHelper.mapField(state.data) : data || [];
