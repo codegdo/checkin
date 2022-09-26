@@ -23,13 +23,13 @@ interface ClientOffset {
 }
 
 export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
-  const { id, role, position, data, parentId, focus, current, setFocus, moveItem, deleteItem, children } = props;
+  const { id, role, name, position, data, parentId, focus, current, setFocus, moveItem, deleteItem, children } = props;
   const ref = useRef<HTMLDivElement>(null);
   //const [ref] = useAutoAnimate<HTMLDivElement>({ duration: 120 });
 
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
-      type: 'block',
+      type: role,
       item: { ...props },
       canDrag: () => {
         setFocus(null);
@@ -51,7 +51,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
 
   const [{ isOver }, drop] = useDrop(
     () => ({
-      accept: ['block', 'field'],
+      accept: ['parent', 'block', 'field', 'component'],
       drop: () => {
         if (ref.current) {
           ref.current.style.transition = 'none';
@@ -91,7 +91,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
     preview(getEmptyImage(), { captureDraggingState: false })
   }, []);
 
-  const className = `dd-block${isDragging ? ' dragging' : ''}${isOver ? ' _over' : ''}${data?.length == 0 ? ' _empty' : ''}${focus?.id == id ? ' focus' : ''}`;
+  const className = `dd-block${isDragging ? ' dragging' : ''}${isOver ? ' _over' : ''}${(role == 'parent' && data?.length == 0) ? ' _empty' : ''}${focus?.id == id ? ' focus' : ''}`;
 
   const handleFocusClick = (event: any) => {
 
@@ -116,12 +116,15 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
           <button type="button" onClick={handleButtonClick}>delete</button>
         </div>
       }
-      <div className={`dd-content`}>
-        {
-          children ? children : <Render data={[...data]} />
-        }
-      </div>
+      {
+        role == 'parent' ?
+          <div className={`dd-content`}>
+            {
+              children ? children : <Render data={[...data]} />
+            }
+          </div>
+          : <div className={`dd-content`}>{name}</div>
+      }
     </div>
-
   );
 };

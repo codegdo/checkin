@@ -36,7 +36,7 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
   );
 
   const [{ isOver }, drop] = useDrop(() => ({
-    accept: ['block', 'field'],
+    accept: ['parent', 'block', 'field', 'component'],
     drop: () => {
       // clear transition delay
       if (ref.current) {

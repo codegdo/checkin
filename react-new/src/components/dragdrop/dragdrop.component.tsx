@@ -16,7 +16,7 @@ export const DragDrop: React.FC<DragDropProps> = ({ onCallback, ...props }): JSX
     <DndProvider backend={HTML5Backend}>
       <DragDropProvider {...props}>
 
-        <DragDropBlock id="dropzone" role="block" setFocus={() => { }}>
+        <DragDropBlock id="dropzone" role="parent" setFocus={() => { }}>
           <Render />
         </DragDropBlock>
 

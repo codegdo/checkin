@@ -76,6 +76,7 @@ class DragDropHelper {
     const fromBottom = dragIndex > dropIndex && dragIndex !== null;
     const overTop = offset == 'top' || offset == 'left';
     const overBottom = offset == 'bottom' || offset == 'right';
+    const overMiddle = offset == 'middle';
 
     if (dragType === 'field' && dropType === 'field') {
       if (fromTop && overTop) {
@@ -108,11 +109,16 @@ class DragDropHelper {
         console.log(`${dragType}to${dropType} (drag-from-bottom and drop-over-bottom)`);
       } else if (fromBottom && overTop) {
         console.log(`${dragType}to${dropType} (drag-from-bottom and drop-over-top)`);
-      } else if (fromTop && offset == 'middle') {
+      } else if (fromTop && overMiddle) {
         console.log(`${dragType}to${dropType} (drag-from-top and drop-over-middle)`);
-      } else if (fromBottom && offset == 'middle') {
+      } else if (fromBottom && overMiddle) {
         dropIndex = dropIndex + 1;
         console.log(`${dragType}to${dropType} (drag-from-bottom and drop-over-middle)`);
+      } else if (overTop) {
+        console.log(`${dragType}to${dropType} (drag and drop-over-top)`);
+      } else if (overMiddle) {
+        dropIndex = dropIndex + 1;
+        console.log(`${dragType}to${dropType} (drag and drop-over-middle)`);
       } else if (overBottom) {
         dropIndex = dropIndex + dropCounts;
         console.log(`${dragType}to${dropType} (drag and drop-over-bottom)`);
@@ -126,7 +132,7 @@ class DragDropHelper {
       dropCounts,
       dragIds,
       dropIds,
-      parentId: (offset == 'middle') ? dropId : dropParentId
+      parentId: overMiddle ? dropId : dropParentId
     }
 
   }
@@ -151,7 +157,7 @@ class DragDropHelper {
 
     let middle = 0;
 
-    if (current.drop.role === 'block' && current.drop.data.length == 0) {
+    if (current.drop.role === 'parent' && current.drop.data.length == 0) {
       middle = 25;
     }
 
@@ -200,7 +206,7 @@ class DragDropHelper {
     if (data instanceof Array) {
       data.reduce((a, v) => {
         ids.push(v.id.toString());
-        return a + (v.role == 'block' ? this.count(v.data, ids) : 0);
+        return a + (v.role == 'parent' ? this.count(v.data, ids) : 0);
       }, data.length);
     }
 

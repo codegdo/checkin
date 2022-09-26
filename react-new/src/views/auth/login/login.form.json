@@ -7,7 +7,7 @@
     {
       "id": "f-header",
       "type": "header",
-      "role": "block",
+      "role": "parent",
       "data": [],
       "position": 0,
       "parentId": null
@@ -15,7 +15,7 @@
     {
       "id": "f-main",
       "type": "main",
-      "role": "block",
+      "role": "parent",
       "data": [],
       "position": 3,
       "parentId": null
@@ -23,7 +23,7 @@
     {
       "id": "f-footer",
       "type": "footer",
-      "role": "block",
+      "role": "parent",
       "data": [],
       "position": 6,
       "parentId": null
@@ -34,7 +34,7 @@
       "title": "Login",
       "description": null,
       "type": "title",
-      "role": "field",
+      "role": "block",
       "data": [],
       "value": null,
       "position": 2,
@@ -45,7 +45,7 @@
       "name": "submit",
       "label": "Login",
       "type": "button",
-      "role": "field",
+      "role": "block",
       "data": [],
       "value": null,
       "position": 7,
@@ -57,7 +57,7 @@
       "label": "Signup",
       "description": null,
       "type": "link",
-      "role": "field",
+      "role": "block",
       "data": null,
       "value": "/auth/signup",
       "position": 8,

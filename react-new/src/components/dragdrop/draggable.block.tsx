@@ -1,12 +1,16 @@
 import React, { useRef } from 'react';
 import { useDrag } from 'react-dnd';
 
-export const DraggableItem: React.FC<any> = (props): JSX.Element => {
-  const { current, addItem } = props;
+export const DraggableBlock: React.FC<any> = (props): JSX.Element => {
+  const { current, addItem, setFocus } = props;
   const [{ opacity, isDragging }, drag] = useDrag(
     () => ({
       type: 'block',
-      item: { id: 100, name: 'new', role: 'field', position: null, parentId: null, current },
+      item: { id: 100, name: 'new', role: 'parent', position: null, data: [], parentId: null, current },
+      canDrag: () => {
+        setFocus(null);
+        return true;
+      },
       collect: monitor => ({
         opacity: monitor.isDragging() ? .1 : 1,
         isDragging: monitor.isDragging(),

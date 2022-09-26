@@ -29,6 +29,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
       list.map((item, i, list) => {
         const { role, position } = item;
         switch (role) {
+          case 'parent':
           case 'block':
             return <DragDropBlock
               key={i}
