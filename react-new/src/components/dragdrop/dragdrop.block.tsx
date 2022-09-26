@@ -23,11 +23,9 @@ interface ClientOffset {
 }
 
 export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
-  const { id, role, position, data, parentId, focus, current, setFocus, moveItem, children } = props;
+  const { id, role, position, data, parentId, focus, current, setFocus, moveItem, deleteItem, children } = props;
   const ref = useRef<HTMLDivElement>(null);
   //const [ref] = useAutoAnimate<HTMLDivElement>({ duration: 120 });
-
-
 
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
@@ -107,7 +105,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
   const handleButtonClick = (event: any) => {
     event.preventDefault();
     event.stopPropagation();
-    alert();
+    deleteItem(props);
   }
 
 

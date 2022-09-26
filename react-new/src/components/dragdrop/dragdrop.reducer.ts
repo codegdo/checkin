@@ -3,7 +3,7 @@ import { dragdropHelper } from '../../helpers';
 import { DragDropAction, DragDropState } from './dragdrop.type';
 
 export const initialState = {
-  data: []
+  data: [],
 };
 
 export const reducer = (state: DragDropState, { type, payload }: DragDropAction) => {
@@ -11,17 +11,17 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
     case 'INIT':
       return { ...state, data: [...payload] };
     case 'MOVE_ITEM':
-
       if (!payload.current.drop) {
         return state;
-      };
+      }
 
       if (!payload.current.drop.offset) {
         return state;
       }
 
       const dropId = payload.current.drop.id.toString();
-      const { dragIndex, dropIndex, dragCounts, dragIds, parentId } = dragdropHelper.findDragDropIndex(payload);
+      const { dragIndex, dropIndex, dragCounts, dragIds, parentId } =
+        dragdropHelper.findDragDropIndex(payload);
       const dragItems: any = [];
 
       // prevent drag block drop over nest children
@@ -37,7 +37,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         dragItems.push(state.data[dragIndex + i]);
       }
 
-      const moveState = update(state, {
+      const stateMove = update(state, {
         data: {
           $splice: [
             [dragIndex, dragCounts],
@@ -51,26 +51,27 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         },
       });
 
-      console.log('NEXT STATE', moveState);
+      console.log('NEXT STATE', stateMove);
 
-      return moveState;
+      return stateMove;
     case 'ADD_ITEM':
       if (!payload.current.drop) {
-        return state
-      };
+        return state;
+      }
 
-      const found = dragdropHelper.findDragDropIndex(payload);
+      const foundAdd = dragdropHelper.findDragDropIndex(payload);
 
       const dragItem = {
         id: payload.id,
         name: payload.name,
         role: payload.role,
         position: null,
-        parentId: found.parentId
+        parentId: foundAdd.parentId,
       };
-      const addState = update(state, {
+
+      const stateAdd = update(state, {
         data: {
-          $splice: [[found.dropIndex, 0, dragItem]],
+          $splice: [[foundAdd.dropIndex, 0, dragItem]],
           $apply: (data) =>
             data.filter((item, index) => {
               item.position = index;
@@ -79,10 +80,28 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         },
       });
 
-      console.log('NEXT STATE', addState);
+      console.log('NEXT STATE', stateAdd);
 
-      return addState;
+      return stateAdd;
     case 'DELETE_ITEM':
+      const [counts, ids] = dragdropHelper.totalCount(payload);
+
+      const stateDelete = update(state, {
+        data: {
+          $splice: [[payload.position, counts]],
+          $apply: (data) =>
+            data.filter((item, index) => {
+              item.position = index;
+              return item;
+            }),
+        },
+      });
+
+      console.log('NEXT STATE', stateDelete);
+
+      return stateDelete;
+
+      console.log(ids, counts);
       return state;
     case 'UPDATE_ITEM':
       return state;

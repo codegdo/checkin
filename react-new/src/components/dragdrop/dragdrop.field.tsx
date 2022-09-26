@@ -8,7 +8,7 @@ import { debounce } from '../../utils';
 
 export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
-  const { id, name, role, position, data, parentId, current, focus, setFocus, moveItem } = props;
+  const { id, name, role, position, data, parentId, current, focus, setFocus, moveItem, deleteItem } = props;
   const ref = useRef<HTMLDivElement>(null);
   //const [ref] = useAutoAnimate<HTMLDivElement>({ duration: 120 });
 
@@ -87,7 +87,8 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
   const handleButtonClick = (event: any) => {
     event.preventDefault();
     event.stopPropagation();
-    alert();
+
+    deleteItem(props);
   }
 
   const clickMe = () => {

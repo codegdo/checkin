@@ -11,6 +11,7 @@ export interface DragDropContextProps extends DragDropProps {
   setFocus: (item: any) => void;
   moveItem: (item: any) => void;
   addItem: (item: any) => void;
+  deleteItem: (item: any) => void;
   onCallback: () => void;
 }
 

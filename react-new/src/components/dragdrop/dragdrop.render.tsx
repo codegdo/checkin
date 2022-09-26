@@ -21,7 +21,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
 
   //const [ref] = useAutoAnimate<HTMLDivElement>({ duration: 120 });
 
-  const { state, current, focus, setFocus, moveItem } = ctx;
+  const { state, current, focus, setFocus, moveItem, deleteItem } = ctx;
   const list: any[] = data === undefined ? formHelper.mapField(state.data) : data || [];
 
   return <>
@@ -37,6 +37,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
               focus={focus}
               setFocus={setFocus}
               moveItem={moveItem}
+              deleteItem={deleteItem}
               {...item} />
           case 'field':
             return <DragDropField
@@ -46,6 +47,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
               focus={focus}
               setFocus={setFocus}
               moveItem={moveItem}
+              deleteItem={deleteItem}
               {...item} />
           default: return null;
         }

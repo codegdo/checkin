@@ -28,21 +28,6 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
       payload: item
     });
 
-    // const dragIndex = dragItem.position;
-    // const hoverIndex = dragItem.drop.item.position;
-    // const i = state.data[dragIndex];
-
-    // const items = update(state.data, {
-    //   $splice: [
-    //     [dragIndex, 1],
-    //     [hoverIndex, 0, i as any]
-    //   ],
-    //   $apply: arr => arr.filter((a, index) => { a.position = index; return a; })
-    // });
-
-    //console.log('MOVE ITEM', items);
-    //console.log('dragItem', dragItem);
-    //console.log('hoverItem', hoverItem);
   }, [state]);
 
   const addItem = useCallback((item: any) => {
@@ -51,6 +36,16 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
       type: 'ADD_ITEM',
       payload: item
     });
+  }, [state]);
+
+  const deleteItem = useCallback((item: any) => {
+
+    dispatch({
+      type: 'DELETE_ITEM',
+      payload: item
+    });
+
+    setFocus(null);
   }, [state]);
 
 
@@ -62,7 +57,7 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
     setFocus(id);
   }
 
-  return <DragDropContext.Provider value={{ data, state, current, focus, setFocus: handleFocus, moveItem, addItem, onCallback: handleCallback }}>
+  return <DragDropContext.Provider value={{ data, state, current, focus, setFocus: handleFocus, moveItem, addItem, deleteItem, onCallback: handleCallback }}>
     {children}
   </DragDropContext.Provider>
 }
