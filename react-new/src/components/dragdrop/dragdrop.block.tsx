@@ -1,39 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { dragdropHelper } from '../../helpers';
 import { Render } from './dragdrop.render';
 
-interface BoundingClientRect {
-  top: number;
-  right: number;
-  bottom: number;
-  left: number;
-  width: number;
-  height: number;
-  x: number;
-  y: number;
-}
-
-interface ClientOffset {
-  x: number;
-  y: number;
-}
-
 export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
+
   const { id, role, name, position, data, parentId, focus, current, setFocus, moveItem, deleteItem, children } = props;
   const ref = useRef<HTMLDivElement>(null);
-  //const [ref] = useAutoAnimate<HTMLDivElement>({ duration: 120 });
 
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
       type: role,
       item: { ...props },
       canDrag: () => {
-        setFocus(null);
-        return true;
+        setFocus && setFocus(null);
+        return (id == 'dropholder') ? false : true;
       },
       collect: monitor => ({
         isDragging: monitor.isDragging(),
@@ -62,11 +45,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
         // current over
         if (monitor.isOver({ shallow: true })) {
 
-          if (!ref.current || id === 'dropzone') {
-            return;
-          }
-
-          if (item.id === id) {
+          if (!ref.current || id === 'dropholder' || item.id === id) {
             current.drop = null;
             return;
           }
@@ -98,7 +77,7 @@ export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
     event.preventDefault();
     event.stopPropagation();
 
-    setFocus(focus?.id == id ? null : { id });
+    setFocus && setFocus(focus?.id == id ? null : { id });
 
   }
 

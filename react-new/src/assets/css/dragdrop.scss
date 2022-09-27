@@ -49,3 +49,13 @@
 .on-middle .dd-content:empty:before {
   border-color: #000;
 }
+
+#dropholder {
+  border-color: #eee;
+}
+
+#dropholder._over {
+  > .dd-content:empty:before {
+    border-color: #000;
+  }
+}

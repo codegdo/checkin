@@ -1,5 +1,6 @@
 import update from 'immutability-helper';
 import { dragdropHelper } from '../../helpers';
+import { randomString } from '../../utils';
 import { DragDropAction, DragDropState } from './dragdrop.type';
 
 export const initialState = {
@@ -55,24 +56,47 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
 
       return stateMove;
     case 'ADD_ITEM':
+
       if (!payload.current.drop) {
         return state;
       }
 
-      const foundAdd = dragdropHelper.findDragDropIndex(payload);
+      if (payload.current.drop.id === 'dropholder') {
+        const dragItem = {
+          id: payload.id || randomString(),
+          name: payload.name,
+          role: payload.role,
+          position: null,
+          data: payload.data,
+          parentId: null,
+        };
+
+        return update(state, {
+          data: {
+            $splice: [[1, 0, dragItem]],
+            $apply: (data) =>
+              data.filter((item, index) => {
+                item.position = index;
+                return item;
+              }),
+          },
+        });
+      }
+
+      const { parentId: parentId_ADD, dropIndex: dropIndex_ADD } = dragdropHelper.findDragDropIndex(payload);
 
       const dragItem = {
-        id: payload.id,
+        id: randomString(),
         name: payload.name,
         role: payload.role,
         position: null,
         data: payload.data,
-        parentId: foundAdd.parentId,
+        parentId: parentId_ADD,
       };
 
       const stateAdd = update(state, {
         data: {
-          $splice: [[foundAdd.dropIndex, 0, dragItem]],
+          $splice: [[dropIndex_ADD, 0, dragItem]],
           $apply: (data) =>
             data.filter((item, index) => {
               item.position = index;

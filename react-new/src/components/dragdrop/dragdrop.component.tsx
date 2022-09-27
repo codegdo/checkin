@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -10,13 +10,14 @@ import { DragDropProps } from './dragdrop.type';
 import { DragDropEditor } from './dragdrop.editor';
 
 export const DragDrop: React.FC<DragDropProps> = ({ onCallback, ...props }): JSX.Element => {
+  const { current } = useRef({});
 
   return (
 
     <DndProvider backend={HTML5Backend}>
-      <DragDropProvider {...props}>
+      <DragDropProvider {...props} current={current}>
 
-        <DragDropBlock id="dropzone" role="parent" setFocus={() => { }}>
+        <DragDropBlock id="dropholder" role="parent" data={[]} current={current}>
           <Render />
         </DragDropBlock>
 

@@ -1,4 +1,4 @@
-import React, { memo, PropsWithChildren, useContext, useEffect } from 'react';
+import React, { memo, PropsWithChildren, useContext } from 'react';
 //import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { formHelper } from '../../helpers';
@@ -36,6 +36,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
               position={position}
               current={current}
               focus={focus}
+              list={state.data}
               setFocus={setFocus}
               moveItem={moveItem}
               deleteItem={deleteItem}
@@ -46,6 +47,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
               position={position}
               current={current}
               focus={focus}
+              list={state.data}
               setFocus={setFocus}
               moveItem={moveItem}
               deleteItem={deleteItem}

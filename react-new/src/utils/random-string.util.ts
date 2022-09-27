@@ -5,5 +5,3 @@ export const randomString = (): string => {
   const random = Math.random().toString(16).slice(12);
   return character + '-' + random;
 };
-
-

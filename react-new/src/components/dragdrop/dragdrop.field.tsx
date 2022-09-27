@@ -1,16 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { dragdropHelper } from '../../helpers';
-import { debounce } from '../../utils';
 
 export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
   const { id, name, role, position, data, parentId, current, focus, setFocus, moveItem, deleteItem } = props;
   const ref = useRef<HTMLDivElement>(null);
-  //const [ref] = useAutoAnimate<HTMLDivElement>({ duration: 120 });
 
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({

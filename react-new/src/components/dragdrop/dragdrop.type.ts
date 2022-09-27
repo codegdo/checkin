@@ -1,12 +1,12 @@
 export interface DragDropProps {
   data?: any;
+  current?: any;
   onCallback?: (key?: string, value?: string) => void;
 }
 
 export interface DragDropContextProps extends DragDropProps {
   data: any;
   state: DragDropState;
-  current?: any;
   focus: any;
   setFocus: (item: any) => void;
   moveItem: (item: any) => void;
