@@ -77,28 +77,29 @@ class DragDropHelper {
     const overTop = offset == 'top' || offset == 'left';
     const overBottom = offset == 'bottom' || offset == 'right';
     const overMiddle = offset == 'middle';
+    const text = `${dragType}to${dropType}`;
 
     if (dragType === 'field' && dropType === 'field') {
       if (fromTop && overTop) {
         dropIndex = dropIndex - 1;
-        console.log(`${dragType}to${dropType} (drag-from-top and drop-over-top)`);
+        console.log(`${text} (drag-from-top and drop-over-top)`);
       } else if (fromBottom && overBottom) {
         dropIndex = dropIndex + 1;
-        console.log(`${dragType}to${dropType} (drag-from-bottom and drop-over-bottom)`);
-      } else if (overTop) {
+        console.log(`${text} (drag-from-bottom and drop-over-bottom)`);
+      } else if (dragIndex == null && overTop) {
         //dropIndex = dropIndex - 1;
-        console.log(`${dragType}to${dropType} (drag and drop-over-top)`);
-      } else if (overBottom) {
+        console.log(`${text} (drag and drop-over-top)`);
+      } else if (dragIndex == null && overBottom) {
         dropIndex = dropIndex + 1;
-        console.log(`${dragType}to${dropType} (drag and drop-over-bottom)`);
+        console.log(`${text} (drag and drop-over-bottom)`);
       }
     } else {
       if (fromTop && overTop) {
         dropIndex = dropIndex - dragCounts;
-        console.log(`${dragType}to${dropType} (drag-from-top and drop-over-top)`);
+        console.log(`${text} (drag-from-top and drop-over-top)`);
       } else if (fromTop && overBottom) {
         dropIndex = dropIndex + dropCounts - dragCounts;
-        console.log(`${dragType}to${dropType} (drag-from-top and drop-over-bottom)`);
+        console.log(`${text} (drag-from-top and drop-over-bottom)`);
       } else if (fromBottom && overBottom) {
         // check drag is nested
         if (dropIds.includes(dragId)) {
@@ -106,22 +107,22 @@ class DragDropHelper {
         } else {
           dropIndex = dropIndex + dropCounts;
         }
-        console.log(`${dragType}to${dropType} (drag-from-bottom and drop-over-bottom)`);
+        console.log(`${text} (drag-from-bottom and drop-over-bottom)`);
       } else if (fromBottom && overTop) {
-        console.log(`${dragType}to${dropType} (drag-from-bottom and drop-over-top)`);
+        console.log(`${text} (drag-from-bottom and drop-over-top)`);
       } else if (fromTop && overMiddle) {
-        console.log(`${dragType}to${dropType} (drag-from-top and drop-over-middle)`);
+        console.log(`${text} (drag-from-top and drop-over-middle)`);
       } else if (fromBottom && overMiddle) {
         dropIndex = dropIndex + 1;
-        console.log(`${dragType}to${dropType} (drag-from-bottom and drop-over-middle)`);
-      } else if (overTop) {
-        console.log(`${dragType}to${dropType} (drag and drop-over-top)`);
-      } else if (overMiddle) {
+        console.log(`${text} (drag-from-bottom and drop-over-middle)`);
+      } else if (dragIndex == null && overTop) {
+        console.log(`${text} (drag and drop-over-top)`);
+      } else if (dragIndex == null && overMiddle) {
         dropIndex = dropIndex + 1;
-        console.log(`${dragType}to${dropType} (drag and drop-over-middle)`);
-      } else if (overBottom) {
+        console.log(`${text} (drag and drop-over-middle)`);
+      } else if (dragIndex == null && overBottom) {
         dropIndex = dropIndex + dropCounts;
-        console.log(`${dragType}to${dropType} (drag and drop-over-bottom)`);
+        console.log(`${text} (drag and drop-over-bottom)`);
       }
     }
 

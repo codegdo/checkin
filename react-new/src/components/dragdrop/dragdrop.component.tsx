@@ -3,11 +3,11 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import { Draggable } from './draggable.component';
-import { DragDropBlock } from './dragdrop.block';
 import { DragDropProvider } from './dragdrop.context';
 import { Render } from './dragdrop.render';
 import { DragDropProps } from './dragdrop.type';
 import { DragDropEditor } from './dragdrop.editor';
+import { DragDropItem } from './dragdrop.item';
 
 export const DragDrop: React.FC<DragDropProps> = ({ onCallback, ...props }): JSX.Element => {
   const { current } = useRef({});
@@ -17,9 +17,9 @@ export const DragDrop: React.FC<DragDropProps> = ({ onCallback, ...props }): JSX
     <DndProvider backend={HTML5Backend}>
       <DragDropProvider {...props} current={current}>
 
-        <DragDropBlock id="dropholder" role="parent" data={[]} current={current}>
+        <DragDropItem id="dropholder" role="parent" current={current}>
           <Render />
-        </DragDropBlock>
+        </DragDropItem>
 
         <Draggable />
 

@@ -5,6 +5,7 @@ import { formHelper } from '../../helpers';
 import { DragDropBlock } from './dragdrop.block';
 import { DragDropContext } from './dragdrop.context';
 import { DragDropField } from './dragdrop.field';
+import { DragDropItem } from './dragdrop.item';
 import { DragDropContextProps } from './dragdrop.type';
 
 interface RenderProps {
@@ -27,33 +28,15 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
   return <>
     {
       list.map((item, i, list) => {
-        const { role, position } = item;
-        switch (role) {
-          case 'parent':
-          case 'block':
-            return <DragDropBlock
-              key={i}
-              position={position}
-              current={current}
-              focus={focus}
-              list={state.data}
-              setFocus={setFocus}
-              moveItem={moveItem}
-              deleteItem={deleteItem}
-              {...item} />
-          case 'field':
-            return <DragDropField
-              key={i}
-              position={position}
-              current={current}
-              focus={focus}
-              list={state.data}
-              setFocus={setFocus}
-              moveItem={moveItem}
-              deleteItem={deleteItem}
-              {...item} />
-          default: return null;
-        }
+        return <DragDropItem
+          key={i}
+          current={current}
+          focus={focus}
+          list={state.data}
+          setFocus={setFocus}
+          moveItem={moveItem}
+          deleteItem={deleteItem}
+          {...item} />
       })
     }
   </>

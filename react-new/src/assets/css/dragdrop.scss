@@ -4,6 +4,7 @@
   transition: all 0.5s ease-out;
   margin: 1px;
   position: relative;
+  user-select: none;
 }
 
 .dragging {
@@ -11,7 +12,7 @@
   border: 1px dashed #eee !important;
 }
 
-.dragging ._over {
+.dragging .-over {
   border: 1px dashed #eee !important;
 }
 
