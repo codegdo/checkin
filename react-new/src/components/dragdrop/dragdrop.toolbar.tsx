@@ -1,5 +1,9 @@
-import React from 'react';
+import { FC, useState } from 'react';
 
-export const Toolbar = () => {
+export const Toolbar: FC = () => {
+  useState();
 
+  return <div className='dd-toolbar'>
+
+  </div>
 }

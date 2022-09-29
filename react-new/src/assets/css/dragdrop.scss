@@ -2,7 +2,6 @@
 .dd-field {
   border: 1px dashed #eee;
   transition: all 0.5s ease-out;
-  margin: 1px;
   position: relative;
   user-select: none;
 }
@@ -35,6 +34,8 @@
 
 .dd-content {
   padding: 1rem;
+  background-color: #fff;
+  transition: all 0.2s ease-out;
 }
 
 .dd-content:empty:before {
@@ -44,7 +45,6 @@
   padding: 1rem;
   color: #ddd;
   border: 1px dashed #f8f8f8;
-  transition: all 0.5s ease-out;
 }
 
 .on-middle .dd-content:empty:before {
@@ -53,10 +53,20 @@
 
 #dropholder {
   border-color: #eee;
+  > .-hover {
+    box-shadow: none;
+  }
 }
 
 #dropholder._over {
   > .dd-content:empty:before {
     border-color: #000;
   }
+}
+
+.-hover {
+  box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.1);
+}
+.focus > .dd-content {
+  box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.3);
 }

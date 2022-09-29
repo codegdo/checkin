@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { ReactElement, useEffect, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
@@ -7,7 +7,7 @@ import { Render } from './dragdrop.render';
 
 export const DragDropItem: React.FC<any> = (props): JSX.Element => {
 
-  const { id, role, name, position, data, parentId, focus, current, setFocus, moveItem, deleteItem, children } = props;
+  const { id, type, role, name, position, data, parentId, focus, current, setFocus, moveItem, deleteItem, children } = props;
   const ref = useRef<HTMLDivElement>(null);
 
   const [{ isDragging }, drag, preview] = useDrag(
@@ -15,7 +15,16 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
       type: role,
       item: { ...props },
       canDrag: () => {
-        setFocus && setFocus(null);
+        if (ref.current) {
+          //setFocus && setFocus(null);
+          preview(getEmptyImage(), { captureDraggingState: false });
+
+          const ddContent = ref.current.childNodes[0] as HTMLElement;
+
+          if (ddContent) {
+            ddContent.classList.remove('-hover')
+          };
+        }
         return (id == 'dropholder') ? false : true;
       },
       collect: monitor => ({
@@ -38,6 +47,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
       drop: () => {
         if (ref.current) {
           ref.current.style.transition = 'none';
+          ref.current.classList.remove('-hover');
         }
       },
       hover: (item: any, monitor) => {
@@ -65,19 +75,12 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
     }), [id, moveItem]);
 
 
-
-  useEffect(() => {
-    preview(getEmptyImage(), { captureDraggingState: false })
-  }, []);
-
-
-
   const handleFocusClick = (event: any) => {
 
     event.preventDefault();
     event.stopPropagation();
 
-    setFocus && setFocus(focus?.id == id ? null : { id });
+    setFocus && setFocus(focus?.id == id ? null : { id, isDragging });
 
   }
 
@@ -87,38 +90,44 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
     deleteItem(props);
   }
 
+  const handleMouseOver = (event: any) => {
+
+    event.preventDefault();
+    event.target.classList.add('-hover');
+  }
+
+  const handleMouseOut = (event: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.target.classList.remove('-hover');
+  }
+
   const className = `dd-block${isDragging ? ' dragging' : ''}${isOver ? ' -over' : ''}${(role == 'parent' && data?.length == 0) ? ' -empty' : ''}${focus?.id == id ? ' focus' : ''}`;
 
   drag(drop(ref));
 
-  if (role == 'parent') {
-
-  }
-
   return (
-    <div className={className} id={id} ref={ref} tabIndex={position} onClick={handleFocusClick}>
+    <div className={className} id={id} ref={ref} tabIndex={position} data-type={type} onClick={handleFocusClick} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
       {
         focus?.id == id && <div className={isDragging ? 'dd-toolbar hidden' : 'dd-toolbar'}>
           <button type="button" onClick={handleButtonClick}>delete</button>
         </div>
       }
-      {
-        (() => {
-          switch (role) {
-            case 'parent':
-              return <div className={`dd-content`}>
-                {
-                  children ? children : <Render data={[...data]} />
-                }
-              </div>
-            case 'block':
-              return <div className={`dd-content`}>{name}</div>
-            case 'field':
-              return <div className={`dd-content`}>{name}</div>
-            default: return null;
-          }
-        })()
-      }
+      <div className={`dd-content`}>
+        {
+          (() => {
+            switch (role) {
+              case 'parent':
+                return children ? children : <Render data={[...data]} />
+              case 'block':
+                return <>{name}</>
+              case 'field':
+                return <>{name}</>
+              default: return null;
+            }
+          })()
+        }
+      </div>
     </div>
   );
 };

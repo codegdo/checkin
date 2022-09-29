@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useDrag } from 'react-dnd';
 import { Editor } from '../editor/editor.component';
 import { DragDropContext } from './dragdrop.context';
@@ -15,9 +15,14 @@ export const DragDropEditor: React.FC = () => {
   const { focus, setFocus } = ctx;
 
 
-  return <div>
+  useEffect(() => {
+    console.log(focus);
+  }, [focus]);
+
+
+  return focus && <div>
     {
-      focus && <Editor />
+      focus.isDragging ? null : <Editor />
     }
   </div>
 }
