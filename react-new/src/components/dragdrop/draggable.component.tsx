@@ -15,24 +15,6 @@ const blocks = [
   },
   {
     id: null,
-    name: 'row',
-    role: 'parent',
-    type: 'row',
-    data: [],
-    position: null,
-    parentId: null
-  },
-  {
-    id: null,
-    name: 'column',
-    role: 'parent',
-    type: 'column',
-    data: [],
-    position: null,
-    parentId: null
-  },
-  {
-    id: null,
     name: 'link',
     type: 'link',
     role: 'block',

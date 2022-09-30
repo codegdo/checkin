@@ -140,10 +140,6 @@ class DragDropHelper {
     const dragType = monitor.getItem().type;
     const { type: dropType, role, data } = current.drop;
 
-    if (dragType == 'column' && dropType !== 'row') {
-      return;
-    }
-
     // determine rectangle on screen
     const hoverBoundingRect = ref.current.getBoundingClientRect() as BoundingClientRect;
     // determine mouse position
