@@ -43,7 +43,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
 
   const [{ isOver }, drop] = useDrop(
     () => ({
-      accept: ['parent', 'block', 'field', 'component'],
+      accept: ['parent', 'block', 'field'],
       drop: () => {
         if (ref.current) {
           ref.current.style.transition = 'none';
@@ -61,7 +61,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
           }
 
           if (current.drop == null || current.drop.id !== props.id) {
-            current.drop = { id, role, data, position, parentId, x: 0, y: 0 };
+            current.drop = { id, type, role, data, position, parentId, x: 0, y: 0 };
           }
 
           dragdropHelper.onHover(monitor, ref, current);

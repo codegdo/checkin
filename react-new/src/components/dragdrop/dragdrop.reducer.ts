@@ -61,15 +61,17 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         return state;
       }
 
+      const dragItem = {
+        id: payload.id || randomString(),
+        type: payload.type,
+        name: payload.name,
+        role: payload.role,
+        position: null,
+        data: payload.data,
+        parentId: null,
+      };
+
       if (payload.current.drop.id === 'dropholder') {
-        const dragItem = {
-          id: payload.id || randomString(),
-          name: payload.name,
-          role: payload.role,
-          position: null,
-          data: payload.data,
-          parentId: null,
-        };
 
         return update(state, {
           data: {
@@ -85,14 +87,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
 
       const { parentId: parentId_ADD, dropIndex: dropIndex_ADD } = dragdropHelper.findDragDropIndex(payload);
 
-      const dragItem = {
-        id: randomString(),
-        name: payload.name,
-        role: payload.role,
-        position: null,
-        data: payload.data,
-        parentId: parentId_ADD,
-      };
+      dragItem.parentId = parentId_ADD;
 
       const stateAdd = update(state, {
         data: {

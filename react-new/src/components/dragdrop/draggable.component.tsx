@@ -6,8 +6,27 @@ import { DragDropContextProps } from './dragdrop.type';
 const blocks = [
   {
     id: null,
-    name: 'drop',
+    name: 'block',
     role: 'parent',
+    type: 'div',
+    data: [],
+    position: null,
+    parentId: null
+  },
+  {
+    id: null,
+    name: 'row',
+    role: 'parent',
+    type: 'row',
+    data: [],
+    position: null,
+    parentId: null
+  },
+  {
+    id: null,
+    name: 'column',
+    role: 'parent',
+    type: 'column',
     data: [],
     position: null,
     parentId: null

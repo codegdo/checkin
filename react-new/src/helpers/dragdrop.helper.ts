@@ -77,54 +77,49 @@ class DragDropHelper {
     const overTop = offset == 'top' || offset == 'left';
     const overBottom = offset == 'bottom' || offset == 'right';
     const overMiddle = offset == 'middle';
-    const text = `${dragType}to${dropType}`;
 
-    if (dragType === 'field' && dropType === 'field') {
-      if (fromTop && overTop) {
+    const fromTopOverTop = (fromTop && overTop) && 'fromTop_overTop';
+    const fromTopOverBottom = (fromTop && overBottom) && 'fromTop_overBottom';
+    const fromBottomOverBottom = (fromBottom && overBottom) && 'fromBottom_overBottom';
+    const fromBottomOverTop = (fromBottom && overTop) && 'fromBottom_overTop';
+    const fromBottomOverMiddle = (fromBottom && overMiddle) && 'fromBottom_overMiddle';
+    const type = `${dragType}_${dropType}`;
+    const text = `${(fromTopOverTop || fromTopOverBottom || fromBottomOverBottom || fromBottomOverTop || fromBottomOverMiddle) || 'fromDrag'}`;
+
+    if (type == 'field_field' || type == 'field_block' || type == 'block_block') {
+      if (fromTopOverTop) {
         dropIndex = dropIndex - 1;
-        console.log(`${text} (drag-from-top and drop-over-top)`);
-      } else if (fromBottom && overBottom) {
+      } else if (fromBottomOverBottom) {
         dropIndex = dropIndex + 1;
-        console.log(`${text} (drag-from-bottom and drop-over-bottom)`);
-      } else if (dragIndex == null && overTop) {
-        //dropIndex = dropIndex - 1;
-        console.log(`${text} (drag and drop-over-top)`);
-      } else if (dragIndex == null && overBottom) {
-        dropIndex = dropIndex + 1;
-        console.log(`${text} (drag and drop-over-bottom)`);
+      } else if (dragIndex == null) {
+        if (overBottom) {
+          dropIndex = dropIndex + 1;
+        }
       }
     } else {
-      if (fromTop && overTop) {
+      if (fromTopOverTop) {
         dropIndex = dropIndex - dragCounts;
-        console.log(`${text} (drag-from-top and drop-over-top)`);
-      } else if (fromTop && overBottom) {
+      } else if (fromTopOverBottom) {
         dropIndex = dropIndex + dropCounts - dragCounts;
-        console.log(`${text} (drag-from-top and drop-over-bottom)`);
-      } else if (fromBottom && overBottom) {
-        // check drag is nested
+      } else if (fromBottomOverBottom) {
+        // nested
         if (dropIds.includes(dragId)) {
           dropIndex = dropIndex + dropCounts - dragCounts;
         } else {
           dropIndex = dropIndex + dropCounts;
         }
-        console.log(`${text} (drag-from-bottom and drop-over-bottom)`);
-      } else if (fromBottom && overTop) {
-        console.log(`${text} (drag-from-bottom and drop-over-top)`);
-      } else if (fromTop && overMiddle) {
-        console.log(`${text} (drag-from-top and drop-over-middle)`);
-      } else if (fromBottom && overMiddle) {
+      } else if (fromBottomOverMiddle) {
         dropIndex = dropIndex + 1;
-        console.log(`${text} (drag-from-bottom and drop-over-middle)`);
-      } else if (dragIndex == null && overTop) {
-        console.log(`${text} (drag and drop-over-top)`);
-      } else if (dragIndex == null && overMiddle) {
-        dropIndex = dropIndex + 1;
-        console.log(`${text} (drag and drop-over-middle)`);
-      } else if (dragIndex == null && overBottom) {
-        dropIndex = dropIndex + dropCounts;
-        console.log(`${text} (drag and drop-over-bottom)`);
+      } else if (dragIndex == null) {
+        if (overMiddle) {
+          dropIndex = dropIndex + 1;
+        } else if (overBottom) {
+          dropIndex = dropIndex + dropCounts;
+        }
       }
     }
+
+    console.log(`${type} ${text}`);
 
     return {
       dragIndex,
@@ -141,8 +136,16 @@ class DragDropHelper {
   onHover(monitor: DropTargetMonitor<any, void>, ref: React.RefObject<HTMLDivElement>, current: any) {
     if (!ref.current) return;
 
+    // get type
+    const dragType = monitor.getItem().type;
+    const { type: dropType, role, data } = current.drop;
+
+    if (dragType == 'column' && dropType !== 'row') {
+      return;
+    }
+
     // determine rectangle on screen
-    const hoverBoundingRect = ref.current?.getBoundingClientRect() as BoundingClientRect;
+    const hoverBoundingRect = ref.current.getBoundingClientRect() as BoundingClientRect;
     // determine mouse position
     const clientOffset = monitor.getClientOffset() as ClientOffset;
     // get vertical middle
@@ -154,17 +157,27 @@ class DragDropHelper {
     // get pixels to the left
     const hoverClientX = clientOffset.x - hoverBoundingRect.left;
 
+
     const display = this.parentNodeDisplay(ref.current.parentNode as HTMLElement);
 
     let middle = 0;
 
-    if (current.drop.role === 'parent' && current.drop.data.length == 0) {
+    if (role === 'parent' && !data.length) {
       middle = 25;
     }
 
     if (ref.current.hasAttribute('style')) {
       ref.current.removeAttribute('style');
     }
+
+    if (dragType == 'column' && dropType !== 'row') {
+      return;
+    }
+
+    if (dragType == 'row' && dropType == 'row') {
+      return;
+    }
+
 
     if (display == 'row') {
       if (current.drop.x == clientOffset.x) return;
