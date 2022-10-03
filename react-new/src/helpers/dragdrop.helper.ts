@@ -1,4 +1,4 @@
-import { DropTargetMonitor } from "react-dnd";
+import { DropTargetMonitor } from 'react-dnd';
 
 interface BoundingClientRect {
   top: number;
@@ -16,12 +16,16 @@ interface ClientOffset {
   y: number;
 }
 
-
 class DragDropHelper {
-  constructor() { }
+  constructor() {}
 
-  parentNodeDisplay(parentNode: HTMLElement | null): string {
+  parentNodeDisplay(target: HTMLElement): string {
+    const parentNode = target.parentNode as HTMLElement;
     let direction = 'column';
+
+    if (target.hasAttribute('style')) {
+      target.removeAttribute('style');
+    }
 
     if (parentNode) {
       const display = parentNode.style.display;
@@ -39,24 +43,17 @@ class DragDropHelper {
   }
 
   totalCount({ id, data }): [number, string[]] {
-
     if (id == null || undefined) {
       id = '' + id;
     }
 
     const ids = this.count(data, [id.toString()]);
 
-    return [ids.length, ids]
+    return [ids.length, ids];
   }
 
   findDragDropIndex(item) {
-    let {
-      id: dragId,
-      role: dragType,
-      position: dragIndex,
-      parentId: dragParentId,
-      current,
-    } = item;
+    let { id: dragId, role: dragType, position: dragIndex, parentId: dragParentId, current } = item;
 
     let {
       id: dropId,
@@ -78,13 +75,20 @@ class DragDropHelper {
     const overBottom = offset == 'bottom' || offset == 'right';
     const overMiddle = offset == 'middle';
 
-    const fromTopOverTop = (fromTop && overTop) && 'fromTop_overTop';
-    const fromTopOverBottom = (fromTop && overBottom) && 'fromTop_overBottom';
-    const fromBottomOverBottom = (fromBottom && overBottom) && 'fromBottom_overBottom';
-    const fromBottomOverTop = (fromBottom && overTop) && 'fromBottom_overTop';
-    const fromBottomOverMiddle = (fromBottom && overMiddle) && 'fromBottom_overMiddle';
+    const fromTopOverTop = fromTop && overTop && 'fromTop_overTop';
+    const fromTopOverBottom = fromTop && overBottom && 'fromTop_overBottom';
+    const fromBottomOverBottom = fromBottom && overBottom && 'fromBottom_overBottom';
+    const fromBottomOverTop = fromBottom && overTop && 'fromBottom_overTop';
+    const fromBottomOverMiddle = fromBottom && overMiddle && 'fromBottom_overMiddle';
     const type = `${dragType}_${dropType}`;
-    const text = `${(fromTopOverTop || fromTopOverBottom || fromBottomOverBottom || fromBottomOverTop || fromBottomOverMiddle) || 'fromDrag'}`;
+    const text = `${
+      fromTopOverTop ||
+      fromTopOverBottom ||
+      fromBottomOverBottom ||
+      fromBottomOverTop ||
+      fromBottomOverMiddle ||
+      'fromDrag'
+    }`;
 
     if (type == 'field_field' || type == 'field_block' || type == 'block_block') {
       if (fromTopOverTop) {
@@ -128,17 +132,21 @@ class DragDropHelper {
       dropCounts,
       dragIds,
       dropIds,
-      parentId: overMiddle ? dropId : dropParentId
-    }
-
+      parentId: overMiddle ? dropId : dropParentId,
+    };
   }
 
-  onHover(monitor: DropTargetMonitor<any, void>, ref: React.RefObject<HTMLDivElement>, current: any) {
+  onHover(
+    monitor: DropTargetMonitor<any, void>,
+    ref: React.RefObject<HTMLDivElement>,
+    current: any
+  ) {
     if (!ref.current) return;
 
-    // get type
-    const dragType = monitor.getItem().type;
-    const { type: dropType, role, data } = current.drop;
+    // get item
+    const dragItem = monitor.getItem();
+    const dropItem = current.drop;
+    const target = ref.current;
 
     // determine rectangle on screen
     const hoverBoundingRect = ref.current.getBoundingClientRect() as BoundingClientRect;
@@ -153,66 +161,50 @@ class DragDropHelper {
     // get pixels to the left
     const hoverClientX = clientOffset.x - hoverBoundingRect.left;
 
-
-    const display = this.parentNodeDisplay(ref.current.parentNode as HTMLElement);
+    const display = this.parentNodeDisplay(target);
 
     let middle = 0;
 
-    if (role === 'parent' && !data.length) {
+    if (dropItem.role === 'parent' && !dropItem.data.length) {
       middle = 25;
     }
 
-    if (ref.current.hasAttribute('style')) {
-      ref.current.removeAttribute('style');
-    }
-
-    if (dragType == 'column' && dropType !== 'row') {
-      return;
-    }
-
-    if (dragType == 'row' && dropType == 'row') {
-      return;
-    }
-
-
     if (display == 'row') {
-      if (current.drop.x == clientOffset.x) return;
+      if (dropItem.x == clientOffset.x) return;
 
-      current.drop.x = clientOffset.x;
+      dropItem.x = clientOffset.x;
 
       if (hoverClientX < hoverMiddleX) {
-        ref.current.classList.add('on-left');
-        ref.current.classList.remove('on-right');
-        current.drop.offset = 'left';
+        target.classList.add('on-left');
+        target.classList.remove('on-right');
+        dropItem.offset = 'left';
       } else if (hoverClientX > hoverMiddleX) {
-        ref.current.classList.add('on-right');
-        ref.current.classList.remove('on-left');
-        current.drop.offset = 'right';
+        target.classList.add('on-right');
+        target.classList.remove('on-left');
+        dropItem.offset = 'right';
       }
-
     } else {
-      if (current.drop.y == clientOffset.y) return;
+      if (dropItem.y == clientOffset.y) return;
 
-      current.drop.y = clientOffset.y;
+      dropItem.y = clientOffset.y;
 
       if (hoverClientY <= hoverMiddleY - middle) {
-        ref.current.classList.add('on-top');
-        ref.current.classList.remove('on-bottom', 'on-middle');
-        current.drop.offset = 'top';
+        target.classList.add('on-top');
+        target.classList.remove('on-bottom', 'on-middle');
+        dropItem.offset = 'top';
       } else if (hoverClientY >= hoverMiddleY + middle) {
-        ref.current.classList.add('on-bottom');
-        ref.current.classList.remove('on-top', 'on-middle');
-        current.drop.offset = 'bottom';
+        target.classList.add('on-bottom');
+        target.classList.remove('on-top', 'on-middle');
+        dropItem.offset = 'bottom';
       } else {
-        ref.current.classList.add('on-middle');
-        ref.current.classList.remove('on-top', 'on-bottom');
-        current.drop.offset = 'middle';
+        target.classList.add('on-middle');
+        target.classList.remove('on-top', 'on-bottom');
+        dropItem.offset = 'middle';
       }
     }
   }
 
   private count(data, ids = []) {
-
     if (data instanceof Array) {
       data.reduce((a, v) => {
         ids.push(v.id.toString());
