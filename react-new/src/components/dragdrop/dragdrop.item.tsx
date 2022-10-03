@@ -61,7 +61,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
           }
 
           if (current.drop == null || current.drop.id !== props.id) {
-            current.drop = { id, type, role, data, position, parentId, x: 0, y: 0 };
+            current.drop = { id, type, role, data, position, parentId, x: 0, y: 0, isOver: false };
           }
 
           dragdropHelper.onHover(monitor, ref, current);
@@ -91,8 +91,8 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
   }
 
   const handleMouseOver = (event: any) => {
-
     event.preventDefault();
+    event.stopPropagation();
     event.target.classList.add('-hover');
   }
 
@@ -107,13 +107,13 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
   drag(drop(ref));
 
   return (
-    <div className={className} id={id} ref={ref} tabIndex={position} data-type={type} onClick={handleFocusClick} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+    <div className={className} id={id} ref={ref} tabIndex={position} data-type={type} onClick={handleFocusClick}>
       {
         focus?.id == id && <div className={isDragging ? 'dd-toolbar hidden' : 'dd-toolbar'}>
           <button type="button" onClick={handleButtonClick}>delete</button>
         </div>
       }
-      <div className={`dd-content`}>
+      <div className={`dd-content`} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
         {
           (() => {
             switch (role) {

@@ -35,7 +35,7 @@
 .dd-content {
   padding: 1rem;
   background-color: #fff;
-  transition: all 0.2s ease-out;
+  transition: all 0.5s ease-out;
 }
 
 .dd-content:empty:before {
@@ -45,6 +45,8 @@
   padding: 1rem;
   color: #ddd;
   border: 1px dashed #f8f8f8;
+  transition: all 0.5s ease-out;
+  width: 100%;
 }
 
 .on-middle .dd-content:empty:before {
@@ -69,4 +71,8 @@
 }
 .focus > .dd-content {
   box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.3);
+}
+
+#f-main .dd-content {
+  display: flex;
 }

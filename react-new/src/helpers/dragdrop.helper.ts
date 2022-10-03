@@ -17,34 +17,32 @@ interface ClientOffset {
 }
 
 class DragDropHelper {
-  constructor() {}
+  constructor() { }
 
-  parentNodeDisplay(target: HTMLElement): string {
+  parentNodeDisplay(target: HTMLElement): any {
+
     const parentNode = target.parentNode as HTMLElement;
-    let direction = 'column';
 
-    if (target.hasAttribute('style')) {
-      target.removeAttribute('style');
-    }
+    let display = 'column';
 
     if (parentNode) {
-      const display = parentNode.style.display;
+      const styleDisplay = parentNode.style.display || window.getComputedStyle(parentNode).display;
+      const flexDirection = parentNode.style.flexDirection || window.getComputedStyle(parentNode).flexDirection;
 
-      if (display == 'flex') {
-        const flexDirection = parentNode.style.flexDirection;
-
+      if (styleDisplay == 'flex') {
         if (!flexDirection.includes('column') || flexDirection == '') {
-          direction = 'row';
+          display = 'row';
         }
       }
+
     }
 
-    return direction;
+    return display;
   }
 
   totalCount({ id, data }): [number, string[]] {
     if (id == null || undefined) {
-      id = '' + id;
+      id = id + '';
     }
 
     const ids = this.count(data, [id.toString()]);
@@ -81,14 +79,13 @@ class DragDropHelper {
     const fromBottomOverTop = fromBottom && overTop && 'fromBottom_overTop';
     const fromBottomOverMiddle = fromBottom && overMiddle && 'fromBottom_overMiddle';
     const type = `${dragType}_${dropType}`;
-    const text = `${
-      fromTopOverTop ||
+    const text = `${fromTopOverTop ||
       fromTopOverBottom ||
       fromBottomOverBottom ||
       fromBottomOverTop ||
       fromBottomOverMiddle ||
       'fromDrag'
-    }`;
+      }`;
 
     if (type == 'field_field' || type == 'field_block' || type == 'block_block') {
       if (fromTopOverTop) {
@@ -160,39 +157,59 @@ class DragDropHelper {
     const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
     // get pixels to the left
     const hoverClientX = clientOffset.x - hoverBoundingRect.left;
+    //
+    const childNode = target.childNodes[0] as HTMLElement;
 
     const display = this.parentNodeDisplay(target);
-
-    let middle = 0;
-
-    if (dropItem.role === 'parent' && !dropItem.data.length) {
-      middle = 25;
-    }
 
     if (display == 'row') {
       if (dropItem.x == clientOffset.x) return;
 
       dropItem.x = clientOffset.x;
 
-      if (hoverClientX < hoverMiddleX) {
-        target.classList.add('on-left');
-        target.classList.remove('on-right');
-        dropItem.offset = 'left';
-      } else if (hoverClientX > hoverMiddleX) {
-        target.classList.add('on-right');
-        target.classList.remove('on-left');
-        dropItem.offset = 'right';
+      let width = 0;
+
+      if (target.classList.contains('-empty')) {
+        width = (parseInt(window.getComputedStyle(childNode, ':before').width) || 0) / 2;
       }
-    } else {
+
+      if (target.hasAttribute('style')) {
+        target.removeAttribute('style');
+      }
+
+      if (hoverClientX <= hoverMiddleX - width) {
+        target.classList.add('on-left');
+        target.classList.remove('on-right', 'on-middle');
+        dropItem.offset = 'left';
+      } else if (hoverClientX >= hoverMiddleX + width) {
+        target.classList.add('on-right');
+        target.classList.remove('on-left', 'on-middle');
+        dropItem.offset = 'right';
+      } else {
+        target.classList.add('on-middle');
+        target.classList.remove('on-left', 'on-right');
+        dropItem.offset = 'middle';
+      }
+    } else if (display == 'column') {
       if (dropItem.y == clientOffset.y) return;
 
       dropItem.y = clientOffset.y;
 
-      if (hoverClientY <= hoverMiddleY - middle) {
+      let height = 0;
+
+      if (target.classList.contains('-empty')) {
+        height = (parseInt(window.getComputedStyle(childNode, ':before').height) || 0) / 2;
+      }
+
+      if (target.hasAttribute('style')) {
+        target.removeAttribute('style');
+      }
+
+      if (hoverClientY <= hoverMiddleY - height) {
         target.classList.add('on-top');
         target.classList.remove('on-bottom', 'on-middle');
         dropItem.offset = 'top';
-      } else if (hoverClientY >= hoverMiddleY + middle) {
+      } else if (hoverClientY >= hoverMiddleY + height) {
         target.classList.add('on-bottom');
         target.classList.remove('on-top', 'on-middle');
         dropItem.offset = 'bottom';
