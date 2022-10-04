@@ -1,4 +1,4 @@
-import React, { ComponentType, lazy, Suspense, useEffect, useMemo } from 'react';
+import React, { ComponentType, lazy, Suspense, useMemo } from 'react';
 import parse, { HTMLReactParserOptions } from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import { Nav } from '../nav/nav.component';

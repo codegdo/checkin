@@ -104,7 +104,7 @@ class DragDropHelper {
         dropIndex = dropIndex + dropCounts - dragCounts;
       } else if (fromBottomOverBottom) {
         // nested
-        if (dropIds.includes(dragId)) {
+        if (dropIds.includes(dragId.toString())) {
           dropIndex = dropIndex + dropCounts - dragCounts;
         } else {
           dropIndex = dropIndex + dropCounts;

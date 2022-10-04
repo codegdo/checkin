@@ -1,13 +1,15 @@
-import React, { ReactElement, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import parse, { HTMLReactParserOptions } from 'html-react-parser';
+import DOMPurify from 'dompurify';
 
 import { dragdropHelper } from '../../helpers';
 import { Render } from './dragdrop.render';
 
 export const DragDropItem: React.FC<any> = (props): JSX.Element => {
 
-  const { id, type, role, name, position, data, parentId, focus, current, setFocus, moveItem, deleteItem, children } = props;
+  const { id, type, role, name, position, data, value, parentId, focus, current, setFocus, moveItem, deleteItem, children } = props;
   const ref = useRef<HTMLDivElement>(null);
 
   const [{ isDragging }, drag, preview] = useDrag(
@@ -25,7 +27,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
             ddContent.classList.remove('-hover')
           };
         }
-        return (id == 'dropholder') ? false : true;
+        return (id == 'dropstage') ? false : true;
       },
       collect: monitor => ({
         isDragging: monitor.isDragging(),
@@ -43,7 +45,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
 
   const [{ isOver }, drop] = useDrop(
     () => ({
-      accept: ['parent', 'block', 'field'],
+      accept: ['parent', 'component', 'block', 'field'],
       drop: () => {
         if (ref.current) {
           ref.current.style.transition = 'none';
@@ -55,7 +57,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
         // current over
         if (monitor.isOver({ shallow: true })) {
 
-          if (!ref.current || id === 'dropholder' || item.id === id) {
+          if (!ref.current || id === 'dropstage' || item.id === id) {
             current.drop = null;
             return;
           }
@@ -93,16 +95,21 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
   const handleMouseOver = (event: any) => {
     event.preventDefault();
     event.stopPropagation();
-    event.target.classList.add('-hover');
+
+    if (event.target.classList.contains('dd-content')) {
+      event.target.classList.add('-hover');
+    }
   }
 
   const handleMouseOut = (event: any) => {
     event.preventDefault();
     event.stopPropagation();
-    event.target.classList.remove('-hover');
+    if (event.target.classList.contains('dd-content')) {
+      event.target.classList.remove('-hover');
+    }
   }
 
-  const className = `dd-block${isDragging ? ' dragging' : ''}${isOver ? ' -over' : ''}${(role == 'parent' && data?.length == 0) ? ' -empty' : ''}${focus?.id == id ? ' focus' : ''}`;
+  const className = `${role == 'parent' ? 'dd-block' : 'dd-field'}${isDragging ? ' dragging' : ''}${isOver ? ' -over' : ''}${(role == 'parent' && data?.length == 0) ? ' -empty' : ''}${focus?.id == id ? ' focus' : ''}`;
 
   drag(drop(ref));
 
@@ -119,6 +126,8 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
             switch (role) {
               case 'parent':
                 return children ? children : <Render data={[...data]} />
+              case 'component':
+                return <>{parse(value)}</>
               case 'block':
                 return <>{name}</>
               case 'field':

@@ -68,6 +68,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         role: payload.role,
         position: null,
         data: payload.data,
+        value: payload.value,
         parentId: null,
       };
 

@@ -10,42 +10,57 @@ const blocks = [
     role: 'parent',
     type: 'div',
     data: [],
+    value: null,
+    position: null,
+    parentId: null
+  },
+  {
+    id: null,
+    name: 'component',
+    role: 'component',
+    type: 'div',
+    data: [],
+    value: `<div>test</div><div>test</div>`,
     position: null,
     parentId: null
   },
   {
     id: null,
     name: 'link',
-    type: 'link',
     role: 'block',
+    type: 'link',
     data: null,
+    value: null,
     position: null,
     parentId: null
   },
   {
     id: null,
     name: 'button',
-    type: 'button',
     role: 'block',
+    type: 'button',
     data: null,
+    value: null,
     position: null,
     parentId: null
   },
   {
     id: null,
     name: 'html',
-    type: 'html',
     role: 'block',
+    type: 'html',
     data: null,
+    value: null,
     position: null,
     parentId: null
   },
   {
     id: null,
     name: 'text',
-    type: 'text',
     role: 'block',
+    type: 'text',
     data: null,
+    value: null,
     position: null,
     parentId: null
   }
