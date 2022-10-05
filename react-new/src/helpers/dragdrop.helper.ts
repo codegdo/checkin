@@ -145,6 +145,10 @@ class DragDropHelper {
     const dropItem = current.drop;
     const target = ref.current;
 
+    if (dragItem.id !== null && dropItem.id !== null && dragItem.id == dropItem.parentId) {
+      return;
+    }
+
     // determine rectangle on screen
     const hoverBoundingRect = ref.current.getBoundingClientRect() as BoundingClientRect;
     // determine mouse position

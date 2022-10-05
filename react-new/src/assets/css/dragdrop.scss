@@ -79,10 +79,25 @@
 }
 
 .-hover {
-  box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.1);
+  //box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.1);
+  border-color: rgb(73, 132, 241);
 }
-.focus > .dd-content {
-  box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.3);
+.-hover:before {
+  content: attr(data-title);
+  font-size: 11px;
+  color: #666;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.-focus {
+  //box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.3);
+  border-color: rgb(73, 132, 241);
+  content: 'test';
+}
+
+[data-type='placeholder'] > .dd-content {
+  padding: 0;
 }
 
 #f-main > .dd-content {

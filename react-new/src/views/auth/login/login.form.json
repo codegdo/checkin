@@ -6,27 +6,33 @@
   "data": [
     {
       "id": "f-header",
+      "name": "header",
       "type": "header",
       "role": "parent",
       "data": [],
       "position": 0,
-      "parentId": null
+      "parentId": null,
+      "groupId": null
     },
     {
       "id": "f-main",
+      "name": "main",
       "type": "main",
       "role": "parent",
       "data": [],
       "position": 3,
-      "parentId": null
+      "parentId": null,
+      "groupId": null
     },
     {
       "id": "f-footer",
+      "name": "footer",
       "type": "footer",
       "role": "parent",
       "data": [],
       "position": 6,
-      "parentId": null
+      "parentId": null,
+      "groupId": null
     },
     {
       "id": "f-title",

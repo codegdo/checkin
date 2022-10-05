@@ -17,10 +17,10 @@ const blocks = [
   {
     id: null,
     name: 'component',
-    role: 'component',
+    role: 'group',
     type: 'div',
     data: [],
-    value: `<div>test</div><div>test</div>`,
+    value: `<div class="row"><jsx id='placeholder_0' class="column"></jsx><jsx id='placeholder_1' class="column"></jsx></div>`,
     position: null,
     parentId: null
   },
