@@ -21,7 +21,8 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
       }
 
       const dropId = payload.current.drop.id.toString();
-      const { dragIndex, dropIndex, dragCounts, dragIds, parentId } =
+      const dropType = payload.current.drop.role;
+      const { dragIndex, dropIndex, dragCounts, dragIds, parentId, placeholderId, } =
         dragdropHelper.findDragDropIndex(payload);
       const dragItems: any = [];
 
@@ -32,7 +33,8 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
 
       console.log('AAAA', payload);
 
-      state.data[dragIndex].parentId = parentId;
+      state.data[dragIndex].parentId = (dropType == 'placeholder') ? parentId.split('_')[0] : parentId;
+      state.data[dragIndex].placeholderId = placeholderId;
 
       for (let i = 0; i < dragCounts; i++) {
         dragItems.push(state.data[dragIndex + i]);

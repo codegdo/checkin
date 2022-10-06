@@ -51,13 +51,20 @@ class DragDropHelper {
   }
 
   findDragDropIndex(item) {
-    let { id: dragId, role: dragType, position: dragIndex, parentId: dragParentId, current } = item;
+    let {
+      id: dragId,
+      role: dragType,
+      position: dragIndex,
+      parentId: dragParentId,
+      current
+    } = item;
 
     let {
       id: dropId,
       role: dropType,
       position: dropIndex,
       parentId: dropParentId,
+      placeholderId: dropPlaceholderId,
       offset,
     } = current.drop;
 
@@ -87,7 +94,7 @@ class DragDropHelper {
       'fromDrag'
       }`;
 
-    if (type == 'field_field' || type == 'field_block' || type == 'block_block') {
+    if (type == 'field_field' || type == 'field_element' || type == 'element_element') {
       if (fromTopOverTop) {
         dropIndex = dropIndex - 1;
       } else if (fromBottomOverBottom) {
@@ -97,6 +104,9 @@ class DragDropHelper {
           dropIndex = dropIndex + 1;
         }
       }
+    } else if (type == 'field_placeholder' || type == 'element_placeholder' || type == 'block_placeholder' || type == 'component_placeholder') {
+      dropIndex = dropIndex + dropCounts;
+      console.log('HELLO COMPONENT', item);
     } else {
       if (fromTopOverTop) {
         dropIndex = dropIndex - dragCounts;
@@ -130,6 +140,7 @@ class DragDropHelper {
       dragIds,
       dropIds,
       parentId: overMiddle ? dropId : dropParentId,
+      placeholderId: dropPlaceholderId
     };
   }
 
@@ -164,72 +175,79 @@ class DragDropHelper {
     //
     const childNode = target.childNodes[0] as HTMLElement;
 
-    const display = this.parentNodeDisplay(target);
+    if (dropItem.role === 'placeholder') {
+      target.classList.add('on-middle');
+      dropItem.offset = 'middle';
+    } else {
+      const display = this.parentNodeDisplay(target);
 
-    if (display == 'row') {
-      if (dropItem.x == clientOffset.x) return;
+      if (display == 'row') {
+        if (dropItem.x == clientOffset.x) return;
 
-      dropItem.x = clientOffset.x;
+        dropItem.x = clientOffset.x;
 
-      let width = 0;
+        let width = 0;
 
-      if (target.classList.contains('-empty')) {
-        width = (parseInt(window.getComputedStyle(childNode, ':before').width) || 0) / 2;
-      }
+        if (target.classList.contains('-empty')) {
+          width = (parseInt(window.getComputedStyle(childNode, ':before').width) || 0) / 2;
+        }
 
-      if (target.hasAttribute('style')) {
-        target.removeAttribute('style');
-      }
+        if (target.hasAttribute('style')) {
+          target.removeAttribute('style');
+        }
 
-      if (hoverClientX <= hoverMiddleX - width) {
-        target.classList.add('on-left');
-        target.classList.remove('on-right', 'on-middle');
-        dropItem.offset = 'left';
-      } else if (hoverClientX >= hoverMiddleX + width) {
-        target.classList.add('on-right');
-        target.classList.remove('on-left', 'on-middle');
-        dropItem.offset = 'right';
-      } else {
-        target.classList.add('on-middle');
-        target.classList.remove('on-left', 'on-right');
-        dropItem.offset = 'middle';
-      }
-    } else if (display == 'column') {
-      if (dropItem.y == clientOffset.y) return;
+        if (hoverClientX <= hoverMiddleX - width) {
+          target.classList.add('on-left');
+          target.classList.remove('on-right', 'on-middle');
+          dropItem.offset = 'left';
+        } else if (hoverClientX >= hoverMiddleX + width) {
+          target.classList.add('on-right');
+          target.classList.remove('on-left', 'on-middle');
+          dropItem.offset = 'right';
+        } else {
+          target.classList.add('on-middle');
+          target.classList.remove('on-left', 'on-right');
+          dropItem.offset = 'middle';
+        }
+      } else if (display == 'column') {
+        if (dropItem.y == clientOffset.y) return;
 
-      dropItem.y = clientOffset.y;
+        dropItem.y = clientOffset.y;
 
-      let height = 0;
+        let height = 0;
 
-      if (target.classList.contains('-empty')) {
-        height = (parseInt(window.getComputedStyle(childNode, ':before').height) || 0) / 2;
-      }
+        if (target.classList.contains('-empty')) {
+          height = (parseInt(window.getComputedStyle(childNode, ':before').height) || 0) / 2;
+        }
 
-      if (target.hasAttribute('style')) {
-        target.removeAttribute('style');
-      }
+        if (target.hasAttribute('style')) {
+          target.removeAttribute('style');
+        }
 
-      if (hoverClientY <= hoverMiddleY - height) {
-        target.classList.add('on-top');
-        target.classList.remove('on-bottom', 'on-middle');
-        dropItem.offset = 'top';
-      } else if (hoverClientY >= hoverMiddleY + height) {
-        target.classList.add('on-bottom');
-        target.classList.remove('on-top', 'on-middle');
-        dropItem.offset = 'bottom';
-      } else {
-        target.classList.add('on-middle');
-        target.classList.remove('on-top', 'on-bottom');
-        dropItem.offset = 'middle';
+        if (hoverClientY <= hoverMiddleY - height) {
+          target.classList.add('on-top');
+          target.classList.remove('on-bottom', 'on-middle');
+          dropItem.offset = 'top';
+        } else if (hoverClientY >= hoverMiddleY + height) {
+          target.classList.add('on-bottom');
+          target.classList.remove('on-top', 'on-middle');
+          dropItem.offset = 'bottom';
+        } else {
+          target.classList.add('on-middle');
+          target.classList.remove('on-top', 'on-bottom');
+          dropItem.offset = 'middle';
+        }
       }
     }
+
+
   }
 
   private count(data, ids = []) {
     if (data instanceof Array) {
       data.reduce((a, v) => {
         ids.push(v.id.toString());
-        return a + (v.role == 'parent' ? this.count(v.data, ids) : 0);
+        return a + (v.role == 'block' ? this.count(v.data, ids) : 0);
       }, data.length);
     }
 

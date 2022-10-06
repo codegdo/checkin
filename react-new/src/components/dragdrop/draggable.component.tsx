@@ -7,7 +7,7 @@ const blocks = [
   {
     id: null,
     name: 'block',
-    role: 'parent',
+    role: 'block',
     type: 'div',
     data: [],
     value: null,
@@ -17,17 +17,20 @@ const blocks = [
   {
     id: null,
     name: 'component',
-    role: 'group',
+    role: 'component',
     type: 'div',
     data: [],
-    value: `<div class="row"><jsx id='placeholder_0' class="column"></jsx><jsx id='placeholder_1' class="column"></jsx></div>`,
+    value: `<div class="row">
+      <div class="column"><jsx id='placeholder_0'></jsx></div>
+      <div class="column"><jsx id='placeholder_1'></jsx></div>
+    </div>`,
     position: null,
     parentId: null
   },
   {
     id: null,
     name: 'link',
-    role: 'block',
+    role: 'element',
     type: 'link',
     data: null,
     value: null,
@@ -37,7 +40,7 @@ const blocks = [
   {
     id: null,
     name: 'button',
-    role: 'block',
+    role: 'element',
     type: 'button',
     data: null,
     value: null,
@@ -47,7 +50,7 @@ const blocks = [
   {
     id: null,
     name: 'html',
-    role: 'block',
+    role: 'element',
     type: 'html',
     data: null,
     value: null,
@@ -57,7 +60,7 @@ const blocks = [
   {
     id: null,
     name: 'text',
-    role: 'block',
+    role: 'element',
     type: 'text',
     data: null,
     value: null,

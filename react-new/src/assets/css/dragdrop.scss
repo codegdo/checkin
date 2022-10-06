@@ -20,16 +20,19 @@
 }
 
 .on-top {
-  border-top-color: #000;
+  border-top: 1px dashed rgb(73, 132, 241);
 }
 .on-bottom {
-  border-bottom-color: #000;
+  border-bottom: 1px dashed rgb(73, 132, 241);
 }
 .on-left {
-  border-left-color: #000;
+  border-left: 1px dashed rgb(73, 132, 241);
 }
 .on-right {
-  border-right-color: #000;
+  border-right: 1px dashed rgb(73, 132, 241);
+}
+.on-middle .dd-content:empty:before {
+  border: 1px dashed rgb(73, 132, 241);
 }
 
 .dd-toolbar {
@@ -49,20 +52,13 @@
 
 .dd-content:empty:before {
   content: 'drop...';
-  display: flex;
-  justify-items: center;
-  align-items: center;
+  display: block;
+  text-align: center;
   background: #f8f8f8;
   padding: 1rem;
-  color: #ddd;
+  color: #ccc;
   border: 1px dashed #f8f8f8;
   transition: all 0.3s ease-out;
-  width: 100%;
-  height: 100%;
-}
-
-.on-middle .dd-content:empty:before {
-  border-color: #000;
 }
 
 #dropstage {
@@ -85,6 +81,7 @@
 .-hover:before {
   content: attr(data-title);
   font-size: 11px;
+  text-align: center;
   color: #666;
   position: absolute;
   top: 0;
@@ -96,7 +93,7 @@
   content: 'test';
 }
 
-[data-type='placeholder'] > .dd-content {
+[data-title='placeholder'] > .dd-content {
   padding: 0;
 }
 

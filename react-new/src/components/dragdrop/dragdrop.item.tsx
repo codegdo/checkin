@@ -9,7 +9,7 @@ import { Render } from './dragdrop.render';
 
 export const DragDropItem: React.FC<any> = (props): JSX.Element => {
 
-  const { id, type, role, name, className, position, data, value, draggable = true, parentId, focus, current, setFocus, moveItem, deleteItem, children } = props;
+  const { id, type, role, name, className, position, data, value, draggable = true, parentId, placeholderId, focus, current, setFocus, moveItem, deleteItem, children } = props;
   const ref = useRef<HTMLDivElement>(null);
 
   const [{ isDragging }, drag, preview] = useDrag(
@@ -42,7 +42,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
 
   const [{ isOver }, drop] = useDrop(
     () => ({
-      accept: ['parent', 'group', 'block', 'field'],
+      accept: ['block', 'placeholder', 'component', 'element', 'field'],
       drop: () => {
         if (ref.current) {
           ref.current.style.transition = 'none';
@@ -64,7 +64,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
           }
 
           if (current.drop == null || current.drop.id !== props.id) {
-            current.drop = { id, type, role, data, position, parentId, x: 0, y: 0, isOver: false };
+            current.drop = { id, type, role, data, position, parentId, placeholderId, x: 0, y: 0, isOver: false };
           }
 
           dragdropHelper.onHover(monitor, ref, current);
@@ -99,6 +99,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
 
     if (ref.current) {
       ref.current.classList.add('-hover');
+      ref.current.removeAttribute('style');
     }
   }
 
@@ -111,8 +112,8 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
     }
   }
 
-  const classString = `${className || ''}${role == 'parent' ? ' dd-block' : ' dd-field'}${isDragging ? ' dragging' : ''}${isOver ? ' -over' : ''}${(role == 'parent' && data?.length == 0) ? ' -empty' : ''}${focus?.id == id ? ' -focus' : ''}`;
-
+  const classString = `${className || ''}${role == 'block' ? ' dd-block' : ' dd-field'}${isDragging ? ' dragging' : ''}${isOver ? ' -over' : ''}${(role == 'block' && data?.length == 0) ? ' -empty' : ''}${focus?.id == id ? ' -focus' : ''}`;
+  const title = (role == 'block' || role == 'placeholder' || role == 'component') ? role : type;
   const events = !!draggable ? {
     onClick: handleFocusClick,
     onMouseOver: handleMouseOver,
@@ -122,7 +123,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
   drag(drop(ref));
 
   return (
-    <div className={classString} id={id} ref={ref} tabIndex={position} data-title={name} {...events}>
+    <div className={classString} id={id} ref={ref} tabIndex={position} data-title={title} {...events}>
       {
         focus?.id == id && <div className={isDragging ? 'dd-toolbar hidden' : 'dd-toolbar'}>
           <button type="button" onClick={handleButtonClick}>delete</button>
@@ -132,11 +133,13 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
         {
           (() => {
             switch (role) {
-              case 'parent':
+              case 'block':
+              case 'placeholder':
                 return children ? children : <Render data={[...data]} />
-              case 'group':
+              case 'component':
                 const html = DOMPurify.sanitize(value, { ADD_TAGS: ['jsx'] });
 
+                console.log('PLACEHOLDER DATA', data);
 
                 return parse(html, {
                   replace: (domNode): any => {
@@ -146,18 +149,18 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
                       if (attribs.id) {
                         const [name, key] = attribs.id.split('_');
 
-                        const items = data.filter((i: any) => i.groupId == key);
+                        const items = data.filter((i: any) => i.placeholderId == key);
 
                         if (name == 'placeholder') {
                           return <DragDropItem
                             id={`${id}_${key}`}
-                            className={attribs.class}
-                            type='placeholder'
-                            role='parent'
+                            type='div'
+                            role='placeholder'
                             current={current}
-                            position={null}
+                            position={position}
                             draggable={false}
                             parentId={id}
+                            placeholderId={key}
                             data={items}
                           />
                         }
@@ -166,7 +169,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
                     }
                   }
                 })
-              case 'block':
+              case 'element':
                 return <>{name}</>
               case 'field':
                 return <>{name}</>

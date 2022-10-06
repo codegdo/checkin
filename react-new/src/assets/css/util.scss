@@ -19,3 +19,11 @@
 .invisible {
   visibility: hidden;
 }
+
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 1 1;
+}

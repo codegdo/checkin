@@ -8,31 +8,31 @@
       "id": "f-header",
       "name": "header",
       "type": "header",
-      "role": "parent",
+      "role": "block",
       "data": [],
       "position": 0,
       "parentId": null,
-      "groupId": null
+      "placeholderId": null
     },
     {
       "id": "f-main",
       "name": "main",
       "type": "main",
-      "role": "parent",
+      "role": "block",
       "data": [],
       "position": 3,
       "parentId": null,
-      "groupId": null
+      "placeholderId": null
     },
     {
       "id": "f-footer",
       "name": "footer",
       "type": "footer",
-      "role": "parent",
+      "role": "block",
       "data": [],
       "position": 6,
       "parentId": null,
-      "groupId": null
+      "placeholderId": null
     },
     {
       "id": "f-title",
@@ -40,22 +40,24 @@
       "title": "Login",
       "description": null,
       "type": "title",
-      "role": "block",
+      "role": "element",
       "data": [],
       "value": null,
       "position": 2,
-      "parentId": "f-header"
+      "parentId": "f-header",
+      "placeholderId": null
     },
     {
       "id": "f-submit",
       "name": "submit",
       "label": "Login",
       "type": "button",
-      "role": "block",
+      "role": "element",
       "data": [],
       "value": null,
       "position": 7,
-      "parentId": "f-footer"
+      "parentId": "f-footer",
+      "placeholderId": null
     },
     {
       "id": "f-signup",
@@ -63,11 +65,12 @@
       "label": "Signup",
       "description": null,
       "type": "link",
-      "role": "block",
+      "role": "element",
       "data": null,
       "value": "/auth/signup",
       "position": 8,
-      "parentId": "f-footer"
+      "parentId": "f-footer",
+      "placeholderId": null
     }
   ],
   "fields": [
@@ -83,6 +86,7 @@
       "isRequired": true,
       "position": 4,
       "parentId": "f-main",
+      "placeholderId": null,
       "map": "sec.user.username",
       "lookup": null
     },
@@ -98,6 +102,7 @@
       "isRequired": true,
       "position": 5,
       "parentId": "f-main",
+      "placeholderId": null,
       "map": "sec.user.password",
       "lookup": null
     }
