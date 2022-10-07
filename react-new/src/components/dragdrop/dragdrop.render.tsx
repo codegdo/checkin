@@ -22,7 +22,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
 
   //const [ref] = useAutoAnimate<HTMLDivElement>({ duration: 120 });
 
-  const { state, current, focus, setFocus, moveItem, deleteItem } = ctx;
+  const { state, current, focus, setFocus, moveItem, deleteItem, duplicateItem } = ctx;
   const list: any[] = data === undefined ? formHelper.mapField(state.data) : data || [];
 
   return <>
@@ -36,6 +36,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
           setFocus={setFocus}
           moveItem={moveItem}
           deleteItem={deleteItem}
+          duplicateItem={duplicateItem}
           {...item} />
       })
     }

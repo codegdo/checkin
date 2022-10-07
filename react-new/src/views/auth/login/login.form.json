@@ -12,7 +12,7 @@
       "data": [],
       "position": 0,
       "parentId": null,
-      "placeholderId": null
+      "holderId": null
     },
     {
       "id": "f-main",
@@ -22,7 +22,7 @@
       "data": [],
       "position": 3,
       "parentId": null,
-      "placeholderId": null
+      "holderId": null
     },
     {
       "id": "f-footer",
@@ -32,7 +32,7 @@
       "data": [],
       "position": 6,
       "parentId": null,
-      "placeholderId": null
+      "holderId": null
     },
     {
       "id": "f-title",
@@ -45,7 +45,7 @@
       "value": null,
       "position": 2,
       "parentId": "f-header",
-      "placeholderId": null
+      "holderId": null
     },
     {
       "id": "f-submit",
@@ -57,7 +57,7 @@
       "value": null,
       "position": 7,
       "parentId": "f-footer",
-      "placeholderId": null
+      "holderId": null
     },
     {
       "id": "f-signup",
@@ -70,7 +70,7 @@
       "value": "/auth/signup",
       "position": 8,
       "parentId": "f-footer",
-      "placeholderId": null
+      "holderId": null
     }
   ],
   "fields": [
@@ -86,7 +86,7 @@
       "isRequired": true,
       "position": 4,
       "parentId": "f-main",
-      "placeholderId": null,
+      "holderId": null,
       "map": "sec.user.username",
       "lookup": null
     },
@@ -102,7 +102,7 @@
       "isRequired": true,
       "position": 5,
       "parentId": "f-main",
-      "placeholderId": null,
+      "holderId": null,
       "map": "sec.user.password",
       "lookup": null
     }

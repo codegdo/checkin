@@ -12,11 +12,12 @@ export interface DragDropContextProps extends DragDropProps {
   moveItem: (item: any) => void;
   addItem: (item: any) => void;
   deleteItem: (item: any) => void;
+  duplicateItem: (item: any) => void;
   onCallback: () => void;
 }
 
 export type DragDropAction = {
-  type: 'INIT' | 'MOVE_ITEM' | 'ADD_ITEM' | 'DELETE_ITEM' | 'UPDATE_ITEM';
+  type: 'INIT' | 'MOVE_ITEM' | 'ADD_ITEM' | 'DELETE_ITEM' | 'UPDATE_ITEM' | 'DUPLICATE_ITEM';
   payload?: any;
 };
 

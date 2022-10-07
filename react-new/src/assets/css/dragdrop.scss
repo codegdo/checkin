@@ -36,6 +36,7 @@
 }
 
 .dd-toolbar {
+  display: flex;
   position: absolute;
   top: 0;
   left: 0;
@@ -93,7 +94,7 @@
   content: 'test';
 }
 
-[data-title='placeholder'] > .dd-content {
+[data-title='dropholder'] > .dd-content {
   padding: 0;
 }
 

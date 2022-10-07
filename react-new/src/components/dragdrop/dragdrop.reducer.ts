@@ -8,39 +8,30 @@ export const initialState = {
 };
 
 export const reducer = (state: DragDropState, { type, payload }: DragDropAction) => {
+
   switch (type) {
     case 'INIT':
       return { ...state, data: [...payload] };
     case 'MOVE_ITEM':
-      if (!payload.current.drop) {
+      const dragdrop_MOVE = dragdropHelper.findDragDrop(payload);
+
+      if (!dragdrop_MOVE) {
         return state;
       }
 
-      if (!payload.current.drop.offset) {
-        return state;
-      }
+      const { dragIndex, dropIndex, dragCounts } = dragdrop_MOVE;
 
-      const dropId = payload.current.drop.id.toString();
-      const dropType = payload.current.drop.role;
-      const { dragIndex, dropIndex, dragCounts, dragIds, parentId, placeholderId, } =
-        dragdropHelper.findDragDropIndex(payload);
       const dragItems: any = [];
 
-      // prevent drag block drop over nest children
-      if (dragIds.includes(dropId)) {
-        return state;
-      }
-
-      console.log('AAAA', payload);
-
-      state.data[dragIndex].parentId = (dropType == 'placeholder') ? parentId.split('_')[0] : parentId;
-      state.data[dragIndex].placeholderId = placeholderId;
+      // update map parentId and placeholderId dragItem
+      state.data[dragIndex].parentId = dragdrop_MOVE.parentId;
+      state.data[dragIndex].holderId = dragdrop_MOVE.holderId;
 
       for (let i = 0; i < dragCounts; i++) {
         dragItems.push(state.data[dragIndex + i]);
       }
 
-      const stateMove = update(state, {
+      const state_MOVE = update(state, {
         data: {
           $splice: [
             [dragIndex, dragCounts],
@@ -54,13 +45,21 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         },
       });
 
-      console.log('NEXT STATE', stateMove);
+      console.log('NEXT STATE', state_MOVE);
 
-      return stateMove;
+      return state_MOVE;
     case 'ADD_ITEM':
 
-      if (!payload.current.drop) {
+      const dragdrop_ADD = dragdropHelper.findDragDrop(payload);
+
+      if (!dragdrop_ADD) {
         return state;
+      }
+
+      let { dropIndex: dropIndex_ADD, dropType } = dragdrop_ADD;
+
+      if (dropType === 'dropstage') {
+        dropIndex_ADD = 1;
       }
 
       const dragItem = {
@@ -71,28 +70,11 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         position: null,
         data: payload.data,
         value: payload.value,
-        parentId: null,
+        parentId: dragdrop_ADD.parentId,
+        holderId: dragdrop_ADD.holderId
       };
 
-      if (payload.current.drop.id === 'dropholder') {
-
-        return update(state, {
-          data: {
-            $splice: [[1, 0, dragItem]],
-            $apply: (data) =>
-              data.filter((item, index) => {
-                item.position = index;
-                return item;
-              }),
-          },
-        });
-      }
-
-      const { parentId: parentId_ADD, dropIndex: dropIndex_ADD } = dragdropHelper.findDragDropIndex(payload);
-
-      dragItem.parentId = parentId_ADD;
-
-      const stateAdd = update(state, {
+      const state_ADD = update(state, {
         data: {
           $splice: [[dropIndex_ADD, 0, dragItem]],
           $apply: (data) =>
@@ -103,15 +85,16 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         },
       });
 
-      console.log('NEXT STATE', stateAdd);
+      console.log('NEXT STATE', state_ADD);
 
-      return stateAdd;
+      return state_ADD;
     case 'DELETE_ITEM':
-      const [counts, ids] = dragdropHelper.totalCount(payload);
 
-      const stateDelete = update(state, {
+      const [count] = dragdropHelper.totalCount(payload);
+
+      const state_DELETE = update(state, {
         data: {
-          $splice: [[payload.position, counts]],
+          $splice: [[payload.position, count]],
           $apply: (data) =>
             data.filter((item, index) => {
               item.position = index;
@@ -120,12 +103,28 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         },
       });
 
-      console.log('NEXT STATE', stateDelete);
+      console.log('NEXT STATE', state_DELETE);
 
-      return stateDelete;
+      return state_DELETE;
+    case 'DUPLICATE_ITEM':
 
-      console.log(ids, counts);
+      // const [] = dragdropHelper.totalCount(payload);
+
+      // const state_DUPLICATE = update(state, {
+      //   data: {
+      //     $splice: [[payload.position, count]],
+      //     $apply: (data) =>
+      //       data.filter((item, index) => {
+      //         item.position = index;
+      //         return item;
+      //       }),
+      //   },
+      // });
+
+      // console.log('NEXT STATE', state_DUPLICATE);
+
       return state;
+
     case 'UPDATE_ITEM':
       return state;
     default:

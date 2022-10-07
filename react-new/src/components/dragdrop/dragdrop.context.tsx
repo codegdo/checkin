@@ -51,6 +51,16 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
     setFocus(null);
   }, [state]);
 
+  const duplicateItem = useCallback((item: any) => {
+
+    dispatch({
+      type: 'DUPLICATE_ITEM',
+      payload: item
+    });
+
+    setFocus(null);
+  }, [state]);
+
 
   const handleCallback = useCallback(() => {
 
@@ -60,7 +70,7 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
     setFocus(id);
   }
 
-  return <DragDropContext.Provider value={{ data, state, current: props.current, focus, setFocus: handleFocus, moveItem, addItem, deleteItem, onCallback: handleCallback }}>
+  return <DragDropContext.Provider value={{ data, state, current: props.current, focus, setFocus: handleFocus, moveItem, addItem, deleteItem, duplicateItem, onCallback: handleCallback }}>
     {children}
   </DragDropContext.Provider>
 }

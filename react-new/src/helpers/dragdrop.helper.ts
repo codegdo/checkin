@@ -1,4 +1,5 @@
 import { DropTargetMonitor } from 'react-dnd';
+import { randomString } from '../utils';
 
 interface BoundingClientRect {
   top: number;
@@ -50,21 +51,28 @@ class DragDropHelper {
     return [ids.length, ids];
   }
 
-  findDragDropIndex(item) {
+  findDragDrop({ current, ...item }) {
+
+    if (!current.drop) {
+      return null;
+    }
+
+    if (!current.drop.offset) {
+      return null;
+    }
+
     let {
-      id: dragId,
+      id: dragId = randomString(),
       role: dragType,
-      position: dragIndex,
-      parentId: dragParentId,
-      current
+      position: dragIndex
     } = item;
 
     let {
       id: dropId,
       role: dropType,
       position: dropIndex,
-      parentId: dropParentId,
-      placeholderId: dropPlaceholderId,
+      parentId,
+      holderId,
       offset,
     } = current.drop;
 
@@ -73,6 +81,20 @@ class DragDropHelper {
 
     // get dropItems count
     const [dropCounts, dropIds] = this.totalCount(current.drop);
+
+    if (dropType == 'dropholder') {
+      dropId = dropId.split('_')[0];
+    }
+
+    // reset parentId to null if drop is dropstage
+    if (offset == 'middle') {
+      parentId = (dropType == 'dropstage' ? null : dropId);
+    }
+
+    // prevent drag block drop over nest children
+    if (dragIds.includes(dropId.toString())) {
+      return null;
+    }
 
     const fromTop = dragIndex < dropIndex && dragIndex !== null;
     const fromBottom = dragIndex > dropIndex && dragIndex !== null;
@@ -85,6 +107,7 @@ class DragDropHelper {
     const fromBottomOverBottom = fromBottom && overBottom && 'fromBottom_overBottom';
     const fromBottomOverTop = fromBottom && overTop && 'fromBottom_overTop';
     const fromBottomOverMiddle = fromBottom && overMiddle && 'fromBottom_overMiddle';
+
     const type = `${dragType}_${dropType}`;
     const text = `${fromTopOverTop ||
       fromTopOverBottom ||
@@ -94,6 +117,7 @@ class DragDropHelper {
       'fromDrag'
       }`;
 
+    // dropIndex
     if (type == 'field_field' || type == 'field_element' || type == 'element_element') {
       if (fromTopOverTop) {
         dropIndex = dropIndex - 1;
@@ -104,9 +128,8 @@ class DragDropHelper {
           dropIndex = dropIndex + 1;
         }
       }
-    } else if (type == 'field_placeholder' || type == 'element_placeholder' || type == 'block_placeholder' || type == 'component_placeholder') {
+    } else if (type == 'field_dropholder' || type == 'element_dropholder' || type == 'block_dropholder' || type == 'component_dropholder') {
       dropIndex = dropIndex + dropCounts;
-      console.log('HELLO COMPONENT', item);
     } else {
       if (fromTopOverTop) {
         dropIndex = dropIndex - dragCounts;
@@ -139,8 +162,10 @@ class DragDropHelper {
       dropCounts,
       dragIds,
       dropIds,
-      parentId: overMiddle ? dropId : dropParentId,
-      placeholderId: dropPlaceholderId
+      dragType,
+      dropType,
+      parentId,
+      holderId
     };
   }
 
@@ -149,6 +174,7 @@ class DragDropHelper {
     ref: React.RefObject<HTMLDivElement>,
     current: any
   ) {
+
     if (!ref.current) return;
 
     // get item
@@ -175,7 +201,7 @@ class DragDropHelper {
     //
     const childNode = target.childNodes[0] as HTMLElement;
 
-    if (dropItem.role === 'placeholder') {
+    if (dropItem.role === 'dropstage' || dropItem.role == 'dropholder') {
       target.classList.add('on-middle');
       dropItem.offset = 'middle';
     } else {
@@ -247,7 +273,7 @@ class DragDropHelper {
     if (data instanceof Array) {
       data.reduce((a, v) => {
         ids.push(v.id.toString());
-        return a + (v.role == 'block' ? this.count(v.data, ids) : 0);
+        return a + ((v.role == 'block' || v.role == 'component') ? this.count(v.data, ids) : 0);
       }, data.length);
     }
 
@@ -256,6 +282,12 @@ class DragDropHelper {
 }
 
 export const dragdropHelper = new DragDropHelper();
+
+
+
+
+
+
 /*
 if (
   dragPosition < dropPosition &&

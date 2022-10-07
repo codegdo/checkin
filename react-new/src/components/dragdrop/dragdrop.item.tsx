@@ -9,7 +9,25 @@ import { Render } from './dragdrop.render';
 
 export const DragDropItem: React.FC<any> = (props): JSX.Element => {
 
-  const { id, type, role, name, className, position, data, value, draggable = true, parentId, placeholderId, focus, current, setFocus, moveItem, deleteItem, children } = props;
+  const {
+    id,
+    type,
+    role,
+    name,
+    className,
+    position,
+    data,
+    value,
+    draggable = true,
+    parentId,
+    holderId,
+    focus,
+    current,
+    setFocus,
+    moveItem,
+    deleteItem,
+    duplicateItem,
+    children } = props;
   const ref = useRef<HTMLDivElement>(null);
 
   const [{ isDragging }, drag, preview] = useDrag(
@@ -42,7 +60,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
 
   const [{ isOver }, drop] = useDrop(
     () => ({
-      accept: ['block', 'placeholder', 'component', 'element', 'field'],
+      accept: ['block', 'component', 'dropstage', 'dropholder', 'element', 'field'],
       drop: () => {
         if (ref.current) {
           ref.current.style.transition = 'none';
@@ -57,14 +75,14 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
           if (
             !ref.current ||
             item.id === id ||
-            id === 'dropstage'
+            (role === 'dropstage' && item.list.length !== 0) // if dropstage has children prevent the drop
           ) {
             current.drop = null;
             return;
           }
 
           if (current.drop == null || current.drop.id !== props.id) {
-            current.drop = { id, type, role, data, position, parentId, placeholderId, x: 0, y: 0, isOver: false };
+            current.drop = { id, type, role, data, position, parentId, holderId, x: 0, y: 0, isOver: false };
           }
 
           dragdropHelper.onHover(monitor, ref, current);
@@ -90,7 +108,15 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
   const handleButtonClick = (event: any) => {
     event.preventDefault();
     event.stopPropagation();
-    deleteItem(props);
+
+    switch (event.target.value) {
+      case 'delete':
+        deleteItem(props);
+        break;
+      case 'duplicate':
+        duplicateItem(props);
+        break;
+    }
   }
 
   const handleMouseOver = (event: any) => {
@@ -113,7 +139,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
   }
 
   const classString = `${className || ''}${role == 'block' ? ' dd-block' : ' dd-field'}${isDragging ? ' dragging' : ''}${isOver ? ' -over' : ''}${(role == 'block' && data?.length == 0) ? ' -empty' : ''}${focus?.id == id ? ' -focus' : ''}`;
-  const title = (role == 'block' || role == 'placeholder' || role == 'component') ? role : type;
+  const title = (role == 'element' || role == 'field') ? type : role;
   const events = !!draggable ? {
     onClick: handleFocusClick,
     onMouseOver: handleMouseOver,
@@ -126,7 +152,8 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
     <div className={classString} id={id} ref={ref} tabIndex={position} data-title={title} {...events}>
       {
         focus?.id == id && <div className={isDragging ? 'dd-toolbar hidden' : 'dd-toolbar'}>
-          <button type="button" onClick={handleButtonClick}>delete</button>
+          <button type="button" value="delete" onClick={handleButtonClick}>delete</button>
+          <button type="button" value="duplicate" onClick={handleButtonClick}>duplicate</button>
         </div>
       }
       <div className={`dd-content`}>
@@ -134,12 +161,11 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
           (() => {
             switch (role) {
               case 'block':
-              case 'placeholder':
+              case 'dropstage':
+              case 'dropholder':
                 return children ? children : <Render data={[...data]} />
               case 'component':
                 const html = DOMPurify.sanitize(value, { ADD_TAGS: ['jsx'] });
-
-                console.log('PLACEHOLDER DATA', data);
 
                 return parse(html, {
                   replace: (domNode): any => {
@@ -149,18 +175,18 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
                       if (attribs.id) {
                         const [name, key] = attribs.id.split('_');
 
-                        const items = data.filter((i: any) => i.placeholderId == key);
+                        const items = data.filter((i: any) => i.holderId == key);
 
-                        if (name == 'placeholder') {
+                        if (name == 'dropholder') {
                           return <DragDropItem
                             id={`${id}_${key}`}
                             type='div'
-                            role='placeholder'
+                            role='dropholder'
                             current={current}
                             position={position}
                             draggable={false}
                             parentId={id}
-                            placeholderId={key}
+                            holderId={key}
                             data={items}
                           />
                         }

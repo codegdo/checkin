@@ -12,7 +12,8 @@ const blocks = [
     data: [],
     value: null,
     position: null,
-    parentId: null
+    parentId: null,
+    holderId: null
   },
   {
     id: null,
@@ -21,11 +22,12 @@ const blocks = [
     type: 'div',
     data: [],
     value: `<div class="row">
-      <div class="column"><jsx id='placeholder_0'></jsx></div>
-      <div class="column"><jsx id='placeholder_1'></jsx></div>
+      <div class="column"><jsx id='dropholder_0'></jsx></div>
+      <div class="column"><jsx id='dropholder_1'></jsx></div>
     </div>`,
     position: null,
-    parentId: null
+    parentId: null,
+    holderId: null
   },
   {
     id: null,
@@ -35,7 +37,8 @@ const blocks = [
     data: null,
     value: null,
     position: null,
-    parentId: null
+    parentId: null,
+    holderId: null
   },
   {
     id: null,
@@ -45,7 +48,8 @@ const blocks = [
     data: null,
     value: null,
     position: null,
-    parentId: null
+    parentId: null,
+    holderId: null
   },
   {
     id: null,
@@ -55,7 +59,8 @@ const blocks = [
     data: null,
     value: null,
     position: null,
-    parentId: null
+    parentId: null,
+    holderId: null
   },
   {
     id: null,
@@ -65,7 +70,8 @@ const blocks = [
     data: null,
     value: null,
     position: null,
-    parentId: null
+    parentId: null,
+    holderId: null
   }
 ]
 

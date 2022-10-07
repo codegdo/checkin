@@ -24,7 +24,7 @@ export function mapToParent(list: Item[], item: Item): void {
       return;
     }
 
-    if (i.role === 'block') {
+    if (i.role === 'block' || i.role === 'component') {
       bool = true;
       mapToParent(i.data, item);
     }
