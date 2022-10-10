@@ -10,7 +10,7 @@ export function mapToParent(list: Item[], item: Item): void {
 
   let bool = false;
 
-  if (item.parentId === null || item.parentId === undefined) {
+  if (item.parentId == null) {
     bool = true;
     list.push({ ...item });
     return;
@@ -20,7 +20,7 @@ export function mapToParent(list: Item[], item: Item): void {
 
     if (i.id === item.parentId) {
       bool = false;
-      i.data.push({ ...item });
+      i.data?.push({ ...item });
       return;
     }
 

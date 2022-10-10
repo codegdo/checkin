@@ -54,44 +54,38 @@
 .dd-content:empty:before {
   content: 'drop...';
   display: block;
+
+  padding: 1rem;
   text-align: center;
   background: #f8f8f8;
-  padding: 1rem;
   color: #ccc;
   border: 1px dashed #f8f8f8;
   transition: all 0.3s ease-out;
 }
 
-#dropstage {
-  border-color: #eee;
-  > .-hover {
-    box-shadow: none;
-  }
-}
-
-#dropstage._over {
-  > .dd-content:empty:before {
-    border-color: #000;
-  }
-}
-
 .-hover {
   //box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.1);
   border-color: rgb(73, 132, 241);
+
+  &:before {
+    content: attr(data-title);
+    font-size: 11px;
+    text-align: center;
+    color: #666;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 }
-.-hover:before {
-  content: attr(data-title);
-  font-size: 11px;
-  text-align: center;
-  color: #666;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
+
 .-focus {
   //box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.3);
   border-color: rgb(73, 132, 241);
   content: 'test';
+}
+
+[data-title='dropholder'] {
+  border: none;
 }
 
 [data-title='dropholder'] > .dd-content {

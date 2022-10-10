@@ -86,9 +86,9 @@ class DragDropHelper {
       dropId = dropId.split('_')[0];
     }
 
-    // reset parentId to null if drop is dropstage
+    // reset parentId to null if drop is dropzone
     if (offset == 'middle') {
-      parentId = (dropType == 'dropstage' ? null : dropId);
+      parentId = (dropType == 'dropzone' ? null : dropId);
     }
 
     // prevent drag block drop over nest children
@@ -201,7 +201,7 @@ class DragDropHelper {
     //
     const childNode = target.childNodes[0] as HTMLElement;
 
-    if (dropItem.role === 'dropstage' || dropItem.role == 'dropholder') {
+    if (dropItem.role === 'dropzone' || dropItem.role == 'dropholder') {
       target.classList.add('on-middle');
       dropItem.offset = 'middle';
     } else {

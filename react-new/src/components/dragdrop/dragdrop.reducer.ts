@@ -56,7 +56,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
 
       let { dropIndex: dropIndex_ADD, dropType } = dragdrop_ADD;
 
-      if (dropType === 'dropstage') {
+      if (dropType === 'dropzone') {
         dropIndex_ADD = 1;
       }
 
@@ -106,26 +106,98 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
     case 'DUPLICATE_ITEM':
       const [duplicateCount] = dragdropHelper.totalCount(payload);
 
-      const duplicateItems = [];
+      let targetId!: string | number | null;
+      let componentId!: string | number | null;
+      let blockId: string | number | null;
+      let newId!: string | number | null;
 
-      for (let i = 0; i < dragCounts; i++) {
-        duplicateItems.push(state.data[payload.position + i]);
+      const duplicateItems: any = [];
+
+      for (let i = 0; i < duplicateCount; i++) {
+
+        const item = state.data[payload.position + i];
+
+        // if(i == 0) {
+        //   //targetId = item.id;
+        //   newId = randomString();
+        //   duplicateItems.push({ ...item, id: newId });
+        // }
+
+        // if (item.role == 'component') {
+        //   componentId = item.id;
+
+        // } else if (item.role == 'block') {
+        //   blockId = item.id;
+
+        // } else {
+        //   duplicateItems.push({ ...item, id: randomString(), parentId: newId });
+        // }
+
+        if (item.parentId == null || item.parentId !== targetId) {
+          targetId = item.id;
+          newId = randomString();
+          duplicateItems.push({ ...item, id: newId });
+        }
+
+
+        // map children
+        if (item.parentId == targetId) {
+          if (item.role == 'component') {
+
+          } else if (item.role == 'block') {
+
+            const id = randomString();
+            duplicateItems.push({ ...item, id: id, parentId: newId });
+            targetId = item.id;
+            newId = id;
+          } else {
+            duplicateItems.push({ ...item, id: randomString(), parentId: newId });
+          }
+
+        }
+
+
       }
 
-      // const state_DUPLICATE = update(state, {
-      //   data: {
-      //     $splice: [[payload.position, count]],
-      //     $apply: (data) =>
-      //       data.filter((item, index) => {
-      //         item.position = index;
-      //         return item;
-      //       }),
-      //   },
+      console.log(duplicateItems);
+
+      // state.data.filter((item) => {
+      //   if (item.position <= payload.position + duplicateCount - 1 && item.position >= payload.position) {
+
+      //     if (item.parentId == null || item.parentId !== oldId) {
+      //       oldId = item.id;
+      //       oldParentId = item.parentId;
+      //       newId = randomString();
+      //     }
+
+      //     //item.id = newId;
+
+      //     // map children
+      //     if (item.parentId == oldId) {
+      //       oldParentId = newId;
+      //       newId = randomString();
+      //     }
+
+      //     duplicateItems.push({ ...item, id: newId, parentId: oldParentId });
+      //   }
       // });
 
-      // console.log('NEXT STATE', state_DUPLICATE);
+      //console.log(duplicateItems);
 
-      return state;
+      const state_DUPLICATE = update(state, {
+        data: {
+          $splice: [[payload.position, 0, ...duplicateItems]],
+          $apply: (data) =>
+            data.filter((item, index) => {
+              item.position = index;
+              return item;
+            }),
+        },
+      });
+
+      console.log('NEXT STATE', state_DUPLICATE);
+
+      return state_DUPLICATE;
 
     case 'UPDATE_ITEM':
       return state;

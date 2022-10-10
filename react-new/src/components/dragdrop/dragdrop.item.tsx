@@ -59,10 +59,11 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
 
   const [{ isOver }, drop] = useDrop(
     () => ({
-      accept: ['block', 'component', 'dropstage', 'dropholder', 'element', 'field'],
+      accept: ['block', 'component', 'dropzone', 'dropholder', 'element', 'field'],
       drop: () => {
         if (ref.current) {
           ref.current.style.transition = 'none';
+          ref.current.removeAttribute('style');
         }
       },
       hover: (item: any, monitor) => {
@@ -73,12 +74,13 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
           if (
             !ref.current ||
             item.id === id ||
-            (role === 'dropstage' && item.list.length !== 0) // if dropstage has children prevent the drop
+            (role === 'dropzone' && item.list.length !== 0) // if dropzone has children prevent the drop
           ) {
             current.drop = null;
             return;
           }
 
+          // undefined == null is true
           if (current.drop == null || current.drop.id !== props.id) {
             current.drop = { id, type, role, data, position, parentId, holderId, x: 0, y: 0, isOver: false };
           }
@@ -119,10 +121,8 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
     event.stopPropagation();
 
     if (ref.current) {
-      if (ref.current.hasAttribute('style')) {
-        ref.current.removeAttribute('style');
-      }
 
+      //ref.current.removeAttribute('style');
       ref.current.classList.add('-hover');
 
       // prevent event bubble up
@@ -142,7 +142,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
     }
   }
 
-  const classString = `${className || ''}${role == 'block' ? ' dd-block' : ' dd-field'}${isDragging ? ' dragging' : ''}${isOver ? ' -over' : ''}${(role == 'block' && data?.length == 0) ? ' -empty' : ''}${focus?.id == id ? ' -focus' : ''}`;
+  const classString = `${className || ''}${(role == 'element' || role == 'field') ? ' dd-field' : ' dd-block'}${isDragging ? ' dragging' : ''}${isOver ? ' -over' : ''}${(data?.length == 0) ? ' -empty' : ''}${focus?.id == id ? ' -focus' : ''}`;
   const title = (role == 'element' || role == 'field') ? type : role;
   const events = !!draggable ? {
     onClick: handleFocusClick,
@@ -165,7 +165,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
           (() => {
             switch (role) {
               case 'block':
-              case 'dropstage':
+              case 'dropzone':
               case 'dropholder':
                 return children ? children : <Render data={[...data]} />
               case 'component':
