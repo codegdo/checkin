@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import parse from 'html-react-parser';
@@ -38,8 +38,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
         if (ref.current) {
           //setFocus && setFocus(null);
           preview(getEmptyImage(), { captureDraggingState: false });
-
-          ref.current.classList.remove('-hover');
+          current.isOver = true;
         }
 
         return !!draggable;
@@ -64,7 +63,6 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
       drop: () => {
         if (ref.current) {
           ref.current.style.transition = 'none';
-          ref.current.classList.remove('-hover');
         }
       },
       hover: (item: any, monitor) => {
@@ -95,14 +93,11 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
       }),
     }), [id, moveItem]);
 
-
   const handleFocusClick = (event: any) => {
-
     event.preventDefault();
     event.stopPropagation();
 
-    !!draggable && (setFocus && setFocus(focus?.id == id ? null : { id, isDragging }));
-
+    !!draggable && setFocus(focus?.id == id ? null : { id, isDragging });
   }
 
   const handleButtonClick = (event: any) => {
@@ -124,10 +119,19 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
     event.stopPropagation();
 
     if (ref.current) {
+      if (ref.current.hasAttribute('style')) {
+        ref.current.removeAttribute('style');
+      }
+
       ref.current.classList.add('-hover');
-      ref.current.removeAttribute('style');
+
+      // prevent event bubble up
+      if (current.isOver) {
+        ref.current.classList.remove('-hover');
+        current.isOver = false;
+      }
     }
-  }
+  };
 
   const handleMouseOut = (event: any) => {
     event.preventDefault();
@@ -175,7 +179,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
                       if (attribs.id) {
                         const [name, key] = attribs.id.split('_');
 
-                        const items = data.filter((i: any) => i.holderId == key);
+                        const items = data.filter((item: any) => item.holderId == key);
 
                         if (name == 'dropholder') {
                           return <DragDropItem

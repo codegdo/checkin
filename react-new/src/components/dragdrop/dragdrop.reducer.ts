@@ -8,7 +8,6 @@ export const initialState = {
 };
 
 export const reducer = (state: DragDropState, { type, payload }: DragDropAction) => {
-
   switch (type) {
     case 'INIT':
       return { ...state, data: [...payload] };
@@ -49,7 +48,6 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
 
       return state_MOVE;
     case 'ADD_ITEM':
-
       const dragdrop_ADD = dragdropHelper.findDragDrop(payload);
 
       if (!dragdrop_ADD) {
@@ -71,7 +69,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         data: payload.data,
         value: payload.value,
         parentId: dragdrop_ADD.parentId,
-        holderId: dragdrop_ADD.holderId
+        holderId: dragdrop_ADD.holderId,
       };
 
       const state_ADD = update(state, {
@@ -89,7 +87,6 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
 
       return state_ADD;
     case 'DELETE_ITEM':
-
       const [count] = dragdropHelper.totalCount(payload);
 
       const state_DELETE = update(state, {
@@ -107,8 +104,13 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
 
       return state_DELETE;
     case 'DUPLICATE_ITEM':
+      const [duplicateCount] = dragdropHelper.totalCount(payload);
 
-      // const [] = dragdropHelper.totalCount(payload);
+      const duplicateItems = [];
+
+      for (let i = 0; i < dragCounts; i++) {
+        duplicateItems.push(state.data[payload.position + i]);
+      }
 
       // const state_DUPLICATE = update(state, {
       //   data: {
