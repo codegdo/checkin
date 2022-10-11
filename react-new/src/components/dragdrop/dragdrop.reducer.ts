@@ -121,31 +121,6 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         });
       }
 
-      console.log(duplicateItems);
-
-      // state.data.filter((item) => {
-      //   if (item.position <= payload.position + duplicateCount - 1 && item.position >= payload.position) {
-
-      //     if (item.parentId == null || item.parentId !== oldId) {
-      //       oldId = item.id;
-      //       oldParentId = item.parentId;
-      //       newId = randomString();
-      //     }
-
-      //     //item.id = newId;
-
-      //     // map children
-      //     if (item.parentId == oldId) {
-      //       oldParentId = newId;
-      //       newId = randomString();
-      //     }
-
-      //     duplicateItems.push({ ...item, id: newId, parentId: oldParentId });
-      //   }
-      // });
-
-      //console.log(duplicateItems);
-
       const state_DUPLICATE = update(state, {
         data: {
           $splice: [[payload.position, 0, ...duplicateItems]],
