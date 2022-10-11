@@ -106,57 +106,19 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
     case 'DUPLICATE_ITEM':
       const [duplicateCount] = dragdropHelper.totalCount(payload);
 
-      let targetId!: string | number | null;
-      let componentId!: string | number | null;
-      let blockId: string | number | null;
-      let newId!: string | number | null;
-
+      let duplicateIds: any = {};
       const duplicateItems: any = [];
 
       for (let i = 0; i < duplicateCount; i++) {
-
         const item = state.data[payload.position + i];
+        const newId = randomString();
+        duplicateIds = { ...duplicateIds, [item.id]: newId };
 
-        // if(i == 0) {
-        //   //targetId = item.id;
-        //   newId = randomString();
-        //   duplicateItems.push({ ...item, id: newId });
-        // }
-
-        // if (item.role == 'component') {
-        //   componentId = item.id;
-
-        // } else if (item.role == 'block') {
-        //   blockId = item.id;
-
-        // } else {
-        //   duplicateItems.push({ ...item, id: randomString(), parentId: newId });
-        // }
-
-        if (item.parentId == null || item.parentId !== targetId) {
-          targetId = item.id;
-          newId = randomString();
-          duplicateItems.push({ ...item, id: newId });
-        }
-
-
-        // map children
-        if (item.parentId == targetId) {
-          if (item.role == 'component') {
-
-          } else if (item.role == 'block') {
-
-            const id = randomString();
-            duplicateItems.push({ ...item, id: id, parentId: newId });
-            targetId = item.id;
-            newId = id;
-          } else {
-            duplicateItems.push({ ...item, id: randomString(), parentId: newId });
-          }
-
-        }
-
-
+        duplicateItems.push({
+          ...item,
+          id: newId,
+          parentId: duplicateIds[item.parentId] || item.parentId,
+        });
       }
 
       console.log(duplicateItems);
