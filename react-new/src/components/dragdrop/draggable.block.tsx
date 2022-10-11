@@ -23,17 +23,6 @@ export const DraggableBlock: React.FC<any> = (props): JSX.Element => {
         console.log('ADD FIELD DROP', item);
 
         if (didDrop) {
-
-          // if (list.length == 0) {
-          //   item.current.drop = {
-          //     id: 'dropzone',
-          //     role: 'dropzone',
-          //     parentId: null,
-          //     holderId: null,
-          //     offset: 'middle'
-          //   }
-          // }
-
           addItem(item);
         }
 

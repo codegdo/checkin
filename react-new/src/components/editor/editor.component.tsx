@@ -1,10 +1,10 @@
-import React, { CSSProperties, useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useDrag, useDragLayer, useDrop, XYCoord } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
 const styles: CSSProperties = { position: 'fixed' };
 
-export const Editor: React.FC = () => {
+export const Editor: FC<any> = ({ focus, onCallback }) => {
 
   const ref = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState({ top: 0, left: 0 });
@@ -21,7 +21,7 @@ export const Editor: React.FC = () => {
     canDrag: () => {
       preview(getEmptyImage(), { captureDraggingState: false });
       return true;
-    },
+    }
   }), []);
 
 
@@ -46,12 +46,22 @@ export const Editor: React.FC = () => {
 
   drag(drop(ref));
 
+  const handleClick = () => {
+    onCallback();
+  }
+
+  const handleChange = useCallback(() => {
+    focus.onChange();
+  }, [focus])
+
   return <div ref={preview} style={{ ...styles, ...offset }} className={(isDragging && dragType !== 'editor') ? 'hidden' : ''}>
     <div ref={ref}>
       header
     </div>
     <div>
       Editor
+      <input onChange={handleChange} />
+      <button type="button" onClick={handleClick}>click</button>
     </div>
   </div>
 }

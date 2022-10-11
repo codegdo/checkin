@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
-import { DraggableBlock } from './draggable.block';
+import React, { FC, useContext } from 'react';
+
 import { DragDropContext } from './dragdrop.context';
 import { DragDropContextProps } from './dragdrop.type';
+import { DraggableItem } from './draggable.item';
 
 const blocks = [
   {
@@ -75,7 +76,7 @@ const blocks = [
   }
 ]
 
-export const Draggable = (): JSX.Element => {
+export const Draggable: FC = (): JSX.Element => {
   const ctx = useContext((DragDropContext as Object) as React.Context<DragDropContextProps>);
 
   if (!ctx) {
@@ -83,10 +84,11 @@ export const Draggable = (): JSX.Element => {
   }
 
   const { state, current, addItem, setFocus } = ctx;
+
   return <div>
     {
       blocks.map((block, i) => {
-        return <DraggableBlock
+        return <DraggableItem
           key={i}
           {...block}
           current={current}

@@ -1,10 +1,9 @@
-import React, { useContext, useEffect } from 'react';
-import { useDrag } from 'react-dnd';
+import React, { FC, useContext, useEffect } from 'react';
 import { Editor } from '../editor/editor.component';
 import { DragDropContext } from './dragdrop.context';
 import { DragDropContextProps } from './dragdrop.type';
 
-export const DragDropEditor: React.FC = () => {
+export const DragDropEditor: FC = () => {
 
   const ctx = useContext((DragDropContext as Object) as React.Context<DragDropContextProps>);
 
@@ -12,17 +11,19 @@ export const DragDropEditor: React.FC = () => {
     throw new Error();
   }
 
-  const { focus, setFocus } = ctx;
-
+  const { focus, setFocus, updateItem } = ctx;
 
   useEffect(() => {
     console.log(focus);
   }, [focus]);
 
+  const handleCallback = () => {
+    updateItem({ id: 3 });
+  }
 
   return focus && <div>
     {
-      focus.isDragging ? null : <Editor />
+      focus.isDragging ? null : <Editor type={''} focus={focus} onCallback={handleCallback} />
     }
   </div>
 }

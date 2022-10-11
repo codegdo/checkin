@@ -1,5 +1,5 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-export const DragDropBlock: React.FC<any> = (props): JSX.Element => {
-  return <></>
+export const DragDropBlock: FC<any> = (props): JSX.Element => {
+  return <>{props.name}</>
 };

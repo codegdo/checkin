@@ -137,7 +137,24 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
       return state_DUPLICATE;
 
     case 'UPDATE_ITEM':
-      return state;
+
+      const state_UPDATE = update(state, {
+        data: {
+          $apply: (data) =>
+            data.map((item, index) => {
+              if (item.id !== payload.id) return item;
+
+              return {
+                ...item,
+                label: 'hello'
+              }
+            }),
+        },
+      });
+
+      console.log('NEXT STATE', state_UPDATE);
+
+      return state_UPDATE;
     default:
       return state;
   }

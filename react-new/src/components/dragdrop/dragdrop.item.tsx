@@ -1,18 +1,20 @@
-import React, { useCallback, useEffect, useRef } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
+import React, { FC, useRef } from 'react';
+import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 
 import { dragdropHelper } from '../../helpers';
 import { Render } from './dragdrop.render';
+import { DragDropField } from './dragdrop.field';
+import { DragDropBlock } from './dragdrop.block';
 
-export const DragDropItem: React.FC<any> = (props): JSX.Element => {
+export const DragDropItem: FC<any> = (props): JSX.Element => {
 
   const {
     id,
-    type,
     role,
+    type,
     name,
     className,
     position,
@@ -21,14 +23,19 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
     draggable = true,
     parentId,
     holderId,
-    focus,
     current,
+    focus,
     setFocus,
     moveItem,
     deleteItem,
     duplicateItem,
     children } = props;
+
   const ref = useRef<HTMLDivElement>(null);
+
+  const { hasAnyDragging } = useDragLayer((monitor) => ({
+    hasAnyDragging: monitor.isDragging(),
+  }));
 
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
@@ -36,9 +43,12 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
       item: { ...props },
       canDrag: () => {
         if (ref.current) {
-          //setFocus && setFocus(null);
           preview(getEmptyImage(), { captureDraggingState: false });
           current.isOver = true;
+        }
+
+        if (focus?.id !== id) {
+          setFocus && setFocus(null);
         }
 
         return !!draggable;
@@ -54,7 +64,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
         }
       }
     }),
-    [id, moveItem]
+    [id, moveItem, focus]
   );
 
   const [{ isOver }, drop] = useDrop(
@@ -82,11 +92,21 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
 
           // undefined == null is true
           if (current.drop == null || current.drop.id !== props.id) {
-            current.drop = { id, type, role, data, position, parentId, holderId, x: 0, y: 0, isOver: false };
+            current.drop = {
+              id,
+              role,
+              type,
+              data,
+              position,
+              parentId,
+              holderId,
+              x: 0,
+              y: 0,
+              isOver: false
+            };
           }
 
           dragdropHelper.onHover(monitor, ref, current);
-
         }
       },
       collect: monitor => ({
@@ -95,11 +115,19 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
       }),
     }), [id, moveItem]);
 
+  const onChange = () => {
+    console.log('change');
+  }
+
   const handleFocusClick = (event: any) => {
     event.preventDefault();
     event.stopPropagation();
 
-    !!draggable && setFocus(focus?.id == id ? null : { id, isDragging });
+    const target = focus?.id == id ? null : {
+      id,
+      onChange
+    };
+    !!draggable && setFocus(target);
   }
 
   const handleButtonClick = (event: any) => {
@@ -122,8 +150,7 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
 
     if (ref.current) {
 
-      //ref.current.removeAttribute('style');
-      ref.current.classList.add('-hover');
+      !hasAnyDragging && ref.current.classList.add('-hover');
 
       // prevent event bubble up
       if (current.isOver) {
@@ -172,7 +199,8 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
                 const html = DOMPurify.sanitize(value, { ADD_TAGS: ['jsx'] });
 
                 return parse(html, {
-                  replace: (domNode): any => {
+                  replace: (domNode): JSX.Element | null => {
+
                     if ('attribs' in domNode) {
                       const { attribs } = domNode;
 
@@ -195,14 +223,15 @@ export const DragDropItem: React.FC<any> = (props): JSX.Element => {
                           />
                         }
                       }
-
+                      return null;
                     }
+                    return null;
                   }
                 })
               case 'element':
-                return <>{name}</>
+                return <DragDropBlock {...props} />
               case 'field':
-                return <>{name}</>
+                return <DragDropField {...props} />
               default: return null;
             }
           })()
