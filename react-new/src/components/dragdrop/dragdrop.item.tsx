@@ -1,13 +1,13 @@
 import React, { FC, useRef } from 'react';
 import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import parse from 'html-react-parser';
-import DOMPurify from 'dompurify';
+
 
 import { dragdropHelper } from '../../helpers';
-import { Render } from './dragdrop.render';
 import { DragDropField } from './dragdrop.field';
 import { DragDropBlock } from './dragdrop.block';
+import { DragDropElement } from './dragdrop.element';
+import { DragDropTemplate } from './dragdrop.template';
 
 export const DragDropItem: FC<any> = (props): JSX.Element => {
 
@@ -15,11 +15,9 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
     id,
     role,
     type,
-    name,
     className,
     position,
     data,
-    value,
     draggable = true,
     parentId,
     holderId,
@@ -28,8 +26,8 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
     setFocus,
     moveItem,
     deleteItem,
-    duplicateItem,
-    children } = props;
+    duplicateItem
+  } = props;
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -194,42 +192,11 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
               case 'block':
               case 'dropzone':
               case 'dropholder':
-                return children ? children : <Render data={[...data]} />
-              case 'component':
-                const html = DOMPurify.sanitize(value, { ADD_TAGS: ['jsx'] });
-
-                return parse(html, {
-                  replace: (domNode): JSX.Element | null => {
-
-                    if ('attribs' in domNode) {
-                      const { attribs } = domNode;
-
-                      if (attribs.id) {
-                        const [name, key] = attribs.id.split('_');
-
-                        const items = data.filter((item: any) => item.holderId == key);
-
-                        if (name == 'dropholder') {
-                          return <DragDropItem
-                            id={`${id}_${key}`}
-                            type='div'
-                            role='dropholder'
-                            current={current}
-                            position={position}
-                            draggable={false}
-                            parentId={id}
-                            holderId={key}
-                            data={items}
-                          />
-                        }
-                      }
-                      return null;
-                    }
-                    return null;
-                  }
-                })
-              case 'element':
                 return <DragDropBlock {...props} />
+              case 'component':
+                return <DragDropTemplate {...props} />
+              case 'element':
+                return <DragDropElement {...props} />
               case 'field':
                 return <DragDropField {...props} />
               default: return null;
