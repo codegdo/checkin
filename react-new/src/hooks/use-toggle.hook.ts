@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-export const useToggle = (el: React.MutableRefObject<null>, initialState: boolean): [boolean, React.Dispatch<React.SetStateAction<boolean>>] => {
+export const useToggle = (initialState: boolean = false): [React.MutableRefObject<null>, boolean, React.Dispatch<React.SetStateAction<boolean>>] => {
+  const ref = useRef(null);
+
   const [isToggle, setIsToggle] = useState(initialState);
 
 
   useEffect(() => {
+
     const pageClickEvent = (e: MouseEvent) => {
       // If the toggle element exists and is clicked outside of
-      if (el.current !== null && !el.current.contains(e.target)) {
+      if (ref.current !== null && !ref.current.contains(e.target)) {
         setIsToggle(!isToggle);
       }
     };
@@ -17,11 +20,13 @@ export const useToggle = (el: React.MutableRefObject<null>, initialState: boolea
       window.addEventListener('click', pageClickEvent);
     }
 
+    console.log('click');
+
     return () => {
       window.removeEventListener('click', pageClickEvent);
     }
 
-  }, [isToggle, el]);
+  }, [isToggle, ref]);
 
-  return [isToggle, setIsToggle];
+  return [ref, isToggle, setIsToggle];
 }

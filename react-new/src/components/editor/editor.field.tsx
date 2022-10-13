@@ -1,7 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
 
-export const EditorField: FC<any> = ({ field, onChange }): JSX.Element => {
-  const [values, setValues] = useState(field);
+export const EditorField: FC<any> = ({ values: initialValues, fields, onChange }): JSX.Element => {
+  const [values, setValues] = useState({});
+
+  useEffect(() => {
+    setValues({ ...initialValues })
+  }, [initialValues]);
 
   useEffect(() => {
     onChange(values);
@@ -16,11 +20,21 @@ export const EditorField: FC<any> = ({ field, onChange }): JSX.Element => {
 
   return <div>
 
-    {Object.keys(values).map((item, i) => (
-      <div key={i}>
-        <label>{item}</label>
-        <input name={item} value={values[item]} onChange={handleChange} />
-      </div>
-    ))}
+    {Object.keys(values).map((key, i) => {
+      switch (fields[key].type) {
+        case 'text':
+          return <div key={i}>
+            <label>{key}</label>
+            <input name={key} value={values[key]} onChange={handleChange} />
+          </div>;
+        case 'textarea':
+          return <div key={i}>
+            <label>{key}</label>
+            <textarea name={key} onChange={handleChange}>{values[key]}</textarea>
+          </div>
+        default:
+          return <></>
+      }
+    })}
   </div>
 }

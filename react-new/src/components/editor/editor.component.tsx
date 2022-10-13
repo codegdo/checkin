@@ -1,6 +1,7 @@
 import React, { CSSProperties, FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useDrag, useDragLayer, useDrop, XYCoord } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+
 import { EditorElement } from './edit.element';
 import { EditorBlock } from './editor.block';
 import { EditorField } from './editor.field';
@@ -49,37 +50,28 @@ export const Editor: FC<any> = ({ item, onCallback }) => {
 
   drag(drop(ref));
 
-  const handleClick = () => {
-    onCallback();
-  }
+  const render = useCallback(() => {
+    console.log('EDIT', item);
+    switch (item.role) {
+      case 'block':
+        return <EditorBlock />
+      case 'element':
+        return <EditorElement />
+      case 'field':
+        return <EditorField {...item} />
+      default: return null;
+    }
 
-  const [label, setLabel] = useState('');
 
-  useEffect(() => {
-    //setLabel(focus.field.label);
   }, [item]);
 
-  const handleChange = useCallback((event: any) => {
-    //setLabel(event.target.value);
-    //focus.onChange(event.target.value);
-  }, [item])
 
-  return <div ref={preview} className={(isDragging && dragType !== 'editor') ? 'hidden' : ''} style={{ ...styles, ...offset }}>
+  return <div ref={preview} className={(isDragging && dragType !== 'editor') ? 'editor hidden' : 'editor'} style={{ ...styles, ...offset }}>
     <div ref={ref}>
       header
     </div>
     {
-      (() => {
-        switch (item.role) {
-          case 'block':
-            return <EditorBlock />
-          case 'element':
-            return <EditorElement />
-          case 'field':
-            return <EditorField {...item} />
-          default: return null;
-        }
-      })()
+      render()
     }
 
   </div>

@@ -1,14 +1,25 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-export const DragDropField: React.FC<any> = ({ id, role, label, item, setItem, ...props }): JSX.Element => {
-  const [field, setField] = useState({ label });
+export const DragDropField: React.FC<any> = ({ id, role, label, description, item, setItem, ...props }): JSX.Element => {
+
+  const [values, setValues] = useState({ label, description });
+
+  const pageClickEvent = (e) => {
+    setItem(null);
+    console.log('CLICK');
+  };
 
   useEffect(() => {
-    //setField({ ...field, label });
-  }, [id]);
+    if (item) {
+      window.addEventListener('click', pageClickEvent);
+    }
+    return () => {
+      window.removeEventListener('click', pageClickEvent);
+    }
+  }, [item]);
 
-  const onChange = (values) => {
-    setField({ ...field, ...values })
+  const onChange = (newValues: { [key: string]: string }) => {
+    setValues({ ...values, ...newValues })
   }
 
   const handleClick = (event: any) => {
@@ -18,7 +29,15 @@ export const DragDropField: React.FC<any> = ({ id, role, label, item, setItem, .
     const target = item?.id == id ? null : {
       id,
       role,
-      field,
+      values,
+      fields: {
+        label: {
+          type: 'text'
+        },
+        description: {
+          type: 'textarea'
+        }
+      },
       onChange
     };
 
@@ -26,7 +45,7 @@ export const DragDropField: React.FC<any> = ({ id, role, label, item, setItem, .
   };
 
   return <div className={`dd-content`} onClick={handleClick}>
-    <label>{field.label}</label>
+    <label>{values.label}</label>
     <input />
   </div>
 };

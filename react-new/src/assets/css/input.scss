@@ -11,7 +11,7 @@ input {
   height: $input-height;
   padding: $input-padding;
   color: $base-font-color;
-  background-color: gray;
+  background-color: #efefef;
 
   @include transition();
 }
