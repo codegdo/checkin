@@ -62,7 +62,7 @@ class DragDropHelper {
     }
 
     let {
-      id: dragId = randomString(),
+      id: dragId,
       role: dragType,
       position: dragIndex
     } = item;
@@ -128,7 +128,7 @@ class DragDropHelper {
           dropIndex = dropIndex + 1;
         }
       }
-    } else if (type == 'field_dropholder' || type == 'element_dropholder' || type == 'block_dropholder' || type == 'component_dropholder') {
+    } else if (type == 'field_dropholder' || type == 'element_dropholder' || type == 'block_dropholder') {
       dropIndex = dropIndex + dropCounts;
     } else {
       if (fromTopOverTop) {
@@ -273,7 +273,7 @@ class DragDropHelper {
     if (data instanceof Array) {
       data.reduce((a, v) => {
         ids.push(v.id.toString());
-        return a + ((v.role == 'block' || v.role == 'component') ? this.count(v.data, ids) : 0);
+        return a + ((v.role == 'block') ? this.count(v.data, ids) : 0);
       }, data.length);
     }
 

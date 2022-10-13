@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useEffect, useReducer, useRef, useState } from 'react';
+import React, { PropsWithChildren, useCallback, useEffect, useReducer, useState } from 'react';
 
 import { initialState, reducer } from './dragdrop.reducer';
 import { DragDropContextProps, DragDropProps } from './dragdrop.type';
@@ -7,7 +7,7 @@ export const DragDropContext = React.createContext<DragDropContextProps | null>(
 
 export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ children, data, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [focus, setFocus] = useState(null);
+  const [item, setItem] = useState(null);
 
   useEffect(() => {
     const payload = [...data.data, ...data.fields].sort((a, b) => {
@@ -22,6 +22,10 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
       payload
     });
   }, []);
+
+  useEffect(() => {
+    console.log('NEW STATE', state);
+  }, [state]);
 
 
   const moveItem = useCallback((item: any) => {
@@ -39,6 +43,7 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
       type: 'ADD_ITEM',
       payload: item
     });
+
   }, [state]);
 
   const deleteItem = useCallback((item: any) => {
@@ -48,7 +53,7 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
       payload: item
     });
 
-    setFocus(null);
+    setItem(null);
   }, [state]);
 
   const duplicateItem = useCallback((item: any) => {
@@ -58,7 +63,7 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
       payload: item
     });
 
-    setFocus(null);
+    setItem(null);
   }, [state]);
 
   const updateItem = useCallback((item: any) => {
@@ -68,7 +73,7 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
       payload: item
     });
 
-    setFocus(null);
+    setItem(null);
   }, [state]);
 
 
@@ -76,11 +81,7 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
 
   }, []);
 
-  const handleFocus = (id: any) => {
-    setFocus(id);
-  }
-
-  return <DragDropContext.Provider value={{ data, state, current: props.current, focus, setFocus: handleFocus, moveItem, addItem, deleteItem, duplicateItem, updateItem, onCallback: handleCallback }}>
+  return <DragDropContext.Provider value={{ data, state, current: props.current, item, setItem, moveItem, addItem, deleteItem, duplicateItem, updateItem, onCallback: handleCallback }}>
     {children}
   </DragDropContext.Provider>
 }

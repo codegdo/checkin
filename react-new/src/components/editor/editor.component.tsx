@@ -1,10 +1,13 @@
 import React, { CSSProperties, FC, useCallback, useEffect, useRef, useState } from 'react';
 import { useDrag, useDragLayer, useDrop, XYCoord } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import { EditorElement } from './edit.element';
+import { EditorBlock } from './editor.block';
+import { EditorField } from './editor.field';
 
 const styles: CSSProperties = { position: 'fixed' };
 
-export const Editor: FC<any> = ({ focus, onCallback }) => {
+export const Editor: FC<any> = ({ item, onCallback }) => {
 
   const ref = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState({ top: 0, left: 0 });
@@ -50,18 +53,34 @@ export const Editor: FC<any> = ({ focus, onCallback }) => {
     onCallback();
   }
 
-  const handleChange = useCallback(() => {
-    focus.onChange();
-  }, [focus])
+  const [label, setLabel] = useState('');
 
-  return <div ref={preview} style={{ ...styles, ...offset }} className={(isDragging && dragType !== 'editor') ? 'hidden' : ''}>
+  useEffect(() => {
+    //setLabel(focus.field.label);
+  }, [item]);
+
+  const handleChange = useCallback((event: any) => {
+    //setLabel(event.target.value);
+    //focus.onChange(event.target.value);
+  }, [item])
+
+  return <div ref={preview} className={(isDragging && dragType !== 'editor') ? 'hidden' : ''} style={{ ...styles, ...offset }}>
     <div ref={ref}>
       header
     </div>
-    <div>
-      Editor
-      <input onChange={handleChange} />
-      <button type="button" onClick={handleClick}>click</button>
-    </div>
+    {
+      (() => {
+        switch (item.role) {
+          case 'block':
+            return <EditorBlock />
+          case 'element':
+            return <EditorElement />
+          case 'field':
+            return <EditorField />
+          default: return null;
+        }
+      })()
+    }
+
   </div>
 }

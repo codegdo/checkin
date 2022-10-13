@@ -2,37 +2,34 @@ import React, { FC, useRef } from 'react';
 import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
-
 import { dragdropHelper } from '../../helpers';
 import { DragDropField } from './dragdrop.field';
 import { DragDropBlock } from './dragdrop.block';
 import { DragDropElement } from './dragdrop.element';
-import { DragDropTemplate } from './dragdrop.template';
+import { DragDropToolbar } from './dragdrop.toolbar';
 
 export const DragDropItem: FC<any> = (props): JSX.Element => {
 
   const {
     id,
+    name,
     role,
     type,
-    className,
     position,
     data,
-    draggable = true,
     parentId,
     holderId,
     current,
-    focus,
-    setFocus,
-    moveItem,
-    deleteItem,
-    duplicateItem
+    draggable = true,
+    item: targetItem,
+    setItem,
+    moveItem
   } = props;
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const { hasAnyDragging } = useDragLayer((monitor) => ({
-    hasAnyDragging: monitor.isDragging(),
+  const { currentDragging } = useDragLayer((monitor) => ({
+    currentDragging: monitor.isDragging(),
   }));
 
   const [{ isDragging }, drag, preview] = useDrag(
@@ -45,8 +42,8 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
           current.isOver = true;
         }
 
-        if (focus?.id !== id) {
-          setFocus && setFocus(null);
+        if (targetItem?.id !== id) {
+          setItem && setItem(null);
         }
 
         return !!draggable;
@@ -62,12 +59,12 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
         }
       }
     }),
-    [id, moveItem, focus]
+    [id, moveItem, targetItem]
   );
 
   const [{ isOver }, drop] = useDrop(
     () => ({
-      accept: ['block', 'component', 'dropzone', 'dropholder', 'element', 'field'],
+      accept: ['dropzone', 'dropholder', 'block', 'element', 'field'],
       drop: () => {
         if (ref.current) {
           ref.current.style.transition = 'none';
@@ -113,42 +110,13 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
       }),
     }), [id, moveItem]);
 
-  const onChange = () => {
-    console.log('change');
-  }
-
-  const handleFocusClick = (event: any) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    const target = focus?.id == id ? null : {
-      id,
-      onChange
-    };
-    !!draggable && setFocus(target);
-  }
-
-  const handleButtonClick = (event: any) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    switch (event.target.value) {
-      case 'delete':
-        deleteItem(props);
-        break;
-      case 'duplicate':
-        duplicateItem(props);
-        break;
-    }
-  }
-
   const handleMouseOver = (event: any) => {
     event.preventDefault();
     event.stopPropagation();
 
     if (ref.current) {
 
-      !hasAnyDragging && ref.current.classList.add('-hover');
+      !currentDragging && ref.current.classList.add('-hover');
 
       // prevent event bubble up
       if (current.isOver) {
@@ -167,10 +135,9 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
     }
   }
 
-  const classString = `${className || ''}${(role == 'element' || role == 'field') ? ' dd-field' : ' dd-block'}${isDragging ? ' dragging' : ''}${isOver ? ' -over' : ''}${(data?.length == 0) ? ' -empty' : ''}${focus?.id == id ? ' -focus' : ''}`;
-  const title = (role == 'element' || role == 'field') ? type : role;
+  const classString = `dd-${role}${isDragging ? ' dragging' : ''}${isOver ? ' -over' : ''}${(data?.length == 0) ? ' -empty' : ''}${targetItem?.id == id ? ' -focus' : ''}`;
+  const title = (role == 'block') ? name : role;
   const events = !!draggable ? {
-    onClick: handleFocusClick,
     onMouseOver: handleMouseOver,
     onMouseOut: handleMouseOut
   } : {};
@@ -180,30 +147,23 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
   return (
     <div className={classString} id={id} ref={ref} tabIndex={position} data-title={title} {...events}>
       {
-        focus?.id == id && <div className={isDragging ? 'dd-toolbar hidden' : 'dd-toolbar'}>
-          <button type="button" value="delete" onClick={handleButtonClick}>delete</button>
-          <button type="button" value="duplicate" onClick={handleButtonClick}>duplicate</button>
-        </div>
+        targetItem?.id == id && <DragDropToolbar {...props} />
       }
-      <div className={`dd-content`}>
-        {
-          (() => {
-            switch (role) {
-              case 'block':
-              case 'dropzone':
-              case 'dropholder':
-                return <DragDropBlock {...props} />
-              case 'component':
-                return <DragDropTemplate {...props} />
-              case 'element':
-                return <DragDropElement {...props} />
-              case 'field':
-                return <DragDropField {...props} />
-              default: return null;
-            }
-          })()
-        }
-      </div>
+      {
+        (() => {
+          switch (role) {
+            case 'block':
+            case 'dropzone':
+            case 'dropholder':
+              return <DragDropBlock {...props} />
+            case 'element':
+              return <DragDropElement {...props} />
+            case 'field':
+              return <DragDropField {...props} />
+            default: return null;
+          }
+        })()
+      }
     </div>
   );
 };

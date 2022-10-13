@@ -3,8 +3,8 @@ import { useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
 export const DraggableBlock: React.FC<any> = (props): JSX.Element => {
-  const { role, name, current, list, addItem, setFocus } = props;
-  const [{ opacity, isDragging }, drag, preview] = useDrag(
+  const { role, name, list, addItem, setFocus } = props;
+  const [{ opacity }, drag, preview] = useDrag(
     () => ({
       type: role,
       item: { ...props },

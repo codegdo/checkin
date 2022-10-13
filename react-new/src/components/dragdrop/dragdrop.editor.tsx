@@ -11,19 +11,21 @@ export const DragDropEditor: FC = () => {
     throw new Error();
   }
 
-  const { focus, setFocus, updateItem } = ctx;
+  const { item, updateItem } = ctx;
 
   useEffect(() => {
-    console.log(focus);
-  }, [focus]);
+    console.log(item);
+  }, [item]);
 
   const handleCallback = () => {
     updateItem({ id: 3 });
   }
 
-  return focus && <div>
+  console.log('EDIT', item);
+
+  return item && <>
     {
-      focus.isDragging ? null : <Editor type={''} focus={focus} onCallback={handleCallback} />
+      item.isDragging ? null : <Editor type={''} item={item} onCallback={handleCallback} />
     }
-  </div>
+  </>
 }

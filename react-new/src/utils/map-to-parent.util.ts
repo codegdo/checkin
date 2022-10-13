@@ -1,6 +1,6 @@
 type Item = {
   id: string;
-  role: 'block' | 'component';
+  role: 'block';
   data: Item[];
   position: number;
   parentId: number | string;
@@ -24,7 +24,7 @@ export function mapToParent(list: Item[], item: Item): void {
       return;
     }
 
-    if (i.role === 'block' || i.role === 'component') {
+    if (i.role === 'block') {
       bool = true;
       mapToParent(i.data, item);
     }

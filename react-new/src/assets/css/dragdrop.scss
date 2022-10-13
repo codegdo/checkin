@@ -1,4 +1,7 @@
+.dd-dropzone,
+.dd-dropholder,
 .dd-block,
+.dd-element,
 .dd-field {
   border: 1px dashed #eee;
   transition: all 0.5s ease-out;
@@ -89,5 +92,5 @@
 }
 
 #f-main > .dd-content {
-  display: flex;
+  //display: flex;
 }

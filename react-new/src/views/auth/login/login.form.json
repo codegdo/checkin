@@ -6,40 +6,49 @@
   "data": [
     {
       "id": "f-header",
-      "name": "header",
+      "name": "block",
+      "label": "Block",
+      "description": null,
       "type": "header",
       "role": "block",
       "data": [],
+      "value": null,
       "position": 0,
       "parentId": null,
       "holderId": null
     },
     {
       "id": "f-main",
-      "name": "main",
+      "name": "block",
+      "label": "Block",
+      "description": null,
       "type": "main",
       "role": "block",
       "data": [],
+      "value": null,
       "position": 3,
       "parentId": null,
       "holderId": null
     },
     {
       "id": "f-footer",
-      "name": "footer",
+      "name": "block",
+      "label": "Block",
+      "description": null,
       "type": "footer",
       "role": "block",
       "data": [],
+      "value": null,
       "position": 6,
       "parentId": null,
       "holderId": null
     },
     {
       "id": "f-title",
-      "name": "login",
-      "title": "Login",
+      "name": "title",
+      "label": "Login",
       "description": null,
-      "type": "title",
+      "type": "h1",
       "role": "element",
       "data": [],
       "value": null,
@@ -51,6 +60,7 @@
       "id": "f-submit",
       "name": "submit",
       "label": "Login",
+      "description": null,
       "type": "button",
       "role": "element",
       "data": [],
@@ -83,12 +93,12 @@
       "role": "field",
       "data": null,
       "value": "",
-      "isRequired": true,
       "position": 4,
       "parentId": "f-main",
       "holderId": null,
       "map": "sec.user.username",
-      "lookup": null
+      "lookup": null,
+      "isRequired": true
     },
     {
       "id": 4,
@@ -99,12 +109,12 @@
       "role": "field",
       "data": null,
       "value": "",
-      "isRequired": true,
       "position": 5,
       "parentId": "f-main",
       "holderId": null,
       "map": "sec.user.password",
-      "lookup": null
+      "lookup": null,
+      "isRequired": true
     }
   ]
 }

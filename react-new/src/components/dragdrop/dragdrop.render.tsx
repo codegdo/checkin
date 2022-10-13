@@ -22,18 +22,18 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
 
   //const [ref] = useAutoAnimate<HTMLDivElement>({ duration: 120 });
 
-  const { state, current, focus, setFocus, moveItem, deleteItem, duplicateItem } = ctx;
+  const { state, current, item: currentItem, setItem, moveItem, deleteItem, duplicateItem } = ctx;
   const list: any[] = data === undefined ? formHelper.mapField(state.data) : data || [];
 
   return <>
     {
-      list.map((item, i, list) => {
+      list.map((item, index) => {
         return <DragDropItem
-          key={i}
+          key={index}
           current={current}
-          focus={focus}
           list={state.data}
-          setFocus={setFocus}
+          item={currentItem}
+          setItem={setItem}
           moveItem={moveItem}
           deleteItem={deleteItem}
           duplicateItem={duplicateItem}

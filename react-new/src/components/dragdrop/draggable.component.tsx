@@ -8,6 +8,8 @@ const blocks = [
   {
     id: null,
     name: 'block',
+    label: "Block",
+    description: null,
     role: 'block',
     type: 'div',
     data: [],
@@ -19,13 +21,18 @@ const blocks = [
   {
     id: null,
     name: 'component',
-    role: 'component',
+    label: "Component",
+    description: null,
+    role: 'block',
     type: 'div',
     data: [],
-    value: `<div class="row">
-      <div class="column"><jsx id='dropholder_0'></jsx></div>
-      <div class="column"><jsx id='dropholder_1'></jsx></div>
-    </div>`,
+    value: {
+      data: [],
+      value: `<div class="row">
+        <div class="column"><jsx id='dropholder_0'></jsx></div>
+        <div class="column"><jsx id='dropholder_1'></jsx></div>
+      </div>`
+    },
     position: null,
     parentId: null,
     holderId: null
@@ -33,6 +40,8 @@ const blocks = [
   {
     id: null,
     name: 'link',
+    label: "Link",
+    description: null,
     role: 'element',
     type: 'link',
     data: null,
@@ -44,6 +53,8 @@ const blocks = [
   {
     id: null,
     name: 'button',
+    label: "Button",
+    description: null,
     role: 'element',
     type: 'button',
     data: null,
@@ -55,6 +66,8 @@ const blocks = [
   {
     id: null,
     name: 'html',
+    label: "Html",
+    description: null,
     role: 'element',
     type: 'html',
     data: null,
@@ -66,6 +79,8 @@ const blocks = [
   {
     id: null,
     name: 'text',
+    label: "Text",
+    description: null,
     role: 'element',
     type: 'text',
     data: null,
@@ -83,7 +98,7 @@ export const Draggable: FC = (): JSX.Element => {
     throw new Error();
   }
 
-  const { state, current, addItem, setFocus } = ctx;
+  const { state, current, addItem, setItem } = ctx;
 
   return <div>
     {
@@ -93,7 +108,7 @@ export const Draggable: FC = (): JSX.Element => {
           {...block}
           current={current}
           list={state.data}
-          setFocus={setFocus}
+          setItem={setItem}
           addItem={addItem}
         />
       })
