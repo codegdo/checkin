@@ -76,7 +76,7 @@ export const Editor: FC<any> = ({ item, onCallback }) => {
           case 'element':
             return <EditorElement />
           case 'field':
-            return <EditorField />
+            return <EditorField {...item} />
           default: return null;
         }
       })()

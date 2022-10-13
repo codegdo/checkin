@@ -7,8 +7,8 @@ export const DragDropField: React.FC<any> = ({ id, role, label, item, setItem, .
     //setField({ ...field, label });
   }, [id]);
 
-  const onChange = (value) => {
-    //setField({ ...field, label: value })
+  const onChange = (values) => {
+    setField({ ...field, ...values })
   }
 
   const handleClick = (event: any) => {
@@ -25,5 +25,8 @@ export const DragDropField: React.FC<any> = ({ id, role, label, item, setItem, .
     setItem(target);
   };
 
-  return <div className={`dd-content`} onClick={handleClick}>{label}</div>
+  return <div className={`dd-content`} onClick={handleClick}>
+    <label>{field.label}</label>
+    <input />
+  </div>
 };
