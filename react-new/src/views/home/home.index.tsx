@@ -13,7 +13,6 @@ const Index: React.FC = (): JSX.Element => {
     })();
   }, []);
 
-
   useEffect(() => {
     console.log(form);
   }, [form]);

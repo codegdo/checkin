@@ -24,53 +24,58 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
   }, []);
 
   useEffect(() => {
+
+    if (item && state.data.length > item.length) {
+      const newId = state.data[item.position + 1].id;
+      setItem({ ...item, id: newId });
+    }
+
     console.log('NEW STATE', state);
   }, [state]);
 
 
-  const moveItem = useCallback((item: any) => {
+  const moveItem = useCallback((payload: any) => {
 
     dispatch({
       type: 'MOVE_ITEM',
-      payload: item
+      payload
     });
 
   }, [state]);
 
-  const addItem = useCallback((item: any) => {
+  const addItem = useCallback((payload: any) => {
 
     dispatch({
       type: 'ADD_ITEM',
-      payload: item
+      payload
     });
 
   }, [state]);
 
-  const deleteItem = useCallback((item: any) => {
+  const deleteItem = useCallback((payload: any) => {
 
     dispatch({
       type: 'DELETE_ITEM',
-      payload: item
+      payload
     });
 
     setItem(null);
   }, [state]);
 
-  const duplicateItem = useCallback((item: any) => {
+  const duplicateItem = useCallback((payload: any) => {
 
     dispatch({
       type: 'DUPLICATE_ITEM',
-      payload: item
+      payload
     });
 
-    setItem(null);
-  }, [state]);
+  }, [state, item]);
 
-  const updateItem = useCallback((item: any) => {
+  const updateItem = useCallback((payload: any) => {
 
     dispatch({
       type: 'UPDATE_ITEM',
-      payload: item
+      payload
     });
 
     setItem(null);

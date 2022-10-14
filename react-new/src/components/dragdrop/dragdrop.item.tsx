@@ -1,4 +1,4 @@
-import React, { FC, useRef } from 'react';
+import React, { FC, useCallback, useRef } from 'react';
 import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
@@ -144,25 +144,27 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
 
   drag(drop(ref));
 
+  const render = () => {
+    switch (role) {
+      case 'block':
+      case 'dropzone':
+      case 'dropholder':
+        return <DragDropBlock {...props} />
+      case 'element':
+        return <DragDropElement {...props} />
+      case 'field':
+        return <DragDropField {...props} />
+      default: return null;
+    }
+  };
+
   return (
     <div className={classString} id={id} ref={ref} tabIndex={position} data-title={title} {...events}>
       {
         targetItem?.id == id && <DragDropToolbar {...props} />
       }
       {
-        (() => {
-          switch (role) {
-            case 'block':
-            case 'dropzone':
-            case 'dropholder':
-              return <DragDropBlock {...props} />
-            case 'element':
-              return <DragDropElement {...props} />
-            case 'field':
-              return <DragDropField {...props} />
-            default: return null;
-          }
-        })()
+        render()
       }
     </div>
   );

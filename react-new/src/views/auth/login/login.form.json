@@ -115,6 +115,22 @@
       "map": "sec.user.password",
       "lookup": null,
       "isRequired": true
+    },
+    {
+      "id": 5,
+      "name": "email",
+      "label": "Email",
+      "description": null,
+      "type": "text",
+      "role": "field",
+      "data": null,
+      "value": "",
+      "position": 6,
+      "parentId": "f-main",
+      "holderId": null,
+      "map": "sec.user.emailAddress",
+      "lookup": null,
+      "isRequired": true
     }
   ]
 }

@@ -110,9 +110,11 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         });
       }
 
+      const lastIndex = duplicateItems[duplicateItems.length - 1].position + 1;
+
       return update(state, {
         data: {
-          $splice: [[payload.position, 0, ...duplicateItems]],
+          $splice: [[lastIndex, 0, ...duplicateItems]],
           $apply: (data) =>
             data.filter((item, index) => {
               item.position = index;
