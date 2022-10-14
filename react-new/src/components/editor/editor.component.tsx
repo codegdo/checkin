@@ -8,7 +8,7 @@ import { EditorField } from './editor.field';
 
 const styles: CSSProperties = { position: 'fixed' };
 
-export const Editor: FC<any> = ({ item, onCallback }) => {
+export const Editor: FC<any> = ({ item, setItem, onCallback }) => {
 
   const ref = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState({ top: 0, left: 0 });
@@ -51,7 +51,6 @@ export const Editor: FC<any> = ({ item, onCallback }) => {
   drag(drop(ref));
 
   const render = useCallback(() => {
-    console.log('EDIT', item);
     switch (item.role) {
       case 'block':
         return <EditorBlock />
@@ -65,7 +64,6 @@ export const Editor: FC<any> = ({ item, onCallback }) => {
 
   }, [item]);
 
-
   return <div ref={preview} className={(isDragging && dragType !== 'editor') ? 'editor hidden' : 'editor'} style={{ ...styles, ...offset }}>
     <div ref={ref}>
       header
@@ -73,6 +71,5 @@ export const Editor: FC<any> = ({ item, onCallback }) => {
     {
       render()
     }
-
   </div>
 }

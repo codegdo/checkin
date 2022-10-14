@@ -12,6 +12,17 @@
   align-items: stretch;
   justify-content: space-evenly;
 }
+/*
+.dd-block:hover,
+.dd-element:hover,
+.dd-field:hover {
+  border-color: rgb(73, 132, 241);
+}
+
+.dd-block:has(.dd-block:hover, .dd-element:hover, .dd-field:hover) {
+  border-color: #eee;
+}
+*/
 
 .dragging {
   opacity: 0.1;

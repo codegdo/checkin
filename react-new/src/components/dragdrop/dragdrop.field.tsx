@@ -4,20 +4,6 @@ export const DragDropField: React.FC<any> = ({ id, role, label, description, ite
 
   const [values, setValues] = useState({ label, description });
 
-  const pageClickEvent = (e) => {
-    setItem(null);
-    console.log('CLICK');
-  };
-
-  useEffect(() => {
-    if (item) {
-      window.addEventListener('click', pageClickEvent);
-    }
-    return () => {
-      window.removeEventListener('click', pageClickEvent);
-    }
-  }, [item]);
-
   const onChange = (newValues: { [key: string]: string }) => {
     setValues({ ...values, ...newValues })
   }
