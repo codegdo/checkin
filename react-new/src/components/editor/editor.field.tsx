@@ -18,7 +18,7 @@ export const EditorField: FC<any> = ({ values: initialValues, fields, onChange }
     setValues({ ...values, [key]: value })
   }
 
-  return <div>
+  return <>
 
     {Object.keys(values).map((key, i) => {
       switch (fields[key].type) {
@@ -36,5 +36,5 @@ export const EditorField: FC<any> = ({ values: initialValues, fields, onChange }
           return <></>
       }
     })}
-  </div>
+  </>
 }

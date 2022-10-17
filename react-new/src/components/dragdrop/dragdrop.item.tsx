@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useRef } from 'react';
+import React, { FC, useRef } from 'react';
 import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
@@ -86,7 +86,7 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
           }
 
           // undefined == null is true
-          if (current.drop == null || current.drop.id !== props.id) {
+          if (current.drop == null || current.drop.id !== id) {
             current.drop = {
               id,
               role,

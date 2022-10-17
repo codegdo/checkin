@@ -14,6 +14,8 @@ export const DragDropEditor: FC = () => {
 
   const { item, setItem, updateItem } = ctx;
 
+  const { name, onChange, onClick, data } = item || {};
+
   const ref = useRef(null);
 
   const outsideClickEvent = (e: MouseEvent) => {
@@ -33,13 +35,13 @@ export const DragDropEditor: FC = () => {
     }
   }, [item, ref]);
 
-  const handleCallback = () => {
+  const handleClick = () => {
     updateItem({ id: 3 });
   }
 
   return item && <div ref={ref}>
     {
-      item.isDragging ? null : <Editor type={''} item={item} onCallback={handleCallback} />
+      item.isDragging ? null : <Editor name={name} data={data} onChange={onChange} onClick={onClick} />
     }
   </div>
 }
