@@ -91,7 +91,6 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
             }),
         },
       });
-
     case 'DUPLICATE_ITEM':
       const [duplicateCount] = dragdropHelper.totalCount(payload);
 
@@ -122,8 +121,8 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
             }),
         },
       });
-
     case 'UPDATE_ITEM':
+      console.log('UPDATE ITEM', payload);
       return update(state, {
         data: {
           $apply: (data) =>
@@ -132,7 +131,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
 
               return {
                 ...item,
-                label: 'hello'
+                ...payload
               }
             }),
         },

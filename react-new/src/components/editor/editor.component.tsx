@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { CSSProperties, FC, useEffect, useRef, useState } from 'react';
 import { useDrag, useDragLayer, useDrop, XYCoord } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
@@ -54,8 +54,6 @@ export const Editor: FC<any> = ({ name, data, onChange, onClick }) => {
 
   drag(drop(ref));
 
-  console.log(data);
-
   return <div ref={preview} className={(isDragging && dragType !== 'editor') ? 'editor hidden' : 'editor'} style={{ ...style, ...offset }}>
     <header className='editor-header' ref={ref}>
       {name}
@@ -69,7 +67,7 @@ export const Editor: FC<any> = ({ name, data, onChange, onClick }) => {
       {Object.keys(data).map((key, i) => {
         switch (key) {
           case 'content':
-            return (tab == key) && <EditorContent key={key} data={data[key]} />;
+            return (tab == key) && <EditorContent key={key} data={data[key]} onChange={onChange} />;
           case 'style':
             return (tab == key) && <EditorStyle key={key} />;
           case 'setting':

@@ -2,9 +2,7 @@ import React, { memo, PropsWithChildren, useContext } from 'react';
 //import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { formHelper } from '../../helpers';
-import { DragDropBlock } from './dragdrop.block';
 import { DragDropContext } from './dragdrop.context';
-import { DragDropField } from './dragdrop.field';
 import { DragDropItem } from './dragdrop.item';
 import { DragDropContextProps } from './dragdrop.type';
 
@@ -22,7 +20,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
 
   //const [ref] = useAutoAnimate<HTMLDivElement>({ duration: 120 });
 
-  const { state, current, item: currentItem, setItem, moveItem, deleteItem, duplicateItem } = ctx;
+  const { state, current, item: currentItem, setItem, moveItem, deleteItem, duplicateItem, updateItem } = ctx;
   const list: any[] = data === undefined ? formHelper.mapField(state.data) : data || [];
 
   return <>
@@ -37,6 +35,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
           moveItem={moveItem}
           deleteItem={deleteItem}
           duplicateItem={duplicateItem}
+          updateItem={updateItem}
           {...item} />
       })
     }
