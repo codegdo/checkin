@@ -78,7 +78,6 @@ export const Editor: FC<any> = ({ name, data, onChange, onClick }) => {
       })}
     </main>
     <footer className='editor-footer'>
-      <button name='save' type='button' onClick={onClick}>Save</button>
       <button name='cancel' type='button' onClick={onClick}>Cancel</button>
     </footer>
   </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState, MouseEvent } from 'react';
 import update from 'immutability-helper';
 
 export type FieldState = {};
@@ -25,7 +25,7 @@ const reducer = (state: FieldState, { type, payload }: FieldAction) => {
   }
 }
 
-export const DragDropField: React.FC<any> = ({ id, role, label, description, position, list, item, setItem, updateItem, ...props }): JSX.Element => {
+export const DragDropField: React.FC<any> = ({ id, role, label, description, position, list, item, current, setItem, updateItem, ...props }): JSX.Element => {
 
   const initialState = {
     content: {
@@ -59,13 +59,28 @@ export const DragDropField: React.FC<any> = ({ id, role, label, description, pos
   useEffect(() => {
 
     if (isChange) {
+      console.log('ISCHANGE', item);
       updateItem({ id, ...state.content.values });
+      setItem(item);
     }
 
     return () => {
       setIsChange(false);
     }
-  }, [isChange]);
+  }, [isChange, state]);
+
+  useEffect(() => {
+    if (current?.item && current.item.id == id) {
+
+      const isValueChanged = JSON.stringify(state) == JSON.stringify(current.item.data);
+
+      if (!isValueChanged) {
+        setIsChange(true);
+      }
+
+    }
+
+  }, [current, item]);
 
   const onChange = ({ key, name, value }: any) => {
 
@@ -80,24 +95,24 @@ export const DragDropField: React.FC<any> = ({ id, role, label, description, pos
 
   };
 
-  const onClick = (event) => {
+  const onClick = (event: MouseEvent<HTMLElement>) => {
     const name = event.target.name;
 
     switch (name) {
-      case 'save':
-        setIsChange(true);
-        setItem(null);
-        break;
-      default:
+      case 'cancel':
         dispatch({
           type: 'INIT',
           payload: initialState
         });
         setItem(null);
+        break;
+      default:
+        setIsChange(true);
+        setItem(null);
     }
   };
 
-  const target = (item?.id == id) ? null : {
+  let target = (item?.id == id) ? null : {
     id,
     name: role,
     position,
@@ -110,21 +125,26 @@ export const DragDropField: React.FC<any> = ({ id, role, label, description, pos
   useEffect(() => {
 
     if (!target && item) {
-      console.log('TARGET && ITEM', target, item);
+
+      // duplicate and move item if not match with position
+      // then reset setItem with item data
       if (item.position !== position) {
-        setItem({ ...item, position, onChange, onClick });
+        setItem({
+          id,
+          name: role,
+          position,
+          length: list.length,
+          data: { ...item.data },
+          onChange,
+          onClick
+        });
       }
     }
 
     return () => {
       if (item && item.id == id) {
-        /*
-        dispatch({
-          type: 'INIT',
-          payload: item.data
-        });
-        */
-        console.log('AFTER', item.data, initialState);
+        // keep track with last selected item
+        current.item = { ...item };
       }
     }
 
