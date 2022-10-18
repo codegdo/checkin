@@ -18,11 +18,11 @@ export const DragDropEditor: FC = () => {
 
   const ref = useRef(null);
 
-  const outsideClickEvent = (e: MouseEvent) => {
+  const outsideClickEvent = (event: MouseEvent) => {
     // If the toggle element exists and is clicked outside of
-    if (ref.current !== null && !ref.current.contains(e.target)) {
+    if (ref.current !== null && !ref.current.contains(event.target)) {
       //setItem(null);
-      onClick(e);
+      onClick(event);
     }
   };
 

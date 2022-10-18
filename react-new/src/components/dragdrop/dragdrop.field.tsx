@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import update from 'immutability-helper';
 
 export type FieldState = {};
@@ -54,7 +54,7 @@ export const DragDropField: React.FC<any> = ({ id, role, label, description, pos
       type: 'INIT',
       payload: initialState
     });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
 
@@ -93,7 +93,6 @@ export const DragDropField: React.FC<any> = ({ id, role, label, description, pos
           type: 'INIT',
           payload: initialState
         });
-
         setItem(null);
     }
   };
@@ -111,13 +110,25 @@ export const DragDropField: React.FC<any> = ({ id, role, label, description, pos
   useEffect(() => {
 
     if (!target && item) {
-      console.log('TARGET && ITEM');
+      console.log('TARGET && ITEM', target, item);
       if (item.position !== position) {
         setItem({ ...item, position, onChange, onClick });
       }
     }
 
-  }, [target, list]);
+    return () => {
+      if (item && item.id == id) {
+        /*
+        dispatch({
+          type: 'INIT',
+          payload: item.data
+        });
+        */
+        console.log('AFTER', item.data, initialState);
+      }
+    }
+
+  }, [target, item]);
 
   const handleClick = (event: any) => {
     event.preventDefault();
