@@ -5,3 +5,8 @@ export interface InputProps {
   value?: string;
   onChange?: (key: string, value: string) => void;
 }
+
+export interface LabelProps {
+  label?: string;
+  description?: string;
+}

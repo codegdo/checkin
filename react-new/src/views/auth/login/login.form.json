@@ -6,6 +6,7 @@
   "data": [
     {
       "id": "f-header",
+      "className": "",
       "name": "block",
       "label": "Block",
       "description": null,
@@ -19,6 +20,7 @@
     },
     {
       "id": "f-main",
+      "className": "",
       "name": "block",
       "label": "Block",
       "description": null,
@@ -32,6 +34,7 @@
     },
     {
       "id": "f-footer",
+      "className": "",
       "name": "block",
       "label": "Block",
       "description": null,
@@ -45,6 +48,7 @@
     },
     {
       "id": "f-title",
+      "className": "",
       "name": "title",
       "label": "Login",
       "description": null,
@@ -58,6 +62,7 @@
     },
     {
       "id": "f-submit",
+      "className": "",
       "name": "submit",
       "label": "Login",
       "description": null,
@@ -71,6 +76,7 @@
     },
     {
       "id": "f-signup",
+      "className": "",
       "name": "signup",
       "label": "Signup",
       "description": null,
@@ -86,6 +92,7 @@
   "fields": [
     {
       "id": 3,
+      "className": "",
       "name": "username",
       "label": "Username",
       "description": null,
@@ -102,6 +109,7 @@
     },
     {
       "id": 4,
+      "className": "",
       "name": "password",
       "label": "Password",
       "description": null,
@@ -118,6 +126,7 @@
     },
     {
       "id": 5,
+      "className": "",
       "name": "email",
       "label": "Email",
       "description": null,

@@ -1,5 +1,7 @@
 import React, { useEffect, useReducer, useState, MouseEvent } from 'react';
 import update from 'immutability-helper';
+import { Label } from '../input/label.component';
+import { editorHelper } from '../../helpers';
 
 export type FieldState = {};
 
@@ -25,7 +27,7 @@ const reducer = (state: FieldState, { type, payload }: FieldAction) => {
   }
 }
 
-export const DragDropField: React.FC<any> = ({ id, role, label, description, position, list, item, current, setItem, updateItem, ...props }): JSX.Element => {
+export const DragDropField: React.FC<any> = ({ id, className, role, label, description, position, isRequired, style, list, item, current, setItem, updateItem, ...props }): JSX.Element => {
 
   const initialState = {
     content: {
@@ -34,7 +36,7 @@ export const DragDropField: React.FC<any> = ({ id, role, label, description, pos
           type: 'text'
         },
         description: {
-          type: 'textarea'
+          type: 'text'
         }
       },
       values: {
@@ -45,6 +47,8 @@ export const DragDropField: React.FC<any> = ({ id, role, label, description, pos
     style: {},
     setting: {}
   };
+
+  const editorField = editorHelper.getField({ id, className, label, description, style, isRequired });
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isChange, setIsChange] = useState(false);
@@ -61,7 +65,7 @@ export const DragDropField: React.FC<any> = ({ id, role, label, description, pos
     if (isChange) {
       console.log('ISCHANGE', item);
       updateItem({ id, ...state.content.values });
-      setItem(item);
+      item && setItem(item);
     }
 
     return () => {
@@ -154,11 +158,13 @@ export const DragDropField: React.FC<any> = ({ id, role, label, description, pos
     event.preventDefault();
     event.stopPropagation();
 
+    console.log(editorField);
+
     setItem(target);
   };
 
   return <div className={`dd-content`} onClick={handleClick}>
-    <label>{state.content.values.label}</label>
+    <Label label={state.content.values.label} description={state.content.values.description} />
     <input />
   </div>
 };

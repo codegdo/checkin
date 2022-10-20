@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Input } from '../input/input.component';
+import { Label } from '../input/label.component';
 import { FormContext } from './form.context';
 
 interface FieldProps {
@@ -26,12 +27,7 @@ export const Field: React.FC<FieldProps> = (props): JSX.Element => {
   }
 
   return <div>
-    {
-      (label || description) && <span>
-        {label && <label>{label}</label>}
-        {description && <small>{description}</small>}
-      </span>
-    }
+    <Label label={label} description={description} />
     <Input type={type} name={name} value={value} onChange={handleChange} />
   </div>
 }

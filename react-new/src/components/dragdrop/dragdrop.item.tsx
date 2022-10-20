@@ -101,7 +101,7 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
             };
           }
 
-          dragdropHelper.onHover(monitor, ref, current);
+          dragdropHelper.hover(monitor, ref, current);
         }
       },
       collect: monitor => ({

@@ -20,7 +20,7 @@ interface ClientOffset {
 class DragDropHelper {
   constructor() { }
 
-  parentNodeDisplay(target: HTMLElement): any {
+  display(target: HTMLElement): any {
 
     const parentNode = target.parentNode as HTMLElement;
 
@@ -41,17 +41,17 @@ class DragDropHelper {
     return display;
   }
 
-  totalCount({ id, data }): [number, string[]] {
+  count({ id, data }): [number, string[]] {
     if (id == null || undefined) {
       id = id + '';
     }
 
-    const ids = this.count(data, [id.toString()]);
+    const ids = this.getCount(data, [id.toString()]);
 
     return [ids.length, ids];
   }
 
-  findDragDrop({ current, ...item }) {
+  find({ current, ...item }) {
 
     if (!current.drop) {
       return null;
@@ -77,10 +77,10 @@ class DragDropHelper {
     } = current.drop;
 
     // get dragItems count
-    const [dragCounts, dragIds] = this.totalCount(item);
+    const [dragCounts, dragIds] = this.count(item);
 
     // get dropItems count
-    const [dropCounts, dropIds] = this.totalCount(current.drop);
+    const [dropCounts, dropIds] = this.count(current.drop);
 
     if (dropType == 'dropholder') {
       dropId = dropId.split('_')[0];
@@ -169,7 +169,7 @@ class DragDropHelper {
     };
   }
 
-  onHover(
+  hover(
     monitor: DropTargetMonitor<any, void>,
     ref: React.RefObject<HTMLDivElement>,
     current: any
@@ -205,7 +205,7 @@ class DragDropHelper {
       target.classList.add('on-middle');
       dropItem.offset = 'middle';
     } else {
-      const display = this.parentNodeDisplay(target);
+      const display = this.display(target);
 
       if (display == 'row') {
         if (dropItem.x == clientOffset.x) return;
@@ -235,7 +235,7 @@ class DragDropHelper {
           target.classList.remove('on-left', 'on-right');
           dropItem.offset = 'middle';
         }
-      } else if (display == 'column') {
+      } else {
         if (dropItem.y == clientOffset.y) return;
 
         dropItem.y = clientOffset.y;
@@ -265,15 +265,13 @@ class DragDropHelper {
         }
       }
     }
-
-
   }
 
-  private count(data, ids = []) {
+  private getCount(data, ids = []) {
     if (data instanceof Array) {
       data.reduce((a, v) => {
         ids.push(v.id.toString());
-        return a + ((v.role == 'block') ? this.count(v.data, ids) : 0);
+        return a + ((v.role == 'block') ? this.getCount(v.data, ids) : 0);
       }, data.length);
     }
 

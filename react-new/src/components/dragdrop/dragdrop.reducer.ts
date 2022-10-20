@@ -12,19 +12,19 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
     case 'INIT':
       return { ...state, data: [...payload] };
     case 'MOVE_ITEM':
-      const dragdrop_MOVE = dragdropHelper.findDragDrop(payload);
+      const found_MOVE = dragdropHelper.find(payload);
 
-      if (!dragdrop_MOVE) {
+      if (!found_MOVE) {
         return state;
       }
 
-      const { dragIndex, dropIndex, dragCounts } = dragdrop_MOVE;
+      const { dragIndex, dropIndex, dragCounts } = found_MOVE;
 
       const dragItems: any = [];
 
       // update map parentId and placeholderId dragItem
-      state.data[dragIndex].parentId = dragdrop_MOVE.parentId;
-      state.data[dragIndex].holderId = dragdrop_MOVE.holderId;
+      state.data[dragIndex].parentId = found_MOVE.parentId;
+      state.data[dragIndex].holderId = found_MOVE.holderId;
 
       for (let i = 0; i < dragCounts; i++) {
         dragItems.push(state.data[dragIndex + i]);
@@ -44,13 +44,13 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         },
       });
     case 'ADD_ITEM':
-      const dragdrop_ADD = dragdropHelper.findDragDrop(payload);
+      const found_ADD = dragdropHelper.find(payload);
 
-      if (!dragdrop_ADD) {
+      if (!found_ADD) {
         return state;
       }
 
-      let { dropIndex: dropIndex_ADD, dropType } = dragdrop_ADD;
+      let { dropIndex: dropIndex_ADD, dropType } = found_ADD;
 
       if (dropType === 'dropzone') {
         dropIndex_ADD = 1;
@@ -64,8 +64,8 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         position: null,
         data: payload.data,
         value: payload.value,
-        parentId: dragdrop_ADD.parentId,
-        holderId: dragdrop_ADD.holderId,
+        parentId: found_ADD.parentId,
+        holderId: found_ADD.holderId,
       };
 
       return update(state, {
@@ -79,11 +79,11 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         },
       });
     case 'DELETE_ITEM':
-      const [count] = dragdropHelper.totalCount(payload);
+      const [deleteCount] = dragdropHelper.count(payload);
 
       return update(state, {
         data: {
-          $splice: [[payload.position, count]],
+          $splice: [[payload.position, deleteCount]],
           $apply: (data) =>
             data.filter((item, index) => {
               item.position = index;
@@ -92,7 +92,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         },
       });
     case 'DUPLICATE_ITEM':
-      const [duplicateCount] = dragdropHelper.totalCount(payload);
+      const [duplicateCount] = dragdropHelper.count(payload);
 
       let duplicateIds: any = {};
       const duplicateItems: any = [];
