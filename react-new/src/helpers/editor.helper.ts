@@ -1,55 +1,67 @@
 class EditorHelper {
   getField({ id, className, label, description, isRequired, style }) {
 
-    const classId = `f-${id}`;
-
     return {
-      classId,
+      id,
       type: 'field',
       values: {
-        className, label, description, isRequired, style
+        className, label, description, isRequired,
+        style: {
+          field: {
+
+          },
+          label: {
+            fontSize: ''
+          },
+          description: {
+            fontSize: ''
+          },
+          ...style
+        }
       },
-      keys: [
+      data: [
         {
-          key: 'content',
+          type: 'content',
           data: [
             {
-              className: `.${classId} .label`,
               name: 'label',
               type: 'text',
-              style: {
-                fontSize: ''
-              }
+              style: ['fontSize']
             },
             {
-              className: `.${classId} .description`,
               name: 'description',
               type: 'text',
-              style: {
-                fontSize: ''
-              }
+              style: ['fontSize']
             }
           ]
         },
         {
-          key: 'design',
+          type: 'design',
           data: [
             {
-              className: `.${classId}`,
-              name: 'background',
-              style: {
-                backgroundColor: ''
-              }
+              name: 'field',
+              type: 'text',
+              style: ['color', 'fontSize']
             },
             {
-              className: `.${classId}`,
-              name: 'color',
-              style: {}
+              name: 'field',
+              type: 'background',
+              style: []
+            },
+            {
+              name: 'field',
+              type: 'border',
+              style: []
+            },
+            {
+              name: 'field',
+              type: 'spacing',
+              style: []
             }
           ]
         },
         {
-          key: 'setting',
+          type: 'setting',
           data: [
             {
               name: '',

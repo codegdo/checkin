@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useState, MouseEvent } from 'react';
 import update from 'immutability-helper';
 import { Label } from '../input/label.component';
 import { editorHelper } from '../../helpers';
+import { Input } from '../input/input.component';
 
 export type FieldState = {};
 
@@ -27,7 +28,7 @@ const reducer = (state: FieldState, { type, payload }: FieldAction) => {
   }
 }
 
-export const DragDropField: React.FC<any> = ({ id, className, role, label, description, position, isRequired, style, list, item, current, setItem, updateItem, ...props }): JSX.Element => {
+export const DragDropField: React.FC<any> = ({ id, type, name, className, role, label, description, position, isRequired, style, list, item, current, setItem, updateItem, ...props }): JSX.Element => {
 
   const initialState = {
     content: {
@@ -163,8 +164,8 @@ export const DragDropField: React.FC<any> = ({ id, className, role, label, descr
     setItem(target);
   };
 
-  return <div className={`dd-content`} onClick={handleClick}>
-    <Label label={state.content.values.label} description={state.content.values.description} />
-    <input />
+  return <div className={`dd-content x-${id}`} style={{ ...style?.field }} onClick={handleClick}>
+    <Label className='label' label={state.content.values.label} description={state.content.values.description} />
+    <Input id={id} name={name} type={type} />
   </div>
 };

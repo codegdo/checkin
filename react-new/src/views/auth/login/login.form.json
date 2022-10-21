@@ -69,6 +69,7 @@
       "type": "button",
       "role": "element",
       "data": [],
+      "style": "{}",
       "value": null,
       "position": 7,
       "parentId": "f-footer",
@@ -100,6 +101,11 @@
       "role": "field",
       "data": null,
       "value": "",
+      "style": {
+        "field": {
+          "fontSize": "30px"
+        }
+      },
       "position": 4,
       "parentId": "f-main",
       "holderId": null,
@@ -116,6 +122,7 @@
       "type": "password",
       "role": "field",
       "data": null,
+      "style": {},
       "value": "",
       "position": 5,
       "parentId": "f-main",
@@ -133,6 +140,7 @@
       "type": "text",
       "role": "field",
       "data": null,
+      "style": {},
       "value": "",
       "position": 6,
       "parentId": "f-main",

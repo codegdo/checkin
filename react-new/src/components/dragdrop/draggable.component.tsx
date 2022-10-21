@@ -1,4 +1,8 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useRef } from 'react';
+import { Panel } from '../panel/panel.component';
+import { PanelFooter } from '../panel/panel.footer';
+import { PanelHeader } from '../panel/panel.header';
+import { PanelMain } from '../panel/panen.main';
 
 import { DragDropContext } from './dragdrop.context';
 import { DragDropContextProps } from './dragdrop.type';
@@ -99,6 +103,8 @@ export const Draggable: FC = (): JSX.Element => {
   }
 
   const { state, current, addItem, setItem } = ctx;
+
+  const ref = useRef(null);
 
   return <div>
     {
