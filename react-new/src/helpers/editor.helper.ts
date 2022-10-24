@@ -2,23 +2,23 @@ class EditorHelper {
   getField({ id, className, label, description, isRequired, style }) {
 
     return {
-      id,
-      type: 'field',
-      values: {
-        className, label, description, isRequired,
-        style: {
-          field: {
+      // id,
+      // type: 'field',
+      // values: {
+      //   className, label, description, isRequired,
+      //   style: {
+      //     field: {
 
-          },
-          label: {
-            fontSize: ''
-          },
-          description: {
-            fontSize: ''
-          },
-          ...style
-        }
-      },
+      //     },
+      //     label: {
+      //       fontSize: ''
+      //     },
+      //     description: {
+      //       fontSize: ''
+      //     },
+      //     ...style
+      //   }
+      // },
       data: [
         {
           type: 'content',

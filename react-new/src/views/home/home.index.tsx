@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DragDrop } from '../../components/dragdrop/dragdrop.component';
+import { DragDrop, Draggable } from '../../components/dragdrop';
 
 const Index: React.FC = (): JSX.Element => {
 
@@ -22,7 +22,9 @@ const Index: React.FC = (): JSX.Element => {
   }
 
   return <div>
-    <DragDrop data={form} />
+    <DragDrop data={form}>
+      <Draggable />
+    </DragDrop>
   </div>;
 };
 

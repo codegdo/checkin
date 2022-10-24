@@ -5,28 +5,21 @@ import React, { FC, useState } from 'react';
 import { EditorContent } from './editor.content';
 import { EditorSetting } from './editor.setting';
 import { EditorDesign } from './editor.design';
-import { Panel, PanelHeader, PanelMain, PanelFooter } from '../panel';
+import { Box, BoxHeader, BoxMain, BoxFooter } from '../box';
 import { EditorProps } from './editor.type';
 import { EditorProvider } from './editor.context';
+import { Render } from './editor.render';
 
 export const Editor: FC<EditorProps> = (props) => {
 
-  const [tab, setTab] = useState<string>('');
-
-  const handleTabClick = (event: any) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    setTab(event.target.name);
-  }
-
   return <EditorProvider {...props}>
-    <Panel>
-      <PanelHeader>
+    <Box>
+      <BoxHeader>
         {/* {!tab && name}
       {tab && <button name='' type='button' onClick={handleTabClick}>back</button>} */}
-      </PanelHeader>
-      <PanelMain>
+      </BoxHeader>
+      <BoxMain>
+        <Render />
         {/* {
         !tab && <nav className='editor-tab'>
           {Object.keys(data).map((key) => {
@@ -50,11 +43,11 @@ export const Editor: FC<EditorProps> = (props) => {
           })}
         </main>
       } */}
-      </PanelMain>
-      <PanelFooter>
-        <button name='cancel' type='button' onClick={onClick}>Cancel</button>
-      </PanelFooter>
-    </Panel>
+      </BoxMain>
+      <BoxFooter>
+        {/* <button name='cancel' type='button' onClick={onClick}>Cancel</button> */}
+      </BoxFooter>
+    </Box>
   </EditorProvider>
 }
 

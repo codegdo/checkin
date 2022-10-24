@@ -4,4 +4,6 @@ export interface EditorProps {
   onChange: () => {};
   onClick: () => {};
 }
-export interface EditorContextProps extends EditorProps {}
+export interface EditorContextProps extends EditorProps {
+  data: any;
+}

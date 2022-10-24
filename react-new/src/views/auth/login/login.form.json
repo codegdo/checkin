@@ -42,7 +42,7 @@
       "role": "block",
       "data": [],
       "value": null,
-      "position": 6,
+      "position": 7,
       "parentId": null,
       "holderId": null
     },
@@ -71,7 +71,7 @@
       "data": [],
       "style": "{}",
       "value": null,
-      "position": 7,
+      "position": 8,
       "parentId": "f-footer",
       "holderId": null
     },
@@ -85,7 +85,7 @@
       "role": "element",
       "data": null,
       "value": "/auth/signup",
-      "position": 8,
+      "position": 9,
       "parentId": "f-footer",
       "holderId": null
     }

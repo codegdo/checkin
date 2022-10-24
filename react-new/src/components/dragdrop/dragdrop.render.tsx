@@ -1,5 +1,4 @@
 import React, { memo, PropsWithChildren, useContext } from 'react';
-//import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { formHelper } from '../../helpers';
 import { DragDropContext } from './dragdrop.context';
@@ -10,7 +9,27 @@ interface RenderProps {
   data?: any[]
 }
 
-export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }): JSX.Element => {
+export const DragDropRender: React.FC = (): JSX.Element => {
+  const ctx = useContext((DragDropContext as Object) as React.Context<DragDropContextProps>);
+
+  if (!ctx) {
+    throw new Error();
+  }
+
+  const { state, current } = ctx;
+
+  return <DragDropItem
+    id="dropzone"
+    name="block"
+    role="dropzone"
+    draggable={false}
+    current={current}>
+    <Render data={formHelper.mapField(state.data)} />
+  </DragDropItem>
+
+}
+
+export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data = [] }): JSX.Element => {
 
   const ctx = useContext((DragDropContext as Object) as React.Context<DragDropContextProps>);
 
@@ -18,14 +37,11 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data }):
     throw new Error();
   }
 
-  //const [ref] = useAutoAnimate<HTMLDivElement>({ duration: 120 });
-
   const { state, current, item: currentItem, setItem, moveItem, deleteItem, duplicateItem, updateItem } = ctx;
-  const list: any[] = data === undefined ? formHelper.mapField(state.data) : data || [];
 
   return <>
     {
-      list.map((item, index) => {
+      data.map((item, index) => {
         return <DragDropItem
           key={index}
           current={current}

@@ -4,7 +4,7 @@ import { useDrag, useDragLayer, useDrop, XYCoord } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
 
-export const Panel: FC<PropsWithChildren> = ({ children }): JSX.Element => {
+export const Box: FC<PropsWithChildren> = ({ children }): JSX.Element => {
   const ref = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState({ top: 0, left: 0 });
 

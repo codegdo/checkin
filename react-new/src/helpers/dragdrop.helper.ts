@@ -107,6 +107,7 @@ class DragDropHelper {
     const fromBottomOverBottom = fromBottom && overBottom && 'fromBottom_overBottom';
     const fromBottomOverTop = fromBottom && overTop && 'fromBottom_overTop';
     const fromBottomOverMiddle = fromBottom && overMiddle && 'fromBottom_overMiddle';
+    const fromDrag = 'fromDrag';
 
     const type = `${dragType}_${dropType}`;
     const text = `${fromTopOverTop ||
@@ -114,7 +115,7 @@ class DragDropHelper {
       fromBottomOverBottom ||
       fromBottomOverTop ||
       fromBottomOverMiddle ||
-      'fromDrag'
+      fromDrag
       }`;
 
     // dropIndex
@@ -145,6 +146,7 @@ class DragDropHelper {
       } else if (fromBottomOverMiddle) {
         dropIndex = dropIndex + 1;
       } else if (dragIndex == null) {
+        // fromDrag
         if (overMiddle) {
           dropIndex = dropIndex + 1;
         } else if (overBottom) {

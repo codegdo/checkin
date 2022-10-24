@@ -14,32 +14,28 @@ export const DragDropEditor: FC = () => {
 
   const { item } = ctx;
 
-  const { type, values, onChange, onClick } = item || {};
-
   const ref = useRef<HTMLDivElement>(null);
 
   const outsideClickEvent = (event: MouseEvent) => {
-    // If the toggle element exists and is clicked outside of
     if (ref.current !== null && !ref.current.contains(event.target as HTMLElement)) {
-      onClick(event);
+      item && item.onClick(event);
     }
   };
 
   useEffect(() => {
-    // If item exist then listen for clicks
     if (item) {
       window.addEventListener('click', outsideClickEvent);
     }
     return () => {
       window.removeEventListener('click', outsideClickEvent);
     }
-  }, [item, ref]);
+  }, [item]);
 
   console.log('EDITOR', item);
 
   return item && <div ref={ref}>
     {
-      item.isDragging ? null : <Editor type={type} values={values} onChange={onChange} onClick={onClick} />
+      item.isDragging ? null : <Editor {...item} />
     }
   </div>
 }
