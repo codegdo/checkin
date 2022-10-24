@@ -14,7 +14,7 @@ export const DragDropEditor: FC = () => {
 
   const { item } = ctx;
 
-  const { name, onChange, onClick, data } = item || {};
+  const { type, values, onChange, onClick } = item || {};
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -39,7 +39,7 @@ export const DragDropEditor: FC = () => {
 
   return item && <div ref={ref}>
     {
-      item.isDragging ? null : <Editor name={name} data={data} onChange={onChange} onClick={onClick} />
+      item.isDragging ? null : <Editor type={type} values={values} onChange={onChange} onClick={onClick} />
     }
   </div>
 }

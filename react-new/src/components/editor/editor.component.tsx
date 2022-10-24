@@ -5,12 +5,11 @@ import React, { FC, useState } from 'react';
 import { EditorContent } from './editor.content';
 import { EditorSetting } from './editor.setting';
 import { EditorDesign } from './editor.design';
-import { Panel } from '../panel/panel.component';
-import { PanelHeader } from '../panel/panel.header';
-import { PanelMain } from '../panel/panen.main';
-import { PanelFooter } from '../panel/panel.footer';
+import { Panel, PanelHeader, PanelMain, PanelFooter } from '../panel';
+import { EditorProps } from './editor.type';
+import { EditorProvider } from './editor.context';
 
-export const Editor: FC<any> = ({ name, data, onChange, onClick }) => {
+export const Editor: FC<EditorProps> = (props) => {
 
   const [tab, setTab] = useState<string>('');
 
@@ -21,13 +20,14 @@ export const Editor: FC<any> = ({ name, data, onChange, onClick }) => {
     setTab(event.target.name);
   }
 
-  return <Panel>
-    <PanelHeader>
-      {!tab && name}
-      {tab && <button name='' type='button' onClick={handleTabClick}>back</button>}
-    </PanelHeader>
-    <PanelMain>
-      {
+  return <EditorProvider {...props}>
+    <Panel>
+      <PanelHeader>
+        {/* {!tab && name}
+      {tab && <button name='' type='button' onClick={handleTabClick}>back</button>} */}
+      </PanelHeader>
+      <PanelMain>
+        {/* {
         !tab && <nav className='editor-tab'>
           {Object.keys(data).map((key) => {
             return <div key={key}><button className={(tab == key) ? 'active' : ''} name={key} type='button' onClick={handleTabClick}>{key}</button></div>
@@ -49,12 +49,13 @@ export const Editor: FC<any> = ({ name, data, onChange, onClick }) => {
             }
           })}
         </main>
-      }
-    </PanelMain>
-    <PanelFooter>
-      <button name='cancel' type='button' onClick={onClick}>Cancel</button>
-    </PanelFooter>
-  </Panel>
+      } */}
+      </PanelMain>
+      <PanelFooter>
+        <button name='cancel' type='button' onClick={onClick}>Cancel</button>
+      </PanelFooter>
+    </Panel>
+  </EditorProvider>
 }
 
 
