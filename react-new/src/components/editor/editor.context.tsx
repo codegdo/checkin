@@ -1,18 +1,17 @@
 import React, { FC, PropsWithChildren, createContext, useCallback, useEffect, useReducer, useState } from 'react';
 import { editorHelper } from '../../helpers';
 
-//import { initialState, reducer } from './editor.reducer';
 import { EditorContextProps, EditorProps } from './editor.type';
 
 export const EditorContext = createContext<EditorContextProps | null>(null);
 
-export const EditorProvider: FC<PropsWithChildren<EditorProps>> = ({ children, ...props }) => {
-  //const [state, dispatch] = useReducer(reducer, initialState);
-  //const [data, setData] = useState(null);
+export const EditorProvider: FC<PropsWithChildren<EditorProps>> = ({ type, values: initialValues, onChange, onClick, children }) => {
 
-  const data = editorHelper.getField(props.values);
+  const data = editorHelper.getData(type);
+  const [values, setValues] = useState(initialValues);
+  const [tab, setTab] = useState('content');
 
-  return <EditorContext.Provider value={{ ...props, data }}>
+  return <EditorContext.Provider value={{ values, data, tab, setTab, onChange, onClick }}>
     {children}
   </EditorContext.Provider>
 }

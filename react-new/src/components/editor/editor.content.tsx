@@ -1,7 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 
-export const EditorContent: FC<any> = ({ data, onChange }): JSX.Element => {
-  const { values: initialValues, keys } = data;
+export const EditorContent: FC<any> = (): JSX.Element => {
+  return <>
+    Content
+  </>
+}
+
+/*
+const { values: initialValues, keys } = data;
   const [values, setValues] = useState(initialValues);
 
   useEffect(() => {
@@ -16,9 +22,8 @@ export const EditorContent: FC<any> = ({ data, onChange }): JSX.Element => {
     onChange({ key: 'content', name, value });
   }
 
-  return <>
 
-    {Object.keys(values).map((key, i) => {
+{Object.keys(values).map((key, i) => {
       switch (keys[key].type) {
         case 'text':
           return <div key={i}>
@@ -34,5 +39,4 @@ export const EditorContent: FC<any> = ({ data, onChange }): JSX.Element => {
           return <></>
       }
     })}
-  </>
-}
+*/

@@ -26,7 +26,13 @@ class EditorHelper {
             {
               name: 'label',
               type: 'text',
-              style: ['fontSize']
+
+              style: ['fontSize'],
+
+              tab: {
+                name: 'style',
+                type: 'tab',
+              }
             },
             {
               name: 'description',
@@ -64,15 +70,30 @@ class EditorHelper {
           type: 'setting',
           data: [
             {
-              name: '',
-              option: {
-                isRequired
-              }
+              name: 'field',
+              type: 'checkbox',
+              option: ['isRequired']
             }
           ]
         }
       ]
     }
+  }
+
+  getData(type: string) {
+    const editor = {
+      content: [],
+      design: [],
+      setting: []
+    };
+
+    switch (type) {
+      case 'field':
+
+        break;
+    }
+
+    return editor;
   }
 }
 

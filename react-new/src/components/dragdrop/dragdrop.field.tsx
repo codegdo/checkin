@@ -43,7 +43,7 @@ export const DragDropField: React.FC<any> = ({ id, type, name, className, role, 
     setValues({ ...values, ...newValues });
   };
 
-  const onClick = (event: MouseEvent<HTMLElement> & {
+  const onClick = (event: MouseEvent<HTMLElement, MouseEvent> & {
     target: { name: string | undefined }
   }) => {
     const { name } = event.target;
