@@ -17,7 +17,9 @@ export const EditorTab: FC = (): JSX.Element => {
 
   return <>
     {Object.keys(data).map((key) => {
-      return <div key={key}><button className={(tab == key) ? 'active' : ''} name={key} type='button' onClick={handleTabClick}>{key}</button></div>
+      return <span key={key}>
+        <button className={(tab == key) ? 'active' : ''} name={key} type='button' onClick={handleTabClick}>{key}</button>
+      </span>
     })}
   </>
 }

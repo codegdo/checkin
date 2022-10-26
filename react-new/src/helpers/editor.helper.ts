@@ -1,8 +1,88 @@
 class EditorHelper {
-  getField({ id, className, label, description, isRequired, style }) {
-
+  getField() {
     return {
-      // id,
+      content: [
+        {
+          type: 'div',
+          role: 'block',
+          data: [
+            {
+              name: 'label',
+              label: 'Label',
+              type: 'text',
+              role: 'control'
+            },
+            {
+              name: 'style:label:fontSize',
+              label: 'Font Size',
+              type: 'range',
+              role: 'control'
+            }
+          ]
+        },
+        {
+          type: 'div',
+          role: 'block',
+          data: [
+            {
+              name: 'description',
+              label: 'Description',
+              type: 'text',
+              role: 'control'
+            },
+            {
+              name: 'style:description:fontSize',
+              label: 'Font Size',
+              type: 'range',
+              role: 'control'
+            }
+          ]
+        }
+      ],
+      design: [
+        {
+          name: 'field',
+          type: 'text',
+          style: ['color', 'fontSize']
+        },
+        {
+          name: 'field',
+          type: 'background',
+          style: []
+        },
+        {
+          name: 'field',
+          type: 'border',
+          style: []
+        },
+        {
+          name: 'field',
+          type: 'spacing',
+          style: []
+        }
+      ],
+      setting: [
+        {
+          name: 'field',
+          type: 'checkbox',
+          option: ['isRequired']
+        }
+      ]
+    }
+  }
+
+  getData(type: string) {
+    switch (type) {
+      case 'field': return this.getField();
+      default: return {};
+    }
+  }
+}
+
+export const editorHelper = new EditorHelper();
+
+
+// id,
       // type: 'field',
       // values: {
       //   className, label, description, isRequired,
@@ -19,82 +99,3 @@ class EditorHelper {
       //     ...style
       //   }
       // },
-      data: [
-        {
-          type: 'content',
-          data: [
-            {
-              name: 'label',
-              type: 'text',
-
-              style: ['fontSize'],
-
-              tab: {
-                name: 'style',
-                type: 'tab',
-              }
-            },
-            {
-              name: 'description',
-              type: 'text',
-              style: ['fontSize']
-            }
-          ]
-        },
-        {
-          type: 'design',
-          data: [
-            {
-              name: 'field',
-              type: 'text',
-              style: ['color', 'fontSize']
-            },
-            {
-              name: 'field',
-              type: 'background',
-              style: []
-            },
-            {
-              name: 'field',
-              type: 'border',
-              style: []
-            },
-            {
-              name: 'field',
-              type: 'spacing',
-              style: []
-            }
-          ]
-        },
-        {
-          type: 'setting',
-          data: [
-            {
-              name: 'field',
-              type: 'checkbox',
-              option: ['isRequired']
-            }
-          ]
-        }
-      ]
-    }
-  }
-
-  getData(type: string) {
-    const editor = {
-      content: [],
-      design: [],
-      setting: []
-    };
-
-    switch (type) {
-      case 'field':
-
-        break;
-    }
-
-    return editor;
-  }
-}
-
-export const editorHelper = new EditorHelper();

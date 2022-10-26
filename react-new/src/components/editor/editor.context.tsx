@@ -11,7 +11,9 @@ export const EditorProvider: FC<PropsWithChildren<EditorProps>> = ({ type, value
   const [values, setValues] = useState(initialValues);
   const [tab, setTab] = useState('content');
 
-  return <EditorContext.Provider value={{ values, data, tab, setTab, onChange, onClick }}>
+  console.log(data, type);
+
+  return <EditorContext.Provider value={{ values, data, tab, setTab, setValues, onChange, onClick }}>
     {children}
   </EditorContext.Provider>
 }

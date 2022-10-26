@@ -5,7 +5,7 @@ import { EditorDesign } from './editor.design';
 import { EditorSetting } from './editor.setting';
 import { EditorContextProps } from './editor.type';
 
-export const Render: FC = (): JSX.Element => {
+export const Render: FC<any> = ({ children }): JSX.Element => {
 
   const ctx = useContext((EditorContext as Object) as React.Context<EditorContextProps>);
 
@@ -13,17 +13,14 @@ export const Render: FC = (): JSX.Element => {
     throw new Error();
   }
 
-  const { tab, data } = ctx;
+  const { data, values, tab, setTab, setValues } = ctx;
+  const { content, design, setting } = data;
 
-  return <>
-    {
-      (tab == 'content') && <EditorContent data={data.content} />
-    }
-    {
-      (tab == 'design') && <EditorDesign />
-    }
-    {
-      (tab == 'setting') && <EditorSetting />
-    }
-  </>
+  switch (tab) {
+    case 'content': return <EditorContent data={content} setTab={setTab} setValues={setValues} />;
+    case 'design': return <EditorDesign data={design} setTab={setTab} setValues={setValues} />;
+    case 'setting': return <EditorSetting data={setting} setTab={setTab} setValues={setValues} />;
+    default: return <>{children}</>;
+  }
+
 }

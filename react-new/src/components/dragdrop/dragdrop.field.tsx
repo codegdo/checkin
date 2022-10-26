@@ -96,7 +96,7 @@ export const DragDropField: React.FC<any> = ({ id, type, name, className, role, 
     } else {
       setItem({
         id,
-        role,
+        type: role,
         position,
         list,
         values,

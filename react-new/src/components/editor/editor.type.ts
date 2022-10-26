@@ -9,6 +9,7 @@ export interface EditorContextProps {
   values: any;
   tab: string;
   setTab: any;
+  setValues: any;
   onChange: any;
   onClick: any;
 }
