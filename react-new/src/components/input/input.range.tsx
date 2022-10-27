@@ -1,8 +1,10 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { styleHelper } from '../../helpers';
+import { InputProps } from './input.type';
 
-export const ControlRange: FC = (): JSX.Element => {
-  const [value, setValue] = useState('10');
+export const InputRange: React.FC<InputProps> = ({ type, name, text, value: intialValue = '', onChange }): JSX.Element => {
+
+  const [value, setValue] = useState(intialValue);
   const [backgroundImage, setBackgroundImage] = useState('');
   const ref = useRef(null);
   //let { current: backgroundImage } = useRef('');
@@ -31,7 +33,9 @@ export const ControlRange: FC = (): JSX.Element => {
   }, [value, backgroundImage]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
+    const target = e.target;
+    setValue(target.value);
+    onChange && onChange(name, target.value);
   }
 
   /* const backgroundImage = `linear-gradient(
@@ -44,7 +48,6 @@ export const ControlRange: FC = (): JSX.Element => {
  */
 
   console.log(backgroundImage);
-
 
   return <div>
     <label>{value}</label>
