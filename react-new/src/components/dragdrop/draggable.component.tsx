@@ -1,4 +1,5 @@
 import React, { FC, useContext, useRef } from 'react';
+import { useToggle } from '../../hooks/use-toggle.hook';
 import { Panel } from '../box/box.component';
 import { PanelFooter } from '../box/box.footer';
 import { PanelHeader } from '../box/box.header';
@@ -104,8 +105,6 @@ export const Draggable: FC = (): JSX.Element => {
 
   const { state, current, addItem, setItem } = ctx;
 
-  const ref = useRef(null);
-
   return <div>
     {
       blocks.map((block, i) => {
@@ -119,5 +118,6 @@ export const Draggable: FC = (): JSX.Element => {
         />
       })
     }
+
   </div>
 }

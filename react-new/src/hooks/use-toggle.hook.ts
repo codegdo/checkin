@@ -1,32 +1,23 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
-export const useToggle = (initialState: boolean = false): [React.MutableRefObject<null>, boolean, React.Dispatch<React.SetStateAction<boolean>>] => {
-  const ref = useRef(null);
+export const useToggle = (defaultToggle: boolean = false, ref?: React.RefObject<HTMLElement>): [boolean, React.Dispatch<React.SetStateAction<boolean>>] => {
+  const [isToggle, setIsToggle] = useState(defaultToggle);
 
-  const [isToggle, setIsToggle] = useState(initialState);
-
+  const outsideClickEvent = (e: MouseEvent) => {
+    if (ref && ref.current !== null && !ref.current.contains(e.target as HTMLElement)) {
+      setIsToggle(!isToggle);
+    }
+  };
 
   useEffect(() => {
-
-    const pageClickEvent = (e: MouseEvent) => {
-      // If the toggle element exists and is clicked outside of
-      if (ref.current !== null && !ref.current.contains(e.target)) {
-        setIsToggle(!isToggle);
-      }
-    };
-
-    // If the item is toggle (ie open) then listen for clicks
     if (isToggle) {
-      window.addEventListener('click', pageClickEvent);
+      ref && window.addEventListener('click', outsideClickEvent);
     }
-
-    console.log('click');
 
     return () => {
-      window.removeEventListener('click', pageClickEvent);
+      ref && window.removeEventListener('click', outsideClickEvent);
     }
-
   }, [isToggle, ref]);
 
-  return [ref, isToggle, setIsToggle];
+  return [isToggle, setIsToggle];
 }

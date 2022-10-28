@@ -13,7 +13,7 @@ class EditorHelper {
               role: 'control'
             },
             {
-              name: 'style:label:fontSize',
+              name: 'style.label.fontSize',
               label: 'Font Size',
               type: 'range',
               role: 'control'
@@ -31,7 +31,7 @@ class EditorHelper {
               role: 'control'
             },
             {
-              name: 'style:description:fontSize',
+              name: 'style.description.fontSize',
               label: 'Font Size',
               type: 'range',
               role: 'control'
@@ -99,3 +99,27 @@ export const editorHelper = new EditorHelper();
       //     ...style
       //   }
       // },
+
+/*
+var style = {
+field: {
+fontSize: '10px'
+},
+label: {
+fontSize: '5px;'
+}
+}
+
+const keys = 'field.fontSize'.split('.');
+
+const a = keys.reduce((s,k, i)=> {
+
+if(s&&s[k] && keys.length - 1 == i) {
+s[k] = '100px';
+}
+ 
+return s && s[k] || null;
+}, style)
+
+console.log(style);
+*/

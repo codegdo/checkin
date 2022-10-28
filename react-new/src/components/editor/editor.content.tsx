@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
-import { ControlRange } from '../control/control.range';
+import { Control } from '../control';
 
 export const EditorContent: FC<any> = (): JSX.Element => {
   return <>
     Content
-    <ControlRange />
+    <Control type='padding' />
   </>
 }
 
