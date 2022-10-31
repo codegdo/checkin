@@ -1,6 +1,5 @@
 class StyleHelper {
   linearGradient(str: string, value: string) {
-
     //"linear-gradient(90deg, rgb(231, 231, 231) 0%, rgb(14, 14, 14) 0%, rgb(14, 14, 14) 0%, rgb(231, 231, 231) 0%)"
 
     str = str.substring(str.indexOf('(') + 1, str.lastIndexOf(')'));
