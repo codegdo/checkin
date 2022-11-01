@@ -40,7 +40,7 @@ export const DragDropField: React.FC<any> = ({ id, type, name, className, role, 
   }, [current, item]);
 
   const onChange = (newValues: any) => {
-    setValues({ ...values, ...newValues });
+    setValues({ ...newValues });
   };
 
   const onClick = (event: MouseEvent<HTMLElement, MouseEvent> & {

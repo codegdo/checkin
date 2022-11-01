@@ -8,7 +8,7 @@ export const InputText: React.FC<InputProps> = ({ type, name, text, value: intia
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = event;
     setValue(target.value)
-    onChange && onChange(name, target.value);
+    onChange && onChange({ key: name, value: target.value });
   }
 
   return <div>

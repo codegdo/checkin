@@ -1,14 +1,9 @@
-import React, { FC, useState } from 'react';
-//import { useAutoAnimate } from "@formkit/auto-animate/react";
+import React, { FC } from 'react';
 
-
-import { EditorContent } from './editor.content';
-import { EditorSetting } from './editor.setting';
-import { EditorDesign } from './editor.design';
 import { Box, BoxHeader, BoxMain, BoxFooter } from '../box';
 import { EditorProps } from './editor.type';
 import { EditorProvider } from './editor.context';
-import { Render } from './editor.render';
+import { EditorRender } from './editor.render';
 import { EditorTab } from './editor.tab';
 
 export const Editor: FC<EditorProps> = (props) => {
@@ -19,7 +14,7 @@ export const Editor: FC<EditorProps> = (props) => {
         <EditorTab />
       </BoxHeader>
       <BoxMain>
-        <Render />
+        <EditorRender />
       </BoxMain>
       <BoxFooter>
       </BoxFooter>

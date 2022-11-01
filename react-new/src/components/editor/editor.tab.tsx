@@ -9,7 +9,7 @@ export const EditorTab: FC = (): JSX.Element => {
     throw new Error();
   }
 
-  const { tab, setTab, data } = ctx;
+  const { data, tab, setTab } = ctx;
 
   const handleTabClick = (event: any) => {
     setTab(event.target.name);

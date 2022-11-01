@@ -1,15 +1,15 @@
 export interface EditorProps {
   type: string;
   values: any;
-  onChange: () => {};
-  onClick: () => {};
+  onChange: ({ key, value }: { key: string; value: any }) => void;
+  onClick: () => void;
 }
 export interface EditorContextProps {
   data: any;
   values: any;
   tab: string;
   setTab: any;
-  setValues: any;
+  //setValues: any;
   onChange: any;
   onClick: any;
 }

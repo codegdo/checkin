@@ -1,14 +1,33 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
+import { getSetStringKeyObject } from '../../utils';
 import { Control } from '../control';
+import { EditorContext } from './editor.context';
+import { EditorContextProps } from './editor.type';
 
 export const EditorContent: FC<any> = (): JSX.Element => {
-  return <>
-    Content
-    <Control type='padding' />
-  </>
+
+  const ctx = useContext((EditorContext as Object) as React.Context<EditorContextProps>);
+
+  if (!ctx) {
+    throw new Error();
+  }
+
+  const { data, values, onChange, onClick } = ctx;
+
+  const handleChange = ({ key, value }: any) => {
+    const { obj } = getSetStringKeyObject(values, key, value);
+    onChange && onChange(obj);
+  }
+
+  const handleClick = () => {
+    console.log('EDITOR CLICK');
+  }
+
+  return <Control data={data.content} values={values} onChange={handleChange} onClick={handleClick} />
 }
 
 /*
+<Control type='padding' />
 const { values: initialValues, keys } = data;
   const [values, setValues] = useState(initialValues);
 

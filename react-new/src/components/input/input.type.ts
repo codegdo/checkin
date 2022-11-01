@@ -4,7 +4,7 @@ export interface InputProps {
   name: string;
   value?: string;
   text?: string;
-  onChange?: (key: string, value: string) => void;
+  onChange?: ({ key, value }: { key: string; value: any }) => void;
 }
 
 export interface LabelProps {
