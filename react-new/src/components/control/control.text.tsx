@@ -13,7 +13,9 @@ export const ControlText: FC<any> = ({ label, name }): JSX.Element => {
   }
 
   const { values, onChange } = ctx;
-  const { value } = getSetStringKeyObject(values, name) || '';
+  const { value } = getSetStringKeyObject(values, name);
+
+  console.log('CONTROL TEXT', value);
 
   return <div>
     <label>{label}</label>

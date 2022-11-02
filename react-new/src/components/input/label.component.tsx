@@ -6,10 +6,10 @@ export const Label: FC<LabelProps> = ({ className, label, description }): JSX.El
   return <>
     {
       (label || description) &&
-      <span>
+      <div>
         {label && <label className='label'>{label}</label>}
-        {description && <small className='description'>{description}</small>}
-      </span>
+        {description && <span className='description'>{description}</span>}
+      </div>
     }
   </>
 }

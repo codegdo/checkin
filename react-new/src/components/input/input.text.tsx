@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InputProps } from './input.type';
 
-export const InputText: React.FC<InputProps> = ({ type, name, text, value: intialValue = '', onChange }): JSX.Element => {
+export const InputText: React.FC<InputProps> = ({ name, text, value: initialValue, onChange }): JSX.Element => {
 
-  const [value, setValue] = useState(intialValue);
+  const [value, setValue] = useState(initialValue);
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { target } = event;
@@ -12,7 +16,7 @@ export const InputText: React.FC<InputProps> = ({ type, name, text, value: intia
   }
 
   return <div>
-    <input className='input' type={type} name={name} value={value} onChange={handleChange} />
-    {text && <em>{text}</em>}
+    <input className='input' type='text' name={name} value={value == null ? '' : value} onChange={handleChange} />
+    {text && <span className='text'>{text}</span>}
   </div>
 }

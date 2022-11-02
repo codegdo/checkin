@@ -16,6 +16,8 @@ export const EditorContent: FC<any> = (): JSX.Element => {
 
   const handleChange = ({ key, value }: any) => {
     const { obj } = getSetStringKeyObject(values, key, value);
+
+    console.log('EDITOR CHANGE', obj);
     onChange && onChange(obj);
   }
 

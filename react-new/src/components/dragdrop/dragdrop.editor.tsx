@@ -31,8 +31,6 @@ export const DragDropEditor: FC = () => {
     }
   }, [item]);
 
-  console.log('EDITOR', item);
-
   return item && <div ref={ref}>
     {
       item.isDragging ? null : <Editor {...item} />
