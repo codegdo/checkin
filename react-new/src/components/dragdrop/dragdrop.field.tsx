@@ -109,7 +109,7 @@ export const DragDropField: React.FC<any> = ({ id, type, name, className, role, 
   };
 
   return <div className={`dd-content x-${id}`} style={{ ...style?.field }} onClick={handleClick}>
-    <Label className='label' label={values.label} description={values.description} />
+    <Label className='label' label={values.label} description={values.description} style={style} />
     <Input id={id} name={name} type={type} />
   </div>
 };

@@ -2,15 +2,15 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { styleHelper } from '../../helpers';
 import { InputProps } from './input.type';
 
-export const InputRange: React.FC<InputProps> = ({ name, text, value: initialValue = '0', onChange }): JSX.Element => {
+export const InputRange: React.FC<InputProps> = ({ name, text, value: initialValue = '0', defaultValue, unit = 'px', onChange }): JSX.Element => {
 
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState(initialValue || defaultValue);
   const [backgroundImage, setBackgroundImage] = useState('');
   const ref = useRef<HTMLInputElement>(null);
   let linearGradient = '';
 
   useEffect(() => {
-    setValue(initialValue);
+    setValue(initialValue || defaultValue);
     setBackgroundImage(linearGradient);
   }, [initialValue]);
 
@@ -44,6 +44,6 @@ export const InputRange: React.FC<InputProps> = ({ name, text, value: initialVal
 
   return <div>
     <input ref={ref} type='range' className='input' min='0' max='20' step='1' value={value == null ? 0 : value} style={{ backgroundImage }} onChange={handleChange} />
-    {value !== null && <span className='text'>{value}</span>}
+    {value !== null && <span className='text'>{value + unit}</span>}
   </div>
 }

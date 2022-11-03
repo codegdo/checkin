@@ -1,57 +1,40 @@
 export const getSetStringKeyObject = (obj: any, key: string, value?: string) => {
   const keys = key.split('.');
 
-  console.log('OOOOO', obj);
-
   const result = keys.reduce(
     (a, k, i) => {
       let { obj, ref, value } = a;
+      const lastKey = keys.length - 1 == i;
+      const length = keys.length;
 
-      // nested
-      if (keys.length > 1) {
-
-        if (obj[k] && typeof obj[k] === 'object') {
-
+      // assign ref
+      if (length > 1) {
+        if (i === 0) {
           ref = obj[k];
-
         } else {
-
-          if (keys.length - 1 == i) {
-            //ref[k] = value || ref[k];
-            ref[k] = ref[k] || null;
-          } else {
-            ref[k] = ref[k] || {};
+          // insert key if not found
+          if (ref && ref[k] === undefined) {
+            ref[k] = lastKey ? null : {};
           }
-
-          ref = ref[k];
-
+          // skip last key ref
+          ref = lastKey ? ref : ref[k];
         }
+      }
 
-        if (ref && ref[k]) {
-          if (!value) {
-            // get
-            value = ref[k];
-          } else {
-            // set
-            ref[k] = value;
-          }
-        }
-
-      } else {
+      if (ref && ref[k] !== undefined) {
         if (!value) {
           // get
-          value = obj[k];
+          value = ref[k];
         } else {
           // set
-          obj[k] = value;
+          ref[k] = value;
         }
       }
 
       return { ...a, ref, value };
     },
-    { obj, ref: null, value } as any
+    { obj, ref: obj, value } as any
   );
 
-  console.log(result);
   return result;
 };

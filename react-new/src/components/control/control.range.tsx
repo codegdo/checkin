@@ -19,6 +19,6 @@ export const ControlRange: FC<any> = ({ label, name }): JSX.Element => {
 
   return <div>
     <label>{label}</label>
-    <Input type='range' name={name} value={value} onChange={onChange} />
+    <Input type='range' name={name} value={value} defaultValue='14' onChange={onChange} />
   </div>
 }

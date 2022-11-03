@@ -20,7 +20,6 @@ const scrypt = promisify(_scrypt);
 
 @Entity({ database: 'main', schema: 'sec', name: 'user' })
 @Unique(['username'])
-@Unique(['passcode'])
 export class User {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
