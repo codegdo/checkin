@@ -1,2 +1,2 @@
-Groups are used for object permissions.
-Roles are used for application or function permissions.
+Groups  - object permissions.
+Roles   - application or function permissions.
