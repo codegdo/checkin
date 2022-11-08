@@ -18,10 +18,8 @@ CREATE TABLE dbo.view (
   FOREIGN KEY(parent_id) REFERENCES dbo.view(id) ON DELETE SET NULL
 );
 
-INSERT
-INTO dbo.view(id, name, parent_id, sort_order, is_external, is_internal, is_active)
-VALUES
-(1,'config',null,null,null,null,'1'),
+INSERT INTO dbo.view(id, name, parent_id, sort_order, is_external, is_internal, is_active) VALUES
+(1,'manage',null,null,null,null,'1'),
 (2,'setup',null,null,null,null,'1'),
 (3,'account',null,null,null,null,'1'),
 (4,'help',null,null,null,null,'1'),
@@ -32,6 +30,7 @@ VALUES
 
 (100,'employees',1,0,'0','1','1'),
 (101,'clients',1,1,'0','1','1'),
+(102,'timeclock',1,1,'0','1','1'),
 
 (200,'customers',2,0,'0','1','1'),
 (201,'users',2,1,'0','1','1'),
@@ -62,6 +61,7 @@ VALUES
 (510,'bookings',6,0,'1','1','1'),
 (520,'tasks',7,0,'1','1','1'),
 (530,'orders',8,0,'1','1','1');
+
 
 
 

@@ -16,8 +16,7 @@ CREATE TABLE dbo.object (
   PRIMARY KEY(id)
 );
 
-INSERT INTO dbo.object(id, name, is_external, is_internal, is_custom, is_active) 
-VALUES
+INSERT INTO dbo.object(id, name, is_external, is_internal, is_custom, is_active) VALUES
 (1,'customer','1','1','0','1'),
 (2,'account','1','1','0','1'),
 (3,'user','1','1','0','1'),
@@ -38,7 +37,15 @@ VALUES
 (18,'appointment','1','1','0','1'),
 (19,'booking','1','1','0','1'),
 (20,'task','1','1','0','1'),
-(21,'order','1','1','0','1');
+(21,'order','1','1','0','1'),
+(22,'support','1','1','0','1'),
+(23,'document','1','1','0','1'),
+(24,'project','1','1','0','1'),
+(25,'appointment','1','1','0','1'),
+(26,'booking','1','1','0','1'),
+(27,'task','1','1','0','1'),
+(28,'order','1','1','0','1');
+
 
 
 
