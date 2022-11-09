@@ -13,8 +13,7 @@ CREATE TABLE dbo.feature (
   PRIMARY KEY(id)
 );
 
-INSERT
-INTO dbo.feature (id, name, price)
+INSERT INTO dbo.feature (id, name, price)
 VALUES
 (1,'Asset Audits',50),
 (2,'Asset Tagging',50),

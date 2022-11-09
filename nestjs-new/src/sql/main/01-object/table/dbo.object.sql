@@ -1,19 +1,19 @@
 -- OBJECT
 CREATE TABLE dbo.object (
-  id INTEGER NOT NULL,
-  name VARCHAR(45) NOT NULL,
+  id integer not null ,
+  name varchar(45) NOT NULL,
 
-  is_external BOOLEAN DEFAULT FALSE,
-  is_internal BOOLEAN DEFAULT TRUE,
-  is_custom BOOLEAN DEFAULT FALSE,
-  is_active BOOLEAN DEFAULT TRUE,
+  is_external boolean default false,
+  is_internal boolean default true,
+  is_custom boolean default false,
+  is_active boolean default true,
 
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP,
-  created_by VARCHAR(45) DEFAULT CURRENT_USER,
-  updated_by VARCHAR(45),
+  created_at timestamp default current_timestamp,
+  updated_at timestamp,
+  created_by varchar(45) default current_user,
+  updated_by varchar(45),
   --
-  PRIMARY KEY(id)
+  primary key(id)
 );
 
 INSERT INTO dbo.object(id, name, is_external, is_internal, is_custom, is_active) VALUES
@@ -45,9 +45,6 @@ INSERT INTO dbo.object(id, name, is_external, is_internal, is_custom, is_active)
 (26,'booking','1','1','0','1'),
 (27,'task','1','1','0','1'),
 (28,'order','1','1','0','1');
-
-
-
 
 
 --id INTEGER GENERATED ALWAYS AS IDENTITY NOT NULL,
