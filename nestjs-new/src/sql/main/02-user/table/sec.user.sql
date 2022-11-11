@@ -5,7 +5,6 @@ CREATE TABLE sec.user(
   password varchar(85),
   passcode numeric(4),
 
-  access_type_id integer,
   group_id integer,
   role_id integer,
   contact_id integer,

@@ -1,16 +1,16 @@
 -- MODULE_VIEW
 CREATE TABLE dbo.module_view (
-  module_id INTEGER NOT NULL,
-  view_id INTEGER NOT NULL,
-  company_id INTEGER,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  module_id integer not null,
+  view_id integer not null,
+  company_id integer,
+  created_at timestamp default current_timestamp,
   --
-  PRIMARY KEY(module_id, view_id),
-  FOREIGN KEY(module_id) REFERENCES dbo.module(id) ON DELETE SET NULL,
-  FOREIGN KEY(view_id) REFERENCES dbo.view(id) ON DELETE SET NULL
+  primary key (module_id, view_id),
+  foreign key (module_id) references dbo.module(id) on delete set null,
+  foreign key (view_id) references dbo.view(id) on delete set null
 );
 
-CREATE INDEX idx_module_view ON dbo.module_view(module_id, view_id);
+CREATE INDEX idx_module_view on dbo.module_view(module_id, view_id);
 
 INSERT INTO dbo.module_view(module_id, view_id, company_id)
 VALUES 

@@ -1,16 +1,16 @@
 -- FEATURE
 CREATE TABLE dbo.feature (
-  id INTEGER NOT NULL,
-  name VARCHAR(45) NOT NULL,
-  description VARCHAR(255),
-  price NUMERIC(8,2),
+  id integer not null,
+  name varchar(45) not null,
+  description varchar(255),
+  price numeric(8,2),
 
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP,
-  created_by VARCHAR(45) DEFAULT CURRENT_USER,
-  updated_by VARCHAR(45),
+  created_at timestamp default current_timestamp,
+  updated_at timestamp,
+  created_by varchar(45) default current_user,
+  updated_by varchar(45),
   --
-  PRIMARY KEY(id)
+  primary key (id)
 );
 
 INSERT INTO dbo.feature (id, name, price)

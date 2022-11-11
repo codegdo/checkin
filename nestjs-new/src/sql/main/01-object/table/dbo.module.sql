@@ -14,8 +14,8 @@ CREATE TABLE dbo.module (
   created_by varchar(45) default current_user,
   updated_by varchar(45),
   --
-  primary key(id),
-  foreign key(parent_id) references dbo.module(id) on delete set null
+  primary key (id),
+  foreign key (parent_id) references dbo.module(id) on delete set null
 );
 
 INSERT INTO dbo.module(id, name, parent_id, is_external, is_internal, is_subscription, is_active) VALUES

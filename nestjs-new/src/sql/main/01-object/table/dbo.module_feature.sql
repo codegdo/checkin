@@ -1,16 +1,16 @@
 -- MODULE_FEATURE
 CREATE TABLE dbo.module_feature (
-  module_id INTEGER NOT NULL,
-  feature_id INTEGER NOT NULL,
-  company_id INTEGER,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  module_id integer not null,
+  feature_id integer not null,
+  company_id integer,
+  created_at timestamp default current_timestamp,
   --
-  PRIMARY KEY(module_id, feature_id),
-  FOREIGN KEY(module_id) REFERENCES dbo.module(id) ON DELETE SET NULL,
-  FOREIGN KEY(feature_id) REFERENCES dbo.feature(id) ON DELETE SET NULL
+  primary key (module_id, feature_id),
+  foreign key (module_id) references dbo.module(id) on delete set null,
+  foreign key (feature_id) references dbo.feature(id) on delete set null
 );
 
-CREATE INDEX idx_module_feature ON dbo.module_feature(module_id, feature_id);
+CREATE INDEX idx_module_feature on dbo.module_feature(module_id, feature_id);
 
 INSERT INTO dbo.module_feature(module_id, feature_id, company_id) VALUES
 (50, 6, null),

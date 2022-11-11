@@ -13,7 +13,7 @@ CREATE TABLE dbo.object (
   created_by varchar(45) default current_user,
   updated_by varchar(45),
   --
-  primary key(id)
+  primary key (id)
 );
 
 INSERT INTO dbo.object(id, name, is_external, is_internal, is_custom, is_active) VALUES
