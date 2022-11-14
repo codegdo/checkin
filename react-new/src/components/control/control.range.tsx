@@ -15,7 +15,7 @@ export const ControlRange: FC<any> = ({ label, name }): JSX.Element => {
   const { values, onChange } = ctx;
   const { value } = getSetStringKeyObject(values, name);
 
-  console.log('CONTROL RANGE', value, values, name);
+  console.log('CONTROL RANGE', values, value, name);
 
   return <div>
     <label>{label}</label>

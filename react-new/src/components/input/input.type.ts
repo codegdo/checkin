@@ -4,6 +4,7 @@ export interface InputProps {
   name: string;
   value?: string | number;
   defaultValue?: string | number;
+  data?: any;
   text?: string;
   unit?: string;
   onChange?: ({ key, value }: { key: string; value: any }) => void;
