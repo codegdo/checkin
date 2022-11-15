@@ -15,7 +15,9 @@ export const ControlPadding: FC = (): JSX.Element => {
   const [toggle, setToggle] = useToggle();
 
   const handleChange = () => {
+
     setToggle(!toggle);
+
     const keys = 'field.fontSize'.split('.');
 
     const a = keys.reduce((a, k, i) => {

@@ -5,7 +5,9 @@ import { Template } from '../../components/template/template.component';
 
 const Index = Template(lazy(() => import('./setup.index')));
 const User = Template(lazy(() => import('./user/user.page')));
-const Policy = Template(lazy(() => import('./user/user.page')));
+const UserForm = Template(lazy(() => import('./user/user.form')));
+const Policy = Template(lazy(() => import('./policy/policy.page')));
+const PolicyForm = Template(lazy(() => import('./policy/policy.form')));
 
 export const SetupRoute: React.FC = (): JSX.Element => {
   const routes = useRoutes([
@@ -18,8 +20,16 @@ export const SetupRoute: React.FC = (): JSX.Element => {
       element: <User route="setup" page="users" />
     },
     {
+      path: '/users/:id',
+      element: <UserForm route="setup" page="users" />
+    },
+    {
       path: '/policies',
-      element: <User route="setup" page="policies" />
+      element: <Policy route="setup" page="policies" />
+    },
+    {
+      path: '/policies/:id',
+      element: <PolicyForm route="setup" page="policies" />
     }
   ]);
 

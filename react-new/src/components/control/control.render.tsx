@@ -16,7 +16,6 @@ export const ControlRender: FC<any> = ({ data }): JSX.Element => {
         }
 
         switch (type) {
-          case 'block':
           case 'padding': return <ControlPadding key={index} {...item} />;
           case 'range': return <ControlRange key={index} {...item} />;
           case 'text': return <ControlText key={index} {...item} />;
@@ -24,6 +23,5 @@ export const ControlRender: FC<any> = ({ data }): JSX.Element => {
         }
       })
     }
-
   </>
 }
