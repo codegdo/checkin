@@ -1,32 +1,21 @@
 import React, { PropsWithChildren, useRef } from 'react';
 import { FormProvider } from './form.context';
 import { Render } from './form.render';
+import { FormProps } from './form.type';
 
-export interface FormProps {
-  title?: string;
-  description?: string;
-  data?: any;
-  status?: string | undefined;
-  onCallback?: (key?: string, value?: string) => void;
-}
 
-export const Form: React.FC<PropsWithChildren<FormProps>> = ({ data, title, status, children, onCallback, ...props }): JSX.Element => {
-  const { current: form } = useRef({});
-  const { current: error } = useRef({});
-  const { current: validation } = useRef({});
+export const Form: React.FC<PropsWithChildren<FormProps>> = ({ children, ...props }): JSX.Element => {
 
-  const handleCallback = () => {
-    onCallback && onCallback();
-  }
 
-  return <form>
-    {title && <header>{title}</header>}
+  return <FormProvider {...props}>
+
+
     <main>
-      <FormProvider data={data} form={form} error={error} validation={validation} status={status} onCallback={handleCallback}>
-        {
-          children ? <Render>{children}</Render> : <Render />
-        }
-      </FormProvider>
+      {
+        children ? <Render>{children}</Render> : <Render />
+      }
     </main>
-  </form>
+
+
+  </FormProvider>
 }

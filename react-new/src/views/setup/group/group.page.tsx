@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-const Group = (): JSX.Element => {
+const Group: FC = (): JSX.Element => {
   return <>group</>
 };
 

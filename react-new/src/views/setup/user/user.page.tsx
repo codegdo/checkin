@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Column } from '../../../components/gridview/gridview.column';
 import { GridView } from '../../../components/gridview/gridview.component';
 
@@ -18,7 +18,7 @@ const users: Array<Users> = [
   }
 ];
 
-const User = (): JSX.Element => {
+const User: FC = (): JSX.Element => {
 
   useState();
 

@@ -34,7 +34,6 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
     console.log('NEW STATE', state);
   }, [state]);
 
-
   const moveItem = useCallback((payload: any) => {
 
     dispatch({
@@ -81,7 +80,6 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
 
     setItem(null);
   }, [state]);
-
 
   const handleCallback = useCallback(() => {
 

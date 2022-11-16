@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-const Policy = (): JSX.Element => {
+const Policy: FC = (): JSX.Element => {
   return <>policy</>
 };
 

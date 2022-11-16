@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import React, { FC, lazy } from 'react';
 import { useRoutes } from 'react-router-dom';
 
 import { Template } from '../../components/template/template.component';
@@ -9,7 +9,7 @@ const UserForm = Template(lazy(() => import('./user/user.form')));
 const Policy = Template(lazy(() => import('./policy/policy.page')));
 const PolicyForm = Template(lazy(() => import('./policy/policy.form')));
 
-export const SetupRoute: React.FC = (): JSX.Element => {
+export const SetupRoute: FC = (): JSX.Element => {
   const routes = useRoutes([
     {
       path: '/',

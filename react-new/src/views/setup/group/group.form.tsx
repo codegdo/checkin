@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-const GroupForm = (): JSX.Element => {
+
+
+const GroupForm: FC = (): JSX.Element => {
   return <>group form</>
 };
 

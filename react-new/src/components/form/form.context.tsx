@@ -1,15 +1,5 @@
-import React, { PropsWithChildren } from 'react';
-
-export interface FormContextProps {
-  data?: any;
-  form: Record<string, string | undefined>;
-  error: Record<string, string | undefined>;
-  validation: Record<string, string | undefined>;
-  status: string | undefined;
-  onCallback: (key?: string, value?: string) => void;
-};
-
-type FormProviderProps = FormContextProps;
+import React, { PropsWithChildren, useRef } from 'react';
+import { FormContextProps, FormProps } from './form.type';
 
 const initialProps: FormContextProps = {
   data: null,
@@ -17,13 +7,29 @@ const initialProps: FormContextProps = {
   error: {},
   validation: {},
   status: '',
-  onCallback: () => console.log('onCallback')
+  onClick: () => console.log('onClick')
 }
 
 export const FormContext = React.createContext<FormContextProps>(initialProps);
 
-export const FormProvider: React.FC<PropsWithChildren<FormProviderProps>> = ({ children, ...props }) => {
-  return <FormContext.Provider value={{ ...props }}>
-    {children}
-  </FormContext.Provider>
+export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, status, children }) => {
+
+  const { current: form } = useRef({});
+  const { current: error } = useRef({});
+  const { current: validation } = useRef({});
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert(e.target);
+  }
+
+  const onClick = (key, value) => {
+    alert(key);
+  }
+
+  return <form onSubmit={onSubmit}>
+    <FormContext.Provider value={{ data, form, error, validation, status, onClick }}>
+      {children}
+    </FormContext.Provider>
+  </form>
 }

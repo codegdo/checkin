@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-const Index: React.FC = (): JSX.Element => {
+const Index: FC = (): JSX.Element => {
   return <div>SETUP</div>;
 };
 

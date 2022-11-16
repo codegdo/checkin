@@ -1,8 +1,10 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useContext } from 'react';
 import { Block } from './form.block';
+import { FormContext } from './form.context';
 import { Field } from './form.field';
 import { FieldGrid } from './form.grid';
 import { FieldGroup } from './form.group';
+import { FormContextProps } from './form.type';
 
 interface RenderProps {
   data?: any[]
@@ -10,6 +12,15 @@ interface RenderProps {
 
 export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ data, children }): JSX.Element | null => {
   console.log('DATA', data);
+
+  const ctx = useContext((FormContext as Object) as React.Context<FormContextProps>);
+
+  if (!ctx) {
+    throw new Error();
+  }
+
+  const { onClick } = ctx;
+
   return <>
     {
       children ? children : data && data?.map((item, i) => {
@@ -24,5 +35,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ data, childre
         }
       })
     }
+    <button type='button' onClick={() => onClick('key', 'value')}>Click</button>
+
   </>
 }
