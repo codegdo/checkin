@@ -7,8 +7,8 @@ const data = {
     {
       effect: 'allow',
       actions: ['user:createUser'],
-      access: ['username:write'],
-      resource: ['setup::user/*']
+      fields: ['username:write'],
+      resource: ['setup/user']
     }
   ]
 };

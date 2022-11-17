@@ -67,8 +67,8 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
       accept: ['dropzone', 'dropholder', 'block', 'element', 'field'],
       drop: () => {
         if (ref.current) {
-          ref.current.style.transition = 'none';
-          ref.current.removeAttribute('style');
+          //ref.current.style.transition = 'none';
+          //ref.current.removeAttribute('style');
         }
       },
       hover: (item: any, monitor) => {
@@ -137,7 +137,7 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
 
   const classString = `dd-${role}${isDragging ? ' dragging' : ''}${isOver ? ' -over' : ''}${(data?.length == 0) ? ' -empty' : ''}${targetItem?.id == id ? ' -focus' : ''}`;
   const title = (role == 'block') ? name : role;
-  const events = !!draggable ? {
+  const events = draggable ? {
     onMouseOver: handleMouseOver,
     onMouseOut: handleMouseOut
   } : {};

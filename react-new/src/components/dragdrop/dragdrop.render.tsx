@@ -41,9 +41,9 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data = [
 
   return <>
     {
-      data.map((item, index) => {
+      data.map((item) => {
         return <DragDropItem
-          key={index}
+          key={item.id}
           current={current}
           list={state.data}
           item={currentItem}
