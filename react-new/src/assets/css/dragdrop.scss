@@ -12,6 +12,7 @@
   align-items: stretch;
   justify-content: space-evenly;
 }
+
 /*
 .dd-block:hover,
 .dd-element:hover,
@@ -41,7 +42,7 @@
 .on-right {
   border-right: 1px dashed rgb(73, 132, 241);
 }
-.on-middle .dd-content:empty:before {
+.on-middle .block:empty:before {
   border: 1px dashed rgb(73, 132, 241);
 }
 
@@ -53,7 +54,7 @@
   z-index: 2;
 }
 
-.dd-content {
+.block {
   padding: 1rem;
   background-color: #fff;
   transition: all 0.3s ease-out;
@@ -67,7 +68,7 @@
   }
 }
 
-.dd-content:empty:before {
+.block:empty:before {
   content: 'drop...';
   display: block;
 
@@ -82,15 +83,19 @@
 .-hover {
   //box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.1);
   border-color: rgb(73, 132, 241);
+  position: relative;
 
   &:before {
     content: attr(data-title);
     font-size: 11px;
     text-align: center;
-    color: #666;
+    color: #fff;
+    background-color: rgb(73, 132, 241);
+    padding: 2px 5px;
+
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -18px;
+    left: -1px;
   }
 }
 
@@ -104,7 +109,7 @@
   border: none;
 }
 
-[data-title='dropholder'] > .dd-content {
+[data-title='dropholder'] > .block {
   padding: 0;
 }
 

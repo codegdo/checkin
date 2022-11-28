@@ -1,22 +1,41 @@
 import React, { FC } from 'react';
 
-export const DragDropElement: FC<any> = ({ id, role, item, setItem, ...props }): JSX.Element => {
+export const DragDropElement: FC<any> = (props): JSX.Element => {
 
-  const onChange = () => {
+  const {
+    id,
+    className,
+    role,
+    name,
+    position,
+    data,
+    current,
+    item,
+    setItem
+  } = props;
 
-  }
+  const onChange = () => { }
+
+  const onClick = () => { }
 
   const handleClick = (event: any) => {
     event.preventDefault();
     event.stopPropagation();
 
-    const target = item?.id == id ? null : {
-      id,
-      role,
-      onChange
-    };
-
-    setItem(target);
+    if (item && item.id == id) {
+      setItem(null);
+    } else {
+      setItem({
+        id,
+        type: role,
+        position,
+        //list,
+        //values,
+        onChange,
+        onClick
+      });
+    }
   }
-  return <div className={`dd-content`} onClick={handleClick}>{props.name}</div>
+
+  return <div className={`element ${className}`} onClick={handleClick}>{props.name}</div>
 }

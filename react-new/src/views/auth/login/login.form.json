@@ -6,7 +6,7 @@
   "data": [
     {
       "id": "f-header",
-      "className": "",
+      "className": "f-header",
       "name": "block",
       "label": "Block",
       "description": null,
@@ -20,7 +20,7 @@
     },
     {
       "id": "f-main",
-      "className": "",
+      "className": "f-main",
       "name": "block",
       "label": "Block",
       "description": null,
@@ -34,7 +34,7 @@
     },
     {
       "id": "f-footer",
-      "className": "",
+      "className": "f-footer",
       "name": "block",
       "label": "Block",
       "description": null,
@@ -48,7 +48,7 @@
     },
     {
       "id": "f-title",
-      "className": "",
+      "className": "f-title",
       "name": "title",
       "label": "Login",
       "description": null,
@@ -62,7 +62,7 @@
     },
     {
       "id": "f-submit",
-      "className": "",
+      "className": "f-submit",
       "name": "submit",
       "label": "Login",
       "description": null,
@@ -77,7 +77,7 @@
     },
     {
       "id": "f-signup",
-      "className": "",
+      "className": "f-signup",
       "name": "signup",
       "label": "Signup",
       "description": null,
@@ -93,7 +93,7 @@
   "fields": [
     {
       "id": 3,
-      "className": "",
+      "className": "f-3",
       "name": "username",
       "label": "Username",
       "description": null,
@@ -101,11 +101,7 @@
       "role": "field",
       "data": null,
       "value": "",
-      "style": {
-        "field": {
-          "fontSize": "30px"
-        }
-      },
+      "style": {},
       "position": 4,
       "parentId": "f-main",
       "holderId": null,
@@ -115,7 +111,7 @@
     },
     {
       "id": 4,
-      "className": "",
+      "className": "f-4",
       "name": "password",
       "label": "Password",
       "description": null,
@@ -133,7 +129,7 @@
     },
     {
       "id": 5,
-      "className": "",
+      "className": "f-5",
       "name": "email",
       "label": "Email",
       "description": null,

@@ -11,20 +11,20 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
   switch (type) {
     case 'INIT':
       return { ...state, data: [...payload] };
-    case 'MOVE_ITEM':
-      const found_MOVE = dragdropHelper.find(payload);
+    case 'MOVE_ITEM': {
+      const found = dragdropHelper.find(payload);
 
-      if (!found_MOVE) {
+      if (!found) {
         return state;
       }
 
-      const { dragIndex, dropIndex, dragCounts } = found_MOVE;
+      const { dragIndex, dropIndex, dragCounts } = found;
 
       const dragItems: any = [];
 
-      // update map parentId and placeholderId dragItem
-      state.data[dragIndex].parentId = found_MOVE.parentId;
-      state.data[dragIndex].holderId = found_MOVE.holderId;
+      // update map parentId and holderId dragItem
+      state.data[dragIndex].parentId = found.parentId;
+      state.data[dragIndex].holderId = found.holderId;
 
       for (let i = 0; i < dragCounts; i++) {
         dragItems.push(state.data[dragIndex + i]);
@@ -43,17 +43,18 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
             }),
         },
       });
-    case 'ADD_ITEM':
-      const found_ADD = dragdropHelper.find(payload);
+    }
+    case 'ADD_ITEM': {
+      const found = dragdropHelper.find(payload);
 
-      if (!found_ADD) {
+      if (!found) {
         return state;
       }
 
-      let { dropIndex: dropIndex_ADD, dropType } = found_ADD;
+      let { dropIndex, dropType } = found;
 
       if (dropType === 'dropzone') {
-        dropIndex_ADD = 1;
+        dropIndex = 1;
       }
 
       const dragItem = {
@@ -64,13 +65,13 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         position: null,
         data: payload.data,
         value: payload.value,
-        parentId: found_ADD.parentId,
-        holderId: found_ADD.holderId,
+        parentId: found.parentId,
+        holderId: found.holderId,
       };
 
       return update(state, {
         data: {
-          $splice: [[dropIndex_ADD, 0, dragItem]],
+          $splice: [[dropIndex, 0, dragItem]],
           $apply: (data) =>
             data.filter((item, index) => {
               item.position = index;
@@ -78,12 +79,13 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
             }),
         },
       });
-    case 'DELETE_ITEM':
-      const [deleteCount] = dragdropHelper.count(payload);
+    }
+    case 'DELETE_ITEM': {
+      const [counts] = dragdropHelper.count(payload);
 
       return update(state, {
         data: {
-          $splice: [[payload.position, deleteCount]],
+          $splice: [[payload.position, counts]],
           $apply: (data) =>
             data.filter((item, index) => {
               item.position = index;
@@ -91,13 +93,14 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
             }),
         },
       });
-    case 'DUPLICATE_ITEM':
-      const [duplicateCount] = dragdropHelper.count(payload);
+    }
+    case 'DUPLICATE_ITEM': {
+      const [counts] = dragdropHelper.count(payload);
 
       let duplicateIds: any = {};
       const duplicateItems: any = [];
 
-      for (let i = 0; i < duplicateCount; i++) {
+      for (let i = 0; i < counts; i++) {
         const item = state.data[payload.position + i];
         const newId = randomString();
         duplicateIds = { ...duplicateIds, [item.id]: newId };
@@ -109,7 +112,9 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         });
       }
 
-      const lastIndex = duplicateItems[duplicateItems.length - 1].position + 1;
+      const lastCount = duplicateItems.length - 1;
+      const lastItem = duplicateItems[lastCount];
+      const lastIndex = parseInt(lastItem.position) + 1;
 
       return update(state, {
         data: {
@@ -121,7 +126,8 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
             }),
         },
       });
-    case 'UPDATE_ITEM':
+    }
+    case 'UPDATE_ITEM': {
       console.log('UPDATE ITEM', payload);
       return update(state, {
         data: {
@@ -136,6 +142,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
             }),
         },
       });
+    }
     default:
       return state;
   }

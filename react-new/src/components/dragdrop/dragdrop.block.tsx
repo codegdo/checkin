@@ -8,6 +8,7 @@ import { Render } from './dragdrop.render';
 export const DragDropBlock: FC<any> = (props): JSX.Element => {
   const {
     id,
+    className = '',
     role,
     name,
     position,
@@ -20,24 +21,32 @@ export const DragDropBlock: FC<any> = (props): JSX.Element => {
 
   const onChange = () => { }
 
+  const onClick = () => { }
+
   const handleClick = (event: any) => {
     event.preventDefault();
     event.stopPropagation();
 
-    const target = targetItem?.id == id ? null : {
-      id,
-      role,
-      onChange
-    };
-
-    setItem(target);
+    if (targetItem && targetItem.id == id) {
+      setItem(null);
+    } else {
+      setItem({
+        id,
+        type: role,
+        position,
+        //list,
+        //values,
+        onChange,
+        onClick
+      });
+    }
   }
 
   const events = (role == 'block') ? {
     onClick: handleClick
   } : {};
 
-  return <div className={`dd-content`} {...events}>
+  return <div className={`block ${className}`} {...events}>
     {
       name == 'component' ?
         <>

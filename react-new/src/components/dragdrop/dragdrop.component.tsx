@@ -13,9 +13,7 @@ export const DragDrop: React.FC<PropsWithChildren<DragDropProps>> = ({ children,
     <DndProvider backend={HTML5Backend}>
       <DragDropProvider {...props}>
         <DragDropRender />
-        {
-          children
-        }
+        {children}
         <DragDropEditor />
       </DragDropProvider>
     </DndProvider>

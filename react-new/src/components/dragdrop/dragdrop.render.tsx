@@ -20,6 +20,7 @@ export const DragDropRender: React.FC = (): JSX.Element => {
 
   return <DragDropItem
     id="dropzone"
+    className="form"
     name="block"
     role="dropzone"
     draggable={false}

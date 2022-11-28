@@ -1,6 +1,6 @@
 import React, { useEffect, useState, MouseEvent } from 'react';
 
-import { Label } from '../input/label.component';
+import { Label } from '../input/input.label';
 import { Input } from '../input/input.component';
 
 export const DragDropField: React.FC<any> = ({ id, type, name, className, role, label, description, position, isRequired, style, list, item, current, setItem, updateItem, ...props }): JSX.Element => {
@@ -108,8 +108,8 @@ export const DragDropField: React.FC<any> = ({ id, type, name, className, role, 
     }
   };
 
-  return <div className={`dd-content x-${id}`} style={{ ...style?.field }} onClick={handleClick}>
-    <Label className='label' label={values.label} description={values.description} style={style} />
+  return <div className={`field ${className}`} style={{ ...style?.field }} onClick={handleClick}>
+    <Label className='label' label={values.label} description={values.description} style={{ ...style?.label }} />
     <Input id={id} name={name} type={type} />
   </div>
 };

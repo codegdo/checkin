@@ -4,7 +4,7 @@ import { ControlPadding } from './control.padding';
 import { ControlRange } from './control.range';
 import { ControlText } from './control.text';
 
-export const ControlRender: FC<any> = ({ data }): JSX.Element => {
+export const ControlRender: FC<any> = ({ data = [] }): JSX.Element => {
 
   return <>
     {

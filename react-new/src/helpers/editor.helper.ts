@@ -1,4 +1,11 @@
 class EditorHelper {
+  getBlock() {
+    return {
+      design: [],
+      setting: []
+    }
+  }
+
   getField() {
     return {
       content: [
@@ -71,9 +78,21 @@ class EditorHelper {
     }
   }
 
+  getElement() {
+    return {
+      content: [],
+      design: [],
+      setting: []
+    }
+  }
+
+
+
   getData(type: string) {
     switch (type) {
+      case 'block': return this.getBlock();
       case 'field': return this.getField();
+      case 'element': return this.getElement();
       default: return {};
     }
   }

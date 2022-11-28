@@ -14,11 +14,21 @@ export const ControlRange: FC<any> = ({ label, name }): JSX.Element => {
 
   const { values, onChange } = ctx;
   const { value } = getSetStringKeyObject(values, name);
+  let defaultValue;
 
   console.log('CONTROL RANGE', values, value, name);
 
+  switch (name) {
+    case 'fontSize':
+
+      break;
+    default:
+      defaultValue = null;
+  }
+
+
   return <div>
     <label>{label}</label>
-    <Input type='range' name={name} value={value} defaultValue='14' onChange={onChange} />
+    <Input type='range' name={name} value={value} defaultValue='16' onChange={onChange} />
   </div>
 }

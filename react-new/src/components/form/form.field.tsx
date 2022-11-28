@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { Input } from '../input/input.component';
-import { Label } from '../input/label.component';
+import { Label } from '../input/input.label';
 import { FormContext } from './form.context';
 
 interface FieldProps {
