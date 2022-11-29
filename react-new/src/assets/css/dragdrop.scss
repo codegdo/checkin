@@ -82,7 +82,7 @@
 
 .-hover {
   //box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.1);
-  border-color: rgb(73, 132, 241);
+  border-color: rgb(137, 209, 234);
   position: relative;
 
   &:before {
@@ -90,12 +90,14 @@
     font-size: 11px;
     text-align: center;
     color: #fff;
-    background-color: rgb(73, 132, 241);
+    background-color: rgb(137, 209, 234);
     padding: 2px 5px;
 
     position: absolute;
-    top: -18px;
+    top: 0;
     left: -1px;
+
+    transform: translateY(-100%);
   }
 }
 

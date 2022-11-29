@@ -7,4 +7,7 @@ https://brandcrowd.com
 https://pexels.com
 https://thenounproject.com
 
+https://miro.com
+https://drawsql.app
+
 https://react-svgr.com/playground/

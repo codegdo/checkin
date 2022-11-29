@@ -2,9 +2,10 @@ import React, { useEffect, useState, MouseEvent } from 'react';
 
 import { Label } from '../input/input.label';
 import { Input } from '../input/input.component';
+import { DragDropToolbar } from './dragdrop.toolbar';
 
-export const DragDropField: React.FC<any> = ({ id, type, name, className, role, label, description, position, isRequired, style, list, item, current, setItem, updateItem, ...props }): JSX.Element => {
-
+export const DragDropField: React.FC<any> = (props): JSX.Element => {
+  const { id, type, name, className, role, label, description, position, isRequired, style, list, item, current, setItem, updateItem } = props;
   const initialValues = { className, label, description, style, isRequired };
   const [values, setValues] = useState(initialValues);
   const [isChange, setIsChange] = useState(false);
@@ -93,7 +94,7 @@ export const DragDropField: React.FC<any> = ({ id, type, name, className, role, 
     event.preventDefault();
     event.stopPropagation();
 
-    if (item && item.id == id) {
+    if (item?.id == id) {
       setItem(null);
     } else {
       setItem({
@@ -102,14 +103,20 @@ export const DragDropField: React.FC<any> = ({ id, type, name, className, role, 
         position,
         list,
         values,
+        isEdit: false,
         onChange,
         onClick
       });
     }
   };
 
-  return <div className={`field ${className}`} style={{ ...style?.field }} onClick={handleClick}>
-    <Label className='label' label={values.label} description={values.description} style={{ ...style?.label }} />
-    <Input id={id} name={name} type={type} />
-  </div>
+  return <>
+    {
+      item?.id == id && <DragDropToolbar {...props} />
+    }
+    <div className={`field ${className}`} style={{ ...style?.field }} onClick={handleClick}>
+      <Label className='label' label={values.label} description={values.description} style={{ ...style?.label }} />
+      <Input id={id} name={name} type={type} />
+    </div>
+  </>
 };

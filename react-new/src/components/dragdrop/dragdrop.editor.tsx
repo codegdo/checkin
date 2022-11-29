@@ -31,9 +31,9 @@ export const DragDropEditor: FC = () => {
     }
   }, [item]);
 
-  return item && <div ref={ref}>
+  return <div ref={ref}>
     {
-      item.isDragging ? null : <Editor {...item} />
+      (item && item.isEdit) ? item.isDragging ? null : <Editor {...item} /> : null
     }
   </div>
 }

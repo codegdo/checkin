@@ -161,9 +161,6 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
   return (
     <div className={classString} id={id} ref={ref} tabIndex={position} data-title={title} {...events}>
       {
-        targetItem?.id == id && <DragDropToolbar {...props} />
-      }
-      {
         render()
       }
     </div>

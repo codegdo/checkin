@@ -27,18 +27,21 @@ export const DragDropBlock: FC<any> = (props): JSX.Element => {
     event.preventDefault();
     event.stopPropagation();
 
-    if (targetItem && targetItem.id == id) {
-      setItem(null);
-    } else {
-      setItem({
-        id,
-        type: role,
-        position,
-        //list,
-        //values,
-        onChange,
-        onClick
-      });
+    if (event.target.classList.contains('-hover')) {
+
+      if (targetItem && targetItem.id == id) {
+        setItem(null);
+      } else {
+        setItem({
+          id,
+          type: role,
+          position,
+          //list,
+          //values,
+          onChange,
+          onClick
+        });
+      }
     }
   }
 
