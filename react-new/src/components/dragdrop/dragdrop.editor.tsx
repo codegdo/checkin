@@ -6,7 +6,7 @@ import { DragDropContextProps } from './dragdrop.type';
 
 export const DragDropEditor: FC = () => {
 
-  const ctx = useContext((DragDropContext as Object) as React.Context<DragDropContextProps>);
+  const ctx = useContext((DragDropContext) as React.Context<DragDropContextProps>);
 
   if (!ctx) {
     throw new Error();
@@ -31,9 +31,10 @@ export const DragDropEditor: FC = () => {
     }
   }, [item]);
 
+
   return <div ref={ref}>
     {
-      (item && item.isEdit) ? item.isDragging ? null : <Editor {...item} /> : null
+      (item && item.isEdit) ? <Editor {...item} /> : null
     }
   </div>
 }

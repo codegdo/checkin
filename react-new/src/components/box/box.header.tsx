@@ -1,7 +1,7 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 
 type BoxHeaderProps = React.HTMLProps<HTMLElement>
 
-export const BoxHeader = React.forwardRef<HTMLElement, BoxHeaderProps>((props: any, ref): JSX.Element => {
-  return <header ref={ref}>{props.children}</header>
+export const BoxHeader = React.forwardRef<HTMLElement, BoxHeaderProps>(({ className = '', children }, ref): JSX.Element => {
+  return <header ref={ref} className={className}>{children}</header>
 });

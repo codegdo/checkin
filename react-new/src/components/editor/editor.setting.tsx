@@ -4,7 +4,7 @@ import { EditorContextProps } from './editor.type';
 
 export const EditorSetting: FC<any> = (): JSX.Element => {
 
-  const ctx = useContext((EditorContext as Object) as React.Context<EditorContextProps>);
+  const ctx = useContext((EditorContext) as React.Context<EditorContextProps>);
 
   if (!ctx) {
     throw new Error();

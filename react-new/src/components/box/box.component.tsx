@@ -4,7 +4,7 @@ import { useDrag, useDragLayer, useDrop, XYCoord } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
 
-export const Box: FC<PropsWithChildren> = ({ children }): JSX.Element => {
+export const Box: FC<PropsWithChildren<{ className: string }>> = ({ className = '', children }): JSX.Element => {
   const ref = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState({ top: 0, left: 0 });
 
@@ -44,7 +44,7 @@ export const Box: FC<PropsWithChildren> = ({ children }): JSX.Element => {
 
   drag(drop(ref));
 
-  return <div ref={preview} style={{ ...offset }}>
+  return <div ref={preview} style={{ ...offset }} className={className}>
     {children && Children.toArray(children).map((child) => {
 
       if (isValidElement(child) && typeof child.type !== 'string' && isForwardRef(child)) {

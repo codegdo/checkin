@@ -62,33 +62,36 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     }
   };
 
-  useEffect(() => {
-
-    if (item && item.id == id) {
-
-      // duplicate and move item if not match with position
-      // then reset setItem with item data
-      if (item.position !== position) {
-        setItem({
-          id,
-          type: role,
-          position,
-          list,
-          values: { ...item.value },
-          onChange,
-          onClick
-        });
+  /*
+    useEffect(() => {
+  
+       if (item && item.id == id) {
+  
+        // duplicate and move item if not match with position
+        // then reset setItem with item data
+        if (item.position !== position) {
+          setItem({
+            id,
+            isEdit: item.isEdit,
+            type: role,
+            position,
+            list,
+            values: { ...item.values },
+            onChange,
+            onClick
+          });
+        }
       }
-    }
-
-    return () => {
-      if (item && item.id == id) {
-        // keep track with last selected item
-        current.item = { ...item };
-      }
-    }
-
-  }, [item]);
+  
+      return () => {
+        if (item && item.id == id) {
+          // keep track with last selected item
+          current.item = { ...item };
+        }
+      } 
+  
+    }, [item]);
+  */
 
   const handleClick = (event: any) => {
     event.preventDefault();

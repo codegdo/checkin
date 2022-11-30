@@ -9,14 +9,14 @@ import { EditorTab } from './editor.tab';
 export const Editor: FC<EditorProps> = (props) => {
 
   return <EditorProvider {...props}>
-    <Box>
-      <BoxHeader>
+    <Box className='editor fixed'>
+      <BoxHeader className='editor-header'>
         <EditorTab />
       </BoxHeader>
-      <BoxMain>
+      <BoxMain className='editor-main'>
         <EditorRender />
       </BoxMain>
-      <BoxFooter>
+      <BoxFooter className='editor-footer'>
       </BoxFooter>
     </Box>
   </EditorProvider>

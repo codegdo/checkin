@@ -3,7 +3,7 @@ import { EditorContext } from './editor.context';
 import { EditorContextProps } from './editor.type';
 
 export const EditorTab: FC = (): JSX.Element => {
-  const ctx = useContext((EditorContext as Object) as React.Context<EditorContextProps>);
+  const ctx = useContext((EditorContext) as React.Context<EditorContextProps>);
 
   if (!ctx) {
     throw new Error();

@@ -32,7 +32,7 @@ export const DragDropRender: React.FC = (): JSX.Element => {
 
 export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data = [] }): JSX.Element => {
 
-  const ctx = useContext((DragDropContext as Object) as React.Context<DragDropContextProps>);
+  const ctx = useContext((DragDropContext) as React.Context<DragDropContextProps>);
 
   if (!ctx) {
     throw new Error();

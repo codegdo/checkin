@@ -1,4 +1,9 @@
 .editor {
   background: #fff;
   box-shadow: rgb(0 0 0 / 20%) 0 7px 30px;
+  z-index: 9;
+}
+
+.editor-header {
+  padding: 1rem;
 }

@@ -17,7 +17,9 @@ export const getSetStringKeyObject = (obj: any, key: string, value?: string) => 
             ref[k] = lastKey ? null : {};
           }
           // skip last key ref
-          ref = lastKey ? ref : ref[k];
+          if (ref) {
+            ref = lastKey ? ref : ref[k];
+          }
         }
       }
 

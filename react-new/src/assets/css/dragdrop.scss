@@ -46,12 +46,22 @@
   border: 1px dashed rgb(73, 132, 241);
 }
 
+.dragging {
+  .dd-toolbar {
+    display: none;
+  }
+
+  &:before {
+    display: none;
+  }
+}
 .dd-toolbar {
   display: flex;
   position: absolute;
   top: 0;
   left: 0;
   z-index: 2;
+  transform: translateY(-200%);
 }
 
 .block {
@@ -103,8 +113,23 @@
 
 .-focus {
   //box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.3);
-  border-color: rgb(73, 132, 241);
-  content: 'test';
+  border: 1px solid rgb(73, 132, 241);
+  z-index: 2;
+
+  &:before {
+    content: attr(data-title);
+    font-size: 11px;
+    text-align: center;
+    color: #fff;
+    background-color: rgb(73, 132, 241);
+    padding: 2px 5px;
+
+    position: absolute;
+    top: 0;
+    left: -1px;
+
+    transform: translateY(-100%);
+  }
 }
 
 [data-title='dropholder'] {
