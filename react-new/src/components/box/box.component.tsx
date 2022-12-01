@@ -2,10 +2,12 @@ import React, { FC, PropsWithChildren, Children, useEffect, useRef, useState, is
 import { isForwardRef } from 'react-is';
 import { useDrag, useDragLayer, useDrop, XYCoord } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import { useWindowDimensions } from '../../hooks';
 
 
 export const Box: FC<PropsWithChildren<{ className: string }>> = ({ className = '', children }): JSX.Element => {
   const ref = useRef<HTMLDivElement>(null);
+  const { height, width } = useWindowDimensions();
   const [offset, setOffset] = useState({ top: 0, left: 0 });
 
   const { isDragging, dragType, initialOffset, differentFromInitialOffset } = useDragLayer((monitor) => ({

@@ -1,9 +1,4 @@
-import { AnyAction } from 'redux';
-import { LayoutState, LAYOUT_UPDATE } from './layout.type';
+import { createAction } from '@reduxjs/toolkit';
 
-export function updateLayout(layouts: LayoutState): AnyAction {
-  return {
-    type: LAYOUT_UPDATE,
-    payload: layouts,
-  };
-}
+export const updateLayout = createAction('layout/LAYOUT_UPDATE');
+

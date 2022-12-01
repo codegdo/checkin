@@ -1,14 +1,16 @@
-import React, { useEffect, useState, MouseEvent } from 'react';
+import React, { useEffect, useState, MouseEvent, useRef } from 'react';
 
 import { Label } from '../input/input.label';
 import { Input } from '../input/input.component';
 import { DragDropToolbar } from './dragdrop.toolbar';
+import { BoundingClientRect } from '../../helpers';
 
 export const DragDropField: React.FC<any> = (props): JSX.Element => {
   const { id, type, name, className, role, label, description, position, isRequired, style, list, item, current, setItem, updateItem } = props;
   const initialValues = { className, label, description, style, isRequired };
   const [values, setValues] = useState(initialValues);
   const [isChange, setIsChange] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setValues({ ...initialValues });
@@ -97,6 +99,14 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     event.preventDefault();
     event.stopPropagation();
 
+    let boundingClientRect = null;
+
+    if (ref && ref.current) {
+      boundingClientRect = ref.current.getBoundingClientRect() as BoundingClientRect;
+    }
+
+    console.log(boundingClientRect);
+
     if (item?.id == id) {
       setItem(null);
     } else {
@@ -115,9 +125,9 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
   return <>
     {
-      item?.id == id && <DragDropToolbar {...props} />
+      (item?.id == id) && <DragDropToolbar {...props} />
     }
-    <div className={`field ${className}`} style={{ ...style?.field }} onClick={handleClick}>
+    <div ref={ref} className={`field ${className}`} style={{ ...style?.field }} onClick={handleClick}>
       <Label className='label' label={values.label} description={values.description} style={{ ...style?.label }} />
       <Input id={id} name={name} type={type} />
     </div>

@@ -1,7 +1,7 @@
 import { DropTargetMonitor } from 'react-dnd';
 import { randomString } from '../utils';
 
-interface BoundingClientRect {
+export interface BoundingClientRect {
   top: number;
   right: number;
   bottom: number;

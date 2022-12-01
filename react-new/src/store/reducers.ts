@@ -4,7 +4,7 @@ import { PersistPartial } from 'redux-persist/es/persistReducer';
 import storage from 'redux-persist/lib/storage';
 
 import { initialSessionState, sessionReducer } from './session/session.reducer';
-import { initialLayoutState, layoutReducer } from './layout/layout.reducer';
+import { initialLayout, layoutReducer } from './layout/layout.reducer';
 import { initialNavState, navReducer } from './nav/nav.reducer';
 import { initialPolicyState, policyReducer } from './policy/policy.reducer';
 import { initialLocationState, locationReducer } from './location/location.reducer';
@@ -23,12 +23,12 @@ export const appReducer = combineReducers({
 const rootReducer = (state: AppState | undefined, action: AnyAction): AppState => {
   // reset store
   if (action.type === 'session/DELETE') {
-    storage.removeItem('persist:root');
+    void storage.removeItem('persist:root');
 
     state = {
       ...state,
       session: initialSessionState,
-      layout: initialLayoutState,
+      layout: initialLayout,
       nav: initialNavState,
       policy: initialPolicyState,
       locations: initialLocationState
