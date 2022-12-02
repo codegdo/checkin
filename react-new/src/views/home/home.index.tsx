@@ -5,7 +5,7 @@ import { useAction } from '../../hooks';
 const Index: React.FC = (): JSX.Element => {
 
 
-  const { updateLayout } = useAction();
+  const { updateLayout, getLayoutAsync } = useAction();
   const [form, setForm] = useState<FormData>();
 
   // load form
@@ -14,7 +14,7 @@ const Index: React.FC = (): JSX.Element => {
       const json: any = (await import('../auth/login/login.form.json')).default;
       setForm(json);
     })();
-    updateLayout({ internal: '' })
+    getLayoutAsync();
   }, []);
 
   useEffect(() => {

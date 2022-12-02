@@ -1,32 +1,31 @@
-import { AnyAction } from 'redux';
-import { LocationState, LOCATION_GET, LOCATION_CREATE, LOCATION_UPDATE, LOCATION_DELETE, LOCATION_DELETE_ALL } from './location.type';
+import { AnyAction, createReducer } from "@reduxjs/toolkit";
 
-export const initialLocationState: LocationState[] = [];
+import { getLocation, getLocations, createLocation, updateLocation, deleteLocation, deleteLocations } from "./location.action";
+import { LocationState } from './location.type';
 
-export const locationReducer = (
-  state = initialLocationState,
-  { type, payload }: AnyAction
-): LocationState[] => {
-  switch (type) {
-    case LOCATION_GET: {
-      return [...payload];
-    }
-    case LOCATION_CREATE: {
-      return [...state, payload];
-    }
-    case LOCATION_UPDATE: {
+export const initialLocation: LocationState[] = [];
+
+export const locationReducer = createReducer(initialLocation, (builder) => {
+  builder
+    .addCase(getLocations.type, (_state, action: AnyAction) => {
+      return [...action.payload];
+    })
+    .addCase(getLocation.type, (state, action: AnyAction) => {
+      return state.filter(location => location.id == action.payload);
+    })
+    .addCase(createLocation.type, (state, action: AnyAction) => {
+      return [...state, action.payload];
+    })
+    .addCase(updateLocation.type, (state, action: AnyAction) => {
       return state.map(location => {
-        return location.id === payload.id ? payload : location;
+        return location.id === action.payload.id ? action.payload : location;
       });
-    }
-    case LOCATION_DELETE: {
-      return state.filter(location => location.id !== payload);
-    }
-    case LOCATION_DELETE_ALL: {
+    })
+    .addCase(deleteLocation.type, (state, action: AnyAction) => {
+      return state.filter(location => location.id !== action.payload);
+    })
+    .addCase(deleteLocations.type, (_state, _action: AnyAction) => {
       return [];
-    }
-    default: {
-      return state;
-    }
-  }
-};
+    })
+});
+
