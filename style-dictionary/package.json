@@ -1,0 +1,16 @@
+{
+  "name": "style-dictionary",
+  "version": "1.0.0",
+  "description": "style dictionary",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run clean && style-dictionary build",
+    "clean": "style-dictionary clean"
+  },
+  "author": "gdo",
+  "license": "ISC",
+  "devDependencies": {
+    "lodash": "^4.17.21",
+    "style-dictionary": "^3.7.1"
+  }
+}

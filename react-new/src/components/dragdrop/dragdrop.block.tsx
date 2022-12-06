@@ -1,11 +1,13 @@
-import React, { FC } from 'react';
+import React, { FC, useRef, MouseEvent } from 'react';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 
 import { DragDropItem } from './dragdrop.item';
 import { Render } from './dragdrop.render';
+import { BoundingClientRect } from '../../helpers';
 
 export const DragDropBlock: FC<any> = (props): JSX.Element => {
+
   const {
     id,
     className = '',
@@ -14,34 +16,54 @@ export const DragDropBlock: FC<any> = (props): JSX.Element => {
     position,
     data,
     current,
-    item: targetItem,
+    item,
     setItem,
     children
   } = props;
 
+  const ref = useRef<HTMLDivElement>(null);
+
   const onChange = () => { }
 
-  const onClick = () => { }
+  const onClick = (event: MouseEvent<HTMLElement, MouseEvent> & {
+    target: { name: string | undefined }
+  }) => {
+    const { name } = event.target;
+
+    switch (name) {
+      case 'cancel':
+        setItem(null);
+        break;
+      default:
+        setItem(null);
+    }
+  };
 
   const handleClick = (event: any) => {
     event.preventDefault();
     event.stopPropagation();
 
-    if (event.target.classList.contains('-hover')) {
+    let boundingClientRect = null;
 
-      if (targetItem && targetItem.id == id) {
-        setItem(null);
-      } else {
-        setItem({
-          id,
-          type: role,
-          position,
-          //list,
-          //values,
-          onChange,
-          onClick
-        });
-      }
+    if (ref && ref.current) {
+      boundingClientRect = ref.current.getBoundingClientRect() as BoundingClientRect;
+    }
+
+    console.log(boundingClientRect);
+
+    if (item?.id == id) {
+      setItem(null);
+    } else {
+      setItem({
+        id,
+        type: role,
+        position,
+        //list,
+        //values,
+        isEdit: false,
+        onChange,
+        onClick
+      });
     }
   }
 
@@ -49,7 +71,7 @@ export const DragDropBlock: FC<any> = (props): JSX.Element => {
     onClick: handleClick
   } : {};
 
-  return <div className={`block ${className}`} {...events}>
+  return <div ref={ref} className={`block ${className}`} {...events}>
     {
       name == 'component' ?
         <>

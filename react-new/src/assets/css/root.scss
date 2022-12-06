@@ -11,6 +11,13 @@ $primary: darken($yellow, 0);
 $secondary: lighten($blue, 0);
 
 :root {
+  // --color
+  --color-text-button: ;
+  --color-text-link: ;
+
+  --color-background-button: ;
+  --color-background-link: ;
+
   --light-color: #{$light};
   --dark-color: #{$dark};
 

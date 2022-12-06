@@ -2,7 +2,6 @@ import React, { useEffect, useState, MouseEvent, useRef } from 'react';
 
 import { Label } from '../input/input.label';
 import { Input } from '../input/input.component';
-import { DragDropToolbar } from './dragdrop.toolbar';
 import { BoundingClientRect } from '../../helpers';
 
 export const DragDropField: React.FC<any> = (props): JSX.Element => {
@@ -55,11 +54,10 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
     switch (name) {
       case 'cancel':
-        setValues(initialValues);
-        setItem(null);
+        //
         break;
       default:
-        setIsChange(true);
+        setValues(initialValues);
         setItem(null);
     }
   };
@@ -123,13 +121,8 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     }
   };
 
-  return <>
-    {
-      (item?.id == id) && <DragDropToolbar {...props} />
-    }
-    <div ref={ref} className={`field ${className}`} style={{ ...style?.field }} onClick={handleClick}>
-      <Label className='label' label={values.label} description={values.description} style={{ ...style?.label }} />
-      <Input id={id} name={name} type={type} />
-    </div>
-  </>
+  return <div ref={ref} className={`field ${className}`} style={{ ...style?.field }} onClick={handleClick}>
+    <Label className='label' label={values.label} description={values.description} style={{ ...style?.label }} />
+    <Input id={id} name={name} type={type} />
+  </div>
 };

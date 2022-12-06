@@ -7,7 +7,6 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-//import thunk from 'redux-thunk';
 
 import { persistedReducer } from './store/reducers';
 
