@@ -1,3 +1,4 @@
+import { any } from 'joi';
 import { DropTargetMonitor } from 'react-dnd';
 import { randomString } from '../utils';
 
@@ -42,7 +43,7 @@ class DragDropHelper {
   }
 
   count({ id, data }): [number, string[]] {
-    if (id == null || undefined) {
+    if (id == null) {
       id = id + '';
     }
 
@@ -51,7 +52,8 @@ class DragDropHelper {
     return [ids.length, ids];
   }
 
-  find({ current, ...item }) {
+  find({ context, ...item }) {
+    const { current } = context;
 
     if (!current.drop) {
       return null;
@@ -72,7 +74,7 @@ class DragDropHelper {
       role: dropType,
       position: dropIndex,
       parentId,
-      holderId,
+      placeholderId,
       offset,
     } = current.drop;
 
@@ -82,7 +84,7 @@ class DragDropHelper {
     // get dropItems count
     const [dropCounts, dropIds] = this.count(current.drop);
 
-    if (dropType == 'dropholder') {
+    if (dropType == 'placeholder') {
       dropId = dropId.split('_')[0];
     }
 
@@ -129,7 +131,7 @@ class DragDropHelper {
           dropIndex = dropIndex + 1;
         }
       }
-    } else if (type == 'field_dropholder' || type == 'element_dropholder' || type == 'block_dropholder') {
+    } else if (type == 'field_placeholder' || type == 'element_placeholder' || type == 'block_placeholder') {
       dropIndex = dropIndex + dropCounts;
     } else {
       if (fromTopOverTop) {
@@ -167,21 +169,27 @@ class DragDropHelper {
       dragType,
       dropType,
       parentId,
-      holderId
+      placeholderId
     };
   }
 
   hover(
-    monitor: DropTargetMonitor<any, void>,
-    ref: React.RefObject<HTMLDivElement>,
-    current: any
+    {
+      dragItem,
+      dropItem,
+      monitor,
+      ref,
+    }: {
+      dragItem: any;
+      dropItem: any;
+      monitor: DropTargetMonitor<any, void>;
+      ref: React.RefObject<HTMLDivElement>
+    }
   ) {
 
     if (!ref.current) return;
 
-    // get item
-    const dragItem = monitor.getItem();
-    const dropItem = current.drop;
+    // target
     const target = ref.current;
 
     if (dragItem.id !== null && dropItem.id !== null && dragItem.id == dropItem.parentId) {
@@ -203,21 +211,21 @@ class DragDropHelper {
     //
     const childNode = target.childNodes[0] as HTMLElement;
 
-    if (dropItem.role === 'dropzone' || dropItem.role == 'dropholder') {
+    if (dropItem.role === 'dropzone' || dropItem.role == 'placeholder') {
       target.classList.add('on-middle');
       dropItem.offset = 'middle';
     } else {
       const display = this.display(target);
 
       if (display == 'row') {
-        if (dropItem.x == clientOffset.x) return;
+        if (dropItem.clientOffsetX == clientOffset.x) return;
 
-        dropItem.x = clientOffset.x;
+        dropItem.clientOffsetX = clientOffset.x;
 
         let width = 0;
 
         if (target.classList.contains('-empty')) {
-          width = (parseInt(window.getComputedStyle(childNode, ':before').width) || 0) / 2;
+          width = (parseInt(window.getComputedStyle(target, ':after').width) || 0) / 2;
         }
 
         if (target.hasAttribute('style')) {
@@ -238,14 +246,14 @@ class DragDropHelper {
           dropItem.offset = 'middle';
         }
       } else {
-        if (dropItem.y == clientOffset.y) return;
+        if (dropItem.clientOffsetY == clientOffset.y) return;
 
-        dropItem.y = clientOffset.y;
+        dropItem.clientOffsetY = clientOffset.y;
 
         let height = 0;
 
         if (target.classList.contains('-empty')) {
-          height = (parseInt(window.getComputedStyle(childNode, ':before').height) || 0) / 2;
+          height = (parseInt(window.getComputedStyle(target, ':after').height) || 0) / 2;
         }
 
         if (target.hasAttribute('style')) {

@@ -82,10 +82,21 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
   }, [state]);
 
   const handleCallback = useCallback(() => {
-
+    //
   }, []);
 
-  return <DragDropContext.Provider value={{ data, state, current, item, setItem, moveItem, addItem, deleteItem, duplicateItem, updateItem, onCallback: handleCallback }}>
+  return <DragDropContext.Provider value={{
+    state,
+    current,
+    item,
+    setItem,
+    moveItem,
+    addItem,
+    deleteItem,
+    duplicateItem,
+    updateItem,
+    onCallback: handleCallback
+  }}>
     {children}
   </DragDropContext.Provider>
 }

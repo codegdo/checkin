@@ -5,8 +5,8 @@ export interface DragDropProps {
 }
 
 export interface DragDropContextProps extends DragDropProps {
-  data: any;
   state: DragDropState;
+  current: any;
   item: any;
   setItem: (item: any) => void;
   moveItem: (item: any) => void;

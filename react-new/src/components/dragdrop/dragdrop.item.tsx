@@ -1,114 +1,36 @@
-import React, { FC, useRef } from 'react';
-import { useDrag, useDragLayer, useDrop } from 'react-dnd';
-import { getEmptyImage } from 'react-dnd-html5-backend';
+import React, { FC, useRef, MouseEvent, useState } from 'react';
 
-import { dragdropHelper } from '../../helpers';
 import { DragDropField } from './dragdrop.field';
 import { DragDropBlock } from './dragdrop.block';
 import { DragDropElement } from './dragdrop.element';
 import { DragDropToolbar } from './dragdrop.toolbar';
+import { useDragDrop } from '../../hooks';
+import { Input, Label } from '../input';
 
-export const DragDropItem: FC<any> = (props): JSX.Element => {
+export const DragDropItem: FC<any> = ({ props }): JSX.Element => {
 
   const {
     id,
+    className,
     name,
     role,
     type,
-    position,
     data,
+    position,
     parentId,
     holderId,
+
     current,
     draggable = true,
-    item: targetItem,
+    item,
     setItem,
     moveItem
   } = props;
 
-  const ref = useRef<HTMLDivElement>(null);
 
-  const { currentDragging } = useDragLayer((monitor) => ({
-    currentDragging: monitor.isDragging(),
-  }));
+  const [values, setValues] = useState(props);
 
-  const [{ isDragging }, drag, preview] = useDrag(
-    () => ({
-      type: role,
-      item: { ...props },
-      canDrag: () => {
-        if (ref.current) {
-          preview(getEmptyImage(), { captureDraggingState: false });
-          current.isOver = true;
-        }
-
-        if (targetItem?.id !== id) {
-          setItem && setItem(null);
-        }
-
-        return !!draggable;
-      },
-      collect: monitor => ({
-        isDragging: monitor.isDragging(),
-      }),
-      end: (item, monitor) => {
-        const didDrop = monitor.didDrop();
-
-        if (didDrop) {
-          moveItem(item);
-        }
-      }
-    }),
-    [id, moveItem, targetItem]
-  );
-
-  const [{ isOver }, drop] = useDrop(
-    () => ({
-      accept: ['dropzone', 'dropholder', 'block', 'element', 'field'],
-      drop: () => {
-        if (ref.current) {
-          //ref.current.style.transition = 'none';
-          //ref.current.removeAttribute('style');
-        }
-      },
-      hover: (item: any, monitor) => {
-
-        // current over
-        if (monitor.isOver({ shallow: true })) {
-
-          if (
-            !ref.current ||
-            item.id === id ||
-            (role === 'dropzone' && item.list.length !== 0) // if dropzone has children prevent the drop
-          ) {
-            current.drop = null;
-            return;
-          }
-
-          // undefined == null is true
-          if (current.drop == null || current.drop.id !== id) {
-            current.drop = {
-              id,
-              role,
-              type,
-              data,
-              position,
-              parentId,
-              holderId,
-              x: 0,
-              y: 0,
-              isOver: false
-            };
-          }
-
-          dragdropHelper.hover(monitor, ref, current);
-        }
-      },
-      collect: monitor => ({
-        isOver: monitor.isOver({ shallow: true }),
-        canDrop: monitor.canDrop(),
-      }),
-    }), [id, moveItem]);
+  const { ref, currentDragging, isDragging, isOver } = useDragDrop(props);
 
   const handleMouseOver = (event: any) => {
     event.preventDefault();
@@ -135,19 +57,56 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
     }
   }
 
-  const classString = `dd-${role}${isDragging ? ' dragging' : ''}${isOver ? ' -over' : ''}${(data?.length == 0) ? ' -empty' : ''}${targetItem?.id == id ? ' -focus' : ''}`;
+  const onChange = () => { }
+
+  const onClick = (event: MouseEvent<HTMLElement, MouseEvent> & {
+    target: { name: string | undefined }
+  }) => {
+    const { name } = event.target;
+
+    switch (name) {
+      case 'cancel':
+        //
+        break;
+      default:
+        setItem(null);
+    }
+  };
+
+  const handleClick = (event: any) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    let currentItem = null;
+
+    if (item?.id !== id) {
+      currentItem = {
+        id,
+        type: role,
+        position,
+        //list,
+        //values,
+        isEdit: false,
+        onChange,
+        onClick
+      };
+    }
+
+    setItem(currentItem);
+  }
+
+  const classString = `dd-${role}${isDragging ? ' dragging' : ''}${isOver ? ' -over' : ''}${(data?.length == 0) ? ' -empty' : ''}${item?.id == id ? ' -focus' : ''}`;
   const title = (role == 'block') ? name : role;
   const events = draggable ? {
+    onClick: handleClick,
     onMouseOver: handleMouseOver,
     onMouseOut: handleMouseOut
   } : {};
 
-  drag(drop(ref));
-
   return (
-    <div className={classString} id={id} ref={ref} tabIndex={position} data-title={title} {...events}>
+    <div ref={ref} className={classString} id={id} tabIndex={position} data-title={title} {...events}>
       {
-        (targetItem?.id == id) && <DragDropToolbar {...props} />
+        (item?.id == id) && <DragDropToolbar {...props} />
       }
       {
         (() => {
@@ -159,7 +118,10 @@ export const DragDropItem: FC<any> = (props): JSX.Element => {
             case 'element':
               return <DragDropElement {...props} />
             case 'field':
-              return <DragDropField {...props} />
+              return <>
+                <Label className='label' label={values.label} description={values.description} style={values.style} />
+                <Input id={id} name={name} type={type} />
+              </>
             default: return null;
           }
         })()

@@ -1,16 +1,19 @@
-.dd-dropzone,
-.dd-dropholder,
+.dd-dropzone {
+  padding: 2rem;
+  background: #f8f8f8;
+}
+
 .dd-block,
 .dd-element,
 .dd-field {
   border: 1px dashed #eee;
   transition: all 0.5s ease-out;
   position: relative;
-  user-select: none;
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: stretch;
-  justify-content: space-evenly;
+  //user-select: none;
+  //display: flex;
+  //flex-flow: column nowrap;
+  //align-items: stretch;
+  //justify-content: space-evenly;
 }
 
 /*
@@ -42,9 +45,6 @@
 .on-right {
   border-right: 1px dashed rgb(73, 132, 241);
 }
-.on-middle .block:empty:before {
-  border: 1px dashed rgb(73, 132, 241);
-}
 
 .dragging {
   .dd-toolbar {
@@ -64,12 +64,10 @@
   transform: translateY(-200%);
 }
 
-.block {
+.dd-block {
   padding: 1rem;
   background-color: #fff;
   transition: all 0.3s ease-out;
-  width: 100%;
-  height: 100%;
 
   input,
   textarea,
@@ -78,16 +76,29 @@
   }
 }
 
-.block:empty:before {
+.dd-placeholder {
+  input,
+  textarea,
+  select {
+    pointer-events: none;
+  }
+}
+
+.dd-block:empty:after,
+.dd-placeholder:empty:after {
   content: 'drop...';
   display: block;
 
   padding: 1rem;
   text-align: center;
-  background: #f8f8f8;
   color: #ccc;
+  background: #f8f8f8;
   border: 1px dashed #f8f8f8;
   transition: all 0.3s ease-out;
+}
+
+.on-middle:empty:after {
+  border: 1px dashed rgb(73, 132, 241);
 }
 
 .-hover {

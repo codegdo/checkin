@@ -22,9 +22,9 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
 
       const dragItems: any = [];
 
-      // update map parentId and holderId dragItem
+      // update map parentId and placeholderId dragItem
       state.data[dragIndex].parentId = found.parentId;
-      state.data[dragIndex].holderId = found.holderId;
+      state.data[dragIndex].placeholderId = found.placeholderId;
 
       for (let i = 0; i < dragCounts; i++) {
         dragItems.push(state.data[dragIndex + i]);
@@ -45,6 +45,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
       });
     }
     case 'ADD_ITEM': {
+      const { context, ...item } = payload;
       const found = dragdropHelper.find(payload);
 
       if (!found) {
@@ -58,15 +59,10 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
       }
 
       const dragItem = {
+        ...item,
         id: payload.id || randomString(),
-        type: payload.type,
-        name: payload.name,
-        role: payload.role,
-        position: null,
-        data: payload.data,
-        value: payload.value,
         parentId: found.parentId,
-        holderId: found.holderId,
+        placeholderId: found.placeholderId,
       };
 
       return update(state, {

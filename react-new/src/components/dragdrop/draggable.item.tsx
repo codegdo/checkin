@@ -3,13 +3,15 @@ import { useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
 export const DraggableItem: React.FC<any> = (props): JSX.Element => {
-  const { role, name, current, list, addItem, setItem } = props;
+  const { role, name, context } = props;
+  const { addItem, setItem } = context;
+
   const [{ opacity, isDragging }, drag, preview] = useDrag(
     () => ({
       type: role,
       item: { ...props },
       canDrag: () => {
-        setItem && setItem(null);
+        // setItem && setItem(null);
         preview(getEmptyImage(), { captureDraggingState: false });
         return true;
       },
@@ -28,7 +30,7 @@ export const DraggableItem: React.FC<any> = (props): JSX.Element => {
 
       }
     }),
-    [list, addItem]
+    [addItem]
   );
 
   return <div ref={drag} style={{ opacity }}>{name}</div>

@@ -1,6 +1,21 @@
 import React, { FC } from 'react';
+import { useDragDrop } from '../../hooks';
 
 export const DragDropElement: FC<any> = (props): JSX.Element => {
+  const { ref, classString, onMouseOver, onMouseOut } = useDragDrop(props);
+
+  return <div
+    ref={ref}
+    id={props.id}
+    className={`${classString}`}
+    onMouseOver={onMouseOver}
+    onMouseOut={onMouseOut}
+  >
+    {props.name}
+  </div>
+}
+
+/* export const DragDropElement: FC<any> = (props): JSX.Element => {
 
   const {
     id,
@@ -38,4 +53,4 @@ export const DragDropElement: FC<any> = (props): JSX.Element => {
   }
 
   return <div className={`element ${className}`} onClick={handleClick}>{props.name}</div>
-}
+} */

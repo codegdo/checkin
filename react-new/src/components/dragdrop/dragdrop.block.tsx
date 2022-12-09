@@ -1,12 +1,57 @@
-import React, { FC, useRef, MouseEvent } from 'react';
+import React, { FC, useRef, MouseEvent, useMemo } from 'react';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 
 import { DragDropItem } from './dragdrop.item';
 import { Render } from './dragdrop.render';
 import { BoundingClientRect } from '../../helpers';
+import { useDragDrop } from '../../hooks';
 
-export const DragDropBlock: FC<any> = (props): JSX.Element => {
+export const DragDropBlock: FC<any> = ({ children, ...props }): JSX.Element => {
+  const { ref, classString, onMouseOver, onMouseOut } = useDragDrop(props);
+
+  const events = (props.role == 'dropzone' || props.role == 'placeholder') ? null : {
+    onMouseOver,
+    onMouseOut
+  }
+
+  const component = useMemo(() => {
+    const value = DOMPurify.sanitize(props.value, { ADD_TAGS: ['jsx'] });
+    return parse(value, {
+      replace: (dom) => {
+
+        if ('attribs' in dom) {
+          const { attribs } = dom;
+          if (attribs.id) {
+            const [name, key] = attribs.id.split('_');
+            const items = props.data.filter((item: any) => item.placeholderId == key);
+
+            if (name == 'placeholder') {
+              return <DragDropBlock
+                {...props}
+                id={`${props.id}_${key}`}
+                name='block'
+                role='placeholder'
+
+                data={items}
+                placeholderId={key}
+              />
+            }
+          }
+        }
+
+        return dom;
+      }
+    })
+  }, [props.data]);
+
+  return <div ref={ref} id={props.id} className={`${classString}`} {...events}>
+    {props.name == 'component' ? <>{component}</> : (children ? children : <Render data={props.data} />)}
+  </div>
+};
+
+
+/* export const DragDropBlock: FC<any> = (props): JSX.Element => {
 
   const {
     id,
@@ -85,20 +130,21 @@ export const DragDropBlock: FC<any> = (props): JSX.Element => {
 
                   if (attribs.id) {
                     const [name, key] = attribs.id.split('_');
-                    const items = data.filter((item: any) => item.holderId == key);
+                    const items = props.data.filter((item: any) => item.placeholderId == key);
 
-                    if (name == 'dropholder') {
-                      return <DragDropItem
+                    if (name == 'placeholder') {
+                      return <DragDropBlock
                         id={`${id}_${key}`}
                         name='block'
                         type='div'
-                        role='dropholder'
-                        current={current}
-                        position={position}
-                        draggable={false}
-                        parentId={id}
-                        holderId={key}
+                        role='placeholder'
+
                         data={items}
+                        context={props.context}
+                        
+                        position={position}
+                        parentId={id}
+                        placeholderId={key}
                       />
                     }
                   }
@@ -112,4 +158,4 @@ export const DragDropBlock: FC<any> = (props): JSX.Element => {
         <>{children ? children : <Render data={[...data]} />}</>
     }
   </div>
-};
+}; */

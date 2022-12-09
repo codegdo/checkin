@@ -1,9 +1,5 @@
 import React, { FC, useContext, useRef } from 'react';
-import { useToggle } from '../../hooks/use-toggle.hook';
-import { Panel } from '../box/box.component';
-import { PanelFooter } from '../box/box.footer';
-import { PanelHeader } from '../box/box.header';
-import { PanelMain } from '../box/box.main';
+
 
 import { DragDropContext } from './dragdrop.context';
 import { DragDropContextProps } from './dragdrop.type';
@@ -18,10 +14,12 @@ const blocks = [
     role: 'block',
     type: 'div',
     data: [],
+    component: null,
+    style: {},
     value: null,
     position: null,
     parentId: null,
-    holderId: null
+    placeholderId: null
   },
   {
     id: null,
@@ -31,16 +29,15 @@ const blocks = [
     role: 'block',
     type: 'div',
     data: [],
-    value: {
-      data: [],
-      value: `<div class="row">
-        <div class="column"><jsx id='dropholder_0'></jsx></div>
-        <div class="column"><jsx id='dropholder_1'></jsx></div>
-      </div>`
-    },
+    component: null,
+    style: {},
+    value: `<div class="row">
+      <div class="column"><jsx id='placeholder_0'></jsx></div>
+      <div class="column"><jsx id='placeholder_1'></jsx></div>
+    </div>`,
     position: null,
     parentId: null,
-    holderId: null
+    placeholderId: null
   },
   {
     id: null,
@@ -50,10 +47,12 @@ const blocks = [
     role: 'element',
     type: 'link',
     data: null,
+    component: null,
+    style: {},
     value: null,
     position: null,
     parentId: null,
-    holderId: null
+    placeholderId: null
   },
   {
     id: null,
@@ -63,10 +62,12 @@ const blocks = [
     role: 'element',
     type: 'button',
     data: null,
+    component: null,
+    style: {},
     value: null,
     position: null,
     parentId: null,
-    holderId: null
+    placeholderId: null
   },
   {
     id: null,
@@ -76,10 +77,12 @@ const blocks = [
     role: 'element',
     type: 'html',
     data: null,
+    component: null,
+    style: {},
     value: null,
     position: null,
     parentId: null,
-    holderId: null
+    placeholderId: null
   },
   {
     id: null,
@@ -89,21 +92,21 @@ const blocks = [
     role: 'element',
     type: 'text',
     data: null,
+    component: null,
+    style: {},
     value: null,
     position: null,
     parentId: null,
-    holderId: null
+    placeholderId: null
   }
 ]
 
 export const Draggable: FC = (): JSX.Element => {
-  const ctx = useContext((DragDropContext as Object) as React.Context<DragDropContextProps>);
+  const ctx = useContext((DragDropContext) as React.Context<DragDropContextProps>);
 
   if (!ctx) {
     throw new Error();
   }
-
-  const { state, current, addItem, setItem } = ctx;
 
   return <div>
     {
@@ -111,10 +114,7 @@ export const Draggable: FC = (): JSX.Element => {
         return <DraggableItem
           key={i}
           {...block}
-          current={current}
-          list={state.data}
-          setItem={setItem}
-          addItem={addItem}
+          context={ctx}
         />
       })
     }
