@@ -1,18 +1,49 @@
-import React, { FC, useRef, MouseEvent, useMemo } from 'react';
+import React, { FC, useEffect, useMemo, useState, MouseEvent } from 'react';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 
-import { DragDropItem } from './dragdrop.item';
 import { Render } from './dragdrop.render';
-import { BoundingClientRect } from '../../helpers';
 import { useDragDrop } from '../../hooks';
+import { DragDropToolbar } from './dragdrop.toolbar';
 
 export const DragDropBlock: FC<any> = ({ children, ...props }): JSX.Element => {
-  const { ref, classString, onMouseOver, onMouseOut } = useDragDrop(props);
+  const { id, type, name, className, style, context } = props;
+  const { item, setItem } = context;
+  const initialValues = { style };
+
+  const [values, setValues] = useState(initialValues);
+  const { ref, classNames, attributes, onMouseOver, onMouseOut } = useDragDrop(props);
+
+  useEffect(() => {
+    setValues(initialValues);
+  }, []);
+
+  const onChange = (event: MouseEvent<HTMLElement, MouseEvent>) => {
+    //
+  }
+
+  const onClick = (event: MouseEvent<HTMLElement, MouseEvent> & { target: { name: string | undefined } }) => {
+    const { name } = event.target;
+
+    switch (name) {
+      default:
+        setItem(null);
+    }
+  };
+
+  const handleClick = (event: MouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const currentItem = (item?.id == id) ? null : { id, onChange, onClick };
+    setItem(currentItem);
+  }
+
 
   const events = (props.role == 'dropzone' || props.role == 'placeholder') ? null : {
     onMouseOver,
-    onMouseOut
+    onMouseOut,
+    onClick: handleClick
   }
 
   const component = useMemo(() => {
@@ -45,7 +76,16 @@ export const DragDropBlock: FC<any> = ({ children, ...props }): JSX.Element => {
     })
   }, [props.data]);
 
-  return <div ref={ref} id={props.id} className={`${classString}`} {...events}>
+  return <div
+    ref={ref}
+    id={props.id}
+    className={`${classNames}`}
+    {...attributes}
+    {...events}
+  >
+    {
+      (item?.id == id) && <DragDropToolbar {...props} />
+    }
     {props.name == 'component' ? <>{component}</> : (children ? children : <Render data={props.data} />)}
   </div>
 };

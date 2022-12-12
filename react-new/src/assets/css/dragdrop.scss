@@ -4,6 +4,7 @@
 }
 
 .dd-block,
+.dd-component,
 .dd-element,
 .dd-field {
   border: 1px dashed #eee;
@@ -64,7 +65,8 @@
   transform: translateY(-200%);
 }
 
-.dd-block {
+.dd-block,
+.dd-component {
   padding: 1rem;
   background-color: #fff;
   transition: all 0.3s ease-out;
@@ -76,6 +78,7 @@
   }
 }
 
+.dd-dropzone,
 .dd-placeholder {
   input,
   textarea,
@@ -84,7 +87,8 @@
   }
 }
 
-.dd-block:empty:after,
+.dd-block.-empty:after,
+.dd-dropzone:empty:after,
 .dd-placeholder:empty:after {
   content: 'drop...';
   display: block;
@@ -125,6 +129,7 @@
 .-focus {
   //box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.3);
   border: 1px solid rgb(73, 132, 241);
+  position: relative;
   z-index: 2;
 
   &:before {

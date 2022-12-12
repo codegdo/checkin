@@ -1,6 +1,4 @@
-import { any } from 'joi';
 import { DropTargetMonitor } from 'react-dnd';
-import { randomString } from '../utils';
 
 export interface BoundingClientRect {
   top: number;
@@ -19,9 +17,8 @@ interface ClientOffset {
 }
 
 class DragDropHelper {
-  constructor() { }
 
-  display(target: HTMLElement): any {
+  display(target: HTMLElement): string {
 
     const parentNode = target.parentNode as HTMLElement;
 
@@ -52,10 +49,11 @@ class DragDropHelper {
     return [ids.length, ids];
   }
 
-  find({ context, ...item }) {
+  find({ context, ...dragItem }) {
     const { current } = context;
+    const dropItem = current.drop;
 
-    if (!current.drop) {
+    if (!dropItem) {
       return null;
     }
 
@@ -63,26 +61,27 @@ class DragDropHelper {
       return null;
     }
 
-    let {
+    const {
       id: dragId,
       role: dragType,
       position: dragIndex
-    } = item;
+    } = dragItem;
 
-    let {
-      id: dropId,
+    let dropId = dropItem.id;
+    let dropIndex = dropItem.position;
+    let parentId = dropItem.parentId;
+
+    const {
       role: dropType,
-      position: dropIndex,
-      parentId,
       placeholderId,
       offset,
-    } = current.drop;
+    } = dropItem;
 
     // get dragItems count
-    const [dragCounts, dragIds] = this.count(item);
+    const [dragCounts, dragIds] = this.count(dragItem);
 
     // get dropItems count
-    const [dropCounts, dropIds] = this.count(current.drop);
+    const [dropCounts, dropIds] = this.count(dropItem);
 
     if (dropType == 'placeholder') {
       dropId = dropId.split('_')[0];
@@ -187,10 +186,10 @@ class DragDropHelper {
     }
   ) {
 
-    if (!ref.current) return;
-
     // target
     const target = ref.current;
+
+    if (!target) return;
 
     if (dragItem.id !== null && dropItem.id !== null && dragItem.id == dropItem.parentId) {
       return;
@@ -209,72 +208,56 @@ class DragDropHelper {
     // get pixels to the left
     const hoverClientX = clientOffset.x - hoverBoundingRect.left;
     //
-    const childNode = target.childNodes[0] as HTMLElement;
+    //const childNode = target.childNodes[0] as HTMLElement;
 
     if (dropItem.role === 'dropzone' || dropItem.role == 'placeholder') {
       target.classList.add('on-middle');
       dropItem.offset = 'middle';
-    } else {
-      const display = this.display(target);
+      return;
+    }
 
-      if (display == 'row') {
-        if (dropItem.clientOffsetX == clientOffset.x) return;
+    if (dropItem.displayAs == 'row') {
+      if (dropItem.clientOffsetX == clientOffset.x) return;
 
-        dropItem.clientOffsetX = clientOffset.x;
+      const { width } = this.getComputedAfterStyle(target);
 
-        let width = 0;
+      dropItem.clientOffsetX = clientOffset.x;
 
-        if (target.classList.contains('-empty')) {
-          width = (parseInt(window.getComputedStyle(target, ':after').width) || 0) / 2;
-        }
-
-        if (target.hasAttribute('style')) {
-          target.removeAttribute('style');
-        }
-
-        if (hoverClientX <= hoverMiddleX - width) {
-          target.classList.add('on-left');
-          target.classList.remove('on-right', 'on-middle');
-          dropItem.offset = 'left';
-        } else if (hoverClientX >= hoverMiddleX + width) {
-          target.classList.add('on-right');
-          target.classList.remove('on-left', 'on-middle');
-          dropItem.offset = 'right';
-        } else {
-          target.classList.add('on-middle');
-          target.classList.remove('on-left', 'on-right');
-          dropItem.offset = 'middle';
-        }
+      if (hoverClientX <= hoverMiddleX - width) {
+        target.classList.add('on-left');
+        target.classList.remove('on-right', 'on-middle');
+        dropItem.offset = 'left';
+      } else if (hoverClientX >= hoverMiddleX + width) {
+        target.classList.add('on-right');
+        target.classList.remove('on-left', 'on-middle');
+        dropItem.offset = 'right';
       } else {
-        if (dropItem.clientOffsetY == clientOffset.y) return;
+        target.classList.add('on-middle');
+        target.classList.remove('on-left', 'on-right');
+        dropItem.offset = 'middle';
+      }
+    } else {
+      if (dropItem.clientOffsetY == clientOffset.y) return;
 
-        dropItem.clientOffsetY = clientOffset.y;
+      const { height } = this.getComputedAfterStyle(target);
 
-        let height = 0;
+      dropItem.clientOffsetY = clientOffset.y;
 
-        if (target.classList.contains('-empty')) {
-          height = (parseInt(window.getComputedStyle(target, ':after').height) || 0) / 2;
-        }
-
-        if (target.hasAttribute('style')) {
-          target.removeAttribute('style');
-        }
-
-        if (hoverClientY <= hoverMiddleY - height) {
-          target.classList.add('on-top');
-          target.classList.remove('on-bottom', 'on-middle');
-          dropItem.offset = 'top';
-        } else if (hoverClientY >= hoverMiddleY + height) {
-          target.classList.add('on-bottom');
-          target.classList.remove('on-top', 'on-middle');
-          dropItem.offset = 'bottom';
-        } else {
-          target.classList.add('on-middle');
-          target.classList.remove('on-top', 'on-bottom');
-          dropItem.offset = 'middle';
-        }
+      if (hoverClientY <= hoverMiddleY - height) {
+        target.classList.add('on-top');
+        target.classList.remove('on-bottom', 'on-middle');
+        dropItem.offset = 'top';
+      } else if (hoverClientY >= hoverMiddleY + height) {
+        target.classList.add('on-bottom');
+        target.classList.remove('on-top', 'on-middle');
+        dropItem.offset = 'bottom';
+      } else {
+        target.classList.add('on-middle');
+        target.classList.remove('on-top', 'on-bottom');
+        dropItem.offset = 'middle';
       }
     }
+
   }
 
   private getCount(data, ids = []) {
@@ -286,6 +269,18 @@ class DragDropHelper {
     }
 
     return ids;
+  }
+
+  private getComputedAfterStyle(target: HTMLElement): { width: number, height: number } {
+    let width = 0;
+    let height = 0;
+
+    if (target.classList.contains('-empty')) {
+      width = (parseInt(window.getComputedStyle(target, ':after').width) || 0) / 2;
+      height = (parseInt(window.getComputedStyle(target, ':after').height) || 0) / 2;
+    }
+
+    return { width, height }
   }
 }
 

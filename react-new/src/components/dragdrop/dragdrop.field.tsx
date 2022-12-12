@@ -10,7 +10,7 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
   const initialValues = { className, label, description, style, isRequired };
 
   const [values, setValues] = useState(initialValues);
-  const { ref, classString, onMouseOver, onMouseOut } = useDragDrop(props);
+  const { ref, classNames, attributes, onMouseOver, onMouseOut } = useDragDrop(props);
 
   useEffect(() => {
     setValues(initialValues);
@@ -20,9 +20,14 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     //
   }
 
-  const onClick = (event: MouseEvent<HTMLElement, MouseEvent>) => {
-    //
-  }
+  const onClick = (event: MouseEvent<HTMLElement, MouseEvent> & { target: { name: string | undefined } }) => {
+    const { name } = event.target;
+
+    switch (name) {
+      default:
+        setItem(null);
+    }
+  };
 
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -35,7 +40,8 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
   return <div
     ref={ref}
     id={id}
-    className={`${classString}`}
+    className={`${classNames}`}
+    {...attributes}
     onMouseOver={onMouseOver}
     onMouseOut={onMouseOut}
     onClick={handleClick}

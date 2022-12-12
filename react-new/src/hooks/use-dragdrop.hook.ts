@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { dragdropHelper } from '../helpers';
@@ -19,9 +19,11 @@ export const useDragDrop = (props: any): any => {
       item: { ...props },
       canDrag: () => {
         preview(getEmptyImage(), { captureDraggingState: false });
+
         if (role == 'dropzone' || role == 'placeholder') {
           return false;
         }
+
         return true;
       },
       collect: (monitor) => ({
@@ -43,7 +45,8 @@ export const useDragDrop = (props: any): any => {
     () => ({
       accept: ['dropzone', 'placeholder', 'block', 'element', 'field'],
       hover: (item: any, monitor) => {
-        //if (!ref) return;
+        if (!ref) return;
+
         // current over
         if (monitor.isOver({ shallow: true })) {
           if (!ref.current || item.id === id || (role == 'dropzone' && state.data?.length !== 0)) {
@@ -61,7 +64,8 @@ export const useDragDrop = (props: any): any => {
               parentId,
               placeholderId,
               position,
-              isOver: true,
+              //
+              displayAs: dragdropHelper.display(ref.current),
               clientOffsetX: 0,
               clientOffsetY: 0,
             };
@@ -110,16 +114,18 @@ export const useDragDrop = (props: any): any => {
   const dragging = isDragging ? ' dragging' : '';
   const over = isOver ? ' -over' : '';
   const empty =
-    (role == 'block' || role == 'dropzone' || role == 'placeholder') && data?.length == 0
+    (role == 'block' || role == 'dropzone') && data?.length == 0
       ? ' -empty'
       : '';
   const focus = currentItem?.id == id ? ' -focus' : '';
+  const title = (role == 'block' ? name : role) as string;
 
-  const classString = `dd-${role}${dragging}${over}${empty}${focus}`;
+  const classNames = `dd-${title}${dragging}${over}${empty}${focus}`;
+  const attributes = { "data-title": title }
 
   drag(drop(ref));
 
-  return { ref, classString, onMouseOver, onMouseOut };
+  return { ref, classNames, attributes, onMouseOver, onMouseOut };
 };
 
 /* export const useDragDrop = (props: any): any => {
