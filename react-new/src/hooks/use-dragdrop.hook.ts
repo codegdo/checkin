@@ -24,7 +24,7 @@ export const useDragDrop = (props: any): any => {
         }
         return true;
       },
-      collect: monitor => ({
+      collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
       end: (item, monitor) => {
@@ -34,8 +34,10 @@ export const useDragDrop = (props: any): any => {
           console.log(item);
           moveItem(item);
         }
-      }
-    }), [id, moveItem]);
+      },
+    }),
+    [id, moveItem]
+  );
 
   const [{ isOver }, drop] = useDrop(
     () => ({
@@ -50,6 +52,7 @@ export const useDragDrop = (props: any): any => {
           }
 
           if (current.drop == null || current.drop.id !== id) {
+            current.isOver = true;
             current.drop = {
               id,
               role,
@@ -58,8 +61,9 @@ export const useDragDrop = (props: any): any => {
               parentId,
               placeholderId,
               position,
+              isOver: true,
               clientOffsetX: 0,
-              clientOffsetY: 0
+              clientOffsetY: 0,
             };
           }
 
@@ -67,15 +71,17 @@ export const useDragDrop = (props: any): any => {
             dragItem: item,
             dropItem: current.drop,
             monitor,
-            ref
+            ref,
           });
         }
       },
-      collect: monitor => ({
+      collect: (monitor) => ({
         isOver: monitor.isOver({ shallow: true }),
         canDrop: monitor.canDrop(),
       }),
-    }), [id, moveItem]);
+    }),
+    [id, moveItem]
+  );
 
   const onMouseOver = (event: any) => {
     event.preventDefault();
@@ -83,6 +89,12 @@ export const useDragDrop = (props: any): any => {
 
     if (ref.current) {
       ref.current.classList.add('-hover');
+
+      // prevent event bubble up
+      if (current.isOver) {
+        ref.current.classList.remove('-hover');
+        current.isOver = false;
+      }
     }
   };
 
@@ -93,19 +105,22 @@ export const useDragDrop = (props: any): any => {
     if (ref.current) {
       ref.current.classList.remove('-hover');
     }
-  }
+  };
 
   const dragging = isDragging ? ' dragging' : '';
   const over = isOver ? ' -over' : '';
-  const empty = ((role == 'block' || role == 'dropzone' || role == 'placeholder') && data?.length == 0) ? ' -empty' : '';
+  const empty =
+    (role == 'block' || role == 'dropzone' || role == 'placeholder') && data?.length == 0
+      ? ' -empty'
+      : '';
   const focus = currentItem?.id == id ? ' -focus' : '';
 
   const classString = `dd-${role}${dragging}${over}${empty}${focus}`;
 
   drag(drop(ref));
 
-  return { ref, classString, onMouseOver, onMouseOut }
-}
+  return { ref, classString, onMouseOver, onMouseOut };
+};
 
 /* export const useDragDrop = (props: any): any => {
 
