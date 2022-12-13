@@ -10,7 +10,7 @@ export const EditorSetting: FC<any> = (): JSX.Element => {
     throw new Error();
   }
 
-  const { data, values, setValues } = ctx;
+  const { editor, values, setValues } = ctx;
 
   return <>setting</>
 }

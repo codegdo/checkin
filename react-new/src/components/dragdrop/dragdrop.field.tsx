@@ -5,9 +5,10 @@ import { Input, Label } from '../input';
 import { DragDropToolbar } from './dragdrop.toolbar';
 
 export const DragDropField: React.FC<any> = (props): JSX.Element => {
-  const { id, type, name, className, label, description, style, isRequired, context } = props;
-  const { item, setItem } = context;
-  const initialValues = { className, label, description, style, isRequired };
+  const { context, ...field } = props;
+  const { item, setItem, updateItem } = context;
+  const { id, type, name } = field;
+  const initialValues = { ...field };
 
   const [values, setValues] = useState(initialValues);
   const { ref, classNames, attributes, onMouseOver, onMouseOut } = useDragDrop(props);
@@ -16,8 +17,14 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     setValues(initialValues);
   }, []);
 
-  const onChange = (event: MouseEvent<HTMLElement, MouseEvent>) => {
+  useEffect(() => {
+    updateItem({ ...values });
+    setItem(item);
+  }, [values]);
+
+  const onChange = (newValue: any) => {
     //
+    setValues({ ...values, ...newValue });
   }
 
   const onClick = (event: MouseEvent<HTMLElement, MouseEvent> & { target: { name: string | undefined } }) => {
@@ -33,14 +40,14 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     event.preventDefault();
     event.stopPropagation();
 
-    const currentItem = (item?.id == id) ? null : { id, onChange, onClick };
+    const currentItem = (item?.id == id) ? null : { id, values, onChange, onClick };
     setItem(currentItem);
   }
 
   return <div
     ref={ref}
     id={id}
-    className={`${classNames}`}
+    className={`${classNames as string}`}
     {...attributes}
     onMouseOver={onMouseOver}
     onMouseOut={onMouseOut}

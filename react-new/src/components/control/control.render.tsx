@@ -9,9 +9,9 @@ export const ControlRender: FC<any> = ({ data = [] }): JSX.Element => {
   return <>
     {
       data.map((item, index) => {
-        const { role, type } = item;
+        const { dataType, type } = item;
 
-        if (role === 'block') {
+        if (dataType === 'block') {
           return <ControlBlock key={index} {...item} />;
         }
 

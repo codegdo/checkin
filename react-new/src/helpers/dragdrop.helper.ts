@@ -63,7 +63,7 @@ class DragDropHelper {
 
     const {
       id: dragId,
-      role: dragType,
+      dataType: dragType,
       position: dragIndex
     } = dragItem;
 
@@ -72,7 +72,7 @@ class DragDropHelper {
     let parentId = dropItem.parentId;
 
     const {
-      role: dropType,
+      dataType: dropType,
       placeholderId,
       offset,
     } = dropItem;
@@ -210,7 +210,7 @@ class DragDropHelper {
     //
     //const childNode = target.childNodes[0] as HTMLElement;
 
-    if (dropItem.role === 'dropzone' || dropItem.role == 'placeholder') {
+    if (dropItem.dataType === 'dropzone' || dropItem.dataType == 'placeholder') {
       target.classList.add('on-middle');
       dropItem.offset = 'middle';
       return;
@@ -264,7 +264,7 @@ class DragDropHelper {
     if (data instanceof Array) {
       data.reduce((a, v) => {
         ids.push(v.id.toString());
-        return a + ((v.role == 'block') ? this.getCount(v.data, ids) : 0);
+        return a + ((v.dataType == 'block') ? this.getCount(v.data, ids) : 0);
       }, data.length);
     }
 

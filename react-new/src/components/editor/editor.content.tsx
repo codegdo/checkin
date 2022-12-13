@@ -12,14 +12,13 @@ export const EditorContent: FC<any> = (): JSX.Element => {
     throw new Error();
   }
 
-  const { data, values, onChange, onClick } = ctx;
+  const { editor, values, onChange, onClick } = ctx;
 
   const handleChange = ({ key, value }: any) => {
 
     console.log('EDITOR CHANGE', values, key, value);
 
     const { obj } = getSetStringKeyObject(values, key, value);
-
 
     onChange && onChange(obj);
   }
@@ -28,7 +27,7 @@ export const EditorContent: FC<any> = (): JSX.Element => {
     console.log('EDITOR CLICK');
   }
 
-  return <Control data={data.content} values={values} onChange={handleChange} onClick={handleClick} />
+  return <Control data={editor?.content} values={values} onChange={handleChange} onClick={handleClick} />
 }
 
 /*

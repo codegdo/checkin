@@ -23,7 +23,7 @@ export const DragDropRender: React.FC = (): JSX.Element => {
     id="dropzone"
     className="form"
     name="block"
-    role="dropzone"
+    dataType="dropzone"
     context={ctx}
   >
     <Render data={formHelper.mapField(ctx.state.data)} />
@@ -42,7 +42,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data = [
   return <>
     {
       data.map((item) => {
-        switch (item.role) {
+        switch (item.dataType) {
           case 'block':
           case 'dropzone':
           case 'placeholder':

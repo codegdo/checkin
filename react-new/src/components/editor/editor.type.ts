@@ -5,7 +5,7 @@ export interface EditorProps {
   onClick: () => void;
 }
 export interface EditorContextProps {
-  data: any;
+  editor: any;
   values: any;
   tab: string;
   setTab: any;

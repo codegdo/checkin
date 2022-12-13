@@ -5,14 +5,14 @@ import { EditorContextProps, EditorProps } from './editor.type';
 
 export const EditorContext = createContext<EditorContextProps | null>(null);
 
-export const EditorProvider: FC<PropsWithChildren<EditorProps>> = ({ type, values, children, onChange, onClick }) => {
+export const EditorProvider: FC<PropsWithChildren<EditorProps>> = ({ values: dataValues, children, onChange, onClick }) => {
 
-  const data = editorHelper.getData(type);
+  const { editor, values } = editorHelper.getEditor(dataValues);
   const [tab, setTab] = useState('content');
 
   console.log('EDITOR CONTEXT VALUES', values);
 
-  return <EditorContext.Provider value={{ data, values, tab, setTab, onChange, onClick }}>
+  return <EditorContext.Provider value={{ editor, values, tab, setTab, onChange, onClick }}>
     {children}
   </EditorContext.Provider>
 }

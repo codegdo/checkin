@@ -7,9 +7,10 @@ import { useDragDrop } from '../../hooks';
 import { DragDropToolbar } from './dragdrop.toolbar';
 
 export const DragDropBlock: FC<any> = ({ children, ...props }): JSX.Element => {
-  const { id, type, name, className, style, context } = props;
+  const { context, ...block } = props;
   const { item, setItem } = context;
-  const initialValues = { style };
+  const { id, name, dataType, data, value } = block;
+  const initialValues = { ...block };
 
   const [values, setValues] = useState(initialValues);
   const { ref, classNames, attributes, onMouseOver, onMouseOut } = useDragDrop(props);
@@ -35,34 +36,34 @@ export const DragDropBlock: FC<any> = ({ children, ...props }): JSX.Element => {
     event.preventDefault();
     event.stopPropagation();
 
-    const currentItem = (item?.id == id) ? null : { id, onChange, onClick };
+    const currentItem = (item?.id == id) ? null : { id, values, onChange, onClick };
     setItem(currentItem);
   }
 
 
-  const events = (props.role == 'dropzone' || props.role == 'placeholder') ? null : {
+  const events = (dataType == 'dropzone' || dataType == 'placeholder') ? null : {
     onMouseOver,
     onMouseOut,
     onClick: handleClick
   }
 
   const component = useMemo(() => {
-    const value = DOMPurify.sanitize(props.value, { ADD_TAGS: ['jsx'] });
-    return parse(value, {
+    const strPurify = DOMPurify.sanitize(value, { ADD_TAGS: ['jsx'] });
+    return parse(strPurify, {
       replace: (dom) => {
 
         if ('attribs' in dom) {
           const { attribs } = dom;
           if (attribs.id) {
             const [name, key] = attribs.id.split('_');
-            const items = props.data.filter((item: any) => item.placeholderId == key);
+            const items = data.filter((item: any) => item.placeholderId == key);
 
             if (name == 'placeholder') {
               return <DragDropBlock
                 {...props}
-                id={`${props.id}_${key}`}
+                id={`${id}_${key}`}
                 name='block'
-                role='placeholder'
+                dataType='placeholder'
 
                 data={items}
                 placeholderId={key}
@@ -74,11 +75,11 @@ export const DragDropBlock: FC<any> = ({ children, ...props }): JSX.Element => {
         return dom;
       }
     })
-  }, [props.data]);
+  }, [data]);
 
   return <div
     ref={ref}
-    id={props.id}
+    id={id}
     className={`${classNames}`}
     {...attributes}
     {...events}
@@ -86,7 +87,7 @@ export const DragDropBlock: FC<any> = ({ children, ...props }): JSX.Element => {
     {
       (item?.id == id) && <DragDropToolbar {...props} />
     }
-    {props.name == 'component' ? <>{component}</> : (children ? children : <Render data={props.data} />)}
+    {name == 'component' ? <>{component}</> : (children ? children : <Render data={data} />)}
   </div>
 };
 

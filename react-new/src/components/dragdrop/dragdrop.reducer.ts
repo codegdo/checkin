@@ -124,7 +124,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
       });
     }
     case 'UPDATE_ITEM': {
-      console.log('UPDATE ITEM', payload);
+      //console.log('UPDATE ITEM', payload);
       return update(state, {
         data: {
           $apply: (data) =>

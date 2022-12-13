@@ -4,7 +4,7 @@ import { getEmptyImage } from 'react-dnd-html5-backend';
 import { dragdropHelper } from '../helpers';
 
 export const useDragDrop = (props: any): any => {
-  const { id, role, name, data, parentId, placeholderId, position, context } = props;
+  const { id, dataType, name, data, parentId, placeholderId, position, context } = props;
   const { current, state, item: currentItem, setItem, moveItem } = context;
 
   const ref = useRef<HTMLDivElement>(null);
@@ -15,12 +15,12 @@ export const useDragDrop = (props: any): any => {
 
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
-      type: role,
+      type: dataType,
       item: { ...props },
       canDrag: () => {
         preview(getEmptyImage(), { captureDraggingState: false });
 
-        if (role == 'dropzone' || role == 'placeholder') {
+        if (dataType == 'dropzone' || dataType == 'placeholder') {
           return false;
         }
 
@@ -49,7 +49,7 @@ export const useDragDrop = (props: any): any => {
 
         // current over
         if (monitor.isOver({ shallow: true })) {
-          if (!ref.current || item.id === id || (role == 'dropzone' && state.data?.length !== 0)) {
+          if (!ref.current || item.id === id || (dataType == 'dropzone' && state.data?.length !== 0)) {
             current.drop = null;
             return;
           }
@@ -58,7 +58,7 @@ export const useDragDrop = (props: any): any => {
             current.isOver = true;
             current.drop = {
               id,
-              role,
+              dataType,
               name,
               data,
               parentId,
@@ -114,11 +114,11 @@ export const useDragDrop = (props: any): any => {
   const dragging = isDragging ? ' dragging' : '';
   const over = isOver ? ' -over' : '';
   const empty =
-    (role == 'block' || role == 'dropzone') && data?.length == 0
+    (dataType == 'block' || dataType == 'dropzone') && data?.length == 0
       ? ' -empty'
       : '';
   const focus = currentItem?.id == id ? ' -focus' : '';
-  const title = (role == 'block' ? name : role) as string;
+  const title = (dataType == 'block' ? name : dataType) as string;
 
   const classNames = `dd-${title}${dragging}${over}${empty}${focus}`;
   const attributes = { "data-title": title }

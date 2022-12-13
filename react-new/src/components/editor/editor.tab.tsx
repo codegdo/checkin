@@ -9,14 +9,14 @@ export const EditorTab: FC = (): JSX.Element => {
     throw new Error();
   }
 
-  const { data, tab, setTab } = ctx;
+  const { editor, tab, setTab } = ctx;
 
   const handleTabClick = (event: any) => {
     setTab(event.target.name);
   }
 
   return <>
-    {Object.keys(data).map((key) => {
+    {Object.keys(editor).map((key) => {
       return <span key={key}>
         <button className={(tab == key) ? 'active' : ''} name={key} type='button' onClick={handleTabClick}>{key}</button>
       </span>

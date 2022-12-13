@@ -1,47 +1,58 @@
 class EditorHelper {
-  getBlock() {
-    return {
+  getEditorBlock(data: any) {
+    const values = {
+      style: data.style
+    }
+    const editor = {
       design: [],
       setting: []
     }
+
+    return { editor, values };
   }
 
-  getField() {
-    return {
+  getEditorField(data: any) {
+    const values = {
+      label: data.label,
+      description: data.description,
+      style: data.style
+    }
+
+    const editor = {
       content: [
         {
           type: 'div',
-          role: 'block',
+          dataType: 'block',
           data: [
             {
               name: 'label',
               label: 'Label',
               type: 'text',
-              role: 'control'
+              dataType: 'control'
             },
             {
               name: 'style.label.fontSize',
               label: 'Font Size',
               type: 'range',
-              role: 'control'
+              dataType: 'control'
             }
           ]
         },
         {
           type: 'div',
-          role: 'block',
+          dataType: 'block',
           data: [
             {
               name: 'description',
               label: 'Description',
               type: 'text',
-              role: 'control'
+              dataType: 'control'
             },
             {
               name: 'style.description.fontSize',
               label: 'Font Size',
               type: 'range',
-              role: 'control'
+              dataType: 'control'
             }
           ]
         }
@@ -75,24 +86,31 @@ class EditorHelper {
           option: ['isRequired']
         }
       ]
-    }
+    };
+
+    return { editor, values };
   }
 
-  getElement() {
-    return {
+  getEditorElement(data: any) {
+    const values = {
+      style: data.style
+    }
+
+    const editor = {
       content: [],
       design: [],
       setting: []
-    }
+    };
+
+    return { editor, values };
   }
 
+  getEditor(data: any) {
 
-
-  getData(type: string) {
-    switch (type) {
-      case 'block': return this.getBlock();
-      case 'field': return this.getField();
-      case 'element': return this.getElement();
+    switch (data.dataType) {
+      case 'block': return this.getEditorBlock(data);
+      case 'field': return this.getEditorField(data);
+      case 'element': return this.getEditorElement(data);
       default: return {};
     }
   }

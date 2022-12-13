@@ -3,9 +3,10 @@ import { useDragDrop } from '../../hooks';
 import { DragDropToolbar } from './dragdrop.toolbar';
 
 export const DragDropElement: FC<any> = (props): JSX.Element => {
-  const { id, type, name, className, label, description, style, context } = props;
+  const { context, ...element } = props;
   const { item, setItem } = context;
-  const initialValues = { className, label, description, style };
+  const { id, name } = element;
+  const initialValues = { ...element };
 
   const [values, setValues] = useState(initialValues);
   const { ref, classNames, attributes, onMouseOver, onMouseOut } = useDragDrop(props);
@@ -31,13 +32,13 @@ export const DragDropElement: FC<any> = (props): JSX.Element => {
     event.preventDefault();
     event.stopPropagation();
 
-    const currentItem = (item?.id == id) ? null : { id, onChange, onClick };
+    const currentItem = (item?.id == id) ? null : { id, values, onChange, onClick };
     setItem(currentItem);
   }
 
   return <div
     ref={ref}
-    id={props.id}
+    id={id}
     className={`${classNames}`}
     {...attributes}
     onMouseOver={onMouseOver}
@@ -47,7 +48,7 @@ export const DragDropElement: FC<any> = (props): JSX.Element => {
     {
       (item?.id == id) && <DragDropToolbar {...props} />
     }
-    {props.name}
+    {name}
   </div>
 }
 
