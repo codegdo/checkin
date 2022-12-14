@@ -24,15 +24,15 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
     });
   }, []);
 
-  // useEffect(() => {
+  useEffect(() => {
 
-  //   if (item && state.data.length > item.length) {
-  //     const newId = state.data[item.position + 1].id;
-  //     setItem({ ...item, id: newId });
-  //   }
+    // if (item && state.data.length > item.length) {
+    //   const newId = state.data[item.position + 1].id;
+    //   setItem({ ...item, id: newId });
+    // }
 
-  //   console.log('NEW STATE', state);
-  // }, [state]);
+    console.log('NEW STATE', state);
+  }, [state]);
 
   const moveItem = useCallback((payload: any) => {
 

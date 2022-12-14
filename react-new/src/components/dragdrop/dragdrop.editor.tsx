@@ -1,4 +1,5 @@
 import React, { FC, useContext, useEffect, useRef } from 'react';
+import { useDragLayer } from 'react-dnd';
 
 import { Editor } from '../editor/editor.component';
 import { DragDropContext } from './dragdrop.context';
@@ -15,6 +16,12 @@ export const DragDropEditor: FC = () => {
   const { item } = ctx;
 
   const ref = useRef<HTMLDivElement>(null);
+  const types = ['dropzone', 'placeholder', 'block', 'element', 'field'];
+
+  // const { itemType, onDragging } = useDragLayer((monitor) => ({
+  //   itemType: monitor.getItemType(),
+  //   onDragging: monitor.isDragging(),
+  // }));
 
   const outsideClickEvent = (event: MouseEvent) => {
     if (ref.current !== null && !ref.current.contains(event.target as HTMLElement)) {
@@ -32,9 +39,11 @@ export const DragDropEditor: FC = () => {
   }, [item]);
 
 
-  return <div ref={ref}>
+  return <div ref={ref} className={`dd-editor`}>
     {
       (item && item.isEdit) ? <Editor {...item} /> : null
     }
   </div>
 }
+
+//${(onDragging && types.includes(itemType)) ? 'on-drag' : ''}

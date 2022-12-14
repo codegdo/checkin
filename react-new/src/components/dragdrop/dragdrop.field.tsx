@@ -1,4 +1,4 @@
-import React, { useEffect, useState, MouseEvent, useRef } from 'react';
+import React, { useEffect, useState, MouseEvent } from 'react';
 
 import { useDragDrop } from '../../hooks';
 import { Input, Label } from '../input';

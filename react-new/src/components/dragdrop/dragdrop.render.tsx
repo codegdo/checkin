@@ -19,6 +19,10 @@ export const DragDropRender: React.FC = (): JSX.Element => {
     throw new Error();
   }
 
+  const data = formHelper.mapField(ctx.state.data);
+
+  console.log(data);
+
   return <DragDropBlock
     id="dropzone"
     className="form"
@@ -26,7 +30,7 @@ export const DragDropRender: React.FC = (): JSX.Element => {
     dataType="dropzone"
     context={ctx}
   >
-    <Render data={formHelper.mapField(ctx.state.data)} />
+    <Render data={data} />
   </DragDropBlock>
 
 }

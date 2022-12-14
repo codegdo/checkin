@@ -6,12 +6,13 @@ import { dragdropHelper } from '../helpers';
 export const useDragDrop = (props: any): any => {
   const { id, dataType, name, data, parentId, placeholderId, position, context } = props;
   const { current, state, item: currentItem, setItem, moveItem } = context;
-
+  const types = ['dropzone', 'placeholder', 'block', 'element', 'field'];
   const ref = useRef<HTMLDivElement>(null);
 
-  const { onDragging } = useDragLayer((monitor) => ({
-    onDragging: monitor.isDragging(),
-  }));
+  // const { itemType, onDragging } = useDragLayer((monitor) => ({
+  //   itemType: monitor.getItemType(),
+  //   onDragging: monitor.isDragging(),
+  // }));
 
   const [{ isDragging }, drag, preview] = useDrag(
     () => ({
@@ -43,7 +44,7 @@ export const useDragDrop = (props: any): any => {
 
   const [{ isOver }, drop] = useDrop(
     () => ({
-      accept: ['dropzone', 'placeholder', 'block', 'element', 'field'],
+      accept: types,
       hover: (item: any, monitor) => {
         if (!ref) return;
 
@@ -111,6 +112,7 @@ export const useDragDrop = (props: any): any => {
     }
   };
 
+  //const onDrag = (onDragging && currentItem?.id == id && types.includes(itemType as string)) ? ' on-drag' : '';
   const dragging = isDragging ? ' dragging' : '';
   const over = isOver ? ' -over' : '';
   const empty =
@@ -124,6 +126,8 @@ export const useDragDrop = (props: any): any => {
   const attributes = { "data-title": title }
 
   drag(drop(ref));
+
+  //console.log(itemType);
 
   return { ref, classNames, attributes, onMouseOver, onMouseOut };
 };

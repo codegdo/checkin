@@ -1,8 +1,14 @@
 import { arrayToObjectKeyGroup, mapToParent } from "../utils";
 
-class FormHelper {
-  constructor() { }
+type Item = {
+  id: string;
+  dataType: 'block';
+  data: Item[];
+  position: number;
+  parentId: number | string;
+}
 
+class FormHelper {
   normalize(form: any) {
     const { data = [], fields = [] } = JSON.parse(JSON.stringify(form));
 
@@ -34,14 +40,42 @@ class FormHelper {
 
   mapField(data: any) {
     const _data = JSON.parse(JSON.stringify(data));
-    const list: any[] = [];
+    const list: Item[] = [];
 
-    _data.forEach((item: any, index: number) => {
+    _data.forEach((item: Item, index: number) => {
       item.position = index;
       return mapToParent(list, item);
     });
 
     return list;
+  }
+
+  mapToParent(list: Item[], item: Item) {
+    let bool = false;
+
+    if (item.parentId == null) {
+      bool = true;
+      list.push({ ...item });
+      return;
+    }
+
+    list.find((i, _index) => {
+
+      if (i.id === item.parentId) {
+        bool = false;
+        i.data?.push({ ...item });
+        return;
+      }
+
+      if (i.dataType === 'block') {
+        bool = true;
+        this.mapToParent(i.data, item);
+      }
+    });
+
+    if (bool) {
+      // console.warn(`Fail mapToParent: ${item.parentId}`, item);
+    }
   }
 
 }

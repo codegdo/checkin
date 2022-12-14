@@ -74,7 +74,7 @@ export const DragDropBlock: FC<any> = ({ children, ...props }): JSX.Element => {
 
         return dom;
       }
-    })
+    });
   }, [data]);
 
   return <div

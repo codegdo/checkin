@@ -29,26 +29,81 @@
 }
 */
 
+.-hover {
+  //box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.1);
+  border-color: rgb(137, 209, 234);
+  position: relative;
+
+  &:before {
+    content: attr(data-title);
+    font-size: 11px;
+    text-align: center;
+    color: #fff;
+    background-color: rgb(137, 209, 234);
+    padding: 2px 5px;
+
+    position: absolute;
+    top: 0;
+    left: -1px;
+
+    transform: translateY(-100%);
+  }
+}
+
+.-focus {
+  //box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.3);
+  //border-style: 1px solid rgb(73, 132, 241);
+  border-style: solid;
+  border-color: rgb(73, 132, 241);
+  position: relative;
+  z-index: 2;
+
+  &:before {
+    content: attr(data-title);
+    font-size: 11px;
+    text-align: center;
+    color: #fff;
+    background-color: rgb(73, 132, 241);
+    padding: 2px 5px;
+
+    position: absolute;
+    top: 0;
+    left: -1px;
+
+    transform: translateY(-100%);
+  }
+}
+
+.dragging,
+.on-drag,
+.on-top,
+.on-bottom,
+.on-left,
+.on-right {
+  border: 1px dashed #eee;
+}
+
 .dragging {
   opacity: 0.1;
-  border: 1px dashed #eee !important;
 }
 
 .on-top {
-  border-top: 1px dashed rgb(73, 132, 241);
+  border-top-color: rgb(73, 132, 241);
 }
 .on-bottom {
-  border-bottom: 1px dashed rgb(73, 132, 241);
+  border-bottom-color: rgb(73, 132, 241);
 }
 .on-left {
-  border-left: 1px dashed rgb(73, 132, 241);
+  border-left-color: rgb(73, 132, 241);
 }
 .on-right {
-  border-right: 1px dashed rgb(73, 132, 241);
+  border-right-color: rgb(73, 132, 241);
 }
 
+.on-drag,
 .dragging {
-  .dd-toolbar {
+  .dd-toolbar,
+  .editor {
     display: none;
   }
 
@@ -56,6 +111,7 @@
     display: none;
   }
 }
+
 .dd-toolbar {
   display: flex;
   position: absolute;
@@ -101,51 +157,11 @@
   transition: all 0.3s ease-out;
 }
 
+.dd-editor {
+}
+
 .on-middle:empty:after {
   border: 1px dashed rgb(73, 132, 241);
-}
-
-.-hover {
-  //box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.1);
-  border-color: rgb(137, 209, 234);
-  position: relative;
-
-  &:before {
-    content: attr(data-title);
-    font-size: 11px;
-    text-align: center;
-    color: #fff;
-    background-color: rgb(137, 209, 234);
-    padding: 2px 5px;
-
-    position: absolute;
-    top: 0;
-    left: -1px;
-
-    transform: translateY(-100%);
-  }
-}
-
-.-focus {
-  //box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.3);
-  border: 1px solid rgb(73, 132, 241);
-  position: relative;
-  z-index: 2;
-
-  &:before {
-    content: attr(data-title);
-    font-size: 11px;
-    text-align: center;
-    color: #fff;
-    background-color: rgb(73, 132, 241);
-    padding: 2px 5px;
-
-    position: absolute;
-    top: 0;
-    left: -1px;
-
-    transform: translateY(-100%);
-  }
 }
 
 [data-title='dropholder'] {
