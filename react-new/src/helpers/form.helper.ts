@@ -50,34 +50,6 @@ class FormHelper {
     return list;
   }
 
-  mapToParent(list: Item[], item: Item) {
-    let bool = false;
-
-    if (item.parentId == null) {
-      bool = true;
-      list.push({ ...item });
-      return;
-    }
-
-    list.find((i, _index) => {
-
-      if (i.id === item.parentId) {
-        bool = false;
-        i.data?.push({ ...item });
-        return;
-      }
-
-      if (i.dataType === 'block') {
-        bool = true;
-        this.mapToParent(i.data, item);
-      }
-    });
-
-    if (bool) {
-      // console.warn(`Fail mapToParent: ${item.parentId}`, item);
-    }
-  }
-
 }
 
 export const formHelper = new FormHelper();

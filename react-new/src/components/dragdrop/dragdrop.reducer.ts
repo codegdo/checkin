@@ -18,17 +18,19 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
         return state;
       }
 
-      const { dragIndex, dropIndex, dragCounts } = found;
+      const { dragIndex, dropIndex, dragCounts, parentId, placeholderId } = found;
 
       const dragItems: any = [];
 
       // update map parentId and placeholderId dragItem
-      state.data[dragIndex].parentId = found.parentId;
-      state.data[dragIndex].placeholderId = found.placeholderId;
+      state.data[dragIndex].parentId = parentId;
+      state.data[dragIndex].placeholderId = placeholderId;
 
       for (let i = 0; i < dragCounts; i++) {
         dragItems.push(state.data[dragIndex + i]);
       }
+
+      console.log('MOVE ITEM', dragItems);
 
       return update(state, {
         data: {

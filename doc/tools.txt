@@ -8,6 +8,8 @@ https://pexels.com
 https://thenounproject.com
 
 https://miro.com
+https://figma.com
 https://drawsql.app
+https://app.diagrams.net/ (draw.io)
 
 https://react-svgr.com/playground/

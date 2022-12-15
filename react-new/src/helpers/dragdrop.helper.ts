@@ -53,11 +53,7 @@ class DragDropHelper {
     const { current } = context;
     const dropItem = current.drop;
 
-    if (!dropItem) {
-      return null;
-    }
-
-    if (!current.drop.offset) {
+    if (!dropItem && !dropItem.offset) {
       return null;
     }
 
@@ -87,7 +83,7 @@ class DragDropHelper {
       dropId = dropId.split('_')[0];
     }
 
-    // reset parentId to null if drop is dropzone
+    // reset parentId to null if dropzone
     if (offset == 'middle') {
       parentId = (dropType == 'dropzone' ? null : dropId);
     }
@@ -105,6 +101,7 @@ class DragDropHelper {
 
     const fromTopOverTop = fromTop && overTop && 'fromTop_overTop';
     const fromTopOverBottom = fromTop && overBottom && 'fromTop_overBottom';
+    const fromTopOverMiddle = fromTop && overMiddle && 'fromTop_overMiddle';
     const fromBottomOverBottom = fromBottom && overBottom && 'fromBottom_overBottom';
     const fromBottomOverTop = fromBottom && overTop && 'fromBottom_overTop';
     const fromBottomOverMiddle = fromBottom && overMiddle && 'fromBottom_overMiddle';
@@ -113,6 +110,7 @@ class DragDropHelper {
     const type = `${dragType}_${dropType}`;
     const text = `${fromTopOverTop ||
       fromTopOverBottom ||
+      fromTopOverMiddle ||
       fromBottomOverBottom ||
       fromBottomOverTop ||
       fromBottomOverMiddle ||
@@ -131,7 +129,9 @@ class DragDropHelper {
         }
       }
     } else if (type == 'field_placeholder' || type == 'element_placeholder' || type == 'block_placeholder') {
-      dropIndex = dropIndex + dropCounts;
+      if (fromBottomOverMiddle) {
+        dropIndex = dropIndex + dropCounts;
+      }
     } else {
       if (fromTopOverTop) {
         dropIndex = dropIndex - dragCounts;
@@ -156,9 +156,7 @@ class DragDropHelper {
       }
     }
 
-    console.log(`${type} ${text}`);
-
-    return {
+    const output = {
       dragIndex,
       dropIndex,
       dragCounts,
@@ -170,6 +168,11 @@ class DragDropHelper {
       parentId,
       placeholderId
     };
+
+    console.log(`${type} ${text}`);
+    console.log(output);
+
+    return output;
   }
 
   hover(
