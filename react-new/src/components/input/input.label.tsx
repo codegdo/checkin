@@ -6,8 +6,8 @@ export const Label: FC<LabelProps> = ({ className, label, description, style }):
     {
       (label || description) &&
       <div>
-        {label && <label className='label' style={style}>{label}</label>}
-        {description && <span className='description'>{description}</span>}
+        {label && <label className='label' style={style?.label}>{label}</label>}
+        {description && <span className='description' style={style?.description}>{description}</span>}
       </div>
     }
   </>

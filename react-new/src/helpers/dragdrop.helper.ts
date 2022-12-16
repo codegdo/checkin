@@ -53,7 +53,7 @@ class DragDropHelper {
     const { current } = context;
     const dropItem = current.drop;
 
-    if (!dropItem && !dropItem.offset) {
+    if (!dropItem || !dropItem?.offset) {
       return null;
     }
 
@@ -89,7 +89,7 @@ class DragDropHelper {
     }
 
     // prevent drag block drop over nest children
-    if (dragIds.includes(dropId.toString())) {
+    if (dragIds.includes(`${dropId}`)) {
       return null;
     }
 
@@ -107,7 +107,11 @@ class DragDropHelper {
     const fromBottomOverMiddle = fromBottom && overMiddle && 'fromBottom_overMiddle';
     const fromDrag = 'fromDrag';
 
-    const type = `${dragType}_${dropType}`;
+    const dragdropType = `${dragType}_${dropType}`;
+    const isField = ['field_field', 'field_element', 'element_element'].includes(dragdropType);
+    const isPlaceholder = ['field_placeholder', 'element_placeholder', 'block_placeholder'].includes(dragdropType);
+    const isNested = dropIds.includes(`${dragId}`);
+
     const text = `${fromTopOverTop ||
       fromTopOverBottom ||
       fromTopOverMiddle ||
@@ -117,43 +121,46 @@ class DragDropHelper {
       fromDrag
       }`;
 
+    const decrement = dropIndex - 1;
+    const increment = dropIndex + 1;
+    const decrementWithDrags = dropIndex - dragCounts;
+    const decrementWithDrops = dropIndex + dropCounts - dragCounts;
+    const incrementWithDrops = dropIndex + dropCounts;
+
     // dropIndex
-    if (type == 'field_field' || type == 'field_element' || type == 'element_element') {
-      if (fromTopOverTop) {
-        dropIndex = dropIndex - 1;
-      } else if (fromBottomOverBottom) {
-        dropIndex = dropIndex + 1;
-      } else if (dragIndex == null) {
-        if (overBottom) {
-          dropIndex = dropIndex + 1;
+    switch (true) {
+      case isField:
+        if (fromTopOverTop) {
+          dropIndex = decrement;
+        } else if (fromBottomOverBottom) {
+          dropIndex = increment;
+        } else if (overBottom && !dragIndex) {
+          dropIndex = increment;
         }
-      }
-    } else if (type == 'field_placeholder' || type == 'element_placeholder' || type == 'block_placeholder') {
-      if (fromBottomOverMiddle) {
-        dropIndex = dropIndex + dropCounts;
-      }
-    } else {
-      if (fromTopOverTop) {
-        dropIndex = dropIndex - dragCounts;
-      } else if (fromTopOverBottom) {
-        dropIndex = dropIndex + dropCounts - dragCounts;
-      } else if (fromBottomOverBottom) {
-        // nested
-        if (dropIds.includes(dragId.toString())) {
-          dropIndex = dropIndex + dropCounts - dragCounts;
+        break;
+      case isPlaceholder:
+        if (fromTopOverMiddle) {
+          dropIndex = decrementWithDrops;
+        } else if (fromBottomOverMiddle) {
+          dropIndex = incrementWithDrops;
         } else {
-          dropIndex = dropIndex + dropCounts;
+          dropIndex = increment;
         }
-      } else if (fromBottomOverMiddle) {
-        dropIndex = dropIndex + 1;
-      } else if (dragIndex == null) {
-        // fromDrag
-        if (overMiddle) {
-          dropIndex = dropIndex + 1;
-        } else if (overBottom) {
-          dropIndex = dropIndex + dropCounts;
+        break;
+      default:
+        if (fromTopOverTop) {
+          dropIndex = decrementWithDrags;
+        } else if (fromTopOverBottom) {
+          dropIndex = decrementWithDrops;
+        } else if (fromBottomOverBottom) {
+          dropIndex = isNested ? decrementWithDrops : incrementWithDrops;
+        } else if (fromBottomOverMiddle) {
+          dropIndex = increment;
+        } else if (overMiddle && !dragIndex) {
+          dropIndex = increment;
+        } else if (overBottom && !dragIndex) {
+          dropIndex = incrementWithDrops;
         }
-      }
     }
 
     const output = {
@@ -169,7 +176,7 @@ class DragDropHelper {
       placeholderId
     };
 
-    console.log(`${type} ${text}`);
+    console.log(`${dragdropType} ${text}`);
     console.log(output);
 
     return output;

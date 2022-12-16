@@ -16,7 +16,7 @@ export const ControlRange: FC<any> = ({ label, name }): JSX.Element => {
   const { value } = getSetStringKeyObject(values, name);
   let defaultValue;
 
-  console.log('CONTROL RANGE', values, value, name);
+  console.log('CONTROL RANGE', values, name, ctx);
 
   switch (name) {
     case 'fontSize':

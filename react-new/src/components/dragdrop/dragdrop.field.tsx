@@ -7,7 +7,7 @@ import { DragDropToolbar } from './dragdrop.toolbar';
 export const DragDropField: React.FC<any> = (props): JSX.Element => {
   const { context, ...field } = props;
   const { item, setItem, updateItem } = context;
-  const { id, type, name } = field;
+  const { id, type, name, style } = field;
   const initialValues = { ...field };
 
   const [values, setValues] = useState(initialValues);
@@ -19,11 +19,12 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
   useEffect(() => {
     updateItem({ ...values });
-    setItem(item);
-  }, [values]);
+    setItem({ ...item, values: { ...values } });
+  }, [values, setItem]);
 
   const onChange = (newValue: any) => {
     //
+    console.log('NEW VALUE', newValue);
     setValues({ ...values, ...newValue });
   }
 
@@ -56,7 +57,7 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     {
       (item?.id == id) && <DragDropToolbar {...props} />
     }
-    <Label label={values.label} description={values.description} />
+    <Label label={values.label} description={values.description} style={style} />
     <Input id={id} name={name} type={type} />
   </div>
 };

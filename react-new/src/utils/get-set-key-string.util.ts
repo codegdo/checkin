@@ -1,5 +1,7 @@
 export const getSetStringKeyObject = (obj: any, key: string, value?: string) => {
   const keys = key.split('.');
+  const o = JSON.parse(JSON.stringify(obj));
+  const newObj = { obj: o, ref: o, value } as any
 
   const result = keys.reduce(
     (a, k, i) => {
@@ -23,7 +25,12 @@ export const getSetStringKeyObject = (obj: any, key: string, value?: string) => 
         }
       }
 
+      console.log(ref, k);
+
       if (ref && ref[k] !== undefined) {
+
+        console.log('VALUE', value);
+
         if (!value) {
           // get
           value = ref[k];
@@ -35,7 +42,7 @@ export const getSetStringKeyObject = (obj: any, key: string, value?: string) => 
 
       return { ...a, ref, value };
     },
-    { obj, ref: obj, value } as any
+    { ...newObj } as any
   );
 
   return result;
