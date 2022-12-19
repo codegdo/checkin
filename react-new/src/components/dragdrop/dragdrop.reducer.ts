@@ -99,7 +99,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
       const duplicateItems: any = [];
 
       for (let i = 0; i < counts; i++) {
-        const item = state.data[payload.position + i];
+        const item = state.data[payload.position + i]; //JSON.parse(JSON.stringify(state.data[payload.position + i]));
         const newId = randomString();
         duplicateIds = { ...duplicateIds, [item.id]: newId };
 
@@ -135,8 +135,8 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
 
               return {
                 ...item,
-                ...payload
-              }
+                ...payload,
+              };
             }),
         },
       });

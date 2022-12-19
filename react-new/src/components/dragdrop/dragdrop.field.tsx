@@ -49,6 +49,7 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     ref={ref}
     id={id}
     className={`${classNames as string}`}
+    style={style?.field}
     {...attributes}
     onMouseOver={onMouseOver}
     onMouseOut={onMouseOut}

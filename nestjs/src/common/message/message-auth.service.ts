@@ -1,8 +1,6 @@
-import {
-  Injectable,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TwilioService } from 'nestjs-twilio';
+//import { TwilioService } from 'nestjs-twilio';
 import { MailerService } from '@nestjs-modules/mailer';
 import handlebars from 'handlebars';
 
@@ -10,9 +8,14 @@ import { EmailRepository } from 'src/models/main/repositories';
 import { arrayToObjectKey } from 'src/utils/array-to-object-keys.util';
 import { EmailData } from 'src/models/main/email/email.type';
 import { TokenData } from 'src/models/main/token/token.type';
-import { MessageOptions, MessageEnum, VerifyEmailKey, VerifyMessageKey, VerifyTokenData } from './message.type';
+import {
+  MessageOptions,
+  MessageEnum,
+  VerifyEmailKey,
+  VerifyMessageKey,
+  VerifyTokenData,
+} from './message.type';
 import { LoggerService } from '../logger/logger.service';
-
 
 @Injectable()
 export class MessageAuthService {
@@ -24,10 +27,10 @@ export class MessageAuthService {
     @InjectRepository(EmailRepository)
     private emailRepository: EmailRepository,
 
-    private readonly twilioService: TwilioService,
+    //private readonly twilioService: TwilioService,
 
     private readonly loggerService: LoggerService,
-  ) { }
+  ) {}
 
   async sendVerify(
     options: MessageOptions<TokenData<VerifyTokenData>>,
@@ -39,16 +42,20 @@ export class MessageAuthService {
     try {
       const emails = await this.emailRepository.getEmailByName('verify');
 
-      const { S: send } = arrayToObjectKey<{ S: EmailData; R: EmailData }>(
-        {
-          key: 'type',
-          values: emails,
-        },
-      );
+      const { S: send } = arrayToObjectKey<{ S: EmailData; R: EmailData }>({
+        key: 'type',
+        values: emails,
+      });
 
       if (send) {
-
-        const { subject, fromName, fromAddress, replyTo, body = '', message = '' } = send;
+        const {
+          subject,
+          fromName,
+          fromAddress,
+          replyTo,
+          body = '',
+          message = '',
+        } = send;
 
         if (type == MessageEnum.MESSAGE) {
           const keys: VerifyMessageKey = { key };
@@ -56,11 +63,11 @@ export class MessageAuthService {
 
           console.log(data);
 
-          await this.twilioService.client.messages.create({
-            body,
-            from: process.env.TWILIO_PHONE_NUMBER,
-            to: phoneNumber,
-          });
+          // await this.twilioService.client.messages.create({
+          //   body,
+          //   from: process.env.TWILIO_PHONE_NUMBER,
+          //   to: phoneNumber,
+          // });
         }
 
         if (type == MessageEnum.EMAIL) {
@@ -83,7 +90,6 @@ export class MessageAuthService {
 
         return { ok: true };
       }
-
     } catch (e) {
       this.loggerService.handleError(e);
     }

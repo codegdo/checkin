@@ -1,12 +1,12 @@
 class EditorHelper {
   getEditorBlock(data: any) {
     const values = {
-      style: data.style
-    }
+      style: data.style,
+    };
     const editor = {
       design: [],
-      setting: []
-    }
+      setting: [],
+    };
 
     return { editor, values };
   }
@@ -15,12 +15,14 @@ class EditorHelper {
     const values = {
       label: data.label,
       description: data.description,
-      style: data.style
-    }
+      style: data.style,
+    };
 
     const editor = {
       content: [
         {
+          name: 'panel',
+          label: 'Label',
           type: 'div',
           dataType: 'block',
           data: [
@@ -28,17 +30,19 @@ class EditorHelper {
               name: 'label',
               label: 'Label',
               type: 'text',
-              dataType: 'control'
+              dataType: 'control',
             },
             {
               name: 'style.label.fontSize',
               label: 'Font Size',
               type: 'range',
-              dataType: 'control'
-            }
-          ]
+              dataType: 'control',
+            },
+          ],
         },
         {
+          name: 'panel',
+          label: 'Description',
           type: 'div',
           dataType: 'block',
           data: [
@@ -46,46 +50,66 @@ class EditorHelper {
               name: 'description',
               label: 'Description',
               type: 'text',
-              dataType: 'control'
+              dataType: 'control',
             },
             {
               name: 'style.description.fontSize',
               label: 'Font Size',
               type: 'range',
-              dataType: 'control'
-            }
-          ]
-        }
+              dataType: 'control',
+            },
+          ],
+        },
       ],
       design: [
         {
-          name: 'field',
-          type: 'text',
-          style: ['color', 'fontSize']
+          name: 'panel',
+          label: 'Text',
+          type: 'div',
+          dataType: 'block',
+          data: [
+            {
+              name: 'style.field.color',
+              label: 'Color',
+              type: 'color',
+              dataType: 'control',
+            },
+            {
+              name: 'style.field.background',
+              label: 'Color',
+              type: 'color',
+              dataType: 'control',
+            },
+            {
+              name: 'style.field.fontSize',
+              label: 'Font Size',
+              type: 'range',
+              dataType: 'control',
+            },
+          ],
         },
         {
-          name: 'field',
-          type: 'background',
-          style: []
+          name: 'panel',
+          label: 'Background',
+          type: 'div',
+          dataType: 'block',
+          data: [
+            {
+              name: 'style.field.background',
+              label: 'Color',
+              type: 'color',
+              dataType: 'control',
+            },
+          ],
         },
-        {
-          name: 'field',
-          type: 'border',
-          style: []
-        },
-        {
-          name: 'field',
-          type: 'spacing',
-          style: []
-        }
       ],
       setting: [
         {
           name: 'field',
           type: 'checkbox',
-          option: ['isRequired']
-        }
-      ]
+          option: ['isRequired'],
+        },
+      ],
     };
 
     return { editor, values };
@@ -93,49 +117,51 @@ class EditorHelper {
 
   getEditorElement(data: any) {
     const values = {
-      style: data.style
-    }
+      style: data.style,
+    };
 
     const editor = {
       content: [],
       design: [],
-      setting: []
+      setting: [],
     };
 
     return { editor, values };
   }
 
   getEditor(data: any) {
-
     switch (data.dataType) {
-      case 'block': return this.getEditorBlock(data);
-      case 'field': return this.getEditorField(data);
-      case 'element': return this.getEditorElement(data);
-      default: return {};
+      case 'block':
+        return this.getEditorBlock(data);
+      case 'field':
+        return this.getEditorField(data);
+      case 'element':
+        return this.getEditorElement(data);
+      default:
+        return {};
     }
   }
 }
 
 export const editorHelper = new EditorHelper();
 
-
 // id,
-      // type: 'field',
-      // values: {
-      //   className, label, description, isRequired,
-      //   style: {
-      //     field: {
+// type: 'field',
+// values: {
+//   className, label, description, isRequired,
+//   style: {
+//     field: {
 
-      //     },
-      //     label: {
-      //       fontSize: ''
-      //     },
-      //     description: {
-      //       fontSize: ''
-      //     },
-      //     ...style
-      //   }
-      // },
+//     },
+//     label: {
+//       fontSize: ''
+//     },
+//     description: {
+//       fontSize: ''
+//     },
+//     ...style
+//   }
+// },
 
 /*
 var style = {
