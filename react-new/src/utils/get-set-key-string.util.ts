@@ -1,47 +1,47 @@
 export const getSetStringKeyObject = (values: any, name: string, value?: string) => {
-  const keys = name.split('.');
+  const names = name.split('.');
   const clone = JSON.parse(JSON.stringify(values));
   const initialValue = { obj: clone, ref: clone, value } as any;
 
-  const result = keys.reduce(
-    (acc, k, i) => {
+  const result = names.reduce(
+    (acc, key, i) => {
       let { obj, ref, value } = acc;
-      const lastKey = keys.length - 1 == i;
-      const length = keys.length;
+      const lastKey = names.length - 1 == i;
+      const length = names.length;
 
       // assign ref
       if (length > 1) {
         if (i === 0) {
-          ref = obj[k];
+          ref = obj[key];
         } else {
           // insert key if not found
-          if (ref && ref[k] === undefined) {
-            ref[k] = lastKey ? null : {};
+          if (ref && ref[key] === undefined) {
+            ref[key] = lastKey ? null : {};
           }
           // skip last key ref
           if (ref) {
-            ref = lastKey ? ref : ref[k];
+            ref = lastKey ? ref : ref[key];
           }
         }
       }
 
-      console.log(ref, k);
+      console.log(ref, key);
 
-      if (ref && ref[k] !== undefined) {
+      if (ref && ref[key] !== undefined) {
         console.log('VALUE', value);
 
         if (!value) {
           // get
-          value = ref[k];
+          value = ref[key];
         } else {
           // set
-          ref[k] = value;
+          ref[key] = value;
         }
       }
 
       return { ...acc, ref, value };
     },
-    { ...initialValue } as any
+    { ...initialValue }
   );
 
   return result;
