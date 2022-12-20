@@ -73,6 +73,7 @@ module.exports = (env) => {
         '.ts',
         '.tsx',
         '.json',
+        '.css',
         '.scss',
         '.eot',
         '.ttf',
@@ -92,7 +93,7 @@ module.exports = (env) => {
       new CleanWebpackPlugin(),
       new HtmlWebpackPlugin({
         template: 'src/index.html',
-        inject: false,
+        inject: 'body',
       }),
       new MiniCssExtractPlugin({
         filename: 'style.css',

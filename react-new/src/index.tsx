@@ -7,6 +7,7 @@ import './assets/css/index.scss';
 import { store, persistor } from './app.store';
 import { App } from './app.component';
 import { BrowserRouter } from 'react-router-dom';
+import { Theme } from './app.theme';
 
 ((_window: Window): void => {
   const container = document.getElementById('root') as HTMLElement;
@@ -17,6 +18,7 @@ import { BrowserRouter } from 'react-router-dom';
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <BrowserRouter>
+            <Theme />
             <App />
           </BrowserRouter>
         </PersistGate>

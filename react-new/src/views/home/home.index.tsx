@@ -3,9 +3,7 @@ import { DragDrop, Draggable } from '../../components/dragdrop';
 import { useAction } from '../../hooks';
 
 const Index: React.FC = (): JSX.Element => {
-
-
-  const { updateLayout, getLayoutAsync } = useAction();
+  const { updateLayout, getLayoutAsync, getThemeAsync } = useAction();
   const [form, setForm] = useState<FormData>();
 
   // load form
@@ -15,6 +13,7 @@ const Index: React.FC = (): JSX.Element => {
       setForm(json);
     })();
     getLayoutAsync();
+    getThemeAsync();
   }, []);
 
   useEffect(() => {

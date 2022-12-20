@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useRoutes } from 'react-router-dom';
 import { RouteGuard } from './components/route/route.guard';
 
 import { AuthRoute, HomeRoute, SetupRoute } from './views';
 
-export const AppRoute: React.FC = (): JSX.Element => {
+export const AppRoute: FC = (): JSX.Element => {
   const routes = useRoutes([
     {
       path: '/*',
