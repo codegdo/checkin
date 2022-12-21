@@ -55,14 +55,7 @@ module.exports = (env) => {
         },
         {
           test: /\.(sc|c)ss$/,
-          use: [
-            {
-              loader: MiniCssExtractPlugin.loader,
-            },
-            'css-loader',
-            'postcss-loader',
-            'sass-loader',
-          ],
+          use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader'],
         },
       ],
     },
@@ -96,7 +89,7 @@ module.exports = (env) => {
         inject: 'body',
       }),
       new MiniCssExtractPlugin({
-        filename: 'style.css',
+        filename: 'styles.css',
       }),
       new webpack.DefinePlugin(envKeys),
     ],
