@@ -1,8 +1,8 @@
 //https://coolors.co/palette/000000-14213d-fca311-e5e5e5-ffffff
 $black: rgb(0, 0, 0);
 $white: rgb(255, 255, 255);
-$blue: rgb(20, 33, 61);
 $yellow: rgb(252, 163, 17);
+$blue: rgb(20, 33, 61);
 
 $light: darken($white, 0);
 $dark: lighten($black, 0);
@@ -11,8 +11,50 @@ $primary: darken($yellow, 0);
 $secondary: lighten($blue, 0);
 
 :root {
-  // --color
-  --color-text-button: ;
+  // color
+  --color-text: #{$dark};
+  --color-background: #{$light};
+  --color-border: ;
+  --color-shadow: ;
+  --color-icon: ;
+
+  --color-text-inverse: ;
+  --color-background-inverse: ;
+  --color-border-inverse: ;
+  --color-shadow-inverse: ;
+  --color-icon-inverse: ;
+
+  --color-text-primary: ;
+  --color-background-primary: ;
+  --color-border-primary: ;
+  --color-shadow-primary: ;
+  --color-icon-primary: ;
+
+  --color-text-secondary: ;
+  --color-background-secondary: ;
+  --color-border-secondary: ;
+  --color-shadow-secondary: ;
+  --color-icon-secondary: ;
+
+  // button
+  --color-text-button: #{$dark};
+  --color-background-button: #{$light};
+  --color-border-button: ;
+  --color-shadow-button: ;
+  --color-icon-button: ;
+
+  --color-text-button-primary: ;
+  --color-background-button-primary: ;
+  --color-border-button-primary: ;
+  --color-shadow-button-primary: ;
+  --color-icon-button-primary: ;
+
+  --color-text-button-secondary: ;
+  --color-background-button-secondary: ;
+  --color-border-button-secondary: ;
+  --color-shadow-button-secondary: ;
+  --color-icon-button-secondary: ;
+
   --color-text-link: ;
 
   --color-background-button: ;

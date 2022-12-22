@@ -25,7 +25,7 @@ export const DragDropEditor: FC = () => {
 
   const outsideClickEvent = (event: MouseEvent) => {
     if (ref.current !== null && !ref.current.contains(event.target as HTMLElement)) {
-      item && item.onClick(event);
+      item.onClick && item.onClick(event);
     }
   };
 
