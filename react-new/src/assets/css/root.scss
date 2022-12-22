@@ -82,11 +82,13 @@ $secondary: lighten($blue, 0);
 
 /*
 :root {
-  --black: #000;
-  --darkgray: #696969;
+  --black: #000000;
+  --dim-gray: #222222; 
+  --dark-gray: #787878;
   --gray: #808080;
-  --lightgray: #D3D3D3;
-  --white: #fff;
+  --light-gray: #D3D3D3;
+  --fade-gray: #EFEFEF;
+  --white: #FFFFFF;
   
   --blue: blue;
   
