@@ -42,7 +42,12 @@ export class AuthService {
       },
     );
 
+    const token = await this.jwtService.verifyAsync(accessToken, {
+      publicKey: this.jwtConfiguration.publicKey,
+    });
+
     console.log(accessToken);
+    console.log(token);
     console.log(isEqual);
   }
 }
