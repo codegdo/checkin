@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import jwtConfig from 'src/config/jwt.config';
+import { jwtConfig } from 'src/configs';
 import { HashingService } from 'src/services/hashing/hashing.service';
 import { KeyGenService } from 'src/services/keygen/keygen.service';
 
@@ -13,7 +13,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
-  ) {}
+  ) { }
 
   async signup() {
     const hash = await this.hashingService.hash('123');

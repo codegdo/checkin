@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import jwtConfig from 'src/config/jwt.config';
 import { ConfigModule } from '@nestjs/config';
 
+import { jwtConfig } from 'src/configs';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 
@@ -29,4 +29,4 @@ import { KeyGenService } from 'src/services/keygen/keygen.service';
   ],
   controllers: [AuthController],
 })
-export class AuthModule {}
+export class AuthModule { }

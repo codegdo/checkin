@@ -5,7 +5,7 @@ import { IamModule } from './api/iam/iam.module';
 
 @Module({
   imports: [ConfigModule.forRoot(), AuthModule, IamModule],
-  controllers: [],
   providers: [],
+  controllers: [],
 })
-export class AppModule {}
+export class AppModule { }

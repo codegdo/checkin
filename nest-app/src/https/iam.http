@@ -1,0 +1,15 @@
+@hostname = localhost
+@port = 5000
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+@baseurl = http://{{host}}/api
+
+### user
+POST {{baseurl}}/iam/user
+Content-Type: {{contentType}}
+
+{
+  "username": "gdo",
+  "password": "123456",
+  "emailAddress": 123123
+}

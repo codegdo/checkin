@@ -6,7 +6,7 @@ import { KeyGenService, KeyStore } from './keygen.service';
 
 @Injectable()
 export class KeyStoreService implements KeyGenService {
-  async decrypt(data: string): Promise<KeyStore> {
+  async extract(data: string): Promise<KeyStore> {
     const keyStore = await jose.JWK.asKeyStore(data);
 
     const { keys: privateKeys } = keyStore.toJSON(true);

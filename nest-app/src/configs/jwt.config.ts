@@ -1,6 +1,6 @@
 import { registerAs } from '@nestjs/config';
 
-export default registerAs('jwt', () => {
+export const jwtConfig = registerAs('jwt', () => {
   return {
     secret: process.env.JWT_SECRET,
     audience: process.env.JWT_TOKEN_AUDIENCE,

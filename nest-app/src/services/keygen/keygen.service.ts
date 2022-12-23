@@ -8,6 +8,6 @@ export interface KeyStore {
 
 @Injectable()
 export abstract class KeyGenService {
-  abstract decrypt(data: string): Promise<KeyStore>;
+  abstract extract(data: string): Promise<KeyStore>;
   abstract generate(): Promise<KeyStore>;
 }
