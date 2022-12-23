@@ -1,11 +1,15 @@
 import { Module } from '@nestjs/common';
-import { HashingService } from '../../services/hashing/hashing.service';
-import { EncryptService } from '../../services/hashing/encrypt.service';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from 'src/config/jwt.config';
 import { ConfigModule } from '@nestjs/config';
+
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+
+import { HashingService } from '../../services/hashing/hashing.service';
+import { EncryptService } from '../../services/hashing/encrypt.service';
+import { KeyStoreService } from 'src/services/keygen/keystore.service';
+import { KeyGenService } from 'src/services/keygen/keygen.service';
 
 @Module({
   imports: [
@@ -17,8 +21,12 @@ import { ConfigModule } from '@nestjs/config';
       provide: HashingService,
       useClass: EncryptService,
     },
+    {
+      provide: KeyGenService,
+      useClass: KeyStoreService,
+    },
     AuthService,
   ],
   controllers: [AuthController],
 })
-export class AuthModule { }
+export class AuthModule {}
