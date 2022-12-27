@@ -1,22 +1,51 @@
-import { Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Get,
+  Session,
+  Body,
+} from '@nestjs/common';
 import { Auth } from 'src/decorators/auth.decorator';
+import { UserSignupDto } from 'src/models/main/user/user.dto';
+import { SESSION_DATA_KEY } from 'src/types';
 import { AuthType } from 'src/types/auth.enum';
 import { AuthService } from './auth.service';
 
 @Auth(AuthType.None)
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
-  @HttpCode(HttpStatus.OK)
   @Post('signup')
-  signup() {
-    return this.authService.signup();
+  signup(@Body() body: UserSignupDto) {
+    console.log(body);
+    return this.authService.signup(body);
   }
 
   @HttpCode(HttpStatus.OK)
-  @Post('signin')
-  signin() {
-    return this.authService.signin();
+  @Post('login')
+  login(@Session() session) {
+    session[SESSION_DATA_KEY] = {
+      user: { id: session.id },
+    };
+    return this.authService.login();
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('logout')
+  logout(@Session() session) {
+    const { data } = session;
+
+    if (data) {
+      session.destroy();
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('refresh-session')
+  refresh() {
+    //return this.authService.login();
   }
 }

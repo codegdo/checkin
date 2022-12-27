@@ -10,9 +10,12 @@ import { HashingService } from '../../services/hashing/hashing.service';
 import { EncryptService } from '../../services/hashing/encrypt.service';
 import { KeyStoreService } from 'src/services/keygen/keystore.service';
 import { KeyGenService } from 'src/services/keygen/keygen.service';
+import { TypeOrmExModule } from 'src/custom/typeorm/typeorm-ex.module';
+import { UserRepository } from 'src/models/main/user/user.repository';
 
 @Module({
   imports: [
+    TypeOrmExModule.forFeature([UserRepository]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
   ],
@@ -29,4 +32,4 @@ import { KeyGenService } from 'src/services/keygen/keygen.service';
   ],
   controllers: [AuthController],
 })
-export class AuthModule { }
+export class AuthModule {}

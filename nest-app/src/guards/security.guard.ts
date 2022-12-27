@@ -13,15 +13,34 @@ import { jwtConfig } from 'src/configs';
 import { REQUEST_USER_KEY } from 'src/types';
 
 @Injectable()
-export class AccessTokenGuard implements CanActivate {
+export class SecurityGuard implements CanActivate {
   constructor(
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
-  ) { }
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    // const request = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest();
+    const { data } = request.session;
+    const token = this.extractTokenFromHeader(request);
+
+    if (data) {
+      request[REQUEST_USER_KEY] = data?.user;
+    } else if (token) {
+      try {
+        const sessionId = await this.jwtService.verifyAsync(token, {
+          secret: this.jwtConfiguration.publicKey,
+        });
+
+        request[REQUEST_USER_KEY] = data?.user;
+      } catch {
+        throw new UnauthorizedException();
+      }
+    } else {
+      throw new UnauthorizedException();
+    }
+
     // const token = this.extractTokenFromHeader(request);
 
     // if (!token) {
@@ -36,7 +55,7 @@ export class AccessTokenGuard implements CanActivate {
     // } catch {
     //   throw new UnauthorizedException();
     // }
-    console.log('Authenticate');
+    console.log('Access Token Guard', request.session);
     return true;
   }
 

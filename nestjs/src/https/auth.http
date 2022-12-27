@@ -11,7 +11,8 @@ Content-Type: {{contentType}}
 {
   "username": "gdo",
   "password": "123456",
-  "emailAddress": 123123
+  "emailAddress": "giangd@gmail.com",
+  "phoneNumber": "333"
 }
 
 ### login

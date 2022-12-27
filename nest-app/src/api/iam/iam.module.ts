@@ -7,7 +7,12 @@ import { jwtConfig } from 'src/configs';
 import { IamService } from './iam.service';
 import { IamController } from './iam.controller';
 
-import { AccessTokenGuard, AuthGuard, PermissionGuard, RoleGuard } from 'src/guards';
+import {
+  AuthGuard,
+  SecurityGuard,
+  PermissionGuard,
+  RoleGuard,
+} from 'src/guards';
 
 @Module({
   imports: [
@@ -19,11 +24,11 @@ import { AccessTokenGuard, AuthGuard, PermissionGuard, RoleGuard } from 'src/gua
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
-    AccessTokenGuard,
+    SecurityGuard,
     RoleGuard,
     PermissionGuard,
     IamService,
   ],
-  controllers: [IamController]
+  controllers: [IamController],
 })
-export class IamModule { }
+export class IamModule {}
