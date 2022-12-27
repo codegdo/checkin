@@ -7,8 +7,7 @@ import { DataSource } from 'typeorm';
 
 import { AuthModule, IamModule } from './api';
 import { databaseConfig, sessionConfig } from './configs';
-import { SessionStore } from './helpers/session/session-store.helper';
-import { Session } from './models/main/session/session.entity';
+import { Session, SessionStore } from './models/main/session';
 
 @Module({
   imports: [
@@ -61,4 +60,4 @@ import { Session } from './models/main/session/session.entity';
   ],
   controllers: [],
 })
-export class AppModule {}
+export class AppModule { }

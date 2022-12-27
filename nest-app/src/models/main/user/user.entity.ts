@@ -22,29 +22,29 @@ export class User {
   @Column({ name: 'username' })
   username: string;
 
-  @Column({ name: 'password', select: false })
+  @Column({ name: 'password' })
   password: string;
 
-  @Column({ name: 'passcode', select: false })
+  @Column({ name: 'passcode' })
   passcode: string;
+
+  @Column({ name: 'group_id' })
+  groupId: number;
+
+  @Column({ name: 'role_id' })
+  roleId: number;
+
+  @Column({ name: 'contact_id' })
+  contactId: number;
+
+  @Column({ name: 'company_id' })
+  companyId: number;
 
   @Column({ name: 'is_new_password' })
   isNewPassword: boolean;
 
   @Column({ name: 'is_active' })
   isActive: boolean;
-
-  @Column({ name: 'contact_id' })
-  contactId: number;
-
-  @Column({ name: 'group_id' })
-  groupId: number;
-
-  @Column({ name: 'form_id' })
-  formId: number;
-
-  @Column({ name: 'org_id' })
-  orgId: number;
 
   @Column({ name: 'created_by' })
   createdBy: string;

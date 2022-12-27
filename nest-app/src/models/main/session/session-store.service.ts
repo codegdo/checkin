@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
 import { SessionData, SessionOptions, Store } from 'express-session';
-import { Session } from 'src/models/main/session/session.entity';
 import { Repository } from 'typeorm';
+import { Session } from './session.entity';
 
 export type Ttl =
   | number
@@ -16,7 +15,6 @@ type SessionStoreOptions = Partial<
   }
 >;
 
-//@Injectable()
 export class SessionStore extends Store {
   private cleanupLimit: number | undefined;
   private limitSubquery = true;
@@ -48,7 +46,7 @@ export class SessionStore extends Store {
         return callback(null);
       }
 
-      callback(null, JSON.parse(result.json));
+      callback(null, JSON.parse(result.data));
     } catch (err) {
       callback(err);
       this.handleError(err);
@@ -57,15 +55,15 @@ export class SessionStore extends Store {
 
   async set(sid: string, session: SessionData, callback?: (err?: any) => void) {
     const args = [sid];
-    let json: string;
+    let data: string;
 
     try {
-      json = JSON.stringify(session);
+      data = JSON.stringify(session);
     } catch (err) {
       return callback && callback(err);
     }
 
-    args.push(json);
+    args.push(data);
 
     const ttl = this.getTTL(session, sid);
     args.push('EX', ttl.toString());
@@ -96,7 +94,7 @@ export class SessionStore extends Store {
         {
           expiredAt: Date.now() + ttl * 1000,
           id: sid,
-          json,
+          data,
         },
       );
       callback && callback();
@@ -105,7 +103,7 @@ export class SessionStore extends Store {
         await this.repository.insert({
           expiredAt: Date.now() + ttl * 1000,
           id: sid,
-          json,
+          data,
         });
         callback && callback();
       } catch (err) {
@@ -153,7 +151,7 @@ export class SessionStore extends Store {
     try {
       const result = await this.createQueryBuilder().getMany();
       const sessions = result.map((session) => {
-        const sess = JSON.parse(session.json);
+        const sess = JSON.parse(session.data);
         sess.id = session.id;
         return sess;
       });
