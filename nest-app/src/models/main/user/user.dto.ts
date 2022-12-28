@@ -43,9 +43,27 @@ export class UserSignupDto {
   groupId: number;
 }
 
+export interface UserSignupData {
+  id: number;
+  username: string;
+  phoneNumber: string;
+  emailAddress: string;
+  isActive: boolean;
+}
+
 export class UserSignupBody {
   @IsObject()
   @ValidateNested({ each: true })
   @Type(() => UserSignupDto)
   data: UserSignupDto;
+}
+
+export class UserLoginDto {
+  @IsNotEmpty()
+  @IsString()
+  username: string;
+
+  @IsNotEmpty()
+  @IsString()
+  password: string;
 }

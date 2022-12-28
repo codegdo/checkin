@@ -1,17 +1,18 @@
 import {
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard, PermissionGuard, RoleGuard } from 'src/guards';
+
 
 @Controller('iam')
 export class IamController {
   @HttpCode(HttpStatus.OK)
-  @Post('users')
-  signup() {
+  @Get('users')
+  getAll() {
     //return this.authService.signup();
   }
 }

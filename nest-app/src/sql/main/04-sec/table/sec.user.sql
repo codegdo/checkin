@@ -10,8 +10,8 @@ CREATE TABLE sec.user(
   contact_id integer,
   company_id integer,
   
-  is_new_password boolean,
-  is_active boolean,
+  is_new_password boolean default false,
+  is_active boolean default false,
 
   created_at timestamp default current_timestamp,
   updated_at timestamp,
