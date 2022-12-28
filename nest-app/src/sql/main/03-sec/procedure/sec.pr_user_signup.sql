@@ -5,42 +5,43 @@ CREATE PROCEDURE sec.pr_user_signup(
 DECLARE
   --
 BEGIN
-  --raise notice 'Value: %', p_form_data::jsonb ->> 'firstName';
-    --WITH c as (), u as () SELECT json_agg(d)::json ->> 0 INTO data FROM () d;
-    WITH c as (
-      INSERT INTO org.contact(first_name, last_name, email_address, phone_number)
-      VALUES(
-        p_form_data::jsonb ->> 'firstName',
-        p_form_data::jsonb ->> 'lastName',
-        p_form_data::jsonb ->> 'emailAddress',
-        p_form_data::jsonb ->> 'phoneNumber'
-      )
-      RETURNING id, email_address, phone_number
-    ), u as (
-      INSERT INTO sec.user(username, password, group_id, contact_id)
-      VALUES(
-        p_form_data::jsonb ->> 'username',
-        p_form_data::jsonb ->> 'password',
-        (p_form_data::jsonb ->> 'groupId')::int,
-        (select id from c)
-      )
-      RETURNING id, username, contact_id, is_active
+  WITH c as (
+    INSERT INTO org.contact(first_name, last_name, email_address, phone_number)
+    VALUES(
+      p_form_data::jsonb ->> 'firstName',
+      p_form_data::jsonb ->> 'lastName',
+      p_form_data::jsonb ->> 'emailAddress',
+      p_form_data::jsonb ->> 'phoneNumber'
     )
-    SELECT json_agg(d)::json ->> 0
-    INTO data
-    FROM (
-      SELECT
-        u.id "id",
-        u.username "username",
-        u.is_active "isActive",
-        c.phone_number "phoneNumber",
-        c.email_address "emailAddress"
-      FROM u LEFT JOIN c on c.id = u.contact_id
-    ) d;
+    RETURNING id, email_address, phone_number
+  ), u as (
+    INSERT INTO sec.user(username, password, group_id, contact_id)
+    VALUES(
+      p_form_data::jsonb ->> 'username',
+      p_form_data::jsonb ->> 'password',
+      (p_form_data::jsonb ->> 'groupId')::int,
+      (select id from c)
+    )
+    RETURNING id, username, contact_id, is_active
+  )
+  SELECT json_agg(d)::json ->> 0
+  INTO data
+  FROM (
+    SELECT
+      u.id "id",
+      u.username "username",
+      u.is_active "isActive",
+      c.phone_number "phoneNumber",
+      c.email_address "emailAddress"
+    FROM u LEFT JOIN c on c.id = u.contact_id
+  ) d;
   COMMIT;
-  EXCEPTION when SQLSTATE '23505' then
+  --raise notice 'Value: %', p_form_data::jsonb ->> 'firstName';
+  --WITH c as (), u as () SELECT json_agg(d)::json ->> 0 INTO data FROM () d;
+
+  --EXCEPTION when SQLSTATE '23505' then
   --raise notice 'ERROR %', SQLERRM;
-  raise exception '% %', SQLERRM, SQLSTATE;
+  --raise exception '% %', SQLERRM, SQLSTATE;
 END;
 $$ language plpgsql;
 

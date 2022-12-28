@@ -1,8 +1,8 @@
 -- CREATE TABLE SESSION
-CREATE TABLE IF NOT EXISTS sec.session (
-  id CHARACTER VARYING NOT NULL,
-  data JSONB,
-  expired_at BIGINT,
+CREATE TABLE sec.session (
+  id character varying not null,
+  data jsonb,
+  expired_at bigint,
   --
-  PRIMARY KEY(id)
+  primary key(id)
 );

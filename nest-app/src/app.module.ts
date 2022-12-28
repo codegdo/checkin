@@ -50,7 +50,10 @@ import { Session, SessionStore } from './models/main/session';
       provide: APP_PIPE,
       useValue: new ValidationPipe({
         forbidNonWhitelisted: true,
-        whitelist: true,
+        //skipMissingProperties: true,
+        //skipUndefinedProperties: true,
+        //skipNullProperties: true,
+        //whitelist: true,
         transform: true,
         transformOptions: {
           enableImplicitConversion: true,
@@ -60,4 +63,4 @@ import { Session, SessionStore } from './models/main/session';
   ],
   controllers: [],
 })
-export class AppModule { }
+export class AppModule {}

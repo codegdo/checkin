@@ -30,7 +30,7 @@ export class AuthService {
       const hashedPassword = await this.hashingService.hash(password);
       const data = await this.userRepository.signupUser({
         ...dto,
-        passsword: hashedPassword,
+        password: hashedPassword,
       });
 
       if (!data) {
