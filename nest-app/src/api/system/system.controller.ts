@@ -5,6 +5,10 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
+import { Roles } from 'src/decorators';
+import { AccessLevelEnum } from 'src/models/main';
+
+@Roles(AccessLevelEnum.System)
 @Controller('system')
 export class SystemController {
 

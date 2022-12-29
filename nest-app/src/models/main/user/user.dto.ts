@@ -67,3 +67,9 @@ export class UserLoginDto {
   @IsString()
   password: string;
 }
+
+export enum AccessLevelEnum {
+  System = 'system',
+  Internal = 'internal',
+  External = 'external'
+}
