@@ -12,13 +12,6 @@ async function bootstrap() {
       'Content-Type',
       'Authorization',
       'Expiry',
-      'X-Access-Token',
-      'X-Refresh-Token',
-    ],
-    exposedHeaders: [
-      'Authorization ',
-      'Expiry',
-      'X-Access-Token',
       'X-Refresh-Token',
     ],
   });

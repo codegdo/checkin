@@ -12,7 +12,8 @@ export const jwtConfig = registerAs('jwt', () => {
     publicKey,
     audience: process.env.CLIENT_HOST,
     issuer: process.env.CLIENT_HOST,
-    expiresIn: parseInt(process.env.JWT_ACCESS_TOKEN_TTL ?? '3600', 10),
+    accessTokenTtl: parseInt(process.env.JWT_ACCESS_TOKEN_TTL ?? '3600', 10),
+    refreshTokenTtl: parseInt(process.env.JWT_REFRESH_TOKEN_TTL ?? '3600', 10),
     secretOrKeyProvider: (
       requestType: JwtSecretRequestType,
       tokenOrPayload: string | Object | Buffer,
@@ -21,12 +22,10 @@ export const jwtConfig = registerAs('jwt', () => {
       switch (requestType) {
         case JwtSecretRequestType.SIGN:
           const { privateKey } = verifyOrSignOrOptions;
-          //console.log(verifyOrSignOrOptions);
-          return privateKey || secret;
+          return privateKey ?? secret;
         case JwtSecretRequestType.VERIFY:
           const { publicKey } = verifyOrSignOrOptions;
-          //console.log(verifyOrSignOrOptions);
-          return publicKey || secret;
+          return publicKey ?? secret;
         default:
           return secret;
       }

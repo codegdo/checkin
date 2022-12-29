@@ -5,12 +5,13 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
+@Controller('system')
+export class SystemController {
 
-@Controller('iam')
-export class IamController {
   @HttpCode(HttpStatus.OK)
-  @Get('users')
+  @Get('clients')
   getAll() {
     //return this.authService.signup();
   }
+
 }

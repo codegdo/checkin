@@ -7,7 +7,7 @@ export const sessionConfig = registerAs('session', () => {
     saveUninitialized: false,
     cookie: {
       secure: false,
-      maxAge: 3600000, // 60000
+      maxAge: parseInt(process.env.SESSION_MAX_AGE ?? '3600000', 10), // 60000
     },
   };
 });

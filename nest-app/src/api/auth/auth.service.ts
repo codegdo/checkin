@@ -23,7 +23,7 @@ export class AuthService {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
-  ) {}
+  ) { }
 
   async signup({ password, ...dto }: UserSignupDto) {
     //console.log(hash);
@@ -71,21 +71,11 @@ export class AuthService {
         throw new NotFoundException();
       }
 
-      console.log(process.env.JWT_PRIVATE_KEY);
-
-      const token = await this.signToken(
-        id,
-        { sid: sessionId },
-        {
-          algorithm: 'RS256',
-          privateKey: process.env.JWT_PRIVATE_KEY,
-          expiresIn: 3600,
-        },
-      );
+      const { accessToken, refreshToken } = await this.generateToken(id, sessionId);
 
       //await this.userRepository.
 
-      return { token, user };
+      return { accessToken, refreshToken, user };
     } catch (err) {
       throw err;
     }
@@ -110,6 +100,31 @@ export class AuthService {
     // const token = await this.jwtService.verifyAsync(accessToken, {
     //   publicKey: this.jwtConfiguration.publicKey,
     // });
+  }
+
+  private async generateToken(sub: number, sid: string) {
+    const [accessToken, refreshToken] = await Promise.all([
+      this.signToken(
+        sub,
+        { sid },
+        {
+          algorithm: 'RS256',
+          privateKey: this.jwtConfiguration.privateKey,
+          expiresIn: this.jwtConfiguration.accessTokenTtl,
+        },
+      ),
+      this.signToken(
+        sub,
+        { sid },
+        {
+          algorithm: 'RS256',
+          privateKey: this.jwtConfiguration.privateKey,
+          expiresIn: this.jwtConfiguration.accessTokenTtl,
+        },
+      )
+    ]);
+
+    return { accessToken, refreshToken }
   }
 
   private async signToken<T>(sub, payload?: T, options?: JwtSignOptions) {

@@ -15,9 +15,11 @@ import {
   PermissionGuard,
   RoleGuard,
 } from 'src/guards';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([Session]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
     SessionModule.forRootAsync({

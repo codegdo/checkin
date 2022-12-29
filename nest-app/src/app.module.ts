@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule, IamModule } from './api';
 import { databaseConfig } from './configs';
+import { SystemModule } from './api/system/system.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { databaseConfig } from './configs';
     }),
     AuthModule,
     IamModule,
+    SystemModule,
   ],
   providers: [
     {

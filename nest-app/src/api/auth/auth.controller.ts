@@ -28,13 +28,13 @@ export class AuthController {
   @Post('login')
   async login(@Session() session, @Body() body: UserLoginDto) {
 
-    const { token, user } = await this.authService.login(body, session.id);
+    const { accessToken, refreshToken, user } = await this.authService.login(body, session.id);
 
     session[SESSION_DATA_KEY] = {
       user,
     };
 
-    return { token };
+    return { accessToken, refreshToken, user };
   }
 
   @HttpCode(HttpStatus.OK)
