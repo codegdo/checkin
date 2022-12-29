@@ -18,27 +18,24 @@ export class SecurityGuard implements CanActivate {
     private readonly jwtService: JwtService,
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
-  ) { }
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const { data } = request.session;
     const { token } = this.extractTokenFromHeader(request);
 
-
-
     if (data) {
       request[REQUEST_USER_KEY] = data?.user;
     } else if (token) {
-
       console.log('SECURITY TOKEN', token);
       try {
         const sessionId = await this.jwtService.verifyAsync(token, {
-          secret: this.jwtConfiguration.publicKey,
-          algorithms: ['RS256']
+          algorithms: ['RS256'],
+          publicKey: this.jwtConfiguration.publicKey,
         });
 
-        console.log('SECURITY TOKEN', sessionId)
+        console.log('SECURITY TOKEN', sessionId);
 
         request[REQUEST_USER_KEY] = data?.user;
       } catch (err) {

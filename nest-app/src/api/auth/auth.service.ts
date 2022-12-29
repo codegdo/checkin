@@ -1,6 +1,11 @@
-import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { jwtConfig } from 'src/configs';
@@ -18,7 +23,7 @@ export class AuthService {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
-  ) { }
+  ) {}
 
   async signup({ password, ...dto }: UserSignupDto) {
     //console.log(hash);
@@ -36,7 +41,6 @@ export class AuthService {
 
       return data;
     } catch (err) {
-
       const pgUniqueViolationErrorCode = '23505';
 
       if (err.code === pgUniqueViolationErrorCode) {
@@ -49,9 +53,7 @@ export class AuthService {
   }
 
   async login({ username, password }: UserLoginDto, sessionId: string) {
-
     try {
-
       const user = await this.userRepository.findOneByOrFail({ username });
 
       if (!user) {
@@ -69,12 +71,21 @@ export class AuthService {
         throw new NotFoundException();
       }
 
-      const token = await this.signToken(id, 3600, { sid: sessionId })
+      console.log(process.env.JWT_PRIVATE_KEY);
+
+      const token = await this.signToken(
+        id,
+        { sid: sessionId },
+        {
+          algorithm: 'RS256',
+          privateKey: process.env.JWT_PRIVATE_KEY,
+          expiresIn: 3600,
+        },
+      );
 
       //await this.userRepository.
 
       return { token, user };
-
     } catch (err) {
       throw err;
     }
@@ -101,18 +112,13 @@ export class AuthService {
     // });
   }
 
-  private async signToken<T>(sub: number, expiresIn: number, payload?: T) {
+  private async signToken<T>(sub, payload?: T, options?: JwtSignOptions) {
     return await this.jwtService.signAsync(
+      { sub, ...payload },
       {
-        sub,
-        ...payload,
-      },
-      {
-        algorithm: 'RS256',
-        audience: this.jwtConfiguration.audience,
-        issuer: this.jwtConfiguration.issuer,
-        privateKey: this.jwtConfiguration.privateKey,
-        expiresIn,
+        audience: process.env.CLIENT_HOST,
+        issuer: process.env.CLIENT_HOST,
+        ...options,
       },
     );
   }
