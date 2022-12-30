@@ -40,7 +40,7 @@ BEGIN
         u.id = cast(p_user_id as int)
       else
         u.username = p_user_id
-    end;
+    end
   );
 END;
 $$ language plpgsql;
