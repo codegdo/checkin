@@ -8,6 +8,7 @@ import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { AUTH_TYPE_KEY } from 'src/decorators/auth.decorator';
 import { AuthType } from 'src/types/auth.enum';
+import { AccessGuard } from './access.guard';
 import { PermissionGuard } from './permission.guard';
 import { RoleGuard } from './role.guard';
 import { SecurityGuard } from './security.guard';
@@ -19,16 +20,17 @@ export class AuthGuard implements CanActivate {
     AuthType,
     CanActivate | CanActivate[]
   > = {
-    [AuthType.Bear]: [this.securityGuard, this.roleGuard, this.permissionGuard],
-    [AuthType.None]: { canActivate: () => true },
-  };
+      [AuthType.Bear]: [this.securityGuard, this.accessGuard, this.roleGuard, this.permissionGuard],
+      [AuthType.None]: { canActivate: () => true },
+    };
 
   constructor(
     private readonly reflector: Reflector,
     private readonly securityGuard: SecurityGuard,
+    private readonly accessGuard: AccessGuard,
     private readonly roleGuard: RoleGuard,
     private readonly permissionGuard: PermissionGuard,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const authTypes = this.reflector.getAllAndOverride<AuthType[]>(

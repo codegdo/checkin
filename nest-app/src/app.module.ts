@@ -6,6 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule, IamModule } from './api';
 import { databaseConfig } from './configs';
 import { SystemModule } from './api/system/system.module';
+import { AccountModule } from './api/account/account.module';
+import { CaslAbilityService } from './services/casl/casl-ability.service';
 
 @Module({
   imports: [
@@ -22,6 +24,7 @@ import { SystemModule } from './api/system/system.module';
     AuthModule,
     IamModule,
     SystemModule,
+    AccountModule,
   ],
   providers: [
     {
@@ -38,6 +41,7 @@ import { SystemModule } from './api/system/system.module';
         },
       }),
     },
+    CaslAbilityService,
   ],
   controllers: [],
 })

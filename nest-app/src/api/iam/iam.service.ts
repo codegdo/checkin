@@ -8,4 +8,8 @@ export class IamService {
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
   ) { }
+
+  async getUserPolicy() {
+
+  }
 }

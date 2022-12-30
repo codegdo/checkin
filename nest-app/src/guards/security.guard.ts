@@ -26,11 +26,10 @@ export class SecurityGuard implements CanActivate {
   ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    console.log('Security Guard');
     const request = context.switchToHttp().getRequest();
     const { data } = request.session;
     const { key, accessToken, refreshToken } = this.extractTokenFromHeader(request);
-
-    console.log('SESSION', data);
 
     if (data) {
       request[REQUEST_USER_KEY] = data?.user;
@@ -50,17 +49,16 @@ export class SecurityGuard implements CanActivate {
       await this.refreshSession(refreshToken);
     }
 
-    console.log('Access Token Guard', request.session);
     return true;
   }
 
   private async refreshSession(token: string) {
     if (token) {
       const [sid, isRefreshTokenExpired] = await this.verifyToken(token);
-
-      if (sid && !isRefreshTokenExpired) {
+      console.log(isRefreshTokenExpired);
+      if (sid && isRefreshTokenExpired) {
         // what to do with refresh token???
-        console.log('NEED TO REFRESH SESSION');
+        throw new UnauthorizedException('Refresh Token Required');
       }
 
       sid && await this.sessionsRepository.delete({ id: sid });
@@ -73,7 +71,7 @@ export class SecurityGuard implements CanActivate {
 
   private async verifyToken(token: string) {
     let sid = null;
-    let isTokenExpired = false;
+    let isTokenExpired;
 
     try {
       const verifyToken = await this.jwtService.verifyAsync(token, {
@@ -81,6 +79,8 @@ export class SecurityGuard implements CanActivate {
         publicKey: this.jwtConfiguration.publicKey,
       });
       sid = verifyToken.sid;
+      isTokenExpired = false;
+      console.log(token);
     } catch (err) {
       if (err.name === 'TokenExpiredError') {
         const verifyToken = await this.jwtService.verifyAsync(token, {
@@ -91,7 +91,6 @@ export class SecurityGuard implements CanActivate {
         sid = verifyToken?.sid;
         isTokenExpired = true;
       }
-      isTokenExpired = true;
     }
 
     return [sid, isTokenExpired];
@@ -99,7 +98,7 @@ export class SecurityGuard implements CanActivate {
 
   private extractTokenFromHeader(request: Request) {
     const [key, accessToken] = request.headers.authorization?.split(' ') ?? [];
-    //const [_, refreshToken] = (request.headers['x-refresh-token'] as string)?.split(' ') ?? [];
-    return { key, accessToken, refreshToken: null };
+    const [_, refreshToken] = (request.headers['x-refresh-token'] as string)?.split(' ') ?? [];
+    return { key, accessToken, refreshToken };
   }
 }

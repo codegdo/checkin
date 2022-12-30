@@ -48,7 +48,7 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
-  @Post('refresh-session')
+  @Get('refresh/:tokenId')
   refresh() {
     //return this.authService.login();
   }

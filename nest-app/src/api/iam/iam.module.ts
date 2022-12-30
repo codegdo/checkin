@@ -16,6 +16,8 @@ import {
   RoleGuard,
 } from 'src/guards';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AccessGuard } from 'src/guards/access.guard';
+import { CaslAbilityService } from 'src/services';
 
 @Module({
   imports: [
@@ -51,10 +53,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       useClass: AuthGuard,
     },
     SecurityGuard,
+    AccessGuard,
     RoleGuard,
     PermissionGuard,
     IamService,
+    CaslAbilityService
   ],
   controllers: [IamController],
+  exports: [IamService,
+    CaslAbilityService]
 })
 export class IamModule { }
