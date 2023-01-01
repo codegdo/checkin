@@ -4,6 +4,7 @@ CREATE TABLE dbo.view_object (
   object_id integer not null,
   company_id integer,
   created_at timestamp default current_timestamp,
+  created_by varchar(45) default current_user,
   --
   primary key (view_id, object_id),
   foreign key (view_id) references dbo.view(id) on delete set null,

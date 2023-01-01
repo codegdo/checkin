@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, JwtSignOptions, JwtVerifyOptions } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Request } from 'express';
 
@@ -23,28 +23,32 @@ export class SecurityGuard implements CanActivate {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     @InjectRepository(Session)
     private sessionsRepository: Repository<Session>,
-  ) { }
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     console.log('Security Guard');
     const request = context.switchToHttp().getRequest();
     const { data } = request.session;
-    const { key, accessToken, refreshToken } = this.extractTokenFromHeader(request);
+    const { key, accessToken, refreshToken } =
+      this.extractTokenFromHeader(request);
 
     if (data) {
       request[REQUEST_USER_KEY] = data?.user;
     } else if (accessToken) {
-      const [sid, isAccessTokenExpired] = await this.verifyToken(accessToken);
+      const [sid, isAccessTokenExpired] = await this.verifyToken(accessToken, {
+        algorithms: ['RS256'],
+        publicKey: this.jwtConfiguration.publicKey,
+      });
 
       if (isAccessTokenExpired) {
         await this.refreshSession(refreshToken);
       }
 
-      const { data: sessionData } = await this.sessionsRepository.findOneByOrFail({ id: sid });
+      const { data: sessionData } =
+        await this.sessionsRepository.findOneByOrFail({ id: sid });
       const { data: payload } = JSON.parse(sessionData);
 
       request[REQUEST_USER_KEY] = payload?.user;
-
     } else {
       await this.refreshSession(refreshToken);
     }
@@ -54,29 +58,27 @@ export class SecurityGuard implements CanActivate {
 
   private async refreshSession(token: string) {
     if (token) {
-      const [sid, isRefreshTokenExpired] = await this.verifyToken(token);
+      const [sid, isRefreshTokenExpired] = await this.verifyToken(token, {});
       console.log(isRefreshTokenExpired);
       if (sid && isRefreshTokenExpired) {
         // what to do with refresh token???
         throw new UnauthorizedException('Refresh Token Required');
       }
 
-      sid && await this.sessionsRepository.delete({ id: sid });
+      sid && (await this.sessionsRepository.delete({ id: sid }));
       throw new UnauthorizedException();
-
     } else {
       throw new UnauthorizedException();
     }
   }
 
-  private async verifyToken(token: string) {
+  private async verifyToken(token: string, options: JwtVerifyOptions) {
     let sid = null;
     let isTokenExpired;
 
     try {
       const verifyToken = await this.jwtService.verifyAsync(token, {
-        algorithms: ['RS256'],
-        publicKey: this.jwtConfiguration.publicKey,
+        ...options,
       });
       sid = verifyToken.sid;
       isTokenExpired = false;
@@ -84,9 +86,8 @@ export class SecurityGuard implements CanActivate {
     } catch (err) {
       if (err.name === 'TokenExpiredError') {
         const verifyToken = await this.jwtService.verifyAsync(token, {
-          algorithms: ['RS256'],
-          publicKey: this.jwtConfiguration.publicKey,
-          ignoreExpiration: true
+          ...options,
+          ignoreExpiration: true,
         });
         sid = verifyToken?.sid;
         isTokenExpired = true;
@@ -98,7 +99,8 @@ export class SecurityGuard implements CanActivate {
 
   private extractTokenFromHeader(request: Request) {
     const [key, accessToken] = request.headers.authorization?.split(' ') ?? [];
-    const [_, refreshToken] = (request.headers['x-refresh-token'] as string)?.split(' ') ?? [];
+    const [_, refreshToken] =
+      (request.headers['x-refresh-token'] as string)?.split(' ') ?? [];
     return { key, accessToken, refreshToken };
   }
 }

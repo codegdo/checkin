@@ -4,6 +4,7 @@ CREATE TABLE dbo.module_feature (
   feature_id integer not null,
   company_id integer,
   created_at timestamp default current_timestamp,
+  created_by varchar(45) default current_user,
   --
   primary key (module_id, feature_id),
   foreign key (module_id) references dbo.module(id) on delete set null,

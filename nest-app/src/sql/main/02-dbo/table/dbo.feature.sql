@@ -6,9 +6,7 @@ CREATE TABLE dbo.feature (
   price numeric(8,2),
 
   created_at timestamp default current_timestamp,
-  updated_at timestamp,
   created_by varchar(45) default current_user,
-  updated_by varchar(45),
   --
   primary key (id)
 );

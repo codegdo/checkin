@@ -23,7 +23,7 @@ export class AuthService {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
-  ) { }
+  ) {}
 
   async signup({ password, ...dto }: UserSignupDto) {
     //console.log(hash);
@@ -71,7 +71,10 @@ export class AuthService {
         throw new NotFoundException();
       }
 
-      const { accessToken, refreshToken } = await this.generateToken(id, sessionId);
+      const { accessToken, refreshToken } = await this.generateToken(
+        id,
+        sessionId,
+      );
 
       const userAccess = await this.userRepository.loginUser(id);
 
@@ -79,7 +82,6 @@ export class AuthService {
     } catch (err) {
       throw err;
     }
-
   }
 
   private async generateToken(sub: number, sid: string) {
@@ -97,14 +99,12 @@ export class AuthService {
         sub,
         { sid },
         {
-          algorithm: 'RS256',
-          privateKey: this.jwtConfiguration.privateKey,
           expiresIn: this.jwtConfiguration.accessTokenTtl,
         },
-      )
+      ),
     ]);
 
-    return { accessToken, refreshToken }
+    return { accessToken, refreshToken };
   }
 
   private async signToken<T>(sub, payload?: T, options?: JwtSignOptions) {

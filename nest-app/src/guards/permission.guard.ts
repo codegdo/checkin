@@ -4,40 +4,47 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
+import { PermissionType, PERMISSION_KEY } from 'src/decorators';
 import { CaslAbilityService } from 'src/services';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
-  constructor(private readonly caslAbility: CaslAbilityService) { }
+  constructor(
+    private readonly reflector: Reflector,
+    private readonly caslAbility: CaslAbilityService,
+  ) {}
 
-  async canActivate(
-    context: ExecutionContext,
-  ): Promise<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const contextPermission = this.reflector.getAllAndOverride<
+      PermissionType[]
+    >(PERMISSION_KEY, [context.getHandler(), context.getClass()]);
+
+    if (!contextPermission) {
+      return true;
+    }
 
     const request = context.switchToHttp().getRequest();
     const { user } = request;
 
     const ability = await this.caslAbility.defineAbilityForUser(1);
-    const routes = this.extractRoutes(request)
 
-    const allow = routes.every(route => this.isAllowed(ability, route));
+    const allow = contextPermission.every((permission) =>
+      this.isAllowed(ability, permission),
+    );
 
-    console.log('Permission Guard', allow);
-
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-
-    return true;
+    return allow;
   }
 
   private isAllowed(ability, permission) {
-    return ability.can(permission, 'external')
+    console.log(permission);
+
+    return ability.can(...permission);
   }
 
   private extractRoutes(request) {
-    const route = request.originalUrl.split("?").shift();
+    const route = request.originalUrl.split('?').shift();
     const [_, api, ...routes] = route.split('/');
     return routes;
   }

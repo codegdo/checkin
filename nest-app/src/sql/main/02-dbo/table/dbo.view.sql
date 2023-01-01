@@ -9,9 +9,7 @@ CREATE TABLE dbo.view (
   is_active boolean,
 
   created_at timestamp default current_timestamp,
-  updated_at timestamp,
   created_by varchar(45) default current_user,
-  updated_by varchar(45),
   --
   primary key (id),
   foreign key (parent_id) references dbo.view(id) on delete set null 
