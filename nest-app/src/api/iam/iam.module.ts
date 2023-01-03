@@ -3,25 +3,28 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { NestSessionOptions, SessionModule } from 'nestjs-session';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
 import { jwtConfig, sessionConfig } from 'src/configs';
 import { IamService } from './iam.service';
 import { IamController } from './iam.controller';
-import { Session, SessionStore } from 'src/models/main/session';
+import { Session, SessionStore, UserRepository } from 'src/models/main';
 import {
   AuthGuard,
   SecurityGuard,
   PermissionGuard,
   RoleGuard,
 } from 'src/guards';
-import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { AccessGuard } from 'src/guards/access.guard';
 import { CaslAbilityService } from 'src/services';
+import { TypeOrmExModule } from 'src/custom';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Session]),
+    TypeOrmExModule.forFeature([UserRepository]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
     SessionModule.forRootAsync({
@@ -57,10 +60,9 @@ import { CaslAbilityService } from 'src/services';
     RoleGuard,
     PermissionGuard,
     IamService,
-    CaslAbilityService
+    CaslAbilityService,
   ],
   controllers: [IamController],
-  exports: [IamService,
-    CaslAbilityService]
+  exports: [IamService, CaslAbilityService],
 })
-export class IamModule { }
+export class IamModule {}

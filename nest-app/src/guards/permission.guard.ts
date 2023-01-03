@@ -28,7 +28,10 @@ export class PermissionGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const { user } = request;
 
-    const ability = await this.caslAbility.defineAbilityForUser(1);
+    const { ability } = await this.caslAbility.defineAbilityForUser(
+      user,
+      contextPermission,
+    );
 
     const allow = contextPermission.every((permission) =>
       this.isAllowed(ability, permission),
