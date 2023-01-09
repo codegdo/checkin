@@ -11,12 +11,12 @@ export const databaseConfig = registerAs('database', () => {
     logging: true,
   };
 
-  const main = {
+  const checkin = {
     ...options,
-    database: process.env.DATABASE_MAIN,
+    database: process.env.DATABASE_CHECKIN,
     name: 'default',
-    entities: [__dirname + '/../models/main/**/*.entity{.ts,.js}'],
+    entities: [__dirname + '/../models/**/*.entity{.ts,.js}'],
   };
 
-  return { main };
+  return { checkin };
 });

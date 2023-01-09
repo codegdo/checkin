@@ -18,7 +18,7 @@ import { CaslAbilityService } from './services/casl/casl-ability.service';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configSerivce: ConfigService) => {
-        return configSerivce.get('database.main');
+        return configSerivce.get('database.checkin');
       },
     }),
     AuthModule,

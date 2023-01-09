@@ -11,7 +11,7 @@ export const AppRoute: FC = (): JSX.Element => {
       element: <RouteGuard path='/*' element={<HomeRoute />} />
     },
     {
-      path: '/setup/*',
+      path: '/:id/setup/*',
       element: <RouteGuard path='/*' element={<SetupRoute />} />
     },
     {

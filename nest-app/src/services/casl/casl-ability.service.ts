@@ -8,7 +8,7 @@ import { IamService } from 'src/api/iam/iam.service';
 
 @Injectable()
 export class CaslAbilityService {
-  constructor(private readonly iamService: IamService) {}
+  constructor(private readonly iamService: IamService) { }
 
   async defineAbilityForUser(user, contextPermission) {
     const { can, cannot, build } = new AbilityBuilder(createMongoAbility);
@@ -46,6 +46,9 @@ export class CaslAbilityService {
     return { ability: build() };
   }
 }
+
+// Roles help you manage permissions.
+// Groups help you manage objects and subjects
 
 // return defineAbility((can, cannot) => {
 //   permission.forEach(({ effect, action, resource, condition }) => {

@@ -12,7 +12,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 
-@Entity({ database: 'main', schema: 'sec', name: 'user' })
+@Entity({ database: 'checkin', schema: 'main.sec', name: 'user' })
 @Unique(['username'])
 @Unique(['passcode'])
 export class User {
