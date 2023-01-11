@@ -14,35 +14,37 @@ CREATE TABLE "main.dbo".view_object (
 CREATE INDEX idx_view_object on "main.dbo".view_object(view_id, object_id);
 
 INSERT INTO "main.dbo".view_object(view_id, object_id, company_id) VALUES
-(100,1,null),
+(100,4,null),
+(101,5,null),
+(102,6,null),
+(103,7,null),
+(104,8,null),
 
 (200,4,null),
-(201,5,null),
-(202,6,null),
-(203,7,null),
-(204,8,null),
+(201,4,null),
 
 (300,4,null),
 (301,4,null),
 
 (400,4,null),
 (401,4,null),
+(402,4,null),
 
 (500,4,null),
 (501,4,null),
 (502,4,null),
+(503,4,null),
+(504,4,null),
 
 (600,4,null),
 (601,4,null),
-(602,4,null),
-(603,4,null),
-(604,4,null),
 
 (700,4,null),
 (701,4,null),
 
 (800,4,null),
 (801,4,null),
+(802,4,null),
 
 (900,4,null),
 (901,4,null),
@@ -51,10 +53,8 @@ INSERT INTO "main.dbo".view_object(view_id, object_id, company_id) VALUES
 (1000,4,null),
 (1001,4,null),
 (1002,4,null),
+(1003,4,null),
+(1004,4,null),
+(1005,4,null),
 
-(1100,4,null),
-(1101,4,null),
-(1102,4,null),
-(1103,4,null),
-(1104,4,null),
-(1105,4,null);
+(8000,4,null);

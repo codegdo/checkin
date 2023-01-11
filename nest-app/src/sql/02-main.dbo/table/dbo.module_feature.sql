@@ -14,6 +14,6 @@ CREATE TABLE "main.dbo".module_feature (
 CREATE INDEX idx_module_feature on "main.dbo".module_feature(module_id, feature_id);
 
 INSERT INTO "main.dbo".module_feature(module_id, feature_id, company_id) VALUES
-(2,1,null),
-(2,2,null),
-(2,3,null);
+(10,1,null),
+(10,2,null),
+(10,3,null);

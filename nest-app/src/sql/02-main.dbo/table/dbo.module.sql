@@ -16,24 +16,27 @@ CREATE TABLE "main.dbo".module (
   foreign key (parent_id) references "main.dbo".module(id) on delete set null
 );
 
-INSERT INTO "mail.dbo".module(id, name, parent_id, is_external, is_internal, is_subscription, is_active) VALUES
-(1,'client',1000,'0','0','0','1'),
-(2,'iam',1001,'0','1','0','1'),
-(3,'account',1002,'1','1','0','1'),
-(4,'help',1002,'0','1','0','1'),
-(5,'marketing',1003,'0','1','0','1'),
-(6,'config',1003,'0','1','0','1'),
+INSERT INTO "main.dbo".module(id, name, parent_id, is_external, is_internal, is_subscription, is_active) VALUES
+(1,'client',100,'0','0','0','1'),
 
-(50,'booking',1004,'1','1','1','1'),
-(51,'checkin',1004,'1','1','1','1'),
-(52,'checkout',1004,'0','1','1','1'),
-(53,'review',1004,'0','1','1','1'),
-(54,'report',1004,'1','1','1','1'),
+(10,'iam',101,'0','1','0','1'),
 
-(1000,'system',null,null,null,null,'1'),
-(1001,'admin',null,null,null,null,'1'),
-(1002,'user',null,null,null,null,'1'),
-(1003,'setting',null,null,null,null,'1'),
-(1004,'pos',null,null,null,null,'1');
+(20,'account',102,'1','1','0','1'),
+(21,'help',102,'0','1','0','1'),
+
+(30,'marketing',103,'0','1','0','1'),
+(31,'config',103,'0','1','0','1'),
+
+(40,'booking',104,'1','1','1','1'),
+(41,'checkin',104,'1','1','1','1'),
+(42,'checkout',104,'0','1','1','1'),
+(43,'review',104,'0','1','1','1'),
+(44,'report',104,'1','1','1','1'),
+
+(100,'system',null,null,null,null,'1'),
+(101,'admin',null,null,null,null,'1'),
+(102,'user',null,null,null,null,'1'),
+(103,'setting',null,null,null,null,'1'),
+(104,'pos',null,null,null,null,'1');
 
 

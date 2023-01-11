@@ -35,8 +35,11 @@ BEGIN
         and m.is_active
         and v.is_external
         and v.is_active
+      when access_level = 'system'
+        then m.is_active 
+        and v.is_active
       else
-        m.is_active and v.is_active
+        m.is_active is null
     end
   );
 END;
