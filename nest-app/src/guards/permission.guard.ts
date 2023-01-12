@@ -14,7 +14,7 @@ export class PermissionGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly caslAbility: CaslAbilityService,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const contextPermission = this.reflector.getAllAndOverride<

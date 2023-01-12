@@ -17,7 +17,7 @@ CREATE TABLE "main.sec".permission(
 
 /*
 {
-  "policy": [
+  "permission": [
     {
       "id": 3,
       "name": "Profile",

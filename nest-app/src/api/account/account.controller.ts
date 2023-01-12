@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { Access, Permission } from 'src/decorators';
 import { AccessLevelEnum } from 'src/models/main';
+import { ProfileAction } from 'src/services/casl/casl-action.type';
 
 @Access(AccessLevelEnum.External)
 @Controller('account')
@@ -27,13 +28,13 @@ export class AccountController {
   }
 
 }
-
-enum ProfileAction {
+/*
+export enum ProfileAction {
   GET_PROFILE = 'profile:getProfile',
   UPDATE_PROFILE = 'profile:updateProfile',
 }
 
-/*
+
 service:
   account
 

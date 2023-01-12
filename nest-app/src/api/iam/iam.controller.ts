@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { Access, Permission } from 'src/decorators';
 import { AccessLevelEnum } from 'src/models/main';
+import { UserAction } from 'src/services/casl/casl-action.type';
 
 @Access(AccessLevelEnum.Internal)
 @Controller('iam')
@@ -48,12 +49,13 @@ export class IamController {
     //return this.iamService.updateUser();
   }
 }
-
+/*
 enum UserAction {
-  GET_ALL_USER = 'user:getAllUser',
-  GET_USER = 'user:getUser',
-  CREATE_USER = 'user:createUser',
-  UPDATE_USER = 'user:updateUser',
-  DELETE_USER = 'user:deleteUser',
+  GET_ALL_USER = 'users:getAllUser',
+  GET_USER = 'users:getUser',
+  CREATE_USER = 'users:createUser',
+  UPDATE_USER = 'users:updateUser',
+  DELETE_USER = 'users:deleteUser',
 }
+*/
 

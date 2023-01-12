@@ -19,6 +19,10 @@ CREATE TABLE "main.sec".user(
   updated_by varchar(45),
   --
   primary key(id),
-  foreign key(group_id) references sec.group(id),
-  foreign key(contact_id) references org.contact(id)
+  foreign key(group_id) references "main.sec".group(id),
+  foreign key(contact_id) references "main.org".contact(id)
 );
+
+
+-- Roles help you manage permissions
+-- Groups help you manage objects and subjects

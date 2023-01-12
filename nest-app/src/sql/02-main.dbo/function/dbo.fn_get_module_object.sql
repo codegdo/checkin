@@ -1,4 +1,4 @@
-CREATE FUNCTION "main.dbo".fn_get_module(p_access_level varchar)
+CREATE FUNCTION "main.dbo".fn_get_module_object(p_access_level varchar)
 RETURNS TABLE (
   module varchar,
   module_group varchar,
@@ -30,14 +30,17 @@ BEGIN
         and m.is_active
         and v.is_internal
         and v.is_active
+        and o.is_active
       when access_level = 'external'
         then m.is_external
         and m.is_active
         and v.is_external
         and v.is_active
+        and o.is_active
       when access_level = 'system'
         then m.is_active 
         and v.is_active
+        and o.is_active
       else
         m.is_active is null
     end
@@ -45,4 +48,4 @@ BEGIN
 END;
 $$ language plpgsql;
 
-SELECT * FROM "main.dbo".fn_get_module('external');
+SELECT * FROM "main.dbo".fn_get_module_object('external');

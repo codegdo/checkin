@@ -3,7 +3,7 @@ CREATE TABLE "main.sec".group(
   id integer generated always as identity not null,
   name varchar(85),
   description varchar(255),
-  role_level integer default 1,
+  group_level integer default 1,
 
   access_level_id integer ,
   company_id integer,
@@ -23,11 +23,10 @@ CREATE TABLE "main.sec".group(
 --
 
 INSERT
-INTO "main.sec".group (name, role_level, access_level_id, is_owner, is_active)
+INTO "main.sec".group (name, group_level, access_level_id, is_owner, is_active)
 VALUES
 ('System', 0, 1, '1', '1'),
-('Internal', 0, 2, '1', '1'),
-('External', 0, 3, '0', '1');
+('Internal', 0, 2, '1', '1');
 
 
 select * from sec.group;

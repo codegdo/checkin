@@ -15,4 +15,4 @@ https://app.diagrams.net/ (draw.io)
 https://react-svgr.com/playground/
 
 https://thedesignsystem.guide/
-https://mailchimp.com/resources/marketing-acronyms-104/
+
