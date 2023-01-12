@@ -8,7 +8,6 @@ import {
 } from '@nestjs/common';
 import { Access, Permission } from 'src/decorators';
 import { AccessLevelEnum } from 'src/models/main';
-import { InviteAction, ProfileAction } from 'src/services/casl/action.type';
 
 @Access(AccessLevelEnum.External)
 @Controller('account')
@@ -27,12 +26,11 @@ export class AccountController {
     //return this.authService.signup();
   }
 
-  @HttpCode(HttpStatus.OK)
-  @Get('invite')
-  @Permission([InviteAction.GET_INVITE, 'account'])
-  getInvite() {
-    //return this.authService.signup();
-  }
+}
+
+enum ProfileAction {
+  GET_PROFILE = 'profile:getProfile',
+  UPDATE_PROFILE = 'profile:updateProfile',
 }
 
 /*
@@ -41,7 +39,6 @@ service:
 
 action:
   account:* = all action
-  
   
   profile
     getProfile

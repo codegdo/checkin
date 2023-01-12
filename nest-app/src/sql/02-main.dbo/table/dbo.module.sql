@@ -16,34 +16,24 @@ CREATE TABLE "main.dbo".module (
   foreign key (parent_id) references "main.dbo".module(id) on delete set null
 );
 
-INSERT INTO "main.dbo".module(id, name, parent_id, is_external, is_internal, is_subscription, is_active) VALUES
+INSERT INTO "mail.dbo".module(id, name, parent_id, is_external, is_internal, is_subscription, is_active) VALUES
+(1,'client',1000,'0','0','0','1'),
+(2,'iam',1001,'0','1','0','1'),
+(3,'account',1002,'1','1','0','1'),
+(4,'help',1002,'0','1','0','1'),
+(5,'marketing',1003,'0','1','0','1'),
+(6,'config',1003,'0','1','0','1'),
 
-(1,'monitor',200,'0','0','0','1'),
-(2,'request',200,'0','0','0','1'),
-(3,'log',200,'0','0','0','1'),
-(4,'sys-settings',200,'0','0','0','1'),
+(50,'booking',1004,'1','1','1','1'),
+(51,'checkin',1004,'1','1','1','1'),
+(52,'checkout',1004,'0','1','1','1'),
+(53,'review',1004,'0','1','1','1'),
+(54,'report',1004,'1','1','1','1'),
 
-(20,'iam',201,'0','1','0','1'),
-(21,'account',201,'1','1','0','1'),
-(22,'help',201,'1','1','0','1'),
-(23,'app-settings',201,'0','1','0','1'),
-
-(40,'booking',202,'1','1','1','1'),
-(41,'checkin',202,'1','1','1','1'),
-(42,'checkout',202,'0','1','1','1'),
-(43,'report',202,'1','1','1','1'),
-(44,'pos-settings',202,'0','1','1','1'),
-
-(50,'customer',203,'0','1','1','1'),
-(51,'promotion',203,'0','1','1','1'),
-(52,'referral',203,'0','1','1','1'),
-(53,'reward',203,'0','1','1','1'),
-(54,'review',203,'0','1','1','1'),
-(55,'crm-settings',203,'0','1','1','1'),
-
-(200,'sys',null,null,null,null,'1'),
-(201,'app',null,null,null,null,'1'),
-(202,'pos',null,null,null,null,'1'),
-(203,'crm',null,null,null,null,'1');
+(1000,'system',null,null,null,null,'1'),
+(1001,'admin',null,null,null,null,'1'),
+(1002,'user',null,null,null,null,'1'),
+(1003,'setting',null,null,null,null,'1'),
+(1004,'pos',null,null,null,null,'1');
 
 
