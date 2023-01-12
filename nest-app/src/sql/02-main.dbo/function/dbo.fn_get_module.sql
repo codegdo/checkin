@@ -42,4 +42,4 @@ BEGIN
 END;
 $$ language plpgsql;
 
-SELECT * FROM "main.dbo".fn_get_module();
+SELECT * FROM "main.dbo".fn_get_module('external');

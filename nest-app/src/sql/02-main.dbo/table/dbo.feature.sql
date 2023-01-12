@@ -11,7 +11,7 @@ CREATE TABLE "main.dbo".feature (
   primary key (id)
 );
 
-INSERT INTO 'mail.dbo'.feature (id, name, price) VALUES
+INSERT INTO "main.dbo".feature (id, name, price) VALUES
 (1,'Role Based Access',50),
 (2,'User Restrictions',50),
-(3,'Email Notifications',50),
+(3,'Email Notifications',50);
