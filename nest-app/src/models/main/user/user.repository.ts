@@ -8,7 +8,7 @@ import { UserSignupData, UserSignupDto } from './user.dto';
 export class UserRepository extends Repository<User> {
   async signupUser(data: UserSignupDto): Promise<UserSignupData> {
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_signup($1, $2)`,
+      `CALL main_sec.pr_user_signup($1, $2)`,
       [data, null],
     );
 
@@ -17,7 +17,7 @@ export class UserRepository extends Repository<User> {
 
   async loginUser(id: number): Promise<any> {
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_login($1, $2)`,
+      `CALL main_sec.pr_user_login($1, $2)`,
       [id, null],
     );
 
@@ -27,7 +27,7 @@ export class UserRepository extends Repository<User> {
   async getUserPermissionPolicy(user) {
     const { id } = user;
     const [result] = await this.manager.query(
-      `CALL sec.pr_user_permission_policy($1, $2)`,
+      `CALL main_sec.pr_user_permission_policy($1, $2)`,
       [id, null],
     );
 

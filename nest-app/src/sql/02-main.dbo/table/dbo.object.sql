@@ -1,5 +1,5 @@
 -- OBJECT
-CREATE TABLE "main.dbo".object (
+CREATE TABLE main_dbo.object (
   id integer not null ,
   name varchar(45) NOT NULL,
 
@@ -14,7 +14,7 @@ CREATE TABLE "main.dbo".object (
   primary key (id)
 );
 
-INSERT INTO "main.dbo".object(id, name, is_external, is_internal, is_custom, is_active) VALUES
+INSERT INTO main_dbo.object(id, name, is_external, is_internal, is_custom, is_active) VALUES
 (1,'account','1','1','0','1'),
 (2,'company','1','1','0','1'),
 (3,'contact','1','1','0','1'),

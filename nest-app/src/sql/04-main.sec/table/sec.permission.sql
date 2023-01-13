@@ -1,5 +1,5 @@
 -- PERMISSION
-CREATE TABLE "main.sec".permission(
+CREATE TABLE main_sec.permission(
   id integer generated always as identity not null,
   name varchar(85) unique,
   
@@ -11,8 +11,8 @@ CREATE TABLE "main.sec".permission(
   created_by varchar(45) default current_user,
   --
   primary key(id),
-  foreign key (permission_level_id) references "main.dbo".permission_level(id) on delete set null,
-  foreign key (view_id) references "main.dbo".view(id) on delete set null 
+  foreign key (permission_level_id) references main_sec.permission_level(id) on delete set null,
+  foreign key (view_id) references main_sec.view(id) on delete set null 
 );
 
 /*

@@ -1,5 +1,5 @@
 -- MODULE_VIEW
-CREATE TABLE "main.dbo".module_view (
+CREATE TABLE main_dbo.module_view (
   module_id integer not null,
   view_id integer not null,
   company_id integer,
@@ -7,13 +7,13 @@ CREATE TABLE "main.dbo".module_view (
   created_by varchar(45) default current_user,
   --
   primary key (module_id, view_id),
-  foreign key (module_id) references "main.dbo".module(id) on delete set null,
-  foreign key (view_id) references "main.dbo".view(id) on delete set null
+  foreign key (module_id) references main_dbo.module(id) on delete set null,
+  foreign key (view_id) references main_dbo.view(id) on delete set null
 );
 
-CREATE INDEX idx_module_view on "main.dbo".module_view(module_id, view_id);
+CREATE INDEX idx_module_view on main_dbo.module_view(module_id, view_id);
 
-INSERT INTO "main.dbo".module_view(module_id, view_id, company_id) VALUES
+INSERT INTO main_dbo.module_view(module_id, view_id, company_id) VALUES
 (1,1,null),
 (2,10,null),
 (2,11,null),

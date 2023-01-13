@@ -1,4 +1,4 @@
-CREATE FUNCTION "main.sec".fn_get_user(p_user_id varchar)
+CREATE FUNCTION main_sec.fn_get_user(p_user_id varchar)
 RETURNS TABLE(
   id int,
   username varchar,
@@ -24,16 +24,16 @@ BEGIN
     u.is_active,
     g.name as "group_name",
     g.is_owner,
-    g.role_level,
+    g.group_level,
     al.name as "access_level",
     c.first_name,
     c.last_name,
     c.email_address,
     c.phone_number
-  FROM "main.sec".user u
-  JOIN "main.sec".group g on g.id = u.group_id
-  JOIN "main.sec".access_level al on al.id = g.access_level_id
-  JOIN org.contact c on c.id = u.contact_id
+  FROM main_sec.user u
+  JOIN main_sec.group g on g.id = u.group_id
+  JOIN main_sec.access_level al on al.id = g.access_level_id
+  JOIN main_org.contact c on c.id = u.contact_id
   WHERE (
     case
       when (p_user_id ~ '^\d+$') then
@@ -45,7 +45,7 @@ BEGIN
 END;
 $$ language plpgsql;
 
-SELECT * FROM "main.sec".fn_get_user('2');
+SELECT * FROM main_sec.fn_get_user('2');
 
 
 select

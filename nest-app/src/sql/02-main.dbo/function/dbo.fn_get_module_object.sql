@@ -1,4 +1,4 @@
-CREATE FUNCTION "main.dbo".fn_get_module_object(p_access_level varchar)
+CREATE FUNCTION main_dbo.fn_get_module_object(p_access_level varchar)
 RETURNS TABLE (
   module varchar,
   module_group varchar,
@@ -16,13 +16,13 @@ BEGIN
     v.name,
     v2.name,
     o.name
-  FROM "main.dbo".module m
-    inner join "main.dbo".module m2 on m2.id = m.parent_id
-    join "main.dbo".module_view mv on m.id = mv.module_id
-    join "main.dbo".view v on mv.view_id = v.id
-    inner join "main.dbo".view v2 on v2.id = v.parent_id
-    join "main.dbo".view_object vo on v.id = vo.view_id
-    join "main.dbo".object o on vo.object_id = o.id
+  FROM main_dbo.module m
+    inner join main_dbo.module m2 on m2.id = m.parent_id
+    join main_dbo.module_view mv on m.id = mv.module_id
+    join main_dbo.view v on mv.view_id = v.id
+    inner join main_dbo.view v2 on v2.id = v.parent_id
+    join main_dbo.view_object vo on v.id = vo.view_id
+    join main_dbo.object o on vo.object_id = o.id
   WHERE (
     case
       when access_level = 'internal'
@@ -48,4 +48,4 @@ BEGIN
 END;
 $$ language plpgsql;
 
-SELECT * FROM "main.dbo".fn_get_module_object('external');
+SELECT * FROM main_dbo.fn_get_module_object('external');

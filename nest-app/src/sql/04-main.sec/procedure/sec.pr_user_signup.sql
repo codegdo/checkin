@@ -1,5 +1,5 @@
 -- USER_SIGNUP
-CREATE PROCEDURE "main.sec".pr_user_signup(
+CREATE PROCEDURE main_sec.pr_user_signup(
   p_form_data json,
   OUT data json
 ) as $$
@@ -7,7 +7,7 @@ DECLARE
   --
 BEGIN
   WITH c as (
-    INSERT INTO "main.org".contact(first_name, last_name, email_address, phone_number)
+    INSERT INTO main_org.contact(first_name, last_name, email_address, phone_number)
     VALUES(
       p_form_data::jsonb ->> 'firstName',
       p_form_data::jsonb ->> 'lastName',
@@ -16,7 +16,7 @@ BEGIN
     )
     RETURNING id, email_address, phone_number
   ), u as (
-    INSERT INTO "main.sec".user(username, password, group_id, contact_id)
+    INSERT INTO main_sec.user(username, password, group_id, contact_id)
     VALUES(
       p_form_data::jsonb ->> 'username',
       p_form_data::jsonb ->> 'password',
@@ -46,9 +46,9 @@ BEGIN
 END;
 $$ language plpgsql;
 
-CALL "main.sec".pr_user_signup('{"firstName": "giang", "lastName":"do", "emailAddress":"giang@cmr.bz", "phoneNumber":"8583571474", "username":"gdo3", "password":"do", "groupId":1}', null);
+CALL main_sec.pr_user_signup('{"firstName": "giang", "lastName":"do", "emailAddress":"giang@cmr.bz", "phoneNumber":"8583571474", "username":"gdo3", "password":"do", "groupId":1}', null);
 
-select * from "main.sec".user;
-select * from "main.org".contact;
+select * from main_sec.user;
+select * from main_org.contact;
 
 

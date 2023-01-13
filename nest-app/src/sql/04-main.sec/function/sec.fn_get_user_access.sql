@@ -1,4 +1,4 @@
-CREATE FUNCTION "main.sec".fn_get_user_access(p_user_id varchar)
+CREATE FUNCTION main_sec.fn_get_user_access(p_user_id varchar)
 RETURNS TABLE(
   "user" json,
   "navigation" json
@@ -21,7 +21,7 @@ BEGIN
       company_id "companyId",
       is_owner "isOwner",
       is_active "isActive"
-    FROM "main.sec".fn_get_user(p_user_id)
+    FROM main_sec.fn_get_user(p_user_id)
   ) u;
 
   if user_data is not null then
@@ -29,7 +29,7 @@ BEGIN
     SELECT user_data,
     (
       SELECT json_agg(m)::json
-      FROM (select * from "main.dbo".fn_get_module(user_data::json ->> 'accessLevel')) m
+      FROM (select * from main_dbo.fn_get_module_object(user_data::json ->> 'accessLevel')) m
     );
   else
     raise exception no_data_found;
@@ -37,4 +37,4 @@ BEGIN
 END;
 $$ language plpgsql;
 
-SELECT * FROM "main.sec".fn_get_user_access('2');
+SELECT * FROM main_sec.fn_get_user_access('2');

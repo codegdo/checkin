@@ -1,6 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TABLE "main.log".error (
+CREATE TABLE main_log.error (
   id UUID DEFAULT uuid_generate_v4() NOT NULL,
 
   message TEXT,

@@ -1,4 +1,4 @@
-CREATE FUNCTION "main.sec".fn_get_policy_for_user(p_user_id varchar)
+CREATE FUNCTION main_sec.fn_get_policy_for_user(p_user_id varchar)
 RETURNS TABLE(
   id int,
   name varchar,
@@ -14,10 +14,10 @@ BEGIN
     p.name,
     p.description,
     p.data
-  FROM "main.sec".user u
-  JOIN "main.sec".group g on g.id = u.group_id
-  INNER JOIN "main.sec".group_policy gp on g.id = gp.group_id
-  JOIN "main.sec".policy p on p.id = gp.policy_id
+  FROM main_sec.user u
+  JOIN main_sec.group g on g.id = u.group_id
+  INNER JOIN main_sec.group_policy gp on g.id = gp.group_id
+  JOIN main_sec.policy p on p.id = gp.policy_id
   WHERE (
     case
       when (p_user_id ~ '^\d+$') then
@@ -29,4 +29,4 @@ BEGIN
 END;
 $$ language plpgsql;
 
-SELECT * FROM "main.sec".fn_get_policy_for_user('2');
+SELECT * FROM main_sec.fn_get_policy_for_user('2');

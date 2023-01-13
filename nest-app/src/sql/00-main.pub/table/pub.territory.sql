@@ -1,5 +1,5 @@
 --TERRITORY
-CREATE TABLE "main.pub".territory (
+CREATE TABLE main_pub.territory (
   id integer not null,
   country varchar(90),
   country_code varchar(3),
@@ -15,7 +15,7 @@ CREATE TABLE "main.pub".territory (
 
 -- US
 INSERT
-INTO "main.pub".territory (id, country, country_code, state, state_code, region)
+INTO main_pub.territory (id, country, country_code, state, state_code, region)
 VALUES
 (1, 'United States', 'USA', 'Alaska', 'AK', 'Americas'),
 (2, 'United States', 'USA', 'Alabama', 'AL', 'Americas'),

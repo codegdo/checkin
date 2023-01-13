@@ -1,5 +1,5 @@
 -- FEATURE
-CREATE TABLE "main.dbo".feature (
+CREATE TABLE main_dbo.feature (
   id integer not null,
   name varchar(45) not null,
   description varchar(255),
@@ -11,7 +11,7 @@ CREATE TABLE "main.dbo".feature (
   primary key (id)
 );
 
-INSERT INTO "main.dbo".feature (id, name, price) VALUES
+INSERT INTO main_dbo.feature (id, name, price) VALUES
 (1,'Role Based Access',50),
 (2,'User Restrictions',50),
 (3,'Email Notifications',50);

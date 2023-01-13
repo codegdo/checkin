@@ -1,5 +1,5 @@
 -- VIEW_OBJECT
-CREATE TABLE "main.dbo".view_object (
+CREATE TABLE main_dbo.view_object (
   view_id integer not null,
   object_id integer not null,
   company_id integer,
@@ -7,13 +7,13 @@ CREATE TABLE "main.dbo".view_object (
   created_by varchar(45) default current_user,
   --
   primary key (view_id, object_id),
-  foreign key (view_id) references "main.dbo".view(id) on delete set null,
-  foreign key (object_id) references "main.dbo".object(id) on delete set null 
+  foreign key (view_id) references main_dbo.view(id) on delete set null,
+  foreign key (object_id) references main_dbo.object(id) on delete set null 
 );
 
-CREATE INDEX idx_view_object on "main.dbo".view_object(view_id, object_id);
+CREATE INDEX idx_view_object on main_dbo.view_object(view_id, object_id);
 
-INSERT INTO "main.dbo".view_object(view_id, object_id, company_id) VALUES
+INSERT INTO main_dbo.view_object(view_id, object_id, company_id) VALUES
 (1,4,null),
 (10,4,null),
 (11,4,null),

@@ -1,5 +1,5 @@
 -- PERMISSION_LEVEL
-CREATE TABLE IF NOT EXISTS "main.sec".permission_level (
+CREATE TABLE IF NOT EXISTS main_sec.permission_level (
   id integer not null,
   name varchar(255),
 
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS "main.sec".permission_level (
 --
 
 INSERT
-INTO "main.sec".permission_level (id, name)
+INTO main_sec.permission_level (id, name)
 VALUES
 (1, 'list'),
 (2, 'read'),

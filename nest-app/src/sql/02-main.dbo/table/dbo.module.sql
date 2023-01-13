@@ -1,5 +1,5 @@
 -- MODULE
-CREATE TABLE "main.dbo".module (
+CREATE TABLE main_dbo.module (
   id integer not null,
   name varchar(45) not null,
   parent_id integer,
@@ -13,10 +13,10 @@ CREATE TABLE "main.dbo".module (
   created_by varchar(45) default current_user,
   --
   primary key (id),
-  foreign key (parent_id) references "main.dbo".module(id) on delete set null
+  foreign key (parent_id) references main_dbo.module(id) on delete set null
 );
 
-INSERT INTO "main.dbo".module(id, name, parent_id, is_external, is_internal, is_subscription, is_active) VALUES
+INSERT INTO main_dbo.module(id, name, parent_id, is_external, is_internal, is_subscription, is_active) VALUES
 
 (1,'monitor',200,'0','0','0','1'),
 (2,'request',200,'0','0','0','1'),

@@ -1,5 +1,5 @@
 -- ACCESS_LEVEL
-CREATE TABLE "main.sec".access_level (
+CREATE TABLE main_sec.access_level (
   id integer not null,
   name varchar(255),
 
@@ -12,7 +12,7 @@ CREATE TABLE "main.sec".access_level (
 --
 
 INSERT
-INTO "main.sec".access_level (id, name)
+INTO main_sec.access_level (id, name)
 VALUES
 (1, 'system'),
 (2, 'internal'),

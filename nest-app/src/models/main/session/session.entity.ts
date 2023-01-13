@@ -1,6 +1,6 @@
 import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
 
-@Entity({ database: 'checkin', schema: 'main.sec', name: 'session' })
+@Entity({ database: 'db_checkin', schema: 'main_sec', name: 'session' })
 export class Session extends BaseEntity {
   @PrimaryColumn({ name: 'id' })
   id: string;

@@ -1,5 +1,5 @@
 -- POLICY
-CREATE TABLE "main.sec".policy(
+CREATE TABLE main_sec.policy(
   id integer generated always as identity not null,
   name varchar(85),
   description varchar(255),
@@ -20,7 +20,7 @@ CREATE TABLE "main.sec".policy(
 --
 
 INSERT
-INTO "main.sec".policy (name, description, data, access_level_id, is_active)
+INTO main_sec.policy (name, description, data, access_level_id, is_active)
 VALUES
 ('System Administration', 'Full Access', '{"version": "2023","statement":[{"sid": 1,"effect":"allow","action":"*","resource":"*","condition":{}}]}', '1', '1'),
 ('Administration', 'Full Access', '{"version": "2023","statement":[{"sid": 1,"effect":"allow","action":"*","resource":"*","condition":{}}]}', '1', '1'),

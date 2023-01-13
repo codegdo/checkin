@@ -1,5 +1,5 @@
 -- CONTACT
-CREATE TABLE "main.org".contact(
+CREATE TABLE main_org.contact(
   id integer generated always as identity not null,
   first_name varchar(45),
   last_name varchar(45),
@@ -19,5 +19,5 @@ CREATE TABLE "main.org".contact(
   updated_by varchar(45),
   --
   primary key(id),
-  foreign key(territory_id) references gen.territory(id)
+  foreign key(territory_id) references main_pub.territory(id)
 );

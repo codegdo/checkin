@@ -1,5 +1,5 @@
 -- VIEW
-CREATE TABLE "main.dbo".view (
+CREATE TABLE main_dbo.view (
   id integer not null,
   name varchar(45) not null,
   parent_id integer,
@@ -12,10 +12,10 @@ CREATE TABLE "main.dbo".view (
   created_by varchar(45) default current_user,
   --
   primary key (id),
-  foreign key (parent_id) references "main.dbo".view(id) on delete set null 
+  foreign key (parent_id) references main_dbo.view(id) on delete set null 
 );
 
-INSERT INTO "main.dbo".view(id, name, parent_id, is_external, is_internal, is_active) VALUES
+INSERT INTO main_dbo.view(id, name, parent_id, is_external, is_internal, is_active) VALUES
 
 (1,'clients',1000,'0','0','1'),
 

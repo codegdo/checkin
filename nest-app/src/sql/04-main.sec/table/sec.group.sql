@@ -1,5 +1,5 @@
 -- GROUP
-CREATE TABLE "main.sec".group(
+CREATE TABLE main_sec.group(
   id integer generated always as identity not null,
   name varchar(85),
   description varchar(255),
@@ -17,16 +17,13 @@ CREATE TABLE "main.sec".group(
   updated_by varchar(45),
   --
   primary key(id),
-  foreign key(access_level_id) references "main.sec".access_level(id)
+  foreign key(access_level_id) references main_sec.access_level(id)
 );
 
 --
 
 INSERT
-INTO "main.sec".group (name, group_level, access_level_id, is_owner, is_active)
+INTO main_sec.group (name, group_level, access_level_id, is_owner, is_active)
 VALUES
 ('System', 0, 1, '1', '1'),
 ('Internal', 0, 2, '1', '1');
-
-
-select * from sec.group;
