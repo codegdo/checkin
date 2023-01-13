@@ -6,7 +6,7 @@ RETURNS TABLE(
   is_active boolean,
   group_name varchar,
   is_owner boolean,
-  role_level int,
+  group_level int,
   access_level varchar,
   first_name varchar,
   last_name varchar,

@@ -1,21 +1,15 @@
-import {
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
 
 import { Access } from 'src/decorators';
 import { AccessLevelEnum } from 'src/models/main';
 
 @Access(AccessLevelEnum.System)
-@Controller('system')
-export class SystemController {
+@Controller('monitor')
+export class MonitorController {
 
   @HttpCode(HttpStatus.OK)
   @Get('clients')
-  getAll() {
+  getAllClient() {
     //return this.authService.signup();
   }
-
 }

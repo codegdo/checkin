@@ -11,7 +11,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { jwtConfig } from 'src/configs';
 import { UserRepository } from 'src/models/main';
 import { UserLoginDto, UserSignupDto } from 'src/models/main/user/user.dto';
-import { HashingService, KeyGenService } from 'src/services';
+import { HashingService, KeyGenService } from 'src/helpers';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +23,7 @@ export class AuthService {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
-  ) {}
+  ) { }
 
   async signup({ password, ...dto }: UserSignupDto) {
     //console.log(hash);

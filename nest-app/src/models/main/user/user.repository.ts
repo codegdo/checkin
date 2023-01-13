@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 
-import { CustomRepository } from 'src/custom/typeorm/custom-repository.decorator';
+import { CustomRepository } from 'src/customs/typeorm/custom-repository.decorator';
 import { UserSignupData, UserSignupDto } from './user.dto';
 
 @CustomRepository(User)

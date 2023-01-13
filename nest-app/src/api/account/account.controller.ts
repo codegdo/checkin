@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { Access, Permission } from 'src/decorators';
 import { AccessLevelEnum } from 'src/models/main';
-import { ProfileAction } from 'src/services/casl/casl-action.type';
+import { ProfileAction } from 'src/helpers';
 
 @Access(AccessLevelEnum.External)
 @Controller('account')

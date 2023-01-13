@@ -5,9 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AuthModule, IamModule } from './api';
 import { databaseConfig } from './configs';
-import { SystemModule } from './api/system/system.module';
 import { AccountModule } from './api/account/account.module';
-import { CaslAbilityService } from './services/casl/casl-ability.service';
+import { MonitorModule } from './api/monitor/monitor.module';
 
 @Module({
   imports: [
@@ -22,9 +21,9 @@ import { CaslAbilityService } from './services/casl/casl-ability.service';
       },
     }),
     AuthModule,
-    IamModule,
-    SystemModule,
     AccountModule,
+    IamModule,
+    MonitorModule,
   ],
   providers: [
     {
@@ -40,8 +39,7 @@ import { CaslAbilityService } from './services/casl/casl-ability.service';
           enableImplicitConversion: true,
         },
       }),
-    },
-    CaslAbilityService,
+    }
   ],
   controllers: [],
 })

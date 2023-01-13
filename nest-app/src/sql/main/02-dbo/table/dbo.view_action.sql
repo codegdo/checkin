@@ -20,5 +20,3 @@ INSERT INTO main_dbo.view_action(name,action_group, view_id) VALUES
 ('users:createUser','write',50),
 ('users:updateUser','write',50),
 ('users:deleteUser','write',50);
-
-select * from main_dbo.view_action;

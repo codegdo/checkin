@@ -1,5 +1,5 @@
 import { CustomDecorator, SetMetadata } from '@nestjs/common';
-import { PermissionAction, PermissionSubject } from 'src/services/casl/casl-action.type';
+import { PermissionAction, PermissionSubject } from 'src/helpers';
 
 export const PERMISSION_KEY = 'permission_key';
 export type PermissionType = [PermissionAction, PermissionSubject];

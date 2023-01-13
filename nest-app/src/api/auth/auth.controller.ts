@@ -20,12 +20,18 @@ import { AuthService } from './auth.service';
 @Auth(AuthType.None)
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post('signup')
   signup(@Body() body: UserSignupBody) {
     const { data } = body;
     return this.authService.signup(data);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('verify')
+  verify() {
+
   }
 
   @HttpCode(HttpStatus.OK)

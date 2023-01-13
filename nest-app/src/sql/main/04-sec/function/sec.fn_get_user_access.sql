@@ -17,7 +17,7 @@ BEGIN
       email_address "emailAddress",
       phone_number "phoneNumber",
       access_level "accessLevel",
-      role_level "roleLevel",
+      group_level "groupLevel",
       company_id "companyId",
       is_owner "isOwner",
       is_active "isActive"

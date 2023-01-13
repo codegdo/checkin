@@ -18,8 +18,8 @@ import {
 } from 'src/guards';
 
 import { AccessGuard } from 'src/guards/access.guard';
-import { CaslAbilityService } from 'src/services';
-import { TypeOrmExModule } from 'src/custom';
+import { CaslAbilityService, UtilService } from 'src/helpers';
+import { TypeOrmExModule } from 'src/customs';
 
 @Module({
   imports: [
@@ -61,8 +61,9 @@ import { TypeOrmExModule } from 'src/custom';
     PermissionGuard,
     IamService,
     CaslAbilityService,
+    UtilService
   ],
   controllers: [IamController],
-  exports: [IamService, CaslAbilityService],
+  exports: [IamService, CaslAbilityService, UtilService],
 })
-export class IamModule {}
+export class IamModule { }

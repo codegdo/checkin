@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { Access, Permission } from 'src/decorators';
 import { AccessLevelEnum } from 'src/models/main';
-import { UserAction } from 'src/services/casl/casl-action.type';
+import { UserAction } from 'src/helpers';
 
 @Access(AccessLevelEnum.Internal)
 @Controller('iam')

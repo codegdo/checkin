@@ -7,7 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { PermissionType, PERMISSION_KEY } from 'src/decorators';
-import { CaslAbilityService } from 'src/services';
+import { CaslAbilityService } from 'src/helpers';
 
 @Injectable()
 export class PermissionGuard implements CanActivate {
