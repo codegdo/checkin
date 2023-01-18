@@ -1,4 +1,5 @@
-import React, { FC, useContext } from 'react';
+import React, { FC } from 'react';
+import { useWrapperContext } from '../../hooks';
 
 import { getSetStringKeyObject } from '../../utils';
 import { Input } from '../input/input.component';
@@ -6,11 +7,7 @@ import { ControlContext } from './control.context';
 import { ControlContextProps } from './control.type';
 
 export const ControlRange: FC<any> = ({ label, name }): JSX.Element => {
-  const ctx = useContext((ControlContext as Object) as React.Context<ControlContextProps>);
-
-  if (!ctx) {
-    throw new Error();
-  }
+  const ctx = useWrapperContext(ControlContext as React.Context<ControlContextProps>);
 
   const { values, onChange } = ctx;
   const { value } = getSetStringKeyObject(values, name);

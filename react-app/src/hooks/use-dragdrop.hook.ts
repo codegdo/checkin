@@ -3,9 +3,9 @@ import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { dragdropHelper } from '../helpers';
 
-export const useDragDrop = (props: any): any => {
-  const { id, dataType, name, data, parentId, placeholderId, position, context } = props;
-  const { current, state, item: currentItem, setItem, moveItem } = context;
+export const useDragDrop = ({ current, state, dispatch, ...props }: any): any => {
+  const { id, dataType, name, data, parentId, placeholderId, position } = props;
+  //const { current, state, item: currentItem, moveItem } = context;
   const dragdropType = ['dropzone', 'placeholder', 'block', 'element', 'field'];
   const ref = useRef<HTMLDivElement>(null);
 
@@ -35,11 +35,15 @@ export const useDragDrop = (props: any): any => {
 
         if (didDrop) {
           console.log(item);
-          moveItem(item);
+          //moveItem(item);
+          dispatch({
+            type: 'MOVE_ITEM',
+            payload: item
+          });
         }
       },
     }),
-    [id, moveItem]
+    [id, state]
   );
 
   const [{ isOver }, drop] = useDrop(
@@ -85,7 +89,7 @@ export const useDragDrop = (props: any): any => {
         canDrop: monitor.canDrop(),
       }),
     }),
-    [id, moveItem]
+    [id, state]
   );
 
   const onMouseOver = (event: any) => {
@@ -112,14 +116,14 @@ export const useDragDrop = (props: any): any => {
     }
   };
 
-  const onDrag = (onDragging && currentItem?.id == id && dragdropType.includes(itemType as string)) ? ' on-drag' : '';
+  const onDrag = (onDragging && state.item?.id == id && dragdropType.includes(itemType as string)) ? ' on-drag' : '';
   const dragging = isDragging ? ' dragging' : '';
   const over = isOver ? ' -over' : '';
   const empty =
     (dataType == 'block' || dataType == 'dropzone') && data?.length == 0
       ? ' -empty'
       : '';
-  const focus = currentItem?.id == id ? ' -focus' : '';
+  const focus = state.item?.id == id ? ' -focus' : '';
   const title = (dataType == 'block' ? name : dataType) as string;
 
   const classNames = `dd-${title}${dragging}${onDrag}${over}${empty}${focus}`;

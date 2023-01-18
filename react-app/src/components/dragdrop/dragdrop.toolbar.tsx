@@ -1,18 +1,33 @@
 import React, { FC } from 'react';
 
-export const DragDropToolbar: FC<any> = ({ context, ...props }): JSX.Element => {
-  const { item, setItem, duplicateItem, deleteItem } = context;
+export const DragDropToolbar: FC<any> = ({ item, setItem, dispatch, ...props }): JSX.Element => {
+  //const { item, setItem, duplicateItem, deleteItem } = context;
   const handleClick = (name: string) => {
 
     switch (name) {
       case 'edit':
-        setItem({ ...item, isEdit: true })
+        //setItem({ ...item, isEdit: true });
+        dispatch({
+          type: 'SET_ITEM_ACTIVE',
+          payload: { isActive: true }
+        });
         break;
       case 'duplicate':
-        duplicateItem(props);
+        //duplicateItem(props);
+        dispatch({
+          type: 'DUPLICATE_ITEM',
+          payload: props
+        });
         break;
       case 'delete':
-        deleteItem(props);
+        //deleteItem(props);
+
+        dispatch({
+          type: 'DELETE_ITEM',
+          payload: props
+        });
+
+        //setItem(null);
         break;
     }
   }

@@ -14,6 +14,7 @@ async function bootstrap() {
       'Expiry',
       'X-Refresh-Token',
     ],
+    //exposedHeaders: ['Authorization ', 'Expiry', 'X-Refresh-Token'],
   });
 
   await app.listen(5000);

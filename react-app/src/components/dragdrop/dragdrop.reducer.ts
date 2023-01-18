@@ -5,6 +5,7 @@ import { DragDropAction, DragDropState } from './dragdrop.type';
 
 export const initialState = {
   data: [],
+  item: null
 };
 
 export const reducer = (state: DragDropState, { type, payload }: DragDropAction) => {
@@ -47,13 +48,13 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
       });
     }
     case 'ADD_ITEM': {
-      const { context, ...item } = payload;
       const found = dragdropHelper.find(payload);
 
       if (!found) {
         return state;
       }
 
+      const { current: _, ...item } = payload;
       let { dropIndex, dropType } = found;
 
       if (dropType === 'dropzone') {
@@ -90,6 +91,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
               return item;
             }),
         },
+        item: { $set: null }
       });
     }
     case 'DUPLICATE_ITEM': {
@@ -122,7 +124,7 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
               item.position = index;
               return item;
             }),
-        },
+        }
       });
     }
     case 'UPDATE_ITEM': {
@@ -139,6 +141,30 @@ export const reducer = (state: DragDropState, { type, payload }: DragDropAction)
               };
             }),
         },
+        item: {
+          $apply: (item) => {
+            return item ? { ...item, values: payload } : null
+          }
+        }
+      });
+    }
+    case 'SET_ITEM_EDIT': {
+      console.log('SET ITEM', payload);
+
+      //return state;
+      return update(state, {
+        item: { $set: payload }
+      });
+
+    }
+    case 'SET_ITEM_ACTIVE': {
+      console.log('SET ITEM ACTIVE', payload);
+
+      //return state;
+      return update(state, {
+        item: {
+          $set: { ...state.item, ...payload }
+        }
       });
     }
     default:

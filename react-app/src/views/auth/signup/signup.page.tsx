@@ -3,6 +3,7 @@ import React from 'react';
 import { Form } from '../../../components/form/form.component';
 import { Block } from '../../../components/form/form.block';
 import { Field } from '../../../components/form/form.field';
+import { apiPostSignup } from './signup.api';
 
 const form = {
   title: 'Login',
@@ -23,7 +24,23 @@ const form = {
 
 const Signup: React.FC = (props): JSX.Element => {
 
-  console.log(props);
+  const { status, data, postSignup } = apiPostSignup();
+
+  const handleSubmit = () => {
+    void postSignup({
+      body: {
+        data: {
+          firstName: 'giang',
+          lastName: 'do',
+          emailAddress: 'giang@cmr.bz',
+          phoneNumber: '8583571474',
+          username: 'gdo',
+          password: '123456',
+          groupId: '2'
+        }
+      }
+    });
+  }
 
   return <>
     <Form title="Signup">
@@ -31,6 +48,7 @@ const Signup: React.FC = (props): JSX.Element => {
         <Field type="text" name="username" />
       </Block>
     </Form>
+    <button type="button" onClick={handleSubmit}>submit</button>
   </>
 }
 

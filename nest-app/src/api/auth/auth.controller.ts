@@ -24,6 +24,7 @@ export class AuthController {
 
   @Post('signup')
   signup(@Body() body: UserSignupBody) {
+    console.log(body);
     const { data } = body;
     return this.authService.signup(data);
   }

@@ -49,9 +49,9 @@ class DragDropHelper {
     return [ids.length, ids];
   }
 
-  find({ context, ...dragItem }) {
-    const { current } = context;
-    const dropItem = current.drop;
+  find({ current, ...dragItem }) {
+    //const { current } = context;
+    const dropItem = current?.drop;
 
     if (!dropItem || !dropItem?.offset) {
       return null;

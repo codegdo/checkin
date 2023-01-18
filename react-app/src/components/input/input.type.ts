@@ -15,5 +15,5 @@ export interface LabelProps {
   label?: string;
   description?: string;
 
-  style?: any;
+  styles?: any;
 }

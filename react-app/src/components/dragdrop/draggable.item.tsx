@@ -1,17 +1,15 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useDrag } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 
-export const DraggableItem: React.FC<any> = (props): JSX.Element => {
-  const { dataType, name, context } = props;
-  const { addItem, setItem } = context;
+export const DraggableItem: React.FC<any> = ({ state, dispatch, ...props }): JSX.Element => {
+  const { dataType, name } = props;
 
-  const [{ opacity, isDragging }, drag, preview] = useDrag(
+  const [{ opacity }, drag, preview] = useDrag(
     () => ({
       type: dataType,
       item: { ...props },
       canDrag: () => {
-        // setItem && setItem(null);
         preview(getEmptyImage(), { captureDraggingState: false });
         return true;
       },
@@ -25,12 +23,15 @@ export const DraggableItem: React.FC<any> = (props): JSX.Element => {
         console.log('ADD FIELD DROP', item);
 
         if (didDrop) {
-          addItem(item);
+          dispatch({
+            type: 'ADD_ITEM',
+            payload: item
+          });
         }
 
       }
     }),
-    [addItem]
+    [state]
   );
 
   return <div ref={drag} style={{ opacity }}>{name}</div>

@@ -5,10 +5,10 @@ import { Input, Label } from '../input';
 import { DragDropToolbar } from './dragdrop.toolbar';
 
 export const DragDropField: React.FC<any> = (props): JSX.Element => {
-  const { context, ...field } = props;
-  const { item, setItem, updateItem } = context;
-  const { id, type, name, style } = field;
-  const initialValues = { ...field };
+  const { current, state: { item }, dispatch, onCallback, ...rest } = props;
+
+  const { id, type, name, styles } = rest;
+  const initialValues = { ...rest };
 
   const [values, setValues] = useState(initialValues);
   const { ref, classNames, attributes, onMouseOver, onMouseOut } = useDragDrop(props);
@@ -18,9 +18,11 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    updateItem({ ...values });
-    setItem({ ...item, values: { ...values } });
-  }, [values, setItem]);
+    dispatch({
+      type: 'UPDATE_ITEM',
+      payload: values
+    });
+  }, [values]);
 
   const onChange = (newValue: any) => {
     //
@@ -33,7 +35,10 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
 
     switch (name) {
       default:
-        setItem(null);
+        dispatch({
+          type: 'SET_ITEM_EDIT',
+          payload: null
+        });
     }
   };
 
@@ -42,14 +47,18 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     event.stopPropagation();
 
     const currentItem = (item?.id == id) ? null : { id, values, onChange, onClick };
-    setItem(currentItem);
+
+    dispatch({
+      type: 'SET_ITEM_EDIT',
+      payload: currentItem
+    });
   }
 
   return <div
     ref={ref}
     id={id}
     className={`${classNames as string}`}
-    style={style?.field}
+    style={styles?.field}
     {...attributes}
     onMouseOver={onMouseOver}
     onMouseOut={onMouseOut}
@@ -58,7 +67,7 @@ export const DragDropField: React.FC<any> = (props): JSX.Element => {
     {
       (item?.id == id) && <DragDropToolbar {...props} />
     }
-    <Label label={values.label} description={values.description} style={style} />
+    <Label label={values.label} description={values.description} styles={styles} />
     <Input id={id} name={name} type={type} />
   </div>
 };

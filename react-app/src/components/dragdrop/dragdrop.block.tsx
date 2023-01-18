@@ -7,10 +7,10 @@ import { useDragDrop } from '../../hooks';
 import { DragDropToolbar } from './dragdrop.toolbar';
 
 export const DragDropBlock: FC<any> = ({ children, ...props }): JSX.Element => {
-  const { context, ...block } = props;
-  const { item, setItem } = context;
-  const { id, name, dataType, data, value } = block;
-  const initialValues = { ...block };
+  const { current, state: { item }, dispatch, onCallback, ...rest } = props;
+
+  const { id, name, dataType, data, value } = rest;
+  const initialValues = { ...rest };
 
   const [values, setValues] = useState(initialValues);
   const { ref, classNames, attributes, onMouseOver, onMouseOut } = useDragDrop(props);
@@ -28,7 +28,10 @@ export const DragDropBlock: FC<any> = ({ children, ...props }): JSX.Element => {
 
     switch (name) {
       default:
-        setItem(null);
+        dispatch({
+          type: 'SET_ITEM_EDIT',
+          payload: null
+        });
     }
   };
 
@@ -37,7 +40,11 @@ export const DragDropBlock: FC<any> = ({ children, ...props }): JSX.Element => {
     event.stopPropagation();
 
     const currentItem = (item?.id == id) ? null : { id, values, onChange, onClick };
-    setItem(currentItem);
+
+    dispatch({
+      type: 'SET_ITEM_EDIT',
+      payload: currentItem
+    });
   }
 
 
@@ -80,7 +87,7 @@ export const DragDropBlock: FC<any> = ({ children, ...props }): JSX.Element => {
   return <div
     ref={ref}
     id={id}
-    className={`${classNames}`}
+    className={`${classNames as string}`}
     {...attributes}
     {...events}
   >

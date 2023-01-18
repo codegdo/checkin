@@ -1,25 +1,19 @@
-import React, { memo, PropsWithChildren, useContext } from 'react';
+import React, { memo, PropsWithChildren } from 'react';
 
 import { formHelper } from '../../helpers';
+import { useWrapperContext } from '../../hooks';
 import { DragDropBlock } from './dragdrop.block';
 import { DragDropContext } from './dragdrop.context';
 import { DragDropElement } from './dragdrop.element';
 import { DragDropField } from './dragdrop.field';
-import { DragDropItem } from './dragdrop.item';
-import { DragDropContextProps } from './dragdrop.type';
 
 interface RenderProps {
   data?: any[]
 }
 
 export const DragDropRender: React.FC = (): JSX.Element => {
-  const ctx = useContext((DragDropContext) as React.Context<DragDropContextProps>);
-
-  if (!ctx) {
-    throw new Error();
-  }
-
-  const data = formHelper.mapField(ctx.state.data);
+  const context = useWrapperContext(DragDropContext);
+  const data = formHelper.mapField(context?.state?.data);
 
   console.log(data);
 
@@ -28,7 +22,7 @@ export const DragDropRender: React.FC = (): JSX.Element => {
     className="form"
     name="block"
     dataType="dropzone"
-    context={ctx}
+    {...context}
   >
     <Render data={data} />
   </DragDropBlock>
@@ -37,11 +31,7 @@ export const DragDropRender: React.FC = (): JSX.Element => {
 
 export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data = [] }): JSX.Element => {
 
-  const ctx = useContext((DragDropContext) as React.Context<DragDropContextProps>);
-
-  if (!ctx) {
-    throw new Error();
-  }
+  const context = useWrapperContext(DragDropContext);
 
   return <>
     {
@@ -50,11 +40,11 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data = [
           case 'block':
           case 'dropzone':
           case 'placeholder':
-            return <DragDropBlock key={item.id} context={ctx} {...item} />
+            return <DragDropBlock key={item.id} {...item} {...context} />
           case 'element':
-            return <DragDropElement key={item.id} context={ctx} {...item} />
+            return <DragDropElement key={item.id} {...item} {...context} />
           case 'field':
-            return <DragDropField key={item.id} context={ctx} {...item} />
+            return <DragDropField key={item.id} {...item} {...context} />
           default: return null;
         }
       })

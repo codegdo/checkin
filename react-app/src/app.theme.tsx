@@ -10,7 +10,7 @@ import css from '!!css-loader!postcss-loader!sass-loader!./assets/css/root.scss'
 export const Theme: FC = (): React.ReactPortal => {
 
   const theme = useSelector((state: AppState) => state.theme);
-  console.log(css.toString());
+  //console.log(css.toString());
 
   return createPortal(
     createElement('style', { id: 'theme' }, `:root{${theme[theme.mode]}}`),

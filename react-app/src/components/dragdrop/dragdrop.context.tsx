@@ -3,11 +3,13 @@ import React, { PropsWithChildren, useCallback, useEffect, useReducer, useRef, u
 import { initialState, reducer } from './dragdrop.reducer';
 import { DragDropContextProps, DragDropProps } from './dragdrop.type';
 
-export const DragDropContext = React.createContext<DragDropContextProps | null>(null);
+export const DragDropContext = React.createContext<DragDropContextProps>({
+  state: { data: [], item: null },
+  current: null
+});
 
 export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ children, data, ...props }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const [item, setItem] = useState(null);
   const { current } = useRef({});
 
   useEffect(() => {
@@ -34,68 +36,69 @@ export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ c
     console.log('NEW STATE', state);
   }, [state]);
 
-  const moveItem = useCallback((payload: any) => {
+  // const moveItem = useCallback((payload: any) => {
 
-    dispatch({
-      type: 'MOVE_ITEM',
-      payload
-    });
+  //   dispatch({
+  //     type: 'MOVE_ITEM',
+  //     payload
+  //   });
 
-  }, [state]);
+  // }, [state]);
 
-  const addItem = useCallback((payload: any) => {
+  // const addItem = useCallback((payload: any) => {
 
-    dispatch({
-      type: 'ADD_ITEM',
-      payload
-    });
+  //   dispatch({
+  //     type: 'ADD_ITEM',
+  //     payload
+  //   });
 
-  }, [state]);
+  // }, [state]);
 
-  const deleteItem = useCallback((payload: any) => {
+  // const deleteItem = useCallback((payload: any) => {
 
-    dispatch({
-      type: 'DELETE_ITEM',
-      payload
-    });
+  //   dispatch({
+  //     type: 'DELETE_ITEM',
+  //     payload
+  //   });
 
-    setItem(null);
-  }, [state]);
+  //   setItem(null);
+  // }, [state]);
 
-  const duplicateItem = useCallback((payload: any) => {
+  // const duplicateItem = useCallback((payload: any) => {
 
-    dispatch({
-      type: 'DUPLICATE_ITEM',
-      payload
-    });
+  //   dispatch({
+  //     type: 'DUPLICATE_ITEM',
+  //     payload
+  //   });
 
-  }, [state, item]);
+  // }, [state, item]);
 
-  const updateItem = useCallback((payload: any) => {
+  // const updateItem = useCallback((payload: any) => {
 
-    dispatch({
-      type: 'UPDATE_ITEM',
-      payload
-    });
+  //   dispatch({
+  //     type: 'UPDATE_ITEM',
+  //     payload
+  //   });
 
-    setItem(null);
-  }, [state]);
+  //   setItem(null);
+  // }, [state]);
 
-  const handleCallback = useCallback(() => {
+  const onCallback = useCallback(() => {
     //
   }, []);
 
   return <DragDropContext.Provider value={{
     state,
     current,
-    item,
-    setItem,
-    moveItem,
-    addItem,
-    deleteItem,
-    duplicateItem,
-    updateItem,
-    onCallback: handleCallback
+    //item,
+    dispatch,
+    //setItem,
+    //moveItem,
+    //addItem,
+    //deleteItem,
+    //duplicateItem,
+    //updateItem,
+    onCallback
   }}>
     {children}
   </DragDropContext.Provider>

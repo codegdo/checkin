@@ -1,5 +1,7 @@
-import React, { FC, useContext, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useRef } from 'react';
 import { useDragLayer } from 'react-dnd';
+
+import { useWrapperContext } from '../../hooks';
 
 import { Editor } from '../editor/editor.component';
 import { DragDropContext } from './dragdrop.context';
@@ -7,13 +9,10 @@ import { DragDropContextProps } from './dragdrop.type';
 
 export const DragDropEditor: FC = () => {
 
-  const ctx = useContext((DragDropContext) as React.Context<DragDropContextProps>);
+  const ctx = useWrapperContext(DragDropContext);
+  const { state: { item } } = ctx;
 
-  if (!ctx) {
-    throw new Error();
-  }
-
-  const { item } = ctx;
+  //console.log(item, state);
 
   const ref = useRef<HTMLDivElement>(null);
   const dragdropType = ['dropzone', 'placeholder', 'block', 'element', 'field'];
@@ -25,7 +24,7 @@ export const DragDropEditor: FC = () => {
 
   const outsideClickEvent = (event: MouseEvent) => {
     if (ref.current !== null && !ref.current.contains(event.target as HTMLElement)) {
-      item.onClick && item.onClick(event);
+      item?.onClick(event);
     }
   };
 
@@ -40,7 +39,7 @@ export const DragDropEditor: FC = () => {
 
   return <div ref={ref} className={`dd-editor ${(onDragging && dragdropType.includes(`${itemType}`)) ? 'on-drag' : ''}`}>
     {
-      (item && item.isEdit) ? <Editor {...item} /> : null
+      (item?.isActive) ? <Editor {...item} /> : null
     }
   </div>
 }

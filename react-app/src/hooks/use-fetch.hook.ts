@@ -1,31 +1,31 @@
 import { useCallback, useReducer } from 'react';
-//import { useLocation, useNavigate } from 'react-router-dom';
 import { http, RequestOption } from '../services';
-//import { RedirectState, RedirectTypeEnum } from './use-redirect.hook';
 
 type Action = {
-  type: 'IDLE' | 'LOADING' | 'SUCCESS' | 'FAILURE';
+  type: 'IDLE' | 'PENDING' | 'SUCCESS' | 'FAILURE';
   payload?: any;
 };
 
-type State = {
+interface State {
   status: string;
   response?: any;
-};
+}
+
+type Callback = (option?: RequestOption) => Promise<void>;
 
 const initialState = {
   status: 'idle',
-  response: {},
+  response: null,
 };
 
-const reducer = (state: State, { type, payload }: Action) => {
+const reducer = (state: State, { type, payload: response }: Action) => {
   switch (type) {
-    case 'LOADING':
-      return { ...state, status: 'loading' };
+    case 'PENDING':
+      return { status: 'loading' };
     case 'SUCCESS':
-      return { ...state, status: 'success', response: payload };
+      return { status: 'success', response };
     case 'FAILURE':
-      return { ...state, status: 'error', response: payload };
+      return { status: 'error', response };
     default:
       return state;
   }
@@ -33,10 +33,8 @@ const reducer = (state: State, { type, payload }: Action) => {
 
 export const useFetch = (
   url?: string
-): [State, (option?: RequestOption) => Promise<void>] => {
+): [State, Callback] => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  //const location = useLocation();
-  //const navigate = useNavigate();
 
   const callback = useCallback(async (option?: RequestOption) => {
     const pathUrl = url || option?.url;
@@ -47,21 +45,12 @@ export const useFetch = (
     }
 
     try {
-      dispatch({ type: 'LOADING' });
-      const response = await http.request(pathUrl, option);
-      dispatch({ type: 'SUCCESS', payload: response });
+      dispatch({ type: 'PENDING' });
+      const payload = await http.request(pathUrl, option);
+      dispatch({ type: 'SUCCESS', payload });
     } catch (err: any) {
+      console.log(err);
       dispatch({ type: 'FAILURE', payload: err });
-      //
-      if (err.data?.message === 'Session Timeout') {
-        // navigate('/auth/logout', {
-        //   state: {
-        //     type: RedirectTypeEnum.SessionTimeout,
-        //     previousLocation: location,
-        //   } as RedirectState,
-        // });
-      }
-      console.log('FETCH', err);
     }
   }, []);
 

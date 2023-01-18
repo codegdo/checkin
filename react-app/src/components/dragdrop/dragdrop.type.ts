@@ -7,21 +7,16 @@ export interface DragDropProps {
 export interface DragDropContextProps extends DragDropProps {
   state: DragDropState;
   current: any;
-  item: any;
-  setItem: (item: any) => void;
-  moveItem: (item: any) => void;
-  addItem: (item: any) => void;
-  deleteItem: (item: any) => void;
-  duplicateItem: (item: any) => void;
-  updateItem: (item: any) => void;
-  onCallback: () => void;
+  dispatch?: React.Dispatch<DragDropAction>,
+  onCallback?: () => void;
 }
 
 export type DragDropAction = {
-  type: 'INIT' | 'MOVE_ITEM' | 'ADD_ITEM' | 'DELETE_ITEM' | 'UPDATE_ITEM' | 'DUPLICATE_ITEM';
+  type: 'INIT' | 'MOVE_ITEM' | 'ADD_ITEM' | 'DELETE_ITEM' | 'UPDATE_ITEM' | 'DUPLICATE_ITEM' | 'SET_ITEM_EDIT' | 'SET_ITEM_ACTIVE';
   payload?: any;
 };
 
 export type DragDropState = {
   data: any[];
+  item: any;
 };

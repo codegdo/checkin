@@ -1,7 +1,7 @@
 class EditorHelper {
   getEditorBlock(data: any) {
     const values = {
-      style: data.style,
+      styles: data.styles,
     };
     const editor = {
       design: [],
@@ -15,7 +15,7 @@ class EditorHelper {
     const values = {
       label: data.label,
       description: data.description,
-      style: data.style,
+      styles: data.styles,
     };
 
     const editor = {
@@ -33,7 +33,7 @@ class EditorHelper {
               dataType: 'control',
             },
             {
-              name: 'style.label.fontSize',
+              name: 'styles.label.fontSize',
               label: 'Font Size',
               type: 'range',
               dataType: 'control',
@@ -53,7 +53,7 @@ class EditorHelper {
               dataType: 'control',
             },
             {
-              name: 'style.description.fontSize',
+              name: 'styles.description.fontSize',
               label: 'Font Size',
               type: 'range',
               dataType: 'control',
@@ -69,19 +69,19 @@ class EditorHelper {
           dataType: 'block',
           data: [
             {
-              name: 'style.field.color',
+              name: 'styles.field.color',
               label: 'Color',
               type: 'color',
               dataType: 'control',
             },
             {
-              name: 'style.field.background',
+              name: 'styles.field.background',
               label: 'Color',
               type: 'color',
               dataType: 'control',
             },
             {
-              name: 'style.field.fontSize',
+              name: 'styles.field.fontSize',
               label: 'Font Size',
               type: 'range',
               dataType: 'control',
@@ -95,7 +95,7 @@ class EditorHelper {
           dataType: 'block',
           data: [
             {
-              name: 'style.field.background',
+              name: 'styles.field.background',
               label: 'Color',
               type: 'color',
               dataType: 'control',
@@ -117,7 +117,7 @@ class EditorHelper {
 
   getEditorElement(data: any) {
     const values = {
-      style: data.style,
+      styles: data.styles,
     };
 
     const editor = {

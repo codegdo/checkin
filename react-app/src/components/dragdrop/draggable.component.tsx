@@ -1,8 +1,8 @@
-import React, { FC, useContext, useRef } from 'react';
+import React, { FC } from 'react';
+import { useWrapperContext } from '../../hooks';
 
 
 import { DragDropContext } from './dragdrop.context';
-import { DragDropContextProps } from './dragdrop.type';
 import { DraggableItem } from './draggable.item';
 
 const blocks = [
@@ -102,11 +102,7 @@ const blocks = [
 ]
 
 export const Draggable: FC = (): JSX.Element => {
-  const ctx = useContext((DragDropContext) as React.Context<DragDropContextProps>);
-
-  if (!ctx) {
-    throw new Error();
-  }
+  const { current, state, dispatch } = useWrapperContext(DragDropContext);
 
   return <div>
     {
@@ -114,10 +110,11 @@ export const Draggable: FC = (): JSX.Element => {
         return <DraggableItem
           key={i}
           {...block}
-          context={ctx}
+          current={current}
+          state={state}
+          dispatch={dispatch}
         />
       })
     }
-
   </div>
 }
