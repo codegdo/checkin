@@ -8,6 +8,7 @@ import { DraggableItem } from './draggable.item';
 const blocks = [
   {
     id: null,
+    className: '',
     name: 'block',
     label: "Block",
     description: null,
@@ -15,7 +16,7 @@ const blocks = [
     type: 'div',
     data: [],
     component: null,
-    style: {},
+    styles: {},
     value: null,
     position: null,
     parentId: null,
@@ -23,6 +24,7 @@ const blocks = [
   },
   {
     id: null,
+    className: '',
     name: 'component',
     label: "Component",
     description: null,
@@ -30,7 +32,7 @@ const blocks = [
     type: 'div',
     data: [],
     component: null,
-    style: {},
+    styles: {},
     value: `<div class="row">
       <div class="column"><jsx id='placeholder_0'></jsx></div>
       <div class="column"><jsx id='placeholder_1'></jsx></div>
@@ -41,6 +43,7 @@ const blocks = [
   },
   {
     id: null,
+    className: '',
     name: 'link',
     label: "Link",
     description: null,
@@ -48,7 +51,7 @@ const blocks = [
     type: 'link',
     data: null,
     component: null,
-    style: {},
+    styles: {},
     value: null,
     position: null,
     parentId: null,
@@ -56,6 +59,7 @@ const blocks = [
   },
   {
     id: null,
+    className: '',
     name: 'button',
     label: "Button",
     description: null,
@@ -63,7 +67,7 @@ const blocks = [
     type: 'button',
     data: null,
     component: null,
-    style: {},
+    styles: {},
     value: null,
     position: null,
     parentId: null,
@@ -71,6 +75,7 @@ const blocks = [
   },
   {
     id: null,
+    className: '',
     name: 'html',
     label: "Html",
     description: null,
@@ -78,7 +83,7 @@ const blocks = [
     type: 'html',
     data: null,
     component: null,
-    style: {},
+    styles: {},
     value: null,
     position: null,
     parentId: null,
@@ -86,6 +91,7 @@ const blocks = [
   },
   {
     id: null,
+    className: '',
     name: 'text',
     label: "Text",
     description: null,
@@ -93,7 +99,7 @@ const blocks = [
     type: 'text',
     data: null,
     component: null,
-    style: {},
+    styles: {},
     value: null,
     position: null,
     parentId: null,

@@ -28,7 +28,7 @@ const Signup: React.FC = (props): JSX.Element => {
 
   const handleSubmit = () => {
     void postSignup({
-      body: {
+      body: JSON.stringify({
         data: {
           firstName: 'giang',
           lastName: 'do',
@@ -36,9 +36,9 @@ const Signup: React.FC = (props): JSX.Element => {
           phoneNumber: '8583571474',
           username: 'gdo',
           password: '123456',
-          groupId: '2'
+          groupId: 2
         }
-      }
+      })
     });
   }
 

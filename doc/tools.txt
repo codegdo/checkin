@@ -16,3 +16,4 @@ https://react-svgr.com/playground/
 
 https://thedesignsystem.guide/
 
+https://excalidraw.com/

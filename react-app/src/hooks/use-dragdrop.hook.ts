@@ -1,11 +1,20 @@
 import React, { useRef } from 'react';
 import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import classNames from 'classnames';
 import { dragdropHelper } from '../helpers';
 
-export const useDragDrop = ({ current, state, dispatch, ...props }: any): any => {
-  const { id, dataType, name, data, parentId, placeholderId, position } = props;
-  //const { current, state, item: currentItem, moveItem } = context;
+type DrapDropReturn = {
+  ref: React.RefObject<HTMLDivElement>,
+  stringClass: string;
+  attributes: { [key: string]: string };
+  onMouseOver: (event: React.MouseEvent) => void;
+  onMouseOut: (event: React.MouseEvent) => void;
+}
+
+export const useDragDrop = (props: any): DrapDropReturn => {
+  const { id, dataType, name, data, parentId, placeholderId, position, current, state, dispatch } = props;
+
   const dragdropType = ['dropzone', 'placeholder', 'block', 'element', 'field'];
   const ref = useRef<HTMLDivElement>(null);
 
@@ -34,8 +43,7 @@ export const useDragDrop = ({ current, state, dispatch, ...props }: any): any =>
         const didDrop = monitor.didDrop();
 
         if (didDrop) {
-          console.log(item);
-          //moveItem(item);
+          //console.log(item);
           dispatch({
             type: 'MOVE_ITEM',
             payload: item
@@ -92,7 +100,7 @@ export const useDragDrop = ({ current, state, dispatch, ...props }: any): any =>
     [id, state]
   );
 
-  const onMouseOver = (event: any) => {
+  const onMouseOver = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -107,7 +115,7 @@ export const useDragDrop = ({ current, state, dispatch, ...props }: any): any =>
     }
   };
 
-  const onMouseOut = (event: any) => {
+  const onMouseOut = (event: React.MouseEvent) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -116,21 +124,24 @@ export const useDragDrop = ({ current, state, dispatch, ...props }: any): any =>
     }
   };
 
-  const onDrag = (onDragging && state.item?.id == id && dragdropType.includes(itemType as string)) ? ' on-drag' : '';
-  const dragging = isDragging ? ' dragging' : '';
-  const over = isOver ? ' -over' : '';
-  const empty =
-    (dataType == 'block' || dataType == 'dropzone') && data?.length == 0
-      ? ' -empty'
-      : '';
-  const focus = state.item?.id == id ? ' -focus' : '';
+  const isFocus = state.item?.id == id;
+  const isDragDropType = dragdropType.includes(itemType as string);
+  const isEmpty = (dataType == 'block' || dataType == 'dropzone') && data?.length == 0;
   const title = (dataType == 'block' ? name : dataType) as string;
 
-  const classNames = `dd-${title}${dragging}${onDrag}${over}${empty}${focus}`;
+  const stringClass = classNames({
+    [`dd-${title}`]: true,
+    'on-drag': onDragging && isFocus && isDragDropType,
+    '-dragging': isDragging,
+    '-over': isOver,
+    '-empty': isEmpty,
+    '-focus': isFocus
+  });
+
   const attributes = { "data-title": title }
 
   drag(drop(ref));
 
-  return { ref, classNames, attributes, onMouseOver, onMouseOut };
+  return { ref, stringClass, attributes, onMouseOver, onMouseOut };
 };
 

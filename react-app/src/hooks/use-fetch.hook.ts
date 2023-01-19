@@ -1,5 +1,5 @@
 import { useCallback, useReducer } from 'react';
-import { http, RequestOption } from '../services';
+import { http, RequestOption, RequestOptionBody } from '../services';
 
 type Action = {
   type: 'IDLE' | 'PENDING' | 'SUCCESS' | 'FAILURE';
@@ -11,7 +11,7 @@ interface State {
   response?: any;
 }
 
-type Callback = (option?: RequestOption) => Promise<void>;
+type Callback<T> = (option?: RequestOption | RequestOptionBody<T>) => Promise<void>;
 
 const initialState = {
   status: 'idle',
@@ -31,12 +31,12 @@ const reducer = (state: State, { type, payload: response }: Action) => {
   }
 };
 
-export const useFetch = (
+export const useFetch = <T>(
   url?: string
-): [State, Callback] => {
+): [State, Callback<T>] => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const callback = useCallback(async (option?: RequestOption) => {
+  const callback = useCallback(async (option?: RequestOptionBody<T>) => {
     const pathUrl = url || option?.url;
 
     if (!pathUrl) {

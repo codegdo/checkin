@@ -9,7 +9,7 @@ export const DragDropElement: FC<any> = (props): JSX.Element => {
   const initialValues = { ...rest };
 
   const [values, setValues] = useState(initialValues);
-  const { ref, classNames, attributes, onMouseOver, onMouseOut } = useDragDrop(props);
+  const { ref, stringClass, attributes, onMouseOver, onMouseOut } = useDragDrop(props);
 
   useEffect(() => {
     setValues(initialValues);
@@ -46,7 +46,7 @@ export const DragDropElement: FC<any> = (props): JSX.Element => {
   return <div
     ref={ref}
     id={id}
-    className={`${classNames as string}`}
+    className={`${stringClass}`}
     {...attributes}
     onMouseOver={onMouseOver}
     onMouseOut={onMouseOut}

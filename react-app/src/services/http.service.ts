@@ -11,9 +11,12 @@ export type RequestOption = {
   method?: string;
   headers?: any;
   params?: any;
-  body?: any;
   withCredentials?: boolean;
   credentials?: RequestCredentials;
+};
+
+export type RequestOptionBody<T> = RequestOption & {
+  body?: T | string;
 };
 
 type RequestUrl = {
@@ -47,31 +50,31 @@ class HttpService {
     return params ? queryString.stringifyUrl({ url, query: params }) : url;
   }
 
-  async request<T>(pathUrl: string, option?: RequestOption): Promise<HttpResponse<T>> {
+  async request<T>(pathUrl: string, option?: RequestOptionBody<T>): Promise<HttpResponse<T>> {
     const { headers, method, body, params, baseUrl, ...args } = option || {};
     const url = this.getUrl({ baseUrl, pathUrl, params });
 
-    option = {
+    const _option = {
       headers: {
         'Content-Type': this.contentType,
         'Accept': this.contentType,
         ...headers
       },
       method: method || (body ? 'POST' : 'GET'),
-      body: JSON.stringify(body),
+      body: (typeof body === 'string') ? body : JSON.stringify(body),
       credentials: this.credentials,
       withCredentials: this.withCredentials,
       ...args,
     };
 
-    return this._fetch(new Request(url, option));
+    return this._fetch(new Request(url, _option));
   }
 
   async get<T>(pathUrl: string, option?: RequestOption): Promise<HttpResponse<T>> {
     const { headers, params, baseUrl, ...args } = option || {};
     const url = this.getUrl({ baseUrl, pathUrl, params });
 
-    option = {
+    const _option = {
       headers: {
         'Content-Type': this.contentType,
         'Accept': this.contentType,
@@ -83,67 +86,87 @@ class HttpService {
       ...args,
     };
 
-    return this._fetch(new Request(url, option));
+    return this._fetch(new Request(url, _option));
   }
 
-  async post<T>(pathUrl: string, option: RequestOption): Promise<HttpResponse<T>> {
+  async post<T>(pathUrl: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
     const { headers, body, baseUrl, ...args } = option || {};
     const url = this.getUrl({ baseUrl, pathUrl });
 
-    option = {
+    const _option = {
       headers: {
         'Content-Type': this.contentType,
         'Accept': this.contentType,
         ...headers
       },
       method: 'POST',
-      body: JSON.stringify(body),
+      body: (typeof body === 'string') ? body : JSON.stringify(body),
       credentials: this.credentials,
       withCredentials: this.withCredentials,
       ...args,
     };
 
-    return this._fetch(new Request(url, option));
+    return this._fetch(new Request(url, _option));
   }
 
-  async patch<T>(pathUrl: string, option: RequestOption): Promise<HttpResponse<T>> {
+  async patch<T>(pathUrl: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
     const { headers, body, baseUrl, ...args } = option || {};
     const url = this.getUrl({ baseUrl, pathUrl });
 
-    option = {
+    const _option = {
       headers: {
         'Content-Type': this.contentType,
         'Accept': this.contentType,
         ...headers
       },
       method: 'PATCH',
-      body: JSON.stringify(body),
+      body: (typeof body === 'string') ? body : JSON.stringify(body),
       credentials: this.credentials,
       withCredentials: this.withCredentials,
       ...args,
     };
 
-    return this._fetch(new Request(url, option));
+    return this._fetch(new Request(url, _option));
   }
 
-  async delete<T>(pathUrl: string, option: RequestOption): Promise<HttpResponse<T>> {
+  async put<T>(pathUrl: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
     const { headers, body, baseUrl, ...args } = option || {};
     const url = this.getUrl({ baseUrl, pathUrl });
 
-    option = {
+    const _option = {
+      headers: {
+        'Content-Type': this.contentType,
+        'Accept': this.contentType,
+        ...headers
+      },
+      method: 'PUT',
+      body: (typeof body === 'string') ? body : JSON.stringify(body),
+      credentials: this.credentials,
+      withCredentials: this.withCredentials,
+      ...args,
+    };
+
+    return this._fetch(new Request(url, _option));
+  }
+
+  async delete<T>(pathUrl: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
+    const { headers, body, baseUrl, ...args } = option || {};
+    const url = this.getUrl({ baseUrl, pathUrl });
+
+    const _option = {
       headers: {
         'Content-Type': this.contentType,
         'Accept': this.contentType,
         ...headers
       },
       method: 'DELETE',
-      body: JSON.stringify(body),
+      body: (typeof body === 'string') ? body : JSON.stringify(body),
       credentials: this.credentials,
       withCredentials: this.withCredentials,
       ...args,
     };
 
-    return this._fetch(new Request(url, option));
+    return this._fetch(new Request(url, _option));
   }
 
   private _fetch<T>(req: Request): Promise<HttpResponse<T>> {
