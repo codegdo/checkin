@@ -29,7 +29,7 @@
 }
 */
 
-.-hover {
+.is-hover {
   //box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.1);
   border-color: rgb(137, 209, 234);
   position: relative;
@@ -50,7 +50,7 @@
   }
 }
 
-.-focus {
+.is-focus {
   //box-shadow: 0 0 1px 1px rgba(46, 95, 255, 0.3);
   //border-style: 1px solid rgb(73, 132, 241);
   border-style: solid;
@@ -74,7 +74,7 @@
   }
 }
 
-.-dragging,
+.is-dragging,
 .on-dragging,
 .on-drag-top,
 .on-drag-bottom,
@@ -83,7 +83,7 @@
   border: 1px dashed #eee;
 }
 
-.-dragging {
+.is-dragging {
   opacity: 0.1;
 }
 
@@ -101,7 +101,7 @@
 }
 
 .on-dragging,
-.dragging {
+.is-dragging {
   .dd-toolbar,
   .editor {
     display: none;

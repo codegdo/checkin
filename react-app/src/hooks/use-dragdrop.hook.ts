@@ -110,11 +110,11 @@ export const useDragDrop = (props: any): DrapDropReturn => {
     event.stopPropagation();
 
     if (ref.current) {
-      ref.current.classList.add('-hover');
+      ref.current.classList.add('is-hover');
 
       // prevent event bubble up
       if (current.isOver) {
-        ref.current.classList.remove('-hover');
+        ref.current.classList.remove('is-hover');
         current.isOver = false;
       }
     }
@@ -125,7 +125,7 @@ export const useDragDrop = (props: any): DrapDropReturn => {
     event.stopPropagation();
 
     if (ref.current) {
-      ref.current.classList.remove('-hover');
+      ref.current.classList.remove('is-hover');
     }
   };
 
@@ -137,10 +137,10 @@ export const useDragDrop = (props: any): DrapDropReturn => {
   const stringClass = classNames({
     [`dd-${title}`]: true,
     'on-dragging': onDragging && isFocus && isDragDropType,
-    '-dragging': isDragging,
-    '-over': isOver,
-    '-empty': isEmpty,
-    '-focus': isFocus,
+    'is-dragging': isDragging,
+    'is-over': isOver,
+    'is-empty': isEmpty,
+    'is-focus': isFocus,
   });
 
   const attributes = { 'data-title': title };

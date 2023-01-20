@@ -20,12 +20,12 @@
 
   display: none;
 
-  &._right {
+  &.is-push-right {
     left: auto;
     right: 0;
   }
 
-  &._full {
+  &.is-full-width {
     position: fixed;
     top: 0;
     right: 0;
