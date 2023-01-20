@@ -5,15 +5,16 @@ import classNames from 'classnames';
 import { dragdropHelper } from '../helpers';
 
 type DrapDropReturn = {
-  ref: React.RefObject<HTMLDivElement>,
+  ref: React.RefObject<HTMLDivElement>;
   stringClass: string;
   attributes: { [key: string]: string };
   onMouseOver: (event: React.MouseEvent) => void;
   onMouseOut: (event: React.MouseEvent) => void;
-}
+};
 
 export const useDragDrop = (props: any): DrapDropReturn => {
-  const { id, dataType, name, data, parentId, placeholderId, position, current, state, dispatch } = props;
+  const { id, dataType, name, data, parentId, placeholderId, position, current, state, dispatch } =
+    props;
 
   const dragdropType = ['dropzone', 'placeholder', 'block', 'element', 'field'];
   const ref = useRef<HTMLDivElement>(null);
@@ -46,7 +47,7 @@ export const useDragDrop = (props: any): DrapDropReturn => {
           //console.log(item);
           dispatch({
             type: 'MOVE_ITEM',
-            payload: item
+            payload: item,
           });
         }
       },
@@ -62,7 +63,11 @@ export const useDragDrop = (props: any): DrapDropReturn => {
 
         // current over
         if (monitor.isOver({ shallow: true })) {
-          if (!ref.current || item.id === id || (dataType == 'dropzone' && state.data?.length !== 0)) {
+          if (
+            !ref.current ||
+            item.id === id ||
+            (dataType == 'dropzone' && state.data?.length !== 0)
+          ) {
             current.drop = null;
             return;
           }
@@ -131,17 +136,16 @@ export const useDragDrop = (props: any): DrapDropReturn => {
 
   const stringClass = classNames({
     [`dd-${title}`]: true,
-    'on-drag': onDragging && isFocus && isDragDropType,
+    'on-dragging': onDragging && isFocus && isDragDropType,
     '-dragging': isDragging,
     '-over': isOver,
     '-empty': isEmpty,
-    '-focus': isFocus
+    '-focus': isFocus,
   });
 
-  const attributes = { "data-title": title }
+  const attributes = { 'data-title': title };
 
   drag(drop(ref));
 
   return { ref, stringClass, attributes, onMouseOver, onMouseOut };
 };
-

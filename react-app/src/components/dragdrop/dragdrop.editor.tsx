@@ -1,11 +1,11 @@
 import React, { FC, useEffect, useRef } from 'react';
 import { useDragLayer } from 'react-dnd';
+import classNames from 'classnames';
 
 import { useWrapperContext } from '../../hooks';
 
 import { Editor } from '../editor/editor.component';
 import { DragDropContext } from './dragdrop.context';
-import { DragDropContextProps } from './dragdrop.type';
 
 export const DragDropEditor: FC = () => {
 
@@ -37,9 +37,12 @@ export const DragDropEditor: FC = () => {
     }
   }, [item]);
 
-  return <div ref={ref} className={`dd-editor ${(onDragging && dragdropType.includes(`${itemType}`)) ? 'on-drag' : ''}`}>
-    {
-      (item?.isActive) ? <Editor {...item} /> : null
-    }
-  </div>
+  const editorClass = classNames({
+    'dd-editor': true,
+    'on-dragging': onDragging && dragdropType.includes(`${itemType as string}`)
+  });
+
+  return item?.isActive ? <div ref={ref} className={editorClass}>
+    <Editor {...item} />
+  </div> : null;
 }

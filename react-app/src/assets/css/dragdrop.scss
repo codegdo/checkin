@@ -75,11 +75,11 @@
 }
 
 .-dragging,
-.on-drag,
-.on-top,
-.on-bottom,
-.on-left,
-.on-right {
+.on-dragging,
+.on-drag-top,
+.on-drag-bottom,
+.on-drag-left,
+.on-drag-right {
   border: 1px dashed #eee;
 }
 
@@ -87,20 +87,20 @@
   opacity: 0.1;
 }
 
-.on-top {
+.on-drag-top {
   border-top-color: rgb(73, 132, 241);
 }
-.on-bottom {
+.on-drag-bottom {
   border-bottom-color: rgb(73, 132, 241);
 }
-.on-left {
+.on-drag-left {
   border-left-color: rgb(73, 132, 241);
 }
-.on-right {
+.on-drag-right {
   border-right-color: rgb(73, 132, 241);
 }
 
-.on-drag,
+.on-dragging,
 .dragging {
   .dd-toolbar,
   .editor {

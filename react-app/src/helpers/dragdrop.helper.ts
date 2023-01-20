@@ -17,23 +17,21 @@ interface ClientOffset {
 }
 
 class DragDropHelper {
-
   display(target: HTMLElement): string {
-
     const parentNode = target.parentNode as HTMLElement;
 
     let display = 'column';
 
     if (parentNode) {
       const styleDisplay = parentNode.style.display || window.getComputedStyle(parentNode).display;
-      const flexDirection = parentNode.style.flexDirection || window.getComputedStyle(parentNode).flexDirection;
+      const flexDirection =
+        parentNode.style.flexDirection || window.getComputedStyle(parentNode).flexDirection;
 
       if (styleDisplay == 'flex') {
         if (!flexDirection.includes('column') || flexDirection == '') {
           display = 'row';
         }
       }
-
     }
 
     return display;
@@ -57,21 +55,13 @@ class DragDropHelper {
       return null;
     }
 
-    const {
-      id: dragId,
-      dataType: dragType,
-      position: dragIndex
-    } = dragItem;
+    const { id: dragId, dataType: dragType, position: dragIndex } = dragItem;
 
     let dropId = dropItem.id;
     let dropIndex = dropItem.position;
     let parentId = dropItem.parentId;
 
-    const {
-      dataType: dropType,
-      placeholderId,
-      offset,
-    } = dropItem;
+    const { dataType: dropType, placeholderId, offset } = dropItem;
 
     // get dragItems count
     const [dragCounts, dragIds] = this.count(dragItem);
@@ -85,7 +75,7 @@ class DragDropHelper {
 
     // reset parentId to null if dropzone
     if (offset == 'middle') {
-      parentId = (dropType == 'dropzone' ? null : dropId);
+      parentId = dropType == 'dropzone' ? null : dropId;
     }
 
     // prevent drag block drop over nest children
@@ -109,17 +99,22 @@ class DragDropHelper {
 
     const dragdropType = `${dragType}_${dropType}`;
     const isField = ['field_field', 'field_element', 'element_element'].includes(dragdropType);
-    const isPlaceholder = ['field_placeholder', 'element_placeholder', 'block_placeholder'].includes(dragdropType);
+    const isPlaceholder = [
+      'field_placeholder',
+      'element_placeholder',
+      'block_placeholder',
+    ].includes(dragdropType);
     const isNested = dropIds.includes(`${dragId}`);
 
-    const text = `${fromTopOverTop ||
+    const text = `${
+      fromTopOverTop ||
       fromTopOverBottom ||
       fromTopOverMiddle ||
       fromBottomOverBottom ||
       fromBottomOverTop ||
       fromBottomOverMiddle ||
       fromDrag
-      }`;
+    }`;
 
     const decrement = dropIndex - 1;
     const increment = dropIndex + 1;
@@ -173,7 +168,7 @@ class DragDropHelper {
       dragType,
       dropType,
       parentId,
-      placeholderId
+      placeholderId,
     };
 
     console.log(`${dragdropType} ${text}`);
@@ -182,20 +177,17 @@ class DragDropHelper {
     return output;
   }
 
-  hover(
-    {
-      dragItem,
-      dropItem,
-      monitor,
-      ref,
-    }: {
-      dragItem: any;
-      dropItem: any;
-      monitor: DropTargetMonitor<any, void>;
-      ref: React.RefObject<HTMLDivElement>
-    }
-  ) {
-
+  hover({
+    dragItem,
+    dropItem,
+    monitor,
+    ref,
+  }: {
+    dragItem: any;
+    dropItem: any;
+    monitor: DropTargetMonitor<any, void>;
+    ref: React.RefObject<HTMLDivElement>;
+  }) {
     // target
     const target = ref.current;
 
@@ -221,7 +213,7 @@ class DragDropHelper {
     //const childNode = target.childNodes[0] as HTMLElement;
 
     if (dropItem.dataType === 'dropzone' || dropItem.dataType == 'placeholder') {
-      target.classList.add('on-middle');
+      target.classList.add('on-drag-middle');
       dropItem.offset = 'middle';
       return;
     }
@@ -234,16 +226,16 @@ class DragDropHelper {
       dropItem.clientOffsetX = clientOffset.x;
 
       if (hoverClientX <= hoverMiddleX - width) {
-        target.classList.add('on-left');
-        target.classList.remove('on-right', 'on-middle');
+        target.classList.add('on-drag-left');
+        target.classList.remove('on-drag-right', 'on-drag-middle');
         dropItem.offset = 'left';
       } else if (hoverClientX >= hoverMiddleX + width) {
-        target.classList.add('on-right');
-        target.classList.remove('on-left', 'on-middle');
+        target.classList.add('on-drag-right');
+        target.classList.remove('on-drag-left', 'on-drag-middle');
         dropItem.offset = 'right';
       } else {
-        target.classList.add('on-middle');
-        target.classList.remove('on-left', 'on-right');
+        target.classList.add('on-drag-middle');
+        target.classList.remove('on-drag-left', 'on-drag-right');
         dropItem.offset = 'middle';
       }
     } else {
@@ -254,34 +246,33 @@ class DragDropHelper {
       dropItem.clientOffsetY = clientOffset.y;
 
       if (hoverClientY <= hoverMiddleY - height) {
-        target.classList.add('on-top');
-        target.classList.remove('on-bottom', 'on-middle');
+        target.classList.add('on-drag-top');
+        target.classList.remove('on-drag-bottom', 'on-drag-middle');
         dropItem.offset = 'top';
       } else if (hoverClientY >= hoverMiddleY + height) {
-        target.classList.add('on-bottom');
-        target.classList.remove('on-top', 'on-middle');
+        target.classList.add('on-drag-bottom');
+        target.classList.remove('on-drag-top', 'on-drag-middle');
         dropItem.offset = 'bottom';
       } else {
-        target.classList.add('on-middle');
-        target.classList.remove('on-top', 'on-bottom');
+        target.classList.add('on-drag-middle');
+        target.classList.remove('on-drag-top', 'on-drag-bottom');
         dropItem.offset = 'middle';
       }
     }
-
   }
 
   private getCount(data, ids = []) {
     if (data instanceof Array) {
       data.reduce((a, v) => {
         ids.push(v.id.toString());
-        return a + ((v.dataType == 'block') ? this.getCount(v.data, ids) : 0);
+        return a + (v.dataType == 'block' ? this.getCount(v.data, ids) : 0);
       }, data.length);
     }
 
     return ids;
   }
 
-  private getComputedAfterStyle(target: HTMLElement): { width: number, height: number } {
+  private getComputedAfterStyle(target: HTMLElement): { width: number; height: number } {
     let width = 0;
     let height = 0;
 
@@ -290,16 +281,11 @@ class DragDropHelper {
       height = (parseInt(window.getComputedStyle(target, ':after').height) || 0) / 2;
     }
 
-    return { width, height }
+    return { width, height };
   }
 }
 
 export const dragdropHelper = new DragDropHelper();
-
-
-
-
-
 
 /*
 if (
