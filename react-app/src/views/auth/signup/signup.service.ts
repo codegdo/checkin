@@ -17,12 +17,13 @@ interface PostSignupData {
   }
 
 }
-export const apiPostSignup = () => {
-  const [state, callback] = useFetch<PostSignupData>('/api/auth/signup');
+
+export const postSignupService = () => {
+  const [state, postSignup] = useFetch<PostSignupData>('/api/auth/signup');
 
   return {
     status: state.status,
     data: state.response?.data as ReturnSignupData,
-    postSignup: callback
+    postSignup
   }
 }

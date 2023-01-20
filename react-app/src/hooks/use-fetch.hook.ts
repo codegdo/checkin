@@ -1,5 +1,5 @@
 import { useCallback, useReducer } from 'react';
-import { http, RequestOption, RequestOptionBody } from '../services';
+import { http, RequestOption, RequestOptionBody } from '../libs';
 
 type Action = {
   type: 'IDLE' | 'PENDING' | 'SUCCESS' | 'FAILURE';

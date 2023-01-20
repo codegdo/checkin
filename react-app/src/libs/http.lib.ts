@@ -25,7 +25,7 @@ type RequestUrl = {
   params?: any
 }
 
-class HttpService {
+class HttpLibary {
   private credentials: RequestCredentials;
   private contentType: string;
   private withCredentials: boolean;
@@ -186,4 +186,4 @@ class HttpService {
   }
 }
 
-export const http = new HttpService();
+export const http = new HttpLibary();

@@ -3,7 +3,7 @@ import React from 'react';
 import { Form } from '../../../components/form/form.component';
 import { Block } from '../../../components/form/form.block';
 import { Field } from '../../../components/form/form.field';
-import { apiPostSignup } from './signup.api';
+import { postSignupService } from './signup.service';
 
 const form = {
   title: 'Login',
@@ -24,7 +24,7 @@ const form = {
 
 const Signup: React.FC = (props): JSX.Element => {
 
-  const { status, data, postSignup } = apiPostSignup();
+  const { status, data, postSignup } = postSignupService();
 
   const handleSubmit = () => {
     void postSignup({

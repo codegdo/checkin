@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { useRoutes } from 'react-router-dom';
 import { RouteGuard } from './components/route/route.guard';
 
-import { AuthRoute, HomeRoute, SetupRoute } from './views';
+import { AuthRoute, HomeRoute, IamRoute } from './views';
 
 export const AppRoute: FC = (): JSX.Element => {
   const routes = useRoutes([
@@ -11,8 +11,8 @@ export const AppRoute: FC = (): JSX.Element => {
       element: <RouteGuard path='/*' element={<HomeRoute />} />
     },
     {
-      path: '/:id/setup/*',
-      element: <RouteGuard path='/*' element={<SetupRoute />} />
+      path: '/:id/iam/*',
+      element: <RouteGuard path='/*' element={<IamRoute />} />
     },
     {
       path: '/auth/*',

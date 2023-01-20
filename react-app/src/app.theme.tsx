@@ -4,8 +4,10 @@ import { createPortal } from 'react-dom';
 import { useSelector } from 'react-redux';
 import { AppState } from './store/reducers';
 
-// eslint-disable-next-line import/no-webpack-loader-syntax
-//import css from '!css-loader!postcss-loader!sass-loader!./assets/css/root.scss';
+// eslint import/no-webpack-loader-syntax: off
+// import css from '!css-loader!postcss-loader!sass-loader!./assets/css/root.scss';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const css = require('!css-loader!postcss-loader!sass-loader!./assets/css/root.scss');
 
 export const Theme: FC = (): React.ReactPortal => {
