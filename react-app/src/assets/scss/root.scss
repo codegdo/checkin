@@ -1,0 +1,132 @@
+// https://coolors.co/palette/000000-14213d-fca311-e5e5e5-ffffff
+
+$black: #000000;
+$blue: #14213d;
+$yellow: #fca311;
+$gray: #e5e5e5;
+$white: #ffffff;
+
+$light: darken($white, 0);
+$dark: lighten($black, 0);
+
+$primary: darken($yellow, 0);
+$secondary: lighten($blue, 0);
+
+:root {
+  // color
+  --color-text: #{$dark};
+  --color-background: #{$light};
+  --color-border: ;
+  --color-shadow: ;
+  --color-icon: ;
+
+  --color-text-inverse: ;
+  --color-background-inverse: ;
+  --color-border-inverse: ;
+  --color-shadow-inverse: ;
+  --color-icon-inverse: ;
+
+  --color-text-primary: ;
+  --color-background-primary: ;
+  --color-border-primary: ;
+  --color-shadow-primary: ;
+  --color-icon-primary: ;
+
+  --color-text-secondary: ;
+  --color-background-secondary: ;
+  --color-border-secondary: ;
+  --color-shadow-secondary: ;
+  --color-icon-secondary: ;
+
+  // button
+  --color-text-button: #{$dark};
+  --color-background-button: #{$light};
+  --color-border-button: ;
+  --color-shadow-button: ;
+  --color-icon-button: ;
+
+  --color-text-button-primary: ;
+  --color-background-button-primary: ;
+  --color-border-button-primary: ;
+  --color-shadow-button-primary: ;
+  --color-icon-button-primary: ;
+
+  --color-text-button-secondary: ;
+  --color-background-button-secondary: ;
+  --color-border-button-secondary: ;
+  --color-shadow-button-secondary: ;
+  --color-icon-button-secondary: ;
+
+  --color-text-link: ;
+
+  --color-background-button: ;
+  --color-background-link: ;
+
+  --light-color: #{$light};
+  --dark-color: #{$dark};
+
+  --primary-color: #{$primary};
+  --secondary-color: #{$secondary};
+
+  --link-color: var(--primary-color);
+  --link-color-hover: var(--primary-color);
+  --link-color-muted: var(--primary-color);
+
+  --font-family: Helvetica, sans-serif;
+  --font-size: 1rem;
+  --font-color: var(--dark-color);
+  --background-color: var(--light-color);
+
+  --transition: 250ms ease-out;
+  --shadow: 2px 5px 20px rgba(0, 0, 0, 0.2);
+  --gradient: linear-gradient(60deg, red, green, blue, yellow);
+}
+
+/*
+:root {
+  --black: #000000;
+  --dim-gray: #222222; 
+  --dark-gray: #787878;
+  --gray: #808080;
+  --light-gray: #D3D3D3;
+  --fade-gray: #EFEFEF;
+  --white: #FFFFFF;
+  
+  --blue: blue;
+  
+  --color-text: var(--black);
+  --color-background: var(--white);
+  
+  --color-text--hover: var(--gray);
+  --color-background--hover: var(--gray);
+  
+  --color-text-inverse: var(--white);
+  --color-background-inverse: var(--black);
+  
+  --color-text-inverse--hover: var(--white);
+  --color-background-inverse--hover: var(--darkgray);
+  
+  --color-text-primary: var(--white);
+  --color-background-primary: var(--blue);
+}
+
+.button {
+  color: var(--color-text-inverse);
+  background: var(--color-background-inverse);
+  
+  border: none;
+  appearance: auto;
+  
+  padding: .5rem 1rem;
+}
+
+.button:hover {
+  color: var(--color-text-inverse--hover);
+  background: var(--color-background-inverse--hover);
+}
+
+.button.-primary {
+  color: var(--color-text-primary);
+  background: var(--color-background-primary);
+}
+*/

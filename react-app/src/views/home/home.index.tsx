@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { DragDrop, Draggable } from '../../components/dragdrop';
-import { useAction } from '../../hooks';
+//import { useAction } from '../../hooks';
 
 const Index: React.FC = (): JSX.Element => {
-  const { updateLayout, getLayoutAsync, getThemeAsync } = useAction();
+  //const { updateLayout, getLayoutAsync, getThemeAsync } = useAction();
   const [form, setForm] = useState<FormData>();
 
   // load form
@@ -12,8 +12,6 @@ const Index: React.FC = (): JSX.Element => {
       const json: any = (await import('../auth/login/login.form.json')).default;
       setForm(json);
     })();
-    getLayoutAsync();
-    getThemeAsync();
   }, []);
 
   useEffect(() => {
