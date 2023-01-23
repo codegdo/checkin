@@ -3,7 +3,17 @@ import { AnyAction, createReducer } from "@reduxjs/toolkit";
 import { getThemeAsync, updateTheme } from "./theme.action";
 import { ThemeState } from './theme.type';
 
-export const initialTheme: ThemeState = {};
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const css = require('!css-loader!postcss-loader!sass-loader!../../assets/css/theme.scss')?.default;
+
+console.log(css);
+
+export const initialTheme: ThemeState = {
+  mode: 'light',
+  default: css?.toString(),
+  light: '',
+  dark: ''
+};
 
 export const themeReducer = createReducer(initialTheme, (builder) => {
   builder

@@ -45,6 +45,9 @@ const Login: React.FC = (props): JSX.Element => {
         </FieldGrid>
       </Block>
     </Form>
+    <button type="button" className="button">Button</button>
+    <button type="button" className="button btn-primary">Primary</button>
+    <button type="button" className="button btn-secondary">Secondary</button>
   </>
 }
 

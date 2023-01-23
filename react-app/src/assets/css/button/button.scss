@@ -1,3 +1,17 @@
 .button {
-  
+  border: none;
+  outline: none;
+
+  color: var(--color-text-button);
+  background-color: var(--color-background-button);
+}
+
+.btn-primary {
+  color: var(--color-text-button-inverse);
+  background-color: var(--color-background-button-primary);
+}
+
+.btn-secondary {
+  color: var(--color-text-button-inverse);
+  background-color: var(--color-background-button-secondary);
 }

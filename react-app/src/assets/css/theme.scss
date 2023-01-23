@@ -1,9 +1,25 @@
+@import './vars.scss';
 
+/* color */
 :root {
-  // palletes
+  --black: #{$black};
+  --gray: #{$gray};
+  --white: #{$white};
 
-  --color-foreground: ;
-  --color-background: ;
+  // brand
+  --primary: #{$primary};
+  --secondary: #{$secondary};
 
-  --color-text: ;
+  // primary
+  --red: #{$red};
+  --yellow: #{$yellow};
+  --blue: #{$blue};
+
+  // secondary
+  --purple: #{$purple};
+  --orange: #{$orange};
+  --green: #{$green};
 }
+
+@import './base/base.root.scss';
+@import './button/button.root.scss';

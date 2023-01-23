@@ -1,8 +1,7 @@
 @charset 'utf-8';
-@import './vars.scss';
 
-@import './base.scss';
+@import './theme.scss';
 
-@import './button/index.scss';
-@import './root.scss';
-@import './button/root.button.scss';
+@import './base/base.scss';
+
+@import './button/button.scss';

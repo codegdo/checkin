@@ -1,0 +1,13 @@
+/* button */
+:root {
+  --color-text-button: var(--black);
+  --color-text-button-hover: var(--black);
+  --color-text-button-disabled: var(--gray);
+
+  --color-text-button-inverse: var(--white);
+
+  --color-background-button: var(--gray);
+
+  --color-background-button-primary: var(--primary);
+  --color-background-button-secondary: var(--secondary);
+}
