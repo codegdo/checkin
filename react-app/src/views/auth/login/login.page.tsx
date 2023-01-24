@@ -48,6 +48,8 @@ const Login: React.FC = (props): JSX.Element => {
     <button type="button" className="button">Button</button>
     <button type="button" className="button btn-primary">Primary</button>
     <button type="button" className="button btn-secondary">Secondary</button>
+    <button type="button" className="button btn-light">Light</button>
+    <button type="button" className="button btn-dark">Dark</button>
   </>
 }
 

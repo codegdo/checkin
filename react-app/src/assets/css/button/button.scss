@@ -1,9 +1,10 @@
 .button {
-  border: none;
-  outline: none;
-
   color: var(--color-text-button);
   background-color: var(--color-background-button);
+
+  &:disabled {
+    color: var(--color-text-button-disabled);
+  }
 }
 
 .btn-primary {
@@ -14,4 +15,14 @@
 .btn-secondary {
   color: var(--color-text-button-inverse);
   background-color: var(--color-background-button-secondary);
+}
+
+.btn-light {
+  color: var(--color-text-button);
+  background-color: var(--color-background-button-light);
+}
+
+.btn-dark {
+  color: var(--color-text-button-inverse);
+  background-color: var(--color-background-button-dark);
 }

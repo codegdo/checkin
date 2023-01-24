@@ -3,7 +3,9 @@
 /* color */
 :root {
   --black: #{$black};
+  --dark-gray: #{$dark-gray};
   --gray: #{$gray};
+  --light-gray: #{$light-gray};
   --white: #{$white};
 
   // brand
@@ -21,5 +23,5 @@
   --green: #{$green};
 }
 
-@import './base/base.root.scss';
-@import './button/button.root.scss';
+@import './base/base-root.scss';
+@import './button/button-root.scss';

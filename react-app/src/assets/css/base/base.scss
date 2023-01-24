@@ -6,6 +6,7 @@
 
 body {
   color: var(--color-text);
+  background-color: var(--color-background);
 }
 
 a {
@@ -18,10 +19,6 @@ a {
 
 button {
   appearance: none;
-
-  color: var(--color-text-button);
-
-  &:disabled {
-    color: var(--color-text-button-disabled);
-  }
+  border: none;
+  outline: none;
 }

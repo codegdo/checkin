@@ -1,0 +1,12 @@
+/* button */
+.button {
+  --color-text-button: var(--black);
+  --color-text-button-disabled: var(--gray);
+  --color-text-button-inverse: var(--white);
+
+  --color-background-button: var(--white);
+  --color-background-button-primary: var(--primary);
+  --color-background-button-secondary: var(--secondary);
+  --color-background-button-light: var(--light-gray);
+  --color-background-button-dark: var(--dark-gray);
+}

@@ -4,7 +4,7 @@ import { getThemeAsync, updateTheme } from "./theme.action";
 import { ThemeState } from './theme.type';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const css = require('!css-loader!postcss-loader!sass-loader!../../assets/css/theme.scss')?.default;
+const css = require('!css-loader!postcss-loader!sass-loader!../../assets/css/theme-dark.scss')?.default;
 
 console.log(css);
 

@@ -7,10 +7,10 @@
     "prebuild": "rimraf dist",
     "build": "webpack --mode production --devtool false",
     "format": "prettier --write \"src/**/*.ts|tsx|json|scss\" \"test/**/*.ts\"",
-    "start": "node index.js",
+    "start": "node dist/app.js",
     "start:dev": "webpack serve",
     "start:debug": "start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/index.js",
     "test": "jest --no-cache"
   },
   "keywords": [],
