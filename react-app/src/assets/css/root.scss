@@ -1,0 +1,38 @@
+@import './vars.scss';
+
+/* color */
+:root {
+  --black: #{$black};
+  --white: #{$white};
+
+  --gray-90: #{$gray-90};
+  --gray: #{$gray-50};
+  --gray-10: #{$gray-10};
+
+  // brand
+  --primary-90: #{$primary};
+  --primary: #{$primary};
+  --primary-10: #{$primary};
+
+  --secondary-90: #{$secondary};
+  --secondary: #{$secondary};
+  --secondary-10: #{$secondary};
+
+  --error-90: #{$error};
+  --error: #{$error};
+  --error-10: #{$error};
+
+  --success-90: #{$success};
+  --success: #{$success};
+  --success-10: #{$success};
+
+  // primary
+  --red: #{$red};
+  --yellow: #{$yellow};
+  --blue: #{$blue};
+
+  // secondary
+  --purple: #{$purple};
+  --orange: #{$orange};
+  --green: #{$green};
+}

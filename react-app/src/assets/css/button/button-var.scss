@@ -1,12 +1,20 @@
 /* button */
 .button {
-  --color-text-button: var(--color-text);
-  --color-text-button-disabled: var(--gray);
-  --color-text-button-inverse: var(--white);
+  --color-button: var(--white);
+  --color-button-light: var(--gray-10);
+  --color-button-dark: var(--gray-90);
+  --color-button-primary: var(--primary);
+  --color-button-secondary: var(--secondary);
+  --color-button-error: var(--error);
+  --color-button-success: var(--success);
+  --color-button-disabled: var(--gray);
 
-  --color-background-button: var(--white);
-  --color-background-button-primary: var(--primary);
-  --color-background-button-secondary: var(--secondary);
-  --color-background-button-light: var(--light-gray);
-  --color-background-button-dark: var(--dark-gray);
+  --color-on-button: var(--black);
+  --color-on-button-light: var(--black);
+  --color-on-button-dark: var(--white);
+  --color-on-button-primary: var(--white);
+  --color-on-button-secondary: var(--white);
+  --color-on-button-error: var(--white);
+  --color-on-button-success: var(--white);
+  --color-on-button-disabled: var(--gray-10);
 }

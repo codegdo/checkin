@@ -1,28 +1,28 @@
 .button {
-  color: var(--color-text-button);
-  background-color: var(--color-background-button);
+  color: var(--color-on-button);
+  background-color: var(--color-button);
 
   &:disabled {
-    color: var(--color-text-button-disabled);
+    color: var(--color-on-button-disabled);
   }
 }
 
 .btn-primary {
-  color: var(--color-text-button-inverse);
-  background-color: var(--color-background-button-primary);
+  color: var(--color-on-button-primary);
+  background-color: var(--color-button-primary);
 }
 
 .btn-secondary {
-  color: var(--color-text-button-inverse);
-  background-color: var(--color-background-button-secondary);
+  color: var(--color-on-button-secondary);
+  background-color: var(--color-button-secondary);
 }
 
 .btn-light {
-  color: var(--color-text-button);
-  background-color: var(--color-background-button-light);
+  color: var(--color-on-button-light);
+  background-color: var(--color-button-light);
 }
 
 .btn-dark {
-  color: var(--color-text-button-inverse);
-  background-color: var(--color-background-button-dark);
+  color: var(--color-on-button-dark);
+  background-color: var(--color-button-dark);
 }

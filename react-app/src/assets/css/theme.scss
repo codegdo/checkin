@@ -1,27 +1,5 @@
 @import './vars.scss';
-
-/* color */
-:root {
-  --black: #{$black};
-  --dark-gray: #{$dark-gray};
-  --gray: #{$gray};
-  --light-gray: #{$light-gray};
-  --white: #{$white};
-
-  // brand
-  --primary: #{$primary};
-  --secondary: #{$secondary};
-
-  // primary
-  --red: #{$red};
-  --yellow: #{$yellow};
-  --blue: #{$blue};
-
-  // secondary
-  --purple: #{$purple};
-  --orange: #{$orange};
-  --green: #{$green};
-}
+@import './root.scss';
 
 @import './base/base-var.scss';
 @import './button/button-var.scss';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Form } from '../../../components/form/form.component';
 import { Block } from '../../../components/form/form.block';
@@ -8,6 +8,9 @@ import { Column } from '../../../components/gridview/gridview.column';
 import { Button } from '../../../components/element/element.button';
 import { FieldGroup } from '../../../components/form/form.group';
 import { FieldGrid } from '../../../components/form/form.grid';
+
+import { colorHelper } from '../../../helpers';
+import { tint, shade } from 'tint-shade-color';
 
 const form = {
   title: 'Login',
@@ -29,6 +32,14 @@ const form = {
 const Login: React.FC = (props): JSX.Element => {
 
   console.log(props);
+
+  useEffect(() => {
+    const tint = colorHelper.tintColor('#75e900', 0.5);
+    const shade = colorHelper.shadeColor('#75e900', 0.5);
+
+    console.log(tint);
+    console.log(shade);
+  }, []);
 
   return <>
     <Form title="Login">
