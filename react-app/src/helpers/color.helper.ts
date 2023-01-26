@@ -1,14 +1,26 @@
 class ColorHelper {
+  fullPalette(color: string, range: number): string[] {
+    const tints = this.tintPalette(color, range);
+    const shades = this.shadePalette(color, range);
 
-  tintPalette(color: string): string[] {
+    return [...tints, color, ...shades];
+  }
+
+  tintPalette(color: string, range: number): string[] {
     const colors: string[] = [];
-
+    for (let i = 1; i < 10; i += 10 / range) {
+      const tint = this.tintColor(color, i / 10);
+      colors.push(tint);
+    }
     return colors;
   }
 
-  shadePalette(color: string): string[] {
+  shadePalette(color: string, range: number): string[] {
     const colors: string[] = [];
-
+    for (let i = 1; i < 10; i += 10 / range) {
+      const shade = this.shadeColor(color, i / 10);
+      colors.push(shade);
+    }
     return colors;
   }
 
@@ -34,7 +46,11 @@ class ColorHelper {
       const baseColorDecimal = this.hexToDecimal(normalizeBaseColor.slice(i, i + 2));
       const adjustColorDecimal = this.hexToDecimal(normalizeAdjustColor.slice(i, i + 2));
 
-      let val = this.decimalToHex(Math.round(adjustColorDecimal + (baseColorDecimal - adjustColorDecimal) * ((weight * 100) / 100)));
+      let val = this.decimalToHex(
+        Math.round(
+          adjustColorDecimal + (baseColorDecimal - adjustColorDecimal) * ((weight * 100) / 100)
+        )
+      );
 
       while (val.length < 2) {
         val = '0' + val;
@@ -61,7 +77,6 @@ class ColorHelper {
   private hexToDecimal(hexValue: string) {
     return parseInt(hexValue, 16);
   }
-
 }
 
 export const colorHelper = new ColorHelper();
