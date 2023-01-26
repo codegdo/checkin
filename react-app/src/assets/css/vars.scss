@@ -1,47 +1,46 @@
-// https://coolors.co/palette/000000-14213d-fca311-e5e5e5-ffffff
-// https://www.schemecolor.com/my-web-colors-scheme.php
-//https://dribbble.com/shots/18117988-Attio-Accessible-Color-Base-Palette/attachments/13312931?mode=media
-//https://m2.material.io/design/color/dark-theme.html
-//https://compilezero.medium.com/dark-mode-ui-design-the-definitive-guide-part-1-color-53dcfaea5129
-//https://dribbble.com/shots/16633194/attachments/11664802?mode=media
-//https://uxplanet.org/ultimate-guide-to-color-in-ux-ui-design-de8eb104b5d3
-//https://www.moonlearning.io/resources-student
-
-// gray
-$gray-10: #e7e7e7;
-$gray-20: #cecece;
-$gray-30: #b6b6b6;
-$gray-40: #9d9d9d;
-$gray-50: #858585;
-$gray-60: #6a6a6a;
-$gray-70: #505050;
-$gray-80: #353535;
-$gray-90: #1b1b1b;
-
-//
-
 $black: #000000;
 $white: #ffffff;
 
-$gray-dark: $gray-90;
-$gray: $gray-50;
-$gray-light: $gray-10;
+// neutral
+$gray-10: #ededed;
+$gray-20: #cecece;
+$gray-30: #b0b0b0;
+$gray-40: #919191;
+$gray-50: #858585;
+$gray-60: #787878;
+$gray-70: #565656;
+$gray-80: #353535;
+$gray-90: #141414;
 
-$primary-dark: #0a369d;
-$primary: #0a369d;
-$primary-light: #0a369d;
+// primary
+$primary-10: #dae1f0;
+$primary-20: #9dafd8;
+$primary-30: #607cbf;
+$primary-40: #234aa7;
+$primary-50: #0a369d;
+$primary-60: #09318d;
+$primary-70: #072366;
+$primary-80: #04163f;
+$primary-90: #020818;
 
-$secondary-dark: #1ea3f8;
-$secondary: #1ea3f8;
-$secondary-light: #1ea3f8;
+// secondary
+$secondary-10: #ddf1fe;
+$secondary-20: #a5dafc;
+$secondary-30: #6dc3fa;
+$secondary-40: #35acf9;
+$secondary-50: #1ea3f8;
+$secondary-60: #1b93df;
+$secondary-70: #146aa1;
+$secondary-80: #0c4163;
+$secondary-90: #051825;
 
-$error-dark: #0a369d;
-$error: #0a369d;
-$error-light: #0a369d;
+$error-10: #0a369d;
+$error-50: #0a369d;
+$error-90: #0a369d;
 
-$success-dark: #0a369d;
-$success: #0a369d;
-$success-light: #0a369d;
+$success-10: #0a369d;
+$success-50: #0a369d;
+$success-90: #0a369d;
 
 $red: red;
 $yellow: yellow;
@@ -50,3 +49,18 @@ $blue: blue;
 $purple: purple;
 $orange: orange;
 $green: green;
+
+$gray: #{$gray-50};
+$primary: #{$primary-50};
+$secondary: #{$secondary-50};
+$error: #{$error-50};
+$success: #{$success-50};
+
+// https://coolors.co/palette/000000-14213d-fca311-e5e5e5-ffffff
+// https://www.schemecolor.com/my-web-colors-scheme.php
+// https://dribbble.com/shots/18117988-Attio-Accessible-Color-Base-Palette/attachments/13312931?mode=media
+// https://m2.material.io/design/color/dark-theme.html
+// https://compilezero.medium.com/dark-mode-ui-design-the-definitive-guide-part-1-color-53dcfaea5129
+// https://dribbble.com/shots/16633194/attachments/11664802?mode=media
+// https://uxplanet.org/ultimate-guide-to-color-in-ux-ui-design-de8eb104b5d3
+// https://www.moonlearning.io/resources-student

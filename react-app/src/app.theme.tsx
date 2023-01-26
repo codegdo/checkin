@@ -30,7 +30,7 @@ export const Theme: FC = (): React.ReactPortal => {
   }, []);
 
   return createPortal(
-    createElement('style', { id: 'theme' }, `${theme['light']}`),
+    createElement('style', { id: 'theme' }, `${theme?.colors} ${theme?.mode}`),
     document.head
   );
 }

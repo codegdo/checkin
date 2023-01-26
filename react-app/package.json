@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "webpack --mode production --devtool false",
+    "build": "webpack --mode production",
     "format": "prettier --write \"src/**/*.ts|tsx|json|scss\" \"test/**/*.ts\"",
     "start": "node dist/app.js",
     "start:dev": "webpack serve",

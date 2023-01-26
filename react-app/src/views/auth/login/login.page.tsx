@@ -38,9 +38,9 @@ const Login: React.FC = (props): JSX.Element => {
     const shade = colorHelper.shadeColor('#75e900', 0.5);
     const tints = colorHelper.tintPalette('#75e900', 4);
 
-    const palette = colorHelper.fullPalette('#75e900', 4);
+    const palette = colorHelper.fullPalette('#1ea3f8', 4, '$secondary');
 
-    console.log(palette);
+    console.log(palette.join(' '));
     //console.log(shade);
   }, []);
 

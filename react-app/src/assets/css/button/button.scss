@@ -1,6 +1,8 @@
+@import '../vars.scss';
+
 .button {
-  color: var(--color-on-button);
-  background-color: var(--color-button);
+  color: var(--color-on-button, #{$black});
+  background-color: var(--color-button, #{$white});
 
   &:disabled {
     color: var(--color-on-button-disabled);
@@ -8,21 +10,21 @@
 }
 
 .btn-primary {
-  color: var(--color-on-button-primary);
-  background-color: var(--color-button-primary);
+  color: var(--color-on-button-primary, #{$white});
+  background-color: var(--color-button-primary, #{$primary});
 }
 
 .btn-secondary {
-  color: var(--color-on-button-secondary);
-  background-color: var(--color-button-secondary);
+  color: var(--color-on-button-secondary, #{$white});
+  background-color: var(--color-button-secondary, #{$secondary});
 }
 
 .btn-light {
-  color: var(--color-on-button-light);
-  background-color: var(--color-button-light);
+  color: var(--color-on-button-light, #{$black});
+  background-color: var(--color-button-light, #{$gray-10});
 }
 
 .btn-dark {
-  color: var(--color-on-button-dark);
-  background-color: var(--color-button-dark);
+  color: var(--color-on-button-dark, #{$white});
+  background-color: var(--color-button-dark, #{$black});
 }

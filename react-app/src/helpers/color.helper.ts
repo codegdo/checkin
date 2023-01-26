@@ -1,27 +1,42 @@
 class ColorHelper {
-  fullPalette(color: string, range: number): string[] {
+  fullPalette(color: string, range: number, key?: string): string[] {
     const tints = this.tintPalette(color, range);
     const shades = this.shadePalette(color, range);
 
-    return [...tints, color, ...shades];
+    const colors = [...tints, color, ...shades];
+
+    return key ? colors.map((color, i) => {
+      return `${key}-${(i + 1) * 10}:${color};`;
+    }) : colors;
+
   }
 
-  tintPalette(color: string, range: number): string[] {
+  tintPalette(color: string, range: number, key?: string): string[] {
     const colors: string[] = [];
+
     for (let i = 1; i < 10; i += 10 / range) {
       const tint = this.tintColor(color, i / 10);
       colors.push(tint);
     }
-    return colors;
+
+    colors.reverse();
+
+    return key ? colors.map((color, i) => {
+      return `${key}-${(i + 1) * 10}:${color};`;
+    }) : colors;
   }
 
-  shadePalette(color: string, range: number): string[] {
+  shadePalette(color: string, range: number, key?: string): string[] {
     const colors: string[] = [];
+
     for (let i = 1; i < 10; i += 10 / range) {
       const shade = this.shadeColor(color, i / 10);
       colors.push(shade);
     }
-    return colors;
+
+    return key ? colors.map((color, i) => {
+      return `${key}-${(i + 1) * 10}:${color};`;
+    }) : colors;
   }
 
   tintColor(color: string, weight: number) {
