@@ -1,0 +1,35 @@
+@import '../vars.scss';
+
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: var(--color-text, #{$black});
+  background-color: var(--color-background, #{$white});
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--color-link, #{$primary});
+
+  &:hover {
+    color: var(--color-link-hover, #{$primary});
+  }
+}
+
+button {
+  appearance: none;
+  border: none;
+  outline: none;
+}

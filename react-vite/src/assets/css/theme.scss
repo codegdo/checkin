@@ -1,0 +1,56 @@
+@import './vars.scss';
+@import './base/base.vars.scss';
+
+:root {
+  --black: #{$black};
+  --white: #{$white};
+
+  --gray-10: #{$gray-10};
+  --gray-20: #{$gray-20};
+  --gray-30: #{$gray-30};
+  --gray-40: #{$gray-40};
+  --gray-50: #{$gray-50};
+  --gray-60: #{$gray-60};
+  --gray-70: #{$gray-70};
+  --gray-80: #{$gray-80};
+  --gray-90: #{$gray-90};
+
+  // brand
+  --primary-10: #{$primary-10};
+  --primary-20: #{$primary-20};
+  --primary-30: #{$primary-30};
+  --primary-40: #{$primary-40};
+  --primary-50: #{$primary-50};
+  --primary-60: #{$primary-60};
+  --primary-70: #{$primary-70};
+  --primary-80: #{$primary-80};
+  --primary-90: #{$primary-90};
+
+  --secondary-10: #{$secondary-10};
+  --secondary-20: #{$secondary-20};
+  --secondary-30: #{$secondary-30};
+  --secondary-40: #{$secondary-40};
+  --secondary-50: #{$secondary-50};
+  --secondary-60: #{$secondary-60};
+  --secondary-70: #{$secondary-70};
+  --secondary-80: #{$secondary-80};
+  --secondary-90: #{$secondary-90};
+
+  --error-10: #{$error-10};
+  --error: #{$error-50};
+  --error-90: #{$error-90};
+
+  --success-10: #{$success-10};
+  --success: #{$success-50};
+  --success-90: #{$success-90};
+
+  // primary
+  --red: #{$red};
+  --yellow: #{$yellow};
+  --blue: #{$blue};
+
+  // secondary
+  --purple: #{$purple};
+  --orange: #{$orange};
+  --green: #{$green};
+}
