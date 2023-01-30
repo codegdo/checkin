@@ -1,0 +1,20 @@
+
+@mixin theme-color-base-light{
+  :root {
+    --color-text: var(--black);
+    --color-background: var(--white);
+  
+    --color-link: var(--primary);
+    --color-link-hover: var(--secondary);
+  }
+}
+
+@mixin theme-color-base-dark {
+  :root {
+    --color-text: var(--white);
+    --color-background: var(--gray-80);
+  
+    --color-link: var(--primary);
+    --color-link-hover: var(--secondary);
+  }
+}

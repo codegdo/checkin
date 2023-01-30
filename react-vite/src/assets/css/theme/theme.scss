@@ -1,5 +1,5 @@
-@import './vars.scss';
-@import './base/base.vars.scss';
+@import '../vars';
+@import './default';
 
 :root {
   --black: #{$black};

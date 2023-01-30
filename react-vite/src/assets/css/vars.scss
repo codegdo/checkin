@@ -48,10 +48,22 @@ $blue: blue;
 
 $purple: purple;
 $orange: orange;
-$green: green;
+$green: hsl(131, 61%, 46%);
 
 $gray: #{$gray-50};
 $primary: #{$primary-50};
 $secondary: #{$secondary-50};
 $error: #{$error-50};
 $success: #{$success-50};
+
+$font-stack: ('Inter', 'Avenir', 'Helvetica', 'Arial', sans-serif);
+
+$breakpoints: (
+  'small': 767px,
+  'medium': 992px,
+  'large': 1200px,
+);
+
+//https://sass-guidelin.es/#the-7-1-pattern
+//http://smacss.com/book/categorizing
+//https://github.com/KittyGiraudel/sass-boilerplate/blob/master/stylesheets/main.scss
