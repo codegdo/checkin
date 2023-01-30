@@ -1,0 +1,15 @@
+@charset 'utf-8';
+
+// common
+@import './common/colors', './common/vars', './common/functions',
+  './common/mixins';
+
+// base
+@import './base/base', './base/fonts', './base/typography', './base/helpers';
+
+// theme
+@import './theme/default';
+
+//https://sass-guidelin.es/#the-7-1-pattern
+//http://smacss.com/book/categorizing
+//https://github.com/KittyGiraudel/sass-boilerplate/blob/master/stylesheets/main.scss

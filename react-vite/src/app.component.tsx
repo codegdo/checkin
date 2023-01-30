@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 //import { AppRoute } from './app.route';
 
-import * as styles from './assets/css/theme/theme.scss?inline';
+import * as styles from './assets/css/theme/_default.scss?inline';
 
 export const App: FC = (): JSX.Element => {
 
@@ -19,5 +19,18 @@ export const App: FC = (): JSX.Element => {
 
   }, []);
 
-  return <>hello</>;
+  const handleToggle = () => {
+    const body = document.querySelector("body");
+    body?.toggleAttribute('data-scheme-dark');
+  }
+
+  return <div>
+    <a href="#">hello</a>
+    <button type="button" className="button" onClick={handleToggle}>Toggle</button>
+    <button type="button" className="button">Button</button>
+    <button type="button" className="button btn-primary">Primary</button>
+    <button type="button" className="button btn-secondary">Secondary</button>
+    <button type="button" className="button btn-light">Light</button>
+    <button type="button" className="button btn-dark">Dark</button>
+  </div>;
 }

@@ -1,0 +1,17 @@
+@mixin theme-color-base {
+  body {
+    --color-text: var(--color-black);
+    --color-background: var(--color-white);
+
+    --color-link: var(--color-brand);
+    --color-link-hover: var(--color-brand);
+  }
+
+  [data-scheme-dark] {
+    --color-text: var(--color-white);
+    --color-background: var(--color-gray-90);
+
+    --color-link: var(--color-brand);
+    --color-link-hover: var(--color-brand);
+  }
+}

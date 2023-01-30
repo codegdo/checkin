@@ -1,48 +1,4 @@
 // Button
 .button {
-  color: var(--color-button, $white);
-}
-
-@mixin theme-color-button-light {
-  .button {
-    --color-button: var(--white);
-    --color-button-light: var(--gray-10);
-    --color-button-dark: var(--gray-90);
-    --color-button-primary: var(--primary);
-    --color-button-secondary: var(--secondary);
-    --color-button-error: var(--error);
-    --color-button-success: var(--success);
-    --color-button-disabled: var(--gray);
-  
-    --color-on-button: var(--black);
-    --color-on-button-light: var(--black);
-    --color-on-button-dark: var(--white);
-    --color-on-button-primary: var(--white);
-    --color-on-button-secondary: var(--white);
-    --color-on-button-error: var(--white);
-    --color-on-button-success: var(--white);
-    --color-on-button-disabled: var(--gray-10);
-  }
-}
-
-@mixin theme-color-button-dark {
-  .button {
-    --color-button: var(--white);
-    --color-button-light: var(--gray-10);
-    --color-button-dark: var(--gray-90);
-    --color-button-primary: var(--primary);
-    --color-button-secondary: var(--secondary);
-    --color-button-error: var(--error);
-    --color-button-success: var(--success);
-    --color-button-disabled: var(--gray);
-  
-    --color-on-button: var(--black);
-    --color-on-button-light: var(--black);
-    --color-on-button-dark: var(--white);
-    --color-on-button-primary: var(--white);
-    --color-on-button-secondary: var(--white);
-    --color-on-button-error: var(--white);
-    --color-on-button-success: var(--white);
-    --color-on-button-disabled: var(--gray-10);
-  }
+  color: var(--color-button, $black);
 }
