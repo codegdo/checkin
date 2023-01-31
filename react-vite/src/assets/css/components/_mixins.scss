@@ -1,41 +1,41 @@
 @mixin theme-color-button {
   .button {
-    --color-button: var(--color-white);
-    --color-button-light: var(--color-gray-10);
-    --color-button-dark: var(--color-gray-90);
-    --color-button-primary: var(--color-brand);
-    --color-button-secondary: var(--color-brand);
-    --color-button-error: var(--color-error);
-    --color-button-success: var(--color-success);
-    --color-button-disabled: var(--color-gray);
+    --color-button: var(--white);
+    --color-button-light: var(--gray-10);
+    --color-button-dark: var(--gray-90);
+    --color-button-primary: var(--primary);
+    --color-button-secondary: var(--gray-60);
+    --color-button-error: var(--error);
+    --color-button-success: var(--success);
+    --color-button-disabled: var(--gray);
 
-    --color-on-button: var(--color-black);
-    --color-on-button-light: var(--color-black);
-    --color-on-button-dark: var(--color-white);
-    --color-on-button-primary: var(--color-white);
-    --color-on-button-secondary: var(--color-white);
-    --color-on-button-error: var(--color-white);
-    --color-on-button-success: var(--color-white);
-    --color-on-button-disabled: var(--color-gray-10);
+    --color-on-button: var(--black);
+    --color-on-button-light: var(--black);
+    --color-on-button-dark: var(--white);
+    --color-on-button-primary: var(--white);
+    --color-on-button-secondary: var(--white);
+    --color-on-button-error: var(--white);
+    --color-on-button-success: var(--white);
+    --color-on-button-disabled: var(--gray-10);
   }
 
   [data-scheme-dark] .button {
-    --color-button: var(--color-white);
-    --color-button-light: var(--color-gray-10);
-    --color-button-dark: var(--color-gray-90);
-    --color-button-primary: var(--color-brand);
-    --color-button-secondary: var(--color-brand);
-    --color-button-error: var(--color-error);
-    --color-button-success: var(--color-success);
-    --color-button-disabled: var(--color-gray);
+    --color-button: var(--white);
+    --color-button-light: var(--gray-10);
+    --color-button-dark: var(--gray-90);
+    --color-button-primary: var(--primary);
+    --color-button-secondary: var(--gray-60);
+    --color-button-error: var(--error);
+    --color-button-success: var(--success);
+    --color-button-disabled: var(--gray);
 
-    --color-on-button: var(--color-black);
-    --color-on-button-light: var(--color-black);
-    --color-on-button-dark: var(--color-white);
-    --color-on-button-primary: var(--color-white);
-    --color-on-button-secondary: var(--color-white);
-    --color-on-button-error: var(--color-white);
-    --color-on-button-success: var(--color-white);
-    --color-on-button-disabled: var(--color-gray-10);
+    --color-on-button: var(--black);
+    --color-on-button-light: var(--black);
+    --color-on-button-dark: var(--white);
+    --color-on-button-primary: var(--white);
+    --color-on-button-secondary: var(--white);
+    --color-on-button-error: var(--white);
+    --color-on-button-success: var(--white);
+    --color-on-button-disabled: var(--gray-10);
   }
 }

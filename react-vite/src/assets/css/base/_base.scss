@@ -9,8 +9,8 @@ html {
 }
 
 body {
-  color: var(--color-text, #{$color-black});
-  background-color: var(--color-background, #{$color-white});
+  color: var(--color-text, #{$black});
+  background-color: var(--color-background, #{$white});
 
   margin: 0;
   min-width: 320px;
@@ -18,11 +18,11 @@ body {
 }
 
 a {
-  color: var(--color-link, #{$color-brand});
+  color: var(--color-link, #{$primary});
   text-decoration: none;
 
   @include on-event {
-    color: var(--color-link, #{$color-brand});
+    color: var(--color-link, #{$primary});
     text-decoration: underline;
   }
 }

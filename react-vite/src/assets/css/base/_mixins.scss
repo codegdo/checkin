@@ -1,17 +1,17 @@
 @mixin theme-color-base {
   body {
-    --color-text: var(--color-black);
-    --color-background: var(--color-white);
+    --color-text: var(--black);
+    --color-background: var(--white);
 
-    --color-link: var(--color-brand);
-    --color-link-hover: var(--color-brand);
+    --color-link: var(--primary);
+    --color-link-hover: var(--primary);
   }
 
   [data-scheme-dark] {
-    --color-text: var(--color-white);
-    --color-background: var(--color-gray-90);
+    --color-text: var(--white);
+    --color-background: var(--gray-90);
 
-    --color-link: var(--color-brand);
-    --color-link-hover: var(--color-brand);
+    --color-link: var(--primary);
+    --color-link-hover: var(--primary);
   }
 }

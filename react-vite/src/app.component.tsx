@@ -1,11 +1,19 @@
 import React, { FC, useEffect } from 'react';
-//import { AppRoute } from './app.route';
+import { Outlet } from 'react-router-dom';
 
-import * as styles from './assets/css/theme/_default.scss?inline';
+
+//import * as styles from './assets/css/theme/_default.scss?inline';
 
 export const App: FC = (): JSX.Element => {
+  return <Outlet />
+}
 
-  useEffect(() => {
+
+
+
+//import { AppRoute } from './app.route';
+/*
+useEffect(() => {
     //const scss = import('./assets/css/index.scss');
 
     // void (async () => {
@@ -33,4 +41,4 @@ export const App: FC = (): JSX.Element => {
     <button type="button" className="button btn-light">Light</button>
     <button type="button" className="button btn-dark">Dark</button>
   </div>;
-}
+*/
