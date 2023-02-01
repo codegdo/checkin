@@ -9,13 +9,17 @@ export const IamRoute = () => {
 
   let routes = useRoutes([
     {
+      path: '/',
+      element: <Index route="iam" page="index" />
+    },
+    {
       path: '/users',
       element: <User route="iam" page="users" />
     },
     {
-      path: '/',
-      element: <Index route="iam" page="index" />
-    },
+      path: '*',
+      element: <>not found iam</>
+    }
   ]);
 
   return routes

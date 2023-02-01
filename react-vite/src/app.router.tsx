@@ -9,22 +9,22 @@ const routes = [
     element: <App />,
     children: [
       {
-        element: <AuthRoute />,
-        path: 'auth/*'
+        path: '/auth/*',
+        element: <AuthRoute />
       },
       {
         element: <AuthGuard />,
         children: [
           {
-            element: <IamRoute />,
-            path: 'iam/*'
+            path: '/iam/*',
+            element: <IamRoute />
           },
           {
-            element: <HomeRoute />,
-            path: '/'
+            path: '/*',
+            element: <HomeRoute />
           }
         ]
-      },
+      }
     ]
   }
 ];

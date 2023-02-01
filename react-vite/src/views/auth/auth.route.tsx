@@ -12,14 +12,18 @@ export const AuthRoute = () => {
       element: <Index route="auth" page="index" />,
       children: [
         {
-          path: 'login',
+          path: '/',
           element: <Login route="auth" page="login" />
         },
         {
-          path: '/',
-          element: <Navigate to="login" />
+          path: '/login',
+          element: <Login route="auth" page="login" />
         }
       ]
+    },
+    {
+      path: '*',
+      element: <>not found auth</>
     }
   ]);
 

@@ -1,12 +1,23 @@
-import React, { FC, useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
+import { styleHelper } from './helpers';
 
+export const App: React.FC = (): JSX.Element => {
 
-//import * as styles from './assets/css/theme/_default.scss?inline';
+  useEffect(() => {
+    void (async () => {
+      const css: string = (await import('./assets/css/themes/_default.scss?inline')).default;
 
-export const App: FC = (): JSX.Element => {
+      if (css) {
+        styleHelper.setHeadStyle('theme', css);
+      }
+    })();
+  }, []);
+
   return <Outlet />
 }
+
+
 
 
 

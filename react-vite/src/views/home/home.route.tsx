@@ -8,8 +8,12 @@ export const HomeRoute = () => {
 
   let routes = useRoutes([
     {
-      element: <Index route="home" page="index" />,
-      path: '/'
+      path: '/',
+      element: <Index route="home" page="index" />
+    },
+    {
+      path: '*',
+      element: <>not found home</>
     }
   ]);
 
