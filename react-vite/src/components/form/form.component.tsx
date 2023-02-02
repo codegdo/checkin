@@ -6,10 +6,8 @@ import { FormProps } from './form.type';
 
 export const Form: React.FC<PropsWithChildren<FormProps>> = ({ children, ...props }): JSX.Element => {
   return <FormProvider {...props}>
-    <main>
-      {
-        children ? <Render>{children}</Render> : <Render />
-      }
-    </main>
+    {
+      children ? <Render>{children}</Render> : <Render />
+    }
   </FormProvider>
 }
