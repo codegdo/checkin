@@ -1,3 +1,12 @@
+export interface FieldProps {
+  id?: string | number;
+  name: string;
+  type: string;
+  label?: string;
+  description?: string;
+  value?: string;
+}
+
 export interface FormProps {
   title?: string;
   description?: string;

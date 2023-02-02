@@ -19,7 +19,7 @@ export const Field: React.FC<FieldProps> = (props): JSX.Element => {
   const { label, description, name, type, value } = props;
 
   useEffect(() => {
-    form[props.name] = value;
+    form[name] = value;
   }, []);
 
   const handleChange = ({ key, value }: KeyValue) => {
