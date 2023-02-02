@@ -1,6 +1,9 @@
-import React, { useContext, useEffect } from 'react';
-import { Input } from '../input/input.component';
-import { Label } from '../input/input.label';
+import React, { useEffect } from 'react';
+import Joi from 'joi';
+
+import { useWrapperContext } from '../../hooks';
+import { Label, Input } from '../input';
+
 import { KeyValue } from '../input/input.type';
 import { FormContext } from './form.context';
 
@@ -15,16 +18,18 @@ interface FieldProps {
 
 export const Field: React.FC<FieldProps> = (props): JSX.Element => {
 
-  const { form } = useContext(FormContext);
-  const { label, description, name, type, value } = props;
+  const { form, schema } = useWrapperContext(FormContext);
+  const { type, name, label, description, value } = props;
 
   useEffect(() => {
     form[name] = value;
+    schema[name] = Joi.object({ [name]: Joi.string() });
   }, []);
 
   const handleChange = ({ key, value }: KeyValue) => {
     form[key] = value;
-    console.log(form, key, value);
+    const { error } = schema[name].validate({ [name]: value })
+    console.log(error);
   }
 
   return <div>

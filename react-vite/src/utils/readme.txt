@@ -1,0 +1,2 @@
+-- Utilities are for static functionality that does not depend on a state. 
+-- Once you call a function, it gets the job done and nothing further.

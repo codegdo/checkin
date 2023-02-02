@@ -5,7 +5,7 @@ interface GridProps {
   data?: any
 }
 
-export const FieldGrid: React.FC<PropsWithChildren<GridProps>> = ({ children }): JSX.Element => {
+export const Grid: React.FC<PropsWithChildren<GridProps>> = ({ children }): JSX.Element => {
 
   const columns = useMemo(() => {
     const cols: any[] = [];

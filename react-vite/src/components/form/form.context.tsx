@@ -1,12 +1,13 @@
-import React, { PropsWithChildren, useRef } from 'react';
+import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { FormContextProps, FormProps } from './form.type';
 
 const initialProps: FormContextProps = {
   data: null,
   form: {},
   error: {},
-  validation: {},
+  schema: {},
   status: '',
+  isSubmitting: false,
   onClick: () => console.log('onClick')
 }
 
@@ -16,19 +17,28 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
 
   const { current: form } = useRef({});
   const { current: error } = useRef({});
-  const { current: validation } = useRef({});
+  const { current: schema } = useRef({});
 
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert(e.target);
+  const [isSubmitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    console.log(isSubmitting, form);
+
+    return () => setSubmitting(false);
+  }, [isSubmitting]);
+
+  const onClick = (key: string) => {
+
+    switch (key) {
+      case 'submit':
+        setSubmitting(true);
+        break;
+      default: return;
+    }
   }
 
-  const onClick = (keyvalue: any) => {
-    alert(keyvalue);
-  }
-
-  return <form onSubmit={onSubmit}>
-    <FormContext.Provider value={{ data, form, error, validation, status, onClick }}>
+  return <form onSubmit={(e) => e.preventDefault()}>
+    <FormContext.Provider value={{ data, form, error, schema, status, isSubmitting, onClick }}>
       {children}
     </FormContext.Provider>
   </form>
