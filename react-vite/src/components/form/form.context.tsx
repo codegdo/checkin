@@ -1,11 +1,13 @@
 import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
+
 import { FormContextProps, FormProps } from './form.type';
+import { formHelper } from '../../helpers';
 
 const initialProps: FormContextProps = {
   data: null,
   form: {},
   error: {},
-  schema: {},
+  validation: {},
   status: '',
   isSubmitting: false,
   onClick: () => console.log('onClick')
@@ -17,7 +19,7 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
 
   const { current: form } = useRef({});
   const { current: error } = useRef({});
-  const { current: schema } = useRef({});
+  const { current: validation } = useRef({ schema: formHelper.formSchema() });
 
   const [isSubmitting, setSubmitting] = useState(false);
 
@@ -38,7 +40,7 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
   }
 
   return <form onSubmit={(e) => e.preventDefault()}>
-    <FormContext.Provider value={{ data, form, error, schema, status, isSubmitting, onClick }}>
+    <FormContext.Provider value={{ data, form, error, validation, status, isSubmitting, onClick }}>
       {children}
     </FormContext.Provider>
   </form>

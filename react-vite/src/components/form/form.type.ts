@@ -1,4 +1,4 @@
-import { ObjectSchema } from "joi";
+import { ObjectSchema } from 'joi';
 
 export interface FieldProps {
   id?: string | number;
@@ -7,6 +7,7 @@ export interface FieldProps {
   label?: string;
   description?: string;
   value?: string;
+  isRequired?: boolean;
 }
 
 export interface FormProps {
@@ -20,7 +21,7 @@ export interface FormProps {
 export interface FormContextProps extends FormProps {
   form: { [key: string]: any };
   error: { [key: string]: any };
-  schema: { [key: string]: ObjectSchema<any> };
+  validation: { [key: string]: ObjectSchema<any> };
   status: string | undefined;
   isSubmitting: boolean;
   onClick: (key: string) => void;

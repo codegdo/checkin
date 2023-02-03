@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import Joi from 'joi';
 
 import { useWrapperContext } from '../../hooks';
 import { Label, Input } from '../input';
 
 import { KeyValue } from '../input/input.type';
 import { FormContext } from './form.context';
+import { formHelper } from '../../helpers/form.helper';
 
 interface FieldProps {
   id?: string | number;
@@ -14,22 +14,26 @@ interface FieldProps {
   label?: string;
   description?: string;
   value?: string;
+  isRequired?: boolean;
 }
 
 export const Field: React.FC<FieldProps> = (props): JSX.Element => {
 
-  const { form, schema } = useWrapperContext(FormContext);
+  const { form, validation } = useWrapperContext(FormContext);
   const { type, name, label, description, value } = props;
 
   useEffect(() => {
+    const fieldSchema = formHelper.fieldSchema(props);
+    const schema = validation.schema.keys({ [name]: fieldSchema });
+
     form[name] = value;
-    schema[name] = Joi.object({ [name]: Joi.string() });
+    validation.schema = schema;
   }, []);
 
   const handleChange = ({ key, value }: KeyValue) => {
     form[key] = value;
-    const { error } = schema[name].validate({ [name]: value })
-    console.log(error);
+    const { error } = validation.schema.validate({ [name]: value });
+    console.log('hello', error);
   }
 
   return <div>
