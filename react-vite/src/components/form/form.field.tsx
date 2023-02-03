@@ -1,43 +1,47 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useWrapperContext } from '../../hooks';
-import { Label, Input } from '../input';
-
-import { KeyValue } from '../input/input.type';
+import { Label, Input, KeyValue } from '../input';
+import { formHelper } from '../../helpers';
 import { FormContext } from './form.context';
-import { formHelper } from '../../helpers/form.helper';
-
-interface FieldProps {
-  id?: string | number;
-  name: string;
-  type: string;
-  label?: string;
-  description?: string;
-  value?: string;
-  isRequired?: boolean;
-}
+import { FieldProps } from './form.type';
 
 export const Field: React.FC<FieldProps> = (props): JSX.Element => {
 
-  const { form, validation } = useWrapperContext(FormContext);
-  const { type, name, label, description, value } = props;
+  const { form, errors, validation, isSubmitting } = useWrapperContext(FormContext);
+  const { type, name, label, description, value: initialValue } = props;
+
+  const [isError, setError] = useState(false);
 
   useEffect(() => {
-    const fieldSchema = formHelper.fieldSchema(props);
-    const schema = validation.schema.keys({ [name]: fieldSchema });
+    const fieldValidation = formHelper.fieldValidation(props);
+    const schema = validation.schema.keys({ [name]: fieldValidation });
 
-    form[name] = value;
+    form[name] = initialValue;
     validation.schema = schema;
   }, []);
 
-  const handleChange = ({ key, value }: KeyValue) => {
-    form[key] = value;
-    const { error } = validation.schema.validate({ [name]: value });
-    console.log('hello', error);
+  const handleChange = (input: KeyValue) => {
+    form[name] = input.value;
+
+    delete errors[name];
+
+    const { error } = validation.schema.validate(form, { abortEarly: false });
+
+    if (error) {
+      error.details.forEach(({ message, context }) => {
+        if (context?.key == name) {
+          errors[name] = message;
+          return;
+        }
+      });
+    }
+
+    setError(errors[name] ? true : false)
   }
 
-  return <div>
+  return <div className={isError ? 'error' : ''}>
     <Label label={label} description={description} />
-    <Input type={type} name={name} value={value} onChange={handleChange} />
+    <Input type={type} name={name} value={initialValue} onChange={handleChange} />
   </div>
 }

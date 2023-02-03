@@ -5,7 +5,7 @@ class FormHelper {
     return Joi.object();
   }
 
-  fieldSchema(field: any) {
+  fieldValidation(field: any) {
     let joi = null;
 
     if (field.type == 'number') {

@@ -7,7 +7,7 @@ const Login: React.FC = (): JSX.Element => {
     <Form title="Login">
       <Block type="section">
         <Field type="text" name="username" label="Username" isRequired={true} />
-        <Field type="password" name="password" label="Password" />
+        <Field type="password" name="password" label="Password" isRequired={true} />
       </Block>
       <Block type="section">
         <Element type="button" name="submit" label="Login" />
