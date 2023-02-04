@@ -1,8 +1,14 @@
 import Joi from 'joi';
 import { useEffect, useState } from 'react';
+import { formHelper } from '../helpers';
 
 interface InputValue {
   [key: string]: any;
+}
+
+interface KeyValue {
+  key: string;
+  value: string;
 }
 
 export const useFormValidation = (
@@ -12,10 +18,11 @@ export const useFormValidation = (
   delay?: number
 ): any => {
   const [isError, setError] = useState(false);
-  const [value, setValue] = useState<InputValue>({});
+  const [keyValue, setKeyValue] = useState<KeyValue | null>(null);
 
   useEffect(() => {
-    const key = value?.key;
+    // use input keyValue that avoid first initial validation error if key is undefined
+    const key = keyValue?.key;
     const timer = setTimeout(() => {
       const { error } = validation.schema.validate(form, { abortEarly: false });
 
@@ -38,11 +45,19 @@ export const useFormValidation = (
     return () => {
       clearTimeout(timer);
     };
-  }, [value, isError]);
+  }, [keyValue, isError]);
 
-  const checkValidation = (input: InputValue) => {
-    setValue({ ...input });
+  const setValidation = (field: any) => {
+    const fieldValidation = formHelper.fieldValidation(field);
+    const schema = validation.schema.keys({ [field?.name]: fieldValidation });
+
+    validation.schema = schema;
   };
 
-  return [isError, checkValidation];
+  const checkValidation = (input: KeyValue) => {
+    delete errors[input?.key];
+    setKeyValue({ ...input });
+  };
+
+  return [isError, setValidation, checkValidation];
 };

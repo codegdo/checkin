@@ -9,14 +9,12 @@ import { FieldProps } from './form.type';
 export const Field: React.FC<FieldProps> = (props): JSX.Element => {
   const { type, name, label, description, value: initialValue } = props;
   const { form, errors, validation } = useWrapperContext(FormContext);
-  const [isError, checkValidation] = useFormValidation(form, errors, validation);
+  const [isError, setValidation, checkValidation] = useFormValidation(form, errors, validation);
 
   useEffect(() => {
-    const fieldValidation = formHelper.fieldValidation(props);
-    const schema = validation.schema.keys({ [name]: fieldValidation });
 
     form[name] = initialValue;
-    validation.schema = schema;
+    setValidation(props);
   }, []);
 
   useEffect(() => {
@@ -24,7 +22,7 @@ export const Field: React.FC<FieldProps> = (props): JSX.Element => {
   }, [isError]);
 
   const handleChange = (input: KeyValue) => {
-    delete errors[name];
+
     form[name] = input.value;
     checkValidation(input);
   }
