@@ -20,7 +20,7 @@ export interface FormProps {
 
 export interface FormContextProps extends FormProps {
   form: { [key: string]: any };
-  errors: { [key: string]: any };
+  errors: { [key: string]: string };
   validation: { [key: string]: ObjectSchema<any> };
   status: string | undefined;
   isSubmitting: boolean;

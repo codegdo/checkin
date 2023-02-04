@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
-import { useWrapperContext } from '../../hooks';
+import { useFormValidation, useWrapperContext } from '../../hooks';
 import { Label, Input, KeyValue } from '../input';
 import { formHelper } from '../../helpers';
 import { FormContext } from './form.context';
 import { FieldProps } from './form.type';
 
 export const Field: React.FC<FieldProps> = (props): JSX.Element => {
-
-  const { form, errors, validation, isSubmitting } = useWrapperContext(FormContext);
   const { type, name, label, description, value: initialValue } = props;
-
-  const [isError, setError] = useState(false);
+  const { form, errors, validation } = useWrapperContext(FormContext);
+  const [isError, checkValidation] = useFormValidation(form, errors, validation);
 
   useEffect(() => {
     const fieldValidation = formHelper.fieldValidation(props);
@@ -21,23 +19,14 @@ export const Field: React.FC<FieldProps> = (props): JSX.Element => {
     validation.schema = schema;
   }, []);
 
+  useEffect(() => {
+    console.log('DELAY', errors);
+  }, [isError]);
+
   const handleChange = (input: KeyValue) => {
-    form[name] = input.value;
-
     delete errors[name];
-
-    const { error } = validation.schema.validate(form, { abortEarly: false });
-
-    if (error) {
-      error.details.forEach(({ message, context }) => {
-        if (context?.key == name) {
-          errors[name] = message;
-          return;
-        }
-      });
-    }
-
-    setError(errors[name] ? true : false)
+    form[name] = input.value;
+    checkValidation(input);
   }
 
   return <div className={isError ? 'error' : ''}>
