@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
 
 import { FormContextProps, FormProps } from './form.type';
 import { formHelper } from '../../helpers';
+import { useFormValidation } from '../../hooks';
 
 const initialProps: FormContextProps = {
   data: null,
@@ -20,13 +21,20 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
   const { current: form } = useRef<{ [key: string]: string }>({});
   const { current: errors } = useRef<{ [key: string]: string }>({});
   const { current: validation } = useRef({ schema: formHelper.formSchema() });
+  const { formValidation } = useFormValidation(null, form, errors, validation);
 
   const [isSubmitting, setSubmitting] = useState(false);
 
   useEffect(() => {
 
     if (isSubmitting) {
-      console.log(errors);
+      const isValidated = formValidation();
+
+      if (isValidated) {
+        console.log('SUBMIT', form);
+      }
+
+      console.log('ERROR', errors);
     }
 
     return () => setSubmitting(false);
@@ -36,21 +44,6 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
 
     switch (key) {
       case 'submit':
-
-        if (Object.keys(errors).length === 0) {
-          const { error } = validation.schema.validate(form, { abortEarly: false });
-
-          if (error) {
-            error.details.forEach(({ message, context }) => {
-              const key = context?.key;
-
-              if (key) {
-                errors[key] = message;
-              }
-            });
-          }
-        }
-
         setSubmitting(true);
         break;
       default: return;

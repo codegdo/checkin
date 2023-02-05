@@ -1,5 +1,7 @@
 import Joi from 'joi';
 
+export type ObjectSchema = Joi.ObjectSchema<any>;
+
 class FormHelper {
   formSchema() {
     return Joi.object();
@@ -25,7 +27,7 @@ class FormHelper {
     return joi;
   }
 
-  private joiString({ type, isRequired }: any) {
+  private joiString({ type, name, isRequired }: any) {
     let joi = Joi.string();
 
     joi = isRequired ? joi.required() : joi.allow('');
@@ -37,6 +39,8 @@ class FormHelper {
           allow: ['com', 'net'],
         },
       });
+    } else if (type == 'password') {
+      joi = joi.min(6).max(10);
     }
 
     return joi;
@@ -44,3 +48,12 @@ class FormHelper {
 }
 
 export const formHelper = new FormHelper();
+
+/*
+  joi.required().messages({
+    'string.empty': `"${name}" cannot be an empty field`,
+    'any.required': `"${name}" is a required field`,
+  })
+
+  https://medium.com/sliit-foss/the-joy-of-validating-with-joi-b8c87991975b
+*/

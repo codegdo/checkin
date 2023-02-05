@@ -1,6 +1,5 @@
-import Joi from 'joi';
-import { useEffect, useState } from 'react';
-import { formHelper } from '../helpers';
+import { useEffect, useRef, useState } from 'react';
+import { formHelper, ObjectSchema } from '../helpers';
 
 interface InputValue {
   [key: string]: any;
@@ -11,20 +10,27 @@ interface KeyValue {
   value: string;
 }
 
+type FormValidationReturn = {
+  isError: boolean;
+  setValidation: () => void;
+  fieldValidation: () => void;
+  formValidation: () => boolean;
+};
+
 export const useFormValidation = (
+  field: any,
   form: InputValue,
   errors: InputValue,
-  validation: { [key: string]: Joi.ObjectSchema<any> },
+  validation: { [key: string]: ObjectSchema },
   delay?: number
-): any => {
+): FormValidationReturn => {
   const [isError, setError] = useState(false);
-  const [keyValue, setKeyValue] = useState<KeyValue | null>(null);
+  const timerRef = useRef<any>(null);
 
-  useEffect(() => {
-    // use input keyValue that avoid first initial validation error if key is undefined
-    const key = keyValue?.key;
-    const timer = setTimeout(() => {
+  const setTimer = () => {
+    timerRef.current = setTimeout(() => {
       const { error } = validation.schema.validate(form, { abortEarly: false });
+      const key = field?.name;
 
       if (error) {
         error.details.forEach(({ message, context }) => {
@@ -41,23 +47,48 @@ export const useFormValidation = (
         setError(errors[key] ? true : false);
       }
     }, delay || 500);
+  };
 
+  useEffect(() => {
     return () => {
-      clearTimeout(timer);
+      timerRef.current && clearTimeout(timerRef.current);
     };
-  }, [keyValue, isError]);
+  }, [isError]);
 
-  const setValidation = (field: any) => {
+  const setValidation = () => {
     const fieldValidation = formHelper.fieldValidation(field);
     const schema = validation.schema.keys({ [field?.name]: fieldValidation });
 
     validation.schema = schema;
   };
 
-  const checkValidation = (input: KeyValue) => {
-    delete errors[input?.key];
-    setKeyValue({ ...input });
+  const fieldValidation = () => {
+    field && delete errors[field.name];
+    setTimer();
   };
 
-  return [isError, setValidation, checkValidation];
+  const formValidation = () => {
+    const hasErrors = Object.keys(errors).length === 0;
+    let isValidated = false;
+
+    if (hasErrors) {
+      const { error } = validation.schema.validate(form, { abortEarly: false });
+
+      if (error) {
+        error.details.forEach(({ message, context }) => {
+          const key = context?.key;
+
+          if (key) {
+            errors[key] = message;
+          }
+        });
+      } else {
+        isValidated = true;
+      }
+    }
+
+    return isValidated;
+  };
+
+  return { isError, setValidation, fieldValidation, formValidation };
 };
