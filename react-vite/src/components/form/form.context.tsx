@@ -10,6 +10,7 @@ const initialProps: FormContextProps = {
   errors: {},
   validation: {},
   status: '',
+  options: {},
   isSubmit: false,
   isReset: false,
   onClick: () => console.log('onClick')
@@ -17,12 +18,12 @@ const initialProps: FormContextProps = {
 
 export const FormContext = React.createContext<FormContextProps>(initialProps);
 
-export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, status, children }) => {
+export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, status, options = {}, children }) => {
 
   const { current: form } = useRef<{ [key: string]: string }>({});
   const { current: errors } = useRef<{ [key: string]: string }>({});
   const { current: validation } = useRef({ schema: formHelper.formSchema() });
-  const { formValidation } = useFormValidation(null, form, errors, validation);
+  const { formValidation } = useFormValidation({ field: null, form, errors, validation });
 
   const [isSubmit, setSubmit] = useState(false);
   const [isReset, setReset] = useState(false);
@@ -35,7 +36,7 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
       if (isValidated) {
         console.log('SUBMIT', form);
       }
-
+      console.log('WATCH', form);
       console.log('ERROR', errors);
     }
 
@@ -44,7 +45,7 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
 
   useEffect(() => {
     if (isReset) {
-
+      console.log('WATCH', form);
     }
 
     return () => setReset(false);
@@ -64,7 +65,7 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
   }
 
   return <form onSubmit={(e) => e.preventDefault()}>
-    <FormContext.Provider value={{ data, form, errors, validation, status, isSubmit, isReset, onClick }}>
+    <FormContext.Provider value={{ data, form, errors, validation, status, options, isSubmit, isReset, onClick }}>
       {children}
     </FormContext.Provider>
   </form>

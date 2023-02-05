@@ -1,5 +1,5 @@
 import React, { Children, isValidElement, PropsWithChildren, useMemo } from 'react';
-import { Table } from '../table/table.component';
+//import { Table } from '../table/table.component';
 
 interface GridProps {
   data?: any
@@ -25,5 +25,6 @@ export const Grid: React.FC<PropsWithChildren<GridProps>> = ({ children }): JSX.
     return cols;
   }, []);
 
-  return <Table columns={[...columns]} />
+  //return <Table columns={[...columns]} />
+  return <></>
 }

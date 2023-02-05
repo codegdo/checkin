@@ -7,11 +7,11 @@ import { FieldProps } from './form.type';
 
 export const Field: React.FC<FieldProps> = (props): JSX.Element => {
   const { type, name, label, description, value: initialValue } = props;
-  const { form, errors, validation, isSubmit, isReset } = useWrapperContext(FormContext);
-  const { isError, setValidation, fieldValidation, formReset } = useFormValidation(props, form, errors, validation, 0);
+  const { form, errors, validation, options, isSubmit, isReset } = useWrapperContext(FormContext);
+  const { isError, setValidation, fieldValidation, formReset } = useFormValidation({ field: props, form, errors, validation, delay: 0 });
 
   useEffect(() => {
-    form[name] = initialValue;
+    form[name] = initialValue ?? '';
     setValidation();
   }, []);
 
@@ -20,8 +20,10 @@ export const Field: React.FC<FieldProps> = (props): JSX.Element => {
   }, [isSubmit]);
 
   useEffect(() => {
-    form[name] = initialValue;
-    isReset && formReset();
+    if (isReset) {
+      form[name] = initialValue ?? '';
+      formReset();
+    }
   }, [isReset]);
 
   useEffect(() => {

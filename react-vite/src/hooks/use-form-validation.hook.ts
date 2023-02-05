@@ -18,13 +18,21 @@ type FormValidationReturn = {
   formReset: () => void;
 };
 
-export const useFormValidation = (
-  field: any,
-  form: InputValue,
-  errors: InputValue,
-  validation: { [key: string]: ObjectSchema },
-  delay?: number
-): FormValidationReturn => {
+type FormValidationConfig = {
+  field: any;
+  form: InputValue;
+  errors: InputValue;
+  validation: { [key: string]: ObjectSchema };
+  delay?: number;
+};
+
+export const useFormValidation = ({
+  field,
+  form,
+  errors,
+  validation,
+  delay,
+}: FormValidationConfig): FormValidationReturn => {
   const [isError, setError] = useState(false);
   const timerRef = useRef<any>(null);
 
