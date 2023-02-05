@@ -12,6 +12,7 @@ export interface InputProps {
   data?: any;
   text?: string;
   unit?: string;
+  isReset?: boolean;
   onChange?: (keyvalue: KeyValue) => void;
 }
 

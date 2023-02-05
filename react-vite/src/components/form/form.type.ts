@@ -24,5 +24,6 @@ export interface FormContextProps extends FormProps {
   validation: { [key: string]: ObjectSchema };
   status: string | undefined;
   isSubmitting: boolean;
+  isReset: boolean;
   onClick: (key: string) => void;
 }

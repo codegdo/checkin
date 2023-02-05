@@ -7,8 +7,8 @@ import { FieldProps } from './form.type';
 
 export const Field: React.FC<FieldProps> = (props): JSX.Element => {
   const { type, name, label, description, value: initialValue } = props;
-  const { form, errors, validation, isSubmitting } = useWrapperContext(FormContext);
-  const { isError, setValidation, fieldValidation } = useFormValidation(props, form, errors, validation);
+  const { form, errors, validation, isSubmitting, isReset } = useWrapperContext(FormContext);
+  const { isError, setValidation, fieldValidation, formReset } = useFormValidation(props, form, errors, validation, 0);
 
   useEffect(() => {
     form[name] = initialValue;
@@ -18,6 +18,11 @@ export const Field: React.FC<FieldProps> = (props): JSX.Element => {
   useEffect(() => {
     isSubmitting && fieldValidation();
   }, [isSubmitting]);
+
+  useEffect(() => {
+    form[name] = initialValue;
+    isReset && formReset();
+  }, [isReset]);
 
   useEffect(() => {
     console.log('DELAY', errors);
@@ -30,7 +35,7 @@ export const Field: React.FC<FieldProps> = (props): JSX.Element => {
 
   return <div className={isError ? 'error' : ''}>
     <Label label={label} description={description} />
-    <Input type={type} name={name} value={initialValue} onChange={handleChange} />
+    <Input type={type} name={name} value={initialValue} isReset={isReset} onChange={handleChange} />
     {
       isError && <span>{errors[name]}</span>
     }

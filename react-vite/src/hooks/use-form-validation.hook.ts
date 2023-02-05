@@ -15,6 +15,7 @@ type FormValidationReturn = {
   setValidation: () => void;
   fieldValidation: () => void;
   formValidation: () => boolean;
+  formReset: () => void;
 };
 
 export const useFormValidation = (
@@ -46,7 +47,7 @@ export const useFormValidation = (
       if (key) {
         setError(errors[key] ? true : false);
       }
-    }, delay || 500);
+    }, delay ?? 500);
   };
 
   useEffect(() => {
@@ -90,5 +91,10 @@ export const useFormValidation = (
     return isValidated;
   };
 
-  return { isError, setValidation, fieldValidation, formValidation };
+  const formReset = () => {
+    field && delete errors[field.name];
+    setError(false);
+  };
+
+  return { isError, setValidation, fieldValidation, formValidation, formReset };
 };
