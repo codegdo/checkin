@@ -7,7 +7,7 @@ import { FieldProps } from './form.type';
 
 export const Field: React.FC<FieldProps> = (props): JSX.Element => {
   const { type, name, label, description, value: initialValue } = props;
-  const { form, errors, validation, isSubmitting, isReset } = useWrapperContext(FormContext);
+  const { form, errors, validation, isSubmit, isReset } = useWrapperContext(FormContext);
   const { isError, setValidation, fieldValidation, formReset } = useFormValidation(props, form, errors, validation, 0);
 
   useEffect(() => {
@@ -16,8 +16,8 @@ export const Field: React.FC<FieldProps> = (props): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    isSubmitting && fieldValidation();
-  }, [isSubmitting]);
+    isSubmit && fieldValidation();
+  }, [isSubmit]);
 
   useEffect(() => {
     form[name] = initialValue;
