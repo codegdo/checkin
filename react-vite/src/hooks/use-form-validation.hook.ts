@@ -12,50 +12,45 @@ interface KeyValue {
 
 type FormValidationReturn = {
   isError: boolean;
-  setValidation: () => void;
-  fieldValidation: () => void;
-  formValidation: () => boolean;
+  setValidation: (key: string, field: any) => void;
+  fieldValidation: (key: string) => void;
+  formValidation: (hasErrors: boolean) => boolean;
   formReset: () => void;
 };
 
 type FormValidationConfig = {
-  field: any;
   form: InputValue;
-  errors: InputValue;
   validation: { [key: string]: ObjectSchema };
   delay?: number;
+  callbackError?: (key: string, message: string) => void;
 };
 
 export const useFormValidation = ({
-  field,
   form,
-  errors,
   validation,
   delay,
+  callbackError,
 }: FormValidationConfig): FormValidationReturn => {
   const [isError, setError] = useState(false);
   const timerRef = useRef<any>(null);
 
-  const setTimer = () => {
+  const setTimer = (key: string) => {
     timerRef.current = setTimeout(() => {
       const { error } = validation.schema.validate(form, { abortEarly: false });
-      const key = field?.name;
+      let hasError = false;
 
       if (error) {
         error.details.forEach(({ message, context }) => {
           if (context?.key == key) {
-            if (key) {
-              errors[key] = message;
-            }
+            hasError = true;
+            callbackError && callbackError(key, message);
             return;
           }
         });
       }
 
-      if (key) {
-        setError(errors[key] ? true : false);
-      }
-    }, delay ?? 500);
+      setError(hasError);
+    }, delay ?? 0);
   };
 
   useEffect(() => {
@@ -64,20 +59,18 @@ export const useFormValidation = ({
     };
   }, [isError]);
 
-  const setValidation = () => {
+  const setValidation = (key: string, field: any) => {
     const fieldValidation = formHelper.fieldValidation(field);
-    const schema = validation.schema.keys({ [field?.name]: fieldValidation });
+    const schema = validation.schema.keys({ [key]: fieldValidation });
 
     validation.schema = schema;
   };
 
-  const fieldValidation = () => {
-    field && delete errors[field.name];
-    setTimer();
+  const fieldValidation = (key: string) => {
+    setTimer(key);
   };
 
-  const formValidation = () => {
-    const hasErrors = Object.keys(errors).length === 0;
+  const formValidation = (hasErrors: boolean) => {
     let isValidated = false;
 
     if (hasErrors) {
@@ -88,7 +81,7 @@ export const useFormValidation = ({
           const key = context?.key;
 
           if (key) {
-            errors[key] = message;
+            callbackError && callbackError(key, message);
           }
         });
       } else {
@@ -100,7 +93,6 @@ export const useFormValidation = ({
   };
 
   const formReset = () => {
-    field && delete errors[field.name];
     setError(false);
   };
 

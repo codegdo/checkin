@@ -23,7 +23,7 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
   const { current: form } = useRef<{ [key: string]: string }>({});
   const { current: errors } = useRef<{ [key: string]: string }>({});
   const { current: validation } = useRef({ schema: formHelper.formSchema() });
-  const { formValidation } = useFormValidation({ field: null, form, errors, validation });
+  const { formValidation } = useFormValidation({ form, validation, callbackError });
 
   const [isSubmit, setSubmit] = useState(false);
   const [isReset, setReset] = useState(false);
@@ -31,7 +31,8 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
   useEffect(() => {
 
     if (isSubmit) {
-      const isValidated = formValidation();
+      const hasErrors = Object.keys(errors).length === 0;
+      const isValidated = formValidation(hasErrors);
 
       if (isValidated) {
         console.log('SUBMIT', form);
@@ -50,6 +51,10 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
 
     return () => setReset(false);
   }, [isReset]);
+
+  function callbackError(key: string, message: string) {
+    errors[key] = message;
+  }
 
   const onClick = (key: string) => {
 
