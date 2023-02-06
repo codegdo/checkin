@@ -8,38 +8,45 @@ import { FieldProps } from './form.type';
 export const Field: React.FC<FieldProps> = (props): JSX.Element => {
   const { id, type, name, label, description, value: initialValue } = props;
   const { form, errors, validation, options, isSubmit, isReset } = useWrapperContext(FormContext);
-  const { key = id || name } = options;
+  const { key } = options;
+  let keyname = (id || name).toString();
+
+  if (key && props.hasOwnProperty(key)) {
+    keyname = (key === 'id' || key === 'name') ? props[key as string] : keyname;
+  }
+
   const { isError, setValidation, fieldValidation, formReset } = useFormValidation({ form, validation, callbackError });
 
   useEffect(() => {
-    form[key] = initialValue ?? '';
-    setValidation(key as string, props);
+    form[keyname] = initialValue ?? '';
+    setValidation(keyname, props);
   }, []);
 
   useEffect(() => {
-    isSubmit && fieldValidation(key as string);
+    isSubmit && fieldValidation(keyname);
   }, [isSubmit]);
 
   useEffect(() => {
     if (isReset) {
-      form[key] = initialValue ?? '';
-      delete errors[key];
+      form[keyname] = initialValue ?? '';
+      delete errors[keyname];
       formReset();
     }
   }, [isReset]);
 
   useEffect(() => {
-    console.log('DELAY', errors);
+    console.log('ERROR', errors);
   }, [isError]);
 
-  function callbackError(key: string, message: string) {
-    errors[key] = message;
+  function callbackError(keyname: string, message: string) {
+    errors[keyname] = message;
   }
 
   const handleChange = ({ value }: KeyValue) => {
-    form[key] = value;
-    delete errors[key];
-    fieldValidation(key as string);
+    form[keyname] = value;
+    delete errors[keyname];
+    fieldValidation(keyname);
+    console.log('WATCH', form);
   }
 
   return <div className={isError ? 'error' : ''}>

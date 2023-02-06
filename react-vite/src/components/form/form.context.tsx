@@ -18,7 +18,7 @@ const initialProps: FormContextProps = {
 
 export const FormContext = React.createContext<FormContextProps>(initialProps);
 
-export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, status, options = {}, children }) => {
+export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, status, options = {}, onCallback, children }) => {
 
   const { current: form } = useRef<{ [key: string]: string }>({});
   const { current: errors } = useRef<{ [key: string]: string }>({});
@@ -36,6 +36,7 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
 
       if (isValidated) {
         console.log('SUBMIT', form);
+        onCallback && onCallback('submit', form);
       }
       console.log('WATCH', form);
       console.log('ERROR', errors);
@@ -47,6 +48,7 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
   useEffect(() => {
     if (isReset) {
       console.log('WATCH', form);
+      console.log('ERROR', errors);
     }
 
     return () => setReset(false);
@@ -65,7 +67,8 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
       case 'reset':
         setReset(true);
         break;
-      default: return;
+      default:
+        onCallback && onCallback(key, form);
     }
   }
 

@@ -1,10 +1,17 @@
 import React from 'react';
 import { Form, Block, Field, Grid, Group, Element } from '../../../components/form';
+import { useLoginApi } from './login.api'
 
 const Login: React.FC = (): JSX.Element => {
+  const { getLogin } = useLoginApi();
+
+  const handleCallback = (key: any, data: any) => {
+    console.log(key, data);
+    getLogin(data);
+  }
 
   return <>
-    <Form title="Login">
+    <Form title="Login" onCallback={handleCallback}>
       <Block type="section">
         <Block>
           <Field type="text" name="username" label="Username" isRequired={true} />

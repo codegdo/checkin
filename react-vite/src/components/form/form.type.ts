@@ -12,6 +12,7 @@ export interface FieldProps {
   description?: string;
   value?: string;
   isRequired?: boolean;
+  [key: string]: any;
 }
 
 export interface FormProps {
@@ -20,7 +21,7 @@ export interface FormProps {
   data?: any;
   status?: string | undefined;
   options?: FormOptions;
-  onCallback?: (key?: string, value?: string) => void;
+  onCallback?: (key?: string, values?: any) => void;
 }
 
 export interface FormContextProps extends FormProps {
