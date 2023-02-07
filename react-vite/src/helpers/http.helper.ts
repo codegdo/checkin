@@ -20,8 +20,7 @@ export type RequestOptionBody<T> = RequestOption & {
 };
 
 type RequestUrl = {
-  baseUrl?: string;
-  pathUrl: string;
+  url: string;
   params?: any
 }
 
@@ -29,30 +28,19 @@ class HttpHelper {
   private credentials: RequestCredentials;
   private contentType: string;
   private withCredentials: boolean;
-  private baseUrl: string;
 
   constructor() {
     this.contentType = 'application/json';
     this.credentials = 'include';
     this.withCredentials = true;
-    this.baseUrl = BASE_URL;
   }
 
-  private getUrl({ baseUrl, pathUrl, params }: RequestUrl): string {
-    let url = pathUrl || '/';
-
-    if (baseUrl) {
-      url = `${baseUrl}${pathUrl}`;
-    } else if (this.baseUrl) {
-      url = `${this.baseUrl}${pathUrl}`;
-    }
-
+  private getUrl({ url, params }: RequestUrl): string {
     return params ? queryString.stringifyUrl({ url, query: params }) : url;
   }
 
-  async request<T>(pathUrl: string, option?: RequestOptionBody<T>): Promise<HttpResponse<T>> {
-    const { headers, method, body, params, baseUrl, ...args } = option || {};
-    const url = this.getUrl({ baseUrl, pathUrl, params });
+  async request<T>(url: string, option?: RequestOptionBody<T>): Promise<HttpResponse<T>> {
+    const { headers, method, body, params, ...args } = option || {};
 
     const _option = {
       headers: {
@@ -67,13 +55,11 @@ class HttpHelper {
       ...args,
     };
 
-    return this._fetch(new Request(url, _option));
+    return this._fetch(new Request(this.getUrl({ url, params }), _option));
   }
 
-  async get<T>(pathUrl: string, option?: RequestOption): Promise<HttpResponse<T>> {
-    const { headers, params, baseUrl, ...args } = option || {};
-    const url = this.getUrl({ baseUrl, pathUrl, params });
-
+  async get<T>(url: string, option?: RequestOption): Promise<HttpResponse<T>> {
+    const { headers, params, ...args } = option || {};
     const _option = {
       headers: {
         'Content-Type': this.contentType,
@@ -86,13 +72,11 @@ class HttpHelper {
       ...args,
     };
 
-    return this._fetch(new Request(url, _option));
+    return this._fetch(new Request(this.getUrl({ url, params }), _option));
   }
 
-  async post<T>(pathUrl: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
-    const { headers, body, baseUrl, ...args } = option || {};
-    const url = this.getUrl({ baseUrl, pathUrl });
-
+  async post<T>(url: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
+    const { headers, body, ...args } = option || {};
     const _option = {
       headers: {
         'Content-Type': this.contentType,
@@ -109,10 +93,8 @@ class HttpHelper {
     return this._fetch(new Request(url, _option));
   }
 
-  async patch<T>(pathUrl: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
-    const { headers, body, baseUrl, ...args } = option || {};
-    const url = this.getUrl({ baseUrl, pathUrl });
-
+  async patch<T>(url: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
+    const { headers, body, ...args } = option || {};
     const _option = {
       headers: {
         'Content-Type': this.contentType,
@@ -129,10 +111,8 @@ class HttpHelper {
     return this._fetch(new Request(url, _option));
   }
 
-  async put<T>(pathUrl: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
-    const { headers, body, baseUrl, ...args } = option || {};
-    const url = this.getUrl({ baseUrl, pathUrl });
-
+  async put<T>(url: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
+    const { headers, body, ...args } = option || {};
     const _option = {
       headers: {
         'Content-Type': this.contentType,
@@ -149,10 +129,8 @@ class HttpHelper {
     return this._fetch(new Request(url, _option));
   }
 
-  async delete<T>(pathUrl: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
-    const { headers, body, baseUrl, ...args } = option || {};
-    const url = this.getUrl({ baseUrl, pathUrl });
-
+  async delete<T>(url: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
+    const { headers, body, ...args } = option || {};
     const _option = {
       headers: {
         'Content-Type': this.contentType,

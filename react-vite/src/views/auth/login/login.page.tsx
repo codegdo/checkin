@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   useMutation,
   useQuery,
@@ -7,13 +7,20 @@ import {
 } from '@tanstack/react-query';
 
 import { Form, Block, Field, Grid, Group, Element } from '../../../components/form';
-import { useLoginApi } from './login.api'
+import { getLoginApi, useLoginApi } from './login.api'
 
 const Login: React.FC = (): JSX.Element => {
+
   const { getLogin } = useLoginApi();
   const login = useMutation({
     mutationFn: getLogin
   });
+
+  const { data, isLoading } = getLoginApi(1);
+
+  useEffect(() => {
+    console.log(data);
+  }, []);
 
   const handleCallback = (key: any, data: any) => {
     console.log(key, data);
