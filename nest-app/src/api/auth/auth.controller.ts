@@ -49,6 +49,10 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Get('login')
+  getlogin() { return { message: 'hey!' } }
+
+  @HttpCode(HttpStatus.OK)
   @Get('logout')
   logout(@Session() session) {
     const { data } = session;

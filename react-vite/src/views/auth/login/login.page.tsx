@@ -7,24 +7,19 @@ import {
 } from '@tanstack/react-query';
 
 import { Form, Block, Field, Grid, Group, Element } from '../../../components/form';
-import { getLoginApi, useLoginApi } from './login.api'
+import { loginApi } from './login.api'
 
 const Login: React.FC = (): JSX.Element => {
 
-  const { getLogin } = useLoginApi();
-  const login = useMutation({
-    mutationFn: getLogin
-  });
 
-  const { data, isLoading } = getLoginApi(1);
+  const { data, isLoading, mutate } = loginApi();
 
-  useEffect(() => {
-    console.log(data);
-  }, []);
+
+  console.log(data);
 
   const handleCallback = (key: any, data: any) => {
     console.log(key, data);
-    login.mutate(data);
+    mutate({ body: data });
   }
 
   return <>

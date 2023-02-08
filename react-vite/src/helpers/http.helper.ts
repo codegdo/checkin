@@ -1,28 +1,17 @@
-import queryString from 'query-string';
-import { BASE_URL } from '../app.config';
-
 export type HttpResponse<T> = Response & {
   data?: T;
 };
 
-export type RequestOption = {
+export type RequestOptions = {
   baseUrl?: string;
   url?: string;
   method?: string;
   headers?: any;
+  body?: any;
   params?: any;
   withCredentials?: boolean;
   credentials?: RequestCredentials;
 };
-
-export type RequestOptionBody<T> = RequestOption & {
-  body?: T | string;
-};
-
-type RequestUrl = {
-  url: string;
-  params?: any
-}
 
 class HttpHelper {
   private credentials: RequestCredentials;
@@ -35,14 +24,10 @@ class HttpHelper {
     this.withCredentials = true;
   }
 
-  private getUrl({ url, params }: RequestUrl): string {
-    return params ? queryString.stringifyUrl({ url, query: params }) : url;
-  }
+  private requestOptions(options: RequestOptions) {
+    const { headers, method, body, ...args } = options || {};
 
-  async request<T>(url: string, option?: RequestOptionBody<T>): Promise<HttpResponse<T>> {
-    const { headers, method, body, params, ...args } = option || {};
-
-    const _option = {
+    return {
       headers: {
         'Content-Type': this.contentType,
         'Accept': this.contentType,
@@ -53,98 +38,36 @@ class HttpHelper {
       credentials: this.credentials,
       withCredentials: this.withCredentials,
       ...args,
-    };
-
-    return this._fetch(new Request(this.getUrl({ url, params }), _option));
+    }
   }
 
-  async get<T>(url: string, option?: RequestOption): Promise<HttpResponse<T>> {
-    const { headers, params, ...args } = option || {};
-    const _option = {
-      headers: {
-        'Content-Type': this.contentType,
-        'Accept': this.contentType,
-        ...headers
-      },
-      method: 'GET',
-      credentials: this.credentials,
-      withCredentials: this.withCredentials,
-      ...args,
-    };
-
-    return this._fetch(new Request(this.getUrl({ url, params }), _option));
+  async request<T>(url: string, options: RequestOptions = {}): Promise<HttpResponse<T>> {
+    return this._fetch<T>(new Request(url, this.requestOptions(options)));
   }
 
-  async post<T>(url: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
-    const { headers, body, ...args } = option || {};
-    const _option = {
-      headers: {
-        'Content-Type': this.contentType,
-        'Accept': this.contentType,
-        ...headers
-      },
-      method: 'POST',
-      body: (typeof body === 'string') ? body : JSON.stringify(body),
-      credentials: this.credentials,
-      withCredentials: this.withCredentials,
-      ...args,
-    };
-
-    return this._fetch(new Request(url, _option));
+  async get<T>(url: string, options: RequestOptions = {}): Promise<HttpResponse<T>> {
+    options.method = 'GET';
+    return this._fetch<T>(new Request(url, this.requestOptions(options)));
   }
 
-  async patch<T>(url: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
-    const { headers, body, ...args } = option || {};
-    const _option = {
-      headers: {
-        'Content-Type': this.contentType,
-        'Accept': this.contentType,
-        ...headers
-      },
-      method: 'PATCH',
-      body: (typeof body === 'string') ? body : JSON.stringify(body),
-      credentials: this.credentials,
-      withCredentials: this.withCredentials,
-      ...args,
-    };
-
-    return this._fetch(new Request(url, _option));
+  async post<T>(url: string, options: RequestOptions = {}): Promise<HttpResponse<T>> {
+    options.method = 'POST';
+    return this._fetch<T>(new Request(url, this.requestOptions(options)));
   }
 
-  async put<T>(url: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
-    const { headers, body, ...args } = option || {};
-    const _option = {
-      headers: {
-        'Content-Type': this.contentType,
-        'Accept': this.contentType,
-        ...headers
-      },
-      method: 'PUT',
-      body: (typeof body === 'string') ? body : JSON.stringify(body),
-      credentials: this.credentials,
-      withCredentials: this.withCredentials,
-      ...args,
-    };
-
-    return this._fetch(new Request(url, _option));
+  async patch<T>(url: string, options: RequestOptions = {}): Promise<HttpResponse<T>> {
+    options.method = 'PATCH';
+    return this._fetch<T>(new Request(url, this.requestOptions(options)));
   }
 
-  async delete<T>(url: string, option: RequestOptionBody<T>): Promise<HttpResponse<T>> {
-    const { headers, body, ...args } = option || {};
-    const _option = {
-      headers: {
-        'Content-Type': this.contentType,
-        'Accept': this.contentType,
-        ...headers
-      },
-      method: 'DELETE',
-      body: (typeof body === 'string') ? body : JSON.stringify(body),
-      credentials: this.credentials,
-      withCredentials: this.withCredentials,
-      ...args,
-    };
+  async put<T>(url: string, options: RequestOptions = {}): Promise<HttpResponse<T>> {
+    options.method = 'PUT';
+    return this._fetch<T>(new Request(url, this.requestOptions(options)));
+  }
 
-    return this._fetch(new Request(url, _option));
+  async delete<T>(url: string, options: RequestOptions = {}): Promise<HttpResponse<T>> {
+    options.method = 'DELETE';
+    return this._fetch<T>(new Request(url, this.requestOptions(options)));
   }
 
   private _fetch<T>(req: Request): Promise<HttpResponse<T>> {
