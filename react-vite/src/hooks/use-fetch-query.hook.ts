@@ -11,8 +11,7 @@ import { stringifyUrl } from '../utils';
 
 type QueryKeyT = [string, object | undefined];
 
-
-export const usePrefetchQuery = () => { }
+export const usePrefetchQuery = () => {};
 
 export const useFetchQuery = <T>(
   url: string | null,
@@ -20,7 +19,6 @@ export const useFetchQuery = <T>(
   options: RequestOptions = {},
   config?: UseQueryOptions<T, Error, T, QueryKeyT>
 ) => {
-
   const context = useQuery<T, Error, T, QueryKeyT>(
     [url!, params],
     ({ queryKey }) => fetcher<T>(queryKey, options) as Promise<T>,
@@ -44,17 +42,20 @@ export const useMutationQuery = <T, S>(
     params,
     updater
   );
-}
+};
 
 async function fetcher<T>(queryKey: QueryKeyT, options: RequestOptions) {
   const baseUrl = options?.baseUrl ?? BASE_URL;
   const [url, params] = queryKey;
   const strUrl = stringifyUrl(`${baseUrl}${url}`, params);
 
-  const response = await http.request<T>(strUrl, options);
-  return response.data;
+  try {
+    const response = await http.request<T>(strUrl, options);
+    return response?.data;
+  } catch (err: any) {
+    throw err;
+  }
 }
-
 
 function mutationQuery<T, S>(
   func: (options: T | S) => Promise<S | undefined>,
@@ -62,12 +63,11 @@ function mutationQuery<T, S>(
   params?: object,
   updater?: ((oldData: T, newData: S) => T) | undefined
 ) {
-
   const queryClient = useQueryClient();
 
   return useMutation(func, {
-    onMutate: async () => { },
-    onError: () => { },
-    onSettled: () => { }
+    onMutate: async () => {},
+    onError: () => {},
+    onSettled: () => {},
   });
 }
