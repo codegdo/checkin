@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { formHelper, ObjectSchema } from '../helpers';
+import { formHelper, ObjectSchema, ValidationError } from '../helpers';
 
 interface InputValue {
   [key: string]: any;
@@ -36,20 +36,35 @@ export const useFormValidation = ({
 
   const setTimer = (key: string) => {
     timerRef.current = setTimeout(() => {
-      const { error } = validation.schema.validate(form, { abortEarly: false });
       let hasError = false;
 
-      if (error) {
-        error.details.forEach(({ message, context }) => {
-          if (context?.key == key) {
-            hasError = true;
-            callbackError && callbackError(key, message);
-            return;
-          }
+      validation.schema.validate(form, { abortEarly: false })
+        .then(() => setError(hasError))
+        .catch((errors: ValidationError) => {
+          errors.inner.forEach(error => {
+            //console.log(error.path, error.errors)
+            if (error.path == key) {
+              hasError = true;
+              callbackError && callbackError(key, error.message);
+              return;
+            }
+          });
+          setError(hasError);
         });
-      }
 
-      setError(hasError);
+      // const { error } = validation.schema.validate(form, { abortEarly: false });
+
+      // if (error) {
+      //   error.details.forEach(({ message, context }) => {
+      //     if (context?.key == key) {
+      //       hasError = true;
+      //       callbackError && callbackError(key, message);
+      //       return;
+      //     }
+      //   });
+      // }
+
+      //setError(hasError);
     }, delay ?? 0);
   };
 
@@ -61,9 +76,11 @@ export const useFormValidation = ({
 
   const setValidation = (key: string, field: any) => {
     const fieldValidation = formHelper.fieldValidation(field);
-    const schema = validation.schema.keys({ [key]: fieldValidation });
 
-    validation.schema = schema;
+    // validation.schema = validation.schema.keys({ [key]: fieldValidation });
+    validation.schema = validation.schema.shape({ [key]: fieldValidation });
+
+    console.log(validation.schema);
   };
 
   const fieldValidation = (key: string) => {
@@ -74,19 +91,32 @@ export const useFormValidation = ({
     let isValidated = false;
 
     if (hasErrors) {
-      const { error } = validation.schema.validate(form, { abortEarly: false });
 
-      if (error) {
-        error.details.forEach(({ message, context }) => {
-          const key = context?.key;
-
-          if (key) {
-            callbackError && callbackError(key, message);
-          }
+      validation.schema.validate(form, { abortEarly: false })
+        .then(() => isValidated = true)
+        .catch((errors: ValidationError) => {
+          errors.inner.forEach(error => {
+            //console.log(error.path, error.errors)
+            const key = error.path;
+            if (key) {
+              callbackError && callbackError(key, error.message);
+            }
+          });
         });
-      } else {
-        isValidated = true;
-      }
+
+      // const { error } = validation.schema.validate(form, { abortEarly: false });
+
+      // if (error) {
+      //   error.details.forEach(({ message, context }) => {
+      //     const key = context?.key;
+
+      //     if (key) {
+      //       callbackError && callbackError(key, message);
+      //     }
+      //   });
+      // } else {
+      //   isValidated = true;
+      // }
     }
 
     return isValidated;

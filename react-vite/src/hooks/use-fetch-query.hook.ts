@@ -11,7 +11,7 @@ import { stringifyUrl } from '../utils';
 
 type QueryKeyT = [string, object | undefined];
 
-export const usePrefetchQuery = () => {};
+export const usePrefetchQuery = () => { };
 
 export const useFetchQuery = <T>(
   url: string | null,
@@ -66,8 +66,8 @@ function mutationQuery<T, S>(
   const queryClient = useQueryClient();
 
   return useMutation(func, {
-    onMutate: async () => {},
-    onError: () => {},
-    onSettled: () => {},
+    onMutate: async (data) => { },
+    onError: () => { },
+    onSettled: () => { },
   });
 }

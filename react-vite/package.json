@@ -21,7 +21,8 @@
     "react-router-dom": "^6.8.0",
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
-    "redux-thunk": "^2.4.2"
+    "redux-thunk": "^2.4.2",
+    "yup": "^1.0.0"
   },
   "devDependencies": {
     "@types/dompurify": "^2.4.0",

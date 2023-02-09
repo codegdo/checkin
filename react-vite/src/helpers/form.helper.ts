@@ -1,49 +1,61 @@
-import Joi from 'joi';
+//import Joi from 'joi';
+import * as yup from 'yup';
 
-export type ObjectSchema = Joi.ObjectSchema<any>;
+//export type ObjectSchema = Joi.ObjectSchema<any>;
+export type ObjectSchema = typeof yup.object & {
+  validate: any;
+  shape: any
+};
+
+export type ValidationError = yup.ValidationError;
 
 class FormHelper {
   formSchema() {
-    return Joi.object();
+    //return Joi.object();
+    return yup.object();
   }
 
   fieldValidation(field: any) {
-    let joi = null;
+    let validation = null;
 
     if (field.type == 'number') {
-      joi = this.joiNumber(field);
+      validation = this.validateNumber(field);
     } else {
-      joi = this.joiString(field);
+      validation = this.validateString(field);
     }
 
-    return joi;
+    return validation;
   }
 
-  private joiNumber({ type, isRequired }: any) {
-    let joi = Joi.number();
+  private validateNumber({ type, isRequired }: any) {
+    //let num = Joi.number();
+    let num = yup.number();
 
-    joi = isRequired ? joi.required() : joi.allow('');
+    //num = isRequired ? num.required() : num.allow('');
+    num = isRequired && num.required();
 
-    return joi;
+    return num;
   }
 
-  private joiString({ type, name, isRequired }: any) {
-    let joi = Joi.string();
+  private validateString({ type, name, isRequired }: any) {
+    //let str = Joi.string();
+    let str = yup.string();
 
-    joi = isRequired ? joi.required() : joi.allow('');
+    //str = isRequired ? str.required() : str.allow('');
+    str = isRequired && str.required();
 
     if (type == 'email') {
-      joi = joi.email({
+      str = str.email({
         minDomainSegments: 2,
         tlds: {
           allow: ['com', 'net'],
         },
       });
     } else if (type == 'password') {
-      joi = joi.min(6).max(10);
+      str = str.min(6).max(10);
     }
 
-    return joi;
+    return str;
   }
 }
 
@@ -57,4 +69,6 @@ export const formHelper = new FormHelper();
 
   https://medium.com/sliit-foss/the-joy-of-validating-with-joi-b8c87991975b
   https://medium.com/@andreassujono/top-10-tricky-javascript-questions-often-asked-by-interviewers-45c7dd90495e
+
+  https://dev.to/hi_iam_chris/client-side-object-validation-with-yup-4f7a
 */
