@@ -13,7 +13,7 @@ export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ data, childre
 
   return <>
     {
-      children ? children : data?.map((item, i) => {
+      children ? children : data?.map((item, i, list) => {
         switch (item?.dataType) {
           case 'block': return <Block key={i} {...item} />;
           case 'field': return <Field key={i} {...item} />;

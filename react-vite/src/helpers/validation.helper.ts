@@ -2,20 +2,48 @@
 import * as yup from 'yup';
 
 //export type ObjectSchema = Joi.ObjectSchema<any>;
-export type ObjectSchema = typeof yup.object & {
-  validate: any;
-  shape: any
-};
+export type ObjectSchema = yup.ObjectSchema<yup.AnyObject, {}>;
 
 export type ValidationError = yup.ValidationError;
 
-class FormHelper {
-  formSchema() {
+export interface ObjectValidationSchema {
+  schema: ObjectSchema;
+};
+
+interface KeyValue {
+  [key: string]: string
+};
+
+class ValidationHelper {
+  objectSchema() {
     //return Joi.object();
     return yup.object();
   }
 
-  fieldValidation(field: any) {
+  checkValidation(validation: ObjectValidationSchema, form: object, key?: string) {
+    return validation.schema.validate(form, { abortEarly: false })
+      .catch((errors: ValidationError) => {
+        const err: KeyValue = {};
+        const errs: KeyValue = {};
+
+        errors.inner.forEach(error => {
+          if (key) {
+            // validate one key
+            if (error.path == key) {
+              err[`${key}`] = error.message;
+              return;
+            }
+          } else {
+            // validate all keys
+            errs[`${error.path}`] = error.message;
+          }
+        });
+
+        return key ? err : errs;
+      });
+  }
+
+  validationField(field: any) {
     let validation = null;
 
     if (field.type == 'number') {
@@ -59,7 +87,7 @@ class FormHelper {
   }
 }
 
-export const formHelper = new FormHelper();
+export const validationHelper = new ValidationHelper();
 
 /*
   joi.required().messages({

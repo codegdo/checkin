@@ -28,7 +28,7 @@ export interface FormContextProps extends FormProps {
   data: any;
   form: { [key: string]: any };
   errors: { [key: string]: string };
-  validation: { [key: string]: ObjectSchema };
+  validation: { schema: ObjectSchema };
   status: string | undefined;
   options: FormOptions;
 

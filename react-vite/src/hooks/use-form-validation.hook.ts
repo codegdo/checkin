@@ -1,26 +1,17 @@
 import { useEffect, useRef, useState } from 'react';
-import { formHelper, ObjectSchema, ValidationError } from '../helpers';
-
-interface InputValue {
-  [key: string]: any;
-}
-
-interface KeyValue {
-  key: string;
-  value: string;
-}
+import { validationHelper, ObjectValidationSchema, ValidationError } from '../helpers';
 
 type FormValidationReturn = {
   isError: boolean;
   setValidation: (key: string, field: any) => void;
   fieldValidation: (key: string) => void;
-  formValidation: (hasErrors: boolean) => boolean;
+  formValidation: (initialErrors: boolean) => Promise<void>;
   formReset: () => void;
 };
 
 type FormValidationConfig = {
-  form: InputValue;
-  validation: { [key: string]: ObjectSchema };
+  form: object;
+  validation: ObjectValidationSchema;
   delay?: number;
   callbackError?: (key: string, message: string) => void;
 };
@@ -35,7 +26,22 @@ export const useFormValidation = ({
   const timerRef = useRef<any>(null);
 
   const setTimer = (key: string) => {
-    timerRef.current = setTimeout(() => {
+    timerRef.current = setTimeout(async () => {
+
+      // const errors = await validationHelper.checkValidation(validation, form, key);
+
+      // if (Object.keys(errors).length > 0) {
+
+      //   if (errors[key]) {
+      //     callbackError && callbackError(key, `${errors[key]}`);
+      //     setError(true);
+      //   } else {
+      //     setError(false);
+      //   }
+      // } else {
+      //   setError(false);
+      // }
+
       let hasError = false;
 
       validation.schema.validate(form, { abortEarly: false })
@@ -52,7 +58,7 @@ export const useFormValidation = ({
           setError(hasError);
         });
 
-      // const { error } = validation.schema.validate(form, { abortEarly: false });
+      // const { error }: ValidationError = validation.schema.validate(form, { abortEarly: false });
 
       // if (error) {
       //   error.details.forEach(({ message, context }) => {
@@ -75,10 +81,10 @@ export const useFormValidation = ({
   }, [isError]);
 
   const setValidation = (key: string, field: any) => {
-    const fieldValidation = formHelper.fieldValidation(field);
+    const validationField = validationHelper.validationField(field);
 
     // validation.schema = validation.schema.keys({ [key]: fieldValidation });
-    validation.schema = validation.schema.shape({ [key]: fieldValidation });
+    validation.schema = validation.schema.shape({ [key]: validationField });
 
     console.log(validation.schema);
   };
@@ -87,22 +93,51 @@ export const useFormValidation = ({
     setTimer(key);
   };
 
-  const formValidation = (hasErrors: boolean) => {
-    let isValidated = false;
+  const formValidation = async (initialErrors: boolean) => {
 
-    if (hasErrors) {
 
-      validation.schema.validate(form, { abortEarly: false })
-        .then(() => isValidated = true)
-        .catch((errors: ValidationError) => {
-          errors.inner.forEach(error => {
-            //console.log(error.path, error.errors)
-            const key = error.path;
-            if (key) {
-              callbackError && callbackError(key, error.message);
-            }
-          });
-        });
+    if (initialErrors) {
+
+      // const errors = await validationHelper.checkValidation(validation, form);
+
+      // console.log('MY ERROR', errors);
+
+      // if (errors) {
+
+      //   console.log('MY ERROR', errors);
+
+      //   return errors;
+      // }
+
+      //setValidated(true);
+
+      const errors = await validationHelper.checkValidation(validation, form);
+
+      console.log('ERRORR', errors);
+
+      if (errors) {
+        //isValidated = false;
+
+        for (const [key, value] of Object.entries(errors)) {
+          console.log(`${key}: ${value}`);
+
+          callbackError && callbackError(key, `${value}`);
+        }
+
+        //setValidated(true);
+      }
+
+      // validation.schema.validate(form, { abortEarly: false })
+      //   .then(() => setValidated(true))
+      //   .catch((errors: ValidationError) => {
+      //     errors.inner.forEach(error => {
+      //       //console.log(error.path, error.errors)
+      //       const key = error.path;
+      //       if (key) {
+      //         callbackError && callbackError(key, error.message);
+      //       }
+      //     });
+      //   });
 
       // const { error } = validation.schema.validate(form, { abortEarly: false });
 
@@ -119,7 +154,6 @@ export const useFormValidation = ({
       // }
     }
 
-    return isValidated;
   };
 
   const formReset = () => {

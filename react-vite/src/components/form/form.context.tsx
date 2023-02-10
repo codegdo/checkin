@@ -1,14 +1,18 @@
 import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
 
 import { FormContextProps, FormProps } from './form.type';
-import { formHelper } from '../../helpers';
+import { validationHelper } from '../../helpers';
 import { useFormValidation } from '../../hooks';
+
+const validationSchema = {
+  schema: validationHelper.objectSchema()
+}
 
 const initialProps: FormContextProps = {
   data: null,
   form: {},
   errors: {},
-  validation: {},
+  validation: { ...validationSchema },
   status: '',
   options: {},
   isSubmit: false,
@@ -22,7 +26,7 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
 
   const { current: form } = useRef<{ [key: string]: string }>({});
   const { current: errors } = useRef<{ [key: string]: string }>({});
-  const { current: validation } = useRef({ schema: formHelper.formSchema() });
+  const { current: validation } = useRef({ ...validationSchema });
   const { formValidation } = useFormValidation({ form, validation, callbackError });
 
   const [isSubmit, setSubmit] = useState(false);
@@ -31,19 +35,23 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
   useEffect(() => {
 
     if (isSubmit) {
-      const hasErrors = Object.keys(errors).length === 0;
-      const isValidated = formValidation(hasErrors);
+      const initialErrors = Object.keys(errors).length === 0;
 
-      if (isValidated) {
-        console.log('SUBMIT', form);
-        onCallback && onCallback('submit', form);
-      }
-      console.log('WATCH', form);
-      console.log('ERROR', errors);
+      // formValidation(initialErrors).then(() => {
+
+      //   console.log('SUBMIT', form);
+      //   //onCallback && onCallback('submit', form);
+
+      // });
+
+      //console.log('WATCH', form);
+      console.log('BEFORE ERROR', errors);
     }
 
-    return () => setSubmit(false);
+    return () => setSubmit(false)
   }, [isSubmit]);
+
+
 
   useEffect(() => {
     if (isReset) {
@@ -58,11 +66,24 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
     errors[key] = message;
   }
 
-  const onClick = (key: string) => {
+  const onClick = async (key: string) => {
 
     switch (key) {
       case 'submit':
-        setSubmit(true);
+        // validation
+        const initialErrors = Object.keys(errors).length === 0;
+        await formValidation(initialErrors);
+
+        console.log(errors);
+
+        if (initialErrors) {
+          setSubmit(true);
+        }
+
+
+        //setSubmit(true);
+
+
         break;
       case 'reset':
         setReset(true);
