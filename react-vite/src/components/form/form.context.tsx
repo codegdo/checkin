@@ -37,16 +37,8 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
     if (isSubmit) {
       if (Object.keys(errors).length === 0) {
         console.log('SUBMIT', form);
+        onCallback && onCallback('submit', form);
       }
-
-      // const initialErrors = Object.keys(errors).length === 0;
-
-      // formValidation(initialErrors).then(() => {
-
-      //   console.log('SUBMIT', form);
-      //   //onCallback && onCallback('submit', form);
-
-      // });
 
       console.log('WATCH', form);
       console.log('ERROR', errors);
@@ -54,8 +46,6 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
 
     return () => setSubmit(false)
   }, [isSubmit]);
-
-
 
   useEffect(() => {
     if (isReset) {
@@ -80,7 +70,6 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
         if (initialErrors) {
           await formValidation();
         }
-
 
         setSubmit(true);
 

@@ -1,10 +1,11 @@
 //import Joi from 'joi';
-import * as yup from 'yup';
+import * as Yup from 'yup';
 
 //export type ObjectSchema = Joi.ObjectSchema<any>;
-export type ObjectSchema = yup.ObjectSchema<yup.AnyObject, {}>;
+export type ObjectSchema = Yup.ObjectSchema<Yup.AnyObject, {}>;
 
-export type ValidationError = yup.ValidationError;
+//export type ValidationError = Joi.ValidationError;
+export type ValidationError = Yup.ValidationError;
 
 export interface ObjectValidationSchema {
   schema: ObjectSchema;
@@ -17,30 +18,55 @@ interface KeyValue {
 class ValidationHelper {
   objectSchema() {
     //return Joi.object();
-    return yup.object();
+    return Yup.object();
   }
 
   checkValidation(
     validation: ObjectValidationSchema,
-    form: object,
+    obj: object,
     key?: string
   ) {
+    /* 
+    let err: KeyValue = {};
+    const { error } = validation.schema.validate(form, { abortEarly: false });
+    
+    if (error) {
+      error.details.forEach(({ context, message }) => {
+        const contextKey = context?.key;
+        if (key) {
+          // return one key
+          if (contextKey == key) {
+            err = { [`${key}`]: message };
+            return;
+          }
+        } else {
+          // return all keys
+          if(contextKey) {
+            err = { ...err, [`${contextKey}`]: message };
+          }
+        }
+      });
+    }
+
+    return err; 
+    */
+
     return validation.schema
-      .validate(form, { abortEarly: false })
+      .validate(obj, { abortEarly: false })
       .then((): KeyValue => ({}))
       .catch((errors: ValidationError) => {
         let err: KeyValue = {};
 
-        errors.inner.forEach((error) => {
+        errors.inner.forEach(({ path, message }) => {
           if (key) {
-            // validate one key
-            if (error.path == key) {
-              err = { [`${key}`]: error.message };
+            // return one key
+            if (path == key) {
+              err = { [`${key}`]: message };
               return;
             }
           } else {
-            // validate all keys
-            err = { ...err, [`${key}`]: error.message };
+            // return all keys
+            err = { ...err, [`${path}`]: message };
           }
         });
 
@@ -62,7 +88,7 @@ class ValidationHelper {
 
   private validateNumber({ type, isRequired }: any) {
     //let num = Joi.number();
-    let num = yup.number();
+    let num = Yup.number();
 
     //num = isRequired ? num.required() : num.allow('');
     num = isRequired && num.required();
@@ -72,7 +98,7 @@ class ValidationHelper {
 
   private validateString({ type, name, isRequired }: any) {
     //let str = Joi.string();
-    let str = yup.string();
+    let str = Yup.string();
 
     //str = isRequired ? str.required() : str.allow('');
     str = isRequired && str.required();

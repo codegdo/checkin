@@ -39,9 +39,7 @@ export const Field: React.FC<FieldProps> = (props): JSX.Element => {
   }, [isError]);
 
   function callbackError(keyname: string, message: string) {
-    if (keyname) {
-      errors[keyname] = message;
-    }
+    errors[keyname] = message;
   }
 
   const handleChange = ({ value }: KeyValue) => {

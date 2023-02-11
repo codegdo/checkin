@@ -39,11 +39,9 @@ export const useFormValidation = ({
 
       let hasError = false;
 
-      if (Object.keys(errors).length > 0) {
-        if (errors[key]) {
-          callbackError && callbackError(key, `${errors[key]}`);
-          hasError = true;
-        }
+      if (errors[key]) {
+        callbackError && callbackError(key, `${errors[key]}`);
+        hasError = true;
       }
 
       setError(hasError);
