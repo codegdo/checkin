@@ -35,7 +35,11 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
   useEffect(() => {
 
     if (isSubmit) {
-      const initialErrors = Object.keys(errors).length === 0;
+      if (Object.keys(errors).length === 0) {
+        console.log('SUBMIT', form);
+      }
+
+      // const initialErrors = Object.keys(errors).length === 0;
 
       // formValidation(initialErrors).then(() => {
 
@@ -44,8 +48,8 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
 
       // });
 
-      //console.log('WATCH', form);
-      console.log('BEFORE ERROR', errors);
+      console.log('WATCH', form);
+      console.log('ERROR', errors);
     }
 
     return () => setSubmit(false)
@@ -72,17 +76,13 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
       case 'submit':
         // validation
         const initialErrors = Object.keys(errors).length === 0;
-        await formValidation(initialErrors);
-
-        console.log(errors);
 
         if (initialErrors) {
-          setSubmit(true);
+          await formValidation();
         }
 
 
-        //setSubmit(true);
-
+        setSubmit(true);
 
         break;
       case 'reset':

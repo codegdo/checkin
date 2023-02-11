@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
-import { validationHelper, ObjectValidationSchema, ValidationError } from '../helpers';
+import {
+  validationHelper,
+  ObjectValidationSchema,
+  ValidationError,
+} from '../helpers';
 
 type FormValidationReturn = {
   isError: boolean;
   setValidation: (key: string, field: any) => void;
   fieldValidation: (key: string) => void;
-  formValidation: (initialErrors: boolean) => Promise<void>;
+  formValidation: () => Promise<void>;
   formReset: () => void;
 };
 
@@ -27,50 +31,22 @@ export const useFormValidation = ({
 
   const setTimer = (key: string) => {
     timerRef.current = setTimeout(async () => {
-
-      // const errors = await validationHelper.checkValidation(validation, form, key);
-
-      // if (Object.keys(errors).length > 0) {
-
-      //   if (errors[key]) {
-      //     callbackError && callbackError(key, `${errors[key]}`);
-      //     setError(true);
-      //   } else {
-      //     setError(false);
-      //   }
-      // } else {
-      //   setError(false);
-      // }
+      const errors = await validationHelper.checkValidation(
+        validation,
+        form,
+        key
+      );
 
       let hasError = false;
 
-      validation.schema.validate(form, { abortEarly: false })
-        .then(() => setError(hasError))
-        .catch((errors: ValidationError) => {
-          errors.inner.forEach(error => {
-            //console.log(error.path, error.errors)
-            if (error.path == key) {
-              hasError = true;
-              callbackError && callbackError(key, error.message);
-              return;
-            }
-          });
-          setError(hasError);
-        });
+      if (Object.keys(errors).length > 0) {
+        if (errors[key]) {
+          callbackError && callbackError(key, `${errors[key]}`);
+          hasError = true;
+        }
+      }
 
-      // const { error }: ValidationError = validation.schema.validate(form, { abortEarly: false });
-
-      // if (error) {
-      //   error.details.forEach(({ message, context }) => {
-      //     if (context?.key == key) {
-      //       hasError = true;
-      //       callbackError && callbackError(key, message);
-      //       return;
-      //     }
-      //   });
-      // }
-
-      //setError(hasError);
+      setError(hasError);
     }, delay ?? 0);
   };
 
@@ -93,67 +69,12 @@ export const useFormValidation = ({
     setTimer(key);
   };
 
-  const formValidation = async (initialErrors: boolean) => {
+  const formValidation = async () => {
+    const errors = await validationHelper.checkValidation(validation, form);
 
-
-    if (initialErrors) {
-
-      // const errors = await validationHelper.checkValidation(validation, form);
-
-      // console.log('MY ERROR', errors);
-
-      // if (errors) {
-
-      //   console.log('MY ERROR', errors);
-
-      //   return errors;
-      // }
-
-      //setValidated(true);
-
-      const errors = await validationHelper.checkValidation(validation, form);
-
-      console.log('ERRORR', errors);
-
-      if (errors) {
-        //isValidated = false;
-
-        for (const [key, value] of Object.entries(errors)) {
-          console.log(`${key}: ${value}`);
-
-          callbackError && callbackError(key, `${value}`);
-        }
-
-        //setValidated(true);
-      }
-
-      // validation.schema.validate(form, { abortEarly: false })
-      //   .then(() => setValidated(true))
-      //   .catch((errors: ValidationError) => {
-      //     errors.inner.forEach(error => {
-      //       //console.log(error.path, error.errors)
-      //       const key = error.path;
-      //       if (key) {
-      //         callbackError && callbackError(key, error.message);
-      //       }
-      //     });
-      //   });
-
-      // const { error } = validation.schema.validate(form, { abortEarly: false });
-
-      // if (error) {
-      //   error.details.forEach(({ message, context }) => {
-      //     const key = context?.key;
-
-      //     if (key) {
-      //       callbackError && callbackError(key, message);
-      //     }
-      //   });
-      // } else {
-      //   isValidated = true;
-      // }
+    for (const [key, value] of Object.entries(errors)) {
+      callbackError && callbackError(key, `${value}`);
     }
-
   };
 
   const formReset = () => {
@@ -162,3 +83,59 @@ export const useFormValidation = ({
 
   return { isError, setValidation, fieldValidation, formValidation, formReset };
 };
+
+/* let hasError = false;
+
+      validation.schema
+        .validate(form, { abortEarly: false })
+        .then(() => setError(hasError))
+        .catch((errors: ValidationError) => {
+          errors.inner.forEach((error) => {
+            //console.log(error.path, error.errors)
+            if (error.path == key) {
+              hasError = true;
+              callbackError && callbackError(key, error.message);
+              return;
+            }
+          });
+          setError(hasError);
+        });
+
+      const { error }: ValidationError = validation.schema.validate(form, { abortEarly: false });
+
+      if (error) {
+        error.details.forEach(({ message, context }) => {
+          if (context?.key == key) {
+            hasError = true;
+            callbackError && callbackError(key, message);
+            return;
+          }
+        });
+      }
+
+      setError(hasError); */
+
+/* validation.schema
+      .validate(form, { abortEarly: false })
+      .then(() => {})
+      .catch((errors: ValidationError) => {
+        errors.inner.forEach((error) => {
+          //console.log(error.path, error.errors)
+          const key = error.path;
+          if (key) {
+            callbackError && callbackError(key, error.message);
+          }
+        });
+      });
+
+    const { error } = validation.schema.validate(form, { abortEarly: false });
+    if (error) {
+      error.details.forEach(({ message, context }) => {
+        const key = context?.key;
+        if (key) {
+          callbackError && callbackError(key, message);
+        }
+      });
+    } else {
+      isValidated = true;
+    } */

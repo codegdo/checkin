@@ -8,11 +8,11 @@ export type ValidationError = yup.ValidationError;
 
 export interface ObjectValidationSchema {
   schema: ObjectSchema;
-};
+}
 
 interface KeyValue {
-  [key: string]: string
-};
+  [key: string]: string;
+}
 
 class ValidationHelper {
   objectSchema() {
@@ -20,26 +20,31 @@ class ValidationHelper {
     return yup.object();
   }
 
-  checkValidation(validation: ObjectValidationSchema, form: object, key?: string) {
-    return validation.schema.validate(form, { abortEarly: false })
+  checkValidation(
+    validation: ObjectValidationSchema,
+    form: object,
+    key?: string
+  ) {
+    return validation.schema
+      .validate(form, { abortEarly: false })
+      .then((): KeyValue => ({}))
       .catch((errors: ValidationError) => {
-        const err: KeyValue = {};
-        const errs: KeyValue = {};
+        let err: KeyValue = {};
 
-        errors.inner.forEach(error => {
+        errors.inner.forEach((error) => {
           if (key) {
             // validate one key
             if (error.path == key) {
-              err[`${key}`] = error.message;
+              err = { [`${key}`]: error.message };
               return;
             }
           } else {
             // validate all keys
-            errs[`${error.path}`] = error.message;
+            err = { ...err, [`${key}`]: error.message };
           }
         });
 
-        return key ? err : errs;
+        return err;
       });
   }
 
