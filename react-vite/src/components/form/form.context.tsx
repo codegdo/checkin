@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 
 import { FormContextProps, FormProps } from './form.type';
 import { validationHelper } from '../../helpers';
@@ -60,8 +60,7 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
     errors[key] = message;
   }
 
-  const onClick = async (key: string) => {
-
+  const onClick = useCallback(async (key: string) => {
     switch (key) {
       case 'submit':
         // validation
@@ -80,7 +79,7 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
       default:
         onCallback && onCallback(key, form);
     }
-  }
+  }, []);
 
   return <form onSubmit={(e) => e.preventDefault()}>
     <FormContext.Provider value={{ data, form, errors, validation, status, options, isSubmit, isReset, onClick }}>

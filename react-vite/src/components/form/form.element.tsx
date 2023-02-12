@@ -15,15 +15,15 @@ interface ElementProps {
 
 export const Element: React.FC<PropsWithChildren<ElementProps>> = ({ type, name, label, value, className, children }): JSX.Element => {
 
-  const { onClick } = useWrapperContext(FormContext);
-
+  const { status, onClick } = useWrapperContext(FormContext);
+  const disabled = status == 'loading' ? true : false;
   const handleClick = () => {
     onClick && onClick(name);
   }
 
   switch (type) {
     case 'button':
-      return <button type="button" name={name} onClick={handleClick}>
+      return <button type="button" name={name} disabled={disabled} onClick={handleClick}>
         {children ? children : label || value}
       </button>
     default:

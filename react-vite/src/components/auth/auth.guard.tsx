@@ -7,7 +7,7 @@ export const AuthGuard: React.FC = (): JSX.Element => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (!isAuthenticated) {
       navigate('auth/login')
     }
   }, []);
