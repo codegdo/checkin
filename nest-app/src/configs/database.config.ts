@@ -16,6 +16,7 @@ export const databaseConfig = registerAs('database', () => {
     database: process.env.DATABASE_CHECKIN,
     name: 'default',
     entities: [__dirname + '/../models/**/*.entity{.ts,.js}'],
+    autoLoadEntities: true,
   };
 
   return { checkin };

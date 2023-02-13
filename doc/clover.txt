@@ -1,0 +1,19 @@
+To integrate Clover payment into your app, you will need to follow the steps below:
+
+1/ Sign up for a Clover developer account.
+
+2/ Register your app with Clover, including a detailed description of the functionality that you want to implement.
+
+3/ Use the Clover API documentation to understand how to make API calls to retrieve data, initiate payments, and handle other payment-related tasks.
+
+4/ Decide on which platform you want to develop your app for: Clover Web or Clover Mobile SDK. The former enables you to build a cloud-based app, while the latter is for building native mobile apps for iOS and Android.
+
+5/ Download the SDK for the platform you have chosen and get familiar with the API reference, sample code, and development tools.
+
+6/ Develop your app and test it in the Clover Sandbox environment.
+
+7/ Once you are satisfied with the app's functionality, you can submit it for approval to be listed on the Clover App Market.
+
+8/ Finally, you can go live and start processing payments.
+
+Note: The steps and details for integrating with Clover may vary based on your specific use case and requirements. The API documentation and developer support from Clover should be your primary resources for implementing the integration.

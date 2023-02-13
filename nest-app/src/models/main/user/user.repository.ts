@@ -1,11 +1,15 @@
-import { Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import { DataSource, Repository } from 'typeorm';
 import { User } from './user.entity';
 
-import { CustomRepository } from 'src/customs/typeorm/custom-repository.decorator';
 import { UserSignupData, UserSignupDto } from './user.dto';
 
-@CustomRepository(User)
+@Injectable()
 export class UserRepository extends Repository<User> {
+  constructor(private dataSource: DataSource) {
+    super(User, dataSource.createEntityManager());
+  }
+
   async signupUser(data: UserSignupDto): Promise<UserSignupData> {
     const [result] = await this.manager.query(
       `CALL main_sec.pr_user_signup($1, $2)`,

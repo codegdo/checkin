@@ -10,12 +10,13 @@ import {
   ManyToMany,
   JoinTable,
   ManyToOne,
+  BaseEntity,
 } from 'typeorm';
 
 @Entity({ database: 'db_checkin', schema: 'main_sec', name: 'user' })
 @Unique(['username'])
 @Unique(['passcode'])
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 

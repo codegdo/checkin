@@ -5,8 +5,14 @@ CREATE TABLE main_sec.account(
 
   street_address varchar(95),
   city varchar(95),
-  postal_code varchar(15),
   territory_id int,
+  postal_code varchar(15),
+
+  phone_number varchar(20),
+  website varchar(85),
+
+  owner_id integer,
+  business_type_id integer,
 
   is_active boolean default false,
 

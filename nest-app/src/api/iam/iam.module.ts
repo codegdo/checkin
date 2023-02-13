@@ -19,12 +19,11 @@ import {
 
 import { AccessGuard } from 'src/guards/access.guard';
 import { CaslAbilityService, UtilService } from 'src/helpers';
-import { TypeOrmExModule } from 'src/customs';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Session]),
-    TypeOrmExModule.forFeature([UserRepository]),
+    TypeOrmModule.forFeature([UserRepository]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
     SessionModule.forRootAsync({
@@ -61,7 +60,8 @@ import { TypeOrmExModule } from 'src/customs';
     PermissionGuard,
     IamService,
     CaslAbilityService,
-    UtilService
+    UtilService,
+    UserRepository
   ],
   controllers: [IamController],
   exports: [IamService, CaslAbilityService, UtilService],

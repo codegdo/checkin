@@ -5,10 +5,10 @@ CREATE TABLE main_sec.user(
   password varchar(85),
   passcode numeric(4),
 
+  contact_id integer,
   group_id integer,
   role_id integer,
-  contact_id integer,
-  company_id integer,
+  account_id integer,
   
   is_new_password boolean default false,
   is_active boolean default false,
