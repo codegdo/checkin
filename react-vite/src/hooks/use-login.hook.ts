@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { LoginData } from '../views/auth/login/login.page';
+import { LoginData } from '../views/auth/login/login.type';
 import { useAction } from './use-action.hook';
 
 // user-pending
@@ -17,9 +17,9 @@ export const useLogin = () => {
 
   const callback = useCallback(<T extends LoginData>(data: T) => {
     const { user } = data;
-    const { isActive } = user;
+    const { isActive, accountId } = user;
 
-    updateSession({ user });
+    updateSession({ loggedIn: true, user });
     setStatus('user-active');
   }, []);
 

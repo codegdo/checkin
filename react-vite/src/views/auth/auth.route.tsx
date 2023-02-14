@@ -4,6 +4,7 @@ import { Partial, Template } from "../../components";
 
 const Index = Template(lazy(() => import('./auth.index')));
 const Login = Partial(lazy(() => import('./login/login.page')));
+const Logout = Partial(lazy(() => import('./logout/logout.page')));
 
 export const AuthRoute = () => {
 
@@ -18,6 +19,10 @@ export const AuthRoute = () => {
         {
           path: '/login',
           element: <Login route="auth" page="login" />
+        },
+        {
+          path: '/logout',
+          element: <Logout route="auth" page="logout" />
         }
       ]
     },
