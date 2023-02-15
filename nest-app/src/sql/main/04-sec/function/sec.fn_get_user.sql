@@ -1,18 +1,18 @@
-CREATE FUNCTION main_sec.fn_get_user(p_user_id varchar)
-RETURNS TABLE(
-  id int,
-  username varchar,
-  company_id int,
-  is_active boolean,
-  group_name varchar,
-  is_owner boolean,
-  group_level int,
-  access_level varchar,
-  first_name varchar,
-  last_name varchar,
-  email_address varchar,
-  phone_number varchar
-) as $$
+CREATE FUNCTION main_sec.fn_get_user (p_user_id VARCHAR)
+RETURNS TABLE (
+  id INT,
+  username VARCHAR,
+  company_id INT,
+  is_active BOOLEAN,
+  group_name VARCHAR,
+  is_owner BOOLEAN,
+  group_level INT,
+  access_level VARCHAR,
+  first_name VARCHAR,
+  last_name VARCHAR,
+  email_address VARCHAR,
+  phone_number VARCHAR
+) AS $$
 DECLARE
   --
 BEGIN
@@ -22,28 +22,28 @@ BEGIN
     u.username,
     u.company_id,
     u.is_active,
-    g.name as "group_name",
+    g.name AS "group_name",
     g.is_owner,
     g.group_level,
-    al.name as "access_level",
+    al.name AS "access_level",
     c.first_name,
     c.last_name,
     c.email_address,
     c.phone_number
   FROM main_sec.user u
-  JOIN main_sec.group g on g.id = u.group_id
-  JOIN main_sec.access_level al on al.id = g.access_level_id
-  JOIN main_org.contact c on c.id = u.contact_id
+  JOIN main_sec.group g ON g.id = u.group_id
+  JOIN main_sec.access_level al ON al.id = g.access_level_id
+  JOIN main_org.contact c ON c.id = u.contact_id
   WHERE (
-    case
-      when (p_user_id ~ '^\d+$') then
-        u.id = cast(p_user_id as int)
-      else
+    CASE
+      WHEN (p_user_id ~ '^\d+$') THEN
+        u.id = CAST(p_user_id AS INT)
+      ELSE
         u.username = p_user_id
-    end
+    END
   );
 END;
-$$ language plpgsql;
+$$ LANGUAGE plpgsql;
 
 SELECT * FROM main_sec.fn_get_user('2');
 

@@ -6,6 +6,6 @@ export const Nav: React.FC<any> = (): JSX.Element => {
     <Link to="/">Home</Link>
     <Link to="/iam">Iam</Link>
     <Link to="/iam/users">Users</Link>
-    <Link to="/auth/login">Logout</Link>
+    <Link to="/auth/logout">Logout</Link>
   </nav>
 }
