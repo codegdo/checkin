@@ -1,10 +1,10 @@
-export const linearGradient = (str: string, value: string) => {
+export const linearGradient = (str: string, value: string): string => {
   //"linear-gradient(90deg, rgb(231, 231, 231) 0%, rgb(14, 14, 14) 0%, rgb(14, 14, 14) 0%, rgb(231, 231, 231) 0%)"
 
   str = str.substring(str.indexOf('(') + 1, str.lastIndexOf(')'));
   //"90deg, rgb(231, 231, 231) 0%, rgb(14, 14, 14) 0%, rgb(14, 14, 14) 0%, rgb(231, 231, 231) 0%"
 
-  const arr = str.split(
+  const arr: string[] = str.split(
     /,(?![^(]*\))(?![^"']*["'](?:[^"']*["'][^"']*["'])*[^"']*$)/
   );
 

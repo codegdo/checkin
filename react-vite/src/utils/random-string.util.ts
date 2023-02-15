@@ -1,9 +1,8 @@
 export const randomString = (prefix?: string): string => {
-
-  const n = Math.floor(Math.random() * 27);
-  const char = 'abcdefghijklmnopqurstuvwxyz'.substring(n, n + 1);
-  const random = Math.random().toString(16).slice(12);
-  const str = prefix ? (prefix + '-' + char + random) : (char + '-' + random);
+  const n = Math.floor(Math.random() * 26);
+  const char = 'abcdefghijklmnopqrstuvwxyz'.charAt(n);
+  const random = Math.random().toString(16).slice(4, 8); // use slice(4, 8) to get a 5-character random string
+  const str = prefix ? `${prefix}-${char}${random}` : `${char}-${random}`;
 
   return str;
 };

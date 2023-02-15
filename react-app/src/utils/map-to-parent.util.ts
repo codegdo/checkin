@@ -3,11 +3,10 @@ type Item = {
   dataType: 'block';
   data: Item[];
   position: number;
-  parentId: number | string;
-}
+  parentId: number | string | null;
+};
 
 export function mapToParent(list: Item[], item: Item): void {
-
   let bool = false;
 
   if (item.parentId == null) {
@@ -17,7 +16,6 @@ export function mapToParent(list: Item[], item: Item): void {
   }
 
   list.find((i, _index) => {
-
     if (i.id === item.parentId) {
       bool = false;
       i.data?.push({ ...item });
@@ -34,8 +32,6 @@ export function mapToParent(list: Item[], item: Item): void {
     // console.warn(`Fail mapToParent: ${item.parentId}`, item);
   }
 }
-
-
 
 /*
   input:
