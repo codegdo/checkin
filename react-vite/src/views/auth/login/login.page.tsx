@@ -10,7 +10,7 @@ const Login: React.FC = (): JSX.Element => {
 
   const { status: loadingStatus, isSuccess, data, mutate: submitLogin } = loginApi<LoginData>();
   const { status: userStatus, loggedIn, callback: validateLogin } = useLogin();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isSuccess && data) {

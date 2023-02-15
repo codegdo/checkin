@@ -60,6 +60,8 @@ export class AuthController {
     if (data) {
       session.destroy();
     }
+
+    return { ok: true };
   }
 
   @HttpCode(HttpStatus.OK)

@@ -12,7 +12,7 @@ type ResponseFetch<T> = {
   isSuccess: boolean;
   error: T | undefined;
   data: T | undefined;
-  mutate: (options: RequestOptions) => void;
+  mutate: (options?: RequestOptions) => void;
 };
 
 export const useFetch = <T>(
