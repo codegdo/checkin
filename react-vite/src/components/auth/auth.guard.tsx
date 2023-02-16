@@ -7,10 +7,11 @@ export const AuthGuard: React.FC = (): JSX.Element => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // alert(isAuthenticated);
     if (!isAuthenticated) {
       navigate('auth/login')
     }
-  }, []);
+  }, [isAuthenticated]);
 
   return <Outlet />
 }

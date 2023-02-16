@@ -1,3 +1,9 @@
 import { useFetch, useFetchQuery, useMutationQuery } from '../../../hooks';
+import { UserData, UserStatus } from '../../../store/types';
 
-export const loginApi = <T>() => useFetch<T>('/api/auth/login');
+export interface LoginData {
+  user: UserData;
+  status: UserStatus;
+}
+
+export const loginApi = () => useFetch<LoginData>('/api/auth/login');

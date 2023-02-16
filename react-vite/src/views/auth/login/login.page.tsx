@@ -1,28 +1,20 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Form, Block, Field, Grid, Group, Element } from '../../../components/form';
-import { useLogin } from '../../../hooks';
+import { useLogin } from './use-login.hook';
 import { loginApi } from './login.api'
-import { LoginData } from './login.type';
+
 
 const Login: React.FC = (): JSX.Element => {
 
-  const { status: loadingStatus, isSuccess, data, mutate: submitLogin } = loginApi<LoginData>();
-  const { status: userStatus, loggedIn, callback: validateLogin } = useLogin();
-  const navigate = useNavigate();
+  const { status, isSuccess, data, mutate: submitLogin } = loginApi();
+  const [_, loginUser] = useLogin();
 
   useEffect(() => {
-    if (isSuccess && data) {
-      validateLogin(data);
+    if (isSuccess) {
+      loginUser(data);
     }
-  }, [isSuccess, data]);
-
-  useEffect(() => {
-    if (loggedIn) {
-      navigate('/');
-    }
-  }, [loggedIn]);
+  }, [isSuccess]);
 
   const handleCallback = (keyname: any, data: any) => {
     switch (keyname) {
@@ -33,10 +25,9 @@ const Login: React.FC = (): JSX.Element => {
         break;
       default:
     }
-
   }
 
-  return <Form title="Login" status={loadingStatus} onCallback={handleCallback}>
+  return <Form title="Login" status={status} onCallback={handleCallback}>
     <Block type="section">
       <Block>
         <Field type="text" name="username" label="Username" isRequired={true} />

@@ -13,6 +13,14 @@ import { UserRepository } from 'src/models/main';
 import { UserLoginDto, UserSignupDto } from 'src/models/main/user/user.dto';
 import { HashingService, KeyGenService } from 'src/helpers';
 
+export enum UserStatus {
+  ACTIVE = 'ACCOUNT_ACTIVE',
+  INACTIVE = 'ACCOUNT_INACTIVE',
+  REQUIRE_SETUP_COMPLETE = 'ACCOUNT_REQUIRE_SETUP_COMPLETE',
+  REQUIRE_VERIFY = 'ACCOUNT_REQUIRE_VERIFY'
+}
+
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -76,12 +84,34 @@ export class AuthService {
         sessionId,
       );
 
-      const userAccess = await this.userRepository.loginUser(id);
+      const data = await this.userRepository.loginUser(id);
 
-      return { accessToken, refreshToken, userAccess };
+      const status = this.getUserStatus(data?.user);
+
+      return { accessToken, refreshToken, data, status };
     } catch (err) {
       throw err;
     }
+  }
+
+  private getUserStatus(user) {
+    let status = null;
+
+    if (user) {
+      const { isActive, accountId } = user;
+
+      if (isActive && accountId) {
+        status = UserStatus.ACTIVE;
+      } else if (!isActive && accountId) {
+        status = UserStatus.INACTIVE;
+      } else if (isActive && !accountId) {
+        status = UserStatus.REQUIRE_SETUP_COMPLETE;
+      } else if (!isActive && !accountId) {
+        status = UserStatus.REQUIRE_VERIFY;
+      }
+    }
+
+    return status;
   }
 
   private async generateToken(sub: number, sid: string) {

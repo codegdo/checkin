@@ -1,10 +1,10 @@
 import { AnyAction, createReducer } from "@reduxjs/toolkit";
 
 import { getSession, updateSession, deleteSession, refreshSessionAsync } from "./session.action";
-import { SessionState } from './session.type';
+import { SessionState, UserStatus } from './session.type';
 
 export const initialSession: SessionState = {
-  loggedIn: false
+  status: UserStatus.REQUIRE_AUTH
 };
 
 export const sessionReducer = createReducer(initialSession, (builder) => {
