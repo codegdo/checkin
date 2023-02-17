@@ -12,14 +12,7 @@ import { jwtConfig } from 'src/configs';
 import { UserRepository } from 'src/models/main';
 import { UserLoginDto, UserSignupDto } from 'src/models/main/user/user.dto';
 import { HashingService, KeyGenService } from 'src/helpers';
-
-export enum UserStatus {
-  ACTIVE = 'ACCOUNT_ACTIVE',
-  INACTIVE = 'ACCOUNT_INACTIVE',
-  REQUIRE_SETUP_COMPLETE = 'ACCOUNT_REQUIRE_SETUP_COMPLETE',
-  REQUIRE_VERIFY = 'ACCOUNT_REQUIRE_VERIFY'
-}
-
+import { UserStatus } from 'src/constants';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +24,7 @@ export class AuthService {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
-  ) { }
+  ) {}
 
   async signup({ password, ...dto }: UserSignupDto) {
     //console.log(hash);
@@ -105,7 +98,7 @@ export class AuthService {
       } else if (!isActive && accountId) {
         status = UserStatus.INACTIVE;
       } else if (isActive && !accountId) {
-        status = UserStatus.REQUIRE_SETUP_COMPLETE;
+        status = UserStatus.REQUIRE_SETUP_ACCOUNT;
       } else if (!isActive && !accountId) {
         status = UserStatus.REQUIRE_VERIFY;
       }

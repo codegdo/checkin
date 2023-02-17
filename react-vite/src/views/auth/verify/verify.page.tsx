@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
-import { UserStatus } from '../../../store/types';
+import { UserStatus } from '../../../constants';
 
 const Verify: React.FC = (): JSX.Element => {
   const { status } = useSelector((state: AppState) => state.session);
@@ -14,8 +14,8 @@ const Verify: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     (status === UserStatus.ACTIVE) && navigate('/');
-    (status === UserStatus.REQUIRE_SETUP_COMPLETE) && navigate('/auth/complete');
-    (status === UserStatus.REQUIRE_AUTH) && navigate('/auth/login');
+    (status === UserStatus.REQUIRE_SETUP_ACCOUNT) && navigate('/auth/setup');
+    (status === UserStatus.NOT_FOUND) && navigate('/auth/login');
   }, [status]);
 
   return <>verify</>;

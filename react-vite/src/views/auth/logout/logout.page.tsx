@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
-import { UserStatus } from '../../../store/types';
 
 const Logout: React.FC = (): JSX.Element | null => {
   const { user } = useSelector((state: AppState) => state.session);

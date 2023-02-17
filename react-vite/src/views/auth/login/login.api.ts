@@ -1,5 +1,6 @@
 import { useFetch, useFetchQuery, useMutationQuery } from '../../../hooks';
-import { UserData, UserStatus } from '../../../store/types';
+import { UserData } from '../../../store/types';
+import { UserStatus } from '../../../constants';
 
 export interface LoginData {
   user: UserData;

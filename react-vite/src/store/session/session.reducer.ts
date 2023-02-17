@@ -1,10 +1,16 @@
-import { AnyAction, createReducer } from "@reduxjs/toolkit";
+import { AnyAction, createReducer } from '@reduxjs/toolkit';
+import { UserStatus } from '../../constants';
 
-import { getSession, updateSession, deleteSession, refreshSessionAsync } from "./session.action";
-import { SessionState, UserStatus } from './session.type';
+import {
+  getSession,
+  updateSession,
+  deleteSession,
+  refreshSessionAsync,
+} from './session.action';
+import { SessionState } from './session.type';
 
 export const initialSession: SessionState = {
-  status: UserStatus.REQUIRE_AUTH
+  status: UserStatus.NOT_FOUND,
 };
 
 export const sessionReducer = createReducer(initialSession, (builder) => {
@@ -20,6 +26,5 @@ export const sessionReducer = createReducer(initialSession, (builder) => {
     })
     .addCase(refreshSessionAsync.fulfilled, (state, action: AnyAction) => {
       return { ...state, ...action.payload };
-    })
+    });
 });
-
