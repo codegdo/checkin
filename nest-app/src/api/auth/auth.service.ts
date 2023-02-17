@@ -24,7 +24,7 @@ export class AuthService {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
-  ) {}
+  ) { }
 
   async signup({ password, ...dto }: UserSignupDto) {
     //console.log(hash);
@@ -61,7 +61,7 @@ export class AuthService {
         throw new NotFoundException();
       }
 
-      const { id, password: hashedPassword, isActive, companyId } = user;
+      const { id, password: hashedPassword } = user;
 
       const isEqual = await this.hashingService.compare(
         password,
@@ -91,15 +91,15 @@ export class AuthService {
     let status = null;
 
     if (user) {
-      const { isActive, accountId } = user;
+      const { isActive, companyId } = user;
 
-      if (isActive && accountId) {
+      if (isActive && companyId) {
         status = UserStatus.ACTIVE;
-      } else if (!isActive && accountId) {
+      } else if (!isActive && companyId) {
         status = UserStatus.INACTIVE;
-      } else if (isActive && !accountId) {
-        status = UserStatus.REQUIRE_SETUP_ACCOUNT;
-      } else if (!isActive && !accountId) {
+      } else if (isActive && !companyId) {
+        status = UserStatus.REQUIRE_COMPANY;
+      } else if (!isActive && !companyId) {
         status = UserStatus.REQUIRE_VERIFY;
       }
     }

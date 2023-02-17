@@ -28,6 +28,10 @@ export const AuthRoute = () => {
         {
           path: '/verify',
           element: <Verify route="auth" page="verify" />
+        },
+        {
+          path: '/verify',
+          element: <Verify route="auth" page="verify" />
         }
       ]
     },

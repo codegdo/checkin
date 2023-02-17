@@ -1,5 +1,17 @@
 --TERRITORY
 CREATE TABLE main_pub.territory (
+  id int PRIMARY KEY,
+  country varchar(50) NOT NULL,
+  code varchar(3) NOT NULL,
+  state varchar(50),
+  state_code varchar(2),
+  region varchar(30),
+
+  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+  created_by varchar(45) DEFAULT CURRENT_USER,
+);
+
+CREATE TABLE main_pub.territory (
   id integer not null,
   country varchar(90),
   country_code varchar(3),

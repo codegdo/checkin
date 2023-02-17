@@ -1,10 +1,19 @@
 -- VIEW_OBJECT
 CREATE TABLE main_dbo.view_object (
+  view_id int NOT NULL,
+  object_id int NOT NULL,
+  company_id int,
+  --
+  PRIMARY KEY (view_id, object_id),
+  FOREIGN KEY (view_id) REFERENCES main_dbo.view(id) ON DELETE CASCADE,
+  FOREIGN KEY (object_id) REFERENCES main_dbo.object(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE main_dbo.view_object (
   view_id integer not null,
   object_id integer not null,
   company_id integer,
-  created_at timestamp default current_timestamp,
-  created_by varchar(45) default current_user,
   --
   primary key (view_id, object_id),
   foreign key (view_id) references main_dbo.view(id) on delete set null,

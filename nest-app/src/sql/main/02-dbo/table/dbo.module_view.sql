@@ -1,5 +1,15 @@
 -- MODULE_VIEW
 CREATE TABLE main_dbo.module_view (
+  module_id int NOT NULL,
+  view_id int NOT NULL,
+  company_id int,
+
+  PRIMARY KEY (module_id, view_id),
+  FOREIGN KEY (module_id) REFERENCES main_dbo.module(id) ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (view_id) REFERENCES main_dbo.view(id) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+CREATE TABLE main_dbo.module_view (
   module_id integer not null,
   view_id integer not null,
   company_id integer,

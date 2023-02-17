@@ -1,5 +1,15 @@
 -- FEATURE
 CREATE TABLE main_dbo.feature (
+  id int PRIMARY KEY,
+  name varchar(50) NOT NULL,
+  description varchar(255),
+  price numeric(8,2) DEFAULT 0,
+
+  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+  created_by varchar(50) DEFAULT CURRENT_USER
+);
+
+CREATE TABLE main_dbo.feature (
   id integer not null,
   name varchar(45) not null,
   description varchar(255),

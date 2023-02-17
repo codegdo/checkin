@@ -20,7 +20,7 @@ export const useLogin = <T extends LoginData>(): [
     // alert();
     status === UserStatus.ACTIVE && navigate('/');
     status === UserStatus.REQUIRE_VERIFY && navigate('/auth/verify');
-    status === UserStatus.REQUIRE_SETUP_ACCOUNT && navigate('/auth/setup');
+    status === UserStatus.REQUIRE_COMPANY && navigate('/auth/setup');
   }, [status]);
 
   const callback = useCallback((data?: T) => {

@@ -1,12 +1,27 @@
 -- POLICY
+CREATE TABLE main_sec.policy (
+  id serial PRIMARY KEY,
+  name varchar(100),
+  description varchar(255),
+  data jsonb,
+  access_level_id int,
+  company_id int,
+  is_active boolean,
+
+  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+  updated_at timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  created_by varchar(50) DEFAULT CURRENT_USER,
+  updated_by varchar(50),
+);
+
 CREATE TABLE main_sec.policy(
   id integer generated always as identity not null,
-  name varchar(85),
-  description varchar(255),
+  name varchar(100),
+  description text,
   data jsonb,
 
   access_level_id integer,
-  company_id integer,
+  account_id integer,
   is_active boolean,
 
   created_at timestamp default current_timestamp,

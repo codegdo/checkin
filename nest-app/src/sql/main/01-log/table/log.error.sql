@@ -1,15 +1,12 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TABLE main_log.error (
-  id UUID DEFAULT uuid_generate_v4() NOT NULL,
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
 
-  message TEXT,
-  host VARCHAR(255),
-  url VARCHAR(255),
-  stack TEXT,
+  message varchar(255) NOT NULL,
+  host varchar(50) NOT NULL,
+  url text NOT NULL,
+  stack text NOT NULL,
 
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP,
-  --
-  PRIMARY KEY(id)
+  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

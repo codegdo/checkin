@@ -41,3 +41,135 @@ QR Codes
 Reviews
 
 https://mailchimp.com/resources/marketing-acronyms-104/
+
+appointment status
+If you're asking about appointment status, it refers to the current state or status of an appointment in a software application or system. Common appointment status types include:
+
+Scheduled: The appointment has been scheduled and is pending.
+Confirmed: The appointment has been confirmed by the user or the system and is scheduled to take place.
+Cancelled: The appointment has been cancelled by the user or the system and will not take place.
+Rescheduled: The appointment has been rescheduled to a new date or time.
+In Progress: The appointment is currently in progress and is being worked on or attended.
+Completed: The appointment has been completed or finished as scheduled.
+Missed: The appointment was missed or not attended at the scheduled time.
+No Show: The appointment was not attended and the user did not provide any notice or cancellation.
+Pending Approval: The appointment is pending approval from a supervisor or manager before it can be confirmed.
+Needs Attention: The appointment requires special attention or follow-up by a user or system administrator.
+
+registration status
+If you're asking about registration status, it refers to the current state or status of a user's registration in a software application or website. Common registration status types include:
+
+Registered: The user has successfully completed the registration process and has an active account in the application.
+Pending: The user has initiated the registration process but has not yet completed all required steps or provided all necessary information.
+Approved: The user's registration has been reviewed and approved, and the user is now able to access the application and its features.
+Rejected: The user's registration has been reviewed and rejected, and the user is not able to access the application or its features.
+Inactive: The user has registered for the application, but has not yet activated their account or completed any necessary steps to make their account active.
+Expired: The user's registration has expired due to inactivity or the expiration of a trial period, and the user is no longer able to access the application or its features.
+Deleted: The user's registration has been deleted or removed from the application, and the user is no longer able to access the application or its features.
+
+
+form status
+If you're asking about form status, it refers to the current state or status of a form in a software application or website. Common form status types include:
+
+Open: The form is currently available and can be accessed and completed by users.
+Closed: The form is no longer available for submissions and has been closed.
+Draft: The form is still being developed or edited and is not yet ready for submission.
+Submitted: The form has been successfully completed and submitted by the user.
+Incomplete: The user has started filling out the form but has not yet completed all required fields or submitted it.
+Pending: The form has been submitted and is currently awaiting review or approval.
+Rejected: The form has been reviewed and rejected, and the user may need to resubmit it with corrections or additional information.
+Approved: The form has been reviewed and approved, and the user has been notified of the outcome.
+
+user status
+If you're asking about user status, it refers to a feature in software applications that indicates the current state or availability of a user. Common user status types include:
+
+Online: The user is currently logged into the application and available for interaction.
+Offline: The user is not currently logged into the application and not available for interaction.
+Busy: The user is currently active in the application and may not be available to respond immediately.
+Away: The user is not currently active in the application but has not logged out, indicating they may return at a later time.
+Do Not Disturb: The user is currently active in the application but does not wish to be disturbed or receive notifications.
+Invisible: The user is currently logged into the application but has set their status to "invisible," meaning they do not appear as online or available to other users.
+Blocked: The user has been blocked by another user and is not able to interact with them within the application.
+
+app status
+If you're asking about what an app status is, it refers to a feature in software applications that indicates the current state or availability of the app. Common app status types include:
+
+Online: The app is fully functional and available for use.
+Offline: The app is not currently accessible or available for use.
+Maintenance: The app is temporarily unavailable due to scheduled maintenance or updates.
+Inactive: The app has not been used for a certain period of time and may have been automatically logged out or disconnected.
+Error: The app has encountered an error or issue that prevents it from functioning properly.
+Busy: The app is currently processing a request or task and may be temporarily unavailable.
+Unavailable: The app is not currently accessible for reasons other than maintenance or downtime, such as server outages or other technical issues.
+
+task status
+If you're asking about task status, it refers to the current state or status of a task in a software application or system. Common task status types include:
+
+Open: The task has been created or assigned but is not yet in progress.
+In Progress: The task is currently being worked on or is in progress.
+Completed: The task has been completed or finished as scheduled.
+Deferred: The task has been deferred or postponed until a later time or date.
+Waiting on Someone Else: The task cannot be completed until another user or team completes a related task or provides additional information or resources.
+Blocked: The task cannot be completed due to an issue or obstacle that needs to be resolved before work can continue.
+Cancelled: The task has been cancelled or terminated for some reason.
+Rejected: The task has been reviewed and rejected, and the user may need to resubmit it with corrections or additional information.
+Needs Review: The task has been completed and is waiting for review or approval by a supervisor or manager.
+On Hold: The task has been put on hold temporarily due to a change in priorities or other issues.
+
+order status
+If you're asking about order status, it refers to the current state or status of an order in a software application or system. Common order status types include:
+
+Pending: The order has been created and is waiting for further action, such as payment or processing.
+Processing: The order is being processed or prepared for shipment or delivery.
+Shipped/Delivered: The order has been shipped or delivered to the customer.
+Cancelled: The order has been cancelled by the customer or the system, and no further action will be taken on it.
+Returned: The order has been returned by the customer for some reason, such as a defect or a change in preference.
+Refunded: The order has been refunded to the customer for some reason, such as a cancellation or a defect.
+On Hold: The order is on hold temporarily due to an issue or obstacle that needs to be resolved before it can proceed.
+Partially Fulfilled: Some items in the order have been shipped or delivered, but not all.
+Fulfilled: The order has been completed and all items have been shipped or delivered to the customer.
+Backordered: Some items in the order are currently out of stock or unavailable and will be shipped or delivered at a later time.
+
+booking status
+If you're asking about booking status, it refers to the current state or status of a booking in a software application or system. Common booking status types include:
+
+Confirmed: The booking has been confirmed by the user or the system and is scheduled to take place.
+Pending: The booking has been created or requested but is not yet confirmed or scheduled.
+Cancelled: The booking has been cancelled by the user or the system and will not take place.
+Rescheduled: The booking has been rescheduled to a new date or time.
+In Progress: The booking is currently in progress and is being worked on or attended.
+Completed: The booking has been completed or finished as scheduled.
+Rejected: The booking has been reviewed and rejected, and the user may need to resubmit it with corrections or additional information.
+Waiting on Confirmation: The booking is pending confirmation from a supervisor or manager before it can be confirmed.
+Needs Attention: The booking requires special attention or follow-up by a user or system administrator.
+Waitlisted: The booking is on a waiting list due to lack of availability, and may be confirmed if a spot becomes available.
+
+email status
+If you're asking about email status, it refers to the current state or status of an email message in a software application or system. Common email status types include:
+
+Draft: The email message has been created but is not yet ready to be sent.
+Outbox: The email message has been sent but is waiting in the outbox for a specified time before it is actually sent.
+Sent: The email message has been sent and has left the user's mailbox.
+Delivered: The email message has been successfully delivered to the recipient's mailbox.
+Read: The recipient has opened or read the email message.
+Unread: The recipient has not yet opened or read the email message.
+Replied: The recipient has replied to the email message.
+Forwarded: The recipient has forwarded the email message to another recipient.
+Deferred: The email message has been temporarily deferred and will be sent at a later time or date.
+Failed: The email message could not be delivered for some reason, such as an invalid email address or an issue with the recipient's email server.
+
+Trial status
+If you're asking about trial status, it can refer to different things depending on the context, but generally it refers to the current state or status of a trial in a software application or system.
+
+For example, in a trial software application or service, the trial status might refer to the status of the user's trial account, and common trial status types could include:
+
+Active: The user's trial account is currently active and has not expired.
+Expired: The user's trial account has expired and is no longer accessible.
+Cancelled: The user has cancelled their trial account before it expired.
+Upgrade Offer: The user's trial account has expired, but they have been offered an upgrade to a paid account.
+Limited Features: The user's trial account has limited features compared to a paid account.
+Conversion Pending: The user's trial account is about to expire, and the user has not yet upgraded to a paid account.
+Conversion Completed: The user's trial account has expired, and they have upgraded to a paid account.
+Suspended: The user's trial account has been temporarily suspended for some reason.
+Blacklisted: The user's trial account has been blacklisted due to a violation of the software's terms of use.
+Re-activated: The user's trial account has been reactivated after a period of inactivity or after the user has resolved an issue.

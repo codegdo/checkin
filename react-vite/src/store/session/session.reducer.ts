@@ -28,3 +28,31 @@ export const sessionReducer = createReducer(initialSession, (builder) => {
       return { ...state, ...action.payload };
     });
 });
+
+/*
+{
+  session: {
+    appId: 'accountId',
+
+    appStatus: 'InProgress',
+    userStatus: '',
+
+    accessTokenId: '',
+    refreshTokenId: '',
+  },
+  user: {  
+    id: 1,
+    avatar: {},
+    firstName: '',
+    lastName: '',
+    emailAddress: '',
+    accessLevel: 'System',
+    isActive: false,
+    isOwner: false,
+    companyId: null
+  },
+  company: {},
+  navigation: {},
+  theme: {}
+}
+*/

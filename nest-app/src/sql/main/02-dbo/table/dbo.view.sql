@@ -1,5 +1,20 @@
 -- VIEW
 CREATE TABLE main_dbo.view (
+  id int PRIMARY KEY,
+  name varchar(50) NOT NULL,
+  parent_id int,
+
+  is_external boolean DEFAULT false,
+  is_internal boolean DEFAULT true,
+  is_active boolean,
+
+  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+  created_by varchar(50) DEFAULT CURRENT_USER
+  --
+  FOREIGN KEY (parent_id) REFERENCES main_dbo.view(id) ON DELETE SET NULL
+);
+
+CREATE TABLE main_dbo.view (
   id integer not null,
   name varchar(45) not null,
   parent_id integer,

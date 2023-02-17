@@ -1,5 +1,18 @@
 -- OBJECT
 CREATE TABLE main_dbo.object (
+  id int PRIMARY KEY,
+  name varchar(50) NOT NULL,
+
+  is_external boolean DEFAULT FALSE,
+  is_internal boolean DEFAULT TRUE,
+  is_custom boolean DEFAULT FALSE,
+  is_active boolean DEFAULT TRUE,
+
+  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+  created_by varchar(50) DEFAULT CURRENT_USER
+);
+
+CREATE TABLE main_dbo.object (
   id integer not null ,
   name varchar(45) NOT NULL,
 

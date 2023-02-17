@@ -38,8 +38,8 @@ export class User extends BaseEntity {
   @Column({ name: 'contact_id' })
   contactId: number;
 
-  @Column({ name: 'company_id' })
-  companyId: number;
+  @Column({ name: 'account_id' })
+  accountId: number;
 
   @Column({ name: 'is_new_password' })
   isNewPassword: boolean;

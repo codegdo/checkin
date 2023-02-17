@@ -1,4 +1,18 @@
 -- PERMISSION
+CREATE TABLE main_sec.permission (
+  id serial PRIMARY KEY,
+  name varchar(100) UNIQUE,
+  permission_level_id int,
+  view_id int,
+  is_active boolean DEFAULT FALSE,
+
+  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+  created_by varchar(50) DEFAULT CURRENT_USER,
+
+  FOREIGN KEY (permission_level_id) REFERENCES main_sec.permission_level(id) ON DELETE SET NULL,
+  FOREIGN KEY (view_id) REFERENCES main_sec.view(id) ON DELETE SET NULL,
+);
+
 CREATE TABLE main_sec.permission(
   id integer generated always as identity not null,
   name varchar(85) unique,

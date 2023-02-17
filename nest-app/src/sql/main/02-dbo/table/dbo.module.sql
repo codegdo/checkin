@@ -1,5 +1,21 @@
 -- MODULE
 CREATE TABLE main_dbo.module (
+  id int PRIMARY KEY,
+  name varchar(50) NOT NULL,
+  parent_id int,
+
+  is_external boolean DEFAULT FALSE,
+  is_internal boolean DEFAULT TRUE,
+  is_subscription boolean DEFAULT FALSE,
+  is_active boolean DEFAULT TRUE,
+
+  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
+  created_by varchar(50) DEFAULT CURRENT_USER,
+
+  FOREIGN KEY (parent_id) REFERENCES main_dbo.module(id) ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+CREATE TABLE main_dbo.module (
   id integer not null,
   name varchar(45) not null,
   parent_id integer,
