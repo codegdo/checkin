@@ -12,7 +12,7 @@ import { jwtConfig } from 'src/configs';
 import { UserRepository } from 'src/models/main';
 import { UserLoginDto, UserSignupDto } from 'src/models/main/user/user.dto';
 import { HashingService, KeyGenService } from 'src/helpers';
-import { UserStatus } from 'src/constants';
+import { AppStatus } from 'src/constants';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +24,7 @@ export class AuthService {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
-  ) { }
+  ) {}
 
   async signup({ password, ...dto }: UserSignupDto) {
     //console.log(hash);
@@ -78,8 +78,7 @@ export class AuthService {
       );
 
       const data = await this.userRepository.loginUser(id);
-
-      const status = this.getUserStatus(data?.user);
+      const status = this.generateStatus(data?.user);
 
       return { accessToken, refreshToken, data, status };
     } catch (err) {
@@ -87,20 +86,20 @@ export class AuthService {
     }
   }
 
-  private getUserStatus(user) {
+  private generateStatus(user) {
     let status = null;
 
     if (user) {
       const { isActive, companyId } = user;
 
       if (isActive && companyId) {
-        status = UserStatus.ACTIVE;
+        status = AppStatus.ACTIVE;
       } else if (!isActive && companyId) {
-        status = UserStatus.INACTIVE;
+        status = AppStatus.INACTIVE;
       } else if (isActive && !companyId) {
-        status = UserStatus.REQUIRE_COMPANY;
+        status = AppStatus.REQUIRE_VERIFY_COMPANY;
       } else if (!isActive && !companyId) {
-        status = UserStatus.REQUIRE_VERIFY;
+        status = AppStatus.REQUIRE_VERIFY;
       }
     }
 

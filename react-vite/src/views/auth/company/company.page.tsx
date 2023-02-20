@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
-import { UserStatus } from '../../../constants';
+import { AppStatus } from '../../../constants';
 
 const Setup: React.FC = (): JSX.Element => {
   const { status } = useSelector((state: AppState) => state.session);
@@ -13,9 +13,9 @@ const Setup: React.FC = (): JSX.Element => {
   const { mutate: submitVerify } = useFetch('/api/auth/verify');
 
   useEffect(() => {
-    (status === UserStatus.ACTIVE) && navigate('/');
-    (status === UserStatus.REQUIRE_VERIFY) && navigate('/auth/verify');
-    (status === UserStatus.NOT_FOUND) && navigate('/auth/login');
+    (status === AppStatus.ACTIVE) && navigate('/');
+    (status === AppStatus.REQUIRE_VERIFY) && navigate('/auth/verify');
+    (status === AppStatus.UNAUTHENTICATED) && navigate('/auth/login');
   }, [status]);
 
   return <>verify</>;

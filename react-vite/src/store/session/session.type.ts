@@ -1,8 +1,8 @@
-import { UserStatus } from '../../constants';
+import { AppStatus } from '../../constants';
 
 export interface SessionState {
   loggedIn?: boolean;
-  status?: UserStatus;
+  status?: AppStatus;
   user?: UserData;
 }
 

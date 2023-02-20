@@ -1,5 +1,5 @@
 import { AnyAction, createReducer } from '@reduxjs/toolkit';
-import { UserStatus } from '../../constants';
+import { AppStatus } from '../../constants';
 
 import {
   getSession,
@@ -10,7 +10,7 @@ import {
 import { SessionState } from './session.type';
 
 export const initialSession: SessionState = {
-  status: UserStatus.NOT_FOUND,
+  status: AppStatus.UNAUTHENTICATED,
 };
 
 export const sessionReducer = createReducer(initialSession, (builder) => {

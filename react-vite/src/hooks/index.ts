@@ -4,3 +4,4 @@ export * from './use-form-validation.hook';
 export * from './use-fetch.hook';
 export * from './use-fetch-query.hook';
 export * from './use-action.hook';
+export * from './use-redirect.hook';
