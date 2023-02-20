@@ -6,14 +6,14 @@ import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 
 const Logout: React.FC = (): JSX.Element | null => {
-  const { user } = useSelector((state: AppState) => state.session);
-  const { deleteSession } = useAction();
+  const { user } = useSelector((state: AppState) => state);
+  const { logoutCurrent } = useAction();
   const { mutate: logout } = useFetch('/api/auth/logout');
   const navigate = useNavigate();
 
   useEffect(() => {
     user && logout();
-    deleteSession();
+    logoutCurrent();
     navigate('/auth/login');
   }, [user]);
 

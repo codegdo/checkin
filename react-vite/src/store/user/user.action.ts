@@ -1,8 +1,8 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { UserState } from './user.type';
+import { UserData } from './user.type';
 
 export const getUser = createAction('user/GET');
-export const updateUser = createAction<UserState>('user/UPDATE');
+export const updateUser = createAction<UserData>('user/UPDATE');
 export const deleteUser = createAction('user/DELETE');
 
 export const refreshUserAsync = createAsyncThunk('user/REFRESH', () => {

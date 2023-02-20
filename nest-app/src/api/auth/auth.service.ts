@@ -24,7 +24,7 @@ export class AuthService {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
-  ) {}
+  ) { }
 
   async signup({ password, ...dto }: UserSignupDto) {
     //console.log(hash);
@@ -72,18 +72,32 @@ export class AuthService {
         throw new NotFoundException();
       }
 
+      const data = await this.userRepository.loginUser(id);
+
       const { accessToken, refreshToken } = await this.generateToken(
         id,
         sessionId,
       );
 
-      const data = await this.userRepository.loginUser(id);
-      const status = this.generateStatus(data?.user);
+      const status = this.generateStatus(data.user);
 
-      return { accessToken, refreshToken, data, status };
+      const navigation = this.generateNavigation();
+
+      return {
+        accessToken,
+        refreshToken,
+        current: {
+          appStatus: status
+        },
+        user: data.user
+      };
     } catch (err) {
       throw err;
     }
+  }
+
+  private generateNavigation() {
+
   }
 
   private generateStatus(user) {

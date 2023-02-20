@@ -51,6 +51,10 @@ export interface UserSignupData {
   isActive: boolean;
 }
 
+export interface UserLoginData {
+  user: object;
+}
+
 export class UserSignupBody {
   @IsObject()
   @ValidateNested({ each: true })

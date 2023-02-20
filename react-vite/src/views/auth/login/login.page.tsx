@@ -1,20 +1,24 @@
 import React, { useEffect } from 'react';
 
 import { Form, Block, Field, Grid, Group, Element } from '../../../components/form';
-import { useLogin } from './use-login.hook';
 import { loginApi } from './login.api'
+import { useAction, useRedirect } from '../../../hooks';
 
 
 const Login: React.FC = (): JSX.Element => {
 
+  const { updateCurrent, updateUser } = useAction();
   const { status, isSuccess, data, mutate: submitLogin } = loginApi();
-  const [_, loginUser] = useLogin();
+
+  useRedirect();
 
   useEffect(() => {
-    if (isSuccess) {
-      loginUser(data);
+    if (isSuccess && data) {
+      const { current, user } = data;
+      updateCurrent(current);
+      updateUser(user);
     }
-  }, [isSuccess]);
+  }, [isSuccess, data]);
 
   const handleCallback = (keyname: any, data: any) => {
     switch (keyname) {

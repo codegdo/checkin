@@ -1,4 +1,4 @@
-export interface UserState {
+export interface UserData {
   id?: number;
   firstName?: string;
   lastName?: string;

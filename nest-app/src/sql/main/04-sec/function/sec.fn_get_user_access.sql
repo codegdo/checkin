@@ -18,7 +18,7 @@ BEGIN
       phone_number "phoneNumber",
       access_level "accessLevel",
       group_level "groupLevel",
-      account_id "accountId",
+      company_id "companyId",
       is_owner "isOwner",
       is_active "isActive"
     FROM main_sec.fn_get_user(p_user_id)

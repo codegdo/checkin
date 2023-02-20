@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { User } from './user.entity';
 
-import { UserSignupData, UserSignupDto } from './user.dto';
+import { UserLoginData, UserSignupData, UserSignupDto } from './user.dto';
 
 @Injectable()
 export class UserRepository extends Repository<User> {
@@ -19,7 +19,7 @@ export class UserRepository extends Repository<User> {
     return result.data;
   }
 
-  async loginUser(id: number): Promise<any> {
+  async loginUser(id: number): Promise<UserLoginData> {
     const [result] = await this.manager.query(
       `CALL main_sec.pr_user_login($1, $2)`,
       [id, null],

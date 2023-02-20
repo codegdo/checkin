@@ -6,9 +6,9 @@ import {
   deleteUser,
   refreshUserAsync,
 } from './user.action';
-import { UserState } from './user.type';
+import { UserData } from './user.type';
 
-export const initialUser: UserState = {};
+export const initialUser: UserData = {};
 
 export const userReducer = createReducer(initialUser, (builder) => {
   builder

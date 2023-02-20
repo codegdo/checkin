@@ -3,7 +3,7 @@ import { persistReducer } from 'redux-persist';
 import { PersistPartial } from 'redux-persist/es/persistReducer';
 import storage from 'redux-persist/lib/storage';
 
-import { initialSession, sessionReducer } from './session/session.reducer';
+import { currentReducer, initialCurrent } from './current/current.reducer';
 import { initialTheme, themeReducer } from './theme/theme.reducer';
 import { initialUser, userReducer } from './user/user.reducer';
 
@@ -11,7 +11,7 @@ export type AppState = ReturnType<typeof appReducer>;
 type RootReducer = ReturnType<typeof rootReducer>;
 
 export const appReducer = combineReducers({
-  session: sessionReducer,
+  current: currentReducer,
   user: userReducer,
   theme: themeReducer,
 });
@@ -21,12 +21,12 @@ const rootReducer = (
   action: AnyAction
 ): AppState => {
   // reset store
-  if (action.type === 'session/DELETE') {
+  if (action.type === 'current/LOGOUT') {
     void storage.removeItem('persist:root');
 
     state = {
       ...state,
-      session: initialSession,
+      current: initialCurrent,
       user: initialUser,
       theme: initialTheme,
     };

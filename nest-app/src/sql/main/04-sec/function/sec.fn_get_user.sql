@@ -2,7 +2,7 @@ CREATE FUNCTION main_sec.fn_get_user (p_user_id VARCHAR)
 RETURNS TABLE (
   id INT,
   username VARCHAR,
-  account_id INT,
+  company_id INT,
   is_active BOOLEAN,
   group_name VARCHAR,
   is_owner BOOLEAN,
@@ -20,7 +20,7 @@ BEGIN
   SELECT
     u.id,
     u.username,
-    u.account_id,
+    u.company_id,
     u.is_active,
     g.name AS "group_name",
     g.is_owner,

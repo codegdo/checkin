@@ -40,16 +40,29 @@ export const sessionReducer = createReducer(initialSession, (builder) => {
     accessTokenId: '',
     refreshTokenId: '',
   },
+
+  app: {
+    id: 1,
+    status: ''
+  },
+  auth: {
+    accessToken: '',
+    refreshToken: ''
+  },
   user: {  
     id: 1,
     avatar: {},
     firstName: '',
     lastName: '',
     emailAddress: '',
+
     accessLevel: 'System',
+    
+    companyId: null,
+
     isActive: false,
     isOwner: false,
-    companyId: null
+    
   },
   company: {},
   navigation: {},
