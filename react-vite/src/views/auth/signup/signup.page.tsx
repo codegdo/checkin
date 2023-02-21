@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 
-
 const Signup: React.FC = (): JSX.Element => {
-  return <>Company</>;
+  return <>Signup</>;
 }
 
 export default Signup;

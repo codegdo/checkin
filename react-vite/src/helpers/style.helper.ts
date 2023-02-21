@@ -1,16 +1,19 @@
 class StyleHelper {
-  setHeadStyle(id: string, css: string) {
-    const head = document.head || document.getElementsByTagName('head')[0];
-    const [exist] = Array.from(head.children).filter(child => child.id === id);
+  private head: HTMLHeadElement;
+
+  constructor() {
+    this.head = document.head || document.getElementsByTagName('head')[0];
+  }
+
+  public setHeadStyle(id: string, css: string): void {
+    const [exist] = Array.from(this.head.children).filter(child => child.id === id);
 
     if (!exist) {
       const style = document.createElement('style');
-
-      style.setAttribute('type', 'text/css');
-      style.setAttribute('id', id);
+      style.type = 'text/css';
+      style.id = id;
       style.innerHTML = css;
-
-      head.appendChild(style);
+      this.head.appendChild(style);
     } else {
       exist.innerHTML = css;
     }

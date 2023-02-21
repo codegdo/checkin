@@ -4,12 +4,12 @@ import { AppStatus } from '../constants';
 import { AppState } from '../store/reducers';
 
 export const useAuth = (): boolean => {
-  const { status } = useSelector((state: AppState) => state.session);
+  const { appStatus } = useSelector((state: AppState) => state.current);
   const [isAuth, setAuth] = useState(false);
 
   useEffect(() => {
-    status === AppStatus.ACTIVE && setAuth(true);
-  }, [status]);
+    appStatus === AppStatus.ACTIVE && setAuth(true);
+  }, [appStatus]);
 
   return isAuth;
 };

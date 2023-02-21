@@ -26,30 +26,7 @@ class ValidationHelper {
     obj: object,
     key?: string
   ) {
-    /* 
-    let err: KeyValue = {};
-    const { error } = validation.schema.validate(form, { abortEarly: false });
-    
-    if (error) {
-      error.details.forEach(({ context, message }) => {
-        const contextKey = context?.key;
-        if (key) {
-          // return one key
-          if (contextKey == key) {
-            err = { [`${key}`]: message };
-            return;
-          }
-        } else {
-          // return all keys
-          if(contextKey) {
-            err = { ...err, [`${contextKey}`]: message };
-          }
-        }
-      });
-    }
 
-    return err; 
-    */
 
     return validation.schema
       .validate(obj, { abortEarly: false })
@@ -131,3 +108,28 @@ export const validationHelper = new ValidationHelper();
 
   https://dev.to/hi_iam_chris/client-side-object-validation-with-yup-4f7a
 */
+
+/* 
+    let err: KeyValue = {};
+    const { error } = validation.schema.validate(form, { abortEarly: false });
+    
+    if (error) {
+      error.details.forEach(({ context, message }) => {
+        const contextKey = context?.key;
+        if (key) {
+          // return one key
+          if (contextKey == key) {
+            err = { [`${key}`]: message };
+            return;
+          }
+        } else {
+          // return all keys
+          if(contextKey) {
+            err = { ...err, [`${contextKey}`]: message };
+          }
+        }
+      });
+    }
+
+    return err; 
+    */

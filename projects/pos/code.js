@@ -1,14 +1,14 @@
 class Order {
   constructor(inventory) {
     this.inventory = inventory;
-    this.itemsByCategory = { "Burgers": [], "Sides": [], "Drinks": [] };
+    this.itemsByCategory = { Burgers: [], Sides: [], Drinks: [] };
     this.combos = [];
   }
 
   async addItem(item_id) {
     const [stockLevel, item] = await Promise.all([
       this.inventory.getStock(item_id),
-      this.inventory.getItem(item_id)
+      this.inventory.getItem(item_id),
     ]);
 
     if (stockLevel == 0) {
@@ -36,14 +36,14 @@ class Order {
       }
     }
 
-    this.itemsByCategory["Burgers"].sort((a, b) => a.price - b.price);
-    this.itemsByCategory["Sides"].sort((a, b) => a.price - b.price);
-    this.itemsByCategory["Drinks"].sort((a, b) => a.price - b.price);
+    this.itemsByCategory['Burgers'].sort((a, b) => a.price - b.price);
+    this.itemsByCategory['Sides'].sort((a, b) => a.price - b.price);
+    this.itemsByCategory['Drinks'].sort((a, b) => a.price - b.price);
 
     for (let i = 0; i < numberOfCombos; i++) {
-      const burger = this.itemsByCategory["Burgers"].pop();
-      const side = this.itemsByCategory["Sides"].pop();
-      const drink = this.itemsByCategory["Drinks"].pop();
+      const burger = this.itemsByCategory['Burgers'].pop();
+      const side = this.itemsByCategory['Sides'].pop();
+      const drink = this.itemsByCategory['Drinks'].pop();
       const combo = new Combo(burger, side, drink);
       this.combos.push(combo);
     }
@@ -67,17 +67,17 @@ class Order {
   }
 
   toString() {
-    let string = "";
+    let string = '';
 
     for (let i = 0; i < this.combos.length; i++) {
       string += this.combos[i].toString();
       if (i != this.combos.length - 1) {
-        string += "\n";
+        string += '\n';
       }
     }
 
     if (this.combos.length > 0) {
-      string += "\n";
+      string += '\n';
     }
 
     for (const category of Object.values(this.itemsByCategory)) {
@@ -85,10 +85,10 @@ class Order {
         const item = category[i];
         const name = item.name || item.size;
         const price = item.price;
-        let subcategory = item.subcategory || "";
+        let subcategory = item.subcategory || '';
 
         if (subcategory == null) {
-          subcategory = "";
+          subcategory = '';
         }
 
         string += `$${price} ${name} ${subcategory}\n`;
@@ -99,44 +99,43 @@ class Order {
   }
 }
 
-
 class Inventory {
   constructor() {
     this.catalogue = {
       Burgers: [
-        { id: 1, name: "Python Burger", price: 5.99 },
-        { id: 2, name: "C Burger", price: 4.99 },
-        { id: 3, name: "Ruby Burger", price: 6.49 },
-        { id: 4, name: "Go Burger", price: 5.99 },
-        { id: 5, name: "C++ Burger", price: 7.99 },
-        { id: 6, name: "Java Burger", price: 7.99 },
+        { id: 1, name: 'Python Burger', price: 5.99 },
+        { id: 2, name: 'C Burger', price: 4.99 },
+        { id: 3, name: 'Ruby Burger', price: 6.49 },
+        { id: 4, name: 'Go Burger', price: 5.99 },
+        { id: 5, name: 'C++ Burger', price: 7.99 },
+        { id: 6, name: 'Java Burger', price: 7.99 },
       ],
       Sides: {
         Fries: [
-          { id: 7, size: "Small", price: 2.49 },
-          { id: 8, size: "Medium", price: 3.49 },
-          { id: 9, size: "Large", price: 4.29 },
+          { id: 7, size: 'Small', price: 2.49 },
+          { id: 8, size: 'Medium', price: 3.49 },
+          { id: 9, size: 'Large', price: 4.29 },
         ],
-        "Caesar Salad": [
-          { id: 10, size: "Small", price: 3.49 },
-          { id: 11, size: "Large", price: 4.49 },
+        'Caesar Salad': [
+          { id: 10, size: 'Small', price: 3.49 },
+          { id: 11, size: 'Large', price: 4.49 },
         ],
       },
       Drinks: {
         Coke: [
-          { id: 12, size: "Small", price: 1.99 },
-          { id: 13, size: "Medium", price: 2.49 },
-          { id: 14, size: "Large", price: 2.99 },
+          { id: 12, size: 'Small', price: 1.99 },
+          { id: 13, size: 'Medium', price: 2.49 },
+          { id: 14, size: 'Large', price: 2.99 },
         ],
-        "Ginger Ale": [
-          { id: 15, size: "Small", price: 1.99 },
-          { id: 16, size: "Medium", price: 2.49 },
-          { id: 17, size: "Large", price: 2.99 },
+        'Ginger Ale': [
+          { id: 15, size: 'Small', price: 1.99 },
+          { id: 16, size: 'Medium', price: 2.49 },
+          { id: 17, size: 'Large', price: 2.99 },
         ],
-        "Chocolate Milk Shake": [
-          { id: 18, size: "Small", price: 3.99 },
-          { id: 19, size: "Medium", price: 4.49 },
-          { id: 20, size: "Large", price: 4.99 },
+        'Chocolate Milk Shake': [
+          { id: 18, size: 'Small', price: 3.99 },
+          { id: 19, size: 'Medium', price: 4.49 },
+          { id: 20, size: 'Large', price: 4.99 },
         ],
       },
     };
@@ -146,7 +145,7 @@ class Inventory {
       this.stock[i + 1] = Math.floor(Math.random() * 16);
     }
     this.stockLock = new Promise(function (resolve, reject) {
-      resolve("unlocked");
+      resolve('unlocked');
     });
   }
 
@@ -183,12 +182,12 @@ class Inventory {
   }
 
   async getNumberOfItems() {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     return Object.keys(this.items).length;
   }
 
   async getCatalogue() {
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
     return this.catalogue;
   }
 
@@ -196,7 +195,7 @@ class Inventory {
     if (!(itemId in this.stock)) {
       throw new Error(`No item with id: ${item_id} exists in the inventory.`);
     }
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     return this.stock[itemId];
   }
@@ -213,7 +212,7 @@ class Inventory {
   }
 
   async getItem(itemId) {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     return this.items[itemId];
   }
 }
@@ -229,7 +228,8 @@ class Combo {
   }
 
   _calculatePrice() {
-    let subtotal = this.burger["price"] + this.side["price"] + this.drink["price"];
+    let subtotal =
+      this.burger['price'] + this.side['price'] + this.drink['price'];
     return Math.round(subtotal * (1 - Combo.DISCOUNT) * 100) / 100;
   }
 
@@ -249,9 +249,9 @@ function displayCatalogue(catalogue) {
   const drinks = catalogue['Drinks'];
 
   for (const burger of burgers) {
-    const item_id = burger["id"];
-    const name = burger["name"];
-    const price = burger["price"];
+    const item_id = burger['id'];
+    const name = burger['name'];
+    const price = burger['price'];
     //console.log(`${item_id}. ${name} $${price}`);
   }
 
@@ -259,9 +259,9 @@ function displayCatalogue(catalogue) {
     const sizes = sides[side];
 
     for (const size of sizes) {
-      const item_id = size["id"];
-      const size_name = size["size"];
-      const price = size["price"];
+      const item_id = size['id'];
+      const size_name = size['size'];
+      const price = size['price'];
       //console.log(`${item_id}. ${size_name} $${price}`);
     }
   }
@@ -270,9 +270,9 @@ function displayCatalogue(catalogue) {
     const sizes = drinks[beverage];
 
     for (const size of sizes) {
-      const item_id = size["id"];
-      const size_name = size["size"];
-      const price = size["price"];
+      const item_id = size['id'];
+      const size_name = size['size'];
+      const price = size['price'];
       //console.log(`${item_id}. ${size_name} $${price}`);
     }
   }
@@ -282,16 +282,18 @@ async function getOrder(inventory, numItems) {
   const order = new Order(inventory);
   const tasks = [];
 
-  console.log("Please enter the number of items that you would like to add to your order. Enter q to complete your order.");
+  console.log(
+    'Please enter the number of items that you would like to add to your order. Enter q to complete your order.'
+  );
 
   while (true) {
-    const itemId = prompt("Enter an item number:");
-    if (itemId === "q") {
+    const itemId = prompt('Enter an item number:');
+    if (itemId === 'q') {
       break;
     }
 
     if (!Number.isInteger(Number(itemId))) {
-      console.log("Please enter a valid number.");
+      console.log('Please enter a valid number.');
       continue;
     }
 
@@ -305,7 +307,7 @@ async function getOrder(inventory, numItems) {
     tasks.push(addToOrderTask);
   }
 
-  console.log("Placing order...");
+  console.log('Placing order...');
 
   for (const task of tasks) {
     // if the task returns False we could not add the item
@@ -313,7 +315,9 @@ async function getOrder(inventory, numItems) {
     const [inStock, itemId] = await task;
 
     if (!inStock) {
-      console.log(`Unfortunately item number ${itemId} is out of stock and has been removed from your order. Sorry!`);
+      console.log(
+        `Unfortunately item number ${itemId} is out of stock and has been removed from your order. Sorry!`
+      );
     }
   }
 
@@ -321,7 +325,7 @@ async function getOrder(inventory, numItems) {
 }
 
 function displayOrder(order, subTotal, tax, total) {
-  console.log("\nHere is a summary of your order: \n");
+  console.log('\nHere is a summary of your order: \n');
   console.log(order);
   console.log(`\nSubtotal: $${subTotal.toFixed(2)}`);
   console.log(`Tax: $${tax.toFixed(2)}`);
@@ -329,11 +333,13 @@ function displayOrder(order, subTotal, tax, total) {
 }
 
 function purchaseOrder(total) {
-  let answer = prompt(`Would you like to purchase this order for $${total.toFixed(2)} (yes/no)?`);
-  if (answer === "y" || answer === "yes") {
-    console.log("Thank you for your order!");
+  let answer = prompt(
+    `Would you like to purchase this order for $${total.toFixed(2)} (yes/no)?`
+  );
+  if (answer === 'y' || answer === 'yes') {
+    console.log('Thank you for your order!');
   } else {
-    console.log("No problem, please come again!");
+    console.log('No problem, please come again!');
   }
 }
 
@@ -355,13 +361,13 @@ async function main() {
       purchaseOrder(total);
     }
 
-    const orderAgain = prompt("Would you like to make another order (yes/no)?");
-    if (orderAgain !== "y" && orderAgain !== "yes") {
+    const orderAgain = prompt('Would you like to make another order (yes/no)?');
+    if (orderAgain !== 'y' && orderAgain !== 'yes') {
       break;
     }
   }
 
-  console.log("Goodbye!");
+  console.log('Goodbye!');
 }
 
 main();
