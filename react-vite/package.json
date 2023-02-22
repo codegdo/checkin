@@ -6,14 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "test": "vitest",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^1.9.2",
-    "@tanstack/react-query": "^4.24.6",
+    "@reduxjs/toolkit": "^1.9.3",
+    "@tanstack/react-query": "^4.24.10",
     "dompurify": "^3.0.0",
     "html-react-parser": "^3.0.9",
-    "joi": "^17.7.1",
+    "joi": "^17.8.3",
     "query-string": "^8.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -25,14 +26,18 @@
     "yup": "^1.0.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
     "@types/dompurify": "^2.4.0",
-    "@types/node": "^18.13.0",
+    "@types/node": "^18.14.0",
     "@types/react": "^18.0.28",
-    "@types/react-dom": "^18.0.10",
+    "@types/react-dom": "^18.0.11",
     "@types/react-redux": "^7.1.25",
     "@vitejs/plugin-react": "^3.1.0",
-    "sass": "^1.58.0",
+    "jsdom": "^21.1.0",
+    "sass": "^1.58.3",
     "typescript": "^4.9.5",
-    "vite": "^4.1.1"
+    "vite": "^4.1.4",
+    "vitest": "^0.28.5"
   }
 }

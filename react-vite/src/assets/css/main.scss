@@ -1,8 +1,8 @@
 @charset 'utf-8';
 
-// common
-@import './common/colors', './common/vars', './common/functions',
-  './common/mixins';
+// abstract
+@import './abstract/colors', './abstract/vars', './abstract/functions',
+  './abstract/mixins';
 
 // base
 @import './base/base', './base/fonts', './base/typography', './base/helpers';
@@ -13,3 +13,15 @@
 //https://sass-guidelin.es/#the-7-1-pattern
 //http://smacss.com/book/categorizing
 //https://github.com/KittyGiraudel/sass-boilerplate/blob/master/stylesheets/main.scss
+
+/*
+.modal {
+  position: fixed;
+  z-index: 100;
+  left: 50%;
+  top:50%;
+  transform: translate(-50%, -50%);
+  
+  border: 5px solid #333;
+}
+*/
