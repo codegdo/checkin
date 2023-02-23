@@ -19,3 +19,5 @@ https://thedesignsystem.guide/
 https://excalidraw.com/
 
 https://www.schemecolor.com/gray-web.php
+
+gtmetrix.com

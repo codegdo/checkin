@@ -20,3 +20,5 @@ export const InputText: React.FC<InputProps> = ({ type, name, text, value: initi
     {text && <span className='text'>{text}</span>}
   </div>
 }
+
+// (value == null) also returns true if value is undefined

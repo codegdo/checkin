@@ -4,8 +4,7 @@ import { Form, Block, Field, Grid, Group, Element } from '../../../components/fo
 import { loginApi } from './login.api'
 import { useAction, useRedirect } from '../../../hooks';
 
-
-const Login: React.FC = (): JSX.Element => {
+const LoginForm: React.FC = (): JSX.Element => {
 
   const { updateCurrent, updateUser } = useAction();
   const { status, isSuccess, data, mutate: submitLogin } = loginApi();
@@ -45,6 +44,6 @@ const Login: React.FC = (): JSX.Element => {
   </Form>;
 };
 
-export default Login;
+export default LoginForm;
 
 
