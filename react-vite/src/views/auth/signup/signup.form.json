@@ -1,1 +1,8 @@
-{}
+{
+  "id": 2,
+  "name": "signup",
+  "label": "Try now for free.",
+  "description": "Free for 30 days. No credit card required.",
+  "data": [],
+  "fields": []
+}

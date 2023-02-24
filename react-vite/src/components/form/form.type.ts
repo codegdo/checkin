@@ -36,3 +36,12 @@ export interface FormContextProps extends FormProps {
   isReset: boolean;
   onClick: (key: string) => void;
 }
+
+export interface FormData {
+  id: number;
+  name: string;
+  label: string;
+  description: string;
+  data: any;
+  fields: any;
+}

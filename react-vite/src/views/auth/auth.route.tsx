@@ -5,6 +5,7 @@ import { Partial, Template } from "../../components";
 const Index = Template(lazy(() => import('./auth.index')));
 const Login = Partial(lazy(() => import('./login/login.page')));
 const Logout = Partial(lazy(() => import('./logout/logout.page')));
+const Signup = Partial(lazy(() => import('./signup/signup.page')));
 const Verify = Partial(lazy(() => import('./verify/verify.page')));
 
 export const AuthRoute = () => {
@@ -26,8 +27,8 @@ export const AuthRoute = () => {
           element: <Logout route="auth" page="logout" />
         },
         {
-          path: '/verify',
-          element: <Verify route="auth" page="verify" />
+          path: '/signup',
+          element: <Signup route="auth" page="signup" />
         },
         {
           path: '/verify',
