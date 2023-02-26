@@ -1,35 +1,49 @@
 import React, { useEffect, useState } from 'react';
 
-import { useFormValidation, useWrapperContext } from '../../hooks';
+import { useFormKey, useFormValidation, useWrapperContext } from '../../hooks';
 import { Label, Input, KeyValue } from '../input';
 import { FormContext } from './form.context';
-import { FieldProps } from './form.type';
 
-export const Field: React.FC<FieldProps> = (props): JSX.Element => {
+export interface FieldProps {
+  id?: string | number;
+  name: string;
+  type: string;
+  label?: string;
+  description?: string;
+  className?: string;
+  value?: string;
+  isRequired?: boolean;
+  [key: string]: any;
+}
+
+const Field: React.FC<FieldProps> = (props): JSX.Element => {
+  const { form = {}, errors = {}, validation, options = {}, isSubmit, isReset } = useWrapperContext(FormContext);
   const { id, type, name, label, description, value: initialValue } = props;
-  const { form, errors, validation, options, isSubmit, isReset } = useWrapperContext(FormContext);
-  const { key } = options;
-  let keyname = (id || name).toString();
 
-  if (key && props.hasOwnProperty(key)) {
-    keyname = (key === 'id' || key === 'name') ? props[key as string] : keyname;
-  }
+  // const { keyName } = options;
+  // let key = (id || name).toString();
+
+  // if (keyName && props.hasOwnProperty(keyName)) {
+  //   key = (keyName === 'id' || keyName === 'name') ? props[keyName as string] : key;
+  // }
+
+  const key = useFormKey(options?.keyName, `${id}`, name);
 
   const { isError, setValidation, fieldValidation, formReset } = useFormValidation({ form, validation, callbackError });
 
   useEffect(() => {
-    form[keyname] = initialValue ?? '';
-    setValidation(keyname, props);
-  }, []);
+    form[key] = initialValue ?? '';
+    setValidation(key, props);
+  }, [key]);
 
   useEffect(() => {
-    isSubmit && fieldValidation(keyname);
+    isSubmit && fieldValidation(key);
   }, [isSubmit]);
 
   useEffect(() => {
     if (isReset) {
-      form[keyname] = initialValue ?? '';
-      delete errors[keyname];
+      form[key] = initialValue ?? '';
+      delete errors[key];
       formReset();
     }
   }, [isReset]);
@@ -38,22 +52,26 @@ export const Field: React.FC<FieldProps> = (props): JSX.Element => {
     console.log('ERROR', errors);
   }, [isError]);
 
-  function callbackError(keyname: string, message: string) {
-    errors[keyname] = message;
+  function callbackError(key: string, message: string) {
+    errors[key] = message;
   }
 
   const handleChange = ({ value }: KeyValue) => {
-    form[keyname] = value;
-    delete errors[keyname];
-    fieldValidation(keyname);
+    form[key] = value;
+    delete errors[key];
+    fieldValidation(key);
     console.log('WATCH', form);
   }
 
-  return <div className={isError ? 'error' : ''}>
-    <Label label={label} description={description} />
-    <Input type={type} name={name} value={initialValue} isReset={isReset} onChange={handleChange} />
-    {
-      isError && <span>{errors[name]}</span>
-    }
-  </div>
+  return (
+    <div className={isError ? 'error' : ''}>
+      <Label label={label} description={description} />
+      <Input type={type} name={name} value={initialValue} isReset={isReset} onChange={handleChange} />
+      {
+        isError && <span>{errors[key]}</span>
+      }
+    </div>
+  );
 }
+
+export default Field;

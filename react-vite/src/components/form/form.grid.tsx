@@ -5,7 +5,7 @@ interface GridProps {
   data?: any
 }
 
-export const Grid: React.FC<PropsWithChildren<GridProps>> = ({ children }): JSX.Element => {
+const Grid: React.FC<PropsWithChildren<GridProps>> = ({ children }): JSX.Element => {
 
   const columns = useMemo(() => {
     const cols: any[] = [];
@@ -28,3 +28,5 @@ export const Grid: React.FC<PropsWithChildren<GridProps>> = ({ children }): JSX.
   //return <Table columns={[...columns]} />
   return <></>
 }
+
+export default Grid;

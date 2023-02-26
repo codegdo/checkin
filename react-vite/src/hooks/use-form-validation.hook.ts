@@ -64,6 +64,7 @@ export const useFormValidation = ({
   };
 
   const fieldValidation = (key: string) => {
+    console.log('KEY', key);
     setTimer(key);
   };
 

@@ -5,10 +5,12 @@ interface BlockProps {
   data?: any
 }
 
-export const Group: React.FC<PropsWithChildren<BlockProps>> = ({ children, data }): JSX.Element => {
+const Group: React.FC<PropsWithChildren<BlockProps>> = ({ children, data }): JSX.Element => {
   return <div>
     {
       children ? children : <Render data={data} />
     }
   </div>
 }
+
+export default Group;

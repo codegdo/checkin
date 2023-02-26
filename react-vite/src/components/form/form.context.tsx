@@ -1,15 +1,29 @@
 import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 
-import { FormContextProps, FormProps } from './form.type';
-import { validationHelper } from '../../helpers';
+import { validationHelper, ObjectSchema } from '../../helpers';
 import { useFormValidation } from '../../hooks';
+import { FormProps } from './form.component';
+import { BlockData, FieldData } from './form.type';
+
+export interface FormContextProps {
+  data?: (BlockData | FieldData)[];
+  form?: { [key: string]: any };
+  errors?: { [key: string]: string };
+  validation: { schema: ObjectSchema };
+  status: string | undefined;
+  options?: { keyName?: string };
+
+  isSubmit: boolean;
+  isReset: boolean;
+  onClick: (key: string) => void;
+}
 
 const validationSchema = {
   schema: validationHelper.objectSchema()
 }
 
 const initialProps: FormContextProps = {
-  data: null,
+  data: [],
   form: {},
   errors: {},
   validation: { ...validationSchema },
@@ -81,9 +95,11 @@ export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, sta
     }
   }, []);
 
-  return <form onSubmit={(e) => e.preventDefault()}>
-    <FormContext.Provider value={{ data, form, errors, validation, status, options, isSubmit, isReset, onClick }}>
-      {children}
-    </FormContext.Provider>
-  </form>
+  return (
+    <form onSubmit={(e) => e.preventDefault()}>
+      <FormContext.Provider value={{ data, form, errors, validation, status, options, isSubmit, isReset, onClick }}>
+        {children}
+      </FormContext.Provider>
+    </form>
+  );
 }
