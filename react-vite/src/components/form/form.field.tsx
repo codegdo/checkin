@@ -17,18 +17,10 @@ export interface FieldProps {
 }
 
 const Field: React.FC<FieldProps> = (props): JSX.Element => {
-  const { form = {}, errors = {}, validation, options = {}, isSubmit, isReset } = useWrapperContext(FormContext);
+
   const { id, type, name, label, description, value: initialValue } = props;
-
-  // const { keyName } = options;
-  // let key = (id || name).toString();
-
-  // if (keyName && props.hasOwnProperty(keyName)) {
-  //   key = (keyName === 'id' || keyName === 'name') ? props[keyName as string] : key;
-  // }
-
+  const { form = {}, errors = {}, validation, options = {}, isSubmit, isReset } = useWrapperContext(FormContext);
   const key = useFormKey(options?.keyName, `${id}`, name);
-
   const { isError, setValidation, fieldValidation, formReset } = useFormValidation({ form, validation, callbackError });
 
   useEffect(() => {
@@ -68,7 +60,7 @@ const Field: React.FC<FieldProps> = (props): JSX.Element => {
       <Label label={label} description={description} />
       <Input type={type} name={name} value={initialValue} isReset={isReset} onChange={handleChange} />
       {
-        isError && <span>{errors[key]}</span>
+        isError && <span>{errors[key].replace((options.keyName === 'id' ? `${id}` : name), (label || name))}</span>
       }
     </div>
   );

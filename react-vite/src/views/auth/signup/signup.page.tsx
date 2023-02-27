@@ -11,7 +11,7 @@ const Signup: React.FC = (): JSX.Element => {
 
   console.log(form);
 
-  return <Form title={form?.label} data={form.data} />;
+  return <Form title={form?.label} data={form.data} options={{ keyName: 'id' }} />;
 }
 
 export default Signup;
