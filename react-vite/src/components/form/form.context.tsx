@@ -1,32 +1,29 @@
 import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 
 import { validationHelper, ObjectSchema } from '../../helpers';
-import { useFormValidation } from '../../hooks';
 import { FormProps } from './form.component';
 import { BlockData, FieldData } from './form.type';
 
 export interface FormContextProps {
   data?: (BlockData | FieldData)[];
   form?: { [key: string]: any };
-  errors?: { [key: string]: string };
+  error?: { [key: string]: string };
   validation: { schema: ObjectSchema };
   status: string | undefined;
-  options?: { keyName?: string };
+  options?: { keyOption?: string };
 
   isSubmit: boolean;
   isReset: boolean;
   onClick: (key: string) => void;
 }
 
-const validationSchema = {
-  schema: validationHelper.objectSchema()
-}
+const schema = validationHelper.objectSchema();
 
 const initialProps: FormContextProps = {
   data: [],
   form: {},
-  errors: {},
-  validation: { ...validationSchema },
+  error: {},
+  validation: { schema },
   status: '',
   options: {},
   isSubmit: false,
@@ -39,65 +36,60 @@ export const FormContext = React.createContext<FormContextProps>(initialProps);
 export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, status, options = {}, onCallback, children }) => {
 
   const { current: form } = useRef<{ [key: string]: string }>({});
-  const { current: errors } = useRef<{ [key: string]: string }>({});
-  const { current: validation } = useRef({ ...validationSchema });
-  const { formValidation } = useFormValidation({ form, validation, callbackError });
+  const { current: error } = useRef<{ [key: string]: string }>({});
+  const { current: validation } = useRef({ schema });
 
-  const [isSubmit, setSubmit] = useState(false);
-  const [isReset, setReset] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [isReset, setIsReset] = useState(false);
 
   useEffect(() => {
-
     if (isSubmit) {
-      if (Object.keys(errors).length === 0) {
-        console.log('SUBMIT', form);
-        onCallback && onCallback('submit', form);
+      if (Object.keys(error).length === 0) {
+        onCallback?.('submit', form);
       }
 
       console.log('WATCH', form);
-      console.log('ERROR', errors);
+      console.log('ERROR', error);
     }
 
-    return () => setSubmit(false)
+    return () => setIsSubmit(false)
   }, [isSubmit]);
 
   useEffect(() => {
     if (isReset) {
       console.log('WATCH', form);
-      console.log('ERROR', errors);
+      console.log('ERROR', error);
     }
 
-    return () => setReset(false);
+    return () => setIsReset(false);
   }, [isReset]);
-
-  function callbackError(key: string, message: string) {
-    errors[key] = message;
-  }
 
   const onClick = useCallback(async (key: string) => {
     switch (key) {
       case 'submit':
         // validation
-        const initialErrors = Object.keys(errors).length === 0;
+        const initialErrors = Object.keys(error).length === 0;
 
         if (initialErrors) {
-          await formValidation();
+          const errors = await validationHelper.checkValidation(validation, form);
+          for (const [key] of Object.entries(errors)) {
+            error[key] = errors[key];
+          }
         }
 
-        setSubmit(true);
-
+        setIsSubmit(true);
         break;
       case 'reset':
-        setReset(true);
+        setIsReset(true);
         break;
       default:
-        onCallback && onCallback(key, form);
+        onCallback?.(key, form);
     }
-  }, []);
+  }, [onCallback]);
 
   return (
     <form onSubmit={(e) => e.preventDefault()}>
-      <FormContext.Provider value={{ data, form, errors, validation, status, options, isSubmit, isReset, onClick }}>
+      <FormContext.Provider value={{ data, form, error, validation, status, options, isSubmit, isReset, onClick }}>
         {children}
       </FormContext.Provider>
     </form>

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { validationHelper } from '../../helpers';
 
-import { useFormKey, useFormValidation, useWrapperContext } from '../../hooks';
+import { useWrapperContext } from '../../hooks';
 import { Label, Input, KeyValue } from '../input';
 import { FormContext } from './form.context';
 
@@ -16,52 +17,71 @@ export interface FieldProps {
   [key: string]: any;
 }
 
-const Field: React.FC<FieldProps> = (props): JSX.Element => {
+const Field: React.FC<FieldProps> = ({ id, type, name, label, description, value, isRequired }): JSX.Element => {
+  const { form = {}, error = {}, validation, options, isSubmit, isReset } = useWrapperContext(FormContext);
+  const [isError, setIsError] = useState(false);
+  const timerRef = useRef<number | null>(null);
 
-  const { id, type, name, label, description, value: initialValue } = props;
-  const { form = {}, errors = {}, validation, options = {}, isSubmit, isReset } = useWrapperContext(FormContext);
-  const key = useFormKey(options?.keyName, `${id}`, name);
-  const { isError, setValidation, fieldValidation, formReset } = useFormValidation({ form, validation, callbackError });
+  const key = useMemo(() => (options?.keyOption && options?.keyOption === 'id' && id) ? `${id}` : name, [options, id, name]);
+  const schema = useMemo(() => validationHelper.fieldSchema({ type, isRequired }), [type, isRequired]);
 
-  useEffect(() => {
-    form[key] = initialValue ?? '';
-    setValidation(key, props);
-  }, [key]);
+  const validateField = useCallback(async () => {
+    const errors = await validationHelper.checkValidation(validation, form, key);
+    if (errors[key]) {
+      error[key] = errors[key];
+      setIsError(true);
+    } else {
+      setIsError(false);
+    }
+  }, [form, key, error, validation]);
 
-  useEffect(() => {
-    isSubmit && fieldValidation(key);
-  }, [isSubmit]);
+  useMemo(() => {
+    form[key] = value;
+    validation.schema = validation.schema.shape({ [key]: schema });
+  }, [form, key, schema, validation, value]);
 
   useEffect(() => {
     if (isReset) {
-      form[key] = initialValue ?? '';
-      delete errors[key];
-      formReset();
+      form[key] = value;
+      delete error[key];
+      setIsError(false);
     }
-  }, [isReset]);
+  }, [isReset, form, key, value, error]);
 
   useEffect(() => {
-    console.log('ERROR', errors);
-  }, [isError]);
+    if (isSubmit) {
+      validateField();
+    }
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [isSubmit, validateField]);
 
-  function callbackError(key: string, message: string) {
-    errors[key] = message;
-  }
+  const errorMessage = useMemo(() => {
+    if (isError) {
+      const errorText = error[key]!;
+      const errorKey = options?.keyOption === 'id' ? `${id ?? name}` : name;
+      const fieldName = label ?? name;
+      return errorText.replace(errorKey, fieldName);
+    }
+  }, [isError, error, key, options?.keyOption, id, name, label]);
 
-  const handleChange = ({ value }: KeyValue) => {
+  const handleChange = useCallback(({ value }: KeyValue) => {
     form[key] = value;
-    delete errors[key];
-    fieldValidation(key);
-    console.log('WATCH', form);
-  }
+    delete error[key];
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+    timerRef.current = window.setTimeout(validateField, 0);
+  }, [form, key, error, validateField]);
 
   return (
     <div className={isError ? 'error' : ''}>
       <Label label={label} description={description} />
-      <Input type={type} name={name} value={initialValue} isReset={isReset} onChange={handleChange} />
-      {
-        isError && <span>{errors[key].replace((options.keyName === 'id' ? `${id}` : name), (label || name))}</span>
-      }
+      <Input type={type} name={name} value={form[key] ?? value} isReset={isReset} onChange={handleChange} />
+      {isError && <span>{errorMessage}</span>}
     </div>
   );
 }

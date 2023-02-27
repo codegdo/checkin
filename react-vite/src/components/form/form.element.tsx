@@ -22,7 +22,7 @@ const Element: React.FC<PropsWithChildren<ElementProps>> = ({ type, name, label,
         name={name}
         className={className}
         text={label || value}
-        disabled={status == 'loading' ? true : false}
+        disabled={status === 'loading' ? true : false}
         onClick={onClick}>{children}</Button>
     default:
       return <span>Element not found</span>

@@ -7,6 +7,9 @@ export type ObjectSchema = Yup.ObjectSchema<Yup.AnyObject, {}>;
 //export type ValidationError = Joi.ValidationError;
 export type ValidationError = Yup.ValidationError;
 
+//
+export type FieldSchema = Yup.NumberSchema<number | undefined, Yup.AnyObject, undefined, ""> | Yup.StringSchema<string | undefined, Yup.AnyObject, undefined, "">;
+
 export interface ObjectValidationSchema {
   schema: ObjectSchema;
 }
@@ -51,19 +54,19 @@ class ValidationHelper {
       });
   }
 
-  validationField(field: any) {
+  fieldSchema(field: any) {
     let validation = null;
 
     if (field.type == 'number') {
-      validation = this.validateNumber(field);
+      validation = this.numberSchema(field);
     } else {
-      validation = this.validateString(field);
+      validation = this.stringSchema(field);
     }
 
     return validation;
   }
 
-  private validateNumber({ type, isRequired }: any) {
+  private numberSchema({ type, isRequired }: any) {
     //let num = Joi.number();
     let num = Yup.number();
 
@@ -73,7 +76,7 @@ class ValidationHelper {
     return num;
   }
 
-  private validateString({ type, name, isRequired }: any) {
+  private stringSchema({ type, name, isRequired }: any) {
     //let str = Joi.string();
     let str = Yup.string();
 

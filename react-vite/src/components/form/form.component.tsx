@@ -9,7 +9,7 @@ export interface FormProps {
   data?: (BlockData | FieldData)[];
   status?: string | undefined;
   options?: {
-    keyName?: string;
+    keyOption?: string;
   };
   onCallback?: (key?: string, values?: any) => void;
 }
