@@ -17,7 +17,7 @@ export interface FieldProps {
   [key: string]: any;
 }
 
-const Field: React.FC<FieldProps> = ({ id, type, name, label, description, value, isRequired }): JSX.Element => {
+const FormField: React.FC<FieldProps> = ({ id, type, name, label, description, value, isRequired }): JSX.Element => {
   const { form = {}, error = {}, validation, options, isSubmit, isReset } = useWrapperContext(FormContext);
   const [isError, setIsError] = useState(false);
   const timerRef = useRef<number | null>(null);
@@ -86,4 +86,4 @@ const Field: React.FC<FieldProps> = ({ id, type, name, label, description, value
   );
 }
 
-export default Field;
+export default FormField;

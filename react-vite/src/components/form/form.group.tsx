@@ -1,16 +1,16 @@
 import React, { PropsWithChildren } from 'react';
-import { Render } from './form.render';
+import { FormRender } from './form.render';
 
-interface BlockProps {
+interface BlockProps extends PropsWithChildren {
   data?: any
 }
 
-const Group: React.FC<PropsWithChildren<BlockProps>> = ({ children, data }): JSX.Element => {
+const FormGroup: React.FC<BlockProps> = ({ children, data }): JSX.Element => {
   return <div>
     {
-      children ? children : <Render data={data} />
+      children ? children : <FormRender data={data} />
     }
   </div>
 }
 
-export default Group;
+export default FormGroup;

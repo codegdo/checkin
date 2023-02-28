@@ -6,25 +6,19 @@ import Grid from './form.grid';
 import Group from './form.group';
 import { BlockData, DataType, FieldData } from './form.type';
 
-interface RenderProps {
+interface RenderProps extends PropsWithChildren {
   data?: (BlockData | FieldData)[]
 }
 
-export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ data = [], children }): JSX.Element | null => {
+export const FormRender: React.FC<RenderProps> = ({ data = [], children }): JSX.Element | null => {
   return (
     <>
       {
         children ? children : data.map((item, i, list) => {
-          const { type, className, data } = item;
+          const { dataType } = item;
 
-          switch (item?.dataType) {
-            case DataType.BLOCK:
-              return <Block
-                key={i}
-                type={type}
-                className={className}
-                data={data as (BlockData | FieldData)[]}
-              />;
+          switch (dataType) {
+            case DataType.BLOCK: return <Block key={i} {...item} />;
             case DataType.ELEMENT: return <Element key={i} {...item} />;
             case DataType.FIELD: return <Field key={i} {...item} />;
             case DataType.GROUP: return <Group key={i} {...item} />;

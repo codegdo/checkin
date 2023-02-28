@@ -7,6 +7,7 @@ const Login = Partial(lazy(() => import('./login/login.page')));
 const Logout = Partial(lazy(() => import('./logout/logout.page')));
 const Signup = Partial(lazy(() => import('./signup/signup.page')));
 const Verify = Partial(lazy(() => import('./verify/verify.page')));
+const Setup = Partial(lazy(() => import('./setup/setup.page')));
 
 export const AuthRoute = () => {
 
@@ -33,6 +34,10 @@ export const AuthRoute = () => {
         {
           path: '/verify',
           element: <Verify route="auth" page="verify" />
+        },
+        {
+          path: '/setup',
+          element: <Setup route="auth" page="setup" />
         }
       ]
     },

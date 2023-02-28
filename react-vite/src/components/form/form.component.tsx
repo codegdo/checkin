@@ -1,9 +1,9 @@
 import React, { PropsWithChildren } from 'react';
 import { FormProvider } from './form.context';
-import { Render } from './form.render';
+import { FormRender } from './form.render';
 import { BlockData, FieldData } from './form.type';
 
-export interface FormProps {
+export interface FormProps extends PropsWithChildren {
   title?: string;
   description?: string;
   data?: (BlockData | FieldData)[];
@@ -14,10 +14,10 @@ export interface FormProps {
   onCallback?: (key?: string, values?: any) => void;
 }
 
-const Form: React.FC<PropsWithChildren<FormProps>> = ({ children, ...props }): JSX.Element => {
+const Form: React.FC<FormProps> = ({ children, ...props }): JSX.Element => {
   return (
     <FormProvider {...props}>
-      {children ? <Render>{children}</Render> : <Render data={props.data} />}
+      {children ? <FormRender>{children}</FormRender> : <FormRender data={props.data} />}
     </FormProvider>
   );
 };

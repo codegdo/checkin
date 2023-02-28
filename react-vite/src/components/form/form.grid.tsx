@@ -1,11 +1,11 @@
 import React, { Children, isValidElement, PropsWithChildren, useMemo } from 'react';
 //import { Table } from '../table/table.component';
 
-interface GridProps {
+interface GridProps extends PropsWithChildren {
   data?: any
 }
 
-const Grid: React.FC<PropsWithChildren<GridProps>> = ({ children }): JSX.Element => {
+const FormGrid: React.FC<GridProps> = ({ children }): JSX.Element => {
 
   const columns = useMemo(() => {
     const cols: any[] = [];
@@ -29,4 +29,4 @@ const Grid: React.FC<PropsWithChildren<GridProps>> = ({ children }): JSX.Element
   return <></>
 }
 
-export default Grid;
+export default FormGrid;

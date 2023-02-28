@@ -4,7 +4,7 @@ import { useWrapperContext } from '../../hooks';
 import { Button } from '../element/element.button';
 import { FormContext } from './form.context';
 
-export interface ElementProps {
+export interface ElementProps extends PropsWithChildren {
   type?: string;
   name?: string;
   label?: string;
@@ -12,7 +12,7 @@ export interface ElementProps {
   className?: string;
 }
 
-const Element: React.FC<PropsWithChildren<ElementProps>> = ({ type, name, label, value, className, children }): JSX.Element => {
+const FormElement: React.FC<ElementProps> = ({ type, name, label, value, className, children }): JSX.Element => {
 
   const { status, onClick } = useWrapperContext(FormContext);
 
@@ -29,4 +29,4 @@ const Element: React.FC<PropsWithChildren<ElementProps>> = ({ type, name, label,
   }
 }
 
-export default Element;
+export default FormElement;

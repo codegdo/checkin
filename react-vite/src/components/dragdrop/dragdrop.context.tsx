@@ -6,12 +6,7 @@ interface DragDropContextValue {
   dispatch: Dispatch<Action>;
 }
 
-interface DragDropProviderProps extends PropsWithChildren<DragDropProps> {
-  data: {
-    data: any[];
-    fields: any[];
-  };
-}
+interface DragDropProviderProps extends PropsWithChildren<DragDropProps> { }
 
 interface State {
   data?: any[];
@@ -33,7 +28,7 @@ const reducer = (state: State, action: Action) => {
   }
 }
 
-export const DragDropProvider: React.FC<DragDropProviderProps> = ({ children, data, ...props }) => {
+const DragDropProvider: React.FC<DragDropProviderProps> = ({ children, data, ...props }) => {
   const [state, dispatch] = useReducer(reducer, {});
   const { current } = useRef({});
 
@@ -46,4 +41,6 @@ export const DragDropProvider: React.FC<DragDropProviderProps> = ({ children, da
     {children}
   </DragDropContext.Provider>
 }
+
+export default DragDropProvider;
 

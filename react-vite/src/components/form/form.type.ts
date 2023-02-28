@@ -14,6 +14,7 @@ export enum BlockType {
 }
 
 export enum DataType {
+  AREA = 'area',
   BLOCK = 'block',
   ELEMENT = 'element',
   FIELD = 'field',
@@ -32,7 +33,7 @@ export interface Data {
 export interface FieldData extends Data {
   type: BlockType | FieldType | string;
   dataType: DataType;
-  data: unknown[];
+  data: any[];
   position?: number;
   parentId?: number | string;
 }

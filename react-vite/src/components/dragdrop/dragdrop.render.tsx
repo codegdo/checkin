@@ -1,18 +1,29 @@
-export const DragDropRender: React.FC = (): JSX.Element => {
-  const context = useWrapperContext(DragDropContext);
-  const data = formHelper.mapField(context?.state?.data);
+import React, { memo } from 'react';
+import DropBlock from './drop.block';
 
-  console.log(data);
+interface DragDropItem {
+  id: string;
+  dataType: 'block';
+}
+export interface DragDropRenderProps {
+  data: DragDropItem[];
+}
 
+const DragDropRender: React.FC<DragDropRenderProps> = memo(({ data = [] }): JSX.Element => {
   return (
-    <DragDropBlock
-      id="dropzone"
-      className="form"
-      name="block"
-      dataType="dropzone"
-      {...context}
-    >
-      <Render data={data} />
-    </DragDropBlock>
+    <>
+      {
+        data.map((item: any) => {
+          const { id, dataType } = item;
+
+          switch (dataType) {
+            case 'block': return <DropBlock key={id} dataType={dataType} />
+            default: return null;
+          }
+        })
+      }
+    </>
   );
-};
+});
+
+export default DragDropRender;

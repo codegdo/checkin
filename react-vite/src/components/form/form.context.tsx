@@ -33,7 +33,7 @@ const initialProps: FormContextProps = {
 
 export const FormContext = React.createContext<FormContextProps>(initialProps);
 
-export const FormProvider: React.FC<PropsWithChildren<FormProps>> = ({ data, status, options = {}, onCallback, children }) => {
+export const FormProvider: React.FC<FormProps> = ({ data, status, options = {}, onCallback, children }) => {
 
   const { current: form } = useRef<{ [key: string]: string }>({});
   const { current: error } = useRef<{ [key: string]: string }>({});
