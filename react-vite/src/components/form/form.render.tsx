@@ -1,32 +1,34 @@
-import React, { PropsWithChildren } from 'react';
-import Block from './form.block';
-import Field from './form.field';
-import Element from './form.element';
-import Grid from './form.grid';
-import Group from './form.group';
-import { BlockData, DataType, FieldData } from './form.type';
+import React, { memo, PropsWithChildren } from 'react';
+import FormBlock from './form.block';
+import FormField from './form.field';
+import FormElement from './form.element';
+import FormGrid from './form.grid';
+import FormGroup from './form.group';
+import { DataType, Element } from './form.type';
 
-interface RenderProps extends PropsWithChildren {
-  data?: (BlockData | FieldData)[]
+
+
+interface FormRenderProps extends PropsWithChildren {
+  data?: Element[]
 }
 
-export const FormRender: React.FC<RenderProps> = ({ data = [], children }): JSX.Element | null => {
+export const FormRender: React.FC<FormRenderProps> = memo(({ data = [], children }): JSX.Element => {
   return (
     <>
       {
-        children ? children : data.map((item, i, list) => {
+        children ? children : data.map((item, i) => {
           const { dataType } = item;
 
           switch (dataType) {
-            case DataType.BLOCK: return <Block key={i} {...item} />;
-            case DataType.ELEMENT: return <Element key={i} {...item} />;
-            case DataType.FIELD: return <Field key={i} {...item} />;
-            case DataType.GROUP: return <Group key={i} {...item} />;
-            case DataType.GRID: return <Grid key={i} {...item} />;
+            case DataType.Block: return <FormBlock key={i} {...item} />;
+            case DataType.Element: return <FormElement key={i} {...item} />;
+            case DataType.Field: return <FormField key={i} {...item} />;
+            case DataType.Group: return <FormGroup key={i} {...item} />;
+            case DataType.Grid: return <FormGrid key={i} {...item} />;
             default: return null;
           }
         })
       }
     </>
   );
-}
+});

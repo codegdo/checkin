@@ -1,16 +1,20 @@
 import React, { PropsWithChildren } from 'react';
 import { FormProvider } from './form.context';
 import { FormRender } from './form.render';
-import { BlockData, FieldData } from './form.type';
+import { Element } from './form.type';
+
+interface FormOptions {
+  keyOption?: string;
+}
 
 export interface FormProps extends PropsWithChildren {
   title?: string;
   description?: string;
-  data?: (BlockData | FieldData)[];
+  className?: string;
+  data?: Element[];
+
   status?: string | undefined;
-  options?: {
-    keyOption?: string;
-  };
+  options?: FormOptions;
   onCallback?: (key?: string, values?: any) => void;
 }
 

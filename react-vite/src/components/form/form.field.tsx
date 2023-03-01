@@ -14,7 +14,6 @@ export interface FieldProps {
   className?: string;
   value?: string;
   isRequired?: boolean;
-  [key: string]: any;
 }
 
 const FormField: React.FC<FieldProps> = ({ id, type, name, label, description, value, isRequired }): JSX.Element => {

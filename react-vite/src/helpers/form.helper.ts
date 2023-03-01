@@ -1,8 +1,5 @@
-import { BlockData, FieldData, FormData } from '../components/form';
-import { arrayToObjectKeyGroup, mapToParent } from '../utils';
+import { Element, FormData } from '../components/form';
 import UtilHelper, { util } from './util.helper';
-
-type Item = BlockData | FieldData;
 
 class FormHelper {
   private util: UtilHelper;
@@ -12,23 +9,24 @@ class FormHelper {
   }
 
   normalize(form: FormData) {
-    const { data = [], fields = [] } = this.util.cloneDeep(form);
+    const { data = [], formFields = [] } = this.util.cloneDeep(form);
 
-    const list: Item[] = [];
+    const list: Element[] = [];
 
-    const group: { [key: string]: Item[] } = this.util.groupBy(
-      fields,
+    const group: Record<string, Element[]> = this.util.groupBy(
+      formFields,
       (item) => item?.parentId as string
     );
 
     for (const key in group) {
-      const item = data.find((item: Item) => `${item.id}` === key);
+      const item = data.find((item: Element) => `${item.id}` === key);
       if (item) {
-        item.data = [...item.data, ...group[key]];
+        item.data = item.data ?? [];
+        item.data.push(...group[key]);
       }
     }
 
-    data.forEach((item: Item) => {
+    data.forEach((item: Element) => {
       return this.mapToParent(list, item);
     });
 
@@ -39,9 +37,9 @@ class FormHelper {
 
   mapField(data: any) {
     const _data = JSON.parse(JSON.stringify(data));
-    const list: Item[] = [];
+    const list: Element[] = [];
 
-    _data.forEach((item: Item, index: number) => {
+    _data.forEach((item: Element, index: number) => {
       item.position = index;
       return this.mapToParent(list, item);
     });
@@ -49,7 +47,7 @@ class FormHelper {
     return list;
   }
 
-  mapToParent(list: Item[], item: Item): boolean {
+  mapToParent(list: Element[], item: Element): boolean {
     if (item.parentId == null) {
       list.push({ ...item });
       return true;
@@ -63,7 +61,7 @@ class FormHelper {
 
       if (
         i.dataType === 'block' &&
-        this.mapToParent(i.data as Item[], { ...item })
+        this.mapToParent(i.data as Element[], { ...item })
       ) {
         return true;
       }

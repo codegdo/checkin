@@ -1,18 +1,19 @@
 import React, { PropsWithChildren } from 'react';
-import { DataType, useDragDrop } from '../../hooks';
+import { useDragDrop, useWrapperContext } from '../../hooks';
+import { DragDropContext } from './dragdrop.context';
+
 import DragDropRender from './dragdrop.render';
+import { DndItem, DndItemType } from './dragdrop.type';
 
-interface DropBlockProps extends PropsWithChildren {
-  dataType: string,
-  data?: []
-}
+const DropBlock: React.FC<PropsWithChildren<DndItem>> = ({ children, ...item }): JSX.Element => {
+  const { className, data = [] } = item;
+  const context = useWrapperContext(DragDropContext);
+  const { ref, drag, drop } = useDragDrop(item, DndItemType);
 
-const DropBlock: React.FC<DropBlockProps> = ({ dataType, data = [], children }): JSX.Element => {
-  const { ref, drag, drop } = useDragDrop({ dataType });
   drag(drop(ref));
 
   return (
-    <div ref={ref} style={{ width: '500px', height: '500px', border: '1px solid #ddd' }}>
+    <div ref={ref} className={className}>
       {children ? children : <DragDropRender data={data} />}
     </div>
   );

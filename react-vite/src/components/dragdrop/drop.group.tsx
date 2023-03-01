@@ -1,6 +1,13 @@
 import React from 'react';
 
-const DropGroup: React.FC = (): JSX.Element => {
+import { DndItem } from './dragdrop.type';
+
+interface DropGroupProps {
+  dataType: string,
+  data?: DndItem[];
+}
+
+const DropGroup: React.FC<DropGroupProps> = (): JSX.Element => {
 
   return (
     <></>

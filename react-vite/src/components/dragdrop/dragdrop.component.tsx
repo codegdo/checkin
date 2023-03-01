@@ -4,8 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 
 import DragDropProvider from './dragdrop.context';
-import DragDropRender from './dragdrop.render';
-import DragDropEditor from './dragdrop.editor';
+import DragEditor from './drag.editor';
 import DropArea from './drop.area';
 import DragArea from './drag.area';
 
@@ -21,7 +20,7 @@ const DragDrop: React.FC<DragDropProps> = ({ children, ...props }): JSX.Element 
       <DragDropProvider {...props}>
         <DropArea />
         <DragArea>{children}</DragArea>
-        <DragDropEditor />
+        <DragEditor />
       </DragDropProvider>
     </DndProvider>
   )

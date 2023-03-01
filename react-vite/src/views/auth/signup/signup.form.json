@@ -101,7 +101,7 @@
       "placeholderId": null
     }
   ],
-  "fields": [
+  "formFields": [
     {
       "id": 3,
       "className": "f-3",

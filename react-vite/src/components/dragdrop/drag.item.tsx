@@ -1,11 +1,16 @@
-import React from 'react';
-import { DataType, useDragDrop } from '../../hooks';
+import React, { PropsWithChildren } from 'react';
+import { useDragDrop } from '../../hooks';
+import { DndItem } from './dragdrop.type';
 
-const DragItem: React.FC = (): JSX.Element => {
-  const { drag } = useDragDrop({ dataType: DataType.BLOCK });
+const DragItem: React.FC<PropsWithChildren<DndItem>> = ({ children, ...item }) => {
+  const { name, label, className = 'drag-item' } = item;
+
+  const { drag } = useDragDrop(item);
 
   return (
-    <div ref={drag}>Drag Item</div>
+    <div ref={drag} className={className}>
+      {children ?? label ?? name ?? 'Drag Item'}
+    </div>
   );
 };
 

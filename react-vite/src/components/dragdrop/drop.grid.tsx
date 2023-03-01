@@ -1,6 +1,10 @@
 import React from 'react';
 
-const DropGrid: React.FC = (): JSX.Element => {
+import { DndItem } from './dragdrop.type';
+
+type DropGridProps = DndItem;
+
+const DropGrid: React.FC<DropGridProps> = (): JSX.Element => {
 
   return (
     <></>

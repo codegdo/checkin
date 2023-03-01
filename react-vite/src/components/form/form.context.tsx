@@ -2,10 +2,10 @@ import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } fr
 
 import { validationHelper, ObjectSchema } from '../../helpers';
 import { FormProps } from './form.component';
-import { BlockData, FieldData } from './form.type';
+import { Element } from './form.type';
 
 export interface FormContextProps {
-  data?: (BlockData | FieldData)[];
+  data?: Element[];
   form?: { [key: string]: any };
   error?: { [key: string]: string };
   validation: { schema: ObjectSchema };

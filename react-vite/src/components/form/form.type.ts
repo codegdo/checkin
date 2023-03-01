@@ -1,52 +1,55 @@
-export enum FieldType {
-  TEXT = 'text',
-  NUMBER = 'number',
-  PASSWORD = 'password',
-  EMAIL = 'email',
-  DATE = 'date',
-  CHECKBOX = 'checkbox',
-  RADIO = 'radio',
-}
-
-export enum BlockType {
-  DIV = 'div',
-  BUTTON = 'button',
+export enum ElementType {
+  Text = 'text',
+  Number = 'number',
+  Password = 'password',
+  Email = 'email',
+  Date = 'date',
+  Checkbox = 'checkbox',
+  Radio = 'radio',
+  Div = 'div',
+  Button = 'button',
 }
 
 export enum DataType {
-  AREA = 'area',
-  BLOCK = 'block',
-  ELEMENT = 'element',
-  FIELD = 'field',
-  GROUP = 'group',
-  GRID = 'grid',
+  Area = 'area',
+  Placeholder = 'placeholder',
+  Block = 'block',
+  Element = 'element',
+  Field = 'field',
+  Group = 'group',
+  Grid = 'grid',
 }
 
-export interface Data {
-  id: number;
+export type Element = Block | Field;
+
+interface Data {
+  id?: number | string;
+  name: string;
+  label?: string;
+  type: ElementType | string;
+  dataType: DataType;
+  data?: Element[];
+  className?: string;
+  value?: string;
+  position?: number;
+  parentId?: number | string;
+}
+
+export interface Field extends Data {
+  description?: string;
+}
+
+export interface Block extends Data {
+  placeholderId?: number | string;
+}
+
+export interface FormData {
+  id: number | string;
   name: string;
   label?: string;
   description?: string;
   className?: string;
-}
-
-export interface FieldData extends Data {
-  type: BlockType | FieldType | string;
-  dataType: DataType;
-  data: any[];
-  position?: number;
-  parentId?: number | string;
-}
-
-export interface BlockData extends Data {
-  type: BlockType | FieldType | string;
-  dataType: DataType;
-  data: BlockData[] | FieldData[];
-  position?: number;
-  parentId?: number | string;
-}
-
-export interface FormData extends Data {
-  data: BlockData[] | FieldData[];
-  fields: FieldData[];
+  data: Element[];
+  fields: Field[];
+  formFields: Field[];
 }

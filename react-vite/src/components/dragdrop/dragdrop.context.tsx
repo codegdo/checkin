@@ -1,6 +1,7 @@
 import React, { Dispatch, PropsWithChildren, useEffect, useReducer, useRef } from 'react';
 import { DragDropProps } from './dragdrop.component';
 
+import { DndItem } from './dragdrop.type';
 interface DragDropContextValue {
   state: State;
   dispatch: Dispatch<Action>;
@@ -10,7 +11,7 @@ interface DragDropContextValue {
 interface DragDropProviderProps extends PropsWithChildren<DragDropProps> { }
 
 interface State {
-  data?: any[];
+  data?: DndItem[];
 }
 
 interface Action {

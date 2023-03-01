@@ -1,38 +1,24 @@
 import React, { useRef } from 'react';
 import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
+import { DndItem, DndItemType } from '../components/dragdrop';
 
-export enum DataType {
-  AREA = 'area',
-  PLACEHOLDER = 'placeholder',
-  BLOCK = 'block',
-  ELEMENT = 'element',
-  FIELD = 'field',
-  GROUP = 'group',
-  GRID = 'grid',
-}
-
-type DragDropProps = {
-  id?: string;
-  name?: string;
-  type?: string;
-  dataType: DataType | string;
-  data?: unknown[];
-  parentId?: string;
-  placeholderId?: string;
-  position?: number;
-}
-
-export const useDragDrop = ({ dataType }: DragDropProps) => {
+export const useDragDrop = <T extends DndItem>({ dataType }: T, acceptType?: typeof DndItemType) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const [{ isOver }, drop] = useDrop({
-    accept: Object.values(DataType),
+    accept: acceptType ? Object.values(acceptType) : [],
     hover: (item: any, monitor) => {
       if (!ref.current) return;
 
       // handle hover events here
-      if (monitor.isOver({ shallow: true })) { }
+      if (monitor.isOver({ shallow: true })) {
+        if (
+          !ref.current
+        ) {
+          return;
+        }
+      }
     },
     collect: (monitor) => ({
       isOver: monitor.isOver({ shallow: true }),
