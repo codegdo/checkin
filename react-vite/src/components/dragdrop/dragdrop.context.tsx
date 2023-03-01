@@ -4,6 +4,7 @@ import { DragDropProps } from './dragdrop.component';
 interface DragDropContextValue {
   state: State;
   dispatch: Dispatch<Action>;
+  dndRef: React.MutableRefObject<any>;
 }
 
 interface DragDropProviderProps extends PropsWithChildren<DragDropProps> { }
@@ -17,8 +18,6 @@ interface Action {
   payload: any;
 }
 
-export const DragDropContext = React.createContext<DragDropContextValue>({ state: {}, dispatch: () => { } });
-
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case 'INIT':
@@ -26,21 +25,39 @@ const reducer = (state: State, action: Action) => {
     default:
       return state;
   }
-}
+};
 
-const DragDropProvider: React.FC<DragDropProviderProps> = ({ children, data, ...props }) => {
+export const DragDropContext = React.createContext<DragDropContextValue>({
+  state: {},
+  dispatch: () => { },
+  dndRef: { current: null },
+});
+
+const DragDropProvider: React.FC<DragDropProviderProps> = ({
+  children,
+  data,
+  ...props
+}) => {
   const [state, dispatch] = useReducer(reducer, {});
-  const { current } = useRef({});
+  const dndRef = useRef({});
 
   const contextValue: DragDropContextValue = {
     state,
     dispatch,
+    dndRef,
   };
 
-  return <DragDropContext.Provider value={contextValue}>
-    {children}
-  </DragDropContext.Provider>
-}
+  useEffect(() => {
+    if (data) {
+      dispatch({ type: 'INIT', payload: data });
+    }
+  }, [data]);
+
+  return (
+    <DragDropContext.Provider value={contextValue}>
+      {children}
+    </DragDropContext.Provider>
+  );
+};
 
 export default DragDropProvider;
-
