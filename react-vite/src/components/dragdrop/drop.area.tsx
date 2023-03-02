@@ -7,10 +7,11 @@ import DragDropRender from './dragdrop.render';
 import DropBlock from './drop.block';
 
 const DropArea: React.FC = () => {
-  const { state } = useWrapperContext(DragDropContext);
+  const context = useWrapperContext(DragDropContext);
+  const { state } = context;
 
   return (
-    <DropBlock name='root' type='div' dataType={DataType.Area} className="drop-area">
+    <DropBlock id='0' name='root' type='div' dataType={DataType.Area} className="drop-area" {...context}>
       {state?.data && <DragDropRender data={state.data} />}
     </DropBlock>
   );

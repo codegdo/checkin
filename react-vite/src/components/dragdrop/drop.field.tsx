@@ -1,13 +1,11 @@
 import React from 'react';
 
 import { useDragDrop } from '../../hooks';
-import { DndItem, DndItemType } from './dragdrop.type';
+import { DndItem } from './dragdrop.type';
 
-type DropFieldProps = DndItem;
+const DropField: React.FC<DndItem> = (item): JSX.Element => {
 
-const DropField: React.FC<DropFieldProps> = (item): JSX.Element => {
-
-  const { ref, drag, drop } = useDragDrop(item, DndItemType);
+  const { ref, drag, drop } = useDragDrop(item);
   drag(drop(ref));
 
   return (

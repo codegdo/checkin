@@ -2,10 +2,10 @@ import React, { Dispatch, PropsWithChildren, useEffect, useReducer, useRef } fro
 import { DragDropProps } from './dragdrop.component';
 
 import { DndItem } from './dragdrop.type';
-interface DragDropContextValue {
+export interface DragDropContextValue {
   state: State;
   dispatch: Dispatch<Action>;
-  dndRef: React.MutableRefObject<any>;
+  dndRef: any;
 }
 
 interface DragDropProviderProps extends PropsWithChildren<DragDropProps> { }
@@ -31,7 +31,7 @@ const reducer = (state: State, action: Action) => {
 export const DragDropContext = React.createContext<DragDropContextValue>({
   state: {},
   dispatch: () => { },
-  dndRef: { current: null },
+  dndRef: {},
 });
 
 const DragDropProvider: React.FC<DragDropProviderProps> = ({
@@ -40,7 +40,7 @@ const DragDropProvider: React.FC<DragDropProviderProps> = ({
   ...props
 }) => {
   const [state, dispatch] = useReducer(reducer, {});
-  const dndRef = useRef({});
+  const { current: dndRef } = useRef({});
 
   const contextValue: DragDropContextValue = {
     state,
