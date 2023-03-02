@@ -13,5 +13,5 @@ export enum DndAcceptType {
   Grid = 'grid',
 }
 
-export type DndItem = Element & DragDropContextValue;
+export type DndItem = Element & Partial<DragDropContextValue>;
 export type DndData = FormData;

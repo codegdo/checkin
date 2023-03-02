@@ -27,7 +27,7 @@ interface Data {
   name: string;
   label?: string;
   type: ElementType | string;
-  dataType: DataType;
+  dataType: DataType | string;
   data?: Element[];
   className?: string;
   value?: string;

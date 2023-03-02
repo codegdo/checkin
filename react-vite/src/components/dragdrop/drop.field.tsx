@@ -1,15 +1,22 @@
 import React from 'react';
 
 import { useDragDrop } from '../../hooks';
-import { DndItem } from './dragdrop.type';
+import { DndItem, DndItemType } from './dragdrop.type';
 
 const DropField: React.FC<DndItem> = (item): JSX.Element => {
+  const { className } = item;
+  const acceptType = Object.values(DndItemType);
+  const { ref, drag, drop, onMouseOver, onMouseOut } = useDragDrop(item, acceptType);
 
-  const { ref, drag, drop } = useDragDrop(item);
   drag(drop(ref));
 
   return (
-    <div ref={ref}></div>
+    <div
+      ref={ref}
+      className={className}
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}
+    ></div>
   );
 };
 
