@@ -1,4 +1,13 @@
+import { DndItem } from '../components';
+import UtilHelper, { util } from './util.helper';
+
 class DragDropHelper {
+  private util: UtilHelper;
+
+  constructor(util: UtilHelper) {
+    this.util = util;
+  }
+
   hoverOffsetX(
     clientX: number,
     middleX: number,
@@ -7,8 +16,8 @@ class DragDropHelper {
     return clientX <= middleX - targetWidth
       ? 'left'
       : clientX >= middleX + targetWidth
-      ? 'right'
-      : 'middle';
+        ? 'right'
+        : 'middle';
   }
 
   hoverOffsetY(
@@ -19,8 +28,20 @@ class DragDropHelper {
     return clientY <= middleY - elementHeight
       ? 'top'
       : clientY >= middleY + elementHeight
-      ? 'bottom'
-      : 'middle';
+        ? 'bottom'
+        : 'middle';
+  }
+
+  nomalizeData(data: DndItem[] = []) {
+    const cloneData = this.util.cloneDeep(data);
+
+    const list: DndItem[] = [];
+
+    cloneData.forEach((item: DndItem) => {
+      return this.util.mapToParent(list, item);
+    });
+
+    return list;
   }
 
   getElementDisplay(element: HTMLElement): string {
@@ -64,5 +85,5 @@ class DragDropHelper {
   }
 }
 
-export const dndHelper = new DragDropHelper();
+export const dndHelper = new DragDropHelper(util);
 export default DragDropHelper;

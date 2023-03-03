@@ -1,3 +1,7 @@
+import { DndItem, DndItemType } from "../components";
+
+type Element = DndItem;
+
 class UtilHelper {
   cloneDeep<T>(obj: T): T {
     if (typeof obj !== 'object' || obj === null) {
@@ -22,6 +26,34 @@ class UtilHelper {
       result[key].push(item);
       return result;
     }, {} as { [key: string]: T[] });
+  }
+
+  mapToParent(list: Element[], item: Element): boolean {
+    if (item.parentId == null) {
+      list.push(Object.assign({}, item));
+      return true;
+    }
+
+    const found = list.some((i) => {
+      if (`${i.id}` === `${item.parentId}`) {
+        i.data?.push(Object.assign({}, item));
+        return true;
+      }
+
+      if (
+        i.dataType === DndItemType.Block &&
+        this.mapToParent(i.data as Element[], Object.assign({}, item))
+      ) {
+        return true;
+      }
+      return false;
+    });
+
+    if (!found) {
+      // console.warn(`Fail mapToParent: ${parentId}`, { id, dataType, data, position, parentId });
+    }
+
+    return found;
   }
 }
 

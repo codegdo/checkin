@@ -1,21 +1,28 @@
 import React, { PropsWithChildren } from 'react';
-import { useDragDrop, useWrapperContext } from '../../hooks';
+import { useDragDrop } from '../../hooks';
+import classNamesFn from 'classnames';
 
 
 import DragDropRender from './dragdrop.render';
 import { DndItem, DndItemType } from './dragdrop.type';
 
 const DropBlock: React.FC<PropsWithChildren<DndItem>> = ({ children, ...item }): JSX.Element => {
-  const { className, data = [] } = item;
-  const acceptType = Object.values(DndItemType);
-  const { ref, drag, drop, onMouseOver, onMouseOut } = useDragDrop(item, acceptType);
+  const { className = 'drop-block', data = [] } = item;
+  const acceptTypes = Object.values(DndItemType);
+  const { ref, drag, drop, isDragging, isOver, onMouseOver, onMouseOut } = useDragDrop(item, acceptTypes);
+
+  const classNames = classNamesFn({
+    [className]: true,
+    'is-dragging': isDragging,
+    'is-over': isOver,
+  });
 
   drag(drop(ref));
 
   return (
     <div
       ref={ref}
-      className={className}
+      className={classNames}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
     >

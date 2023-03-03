@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { dndHelper } from '../../helpers';
 
 import { useWrapperContext } from '../../hooks';
 import { DataType } from '../form';
@@ -7,12 +8,15 @@ import DragDropRender from './dragdrop.render';
 import DropBlock from './drop.block';
 
 const DropArea: React.FC = () => {
-  const context = useWrapperContext(DragDropContext);
-  const { state } = context;
+  const { state, ...context } = useWrapperContext(DragDropContext);
+  const data = dndHelper.nomalizeData(state?.data);
+
+  console.log('state', state);
+  console.log('nomalize', data);
 
   return (
     <DropBlock id='0' name='root' type='div' dataType={DataType.Area} className="drop-area" {...context}>
-      {state?.data && <DragDropRender data={state.data} />}
+      {<DragDropRender data={data} />}
     </DropBlock>
   );
 };

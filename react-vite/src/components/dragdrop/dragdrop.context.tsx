@@ -1,17 +1,12 @@
-import React, { Dispatch, PropsWithChildren, useEffect, useReducer, useRef } from 'react';
+import React, { Dispatch, PropsWithChildren, useCallback, useEffect, useReducer, useRef } from 'react';
+import update from 'immutability-helper';
+
 import { DragDropProps } from './dragdrop.component';
-
 import { DndItem } from './dragdrop.type';
-export interface DragDropContextValue {
-  state: State;
-  dispatch: Dispatch<Action>;
-  dndRef: any;
-}
-
-interface DragDropProviderProps extends PropsWithChildren<DragDropProps> { }
 
 interface State {
   data?: DndItem[];
+  item?: DndItem;
 }
 
 interface Action {
@@ -19,10 +14,54 @@ interface Action {
   payload: any;
 }
 
-const reducer = (state: State, action: Action) => {
-  switch (action.type) {
-    case 'INIT':
-      return { ...state, data: [...action.payload] };
+
+export interface DragDropContextValue {
+  state: State;
+  dispatch: Dispatch<Action>;
+  dndRef: any;
+}
+
+interface DragDropProviderProps extends PropsWithChildren<DragDropProps> { };
+
+
+export enum DndActionTypes {
+  SET_ITEMS = 'SET_ITEMS',
+  ADD_ITEM = 'ADD_ITEM',
+  MOVE_ITEM = 'MOVE_ITEM'
+}
+
+const dndReducer = (state: State, { type, payload }: Action) => {
+  switch (type) {
+    case DndActionTypes.SET_ITEMS: {
+      return { ...state, data: [...payload] };
+    }
+    case DndActionTypes.ADD_ITEM: {
+      const { dragItem, dropItem } = payload;
+
+      console.log('ADD ITEM', dragItem, dropItem);
+
+      return state;
+    }
+    case DndActionTypes.MOVE_ITEM: {
+      const { dragItem, dropItem } = payload;
+
+      console.log('MOVE ITEM', dragItem, dropItem);
+
+      return state;
+
+      // const newData = update(state.data, {
+      //   $splice: [
+      //     [dragIndex, dragCounts],
+      //     [dropIndex, 0, ...dragItems],
+      //   ],
+      //   $apply: (data: any) => data.map((item: any, index: number) => {
+      //     item.position = index;
+      //     return item;
+      //   }),
+      // });
+
+      // return update(state, { data: { $set: newData } });
+    }
     default:
       return state;
   }
@@ -31,7 +70,7 @@ const reducer = (state: State, action: Action) => {
 export const DragDropContext = React.createContext<DragDropContextValue>({
   state: {},
   dispatch: () => { },
-  dndRef: {},
+  dndRef: {}
 });
 
 const DragDropProvider: React.FC<DragDropProviderProps> = ({
@@ -39,23 +78,21 @@ const DragDropProvider: React.FC<DragDropProviderProps> = ({
   data,
   ...props
 }) => {
-  const [state, dispatch] = useReducer(reducer, {});
+  const [state, dispatch] = useReducer(dndReducer, {});
   const { current: dndRef } = useRef({});
 
-  const contextValue: DragDropContextValue = {
+  const memoizedContextValue = useCallback(() => ({
     state,
     dispatch,
-    dndRef,
-  };
+    dndRef
+  }), [state, dispatch, dndRef]);
 
   useEffect(() => {
-    if (data) {
-      dispatch({ type: 'INIT', payload: data });
-    }
+    dispatch({ type: DndActionTypes.SET_ITEMS, payload: data });
   }, [data]);
 
   return (
-    <DragDropContext.Provider value={contextValue}>
+    <DragDropContext.Provider value={memoizedContextValue()}>
       {children}
     </DragDropContext.Provider>
   );

@@ -16,7 +16,7 @@ const DropField: React.FC<DndItem> = (item): JSX.Element => {
       className={className}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
-    ></div>
+    >field</div>
   );
 };
 
