@@ -6,11 +6,13 @@ class StyleHelper {
   }
 
   public setHeadStyle(id: string, css: string): void {
-    const [exist] = Array.from(this.head.children).filter(child => child.id === id);
+    const [exist] = Array.from(this.head.children).filter(
+      (child) => child.id === id
+    );
 
     if (!exist) {
       const style = document.createElement('style');
-      style.type = 'text/css';
+      //style.type = 'text/css';
       style.id = id;
       style.innerHTML = css;
       this.head.appendChild(style);

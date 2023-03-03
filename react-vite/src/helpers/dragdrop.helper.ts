@@ -1,43 +1,66 @@
-import { DropTargetMonitor } from "react-dnd";
-
-interface DndHoverParams {
-  dragItem: any;
-  dropItem: any;
-  monitor: DropTargetMonitor<any, void>;
-  ref: React.RefObject<HTMLDivElement>;
-}
-
 class DragDropHelper {
-  /**
-   * Handles the hover event during a Drag and Drop operation.
-   */
-  handleOver({ monitor, ref, dragItem, dropItem }: DndHoverParams) {
-    const dropTarget = ref.current;
+  hoverOffsetX(
+    clientX: number,
+    middleX: number,
+    targetWidth: number
+  ): 'left' | 'right' | 'middle' {
+    return clientX <= middleX - targetWidth
+      ? 'left'
+      : clientX >= middleX + targetWidth
+      ? 'right'
+      : 'middle';
+  }
 
-    if (!dropTarget) return;
+  hoverOffsetY(
+    clientY: number,
+    middleY: number,
+    elementHeight: number
+  ): 'top' | 'bottom' | 'middle' {
+    return clientY <= middleY - elementHeight
+      ? 'top'
+      : clientY >= middleY + elementHeight
+      ? 'bottom'
+      : 'middle';
+  }
 
-    // determine rectangle on screen
-    const hoverBoundingRect = dropTarget.getBoundingClientRect();
-    // determine mouse position
-    const clientOffset = monitor.getClientOffset();
+  getElementDisplay(element: HTMLElement): string {
+    const parentNode = element.parentNode as HTMLElement;
 
-    if (!clientOffset) return;
+    if (!parentNode) {
+      return 'column';
+    }
 
-    // get vertical middle
-    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-    // get pixels to the top
-    const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-    // get horizontal middle
-    const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
-    // get pixels to the left
-    const hoverClientX = clientOffset.x - hoverBoundingRect.left;
+    const computedParentStyle = window.getComputedStyle(parentNode);
+    const parentDisplayStyle =
+      parentNode.style.display || computedParentStyle.display;
+    const parentFlexDirection =
+      parentNode.style.flexDirection || computedParentStyle.flexDirection;
 
-    if (dropItem.x == clientOffset.x && dropItem.y == clientOffset.y) return;
+    if (parentDisplayStyle !== 'flex') {
+      return 'column';
+    }
 
-    dropItem.x = clientOffset.x;
-    dropItem.y = clientOffset.y;
+    if (!parentFlexDirection.includes('column') || parentFlexDirection === '') {
+      return 'row';
+    }
 
-    console.log(dropItem.x, dropItem.y);
+    return 'column';
+  }
+
+  getElementSize(element: HTMLElement): {
+    elementWidth: number;
+    elementHeight: number;
+  } {
+    let elementWidth = 0;
+    let elementHeight = 0;
+
+    if (element.classList.contains('-empty')) {
+      const style = window.getComputedStyle(element, ':after');
+      elementWidth = (parseFloat(style.width) || 0) / 2;
+      elementHeight = (parseFloat(style.height) || 0) / 2;
+    }
+
+    return { elementWidth, elementHeight };
   }
 }
 
