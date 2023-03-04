@@ -33,6 +33,7 @@ interface Data {
   value?: string;
   position?: number;
   parentId?: number | string;
+  childId?: number | string;
 }
 
 export interface Field extends Data {

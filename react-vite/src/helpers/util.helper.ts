@@ -1,4 +1,4 @@
-import { DndItem, DndItemType } from "../components";
+import { DndItem, DndItemType } from '../components';
 
 type Element = DndItem;
 
@@ -28,32 +28,56 @@ class UtilHelper {
     }, {} as { [key: string]: T[] });
   }
 
-  mapToParent(list: Element[], item: Element): boolean {
+  filterArray(
+    arr: Element[],
+    condition: (item: Element) => boolean
+  ): [Element[], Element[]] {
+    const filtered1: Element[] = [];
+    const filtered2: Element[] = [];
+
+    arr.forEach((item) => {
+      if (condition(item)) {
+        filtered1.push(item);
+      } else {
+        filtered2.push(item);
+      }
+    });
+
+    return [filtered1, filtered2];
+  }
+
+  mapToParent(
+    list: Element[],
+    item: Element,
+    condition: (item: Element) => boolean
+  ): boolean {
+    // If item has no parent, add it to the top-level of the list
     if (item.parentId == null) {
-      list.push(Object.assign({}, item));
+      list.push({ ...item });
       return true;
     }
 
-    const found = list.some((i) => {
-      if (`${i.id}` === `${item.parentId}`) {
-        i.data?.push(Object.assign({}, item));
-        return true;
+    // Find the parent element in the list
+    const parent = list.find((i) => i.id === item.parentId);
+    if (parent) {
+      // If parent is found, add the item to its data property
+      if (!parent.data) {
+        parent.data = [];
       }
-
-      if (
-        i.dataType === DndItemType.Block &&
-        this.mapToParent(i.data as Element[], Object.assign({}, item))
-      ) {
-        return true;
+      parent.data.push({ ...item });
+      return true;
+    } else {
+      // If parent is not found, recursively search in the child elements
+      for (const child of list) {
+        if (child.data && condition(child)) {
+          if (this.mapToParent(child.data, { ...item }, condition)) {
+            return true;
+          }
+        }
       }
+      // If parent is not found in the list, return false
       return false;
-    });
-
-    if (!found) {
-      // console.warn(`Fail mapToParent: ${parentId}`, { id, dataType, data, position, parentId });
     }
-
-    return found;
   }
 }
 
@@ -71,6 +95,8 @@ const items = [
 const grouped = groupBy(items, 'category');
 
 console.log(grouped);
+
+const [filtered1, filtered2] = filterArray(arr, item => item.dataType === 'block');
 
 // Output:
 // {

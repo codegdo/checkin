@@ -5,7 +5,13 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { DropTargetMonitor, useDrag, useDragLayer, useDrop, XYCoord } from 'react-dnd';
+import {
+  DropTargetMonitor,
+  useDrag,
+  useDragLayer,
+  useDrop,
+  XYCoord,
+} from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import { DndItem } from '../components/dragdrop';
 import { DndActionTypes } from '../components/dragdrop/dragdrop.context';
@@ -16,7 +22,7 @@ export const useDragDrop = <T extends DndItem>(
   acceptType: string | string[] = []
 ) => {
   const ref = useRef<HTMLDivElement>(null);
-  const { id, dataType, parentId, position } = item;
+  const { id, dataType, parentId, childId, position, data } = item;
   const [offset, setOffset] = useState<string>();
 
   useEffect(() => {
@@ -55,7 +61,6 @@ export const useDragDrop = <T extends DndItem>(
 
     // only run if position change
     if (dndRef.x !== clientOffset.x || dndRef.y !== clientOffset.y) {
-
       dndRef.x = clientOffset.x;
       dndRef.y = clientOffset.y;
 
@@ -99,8 +104,9 @@ export const useDragDrop = <T extends DndItem>(
           dndRef.id = id;
           dndRef.dataType = dataType;
           dndRef.parentId = parentId;
+          dndRef.childId = childId;
           dndRef.position = position;
-          dndRef.elementRef = ref.current;
+          dndRef.data = data;
           dndRef.x = 0;
           dndRef.y = 0;
 
@@ -155,7 +161,7 @@ export const useDragDrop = <T extends DndItem>(
               type: DndActionTypes.MOVE_ITEM,
               payload: {
                 dragItem,
-                dropItem: dndRef
+                dropItem: dndRef,
               },
             });
           } else {
@@ -163,7 +169,7 @@ export const useDragDrop = <T extends DndItem>(
               type: DndActionTypes.ADD_ITEM,
               payload: {
                 dragItem,
-                dropItem: dndRef
+                dropItem: dndRef,
               },
             });
           }

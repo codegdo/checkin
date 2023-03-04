@@ -1,4 +1,4 @@
-import { DndItem } from '../components';
+import { DndItem, DndItemType } from '../components';
 import UtilHelper, { util } from './util.helper';
 
 class DragDropHelper {
@@ -16,8 +16,8 @@ class DragDropHelper {
     return clientX <= middleX - targetWidth
       ? 'left'
       : clientX >= middleX + targetWidth
-        ? 'right'
-        : 'middle';
+      ? 'right'
+      : 'middle';
   }
 
   hoverOffsetY(
@@ -28,8 +28,8 @@ class DragDropHelper {
     return clientY <= middleY - elementHeight
       ? 'top'
       : clientY >= middleY + elementHeight
-        ? 'bottom'
-        : 'middle';
+      ? 'bottom'
+      : 'middle';
   }
 
   nomalizeData(data: DndItem[] = []) {
@@ -38,7 +38,11 @@ class DragDropHelper {
     const list: DndItem[] = [];
 
     cloneData.forEach((item: DndItem) => {
-      return this.util.mapToParent(list, item);
+      return this.util.mapToParent(
+        list,
+        item,
+        (item) => item.dataType === DndItemType.Block
+      );
     });
 
     return list;

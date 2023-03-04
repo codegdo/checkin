@@ -10,6 +10,7 @@ const json = [
     dataType: 'block',
     data: [],
     parentId: null,
+    childId: null,
     position: 1
   },
   {
@@ -20,6 +21,7 @@ const json = [
     dataType: 'field',
     data: [],
     parentId: '1',
+    childId: null,
     position: 0
   }
 ]
