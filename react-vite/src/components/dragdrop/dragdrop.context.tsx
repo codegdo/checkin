@@ -3,10 +3,11 @@ import update from 'immutability-helper';
 
 import { DragDropProps } from './dragdrop.component';
 import { DndItem } from './dragdrop.type';
+import { dndHelper } from '../../helpers';
 
 interface State {
-  data?: DndItem[];
-  item?: DndItem;
+  data: DndItem[];
+  item: DndItem | null;
 }
 
 interface Action {
@@ -14,11 +15,17 @@ interface Action {
   payload: any;
 }
 
+type DropRef = Partial<DndItem> & {x?: number; y?:number; offset?: string}
+
+interface DndRef {
+  dropRef: DropRef;
+  itemRef: DndItem | null;
+}
 
 export interface DragDropContextValue {
   state: State;
   dispatch: Dispatch<Action>;
-  dndRef: any;
+  dndRef: DndRef;
 }
 
 interface DragDropProviderProps extends PropsWithChildren<DragDropProps> { };
@@ -36,41 +43,35 @@ const dndReducer = (state: State, { type, payload }: Action) => {
       return { ...state, data: [...payload] };
     }
     case DndActionTypes.ADD_ITEM: {
-      const { dragItem, dropItem } = payload;
+      const { dragItem, dropRef } = payload;
 
-      console.log('ADD ITEM', dragItem, dropItem);
+      console.log('ADD ITEM', dragItem, dropRef);
 
       return state;
     }
     case DndActionTypes.MOVE_ITEM: {
-      const { dragItem, dropItem } = payload;
-
-      console.log('MOVE ITEM', dragItem, dropItem);
-
-      return state;
-
-      // const newData = update(state.data, {
-      //   $splice: [
-      //     [dragIndex, dragCounts],
-      //     [dropIndex, 0, ...dragItems],
-      //   ],
-      //   $apply: (data: any) => data.map((item: any, index: number) => {
-      //     item.position = index;
-      //     return item;
-      //   }),
-      // });
-
-      // return update(state, { data: { $set: newData } });
+      const { dragItem, dropRef } = payload;
+      const newData = dndHelper.moveItems(dragItem, dropRef, state.data);
+      
+      return {
+        ...state,
+        data: newData
+      };
     }
     default:
       return state;
   }
 };
 
+const defaultDndRef = {
+  dropRef: {},
+  itemRef: null
+}
+
 export const DragDropContext = React.createContext<DragDropContextValue>({
-  state: {},
+  state: {data: [], item: null},
   dispatch: () => { },
-  dndRef: {}
+  dndRef: defaultDndRef
 });
 
 const DragDropProvider: React.FC<DragDropProviderProps> = ({
@@ -78,8 +79,8 @@ const DragDropProvider: React.FC<DragDropProviderProps> = ({
   data,
   ...props
 }) => {
-  const [state, dispatch] = useReducer(dndReducer, {});
-  const { current: dndRef } = useRef({});
+  const [state, dispatch] = useReducer(dndReducer, {data: [], item: null});
+  const { current: dndRef } = useRef(defaultDndRef);
 
   const memoizedContextValue = useCallback(() => ({
     state,

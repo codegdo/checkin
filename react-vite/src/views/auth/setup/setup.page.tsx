@@ -11,7 +11,7 @@ const json = [
     data: [],
     parentId: null,
     childId: null,
-    position: 1
+    position: 0
   },
   {
     id: '2',
@@ -22,7 +22,7 @@ const json = [
     data: [],
     parentId: '1',
     childId: null,
-    position: 0
+    position: 1
   }
 ]
 

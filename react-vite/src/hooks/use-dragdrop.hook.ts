@@ -23,6 +23,7 @@ export const useDragDrop = <T extends DndItem>(
 ) => {
   const ref = useRef<HTMLDivElement>(null);
   const { id, dataType, parentId, childId, position, data } = item;
+  const dropRef = dndRef?.dropRef;
   const [offset, setOffset] = useState<string>();
 
   useEffect(() => {
@@ -53,17 +54,21 @@ export const useDragDrop = <T extends DndItem>(
         default:
           console.log('ELEMENT OFFSET: ', offset);
       }
+      if(dropRef) {
+        dropRef.offset = offset;
+      }
     }
   }, [offset]);
 
   const updateDndRefPosition = (clientOffset: XYCoord) => {
-    if (!ref.current) return;
-
+    if (!ref.current || !dropRef) return;
+    
     // only run if position change
-    if (dndRef.x !== clientOffset.x || dndRef.y !== clientOffset.y) {
-      dndRef.x = clientOffset.x;
-      dndRef.y = clientOffset.y;
-
+    if (dropRef.x !== clientOffset.x || dropRef.y !== clientOffset.y) {
+      
+      dropRef.x = clientOffset.x;
+      dropRef.y = clientOffset.y;
+     
       // determine rectangle on screen
       const hoverBoundingRect = ref.current.getBoundingClientRect();
       // get vertical middle
@@ -90,50 +95,45 @@ export const useDragDrop = <T extends DndItem>(
     }
   };
 
-  const hover = useCallback(
-    (hoverItem: DndItem, monitor: DropTargetMonitor<DndItem, unknown>) => {
-      if (!ref.current) return;
-
-      // handle hover events here
-      if (monitor.isOver({ shallow: true })) {
-        if (hoverItem.id === id) {
-          return;
-        }
-
-        if (dndRef?.id !== id) {
-          dndRef.id = id;
-          dndRef.dataType = dataType;
-          dndRef.parentId = parentId;
-          dndRef.childId = childId;
-          dndRef.position = position;
-          dndRef.data = data;
-          dndRef.x = 0;
-          dndRef.y = 0;
-
-          console.log(dndRef);
-        }
-
-        // determine mouse position
-        const clientOffset = monitor.getClientOffset();
-
-        if (!clientOffset) return;
-
-        updateDndRefPosition(clientOffset);
-      }
-    },
-    [id, setOffset]
-  );
-
   const [{ isOver }, drop] = useDrop(
     {
       accept: acceptType,
-      hover,
+      hover: (hoverItem: DndItem, monitor: DropTargetMonitor<DndItem, unknown>) => {
+        if (!ref.current || !dropRef) return;
+  
+        // handle hover events here
+        if (monitor.isOver({ shallow: true })) {
+          if (hoverItem.id === id) {
+            return;
+          }
+  
+          if (dropRef.id !== id) {
+            dropRef.id = id;
+            dropRef.dataType = dataType;
+            dropRef.parentId = parentId;
+            dropRef.childId = childId;
+            dropRef.position = position;
+            dropRef.data = data;
+            dropRef.x = 0;
+            dropRef.y = 0;
+  
+            console.log(dndRef);
+          }
+  
+          // determine mouse position
+          const clientOffset = monitor.getClientOffset();
+  
+          if (!clientOffset) return;
+  
+          updateDndRefPosition(clientOffset);
+        }
+      },
       collect: (monitor) => ({
         isOver: monitor.isOver({ shallow: true }),
         canDrop: monitor.canDrop(),
       }),
     },
-    [acceptType, hover]
+    [acceptType]
   );
 
   const [{ isDragging }, drag, preview] = useDrag(
@@ -142,9 +142,8 @@ export const useDragDrop = <T extends DndItem>(
       item: { ...item },
       canDrag: () => {
         preview(getEmptyImage(), { captureDraggingState: false });
-        if (dataType == 'area' || dataType == 'placeholder') {
-          return false;
-        }
+        if (dataType == 'area' || dataType == 'placeholder') return false;
+        if (dropRef) dropRef.id = undefined;
         return true;
       },
       collect: (monitor) => ({
@@ -161,7 +160,7 @@ export const useDragDrop = <T extends DndItem>(
               type: DndActionTypes.MOVE_ITEM,
               payload: {
                 dragItem,
-                dropItem: dndRef,
+                dropRef,
               },
             });
           } else {
@@ -169,7 +168,7 @@ export const useDragDrop = <T extends DndItem>(
               type: DndActionTypes.ADD_ITEM,
               payload: {
                 dragItem,
-                dropItem: dndRef,
+                dropRef,
               },
             });
           }

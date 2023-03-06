@@ -32,8 +32,8 @@ interface Data {
   className?: string;
   value?: string;
   position?: number;
-  parentId?: number | string;
-  childId?: number | string;
+  parentId?: string | null;
+  childId?: string | null;
 }
 
 export interface Field extends Data {
