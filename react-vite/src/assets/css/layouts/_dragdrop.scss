@@ -3,7 +3,32 @@
   height: 500px;
   border: 1px solid #ddd;
 }
-.drop-block {
-  padding: 2rem;
-  background-color: #eee;
+
+.drop-item {
+  border: 1px dashed #eee;
+  padding: 1rem;
+  transition: all 0.5s ease-out;
+  position: relative;
+}
+.drop-item.on-top {
+  border-top-color: rgb(73, 132, 241);
+}
+.drop-item.on-bottom {
+  border-bottom-color: rgb(73, 132, 241);
+}
+
+.drop-block.is-empty:after {
+  content: 'drop...';
+  display: block;
+
+  padding: 1rem;
+  text-align: center;
+  color: #ccc;
+  background: #f8f8f8;
+  border: 1px dashed #f8f8f8;
+  transition: all 0.3s ease-out;
+}
+
+.drop-block.on-middle:after {
+  border-color: rgb(73, 132, 241);
 }

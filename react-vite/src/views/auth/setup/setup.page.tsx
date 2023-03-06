@@ -4,7 +4,7 @@ import { DragDrop, DragItem } from '../../../components/dragdrop';
 const json = [
   {
     id: '1',
-    className: 'drop-block',
+    className: '',
     name: 'block',
     type: 'div',
     dataType: 'block',
@@ -15,7 +15,7 @@ const json = [
   },
   {
     id: '2',
-    className: 'drop-field',
+    className: '',
     name: 'field',
     type: 'text',
     dataType: 'field',

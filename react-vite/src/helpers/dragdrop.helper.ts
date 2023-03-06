@@ -189,22 +189,24 @@ class DragDropHelper {
 
   moveItems<T extends Item>(dragItem: T, dropRef: T, data: T[]) {
     const foundResult = this.findDropIndex(dragItem, dropRef);
-    
-    if(!foundResult) {
+
+    if (!foundResult) {
       return data;
     }
+
     console.log('FOUND RESULT', foundResult);
-    const {dragIndex, dropIndex, dragCounts, newParentId, newChildId} = foundResult;
+
+    const { dragIndex, dropIndex, dragCounts, newParentId, newChildId } = foundResult;
 
     const draggedItems = data.slice(dragIndex, dragIndex + dragCounts);
     const remainingItems = data.filter((_, index) => index < dragIndex || index >= dragIndex + dragCounts);
 
     const updatedDraggedItems = draggedItems.map(item => ({
       ...item,
-      parentId: dropRef.parentId,
-      childId: dropRef.id,
+      parentId: newParentId,
+      childId: newChildId,
     }));
-  
+
     const updatedData = [
       ...remainingItems.slice(0, dropIndex),
       ...updatedDraggedItems,
@@ -213,7 +215,7 @@ class DragDropHelper {
       ...item,
       position: index,
     }));
-  
+
     return updatedData;
   }
 
@@ -225,8 +227,8 @@ class DragDropHelper {
     return clientX <= middleX - targetWidth
       ? 'left'
       : clientX >= middleX + targetWidth
-      ? 'right'
-      : 'middle';
+        ? 'right'
+        : 'middle';
   }
 
   hoverOffsetY(
@@ -237,8 +239,8 @@ class DragDropHelper {
     return clientY <= middleY - elementHeight
       ? 'top'
       : clientY >= middleY + elementHeight
-      ? 'bottom'
-      : 'middle';
+        ? 'bottom'
+        : 'middle';
   }
 
   nomalizeData(data: DndItem[] = []) {
@@ -282,19 +284,19 @@ class DragDropHelper {
   }
 
   getElementSize(element: HTMLElement): {
-    elementWidth: number;
-    elementHeight: number;
+    width: number;
+    height: number;
   } {
-    let elementWidth = 0;
-    let elementHeight = 0;
+    let width = 0;
+    let height = 0;
 
-    if (element.classList.contains('-empty')) {
+    if (element.classList.contains('is-empty')) {
       const style = window.getComputedStyle(element, ':after');
-      elementWidth = (parseFloat(style.width) || 0) / 2;
-      elementHeight = (parseFloat(style.height) || 0) / 2;
+      width = (parseFloat(style.width) || 0) / 2;
+      height = (parseFloat(style.height) || 0) / 2;
     }
 
-    return { elementWidth, elementHeight };
+    return { width, height };
   }
 }
 

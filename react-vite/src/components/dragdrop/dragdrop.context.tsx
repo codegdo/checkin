@@ -15,7 +15,7 @@ interface Action {
   payload: any;
 }
 
-type DropRef = Partial<DndItem> & {x?: number; y?:number; offset?: string}
+type DropRef = Partial<DndItem> & { x?: number; y?: number; offset?: string, currentRef?: HTMLDivElement | null }
 
 interface DndRef {
   dropRef: DropRef;
@@ -52,7 +52,7 @@ const dndReducer = (state: State, { type, payload }: Action) => {
     case DndActionTypes.MOVE_ITEM: {
       const { dragItem, dropRef } = payload;
       const newData = dndHelper.moveItems(dragItem, dropRef, state.data);
-      
+
       return {
         ...state,
         data: newData
@@ -69,7 +69,7 @@ const defaultDndRef = {
 }
 
 export const DragDropContext = React.createContext<DragDropContextValue>({
-  state: {data: [], item: null},
+  state: { data: [], item: null },
   dispatch: () => { },
   dndRef: defaultDndRef
 });
@@ -79,7 +79,7 @@ const DragDropProvider: React.FC<DragDropProviderProps> = ({
   data,
   ...props
 }) => {
-  const [state, dispatch] = useReducer(dndReducer, {data: [], item: null});
+  const [state, dispatch] = useReducer(dndReducer, { data: [], item: null });
   const { current: dndRef } = useRef(defaultDndRef);
 
   const memoizedContextValue = useCallback(() => ({
