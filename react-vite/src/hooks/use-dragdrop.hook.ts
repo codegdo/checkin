@@ -29,9 +29,12 @@ export const useDragDrop = <T extends DndItem>(
 
   const [offset, setOffset] = useState<string>();
 
+  // This function updates the CSS classes of the drop target element to indicate where a dragged element will be dropped.
   const updateDropTargetClassList = useCallback((offsetString: string) => {
+    // If the dropTargetRef does not exist, return early
     if (!dropTargetRef) return;
 
+    // Remove all CSS classes related to drop target position
     dropTargetRef.classList.remove(
       'on-top',
       'on-right',
@@ -40,6 +43,7 @@ export const useDragDrop = <T extends DndItem>(
       'on-middle'
     );
 
+    // Determine which CSS class to add based on the first word of the offsetString parameter
     switch (offsetString.split(' ')[0]) {
       case 'top':
         dropTargetRef.classList.add('on-top');
@@ -57,43 +61,60 @@ export const useDragDrop = <T extends DndItem>(
         dropTargetRef.classList.add('on-middle');
         break;
       default:
+        // Log an error message to the console if the offsetString does not match any of the cases
         console.log('ELEMENT OFFSET: ', offsetString);
     }
-  }, [dropTargetRef]);
+  }, [dropTargetRef]); 
 
-  const updateDropRefPositionByClientOffset = useCallback((clientOffset: XYCoord) => {
+
+  // Memoized function that updates the dropRef position based on the client offset
+  const updateDropRefPositionByClientOffset = useCallback((clientOffsetPosition: XYCoord) => {
+    // Get references to the dropTarget and dropRef using useRef
+    // and check if they exist; if not, return early
     if (!dropTargetRef || !dropRef) return;
 
     // Only update the position if it has changed
-    if (dropRef.x !== clientOffset.x || dropRef.y !== clientOffset.y) {
+    if (dropRef.x !== clientOffsetPosition.x || dropRef.y !== clientOffsetPosition.y) {
 
-      dropRef.x = clientOffset.x;
-      dropRef.y = clientOffset.y;
+      // Update the x and y properties of the dropRef with the client offset position
+      dropRef.x = clientOffsetPosition.x;
+      dropRef.y = clientOffsetPosition.y;
 
       // Determine the bounding rectangle of the drop target
       const boundingRect = dropTargetRef.getBoundingClientRect();
-      // get vertical center
-      const centerY = (boundingRect.bottom - boundingRect.top) / 2;
-      // get pixels to the top
-      const clientY = clientOffset.y - boundingRect.top;
-      // get horizontal center
-      const centerX = (boundingRect.right - boundingRect.left) / 2;
-      // get pixels to the left
-      const clientX = clientOffset.x - boundingRect.left;
 
+      // Get the vertical center of the drop target
+      const centerY = (boundingRect.bottom - boundingRect.top) / 2;
+
+      // Get the number of pixels from the top of the drop target to the mouse pointer
+      const clientY = clientOffsetPosition.y - boundingRect.top;
+
+      // Get the horizontal center of the drop target
+      const centerX = (boundingRect.right - boundingRect.left) / 2;
+
+      // Get the number of pixels from the left of the drop target to the mouse pointer
+      const clientX = clientOffsetPosition.x - boundingRect.left;
+
+      // Get the width and height of the drop target element
       const { width: elementWidth, height: elementHeight } = dndHelper.getElementSize(
         dropTargetRef
       );
 
+      // Calculate the horizontal and vertical offset based on the clientX, centerY, and elementWidth/elementHeight
       const horizontalOffset = dndHelper.hoverOffsetX(clientX, centerY, elementWidth);
       const verticalOffset = dndHelper.hoverOffsetY(clientY, centerY, elementHeight);
 
+      // Determine the display style of the drop target
       const displayStyle = dndHelper.getElementDisplay(dropTargetRef);
+
+      // Calculate the current offset based on the display style
       const currentOffset = displayStyle === 'column' ? verticalOffset : horizontalOffset;
 
-      setOffset(`${currentOffset} (${clientOffset.x},${clientOffset.y})`);
+      // Set the offset state with the currentOffset and the clientOffsetPosition
+      setOffset(`${currentOffset} (${clientOffsetPosition.x},${clientOffsetPosition.y})`);
     }
   }, [dropTargetRef, dropRef, setOffset]);
+
 
   useEffect(() => {
     if (offset) {
@@ -111,14 +132,21 @@ export const useDragDrop = <T extends DndItem>(
     {
       accept: acceptTypes,
       hover: useCallback((hoverItem: DndItem, monitor: DropTargetMonitor<DndItem, unknown>) => {
+        // Get references to the dropTarget and dropRef using useRef
+        // and check if they exist; if not, return early
         if (!dropTargetRef || !dropRef) return;
 
-        // handle hover events here
+        // Check if the hovered item's id matches the current item's id
         if (monitor.isOver({ shallow: true })) {
           if (hoverItem.id === id) {
+            // If they match, remove the 'on-top' and 'on-bottom' CSS classes
+            // from the dropRef's currentRef element
+            if(['on-top', 'on-bottom'].some(className => dropRef.currentRef?.classList.contains(className))) {
+              dropRef.currentRef?.classList.remove('on-top', 'on-bottom');
+            }
             return;
           }
-
+          // If they don't match, update the dropRef with the new item's properties
           if (dropRef.id !== id) {
             dropRef.id = id;
             dropRef.dataType = dataType;
@@ -132,12 +160,13 @@ export const useDragDrop = <T extends DndItem>(
             console.log(dndRef);
           }
 
-          // determine mouse position
-          const clientOffset = monitor.getClientOffset();
+          // Determine the mouse position using getClientOffset
+          const clientOffsetPosition = monitor.getClientOffset();
 
-          if (!clientOffset) return;
+          if (!clientOffsetPosition) return;
 
-          updateDropRefPositionByClientOffset(clientOffset);
+          // If the client offset exists, update the dropRef's position
+          updateDropRefPositionByClientOffset(clientOffsetPosition);
         }
       }, [id, dataType, parentId, childId, position, data, dropRef, dndRef, updateDropRefPositionByClientOffset]),
       collect: (monitor) => ({

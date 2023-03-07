@@ -19,8 +19,8 @@ class DragDropHelper {
   }
 
   countIdsRecursive(data: Item[], ids: string[] = []): string[] {
-    return data.reduce((acc: string[], curr: Item) => {
-      const currId = curr.id.toString();
+    return data?.reduce((acc: string[], curr: Item) => {
+      const currId = `${curr.id}`;
       acc.push(currId);
       if (curr.dataType === 'block') {
         this.countIdsRecursive(curr.data, ids);
@@ -34,7 +34,7 @@ class DragDropHelper {
       id = '';
     }
 
-    const ids = this.countIdsRecursive(data, [id.toString()]);
+    const ids = this.countIdsRecursive(data, [`${id}`]);
     return [ids.length, ids];
   }
 
