@@ -15,7 +15,7 @@ interface Action {
   payload: any;
 }
 
-type DropRef = Partial<DndItem> & { x?: number; y?: number; offset?: string, currentRef?: HTMLDivElement | null }
+type DropRef = Partial<DndItem> & { x?: number; y?: number; offset?: string, currentRef?: HTMLDivElement | null, canDrop?: boolean }
 
 interface DndRef {
   dropRef: DropRef;
@@ -45,18 +45,24 @@ const dndReducer = (state: State, { type, payload }: Action) => {
     case DndActionTypes.ADD_ITEM: {
       const { dragItem, dropRef } = payload;
 
-      console.log('ADD ITEM', dragItem, dropRef);
+      let newDragItem: Partial<DndItem> = {
+        id: dndHelper.newId(),
+        data: [],
+        parentId: null,
+        childId: null,
+        position: 0,
+        ...dragItem
+      };
 
-      return state;
+      const newData = dndHelper.addItems(newDragItem, dropRef, state.data);
+
+      return { ...state, data: newData };
     }
     case DndActionTypes.MOVE_ITEM: {
       const { dragItem, dropRef } = payload;
       const newData = dndHelper.moveItems(dragItem, dropRef, state.data);
 
-      return {
-        ...state,
-        data: newData
-      };
+      return { ...state, data: newData };
     }
     default:
       return state;

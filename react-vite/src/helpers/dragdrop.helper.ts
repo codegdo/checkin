@@ -29,7 +29,7 @@ class DragDropHelper {
     }, ids);
   }
 
-  countItems<T extends Item>({ id, data }: T): [number, string[]] {
+  countItems<T extends Item>({ id, data = [] }: T): [number, string[]] {
     if (id === null) {
       id = '';
     }
@@ -77,43 +77,48 @@ class DragDropHelper {
     };
   }
 
-  findDropIndex<
-    T extends Item
-  >(dragItem: T, dropRef: T) {
-    const {
-      id: dragId,
-      dataType: dragDataType,
-      position: dragIndex,
-    } = dragItem;
-    const {
-      id: dropId,
-      dataType: dropDataType,
-      position: dropIndex,
-      parentId,
-      childId,
-      offset,
-    } = dropRef;
+  // The function takes two parameters, dragItem and dropRef, which are both of the Item type.
+  // It returns an object with various properties that are used to calculate the position of the drag item in relation to the drop item.
+  calculateDropIndex<T extends Item>(dragItem: T, dropRef: T) {
 
+    // Extract the id, data type, and position of the drag and drop items.
+    const dragId = dragItem.id;
+    const dragDataType = dragItem.dataType;
+    const dragPosition = dragItem.position;
+    const dropId = dropRef.id;
+    const dropDataType = dropRef.dataType;
+    const dropPosition = dropRef.position;
+    const dropParentId = dropRef.parentId;
+    const dropChildId = dropRef.childId;
+    const dropOffset = dropRef.offset;
+
+    // Get the number of items in the drag and drop blocks, as well as their ids.
     const [dragCounts, dragIds] = this.countItems(dragItem);
     const [dropCounts, dropIds] = this.countItems(dropRef);
 
-    // Remove suffix from dropId if it's a placeholder
-    const strippedDropId =
-      dropDataType === 'placeholder' ? `${dropId}`.split('_')[0] : `${dropId}`;
+    // Remove suffix from dropItemId if it's a placeholder
+    const strippedDropId = dropDataType === 'placeholder' ? `${dropId}`.split('_')[0] : `${dropId}`;
 
     // Prevent drag block drop over nested children
+    // If the ids of the drag items include the stripped drop item id, it means that the drag item is nested inside the drop item.
+    // In this case, we return null to indicate that the drag item cannot be dropped on the drop item.
     if (dragIds.includes(strippedDropId)) {
       return null;
     }
 
-    // Reset parentId to null if area
+    // Reset dropItemParentId to null if dropRef is an area
+    // If the drop item is an area, set the newParentId to null, indicating that the dragged items will not have a parent.
+    // If it's not an area, set the newParentId to the id of the drop item, indicating that the dragged items will have the drop item as their parent.
+    // reset parentId to null if dropzone
+
     const newParentId =
-      offset === 'middle'
+      dropOffset === 'middle'
         ? dropDataType === 'area'
           ? null
           : strippedDropId
-        : parentId;
+        : dropParentId;
 
+    // Calculate the position of the drag item in relation to the drop item.
     const {
       isDraggingFromTopOverTop,
       isDraggingFromTopOverMiddle,
@@ -124,89 +129,153 @@ class DragDropHelper {
       isOverTop,
       isOverBottom,
       isOverMiddle
-    } = this.calculateDropPosition(dragIndex, dropIndex, offset);
+    } = this.calculateDropPosition(dragPosition, dropPosition, dropOffset);
 
-    let dropIndexDelta = 0;
+    // Set the initial index of the dragged item.
+    let dropIndex = 0;
 
-    if (
-      ['field_field', 'field_element', 'element_element'].includes(
-        `${dragDataType}_${dropDataType}`
-      )
-    ) {
+    // Check if the drag and drop items are of the same type (field-field, field-element, element-element, field-placeholder, element-placeholder, block-placeholder).
+    const isFieldOrElementDrop = ['field_field', 'field_element', 'element_element'].includes(`${dragDataType}_${dropDataType}`);
+    const isPlaceholderDrop = ['field_placeholder', 'element_placeholder', 'block_placeholder'].includes(`${dragDataType}_${dropDataType}`);
+
+    // Determine the drop index based on the drag and drop action
+    if (isFieldOrElementDrop) {
+      // If dragging from top and over top, drop above the current drop position
       if (isDraggingFromTopOverTop) {
-        dropIndexDelta = dropIndex - 1;
-      } else if (isDraggingFromTopOverBottom) {
-        dropIndexDelta = dropIndex + 1;
-      } else {
-        dropIndexDelta = isOverBottom ? dropIndex + 1 : dropIndex - 1;
+        dropIndex = dropPosition - 1;
       }
-    } else if (
-      [
-        'field_placeholder',
-        'element_placeholder',
-        'block_placeholder',
-      ].includes(`${dragDataType}_${dropDataType}`)
-    ) {
+      // If dragging from top and over bottom, drop below the current drop position
+      else if (isDraggingFromTopOverBottom) {
+        dropIndex = dropPosition + 1;
+      }
+      // If not dragging from top and not over bottom, drop above the current drop position
+      else {
+        dropIndex = isOverBottom ? dropPosition + 1 : dropPosition - 1;
+      }
+    }
+    // If dragging over a placeholder, adjust the drop position based on the number of items being dragged and dropped
+    else if (isPlaceholderDrop) {
+      // If dragging from top and over the middle, drop items below the current drop position
       if (isDraggingFromTopOverMiddle) {
-        dropIndexDelta = dropIndex + dropCounts - dragCounts;
-      } else if (isDraggingFromBottomOverMiddle) {
-        dropIndexDelta = dropIndex + dropCounts;
-      } else {
-        dropIndexDelta = dropIndex + 1;
+        const itemsToInsert = dropCounts - dragCounts;
+        dropIndex = dropPosition + itemsToInsert;
       }
-    } else {
+      // If dragging from bottom and over the middle, drop items above the current drop position
+      else if (isDraggingFromBottomOverMiddle) {
+        dropIndex = dropPosition + dropCounts;
+      }
+      // If not dragging from top or bottom, drop items below the current drop position
+      else {
+        dropIndex = dropPosition + 1;
+      }
+    }
+    // If not dragging over a field, adjust the drop position based on the drag and drop action and the number of items being dragged and dropped
+    else {
+      const dragIdIncludedInDrop = dropIds.includes(`${dragId}`);
+      // If dragging from top and over top, drop items above the current drop position
       if (isDraggingFromTopOverTop) {
-        dropIndexDelta = dropIndex - dragCounts;
-      } else if (isDraggingFromTopOverBottom) {
-        dropIndexDelta = dropIndex + dropCounts - dragCounts;
-      } else if (isDraggingFromBottomOverBottom) {
-        dropIndexDelta = dropIds.includes(`${dragId}`)
-          ? dropIndex + dropCounts - dragCounts
-          : dropIndex + dropCounts;
-      } else if (isDraggingFromBottomOverMiddle) {
-        dropIndexDelta = dropIndex + 1;
-      } else {
-        dropIndexDelta = isOverBottom ? dropIndex + dropCounts : isOverMiddle ? dropIndex + 1 : dropIndex - 1;
+        dropIndex = dropPosition - dragCounts;
+      }
+      // If dragging from top and over bottom, drop items below the current drop position
+      else if (isDraggingFromTopOverBottom) {
+        const itemsToInsert = dropCounts - dragCounts;
+        dropIndex = dropPosition + itemsToInsert;
+      }
+      // If dragging from bottom and over bottom, adjust the drop position based on whether the dragged item is included in the drop area
+      else if (isDraggingFromBottomOverBottom) {
+        const itemsToInsert = dragIdIncludedInDrop ? dropCounts - dragCounts : dropCounts;
+        dropIndex = dropPosition + itemsToInsert;
+      }
+      // If dragging from bottom and over middle, drop items below the current drop position
+      else if (isDraggingFromBottomOverMiddle) {
+        dropIndex = dropPosition + 1;
+      }
+      // If not dragging from top or bottom and not over bottom or middle, adjust the drop position based on whether the dragged item is over the top or middle
+      else {
+        dropIndex = isOverBottom ? dropPosition + dropCounts : isOverMiddle ? dropPosition + 1 : dropPosition - 1;
       }
     }
 
-    const output = {
-      dragIndex,
-      dropIndex: dropIndexDelta,
-      dragCounts,
-      dropCounts,
-      dragIds,
-      dropIds,
+    // Return updated object with properties
+    return {
+      dragId,
       dragDataType,
-      dropDataType,
-      newParentId,
-      newChildId: childId,
-      offset,
-    };
+      dragIndex: dragPosition,
+      dragCounts,
 
-    return output;
+      dropId,
+      dropDataType,
+      dropIndex,
+      dropCounts,
+      dropParentId: newParentId,
+      dropChildId,
+      dropOffset,
+    }
   }
 
-  moveItems<T extends Item>(dragItem: T, dropRef: T, data: T[]) {
-    const foundResult = this.findDropIndex(dragItem, dropRef);
+  addItems<T extends Item>(dragItem: T, dropRef: T, data: T[]): T[] {
 
-    if (!foundResult) {
+    // Calculate the new drop index and other relevant information.
+    const result = this.calculateDropIndex(dragItem, dropRef);
+
+    console.log(result);
+
+    // If the drop index could not be calculated, return the original data.
+    if (!result) {
       return data;
     }
 
-    console.log('FOUND RESULT', foundResult);
+    // Destructure the relevant information from the result.
+    const { dragIndex, dragCounts, dropIndex, dropParentId, dropChildId } = result;
 
-    const { dragIndex, dropIndex, dragCounts, newParentId, newChildId } = foundResult;
+    const newDraggedItem = {
+      ...dragItem,
+      parentId: dropParentId,
+      childId: dropChildId
+    }
 
+    const updatedData = [...data];
+    updatedData.splice(dropIndex, 0, newDraggedItem);
+    updatedData.forEach((item, index) => item.position = index);
+
+    console.log('RESULT', updatedData);
+
+    return updatedData;
+  }
+
+  /**
+   * Move the dragged items to the new drop position.
+   * @param dragItem The item being dragged.
+   * @param dropRef The item being dropped on.
+   * @param data The array of items to update.
+   * @returns An updated array of items with the dragged items moved to the new position.
+   */
+  moveItems<T extends Item>(dragItem: T, dropRef: T, data: T[]): T[] {
+    // Calculate the new drop index and other relevant information.
+    const result = this.calculateDropIndex(dragItem, dropRef);
+
+    // If the drop index could not be calculated, return the original data.
+    if (!result) {
+      return data;
+    }
+
+    console.log('RESULT', result);
+
+    // Destructure the relevant information from the result.
+    const { dragIndex, dragCounts, dropIndex, dropParentId, dropChildId } = result;
+
+    // Get the items that were dragged and the remaining items.
     const draggedItems = data.slice(dragIndex, dragIndex + dragCounts);
     const remainingItems = data.filter((_, index) => index < dragIndex || index >= dragIndex + dragCounts);
 
+    // Update the dragged items to have the new parent and child IDs.
     const updatedDraggedItems = draggedItems.map(item => ({
       ...item,
-      parentId: newParentId,
-      childId: newChildId,
+      parentId: dropParentId,
+      childId: dropChildId,
     }));
 
+    // Rebuild the data array with the updated items and positions.
     const updatedData = [
       ...remainingItems.slice(0, dropIndex),
       ...updatedDraggedItems,
@@ -216,6 +285,7 @@ class DragDropHelper {
       position: index,
     }));
 
+    // Return the updated data array.
     return updatedData;
   }
 
@@ -297,6 +367,10 @@ class DragDropHelper {
     }
 
     return { width, height };
+  }
+
+  newId() {
+    return util.randomString();
   }
 }
 

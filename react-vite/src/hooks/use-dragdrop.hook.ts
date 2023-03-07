@@ -23,7 +23,6 @@ export const useDragDrop = <T extends DndItem>(
 ) => {
   const { id, dataType, parentId, childId, position, data } = item;
   const ref = useRef<HTMLDivElement>(null);
-  const dropTargetRef = ref.current;
   const dropRef = dndRef?.dropRef;
   const hasEmptyList = data?.length === 0;
 
@@ -32,10 +31,10 @@ export const useDragDrop = <T extends DndItem>(
   // This function updates the CSS classes of the drop target element to indicate where a dragged element will be dropped.
   const updateDropTargetClassList = useCallback((offsetString: string) => {
     // If the dropTargetRef does not exist, return early
-    if (!dropTargetRef) return;
+    if (!ref.current) return;
 
     // Remove all CSS classes related to drop target position
-    dropTargetRef.classList.remove(
+    ref.current.classList.remove(
       'on-top',
       'on-right',
       'on-bottom',
@@ -46,32 +45,32 @@ export const useDragDrop = <T extends DndItem>(
     // Determine which CSS class to add based on the first word of the offsetString parameter
     switch (offsetString.split(' ')[0]) {
       case 'top':
-        dropTargetRef.classList.add('on-top');
+        ref.current.classList.add('on-top');
         break;
       case 'right':
-        dropTargetRef.classList.add('on-right');
+        ref.current.classList.add('on-right');
         break;
       case 'bottom':
-        dropTargetRef.classList.add('on-bottom');
+        ref.current.classList.add('on-bottom');
         break;
       case 'left':
-        dropTargetRef.classList.add('on-top');
+        ref.current.classList.add('on-top');
         break;
       case 'middle':
-        dropTargetRef.classList.add('on-middle');
+        ref.current.classList.add('on-middle');
         break;
       default:
         // Log an error message to the console if the offsetString does not match any of the cases
         console.log('ELEMENT OFFSET: ', offsetString);
     }
-  }, [dropTargetRef]); 
+  }, [ref]);
 
 
   // Memoized function that updates the dropRef position based on the client offset
   const updateDropRefPositionByClientOffset = useCallback((clientOffsetPosition: XYCoord) => {
     // Get references to the dropTarget and dropRef using useRef
     // and check if they exist; if not, return early
-    if (!dropTargetRef || !dropRef) return;
+    if (!ref.current || !dropRef) return;
 
     // Only update the position if it has changed
     if (dropRef.x !== clientOffsetPosition.x || dropRef.y !== clientOffsetPosition.y) {
@@ -81,7 +80,7 @@ export const useDragDrop = <T extends DndItem>(
       dropRef.y = clientOffsetPosition.y;
 
       // Determine the bounding rectangle of the drop target
-      const boundingRect = dropTargetRef.getBoundingClientRect();
+      const boundingRect = ref.current.getBoundingClientRect();
 
       // Get the vertical center of the drop target
       const centerY = (boundingRect.bottom - boundingRect.top) / 2;
@@ -97,7 +96,7 @@ export const useDragDrop = <T extends DndItem>(
 
       // Get the width and height of the drop target element
       const { width: elementWidth, height: elementHeight } = dndHelper.getElementSize(
-        dropTargetRef
+        ref.current
       );
 
       // Calculate the horizontal and vertical offset based on the clientX, centerY, and elementWidth/elementHeight
@@ -105,7 +104,7 @@ export const useDragDrop = <T extends DndItem>(
       const verticalOffset = dndHelper.hoverOffsetY(clientY, centerY, elementHeight);
 
       // Determine the display style of the drop target
-      const displayStyle = dndHelper.getElementDisplay(dropTargetRef);
+      const displayStyle = dndHelper.getElementDisplay(ref.current);
 
       // Calculate the current offset based on the display style
       const currentOffset = displayStyle === 'column' ? verticalOffset : horizontalOffset;
@@ -113,41 +112,46 @@ export const useDragDrop = <T extends DndItem>(
       // Set the offset state with the currentOffset and the clientOffsetPosition
       setOffset(`${currentOffset} (${clientOffsetPosition.x},${clientOffsetPosition.y})`);
     }
-  }, [dropTargetRef, dropRef, setOffset]);
+  }, [ref, dropRef, setOffset]);
 
 
   useEffect(() => {
     if (offset) {
       updateDropTargetClassList(offset);
-
-      console.log(offset);
-
       if (dropRef) {
         dropRef.offset = offset.split(' ')[0];
       }
     }
   }, [offset, dropRef, updateDropTargetClassList]);
 
+  // Destructure the values returned by the useDrop hook
   const [{ isOver }, drop] = useDrop(
     {
+      // The type of the drop can accept
       accept: acceptTypes,
+      // A function to determine dragged over
       hover: useCallback((hoverItem: DndItem, monitor: DropTargetMonitor<DndItem, unknown>) => {
         // Get references to the dropTarget and dropRef using useRef
         // and check if they exist; if not, return early
-        if (!dropTargetRef || !dropRef) return;
+        if (!ref.current || !dropRef) return;
 
         // Check if the hovered item's id matches the current item's id
         if (monitor.isOver({ shallow: true })) {
           if (hoverItem.id === id) {
             // If they match, remove the 'on-top' and 'on-bottom' CSS classes
             // from the dropRef's currentRef element
-            if(['on-top', 'on-bottom'].some(className => dropRef.currentRef?.classList.contains(className))) {
+            if (['on-top', 'on-bottom'].some(className => dropRef.currentRef?.classList.contains(className))) {
               dropRef.currentRef?.classList.remove('on-top', 'on-bottom');
+            }
+            // Set dropRef's canDrop property to false
+            if (dropRef.canDrop) {
+              dropRef.canDrop = false;
             }
             return;
           }
           // If they don't match, update the dropRef with the new item's properties
           if (dropRef.id !== id) {
+            // Set the dropRef's properties based on the new item's properties
             dropRef.id = id;
             dropRef.dataType = dataType;
             dropRef.parentId = parentId;
@@ -156,54 +160,63 @@ export const useDragDrop = <T extends DndItem>(
             dropRef.data = data;
             dropRef.x = 0;
             dropRef.y = 0;
-            dropRef.currentRef = dropTargetRef;
+            dropRef.currentRef = ref.current;
+
             console.log(dndRef);
           }
-
+          // Set dropRef's canDrop property to true
+          if (!dropRef.canDrop) dropRef.canDrop = true;
           // Determine the mouse position using getClientOffset
           const clientOffsetPosition = monitor.getClientOffset();
-
+          // If the client offset doesn't exist, return early
           if (!clientOffsetPosition) return;
-
           // If the client offset exists, update the dropRef's position
           updateDropRefPositionByClientOffset(clientOffsetPosition);
         }
-      }, [id, dataType, parentId, childId, position, data, dropRef, dndRef, updateDropRefPositionByClientOffset]),
+        // An array of dependencies to trigger a callback when they change
+      }, [id, dataType, parentId, childId, position, data, dropRef, ref, updateDropRefPositionByClientOffset]),
+      // A function that returns an object with values to be collected during dropping
       collect: (monitor) => ({
         isOver: monitor.isOver({ shallow: true }),
         canDrop: monitor.canDrop(),
       }),
     });
 
+  // Destructure the values returned by the useDrag hook
   const [{ isDragging }, drag, preview] = useDrag(
+    // Pass an object with various options to configure the drag behavior
     () => ({
+      // The type of the draggable item
       type: dataType,
+      // The item data to be passed to the drop target
       item: { ...item },
+      // A function to determine whether the item can be dragged
       canDrag: () => {
+        // Prepare an empty image to use for dragging preview
         preview(getEmptyImage(), { captureDraggingState: false });
+        // Prevent dragging for certain types of items
         if (dataType == 'area' || dataType == 'placeholder') return false;
+        // Reset the ID of the drop target.
+        // will trigger useDrop hover function to set a new dropRef again
         if (dropRef) dropRef.id = undefined;
+        // Allow dragging for all other items
         return true;
       },
+      // A function that returns an object with values to be collected during dragging
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
       }),
+      // A function to handle the end of a drag operation
       end: (dragItem, monitor) => {
+        // Check if the item was dropped onto a valid target
         const didDrop = monitor.didDrop();
-
-        //  handle drop events here
+        // Handle the drop event if one occurred
         if (didDrop) {
-          if (dropTargetRef) {
+          // Check if the drop target allows the dropped item
+          if (dropRef?.canDrop) {
+            // Dispatch an action to move or add the item to the drop target
             dispatch?.({
-              type: DndActionTypes.MOVE_ITEM,
-              payload: {
-                dragItem,
-                dropRef,
-              },
-            });
-          } else {
-            dispatch?.({
-              type: DndActionTypes.ADD_ITEM,
+              type: ref.current ? DndActionTypes.MOVE_ITEM : DndActionTypes.ADD_ITEM,
               payload: {
                 dragItem,
                 dropRef,
@@ -213,30 +226,25 @@ export const useDragDrop = <T extends DndItem>(
         }
       },
     }),
-    [dataType, item, dndRef]
+    // An array of dependencies to trigger a re-render when they change
+    [ref, dataType, item, dndRef]
   );
 
-  const onMouseOver = useCallback(
-    (event: React.MouseEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-      if (dropTargetRef) {
-        dropTargetRef.classList.add('is-hover');
-      }
-    },
-    [dropTargetRef]
-  );
+  const onMouseOver = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (ref.current) {
+      ref.current.classList.add('is-hover');
+    }
+  };
 
-  const onMouseOut = useCallback(
-    (event: React.MouseEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-      if (dropTargetRef) {
-        dropTargetRef.classList.remove('is-hover');
-      }
-    },
-    [dropTargetRef]
-  );
+  const onMouseOut = (event: React.MouseEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (ref.current) {
+      ref.current.classList.remove('is-hover');
+    }
+  };
 
   return { ref, drop, drag, isOver, isDragging, hasEmptyList, onMouseOver, onMouseOut };
 };
