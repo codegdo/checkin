@@ -65,7 +65,6 @@ export const useDragDrop = <T extends DndItem>(
     }
   }, [ref]);
 
-
   // Memoized function that updates the dropRef position based on the client offset
   const updateDropRefPositionByClientOffset = useCallback((clientOffsetPosition: XYCoord) => {
     // Get references to the dropTarget and dropRef using useRef
@@ -114,6 +113,13 @@ export const useDragDrop = <T extends DndItem>(
     }
   }, [ref, dropRef, setOffset]);
 
+  const removeCurrentRefClassName = useCallback((currentRef: HTMLElement | null | undefined) => {
+    // If they match, remove the 'on-top' and 'on-bottom' CSS classes
+    // from the dropRef's currentRef element
+    if (['on-top', 'on-bottom'].some(className => currentRef?.classList.contains(className))) {
+      currentRef?.classList.remove('on-top', 'on-bottom');
+    }
+  }, [dropRef]);
 
   useEffect(() => {
     if (offset) {
@@ -125,62 +131,68 @@ export const useDragDrop = <T extends DndItem>(
   }, [offset, dropRef, updateDropTargetClassList]);
 
   // Destructure the values returned by the useDrop hook
-  const [{ isOver }, drop] = useDrop(
-    {
-      // The type of the drop can accept
-      accept: acceptTypes,
-      // A function to determine dragged over
-      hover: useCallback((hoverItem: DndItem, monitor: DropTargetMonitor<DndItem, unknown>) => {
-        // Get references to the dropTarget and dropRef using useRef
-        // and check if they exist; if not, return early
-        if (!ref.current || !dropRef) return;
+  const [{ isOver }, drop] = useDrop({
+    // The type of the drop can accept
+    accept: acceptTypes,
+    // A function to determine dragged over
+    hover: useCallback((hoverItem: DndItem, monitor: DropTargetMonitor<DndItem, unknown>) => {
+      // Get references to the dropTarget and dropRef using useRef
+      // and check if they exist; if not, return early
+      if (!ref.current || !dropRef) return;
 
-        // Check if the hovered item's id matches the current item's id
-        if (monitor.isOver({ shallow: true })) {
-          if (hoverItem.id === id) {
-            // If they match, remove the 'on-top' and 'on-bottom' CSS classes
-            // from the dropRef's currentRef element
-            if (['on-top', 'on-bottom'].some(className => dropRef.currentRef?.classList.contains(className))) {
-              dropRef.currentRef?.classList.remove('on-top', 'on-bottom');
-            }
-            // Set dropRef's canDrop property to false
-            if (dropRef.canDrop) {
-              dropRef.canDrop = false;
-            }
-            return;
-          }
-          // If they don't match, update the dropRef with the new item's properties
-          if (dropRef.id !== id) {
-            // Set the dropRef's properties based on the new item's properties
-            dropRef.id = id;
-            dropRef.dataType = dataType;
-            dropRef.parentId = parentId;
-            dropRef.childId = childId;
-            dropRef.position = position;
-            dropRef.data = data;
-            dropRef.x = 0;
-            dropRef.y = 0;
-            dropRef.currentRef = ref.current;
+      // Check if the hovered item's id matches the current item's id
+      if (monitor.isOver({ shallow: true })) {
+        if (hoverItem.id === id) {
+          // Remove the current reference class name from the drop reference's currentRef
+          removeCurrentRefClassName(dropRef?.currentRef);
 
-            console.log(dndRef);
+          // Set dropRef's canDrop property to false
+          if (dropRef.canDrop) {
+            dropRef.canDrop = false;
           }
-          // Set dropRef's canDrop property to true
-          if (!dropRef.canDrop) dropRef.canDrop = true;
-          // Determine the mouse position using getClientOffset
-          const clientOffsetPosition = monitor.getClientOffset();
-          // If the client offset doesn't exist, return early
-          if (!clientOffsetPosition) return;
-          // If the client offset exists, update the dropRef's position
-          updateDropRefPositionByClientOffset(clientOffsetPosition);
+
+          return;
         }
-        // An array of dependencies to trigger a callback when they change
-      }, [id, dataType, parentId, childId, position, data, dropRef, ref, updateDropRefPositionByClientOffset]),
-      // A function that returns an object with values to be collected during dropping
-      collect: (monitor) => ({
-        isOver: monitor.isOver({ shallow: true }),
-        canDrop: monitor.canDrop(),
-      }),
-    });
+
+        // If they don't match, update the dropRef with the new item's properties
+        if (dropRef.id !== id) {
+          // Remove the current reference class name from the drop reference's currentRef
+          removeCurrentRefClassName(dropRef?.currentRef);
+
+          // Set the dropRef's properties based on the new item's properties
+          dropRef.id = id;
+          dropRef.dataType = dataType;
+          dropRef.parentId = parentId;
+          dropRef.childId = childId;
+          dropRef.position = position;
+          dropRef.data = data;
+          dropRef.x = 0;
+          dropRef.y = 0;
+          dropRef.currentRef = ref.current;
+
+          console.log(dndRef);
+        }
+
+        // Set dropRef's canDrop property to true
+        if (!dropRef.canDrop) dropRef.canDrop = true;
+
+        // Determine the mouse position using getClientOffset
+        const clientOffsetPosition = monitor.getClientOffset();
+
+        // If the client offset doesn't exist, return early
+        if (!clientOffsetPosition) return;
+
+        // If the client offset exists, update the dropRef's position
+        updateDropRefPositionByClientOffset(clientOffsetPosition);
+      }
+      // An array of dependencies to trigger a callback when they change
+    }, [id, dataType, parentId, childId, position, data, dropRef, ref, updateDropRefPositionByClientOffset]),
+    // A function that returns an object with values to be collected during dropping
+    collect: (monitor) => ({
+      isOver: monitor.isOver({ shallow: true }),
+      canDrop: monitor.canDrop(),
+    }),
+  });
 
   // Destructure the values returned by the useDrag hook
   const [{ isDragging }, drag, preview] = useDrag(
@@ -214,7 +226,7 @@ export const useDragDrop = <T extends DndItem>(
         if (didDrop) {
           // Check if the dropped item is not allowed in the target area
           if (dragItem.position !== undefined && dropRef?.dataType === 'area') return;
-          
+
           // Check if the drop target allows the dropped item
           if (dropRef?.canDrop) {
             // Dispatch an action to move or add the item to the drop target
