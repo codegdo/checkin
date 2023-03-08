@@ -132,7 +132,7 @@ class DragDropHelper {
     } = this.calculateDropPosition(dragPosition, dropPosition, dropOffset);
 
     // Set the initial index of the dragged item.
-    let dropIndex = 0;
+    let dropIndex = dropPosition;
 
     // Check if the drag and drop items are of the same type (field-field, field-element, element-element, field-placeholder, element-placeholder, block-placeholder).
     const isFieldOrElementDrop = ['field_field', 'field_element', 'element_element'].includes(`${dragDataType}_${dropDataType}`);
@@ -150,7 +150,7 @@ class DragDropHelper {
       }
       // If not dragging from top and not over bottom, drop above the current drop position
       else {
-        dropIndex = isOverBottom ? dropPosition + 1 : dropPosition - 1;
+        dropIndex = isOverBottom ? dropPosition + 1 : dropPosition;
       }
     }
     // If dragging over a placeholder, adjust the drop position based on the number of items being dragged and dropped
@@ -192,7 +192,7 @@ class DragDropHelper {
       }
       // If not dragging from top or bottom and not over bottom or middle, adjust the drop position based on whether the dragged item is over the top or middle
       else {
-        dropIndex = isOverBottom ? dropPosition + dropCounts : isOverMiddle ? dropPosition + 1 : dropPosition - 1;
+        dropIndex = isOverBottom ? dropPosition + dropCounts : isOverMiddle ? dropPosition + 1 : dropPosition;
       }
     }
 
@@ -264,16 +264,22 @@ class DragDropHelper {
     // Destructure the relevant information from the result.
     const { dragIndex, dragCounts, dropIndex, dropParentId, dropChildId } = result;
 
+    // Update the parentId and childId properties of the dragged item.
+    // data[dragIndex].parentId = dropParentId;
+    // data[dragIndex].childId = dropChildId;
+    
     // Get the items that were dragged and the remaining items.
     const draggedItems = data.slice(dragIndex, dragIndex + dragCounts);
     const remainingItems = data.filter((_, index) => index < dragIndex || index >= dragIndex + dragCounts);
 
-    // Update the dragged items to have the new parent and child IDs.
-    const updatedDraggedItems = draggedItems.map(item => ({
-      ...item,
-      parentId: dropParentId,
-      childId: dropChildId,
-    }));
+    // Update the dragged item that match dragIndex to have the new parent and child IDs.
+    const updatedDraggedItems = draggedItems.map(item => {
+      if(item.position === dragIndex) {
+        item.parentId = dropParentId;
+        item.childId = dropChildId;
+      }
+      return item;
+    });
 
     // Rebuild the data array with the updated items and positions.
     const updatedData = [
@@ -376,3 +382,30 @@ class DragDropHelper {
 
 export const dndHelper = new DragDropHelper(util);
 export default DragDropHelper;
+
+/* // Create an array to hold the dragged items.
+    const draggedItems: any = [];
+
+    // Add the dragged items to the `draggedItems` array.
+    for (let i = 0; i < dragCounts; i++) {
+      draggedItems.push(data[dragIndex + i]);
+    }
+
+    // Update the `data` array using the `update` function.
+    const updatedData = update(data, {
+      // Remove the dragged items from their current location in the array.
+      $splice: [
+        [dragIndex, dragCounts],
+        // Add the dragged items at the new drop index.
+        [dropIndex, 0, ...draggedItems],
+      ],
+      // Update the position property of each item in the array.
+      $apply: (data: any) =>
+        data.filter((item: any, index: number) => {
+          item.position = index;
+          return item;
+        }),
+    });
+
+    // Return the updated data array.
+    return updatedData; */
