@@ -109,7 +109,7 @@ class DragDropHelper {
     // Reset dropItemParentId to null if dropRef is an area
     // If the drop item is an area, set the newParentId to null, indicating that the dragged items will not have a parent.
     // If it's not an area, set the newParentId to the id of the drop item, indicating that the dragged items will have the drop item as their parent.
-    // reset parentId to null if dropzone
+    // reset parentId to null if area
 
     const newParentId =
       dropOffset === 'middle'
@@ -158,7 +158,7 @@ class DragDropHelper {
       // If dragging from top and over the middle, drop items below the current drop position
       if (isDraggingFromTopOverMiddle) {
         const itemsToInsert = dropCounts - dragCounts;
-        dropIndex = dropPosition + itemsToInsert;
+        dropIndex = dropPosition + dropCounts - dragCounts;
       }
       // If dragging from bottom and over the middle, drop items above the current drop position
       else if (isDraggingFromBottomOverMiddle) {
@@ -171,7 +171,9 @@ class DragDropHelper {
     }
     // If not dragging over a field, adjust the drop position based on the drag and drop action and the number of items being dragged and dropped
     else {
-      const dragIdIncludedInDrop = dropIds.includes(`${dragId}`);
+      const isDragIdIncludedInDrop = dropIds.includes(`${dragId}`);
+      const isDraggingNewItem = dragPosition === null;
+      
       // If dragging from top and over top, drop items above the current drop position
       if (isDraggingFromTopOverTop) {
         dropIndex = dropPosition - dragCounts;
@@ -183,7 +185,7 @@ class DragDropHelper {
       }
       // If dragging from bottom and over bottom, adjust the drop position based on whether the dragged item is included in the drop area
       else if (isDraggingFromBottomOverBottom) {
-        const itemsToInsert = dragIdIncludedInDrop ? dropCounts - dragCounts : dropCounts;
+        const itemsToInsert = isDragIdIncludedInDrop ? dropCounts - dragCounts : dropCounts;
         dropIndex = dropPosition + itemsToInsert;
       }
       // If dragging from bottom and over middle, drop items below the current drop position
@@ -191,7 +193,7 @@ class DragDropHelper {
         dropIndex = dropPosition + 1;
       }
       // If not dragging from top or bottom and not over bottom or middle, adjust the drop position based on whether the dragged item is over the top or middle
-      else {
+      else if(isDraggingNewItem) {
         dropIndex = isOverBottom ? dropPosition + dropCounts : isOverMiddle ? dropPosition + 1 : dropPosition;
       }
     }

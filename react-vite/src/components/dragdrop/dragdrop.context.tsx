@@ -50,7 +50,7 @@ const dndReducer = (state: State, { type, payload }: Action) => {
         data: [],
         parentId: null,
         childId: null,
-        position: 0,
+        position: null,
         ...dragItem
       };
 
