@@ -3,40 +3,49 @@ import stringClassNames from 'classnames';
 
 import { useDragDrop } from '../../hooks';
 import { DndItem, DndItemType } from './dragdrop.type';
+import DragDropMenu from './dragdrop.menu';
 
 type DropFieldProps = DndItem;
 
 const DropField: React.FC<DropFieldProps> = (props): JSX.Element => {
-  const {state, dispatch, id, className = '',  } = props;
+  const { state, dispatch, id, className = '', } = props;
   const acceptTypes = Object.values(DndItemType);
-  const { 
-    ref, 
-    drag, 
-    drop, 
-    isDragging, 
-    isOver, 
-    isFocused, 
-    onMouseOver, 
-    onMouseOut 
+  const {
+    ref,
+    drag,
+    drop,
+    isDragging,
+    isOver,
+    isFocused,
+    onMouseOver,
+    onMouseOut
   } = useDragDrop(props, acceptTypes);
 
   const classNames = stringClassNames({
-    'drop-item drop-field': true,
     [className]: true,
+    'drop-item drop-field': true,
     'is-dragging': isDragging,
     'is-over': isOver,
     'is-focus': isFocused
   });
 
-  const handleChangeCallback = () => {
+  const handleOnChangeCallback = () => {
     console.log('on-change');
+  }
+
+  const handleOnClickCallback = () => {
+    console.log('on-click');
   }
 
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
 
-    const selectedItem = (state?.item?.id == id) ? null : { id, onChange: handleChangeCallback };
+    const selectedItem = (state?.item?.id == id) ? null : {
+      id,
+      onChange: handleOnChangeCallback,
+      onClick: handleOnClickCallback
+    };
 
     console.log(selectedItem);
 
@@ -55,7 +64,10 @@ const DropField: React.FC<DropFieldProps> = (props): JSX.Element => {
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
       onClick={handleClick}
-    >field</div>
+    >
+      {isFocused && <DragDropMenu />}
+      field
+    </div>
   );
 };
 

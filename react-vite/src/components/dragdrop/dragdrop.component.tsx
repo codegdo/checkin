@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 
 import DragDropProvider from './dragdrop.context';
-import DragEditor from './drag.editor';
+import DragEditor from './dragdrop.editor';
 import DropArea from './drop.area';
 import DragArea from './drag.area';
 
