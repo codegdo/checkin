@@ -1,7 +1,6 @@
 import React, {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -25,6 +24,7 @@ export const useDragDrop = <T extends DndItem>(
   const ref = useRef<HTMLDivElement>(null);
   const dropRef = dndRef?.dropRef;
   const hasEmptyList = data?.length === 0;
+  const isFocused = state?.item?.id == id;
 
   const [offset, setOffset] = useState<string>();
 
@@ -261,5 +261,15 @@ export const useDragDrop = <T extends DndItem>(
     }
   };
 
-  return { ref, drop, drag, isOver, isDragging, hasEmptyList, onMouseOver, onMouseOut };
+  return { 
+    ref, 
+    drop, 
+    drag, 
+    isOver, 
+    isDragging, 
+    isFocused, 
+    hasEmptyList, 
+    onMouseOver, 
+    onMouseOut
+  };
 };

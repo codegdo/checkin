@@ -32,14 +32,18 @@ interface DragDropProviderProps extends PropsWithChildren<DragDropProps> { };
 
 
 export enum DndActionTypes {
-  SET_ITEMS = 'SET_ITEMS',
+  SET_SELECTED_ITEM = 'SET_SELECTED_ITEM',
+  SET_INITIAL_ITEMS = 'SET_INITIAL_ITEMS',
   ADD_ITEM = 'ADD_ITEM',
   MOVE_ITEM = 'MOVE_ITEM'
 }
 
 const dndReducer = (state: State, { type, payload }: Action) => {
   switch (type) {
-    case DndActionTypes.SET_ITEMS: {
+    case DndActionTypes.SET_SELECTED_ITEM: {
+      return {...state, item: {...payload}}
+    }
+    case DndActionTypes.SET_INITIAL_ITEMS: {
       return { ...state, data: [...payload] };
     }
     case DndActionTypes.ADD_ITEM: {
@@ -95,7 +99,7 @@ const DragDropProvider: React.FC<DragDropProviderProps> = ({
   }), [state, dispatch, dndRef]);
 
   useEffect(() => {
-    dispatch({ type: DndActionTypes.SET_ITEMS, payload: data });
+    dispatch({ type: DndActionTypes.SET_INITIAL_ITEMS, payload: data });
   }, [data]);
 
   return (
