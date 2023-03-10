@@ -330,7 +330,7 @@ class DragDropHelper {
       return this.util.mapToParent(
         list,
         item,
-        (item) => item.dataType === DndItemType.Block
+        (item) => item.dataType === DndItemType.BLOCK
       );
     });
 

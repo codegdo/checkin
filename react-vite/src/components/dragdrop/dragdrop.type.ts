@@ -3,14 +3,10 @@ import { DragDropContextValue } from './dragdrop.context';
 
 export const DndItemType = { ...DataType };
 
-export enum DndAcceptType {
-  Area = 'area',
-  Placeholder = 'placeholder',
-  Block = 'block',
-  Element = 'element',
-  Field = 'field',
-  Group = 'group',
-  Grid = 'grid',
+export enum DndActionClickType {
+  MENU_EDIT = 'MENU_EDIT',
+  MENU_DUPLICATE = 'MENU_DUPLICATE',
+  MENU_DELETE = 'MENU_DELETE'
 }
 
 export type DndItem = Element & Partial<DragDropContextValue>;

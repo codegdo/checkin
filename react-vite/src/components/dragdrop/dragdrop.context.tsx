@@ -11,7 +11,7 @@ interface State {
 }
 
 interface Action {
-  type: string;
+  type: DndActionTypes | string;
   payload: any;
 }
 

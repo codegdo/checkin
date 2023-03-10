@@ -1,23 +1,23 @@
 export enum ElementType {
-  Text = 'text',
-  Number = 'number',
-  Password = 'password',
-  Email = 'email',
-  Date = 'date',
-  Checkbox = 'checkbox',
-  Radio = 'radio',
-  Div = 'div',
-  Button = 'button',
+  TEXT = 'text',
+  NUMBER = 'number',
+  PASSWORD = 'password',
+  EMAIL = 'email',
+  DATE = 'date',
+  CHECKBOX = 'checkbox',
+  RADIO = 'radio',
+  DIV = 'div',
+  BUTTON = 'button',
 }
 
 export enum DataType {
-  Area = 'area',
-  Placeholder = 'placeholder',
-  Block = 'block',
-  Element = 'element',
-  Field = 'field',
-  Group = 'group',
-  Grid = 'grid',
+  AREA = 'area',
+  PLACEHOLDER = 'placeholder',
+  BLOCK = 'block',
+  ELEMENT = 'element',
+  FIELD = 'field',
+  GROUP = 'group',
+  GRID = 'grid',
 }
 
 export type Element = Block | Field;

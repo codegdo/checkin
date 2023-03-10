@@ -15,7 +15,7 @@ const DropArea: React.FC = () => {
   console.log('nomalize', data);
 
   return (
-    <DropBlock id='0' name='root' type='div' dataType={DataType.Area} className="drop-area" {...context}>
+    <DropBlock id='0' name='root' type='div' dataType={DataType.AREA} className="drop-area" {...context}>
       {<DragDropRender data={data} />}
     </DropBlock>
   );

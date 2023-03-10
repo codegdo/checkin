@@ -20,11 +20,11 @@ export const FormRender: React.FC<FormRenderProps> = memo(({ data = [], children
           const { dataType } = item;
 
           switch (dataType) {
-            case DataType.Block: return <FormBlock key={i} {...item} />;
-            case DataType.Element: return <FormElement key={i} {...item} />;
-            case DataType.Field: return <FormField key={i} {...item} />;
-            case DataType.Group: return <FormGroup key={i} {...item} />;
-            case DataType.Grid: return <FormGrid key={i} {...item} />;
+            case DataType.BLOCK: return <FormBlock key={i} {...item} />;
+            case DataType.ELEMENT: return <FormElement key={i} {...item} />;
+            case DataType.FIELD: return <FormField key={i} {...item} />;
+            case DataType.GROUP: return <FormGroup key={i} {...item} />;
+            case DataType.GRID: return <FormGrid key={i} {...item} />;
             default: return null;
           }
         })

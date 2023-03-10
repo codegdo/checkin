@@ -6,6 +6,7 @@ import stringClassNames from 'classnames';
 import DragDropRender from './dragdrop.render';
 import { DndItem, DndItemType } from './dragdrop.type';
 import DragDropMenu from './dragdrop.menu';
+import { DndActionTypes } from './dragdrop.context';
 type DropBlockProps = DndItem;
 
 const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...props }): JSX.Element => {
@@ -17,8 +18,8 @@ const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...p
     drop,
     isDragging,
     isOver,
-    isFocused,
-    hasEmptyList,
+    isSelected,
+    isDropEmpty,
     onMouseOver,
     onMouseOut
   } = useDragDrop(props, acceptTypes);
@@ -28,32 +29,40 @@ const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...p
     'drop-item drop-block': dataType !== 'area',
     'is-dragging': isDragging,
     'is-over': isOver,
-    'is-focus': isFocused,
-    'is-empty': hasEmptyList,
+    'is-selected': isSelected,
+    'is-empty': isDropEmpty,
   });
 
-  const handleOnChangeCallback = () => {
+  const handleChange = () => {
     console.log('on-change');
   }
 
-  const handleOnClickCallback = () => {
-    console.log('on-click');
+  const handleClick = (name: string) => {
+    switch(name) {
+      case 'MENU_EDIT':
+        break;
+      case 'MENU_DUPLICATE':
+        break;
+      case 'MENU_DELETE':
+        break;
+      default:
+    }
   }
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
+  const handleItemClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
 
     const selectedItem = (state?.item?.id == id) ? null : {
       id,
-      onChange: handleOnChangeCallback,
-      onClick: handleOnClickCallback
+      onChange: handleChange,
+      onClick: handleClick
     };
 
     console.log(selectedItem);
 
     dispatch?.({
-      type: 'SET_SELECTED_ITEM',
+      type: DndActionTypes.SET_SELECTED_ITEM,
       payload: selectedItem
     });
   }
@@ -66,9 +75,9 @@ const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...p
       className={classNames}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
-      onClick={handleClick}
+      onClick={handleItemClick}
     >
-      {isFocused && <DragDropMenu />}
+      {isSelected && <DragDropMenu onClick={handleClick} />}
       {children || <DragDropRender data={data} />}
     </div>
   );

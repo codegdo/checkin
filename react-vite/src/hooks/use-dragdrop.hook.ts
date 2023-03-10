@@ -23,8 +23,8 @@ export const useDragDrop = <T extends DndItem>(
   const { id, dataType, parentId, childId, position, data } = item;
   const ref = useRef<HTMLDivElement>(null);
   const dropRef = dndRef?.dropRef;
-  const hasEmptyList = data?.length === 0;
-  const isFocused = state?.item?.id == id;
+  const isDropEmpty = data?.length === 0;
+  const isSelected = state?.item?.id == id;
 
   const [offset, setOffset] = useState<string>();
 
@@ -267,8 +267,8 @@ export const useDragDrop = <T extends DndItem>(
     drag, 
     isOver, 
     isDragging, 
-    isFocused, 
-    hasEmptyList, 
+    isSelected, 
+    isDropEmpty, 
     onMouseOver, 
     onMouseOut
   };

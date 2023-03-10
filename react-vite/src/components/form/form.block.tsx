@@ -1,11 +1,11 @@
 import React, { PropsWithChildren } from 'react';
 import { FormRender } from './form.render';
-import { BlockData, FieldData } from './form.type';
+import { Element } from './form.type';
 
 export interface BlockProps extends PropsWithChildren {
   type?: string;
   className?: string;
-  data?: (BlockData | FieldData)[];
+  data?: Element[];
 }
 
 const FormBlock: React.FC<BlockProps> = ({ type = 'div', className, data = [], children }): JSX.Element => {
