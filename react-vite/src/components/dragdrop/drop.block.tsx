@@ -4,7 +4,7 @@ import stringClassNames from 'classnames';
 
 
 import DragDropRender from './dragdrop.render';
-import { DndItem, DndItemType } from './dragdrop.type';
+import { DndActionClickType, DndItem, DndItemType } from './dragdrop.type';
 import DragDropMenu from './dragdrop.menu';
 import { DndActionTypes } from './dragdrop.context';
 type DropBlockProps = DndItem;
@@ -38,12 +38,21 @@ const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...p
   }
 
   const handleClick = (name: string) => {
-    switch(name) {
-      case 'MENU_EDIT':
+    switch (name) {
+      case DndActionClickType.MENU_EDIT:
+
         break;
-      case 'MENU_DUPLICATE':
+      case DndActionClickType.MENU_DUPLICATE:
+        dispatch?.({
+          type: DndActionTypes.DUPLICATE_ITEM,
+          payload: props
+        });
         break;
-      case 'MENU_DELETE':
+      case DndActionClickType.MENU_DELETE:
+        dispatch?.({
+          type: DndActionTypes.DELETE_ITEM,
+          payload: props
+        });
         break;
       default:
     }

@@ -35,13 +35,15 @@ export enum DndActionTypes {
   SET_SELECTED_ITEM = 'SET_SELECTED_ITEM',
   SET_INITIAL_ITEMS = 'SET_INITIAL_ITEMS',
   ADD_ITEM = 'ADD_ITEM',
-  MOVE_ITEM = 'MOVE_ITEM'
+  MOVE_ITEM = 'MOVE_ITEM',
+  DUPLICATE_ITEM = 'DUPLICATE_ITEM',
+  DELETE_ITEM = 'DELETE_ITEM'
 }
 
 const dndReducer = (state: State, { type, payload }: Action) => {
   switch (type) {
     case DndActionTypes.SET_SELECTED_ITEM: {
-      return {...state, item: {...payload}}
+      return { ...state, item: { ...payload } }
     }
     case DndActionTypes.SET_INITIAL_ITEMS: {
       return { ...state, data: [...payload] };
@@ -67,6 +69,18 @@ const dndReducer = (state: State, { type, payload }: Action) => {
       const newData = dndHelper.moveItems(dragItem, dropRef, state.data);
 
       return { ...state, data: newData };
+    }
+    case DndActionTypes.DUPLICATE_ITEM: {
+      const { dragItem, dropRef } = payload;
+      const newData = dndHelper.moveItems(dragItem, dropRef, state.data);
+
+      return { ...state, data: newData };
+    }
+    case DndActionTypes.DELETE_ITEM: {
+      //const { dragItem, dropRef } = payload;
+      //const newData = dndHelper.moveItems(dragItem, dropRef, state.data);
+
+      return { ...state };
     }
     default:
       return state;

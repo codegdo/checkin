@@ -173,7 +173,7 @@ class DragDropHelper {
     else {
       const isDragIdIncludedInDrop = dropIds.includes(`${dragId}`);
       const isDraggingNewItem = dragPosition === null;
-      
+
       // If dragging from top and over top, drop items above the current drop position
       if (isDraggingFromTopOverTop) {
         dropIndex = dropPosition - dragCounts;
@@ -193,7 +193,7 @@ class DragDropHelper {
         dropIndex = dropPosition + 1;
       }
       // If not dragging from top or bottom and not over bottom or middle, adjust the drop position based on whether the dragged item is over the top or middle
-      else if(isDraggingNewItem) {
+      else if (isDraggingNewItem) {
         dropIndex = isOverBottom ? dropPosition + dropCounts : isOverMiddle ? dropPosition + 1 : dropPosition;
       }
     }
@@ -269,14 +269,14 @@ class DragDropHelper {
     // Update the parentId and childId properties of the dragged item.
     // data[dragIndex].parentId = dropParentId;
     // data[dragIndex].childId = dropChildId;
-    
+
     // Get the items that were dragged and the remaining items.
     const draggedItems = data.slice(dragIndex, dragIndex + dragCounts);
     const remainingItems = data.filter((_, index) => index < dragIndex || index >= dragIndex + dragCounts);
 
     // Update the dragged item that match dragIndex to have the new parent and child IDs.
     const updatedDraggedItems = draggedItems.map(item => {
-      if(item.position === dragIndex) {
+      if (item.position === dragIndex) {
         item.parentId = dropParentId;
         item.childId = dropChildId;
       }
@@ -295,6 +295,17 @@ class DragDropHelper {
 
     // Return the updated data array.
     return updatedData;
+  }
+
+  deleteItem<T extends Item>(deleteItem: T, data: T[]): T[] {
+    const dragIndex = deleteItem.position;
+    const [deleteCounts] = this.countItems(deleteItem);
+    const newData = [
+      ...data.slice(0, dragIndex),
+      ...data.slice(dragIndex + deleteCounts)
+    ].map((item: T, index: number) => ({ ...item, position: index }));
+
+    return [];
   }
 
   hoverOffsetX(
