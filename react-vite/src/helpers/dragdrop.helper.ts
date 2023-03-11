@@ -297,15 +297,85 @@ class DragDropHelper {
     return updatedData;
   }
 
-  deleteItem<T extends Item>(deleteItem: T, data: T[]): T[] {
-    const dragIndex = deleteItem.position;
-    const [deleteCounts] = this.countItems(deleteItem);
-    const newData = [
-      ...data.slice(0, dragIndex),
-      ...data.slice(dragIndex + deleteCounts)
+  removeItems<T extends Item>(item: T, data: T[]): T[] {
+    const [numItemsToRemove] = this.countItems(item);
+    const updatedData = [
+      ...data.slice(0, item.position),
+      ...data.slice(item.position + numItemsToRemove)
     ].map((item: T, index: number) => ({ ...item, position: index }));
+    
+    return updatedData;
+  }
 
-    return [];
+  cloneItems<T extends Item>(itemToClone: T, data: T[]): T[] {
+    // Count the number of items to clone
+    const [numItemsToClone] = this.countItems(itemToClone);
+    // Create an empty array to store the cloned items
+    const clonedItems: T[] = [];
+    // Create an empty object to store the original item IDs and their new IDs
+    const idMap: Record<string, string> = {};
+    
+    // Clone the specified number of items starting from the specified item position
+    for (let i = 0; i < numItemsToClone; i++) {
+      // Get the original item to clone
+      const originalItem = data[itemToClone.position + i];
+  
+      // Check if the original item exists
+      if (originalItem) {
+        // Generate a new ID for the cloned item
+        const newId = this.generateNewId();
+        // Get the parent ID for the cloned item
+        const parentId = idMap[`${originalItem.parentId}`] ?? originalItem.parentId;
+  
+        // Update the ID map with the original and new IDs
+        idMap[`${originalItem.id}`] = newId;
+        // Add the cloned item to the array
+        clonedItems.push({
+          ...originalItem,
+          id: newId,
+          parentId,
+        });
+      }
+    }
+  
+    // Get the last index of the data array
+    const lastIndex = this.getLastIndex(data) + 1;
+    // Create an empty array to store the updated data
+    const newData: T[] = [];
+  
+    // Loop through each item in the data array
+    for (let i = 0; i < lastIndex; i++) {
+      // Get the current item
+      const item = data[i];
+  
+      // If we've reached the position where the cloned items should be added, add them
+      if (i === lastIndex - clonedItems.length) {
+        newData.push(...clonedItems);
+      }
+  
+      // If the item's position is greater than or equal to the last index, update its position
+      if (item.position >= lastIndex) {
+        newData.push({
+          ...item,
+          position: i + clonedItems.length,
+        });
+      } else {
+        // Otherwise, add the item as-is
+        newData.push(item);
+      }
+    }
+    
+    // Update the positions of all items in the data array
+    const updateData = newData.map((item, index) => ({
+      ...item,
+      position: index,
+    })); 
+  
+    // Log the idMap, clonedItems, and updated data array
+    console.log(idMap, clonedItems, updateData);
+  
+    // Return the updated data array
+    return updateData;
   }
 
   hoverOffsetX(
@@ -348,6 +418,11 @@ class DragDropHelper {
     return list;
   }
 
+  getLastIndex<T extends Item>(items: T[]): number {
+    const endIndex = items.length - 1;
+    return endIndex >= 0 ? items[endIndex].position : -1;
+  }
+
   getElementDisplay(element: HTMLElement): string {
     const parentNode = element.parentNode as HTMLElement;
 
@@ -388,7 +463,7 @@ class DragDropHelper {
     return { width, height };
   }
 
-  newId() {
+  generateNewId() {
     return util.randomString();
   }
 }

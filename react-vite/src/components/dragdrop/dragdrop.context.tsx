@@ -36,14 +36,14 @@ export enum DndActionTypes {
   SET_INITIAL_ITEMS = 'SET_INITIAL_ITEMS',
   ADD_ITEM = 'ADD_ITEM',
   MOVE_ITEM = 'MOVE_ITEM',
-  DUPLICATE_ITEM = 'DUPLICATE_ITEM',
-  DELETE_ITEM = 'DELETE_ITEM'
+  CLONE_ITEM = 'CLONE_ITEM',
+  REMOVE_ITEM = 'REMOVE_ITEM'
 }
 
 const dndReducer = (state: State, { type, payload }: Action) => {
   switch (type) {
     case DndActionTypes.SET_SELECTED_ITEM: {
-      return { ...state, item: { ...payload } }
+      return { ...state, item: payload }
     }
     case DndActionTypes.SET_INITIAL_ITEMS: {
       return { ...state, data: [...payload] };
@@ -52,7 +52,7 @@ const dndReducer = (state: State, { type, payload }: Action) => {
       const { dragItem, dropRef } = payload;
 
       let newDragItem: Partial<DndItem> = {
-        id: dndHelper.newId(),
+        id: dndHelper.generateNewId(),
         data: [],
         parentId: null,
         childId: null,
@@ -60,27 +60,25 @@ const dndReducer = (state: State, { type, payload }: Action) => {
         ...dragItem
       };
 
-      const newData = dndHelper.addItems(newDragItem, dropRef, state.data);
+      const updatedData = dndHelper.addItems(newDragItem, dropRef, state.data);
 
-      return { ...state, data: newData };
+      return { ...state, data: updatedData };
     }
     case DndActionTypes.MOVE_ITEM: {
       const { dragItem, dropRef } = payload;
-      const newData = dndHelper.moveItems(dragItem, dropRef, state.data);
+      const updatedData = dndHelper.moveItems(dragItem, dropRef, state.data);
 
-      return { ...state, data: newData };
+      return { ...state, data: updatedData };
     }
-    case DndActionTypes.DUPLICATE_ITEM: {
-      const { dragItem, dropRef } = payload;
-      const newData = dndHelper.moveItems(dragItem, dropRef, state.data);
+    case DndActionTypes.CLONE_ITEM: {
+      const updatedData = dndHelper.cloneItems(payload, state.data);
 
-      return { ...state, data: newData };
+      return { ...state, data: updatedData, item: null };
     }
-    case DndActionTypes.DELETE_ITEM: {
-      //const { dragItem, dropRef } = payload;
-      //const newData = dndHelper.moveItems(dragItem, dropRef, state.data);
+    case DndActionTypes.REMOVE_ITEM: {
+      const updatedData = dndHelper.removeItems(payload, state.data);
 
-      return { ...state };
+      return { ...state, data: updatedData, item: null };
     }
     default:
       return state;

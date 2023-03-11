@@ -2,7 +2,7 @@ import React from 'react';
 import stringClassNames from 'classnames';
 
 import { useDragDrop } from '../../hooks';
-import { DndItem, DndItemType } from './dragdrop.type';
+import { DndActionClickType, DndItem, DndItemType } from './dragdrop.type';
 import DragDropMenu from './dragdrop.menu';
 import { DndActionTypes } from './dragdrop.context';
 
@@ -34,12 +34,28 @@ const DropField: React.FC<DropFieldProps> = (props): JSX.Element => {
     console.log('on-change');
   }
 
-  const handleClick= (name: string) => {
-    console.log('on-click');
+  const handleClick = (name: string) => {
+    switch (name) {
+      case DndActionClickType.MENU_EDIT:
+
+        break;
+      case DndActionClickType.MENU_CLONE:
+        dispatch?.({
+          type: DndActionTypes.CLONE_ITEM,
+          payload: props
+        });
+        break;
+      case DndActionClickType.MENU_REMOVE:
+        dispatch?.({
+          type: DndActionTypes.REMOVE_ITEM,
+          payload: props
+        });
+        break;
+      default:
+    }
   }
 
   const handleItemClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
     e.stopPropagation();
 
     const selectedItem = (state?.item?.id == id) ? null : {

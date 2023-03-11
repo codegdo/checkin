@@ -1,4 +1,5 @@
 import React from 'react';
+import { DndActionClickType } from './dragdrop.type';
 
 interface DragDropMenuProps {
   onClick: (name: string) => void
@@ -16,9 +17,9 @@ const DragDropMenu: React.FC<DragDropMenuProps> = ({onClick}): JSX.Element => {
 
   return (
     <div className='dnd-menu' onClick={handleMenuClick}>
-      <button type='button' onClick={() => handleClick('MENU_EDIT')}>Edit</button>
-      <button type='button' onClick={() => handleClick('MENU_DUPLICATE')}>Duplicate</button>
-      <button type='button' onClick={() => handleClick('MENU_DELETE')}>Delete</button>
+      <button type='button' onClick={() => handleClick(DndActionClickType.MENU_EDIT)}>Edit</button>
+      <button type='button' onClick={() => handleClick(DndActionClickType.MENU_CLONE)}>Clone</button>
+      <button type='button' onClick={() => handleClick(DndActionClickType.MENU_REMOVE)}>Remove</button>
     </div>
   );
 };

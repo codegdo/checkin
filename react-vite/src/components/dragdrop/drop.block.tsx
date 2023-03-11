@@ -42,15 +42,15 @@ const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...p
       case DndActionClickType.MENU_EDIT:
 
         break;
-      case DndActionClickType.MENU_DUPLICATE:
+      case DndActionClickType.MENU_CLONE:
         dispatch?.({
-          type: DndActionTypes.DUPLICATE_ITEM,
+          type: DndActionTypes.CLONE_ITEM,
           payload: props
         });
         break;
-      case DndActionClickType.MENU_DELETE:
+      case DndActionClickType.MENU_REMOVE:
         dispatch?.({
-          type: DndActionTypes.DELETE_ITEM,
+          type: DndActionTypes.REMOVE_ITEM,
           payload: props
         });
         break;
@@ -59,7 +59,6 @@ const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...p
   }
 
   const handleItemClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
     e.stopPropagation();
 
     const selectedItem = (state?.item?.id == id) ? null : {

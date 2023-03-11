@@ -5,8 +5,8 @@ export const DndItemType = { ...DataType };
 
 export enum DndActionClickType {
   MENU_EDIT = 'MENU_EDIT',
-  MENU_DUPLICATE = 'MENU_DUPLICATE',
-  MENU_DELETE = 'MENU_DELETE'
+  MENU_CLONE = 'MENU_CLONE',
+  MENU_REMOVE = 'MENU_REMOVE'
 }
 
 export type DndItem = Element & Partial<DragDropContextValue>;
