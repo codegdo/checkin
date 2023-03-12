@@ -40,46 +40,61 @@ export enum DndActionTypes {
   REMOVE_ITEM = 'REMOVE_ITEM'
 }
 
-const dndReducer = (state: State, { type, payload }: Action) => {
+const dndReducer = (state: State, action: Action) => {
+  const { type, payload } = action;
+
   switch (type) {
-    case DndActionTypes.SET_SELECTED_ITEM: {
-      return { ...state, item: payload }
-    }
-    case DndActionTypes.SET_INITIAL_ITEMS: {
-      return { ...state, data: [...payload] };
-    }
+    case DndActionTypes.SET_SELECTED_ITEM:
+      const selectedItem = payload;
+      return { ...state, item: selectedItem };
+
+    case DndActionTypes.SET_INITIAL_ITEMS:
+      const initialItems = [...payload];
+      return { ...state, data: initialItems };
+
     case DndActionTypes.ADD_ITEM: {
       const { dragItem, dropRef } = payload;
 
-      let newDragItem: Partial<DndItem> = {
+      // Generate a new item with an ID and default values, 
+      // and add it to the data at the given drop reference
+      // and set position equal -1 to determine new item
+      const newItem = {
         id: dndHelper.generateNewId(),
         data: [],
         parentId: null,
         childId: null,
-        position: null,
-        ...dragItem
+        position: -1,
+        ...dragItem,
       };
 
-      const updatedData = dndHelper.addItems(newDragItem, dropRef, state.data);
+      const updatedData = dndHelper.addItems(newItem, dropRef, state.data);
 
       return { ...state, data: updatedData };
     }
+
     case DndActionTypes.MOVE_ITEM: {
       const { dragItem, dropRef } = payload;
+
+      // Move the item to the new position and update the parent-child relationships in the data
       const updatedData = dndHelper.moveItems(dragItem, dropRef, state.data);
 
       return { ...state, data: updatedData };
     }
+
     case DndActionTypes.CLONE_ITEM: {
-      const updatedData = dndHelper.cloneItems(payload, state.data);
+      // Clone the selected item and add it to the data, then clear the selected item
+      const clonedData = dndHelper.cloneItems(payload, state.data);
 
-      return { ...state, data: updatedData, item: null };
+      return { ...state, data: clonedData, item: null };
     }
+
     case DndActionTypes.REMOVE_ITEM: {
-      const updatedData = dndHelper.removeItems(payload, state.data);
+      // Remove the selected item and its children from the data, then clear the selected item
+      const removedData = dndHelper.removeItems(payload, state.data);
 
-      return { ...state, data: updatedData, item: null };
+      return { ...state, data: removedData, item: null };
     }
+
     default:
       return state;
   }

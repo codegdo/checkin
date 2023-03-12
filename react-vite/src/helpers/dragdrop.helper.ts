@@ -1,5 +1,6 @@
 import { DndItem, DndItemType } from '../components';
 import UtilHelper, { util } from './util.helper';
+import update from 'immutability-helper';
 
 interface Item {
   id: number | string;
@@ -16,6 +17,166 @@ class DragDropHelper {
 
   constructor(util: UtilHelper) {
     this.util = util;
+  }
+
+  // The function takes three arguments: the item being dragged, the item being dropped on,
+  // and an array of items. It returns a new array that includes the dragged item at the
+  // calculated drop index.
+  addItems<T extends Item>(dragItem: T, dropRef: T, data: T[]): T[] {
+    // Calculate the new drop index and other relevant information.
+    const result = this.calculateDropIndex(dragItem, dropRef);
+
+    // If the drop index could not be calculated, return the original data.
+    if (!result) return data;
+
+    // Destructure the relevant information from the result.
+    const { dropIndex, dropParentId, dropChildId } = result;
+
+    // If the drop index is greater than the length of the data array, return the original data.
+    if(dropIndex > data.length) {
+      return data;
+    }
+
+    // Create a new object that includes the dragged item with updated parentId and childId.
+    const newDraggedItem = {
+      ...dragItem,
+      parentId: dropParentId,
+      childId: dropChildId
+    }
+
+    // Clone the original data array into a new array to avoid modifying the original data.
+    const updatedData = [...data];
+
+    // Insert the newDraggedItem object into the updatedData array at the drop index.
+    updatedData.splice(dropIndex, 0, newDraggedItem);
+
+    // Update the position property of each item in the updatedData array to its current index in the array.
+    updatedData.forEach((item, index) => item.position = index);
+
+    // Return the updatedData array.
+    return updatedData;
+  }
+
+  /**
+   * Move the dragged items to the new drop position.
+   * @param dragItem The item being dragged.
+   * @param dropRef The item being dropped on.
+   * @param data The array of items to update.
+   * @returns An updated array of items with the dragged items moved to the new position.
+   */
+  moveItems<T extends Item>(dragItem: T, dropRef: T, data: T[]): T[] {
+    // Calculate the new drop index and other relevant information.
+    const result = this.calculateDropIndex(dragItem, dropRef);
+
+    // If the drop index could not be calculated, return the original data.
+    if (!result) {
+      return data;
+    }
+
+    // Destructure the relevant information from the result.
+    const { dragIndex, dragCounts, dropIndex, dropParentId, dropChildId } = result;
+
+    // Get the items that were dragged and the remaining items.
+    const draggedItems = data.slice(dragIndex, dragIndex + dragCounts);
+    const remainingItems = data.filter((_, index) => index < dragIndex || index >= dragIndex + dragCounts);
+
+    // Update the dragged item that match dragIndex to have the new parent and child IDs.
+    const updatedDraggedItems = draggedItems.map(item => {
+      if (item.position === dragIndex) {
+        item.parentId = dropParentId;
+        item.childId = dropChildId;
+      }
+      return item;
+    });
+
+    // Rebuild the data array with the updated items and positions.
+    const updatedData = [
+      ...remainingItems.slice(0, dropIndex),
+      ...updatedDraggedItems,
+      ...remainingItems.slice(dropIndex)
+    ].map((item, index) => ({
+      ...item,
+      position: index,
+    }));
+
+    // Return the updated data array.
+    return updatedData;
+  }
+
+  // The function takes an item of type T that extends the Item class, and an array of items of type T,
+  // and returns a new array that excludes the items to be removed.
+  removeItems<T extends Item>(item: T, data: T[]): T[] {
+    // Count how many times the item appears in the data array.
+    const [numItemsToRemove] = this.countItems(item);
+
+    // Create a new array that excludes the items to be removed.
+    // This is done by slicing the data array from the beginning to the position of the item,
+    // and then slicing the data array from the position after the last item to be removed to the end.
+    const updatedData = [
+      ...data.slice(0, item.position),
+      ...data.slice(item.position + numItemsToRemove)
+    ]
+    // Map over the updatedData array and update the position property of each item to its current index in the array.
+    .map((item: T, index: number) => ({ ...item, position: index }));
+
+    // Return the updatedData array.
+    return updatedData;
+  }
+
+  // The function takes an item of type T that extends the Item class, and an array of items of type T,
+  // and returns a new array that includes the cloned items along with the original ones.
+  cloneItems<T extends Item>(itemToClone: T, data: T[]): T[] {
+    // Count how many times the itemToClone appears in the data array.
+    const [numItemsToClone] = this.countItems(itemToClone);
+
+    // Create a new array to store the cloned items.
+    const clonedItems: T[] = new Array(numItemsToClone);
+
+    // Create a map to store the mapping between the original item IDs and the new item IDs.
+    const idMap = new Map<string, string>();
+
+    // Loop through the range of items to be cloned.
+    for (let i = 0; i < numItemsToClone; i++) {
+      // Get the original item from the data array.
+      const originalItem = data[itemToClone.position + i];
+
+      // If the original item exists:
+      if (originalItem) {
+        // Generate a new ID for the cloned item.
+        const newId = this.generateNewId();
+
+        // Retrieve the parent ID of the original item from idMap or use the original parent ID if it hasn't been mapped yet.
+        const parentId = idMap.get(`${originalItem.parentId}`) || originalItem.parentId;
+
+        // Update the id and parentId properties of the original item to create a new item with a new ID and parentId.
+        // Add the new item to the clonedItems array.
+        idMap.set(`${originalItem.id}`, newId);
+        clonedItems[i] = {
+          ...originalItem,
+          id: newId,
+          parentId,
+        };
+      }
+    }
+
+    // Calculate the position of the last cloned item.
+    const lastCloneItemPosition = this.getLastItemPosition(clonedItems) + 1;
+
+    // Create a new array that includes the original data array sliced up to the last cloned item's position,
+    // followed by the cloned items array, followed by the remaining part of the original data array.
+    const updatedData = [
+      ...data.slice(0, lastCloneItemPosition),
+      ...clonedItems,
+      ...data.slice(lastCloneItemPosition)
+    ]
+    // Map over the updatedData array and update the position property of each item to its current index in the array.
+    .map((item: T, index: number) => ({ ...item, position: index }));;
+
+    // Log the idMap, clonedItems, and updatedData to the console.
+    console.log(idMap, clonedItems, updatedData);
+
+    // Return the updatedData array.
+    return updatedData;
   }
 
   countIdsRecursive(data: Item[], ids: string[] = []): string[] {
@@ -39,7 +200,7 @@ class DragDropHelper {
   }
 
   calculateDropPosition(
-    dragIndex: number | null,
+    dragIndex: number,
     dropIndex: number,
     offset?: string
   ) {
@@ -47,7 +208,7 @@ class DragDropHelper {
     const isOverBottom = offset === 'bottom' || offset === 'right';
     const isOverMiddle = offset === 'middle';
 
-    if (dragIndex === null) {
+    if (dragIndex === -1) {
       return {
         isDraggingFromTopOverTop: false,
         isDraggingFromTopOverMiddle: false,
@@ -172,10 +333,11 @@ class DragDropHelper {
     // If not dragging over a field, adjust the drop position based on the drag and drop action and the number of items being dragged and dropped
     else {
       const isDragIdIncludedInDrop = dropIds.includes(`${dragId}`);
-      const isDraggingNewItem = dragPosition === null;
+      const isDraggingNewItem = dragPosition === -1;
 
       // If dragging from top and over top, drop items above the current drop position
       if (isDraggingFromTopOverTop) {
+
         dropIndex = dropPosition - dragCounts;
       }
       // If dragging from top and over bottom, drop items below the current drop position
@@ -192,9 +354,13 @@ class DragDropHelper {
       else if (isDraggingFromBottomOverMiddle) {
         dropIndex = dropPosition + 1;
       }
-      // If not dragging from top or bottom and not over bottom or middle, adjust the drop position based on whether the dragged item is over the top or middle
+      // If dragging is new item, adjust the drop position based on whether the dragged item is over the top, bottom or middle
       else if (isDraggingNewItem) {
-        dropIndex = isOverBottom ? dropPosition + dropCounts : isOverMiddle ? dropPosition + 1 : dropPosition;
+        dropIndex = isOverBottom 
+        ? dropPosition + dropCounts 
+        : isOverMiddle 
+          ? dropPosition + 1
+          : dropPosition;
       }
     }
 
@@ -213,169 +379,6 @@ class DragDropHelper {
       dropChildId,
       dropOffset,
     }
-  }
-
-  addItems<T extends Item>(dragItem: T, dropRef: T, data: T[]): T[] {
-
-    // Calculate the new drop index and other relevant information.
-    const result = this.calculateDropIndex(dragItem, dropRef);
-
-    console.log(result);
-
-    // If the drop index could not be calculated, return the original data.
-    if (!result) {
-      return data;
-    }
-
-    // Destructure the relevant information from the result.
-    const { dragIndex, dragCounts, dropIndex, dropParentId, dropChildId } = result;
-
-    const newDraggedItem = {
-      ...dragItem,
-      parentId: dropParentId,
-      childId: dropChildId
-    }
-
-    const updatedData = [...data];
-    updatedData.splice(dropIndex, 0, newDraggedItem);
-    updatedData.forEach((item, index) => item.position = index);
-
-    console.log('RESULT', updatedData);
-
-    return updatedData;
-  }
-
-  /**
-   * Move the dragged items to the new drop position.
-   * @param dragItem The item being dragged.
-   * @param dropRef The item being dropped on.
-   * @param data The array of items to update.
-   * @returns An updated array of items with the dragged items moved to the new position.
-   */
-  moveItems<T extends Item>(dragItem: T, dropRef: T, data: T[]): T[] {
-    // Calculate the new drop index and other relevant information.
-    const result = this.calculateDropIndex(dragItem, dropRef);
-
-    // If the drop index could not be calculated, return the original data.
-    if (!result) {
-      return data;
-    }
-
-    console.log('RESULT', result);
-
-    // Destructure the relevant information from the result.
-    const { dragIndex, dragCounts, dropIndex, dropParentId, dropChildId } = result;
-
-    // Update the parentId and childId properties of the dragged item.
-    // data[dragIndex].parentId = dropParentId;
-    // data[dragIndex].childId = dropChildId;
-
-    // Get the items that were dragged and the remaining items.
-    const draggedItems = data.slice(dragIndex, dragIndex + dragCounts);
-    const remainingItems = data.filter((_, index) => index < dragIndex || index >= dragIndex + dragCounts);
-
-    // Update the dragged item that match dragIndex to have the new parent and child IDs.
-    const updatedDraggedItems = draggedItems.map(item => {
-      if (item.position === dragIndex) {
-        item.parentId = dropParentId;
-        item.childId = dropChildId;
-      }
-      return item;
-    });
-
-    // Rebuild the data array with the updated items and positions.
-    const updatedData = [
-      ...remainingItems.slice(0, dropIndex),
-      ...updatedDraggedItems,
-      ...remainingItems.slice(dropIndex)
-    ].map((item, index) => ({
-      ...item,
-      position: index,
-    }));
-
-    // Return the updated data array.
-    return updatedData;
-  }
-
-  removeItems<T extends Item>(item: T, data: T[]): T[] {
-    const [numItemsToRemove] = this.countItems(item);
-    const updatedData = [
-      ...data.slice(0, item.position),
-      ...data.slice(item.position + numItemsToRemove)
-    ].map((item: T, index: number) => ({ ...item, position: index }));
-    
-    return updatedData;
-  }
-
-  cloneItems<T extends Item>(itemToClone: T, data: T[]): T[] {
-    // Count the number of items to clone
-    const [numItemsToClone] = this.countItems(itemToClone);
-    // Create an empty array to store the cloned items
-    const clonedItems: T[] = [];
-    // Create an empty object to store the original item IDs and their new IDs
-    const idMap: Record<string, string> = {};
-    
-    // Clone the specified number of items starting from the specified item position
-    for (let i = 0; i < numItemsToClone; i++) {
-      // Get the original item to clone
-      const originalItem = data[itemToClone.position + i];
-  
-      // Check if the original item exists
-      if (originalItem) {
-        // Generate a new ID for the cloned item
-        const newId = this.generateNewId();
-        // Get the parent ID for the cloned item
-        const parentId = idMap[`${originalItem.parentId}`] ?? originalItem.parentId;
-  
-        // Update the ID map with the original and new IDs
-        idMap[`${originalItem.id}`] = newId;
-        // Add the cloned item to the array
-        clonedItems.push({
-          ...originalItem,
-          id: newId,
-          parentId,
-        });
-      }
-    }
-  
-    // Get the last index of the data array
-    const lastIndex = this.getLastIndex(data) + 1;
-    // Create an empty array to store the updated data
-    const newData: T[] = [];
-  
-    // Loop through each item in the data array
-    for (let i = 0; i < lastIndex; i++) {
-      // Get the current item
-      const item = data[i];
-  
-      // If we've reached the position where the cloned items should be added, add them
-      if (i === lastIndex - clonedItems.length) {
-        newData.push(...clonedItems);
-      }
-  
-      // If the item's position is greater than or equal to the last index, update its position
-      if (item.position >= lastIndex) {
-        newData.push({
-          ...item,
-          position: i + clonedItems.length,
-        });
-      } else {
-        // Otherwise, add the item as-is
-        newData.push(item);
-      }
-    }
-    
-    // Update the positions of all items in the data array
-    const updateData = newData.map((item, index) => ({
-      ...item,
-      position: index,
-    })); 
-  
-    // Log the idMap, clonedItems, and updated data array
-    console.log(idMap, clonedItems, updateData);
-  
-    // Return the updated data array
-    return updateData;
   }
 
   hoverOffsetX(
@@ -418,7 +421,7 @@ class DragDropHelper {
     return list;
   }
 
-  getLastIndex<T extends Item>(items: T[]): number {
+  getLastItemPosition<T extends Item>(items: T[]): number {
     const endIndex = items.length - 1;
     return endIndex >= 0 ? items[endIndex].position : -1;
   }

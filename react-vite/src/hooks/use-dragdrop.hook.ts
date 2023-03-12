@@ -224,8 +224,8 @@ export const useDragDrop = <T extends DndItem>(
         const didDrop = monitor.didDrop();
         // Handle the drop event if one occurred
         if (didDrop) {
-          // Check if the dropped item is not allowed in the target area
-          if (dragItem.position !== undefined && dropRef?.dataType === 'area') return;
+          // Check if dragging is dropped item then not allowed in the target drop area
+          if (ref.current !== null && dropRef?.dataType === 'area') return;
 
           // Check if the drop target allows the dropped item
           if (dropRef?.canDrop) {
