@@ -1,14 +1,19 @@
 import { DndItem, DndItemType } from '../components';
 import UtilHelper, { util } from './util.helper';
-import update from 'immutability-helper';
 
 interface Item {
   id: number | string;
   dataType: string;
+  data?: any;
   position: number;
-  data: any;
   parentId: string | null;
   childId: string | null;
+}
+
+interface DragItem extends Item {
+}
+
+interface DropRef extends Item {
   offset?: string;
 }
 
@@ -22,9 +27,11 @@ class DragDropHelper {
   // The function takes three arguments: the item being dragged, the item being dropped on,
   // and an array of items. It returns a new array that includes the dragged item at the
   // calculated drop index.
-  addItems<T extends Item>(dragItem: T, dropRef: T, data: T[]): T[] {
+  addItems(dragItem: DragItem, dropRef: DropRef, data: Item[]): Item[] {
     // Calculate the new drop index and other relevant information.
     const result = this.calculateDropIndex(dragItem, dropRef);
+
+    console.log('ADD ITEM RESULT', result);
 
     // If the drop index could not be calculated, return the original data.
     if (!result) return data;
@@ -64,7 +71,7 @@ class DragDropHelper {
    * @param data The array of items to update.
    * @returns An updated array of items with the dragged items moved to the new position.
    */
-  moveItems<T extends Item>(dragItem: T, dropRef: T, data: T[]): T[] {
+  moveItems(dragItem: DragItem, dropRef: DropRef, data: Item[]): Item[] {
     // Calculate the new drop index and other relevant information.
     const result = this.calculateDropIndex(dragItem, dropRef);
 
@@ -105,7 +112,7 @@ class DragDropHelper {
 
   // The function takes an item of type T that extends the Item class, and an array of items of type T,
   // and returns a new array that excludes the items to be removed.
-  removeItems<T extends Item>(item: T, data: T[]): T[] {
+  removeItems(item: Item, data: Item[]): Item[] {
     // Count how many times the item appears in the data array.
     const [numItemsToRemove] = this.countItems(item);
 
@@ -117,7 +124,7 @@ class DragDropHelper {
       ...data.slice(item.position + numItemsToRemove)
     ]
     // Map over the updatedData array and update the position property of each item to its current index in the array.
-    .map((item: T, index: number) => ({ ...item, position: index }));
+    .map((item: Item, index: number) => ({ ...item, position: index }));
 
     // Return the updatedData array.
     return updatedData;
@@ -125,12 +132,12 @@ class DragDropHelper {
 
   // The function takes an item of type T that extends the Item class, and an array of items of type T,
   // and returns a new array that includes the cloned items along with the original ones.
-  cloneItems<T extends Item>(itemToClone: T, data: T[]): T[] {
+  cloneItems(itemToClone: Item, data: Item[]): Item[] {
     // Count how many times the itemToClone appears in the data array.
     const [numItemsToClone] = this.countItems(itemToClone);
 
     // Create a new array to store the cloned items.
-    const clonedItems: T[] = new Array(numItemsToClone);
+    const clonedItems: Item[] = new Array(numItemsToClone);
 
     // Create a map to store the mapping between the original item IDs and the new item IDs.
     const idMap = new Map<string, string>();
@@ -170,7 +177,7 @@ class DragDropHelper {
       ...data.slice(lastCloneItemPosition)
     ]
     // Map over the updatedData array and update the position property of each item to its current index in the array.
-    .map((item: T, index: number) => ({ ...item, position: index }));;
+    .map((item: Item, index: number) => ({ ...item, position: index }));;
 
     // Log the idMap, clonedItems, and updatedData to the console.
     console.log(idMap, clonedItems, updatedData);
@@ -190,7 +197,7 @@ class DragDropHelper {
     }, ids);
   }
 
-  countItems<T extends Item>({ id, data = [] }: T): [number, string[]] {
+  countItems({ id, data = [] }: Item): [number, string[]] {
     if (id === null) {
       id = '';
     }
@@ -240,7 +247,7 @@ class DragDropHelper {
 
   // The function takes two parameters, dragItem and dropRef, which are both of the Item type.
   // It returns an object with various properties that are used to calculate the position of the drag item in relation to the drop item.
-  calculateDropIndex<T extends Item>(dragItem: T, dropRef: T) {
+  calculateDropIndex(dragItem: DragItem, dropRef: DropRef) {
 
     // Extract the id, data type, and position of the drag and drop items.
     const dragId = dragItem.id;
@@ -271,7 +278,6 @@ class DragDropHelper {
     // If the drop item is an area, set the newParentId to null, indicating that the dragged items will not have a parent.
     // If it's not an area, set the newParentId to the id of the drop item, indicating that the dragged items will have the drop item as their parent.
     // reset parentId to null if area
-
     const newParentId =
       dropOffset === 'middle'
         ? dropDataType === 'area'
@@ -367,11 +373,13 @@ class DragDropHelper {
     // Return updated object with properties
     return {
       dragId,
+      dragIds,
       dragDataType,
       dragIndex: dragPosition,
       dragCounts,
 
       dropId,
+      dropIds,
       dropDataType,
       dropIndex,
       dropCounts,
