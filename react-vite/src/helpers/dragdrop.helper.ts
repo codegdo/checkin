@@ -24,9 +24,8 @@ class DragDropHelper {
     this.util = util;
   }
 
-  // The function takes three arguments: the item being dragged, the item being dropped on,
-  // and an array of items. It returns a new array that includes the dragged item at the
-  // calculated drop index.
+  // The function takes three arguments: the item being dragged, the item being dropped on, and an array of items.
+  // It returns a new array that includes the dragged item at the calculated drop index.
   addItems(dragItem: DragItem, dropRef: DropRef, data: Item[]): Item[] {
     // Calculate the new drop index and other relevant information.
     const result = this.calculateDropIndex(dragItem, dropRef);
@@ -40,7 +39,7 @@ class DragDropHelper {
     const { dropIndex, dropParentId, dropChildId } = result;
 
     // If the drop index is greater than the length of the data array, return the original data.
-    if(dropIndex > data.length) {
+    if (dropIndex > data.length) {
       return data;
     }
 
@@ -64,13 +63,8 @@ class DragDropHelper {
     return updatedData;
   }
 
-  /**
-   * Move the dragged items to the new drop position.
-   * @param dragItem The item being dragged.
-   * @param dropRef The item being dropped on.
-   * @param data The array of items to update.
-   * @returns An updated array of items with the dragged items moved to the new position.
-   */
+  // The function takes three arguments: the item being dragged, the item being dropped on, and an array of items.
+  // It returns an updated array of items with the dragged items moved to the new position.
   moveItems(dragItem: DragItem, dropRef: DropRef, data: Item[]): Item[] {
     // Calculate the new drop index and other relevant information.
     const result = this.calculateDropIndex(dragItem, dropRef);
@@ -110,8 +104,8 @@ class DragDropHelper {
     return updatedData;
   }
 
-  // The function takes an item of type T that extends the Item class, and an array of items of type T,
-  // and returns a new array that excludes the items to be removed.
+  // The function takes two arguments: the item and an array of items.
+  // It returns a new array that excludes the items to be removed.
   removeItems(item: Item, data: Item[]): Item[] {
     // Count how many times the item appears in the data array.
     const [numItemsToRemove] = this.countItems(item);
@@ -123,15 +117,15 @@ class DragDropHelper {
       ...data.slice(0, item.position),
       ...data.slice(item.position + numItemsToRemove)
     ]
-    // Map over the updatedData array and update the position property of each item to its current index in the array.
-    .map((item: Item, index: number) => ({ ...item, position: index }));
+      // Map over the updatedData array and update the position property of each item to its current index in the array.
+      .map((item: Item, index: number) => ({ ...item, position: index }));
 
     // Return the updatedData array.
     return updatedData;
   }
 
-  // The function takes an item of type T that extends the Item class, and an array of items of type T,
-  // and returns a new array that includes the cloned items along with the original ones.
+  // The function takes two arguments: the item and an array of items.
+  // It returns a new array that includes the cloned items along with the original ones.
   cloneItems(itemToClone: Item, data: Item[]): Item[] {
     // Count how many times the itemToClone appears in the data array.
     const [numItemsToClone] = this.countItems(itemToClone);
@@ -176,8 +170,8 @@ class DragDropHelper {
       ...clonedItems,
       ...data.slice(lastCloneItemPosition)
     ]
-    // Map over the updatedData array and update the position property of each item to its current index in the array.
-    .map((item: Item, index: number) => ({ ...item, position: index }));;
+      // Map over the updatedData array and update the position property of each item to its current index in the array.
+      .map((item: Item, index: number) => ({ ...item, position: index }));;
 
     // Log the idMap, clonedItems, and updatedData to the console.
     console.log(idMap, clonedItems, updatedData);
@@ -209,7 +203,7 @@ class DragDropHelper {
   calculateDropPosition(
     dragIndex: number,
     dropIndex: number,
-    offset?: string
+    offset: string
   ) {
     const isOverTop = offset === 'top' || offset === 'left';
     const isOverBottom = offset === 'bottom' || offset === 'right';
@@ -258,7 +252,7 @@ class DragDropHelper {
     const dropPosition = dropRef.position;
     const dropParentId = dropRef.parentId;
     const dropChildId = dropRef.childId;
-    const dropOffset = dropRef.offset;
+    const dropOffset = dropRef.offset || 'bottom';
 
     // Get the number of items in the drag and drop blocks, as well as their ids.
     const [dragCounts, dragIds] = this.countItems(dragItem);
@@ -270,9 +264,7 @@ class DragDropHelper {
     // Prevent drag block drop over nested children
     // If the ids of the drag items include the stripped drop item id, it means that the drag item is nested inside the drop item.
     // In this case, we return null to indicate that the drag item cannot be dropped on the drop item.
-    if (dragIds.includes(strippedDropId)) {
-      return null;
-    }
+    if (dragIds.includes(strippedDropId)) return null;
 
     // Reset dropItemParentId to null if dropRef is an area
     // If the drop item is an area, set the newParentId to null, indicating that the dragged items will not have a parent.
@@ -325,7 +317,7 @@ class DragDropHelper {
       // If dragging from top and over the middle, drop items below the current drop position
       if (isDraggingFromTopOverMiddle) {
         const itemsToInsert = dropCounts - dragCounts;
-        dropIndex = dropPosition + dropCounts - dragCounts;
+        dropIndex = dropPosition + itemsToInsert;
       }
       // If dragging from bottom and over the middle, drop items above the current drop position
       else if (isDraggingFromBottomOverMiddle) {
@@ -362,11 +354,11 @@ class DragDropHelper {
       }
       // If dragging is new item, adjust the drop position based on whether the dragged item is over the top, bottom or middle
       else if (isDraggingNewItem) {
-        dropIndex = isOverBottom 
-        ? dropPosition + dropCounts 
-        : isOverMiddle 
-          ? dropPosition + 1
-          : dropPosition;
+        dropIndex = isOverBottom
+          ? dropPosition + dropCounts
+          : isOverMiddle
+            ? dropPosition + 1
+            : dropPosition;
       }
     }
 
@@ -458,10 +450,7 @@ class DragDropHelper {
     return 'column';
   }
 
-  getElementSize(element: HTMLElement): {
-    width: number;
-    height: number;
-  } {
+  getElementSize(element: HTMLElement) {
     let width = 0;
     let height = 0;
 

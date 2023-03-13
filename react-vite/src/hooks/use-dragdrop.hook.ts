@@ -116,8 +116,8 @@ export const useDragDrop = <T extends DndItem>(
   const removeCurrentRefClassName = useCallback((currentRef: HTMLElement | null | undefined) => {
     // If they match, remove the 'on-top' and 'on-bottom' CSS classes
     // from the dropRef's currentRef element
-    if (['on-top', 'on-bottom'].some(className => currentRef?.classList.contains(className))) {
-      currentRef?.classList.remove('on-top', 'on-bottom');
+    if (['on-top', 'on-bottom', 'on-left', 'on-right'].some(className => currentRef?.classList.contains(className))) {
+      currentRef?.classList.remove('on-top', 'on-bottom', 'on-left', 'on-right');
     }
   }, [dropRef]);
 
@@ -261,15 +261,15 @@ export const useDragDrop = <T extends DndItem>(
     }
   };
 
-  return { 
-    ref, 
-    drop, 
-    drag, 
-    isOver, 
-    isDragging, 
-    isSelected, 
-    isDropEmpty, 
-    onMouseOver, 
+  return {
+    ref,
+    drop,
+    drag,
+    isOver,
+    isDragging,
+    isSelected,
+    isDropEmpty,
+    onMouseOver,
     onMouseOut
   };
 };
