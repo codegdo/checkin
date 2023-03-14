@@ -106,7 +106,11 @@ export const useDragDrop = <T extends DndItem>(
       const displayStyle = dndHelper.getElementDisplay(ref.current);
 
       // Calculate the current offset based on the display style
-      const currentOffset = displayStyle === 'column' ? verticalOffset : horizontalOffset;
+      let currentOffset = displayStyle === 'column' ? verticalOffset : horizontalOffset;
+
+      if (dropRef.dataType === 'placeholder') {
+        currentOffset = 'middle';
+      }
 
       // Set the offset state with the currentOffset and the clientOffsetPosition
       setOffset(`${currentOffset} (${clientOffsetPosition.x},${clientOffsetPosition.y})`);
@@ -116,8 +120,8 @@ export const useDragDrop = <T extends DndItem>(
   const removeCurrentRefClassName = useCallback((currentRef: HTMLElement | null | undefined) => {
     // If they match, remove the 'on-top' and 'on-bottom' CSS classes
     // from the dropRef's currentRef element
-    if (['on-top', 'on-bottom', 'on-left', 'on-right'].some(className => currentRef?.classList.contains(className))) {
-      currentRef?.classList.remove('on-top', 'on-bottom', 'on-left', 'on-right');
+    if (['on-top', 'on-bottom', 'on-left', 'on-right', 'on-middle'].some(className => currentRef?.classList.contains(className))) {
+      currentRef?.classList.remove('on-top', 'on-bottom', 'on-left', 'on-right', 'on-middle');
     }
   }, [dropRef]);
 
@@ -142,7 +146,7 @@ export const useDragDrop = <T extends DndItem>(
 
       // Check if the hovered item's id matches the current item's id
       if (monitor.isOver({ shallow: true })) {
-        if (hoverItem.id === id) {
+        if (`${id}`.includes(`${hoverItem.id}`)) {
           // Remove the current reference class name from the drop reference's currentRef
           removeCurrentRefClassName(dropRef?.currentRef);
 

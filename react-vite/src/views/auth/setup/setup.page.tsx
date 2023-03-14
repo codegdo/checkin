@@ -16,21 +16,6 @@ const json = [
   {
     id: '2',
     className: '',
-    name: 'component',
-    type: 'div',
-    dataType: 'block',
-    data: [],
-    value: `<div class="row">
-      <div class="column"><jsx id='placeholder_0'></jsx></div>
-      <div class="column"><jsx id='placeholder_1'></jsx></div>
-    </div>`,
-    parentId: null,
-    childId: null,
-    position: 0
-  },
-  {
-    id: '3',
-    className: '',
     name: 'field',
     type: 'text',
     dataType: 'field',
@@ -46,6 +31,10 @@ const Setup: React.FC = (): JSX.Element => {
   return (
     <DragDrop data={json}>
       <DragItem name='block' type='div' dataType='block' />
+      <DragItem name='component' type='div' dataType='block' value={`<div class="row">
+      <div class="column"><jsx id='placeholder_0'></jsx></div>
+      <div class="column"><jsx id='placeholder_1'></jsx></div>
+    </div>`} />
       <DragItem name='field' type='textbox' dataType='field' />
     </DragDrop>
   );

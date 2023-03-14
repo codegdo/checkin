@@ -1,16 +1,20 @@
-import React, { PropsWithChildren } from 'react';
-import { useDragDrop } from '../../hooks';
+import React, { PropsWithChildren, useCallback, useMemo } from 'react';
+import parse from 'html-react-parser';
+import DOMPurify from 'dompurify';
 import stringClassNames from 'classnames';
 
+import { useDragDrop } from '../../hooks';
 
 import DragDropRender from './dragdrop.render';
 import { DndActionClickType, DndItem, DndItemType } from './dragdrop.type';
 import DragDropMenu from './dragdrop.menu';
 import { DndActionTypes } from './dragdrop.context';
+import DropPlaceholder from './drop.placeholder';
+
 type DropBlockProps = DndItem;
 
 const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...props }): JSX.Element => {
-  const { state, dispatch, id, className = '', dataType, data = [] } = props;
+  const { state, dispatch, id, className = '', name, dataType, data = [], value = '' } = props;
   const acceptTypes = Object.values(DndItemType);
   const {
     ref,
@@ -24,9 +28,36 @@ const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...p
     onMouseOut
   } = useDragDrop(props, acceptTypes);
 
+  const parsedComponent = useMemo(() => {
+    const sanitizedValue = DOMPurify.sanitize(value, { ADD_TAGS: ['jsx'] });
+    return parse(sanitizedValue, {
+      replace: (dom) => {
+        if ('attribs' in dom) {
+          const { attribs } = dom;
+          if (attribs.id) {
+            const [name, key] = attribs.id.split('_');
+            const items = data.filter((item: any) => item.placeholderId == key);
+
+            if (name === 'placeholder') {
+              return <DropPlaceholder
+                {...props}
+                id={`${id}_${key}`}
+                dataType='placeholder'
+                data={items}
+                childId={key}
+              />
+            }
+          }
+        }
+
+        return dom;
+      }
+    });
+  }, [data]);
+
   const classNames = stringClassNames({
     [className]: true,
-    'drop-item drop-block': dataType !== 'area',
+    [`drop-item drop-${name}`]: dataType !== 'area',
     'is-dragging': isDragging,
     'is-over': isOver,
     'is-selected': isSelected,
@@ -86,7 +117,7 @@ const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...p
       onClick={handleItemClick}
     >
       {isSelected && <DragDropMenu onClick={handleClick} />}
-      {children || <DragDropRender data={data} />}
+      {name === 'component' ? <>{parsedComponent}</> : children || <DragDropRender data={data} />}
     </div>
   );
 };
