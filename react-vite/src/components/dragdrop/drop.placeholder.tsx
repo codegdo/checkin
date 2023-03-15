@@ -21,12 +21,13 @@ const DropPlaceholder: React.FC<DropPlaceholderProps> = (props) => {
   } = useDragDrop(props, acceptTypes);
 
   const classNames = stringClassNames({
+    'drop-placeholder': true,
     'is-over': isOver
   });
 
   drag(drop(ref));
 
-  return <div ref={ref} className='drop-placeholder'><DragDropRender data={data} /></div>
+  return <div ref={ref} className={classNames}><DragDropRender data={data} /></div>
 };
 
 export default DropPlaceholder;

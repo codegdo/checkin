@@ -36,7 +36,7 @@ const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...p
           const { attribs } = dom;
           if (attribs.id) {
             const [name, key] = attribs.id.split('_');
-            const items = data.filter((item: any) => item.placeholderId == key);
+            const items = data.filter((item: any) => item.childId == key);
 
             if (name === 'placeholder') {
               return <DropPlaceholder

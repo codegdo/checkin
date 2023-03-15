@@ -61,7 +61,7 @@ export const useDragDrop = <T extends DndItem>(
         break;
       default:
         // Log an error message to the console if the offsetString does not match any of the cases
-        console.log('ELEMENT OFFSET: ', offsetString);
+        console.log('OFFSET DOES NOT MATCH: ', offsetString);
     }
   }, [ref]);
 
@@ -118,12 +118,14 @@ export const useDragDrop = <T extends DndItem>(
   }, [ref, dropRef, setOffset]);
 
   const removeCurrentRefClassName = useCallback((currentRef: HTMLElement | null | undefined) => {
-    // If they match, remove the 'on-top' and 'on-bottom' CSS classes
-    // from the dropRef's currentRef element
-    if (['on-top', 'on-bottom', 'on-left', 'on-right', 'on-middle'].some(className => currentRef?.classList.contains(className))) {
-      currentRef?.classList.remove('on-top', 'on-bottom', 'on-left', 'on-right', 'on-middle');
+    if (!currentRef) return;
+
+    // If they match, remove the 'on-top', 'on-bottom', 'on-left', 'on-right', and 'on-middle' CSS classes
+    const classList = currentRef.classList;
+    if (classList.contains('on-top') || classList.contains('on-bottom') || classList.contains('on-left') || classList.contains('on-right') || classList.contains('on-middle')) {
+      classList.remove('on-top', 'on-bottom', 'on-left', 'on-right', 'on-middle');
     }
-  }, [dropRef]);
+  }, []);
 
   useEffect(() => {
     if (offset) {
@@ -146,20 +148,32 @@ export const useDragDrop = <T extends DndItem>(
 
       // Check if the hovered item's id matches the current item's id
       if (monitor.isOver({ shallow: true })) {
-        if (`${id}`.includes(`${hoverItem.id}`)) {
-          // Remove the current reference class name from the drop reference's currentRef
+
+        // Split the hovered item's id into an array using the underscore character as the separator
+        // This is needed in case we're dealing with a parent item being dragged and dropped onto a nested placeholder
+        // In this case, the parent item's id will have a trailing number before the underscore and childId after the underscore
+        const [hoverItemId] = `${hoverItem.id}`.split('_');
+
+        // Check if the first part of the hovered item's id matches the current item's id
+        if (`${id}` === hoverItemId) {
+
+          // Remove the current reference class name from the drop reference's currentRef property
+          // This is necessary to ensure that the current reference class is not retained after the item is dropped
           removeCurrentRefClassName(dropRef?.currentRef);
 
-          // Set dropRef's canDrop property to false
-          if (dropRef.canDrop) {
+          // Set the dropRef's canDrop property to false to indicate that the item cannot be dropped here
+          // This is necessary to prevent the item from being dropped onto a placeholder that already has a parent item
+          if (dropRef?.canDrop) {
             dropRef.canDrop = false;
           }
 
+          // Return early to prevent further execution of this function
+          // This is necessary to ensure that the rest of the code in this function is not executed if the item cannot be dropped
           return;
         }
 
         // If they don't match, update the dropRef with the new item's properties
-        if (dropRef.id !== id) {
+        if (`${dropRef.id}` !== `${id}`) {
           // Remove the current reference class name from the drop reference's currentRef
           removeCurrentRefClassName(dropRef?.currentRef);
 
@@ -249,18 +263,38 @@ export const useDragDrop = <T extends DndItem>(
     [ref, dataType, item, dndRef]
   );
 
+  // Define a function that is called when the mouse pointer is moved over the component
   const onMouseOver = (event: React.MouseEvent) => {
+
+    // Prevent the default behavior of the event, which can include actions such as following a link or submitting a form
     event.preventDefault();
+
+    // Stop the event from propagating up the DOM tree, which can interfere with the behavior of the component
     event.stopPropagation();
+
+    // Check if the ref object has a current property
     if (ref.current) {
+
+      // Add the 'is-hover' class to the element
+      // This class is used to indicate that the element is currently being hovered over by the mouse pointer
       ref.current.classList.add('is-hover');
     }
   };
 
+  // Define a function that is called when the mouse pointer leaves the component
   const onMouseOut = (event: React.MouseEvent) => {
+
+    // Prevent the default behavior of the event, which can include actions such as following a link or submitting a form
     event.preventDefault();
+
+    // Stop the event from propagating up the DOM tree, which can interfere with the behavior of the component
     event.stopPropagation();
+
+    // Check if the ref object has a current property
     if (ref.current) {
+
+      // Remove the 'is-hover' class from the element
+      // This class is used to indicate that the element is currently being hovered over by the mouse pointer
       ref.current.classList.remove('is-hover');
     }
   };
