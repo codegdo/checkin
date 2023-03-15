@@ -20,7 +20,7 @@ export const useDragDrop = <T extends DndItem>(
   { dndRef, state, dispatch, ...item }: T,
   acceptTypes: string | string[] = []
 ) => {
-  const { id, dataType, parentId, childId, position, data } = item;
+  const { id, dataType, parentId, childId, position, data, setting } = item;
   const ref = useRef<HTMLDivElement>(null);
   const dropRef = dndRef?.dropRef;
   const isDropEmpty = data?.length === 0;
@@ -151,7 +151,7 @@ export const useDragDrop = <T extends DndItem>(
 
         // Split the hovered item's id into an array using the underscore character as the separator
         // This is needed in case we're dealing with a parent item being dragged and dropped onto a nested placeholder
-        // In this case, the parent item's id will have a trailing number before the underscore and childId after the underscore
+        // In this case, the parent item's id will have a trailing number before the underscore as parentId and number after the underscore as childId
         const [hoverItemId] = `${hoverItem.id}`.split('_');
 
         // Check if the first part of the hovered item's id matches the current item's id
@@ -229,6 +229,8 @@ export const useDragDrop = <T extends DndItem>(
         // Reset the ID of the drop target.
         // will trigger useDrop hover function to set a new dropRef again
         if (dropRef) dropRef.id = undefined;
+
+        if (setting) return setting?.canDrag;
         // Allow dragging for all other items
         return true;
       },
@@ -301,12 +303,12 @@ export const useDragDrop = <T extends DndItem>(
 
   return {
     ref,
-    drop,
-    drag,
     isOver,
     isDragging,
     isSelected,
     isDropEmpty,
+    drag,
+    drop,
     onMouseOver,
     onMouseOut
   };

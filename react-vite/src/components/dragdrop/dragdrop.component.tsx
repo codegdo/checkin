@@ -7,6 +7,7 @@ import DragDropProvider from './dragdrop.context';
 import DragEditor from './dragdrop.editor';
 import DropArea from './drop.area';
 import DragArea from './drag.area';
+import DragPrview from './drag.preview';
 
 export interface DragDropProps extends PropsWithChildren {
   data?: any;
@@ -21,6 +22,7 @@ const DragDrop: React.FC<DragDropProps> = ({ children, ...props }): JSX.Element 
         <DropArea />
         <DragArea>{children}</DragArea>
         <DragEditor />
+        <DragPrview />
       </DragDropProvider>
     </DndProvider>
   )

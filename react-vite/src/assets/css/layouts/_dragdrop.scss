@@ -50,6 +50,13 @@
   border-color: rgb(73, 132, 241);
 }
 
+.drag-preview {
+  display: inline-block;
+  padding: 0.1rem 1rem;
+  border-radius: 0.1rem;
+  background-color: #ddd;
+}
+
 .dnd-menu {
   position: absolute;
   top: 0;

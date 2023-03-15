@@ -1,3 +1,4 @@
+import { XYCoord } from 'react-dnd';
 import { DndItem, DndItemType } from '../components';
 import UtilHelper, { util } from './util.helper';
 
@@ -421,6 +422,46 @@ class DragDropHelper {
     return list;
   }
 
+  snapToGrid(x: number, y: number): [number, number] {
+    const snappedX = Math.round(x / 32) * 32
+    const snappedY = Math.round(y / 32) * 32
+    return [snappedX, snappedY]
+  }
+
+  // Returns the styles for an item that is being dragged and dropped
+  getItemStyles(
+    initialOffset: XYCoord | null,
+    currentOffset: XYCoord | null,
+    isSnapToGrid: boolean,
+  ) {
+    // If either initialOffset or currentOffset is null, return the styles to hide the item
+    if (!initialOffset || !currentOffset) {
+      return {
+        display: 'none',
+      };
+    }
+
+    // Calculate the new x and y coordinates based on the current offset and whether snapping to grid is enabled
+    let { x, y } = currentOffset;
+
+    if (isSnapToGrid) {
+      x -= initialOffset.x;
+      y -= initialOffset.y;
+      [x, y] = this.snapToGrid(x, y);
+      x += initialOffset.x;
+      y += initialOffset.y;
+    }
+
+    // Create the transform style with the new x and y coordinates
+    const transform = `translate(${x}px, ${y}px)`;
+
+    // Return an object with the transform style and its Webkit version
+    return {
+      transform,
+      WebkitTransform: transform,
+    };
+  }
+
   getLastItemPosition<T extends Item>(items: T[]): number {
     const endIndex = items.length - 1;
     return endIndex >= 0 ? items[endIndex].position : -1;
@@ -470,30 +511,3 @@ class DragDropHelper {
 
 export const dndHelper = new DragDropHelper(util);
 export default DragDropHelper;
-
-/* // Create an array to hold the dragged items.
-    const draggedItems: any = [];
-
-    // Add the dragged items to the `draggedItems` array.
-    for (let i = 0; i < dragCounts; i++) {
-      draggedItems.push(data[dragIndex + i]);
-    }
-
-    // Update the `data` array using the `update` function.
-    const updatedData = update(data, {
-      // Remove the dragged items from their current location in the array.
-      $splice: [
-        [dragIndex, dragCounts],
-        // Add the dragged items at the new drop index.
-        [dropIndex, 0, ...draggedItems],
-      ],
-      // Update the position property of each item in the array.
-      $apply: (data: any) =>
-        data.filter((item: any, index: number) => {
-          item.position = index;
-          return item;
-        }),
-    });
-
-    // Return the updated data array.
-    return updatedData; */
