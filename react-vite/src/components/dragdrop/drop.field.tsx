@@ -17,6 +17,7 @@ const DropField: React.FC<DropFieldProps> = (props): JSX.Element => {
     drop,
     isDragging,
     isOver,
+    isLock,
     isSelected,
     onMouseOver,
     onMouseOut
@@ -27,6 +28,7 @@ const DropField: React.FC<DropFieldProps> = (props): JSX.Element => {
     'drop-item drop-field': true,
     'is-dragging': isDragging,
     'is-over': isOver,
+    'is-lock': isLock,
     'is-selected': isSelected
   });
 

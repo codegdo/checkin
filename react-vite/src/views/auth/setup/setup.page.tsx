@@ -24,9 +24,7 @@ const json = [
     parentId: '1',
     childId: null,
     position: 1,
-    setting: {
-      canDrag: false
-    }
+    setting: {}
   }
 ]
 

@@ -25,6 +25,7 @@ export const useDragDrop = <T extends DndItem>(
   const dropRef = dndRef?.dropRef;
   const isDropEmpty = data?.length === 0;
   const isSelected = state?.item?.id == id;
+  const isLock = setting?.canDrag === false;
 
   const [offset, setOffset] = useState<string>();
 
@@ -222,15 +223,16 @@ export const useDragDrop = <T extends DndItem>(
       item: { ...item },
       // A function to determine whether the item can be dragged
       canDrag: () => {
+        // Prevent dragging for certain types of items
+        if (dataType === 'area' || dataType === 'placeholder') return false;
+        if (setting?.canDrag === false) return false;
+
         // Prepare an empty image to use for dragging preview
         preview(getEmptyImage(), { captureDraggingState: false });
-        // Prevent dragging for certain types of items
-        if (dataType == 'area' || dataType == 'placeholder') return false;
+
         // Reset the ID of the drop target.
         // will trigger useDrop hover function to set a new dropRef again
         if (dropRef) dropRef.id = undefined;
-
-        if (setting) return setting?.canDrag;
         // Allow dragging for all other items
         return true;
       },
@@ -242,27 +244,25 @@ export const useDragDrop = <T extends DndItem>(
       end: (dragItem, monitor) => {
         // Check if the item was dropped onto a valid target
         const didDrop = monitor.didDrop();
-        // Handle the drop event if one occurred
-        if (didDrop) {
-          // Check if dragging is dropped item then not allowed in the target drop area
-          if (ref.current !== null && dropRef?.dataType === 'area') return;
 
-          // Check if the drop target allows the dropped item
-          if (dropRef?.canDrop) {
-            // Dispatch an action to move or add the item to the drop target
-            dispatch?.({
-              type: ref.current ? DndActionTypes.MOVE_ITEM : DndActionTypes.ADD_ITEM,
-              payload: {
-                dragItem,
-                dropRef,
-              },
-            });
-          }
+        // Check if dragging is dropped item then not allowed in the target drop area
+        if (didDrop && ref.current !== null && dropRef?.dataType === 'area') return;
+
+        // Check if the drop target allows the dropped item
+        if (didDrop && dropRef?.canDrop) {
+          // Dispatch an action to move or add the item to the drop target
+          dispatch?.({
+            type: ref.current ? DndActionTypes.MOVE_ITEM : DndActionTypes.ADD_ITEM,
+            payload: {
+              dragItem,
+              dropRef,
+            },
+          });
         }
       },
     }),
     // An array of dependencies to trigger a re-render when they change
-    [ref, dataType, item, dndRef]
+    [ref, dataType, item, dndRef, setting]
   );
 
   // Define a function that is called when the mouse pointer is moved over the component
@@ -306,6 +306,7 @@ export const useDragDrop = <T extends DndItem>(
     isOver,
     isDragging,
     isSelected,
+    isLock,
     isDropEmpty,
     drag,
     drop,
