@@ -20,12 +20,14 @@ export const useDragDrop = <T extends DndItem>(
   { dndRef, state, dispatch, ...item }: T,
   acceptTypes: string | string[] = []
 ) => {
-  const { id, dataType, parentId, childId, position, data, setting } = item;
+  const { id, dataType, parentId, childId, position, data, settings } = item;
   const ref = useRef<HTMLDivElement>(null);
   const dropRef = dndRef?.dropRef;
+  const dropElement = dndRef?.dropElement;
+  const dragElement = dndRef?.dragElement;
   const isDropEmpty = data?.length === 0;
   const isSelected = state?.item?.id == id;
-  const isLock = setting?.canDrag === false;
+  const isLock = settings?.canDrag === false;
 
   const [offset, setOffset] = useState<string>();
 
@@ -47,6 +49,11 @@ export const useDragDrop = <T extends DndItem>(
     switch (offsetString.split(' ')[0]) {
       case 'top':
         ref.current.classList.add('on-top');
+        if (dropRef?.dataType === 'field') {
+          ref.current.style.translate = '0px 58px';
+        }
+
+        console.log('CURRNE', dropRef);
         break;
       case 'right':
         ref.current.classList.add('on-right');
@@ -55,7 +62,7 @@ export const useDragDrop = <T extends DndItem>(
         ref.current.classList.add('on-bottom');
         break;
       case 'left':
-        ref.current.classList.add('on-top');
+        ref.current.classList.add('on-left');
         break;
       case 'middle':
         ref.current.classList.add('on-middle');
@@ -67,7 +74,7 @@ export const useDragDrop = <T extends DndItem>(
   }, [ref]);
 
   // Memoized function that updates the dropRef position based on the client offset
-  const updateDropRefPositionByClientOffset = useCallback((clientOffsetPosition: XYCoord) => {
+  const updateDropRefPosition = useCallback((clientOffsetPosition: XYCoord) => {
     // Get references to the dropTarget and dropRef using useRef
     // and check if they exist; if not, return early
     if (!ref.current || !dropRef) return;
@@ -202,10 +209,10 @@ export const useDragDrop = <T extends DndItem>(
         if (!clientOffsetPosition) return;
 
         // If the client offset exists, update the dropRef's position
-        updateDropRefPositionByClientOffset(clientOffsetPosition);
+        updateDropRefPosition(clientOffsetPosition);
       }
       // An array of dependencies to trigger a callback when they change
-    }, [id, dataType, parentId, childId, position, data, dropRef, ref, updateDropRefPositionByClientOffset]),
+    }, [id, dataType, parentId, childId, position, data, dropRef, ref, updateDropRefPosition]),
     // A function that returns an object with values to be collected during dropping
     collect: (monitor) => ({
       isOver: monitor.isOver({ shallow: true }),
@@ -225,7 +232,7 @@ export const useDragDrop = <T extends DndItem>(
       canDrag: () => {
         // Prevent dragging for certain types of items
         if (dataType === 'area' || dataType === 'placeholder') return false;
-        if (setting?.canDrag === false) return false;
+        if (settings?.canDrag === false) return false;
 
         // Prepare an empty image to use for dragging preview
         preview(getEmptyImage(), { captureDraggingState: false });
@@ -238,7 +245,7 @@ export const useDragDrop = <T extends DndItem>(
       },
       // A function that returns an object with values to be collected during dragging
       collect: (monitor) => ({
-        isDragging: monitor.isDragging(),
+        isDragging: monitor.isDragging()
       }),
       // A function to handle the end of a drag operation
       end: (dragItem, monitor) => {
@@ -262,7 +269,7 @@ export const useDragDrop = <T extends DndItem>(
       },
     }),
     // An array of dependencies to trigger a re-render when they change
-    [ref, dataType, item, dndRef, setting]
+    [ref, dataType, item, dndRef, settings]
   );
 
   // Define a function that is called when the mouse pointer is moved over the component

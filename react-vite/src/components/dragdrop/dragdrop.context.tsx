@@ -1,5 +1,4 @@
 import React, { Dispatch, PropsWithChildren, useCallback, useEffect, useReducer, useRef } from 'react';
-import update from 'immutability-helper';
 
 import { DragDropProps } from './dragdrop.component';
 import { DndItem } from './dragdrop.type';
@@ -20,6 +19,8 @@ type DropRef = Partial<DndItem> & { x?: number; y?: number; offset?: string, cur
 interface DndRef {
   dropRef: DropRef;
   itemRef: DndItem | null;
+  dropElement?: HTMLDivElement | null;
+  dragElement?: HTMLDivElement | null;
 }
 
 export interface DragDropContextValue {
@@ -102,7 +103,9 @@ const dndReducer = (state: State, action: Action) => {
 
 const defaultDndRef = {
   dropRef: {},
-  itemRef: null
+  itemRef: null,
+  dropElement: null,
+  dragElement: null
 }
 
 export const DragDropContext = React.createContext<DragDropContextValue>({

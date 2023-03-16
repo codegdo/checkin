@@ -34,7 +34,7 @@ interface Data {
   position?: number;
   parentId?: string | null;
   childId?: string | null;
-  setting?: Record<string, any>
+  settings?: Record<string, any>
 }
 
 export interface Field extends Data {

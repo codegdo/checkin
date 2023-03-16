@@ -12,7 +12,7 @@ const json = [
     parentId: null,
     childId: null,
     position: 0,
-    setting: {}
+    settings: {}
   },
   {
     id: '2',
@@ -24,7 +24,19 @@ const json = [
     parentId: '1',
     childId: null,
     position: 1,
-    setting: {}
+    settings: {}
+  },
+  {
+    id: '3',
+    className: '',
+    name: 'field',
+    type: 'text',
+    dataType: 'field',
+    data: [],
+    parentId: '1',
+    childId: null,
+    position: 2,
+    settings: {}
   }
 ]
 
