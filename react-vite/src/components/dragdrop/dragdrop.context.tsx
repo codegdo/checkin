@@ -19,8 +19,7 @@ type DropRef = Partial<DndItem> & { x?: number; y?: number; offset?: string, cur
 interface DndRef {
   dropRef: DropRef;
   itemRef: DndItem | null;
-  dropElement?: HTMLDivElement | null;
-  dragElement?: HTMLDivElement | null;
+  elementRef?: Record<string, HTMLDivElement | null> ;
 }
 
 export interface DragDropContextValue {
@@ -104,8 +103,7 @@ const dndReducer = (state: State, action: Action) => {
 const defaultDndRef = {
   dropRef: {},
   itemRef: null,
-  dropElement: null,
-  dragElement: null
+  elementRef: {}
 }
 
 export const DragDropContext = React.createContext<DragDropContextValue>({

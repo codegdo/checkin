@@ -499,8 +499,16 @@ class DragDropHelper {
       const style = window.getComputedStyle(element, ':after');
       width = (parseFloat(style.width) || 0) / 2;
       height = (parseFloat(style.height) || 0) / 2;
+    } else {
+      const childNodes = Array.from(element.childNodes) as HTMLElement[];
+      childNodes.forEach((child) => {
+        if (child instanceof HTMLElement) {
+          width += child.clientWidth / 2;
+          height += child.clientHeight / 2;
+        }
+      });
     }
-
+    console.log(width, height);
     return { width, height };
   }
 

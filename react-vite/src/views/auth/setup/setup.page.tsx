@@ -17,7 +17,7 @@ const json = [
   {
     id: '2',
     className: '',
-    name: 'field',
+    name: 'field2',
     type: 'text',
     dataType: 'field',
     data: [],
@@ -29,7 +29,7 @@ const json = [
   {
     id: '3',
     className: '',
-    name: 'field',
+    name: 'field3',
     type: 'text',
     dataType: 'field',
     data: [],

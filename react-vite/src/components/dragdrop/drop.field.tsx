@@ -9,7 +9,7 @@ import { DndActionTypes } from './dragdrop.context';
 type DropFieldProps = DndItem;
 
 const DropField: React.FC<DropFieldProps> = (props): JSX.Element => {
-  const { state, dispatch, id, className = '', } = props;
+  const { dndRef, state, dispatch, id, name, className = '', } = props;
   const acceptTypes = Object.values(DndItemType);
   const {
     ref,
@@ -48,6 +48,7 @@ const DropField: React.FC<DropFieldProps> = (props): JSX.Element => {
         });
         break;
       case DndActionClickType.MENU_REMOVE:
+        if(dndRef?.elementRef) delete dndRef.elementRef[`${id}`];
         dispatch?.({
           type: DndActionTypes.REMOVE_ITEM,
           payload: props
@@ -85,7 +86,7 @@ const DropField: React.FC<DropFieldProps> = (props): JSX.Element => {
       onClick={handleItemClick}
     >
       {isSelected && <DragDropMenu onClick={handleClick} />}
-      field
+      {name}
     </div>
   );
 };

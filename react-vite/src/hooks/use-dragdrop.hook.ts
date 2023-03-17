@@ -23,8 +23,7 @@ export const useDragDrop = <T extends DndItem>(
   const { id, dataType, parentId, childId, position, data, settings } = item;
   const ref = useRef<HTMLDivElement>(null);
   const dropRef = dndRef?.dropRef;
-  const dropElement = dndRef?.dropElement;
-  const dragElement = dndRef?.dragElement;
+  const elementRef = dndRef?.elementRef;
   const isDropEmpty = data?.length === 0;
   const isSelected = state?.item?.id == id;
   const isLock = settings?.canDrag === false;
@@ -49,17 +48,24 @@ export const useDragDrop = <T extends DndItem>(
     switch (offsetString.split(' ')[0]) {
       case 'top':
         ref.current.classList.add('on-top');
-        if (dropRef?.dataType === 'field') {
-          ref.current.style.translate = '0px 58px';
-        }
-
-        console.log('CURRNE', dropRef);
+        // if (dropRef?.dataType === 'field') {
+        //   ref.current.style.transform = 'translate(0px, 58px)';
+        //   if (elementRef?.['3']) {
+        //     elementRef['3'].style.transform = 'translate(0px, -58px)';
+        //   }
+        // }
         break;
       case 'right':
         ref.current.classList.add('on-right');
         break;
       case 'bottom':
         ref.current.classList.add('on-bottom');
+        // if (dropRef?.dataType === 'field') {
+        //   ref.current.style.transform = 'translate(0px, -58px)';
+        //   if (elementRef?.['3']) {
+        //     elementRef['3'].style.transform = 'translate(0px, 58px)';
+        //   }
+        // }
         break;
       case 'left':
         ref.current.classList.add('on-left');
@@ -144,46 +150,45 @@ export const useDragDrop = <T extends DndItem>(
     }
   }, [offset, dropRef, updateDropTargetClassList]);
 
+  useEffect(() => {
+    if(elementRef && ref.current) {
+      elementRef[`${id}`] = ref.current
+    }
+  }, [elementRef, ref, id]);
+
   // Destructure the values returned by the useDrop hook
   const [{ isOver }, drop] = useDrop({
     // The type of the drop can accept
     accept: acceptTypes,
     // A function to determine dragged over
-    hover: useCallback((hoverItem: DndItem, monitor: DropTargetMonitor<DndItem, unknown>) => {
-      // Get references to the dropTarget and dropRef using useRef
+    hover: useCallback((dragItem: DndItem, monitor: DropTargetMonitor<DndItem, unknown>) => {
+      // Get references ref.current and dropRef
       // and check if they exist; if not, return early
       if (!ref.current || !dropRef) return;
 
       // Check if the hovered item's id matches the current item's id
       if (monitor.isOver({ shallow: true })) {
 
-        // Split the hovered item's id into an array using the underscore character as the separator
-        // This is needed in case we're dealing with a parent item being dragged and dropped onto a nested placeholder
-        // In this case, the parent item's id will have a trailing number before the underscore as parentId and number after the underscore as childId
-        const [hoverItemId] = `${hoverItem.id}`.split('_');
+        // Extract the item ID from the drag item's ID
+        const [dragItemId] = `${dragItem.id}`.split('_');
 
-        // Check if the first part of the hovered item's id matches the current item's id
-        if (`${id}` === hoverItemId) {
-
-          // Remove the current reference class name from the drop reference's currentRef property
-          // This is necessary to ensure that the current reference class is not retained after the item is dropped
-          removeCurrentRefClassName(dropRef?.currentRef);
-
-          // Set the dropRef's canDrop property to false to indicate that the item cannot be dropped here
-          // This is necessary to prevent the item from being dropped onto a placeholder that already has a parent item
-          if (dropRef?.canDrop) {
+        // If the dragged item is the same as the current drop target, do nothing
+        if (`${id}` === dragItemId) {
+          if (dropRef.canDrop) {
+            // Set canDrop to false to prevent dropping on an occupied placeholder
             dropRef.canDrop = false;
+            // Remove the current ref class name from the drop ref's element
+            removeCurrentRefClassName(elementRef?.[`${dropRef.id}`]);
           }
-
           // Return early to prevent further execution of this function
-          // This is necessary to ensure that the rest of the code in this function is not executed if the item cannot be dropped
           return;
         }
 
         // If they don't match, update the dropRef with the new item's properties
         if (`${dropRef.id}` !== `${id}`) {
+
           // Remove the current reference class name from the drop reference's currentRef
-          removeCurrentRefClassName(dropRef?.currentRef);
+          removeCurrentRefClassName(elementRef?.[`${dropRef.id}`]);
 
           // Set the dropRef's properties based on the new item's properties
           dropRef.id = id;
@@ -194,7 +199,6 @@ export const useDragDrop = <T extends DndItem>(
           dropRef.data = data;
           dropRef.x = 0;
           dropRef.y = 0;
-          dropRef.currentRef = ref.current;
 
           console.log(dndRef);
         }
@@ -208,10 +212,10 @@ export const useDragDrop = <T extends DndItem>(
         // If the client offset doesn't exist, return early
         if (!clientOffsetPosition) return;
 
-        // If the client offset exists, update the dropRef's position
+        // Update the drop ref's position
         updateDropRefPosition(clientOffsetPosition);
       }
-      // An array of dependencies to trigger a callback when they change
+      // List dependencies for this callback
     }, [id, dataType, parentId, childId, position, data, dropRef, ref, updateDropRefPosition]),
     // A function that returns an object with values to be collected during dropping
     collect: (monitor) => ({
