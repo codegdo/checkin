@@ -14,12 +14,19 @@ interface Action {
   payload: any;
 }
 
-type DropRef = Partial<DndItem> & { x?: number; y?: number; offset?: string, currentRef?: HTMLDivElement | null, canDrop?: boolean }
+type DropRef = Partial<DndItem> & {
+  dragId?: string | number;
+  dragPosition?: number | null;
+  x?: number;
+  y?: number;
+  offset?: string,
+  canDrop?: boolean
+}
 
 interface DndRef {
   dropRef: DropRef;
   itemRef: DndItem | null;
-  elementRef?: Record<string, HTMLDivElement | null> ;
+  elementRef?: Record<string, HTMLDivElement | null>;
 }
 
 export interface DragDropContextValue {

@@ -3,12 +3,12 @@ import { DndItem, DndItemType } from '../components';
 import UtilHelper, { util } from './util.helper';
 
 interface Item {
-  id: number | string;
+  id?: number | string;
   dataType: string;
   data?: any;
-  position: number;
-  parentId: string | null;
-  childId: string | null;
+  position?: number;
+  parentId?: string | null;
+  childId?: string | null;
 }
 
 interface DragItem extends Item {
@@ -37,7 +37,7 @@ class DragDropHelper {
     if (!result) return data;
 
     // Destructure the relevant information from the result.
-    const { dropIndex, dropParentId, dropChildId } = result;
+    const { dropIndex = 0, dropParentId, dropChildId } = result;
 
     // If the drop index is greater than the length of the data array, return the original data.
     if (dropIndex > data.length) {
@@ -76,7 +76,7 @@ class DragDropHelper {
     }
 
     // Destructure the relevant information from the result.
-    const { dragIndex, dragCounts, dropIndex, dropParentId, dropChildId } = result;
+    const { dragIndex = 0, dragCounts, dropIndex, dropParentId, dropChildId } = result;
 
     // Get the items that were dragged and the remaining items.
     const draggedItems = data.slice(dragIndex, dragIndex + dragCounts);
@@ -114,9 +114,10 @@ class DragDropHelper {
     // Create a new array that excludes the items to be removed.
     // This is done by slicing the data array from the beginning to the position of the item,
     // and then slicing the data array from the position after the last item to be removed to the end.
+    const itemPosition = item.position ?? 0;
     const updatedData = [
       ...data.slice(0, item.position),
-      ...data.slice(item.position + numItemsToRemove)
+      ...data.slice(itemPosition + numItemsToRemove)
     ]
       // Map over the updatedData array and update the position property of each item to its current index in the array.
       .map((item: Item, index: number) => ({ ...item, position: index }));
@@ -140,7 +141,8 @@ class DragDropHelper {
     // Loop through the range of items to be cloned.
     for (let i = 0; i < numItemsToClone; i++) {
       // Get the original item from the data array.
-      const originalItem = data[itemToClone.position + i];
+      const itemToClonePosition = itemToClone.position ?? 0;
+      const originalItem = data[itemToClonePosition + i];
 
       // If the original item exists:
       if (originalItem) {
@@ -247,10 +249,10 @@ class DragDropHelper {
     // Extract the id, data type, and position of the drag and drop items.
     const dragId = dragItem.id;
     const dragDataType = dragItem.dataType;
-    const dragPosition = dragItem.position;
+    const dragPosition = dragItem.position ?? 0;
     const dropId = dropRef.id;
     const dropDataType = dropRef.dataType;
-    const dropPosition = dropRef.position;
+    const dropPosition = dropRef.position ?? 0;
     const dropParentId = dropRef.parentId;
     const dropChildId = dropRef.childId;
     const dropOffset = dropRef.offset || 'bottom';
@@ -260,12 +262,12 @@ class DragDropHelper {
     const [dropCounts, dropIds] = this.countItems(dropRef);
 
     // Remove suffix from dropItemId if it's a placeholder
-    const strippedDropId = dropDataType === 'placeholder' ? `${dropId}`.split('_')[0] : `${dropId}`;
+    const placeholderParentId = dropDataType === 'placeholder' ? `${dropId}`.split('_')[0] : `${dropId}`;
 
-    // Prevent drag block drop over nested children
-    // If the ids of the drag items include the stripped drop item id, it means that the drag item is nested inside the drop item.
-    // In this case, we return null to indicate that the drag item cannot be dropped on the drop item.
-    if (dragIds.includes(strippedDropId)) return null;
+    // Check if any of the drag item ids match the stripped drop item id.
+    // If yes, it means that the drag item is nested inside the drop item, so we return true.
+    //const isDropOnNestedChildren = this.checkDragItemDroppedOnNestedItem(dragIds, strippedDropId);
+    //if (isDropOnNestedChildren) return null;
 
     // Reset dropItemParentId to null if dropRef is an area
     // If the drop item is an area, set the newParentId to null, indicating that the dragged items will not have a parent.
@@ -275,7 +277,7 @@ class DragDropHelper {
       dropOffset === 'middle'
         ? dropDataType === 'area'
           ? null
-          : strippedDropId
+          : placeholderParentId
         : dropParentId;
 
     // Calculate the position of the drag item in relation to the drop item.
@@ -428,6 +430,13 @@ class DragDropHelper {
     return [snappedX, snappedY]
   }
 
+  checkDragItemDroppedOnNestedItem(dragItemIds: string[], dropItemId: string) {
+    // Check if any of the drag item ids match the stripped drop item id.
+    // If yes, it means that the drag item is nested inside the drop item, so we return true.
+    return dragItemIds.some((dragItemId) => dragItemId === dropItemId);
+
+  }
+
   // Returns the styles for an item that is being dragged and dropped
   getItemStyles(
     initialOffset: XYCoord | null,
@@ -464,7 +473,7 @@ class DragDropHelper {
 
   getLastItemPosition<T extends Item>(items: T[]): number {
     const endIndex = items.length - 1;
-    return endIndex >= 0 ? items[endIndex].position : -1;
+    return endIndex >= 0 ? items[endIndex].position ?? -1 : -1;
   }
 
   getElementDisplay(element: HTMLElement): string {
