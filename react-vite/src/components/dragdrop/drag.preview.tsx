@@ -1,7 +1,7 @@
 import { CSSProperties, useEffect, useState } from 'react';
 import { useDragLayer } from 'react-dnd';
 
-import { dndHelper } from '../../helpers';
+import { dndHelper } from './dragdrop.helper';
 
 const layerStyles: CSSProperties = {
   position: 'fixed',
@@ -16,21 +16,21 @@ const layerStyles: CSSProperties = {
 interface DragPreviewProps { }
 
 const DragPreview: React.FC<DragPreviewProps> = () => {
-  const { item, isDragging, initialOffset, clientOffset } = useDragLayer((monitor) => ({
-    initialOffset: monitor.getInitialSourceClientOffset(),
+  const { item, itemType, isDragging, initialSourceClientOffset, clientOffset } = useDragLayer((monitor) => ({
+    initialSourceClientOffset: monitor.getInitialSourceClientOffset(),
     clientOffset: monitor.getClientOffset(),
     item: monitor.getItem(),
     itemType: monitor.getItemType(),
     isDragging: monitor.isDragging(),
   }));
 
-  if (!isDragging) {
-    return null
+  if (!isDragging || itemType === 'panel') {
+    return null;
   }
 
   return (
     <div style={layerStyles}>
-      <div className='drag-preview' style={dndHelper.getItemStyles(initialOffset, clientOffset, false)}>{item?.name}</div>
+      <div className='drag-preview' style={dndHelper.getItemStyles(initialSourceClientOffset, clientOffset, false)}>{item?.name}</div>
     </div>
   );
 };

@@ -6,12 +6,17 @@
 
 .drop-item {
   border: 1px dashed #eee;
+  background-color: #fff;
   padding: 1rem;
   transition: all 0.5s ease-out;
   position: relative;
 }
 .drop-item.is-focus {
   position: relative;
+}
+.drop-block.is-over,
+.drop-placeholder.is-over {
+  background-color: #f8f8f8;
 }
 .drop-block.is-empty:after,
 .drop-placeholder:empty:after {

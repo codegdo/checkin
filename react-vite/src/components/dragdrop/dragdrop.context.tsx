@@ -2,7 +2,7 @@ import React, { Dispatch, PropsWithChildren, useCallback, useEffect, useReducer,
 
 import { DragDropProps } from './dragdrop.component';
 import { DndItem } from './dragdrop.type';
-import { dndHelper } from '../../helpers';
+import { dndHelper } from './dragdrop.helper';
 
 interface State {
   data: DndItem[];
@@ -43,6 +43,7 @@ interface DragDropProviderProps extends PropsWithChildren<DragDropProps> { };
 
 export enum DndActionTypes {
   SET_SELECTED_ITEM = 'SET_SELECTED_ITEM',
+  SET_SELECTED_ITEM_ACTIVE = 'SET_SELECTED_ITEM_ACTIVE',
   SET_INITIAL_ITEMS = 'SET_INITIAL_ITEMS',
   ADD_ITEM = 'ADD_ITEM',
   MOVE_ITEM = 'MOVE_ITEM',
@@ -54,6 +55,9 @@ const dndReducer = (state: State, action: Action) => {
   const { type, payload } = action;
 
   switch (type) {
+    case DndActionTypes.SET_SELECTED_ITEM_ACTIVE:
+      return { ...state, item: { ...state.item, isActive: true } };
+
     case DndActionTypes.SET_SELECTED_ITEM:
       const selectedItem = payload;
       return { ...state, item: selectedItem };

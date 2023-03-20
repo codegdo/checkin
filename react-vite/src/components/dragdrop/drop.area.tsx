@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { dndHelper } from '../../helpers';
 
 import { useWrapperContext } from '../../hooks';
 import { DataType } from '../form';
 import { DragDropContext } from './dragdrop.context';
+import { dndHelper } from './dragdrop.helper';
 import DragDropRender from './dragdrop.render';
 import DropBlock from './drop.block';
 

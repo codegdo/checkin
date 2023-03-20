@@ -34,7 +34,8 @@ interface Data {
   position?: number;
   parentId?: string | null;
   childId?: string | null;
-  settings?: Record<string, any>
+  settings?: Record<string, any>;
+  isActive?: boolean;
 }
 
 export interface Field extends Data {

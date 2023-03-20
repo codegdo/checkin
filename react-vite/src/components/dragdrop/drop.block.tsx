@@ -3,7 +3,7 @@ import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import stringClassNames from 'classnames';
 
-import { useDragDrop } from '../../hooks';
+import { useDragDrop } from './use-dragdrop.hook';
 
 import DragDropRender from './dragdrop.render';
 import { DndActionClickType, DndItem, DndItemType } from './dragdrop.type';

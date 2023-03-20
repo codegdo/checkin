@@ -1,5 +1,6 @@
 import React, { PropsWithChildren } from 'react';
-import { useDragDrop, useWrapperContext } from '../../hooks';
+import { useWrapperContext } from '../../hooks';
+import { useDragDrop } from './use-dragdrop.hook';
 import { DragDropContext } from './dragdrop.context';
 import { DndItem } from './dragdrop.type';
 

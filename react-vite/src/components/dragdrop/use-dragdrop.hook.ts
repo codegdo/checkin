@@ -12,9 +12,9 @@ import {
   XYCoord,
 } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { DndItem } from '../components/dragdrop';
-import { DndActionTypes } from '../components/dragdrop/dragdrop.context';
-import { dndHelper } from '../helpers';
+import { DndActionTypes } from './dragdrop.context';
+import { dndHelper } from './dragdrop.helper';
+import { DndItem } from './dragdrop.type';
 
 export const useDragDrop = <T extends DndItem>(
   { dndRef, state, dispatch, ...item }: T,
@@ -29,27 +29,27 @@ export const useDragDrop = <T extends DndItem>(
   const isSelected = state?.item?.id == id;
   const isLock = settings?.canDrag === false;
 
-  let {current: previousY} = useRef<number | null>(null);
-  let {current: currentY} = useRef<number | null>(null);
-  let {current: previousX} = useRef<number | null>(null);
-  let {current: currentX} = useRef<number | null>(null);
+  let { current: previousY } = useRef<number | null>(null);
+  let { current: currentY } = useRef<number | null>(null);
+  let { current: previousX } = useRef<number | null>(null);
+  let { current: currentX } = useRef<number | null>(null);
 
   const [offset, setOffset] = useState<string>();
 
   const updateDropTargetTransform = useCallback((offsetString: string) => {
     // Ensure required elements are present before continuing
     if (!currentElement || !dropRef) return;
-  
+
     // Get dimensions and positions
     const height = currentElement.clientHeight;
     const draggedElement = elementRef?.[`${dropRef.dragId}`];
     const position = dropRef.position as number;
     const dragPosition = dropRef.dragPosition as number;
     const direction = dropRef.direction;
-  
+
     // Determine which CSS class to add based on the first word of the offsetString parameter
     const [offsetDirection] = offsetString.split(' ');
-  
+
     // Apply transformations based on the offset direction and drop direction
     switch (offsetDirection) {
       case 'top': {
@@ -95,7 +95,7 @@ export const useDragDrop = <T extends DndItem>(
             }
           } else {
             // Move the drop target down
-            if(draggedElement && dropRef.translateY) {
+            if (draggedElement && dropRef.translateY) {
               dropRef.translateY -= height;
               currentElement.style.transform = '';
               draggedElement.style.transform = `translate(0px, ${dropRef.translateY}px) scale(1, 1)`;
@@ -111,7 +111,7 @@ export const useDragDrop = <T extends DndItem>(
         console.log('OFFSET DOES NOT MATCH: ', offsetString);
     }
   }, [currentElement, dropRef]);
-  
+
   // This function updates the CSS classes of the drop target element to indicate where a dragged element will be dropped.
   const updateDropTargetClassList = useCallback((offsetString: string) => {
 
@@ -128,12 +128,12 @@ export const useDragDrop = <T extends DndItem>(
 
     // Determine which CSS class to add based on the first word of the offsetString parameter
     const [offsetDirection] = offsetString.split(' ');
-    
+
     switch (offsetDirection) {
-      case 'top': 
+      case 'top':
         currentElement.classList.add('on-top');
         break;
-      case 'bottom': 
+      case 'bottom':
         currentElement.classList.add('on-bottom');
         break;
       case 'right':
@@ -155,7 +155,7 @@ export const useDragDrop = <T extends DndItem>(
       previousY = clientY;
     } else {
       currentY = clientY;
-  
+
       if (currentY < previousY) {
         previousY = currentY;
         return 'up';
@@ -174,7 +174,7 @@ export const useDragDrop = <T extends DndItem>(
       previousX = clientX;
     } else {
       currentX = clientX;
-  
+
       if (currentX < previousX) {
         previousX = currentX;
         return 'left';
@@ -190,7 +190,7 @@ export const useDragDrop = <T extends DndItem>(
 
   // Memoized function that updates the dropRef position based on the client offset
   const updateDropRefPosition = useCallback((currentClientOffset: XYCoord, initialClientOffset: XYCoord) => {
-  
+
     // Get references to the currentElement and dropRef using useRef
     // and check if they exist; if not, return early
     if (!currentElement || !dropRef) {
@@ -200,7 +200,7 @@ export const useDragDrop = <T extends DndItem>(
 
     // Only update the position if it has changed
     if (dropRef.x !== currentClientOffset.x || dropRef.y !== currentClientOffset.y) {
-      
+
       // Update the x and y properties of the dropRef with the client offset position
       dropRef.x = currentClientOffset.x;
       dropRef.y = currentClientOffset.y;

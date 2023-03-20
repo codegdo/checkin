@@ -1,7 +1,7 @@
 import React from 'react';
 import stringClassNames from 'classnames';
 
-import { useDragDrop } from '../../hooks';
+import { useDragDrop } from './use-dragdrop.hook';
 import DragDropRender from './dragdrop.render';
 import { DndItem, DndItemType } from './dragdrop.type';
 

@@ -1,6 +1,7 @@
 import { XYCoord } from 'react-dnd';
-import { DndItem, DndItemType } from '../components';
-import UtilHelper, { util } from './util.helper';
+
+import UtilHelper, { util } from '../../helpers/util.helper';
+import { DndItem, DndItemType } from './dragdrop.type';
 
 interface Item {
   id?: number | string;
@@ -37,7 +38,14 @@ class DragDropHelper {
     if (!result) return data;
 
     // Destructure the relevant information from the result.
-    const { dropIndex = 0, dropParentId, dropChildId } = result;
+    const { dropDataType, dropParentId, dropChildId, } = result;
+
+    let dropIndex = result.dropIndex;
+
+    // If the drop reference is an "area", set the drop index to the end of the data array.
+    if (dropDataType === 'area') {
+      dropIndex = data.length;
+    }
 
     // If the drop index is greater than the length of the data array, return the original data.
     if (dropIndex > data.length) {
@@ -413,7 +421,7 @@ class DragDropHelper {
       startY = clientY;
     } else {
       endY = clientY;
-      
+
       if (endY < startY) {
         // Mouse is moving up
         startY = endY;

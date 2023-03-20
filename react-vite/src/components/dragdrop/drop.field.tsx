@@ -1,10 +1,10 @@
 import React from 'react';
 import stringClassNames from 'classnames';
 
-import { useDragDrop } from '../../hooks';
-import { DndActionClickType, DndItem, DndItemType } from './dragdrop.type';
+import { useDragDrop } from './use-dragdrop.hook';
 import DragDropMenu from './dragdrop.menu';
 import { DndActionTypes } from './dragdrop.context';
+import { DndActionClickType, DndItem, DndItemType } from './dragdrop.type';
 
 type DropFieldProps = DndItem;
 
@@ -39,7 +39,10 @@ const DropField: React.FC<DropFieldProps> = (props): JSX.Element => {
   const handleClick = (name: string) => {
     switch (name) {
       case DndActionClickType.MENU_EDIT:
-
+        dispatch?.({
+          type: DndActionTypes.SET_SELECTED_ITEM_ACTIVE,
+          payload: true
+        });
         break;
       case DndActionClickType.MENU_CLONE:
         dispatch?.({
@@ -48,7 +51,7 @@ const DropField: React.FC<DropFieldProps> = (props): JSX.Element => {
         });
         break;
       case DndActionClickType.MENU_REMOVE:
-        if(dndRef?.elementRef) delete dndRef.elementRef[`${id}`];
+        if (dndRef?.elementRef) delete dndRef.elementRef[`${id}`];
         dispatch?.({
           type: DndActionTypes.REMOVE_ITEM,
           payload: props
@@ -63,6 +66,7 @@ const DropField: React.FC<DropFieldProps> = (props): JSX.Element => {
 
     const selectedItem = (state?.item?.id == id) ? null : {
       id,
+      isActive: false,
       onChange: handleChange,
       onClick: handleClick
     };
