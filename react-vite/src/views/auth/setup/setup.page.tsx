@@ -37,6 +37,18 @@ const json = [
     childId: null,
     position: 2,
     settings: {}
+  },
+  {
+    id: '4',
+    className: '',
+    name: 'field4',
+    type: 'text',
+    dataType: 'field',
+    data: [],
+    parentId: '1',
+    childId: null,
+    position: 3,
+    settings: {}
   }
 ]
 

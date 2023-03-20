@@ -19,8 +19,11 @@ type DropRef = Partial<DndItem> & {
   dragPosition?: number | null;
   x?: number;
   y?: number;
-  offset?: string,
-  canDrop?: boolean
+  translateX?: number;
+  translateY?: number;
+  offset?: string;
+  direction?: string;
+  canDrop?: boolean;
 }
 
 interface DndRef {

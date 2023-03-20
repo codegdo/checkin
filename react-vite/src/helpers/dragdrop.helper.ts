@@ -384,7 +384,7 @@ class DragDropHelper {
     }
   }
 
-  hoverOffsetX(
+  determineOffsetX(
     clientX: number,
     middleX: number,
     targetWidth: number
@@ -396,7 +396,7 @@ class DragDropHelper {
         : 'middle';
   }
 
-  hoverOffsetY(
+  determineOffsetY(
     clientY: number,
     middleY: number,
     elementHeight: number
@@ -406,6 +406,28 @@ class DragDropHelper {
       : clientY >= middleY + elementHeight
         ? 'bottom'
         : 'middle';
+  }
+
+  determineDirectionY(startY: number | null, endY: number | null, clientY: number): string | undefined {
+    if (startY === null) {
+      startY = clientY;
+    } else {
+      endY = clientY;
+      
+      if (endY < startY) {
+        // Mouse is moving up
+        startY = endY;
+        return 'up';
+      } else if (endY > startY) {
+        // Mouse is moving down
+        // Move the mouse back down
+        window.scrollBy(0, 1);
+        startY = endY;
+        return 'down';
+      } else {
+        return 'no movement'
+      }
+    }
   }
 
   nomalizeData(data: DndItem[] = []) {
@@ -517,7 +539,7 @@ class DragDropHelper {
         }
       });
     }
-    console.log(width, height);
+    //console.log(width, height);
     return { width, height };
   }
 

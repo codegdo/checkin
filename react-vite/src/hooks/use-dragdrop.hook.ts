@@ -29,11 +29,92 @@ export const useDragDrop = <T extends DndItem>(
   const isSelected = state?.item?.id == id;
   const isLock = settings?.canDrag === false;
 
+  let {current: previousY} = useRef<number | null>(null);
+  let {current: currentY} = useRef<number | null>(null);
+  let {current: previousX} = useRef<number | null>(null);
+  let {current: currentX} = useRef<number | null>(null);
+
   const [offset, setOffset] = useState<string>();
 
+  const updateDropTargetTransform = useCallback((offsetString: string) => {
+    // Ensure required elements are present before continuing
+    if (!currentElement || !dropRef) return;
+  
+    // Get dimensions and positions
+    const height = currentElement.clientHeight;
+    const draggedElement = elementRef?.[`${dropRef.dragId}`];
+    const position = dropRef.position as number;
+    const dragPosition = dropRef.dragPosition as number;
+    const direction = dropRef.direction;
+  
+    // Determine which CSS class to add based on the first word of the offsetString parameter
+    const [offsetDirection] = offsetString.split(' ');
+  
+    // Apply transformations based on the offset direction and drop direction
+    switch (offsetDirection) {
+      case 'top': {
+        if (direction === 'up' && position < dragPosition) {
+          console.log('FROM TOP up');
+        } else if (direction === 'down') {
+          if (position > dragPosition) {
+            // Move the drop target down
+            if (dropRef.translateY == null) {
+              dropRef.translateY = height;
+            } else {
+              dropRef.translateY += height;
+            }
+            // Apply transformations to the elements being dragged and dropped
+            if (draggedElement) {
+              currentElement.style.transform = `translate(0px, -${height}px) scale(1, 1)`;
+              draggedElement.style.transform = `translate(0px, ${dropRef.translateY}px) scale(1, 1)`;
+            }
+          } else {
+            // Move the drop target up
+            if (draggedElement && dropRef.translateY) {
+              currentElement.style.transform = '';
+              dropRef.translateY += height;
+              draggedElement.style.transform = `translate(0px, ${dropRef.translateY}px) scale(1, 1)`;
+            }
+          }
+          console.log('FROM TOP down');
+        }
+        break;
+      }
+      case 'bottom': {
+        if (direction === 'up') {
+          // Move the drop target up
+          if (position < dragPosition) {
+            if (dropRef.translateY == null) {
+              dropRef.translateY = -height;
+            } else {
+              dropRef.translateY -= height;
+            }
+            if (draggedElement) {
+              currentElement.style.transform = `translate(0px, ${height}px) scale(1, 1)`;
+              draggedElement.style.transform = `translate(0px, ${dropRef.translateY}px) scale(1, 1)`;
+            }
+          } else {
+            // Move the drop target down
+            if(draggedElement && dropRef.translateY) {
+              dropRef.translateY -= height;
+              currentElement.style.transform = '';
+              draggedElement.style.transform = `translate(0px, ${dropRef.translateY}px) scale(1, 1)`;
+            }
+          }
+          console.log('FROM BOTTOM up');
+        } else if (direction === 'down' && position > dragPosition) {
+          console.log('FROM BOTTOM down');
+        }
+        break;
+      }
+      default:
+        console.log('OFFSET DOES NOT MATCH: ', offsetString);
+    }
+  }, [currentElement, dropRef]);
+  
   // This function updates the CSS classes of the drop target element to indicate where a dragged element will be dropped.
   const updateDropTargetClassList = useCallback((offsetString: string) => {
-    // If the dropTargetRef does not exist, return early
+
     if (!currentElement) return;
 
     // Remove all CSS classes related to drop target position
@@ -46,27 +127,17 @@ export const useDragDrop = <T extends DndItem>(
     );
 
     // Determine which CSS class to add based on the first word of the offsetString parameter
-    switch (offsetString.split(' ')[0]) {
-      case 'top':
+    const [offsetDirection] = offsetString.split(' ');
+    
+    switch (offsetDirection) {
+      case 'top': 
         currentElement.classList.add('on-top');
-        // if (dropRef?.dataType === 'field') {
-        //   currentElement.style.transform = 'translate(0px, 58px)';
-        //   if (elementRef?.['3']) {
-        //     elementRef['3'].style.transform = 'translate(0px, -58px)';
-        //   }
-        // }
+        break;
+      case 'bottom': 
+        currentElement.classList.add('on-bottom');
         break;
       case 'right':
         currentElement.classList.add('on-right');
-        break;
-      case 'bottom':
-        currentElement.classList.add('on-bottom');
-        // if (dropRef?.dataType === 'field') {
-        //   currentElement.style.transform = 'translate(0px, -58px)';
-        //   if (elementRef?.['3']) {
-        //     elementRef['3'].style.transform = 'translate(0px, 58px)';
-        //   }
-        // }
         break;
       case 'left':
         currentElement.classList.add('on-left');
@@ -75,23 +146,64 @@ export const useDragDrop = <T extends DndItem>(
         currentElement.classList.add('on-middle');
         break;
       default:
-        // Log an error message to the console if the offsetString does not match any of the cases
         console.log('OFFSET DOES NOT MATCH: ', offsetString);
     }
   }, [currentElement]);
 
+  const determineDirectionY = useCallback((clientY: number) => {
+    if (previousY === null) {
+      previousY = clientY;
+    } else {
+      currentY = clientY;
+  
+      if (currentY < previousY) {
+        previousY = currentY;
+        return 'up';
+      } else if (currentY > previousY) {
+        window.scrollBy(0, 1);
+        previousY = currentY;
+        return 'down';
+      } else {
+        return 'no movement';
+      }
+    }
+  }, [previousY, currentY]);
+
+  const determineDirectionX = useCallback((clientX: number) => {
+    if (previousX === null) {
+      previousX = clientX;
+    } else {
+      currentX = clientX;
+  
+      if (currentX < previousX) {
+        previousX = currentX;
+        return 'left';
+      } else if (currentX > previousX) {
+        window.scrollBy(0, 1);
+        previousX = currentX;
+        return 'right';
+      } else {
+        return 'no movement';
+      }
+    }
+  }, [previousX, currentX]);
+
   // Memoized function that updates the dropRef position based on the client offset
-  const updateDropRefPosition = useCallback((clientOffsetPosition: XYCoord) => {
-    // Get references to the dropTarget and dropRef using useRef
+  const updateDropRefPosition = useCallback((currentClientOffset: XYCoord, initialClientOffset: XYCoord) => {
+  
+    // Get references to the currentElement and dropRef using useRef
     // and check if they exist; if not, return early
-    if (!currentElement || !dropRef) return;
+    if (!currentElement || !dropRef) {
+      console.log('Error: currentElement or dropRef not defined');
+      return;
+    }
 
     // Only update the position if it has changed
-    if (dropRef.x !== clientOffsetPosition.x || dropRef.y !== clientOffsetPosition.y) {
-
+    if (dropRef.x !== currentClientOffset.x || dropRef.y !== currentClientOffset.y) {
+      
       // Update the x and y properties of the dropRef with the client offset position
-      dropRef.x = clientOffsetPosition.x;
-      dropRef.y = clientOffsetPosition.y;
+      dropRef.x = currentClientOffset.x;
+      dropRef.y = currentClientOffset.y;
 
       // Determine the bounding rectangle of the drop target
       const boundingRect = currentElement.getBoundingClientRect();
@@ -100,13 +212,13 @@ export const useDragDrop = <T extends DndItem>(
       const centerY = (boundingRect.bottom - boundingRect.top) / 2;
 
       // Get the number of pixels from the top of the drop target to the mouse pointer
-      const clientY = clientOffsetPosition.y - boundingRect.top;
+      const clientY = currentClientOffset.y - boundingRect.top;
 
       // Get the horizontal center of the drop target
       const centerX = (boundingRect.right - boundingRect.left) / 2;
 
       // Get the number of pixels from the left of the drop target to the mouse pointer
-      const clientX = clientOffsetPosition.x - boundingRect.left;
+      const clientX = currentClientOffset.x - boundingRect.left;
 
       // Get the width and height of the drop target element
       const { width: elementWidth, height: elementHeight } = dndHelper.getElementSize(
@@ -114,21 +226,30 @@ export const useDragDrop = <T extends DndItem>(
       );
 
       // Calculate the horizontal and vertical offset based on the clientX, centerY, and elementWidth/elementHeight
-      const horizontalOffset = dndHelper.hoverOffsetX(clientX, centerY, elementWidth);
-      const verticalOffset = dndHelper.hoverOffsetY(clientY, centerY, elementHeight);
+      const horizontalOffset = dndHelper.determineOffsetX(clientX, centerY, elementWidth);
+      const verticalOffset = dndHelper.determineOffsetY(clientY, centerY, elementHeight);
+      const verticalDirection = determineDirectionY(currentClientOffset.y);
+      const horizontalDirection = initialClientOffset.y < currentClientOffset.y ? 'left' : 'right';
 
       // Determine the display style of the drop target
       const displayStyle = dndHelper.getElementDisplay(currentElement);
 
       // Calculate the current offset based on the display style
       let currentOffset = displayStyle === 'column' ? verticalOffset : horizontalOffset;
+      let currentDirection = displayStyle === 'column' ? verticalDirection : horizontalDirection;
 
       if (dropRef.dataType === 'placeholder') {
         currentOffset = 'middle';
       }
 
+      //console.log(verticalDirection);
+
+      if (dropRef) {
+        dropRef.direction = verticalDirection;
+      }
+
       // Set the offset state with the currentOffset and the clientOffsetPosition
-      setOffset(`${currentOffset} (${clientOffsetPosition.x},${clientOffsetPosition.y})`);
+      setOffset(`${currentOffset} ${currentDirection}`);
     }
   }, [currentElement, dropRef, setOffset]);
 
@@ -145,8 +266,11 @@ export const useDragDrop = <T extends DndItem>(
   useEffect(() => {
     if (offset) {
       updateDropTargetClassList(offset);
+      //updateDropTargetTransform(offset);
       if (dropRef) {
-        dropRef.offset = offset.split(' ')[0];
+        const [currentOffset, currentDirection] = offset.split(' ');
+        dropRef.offset = currentOffset;
+        //dropRef.direction = currentDirection;
       }
     }
   }, [offset, dropRef, updateDropTargetClassList]);
@@ -200,6 +324,7 @@ export const useDragDrop = <T extends DndItem>(
 
           dropRef.dragId = dragItem?.id;
           dropRef.dragPosition = dragItem?.position;
+
           dropRef.x = 0;
           dropRef.y = 0;
 
@@ -222,12 +347,16 @@ export const useDragDrop = <T extends DndItem>(
 
         // Determine the mouse position using getClientOffset
         const clientOffsetPosition = monitor.getClientOffset();
+        const initialClientOffset = monitor.getInitialClientOffset();
+
+        // initial y > clientoffset y = move up
+        // initial y < clientoffset y = move down
 
         // If the client offset doesn't exist, return early
-        if (!clientOffsetPosition) return;
+        if (!clientOffsetPosition || !initialClientOffset) return;
 
         // Update the drop ref's position based on the mouse position
-        updateDropRefPosition(clientOffsetPosition);
+        updateDropRefPosition(clientOffsetPosition, initialClientOffset);
       }
 
       // List dependencies for this callback
