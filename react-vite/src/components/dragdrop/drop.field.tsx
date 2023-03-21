@@ -1,90 +1,44 @@
 import React from 'react';
-import stringClassNames from 'classnames';
+import classNames from 'classnames';
 
-import { useDragDrop } from './use-dragdrop.hook';
+import useDragDrop from './use-dragdrop.hook';
 import DragDropMenu from './dragdrop.menu';
 import { DndActionTypes } from './dragdrop.context';
 import { DndActionClickType, DndItem, DndItemType } from './dragdrop.type';
+import useItemClick from './use-itemclick.hook';
 
 type DropFieldProps = DndItem;
 
-const DropField: React.FC<DropFieldProps> = (props): JSX.Element => {
-  const { dndRef, state, dispatch, id, name, className = '', } = props;
-  const acceptTypes = Object.values(DndItemType);
+const DropField: React.FC<DropFieldProps> = ({ state, dispatch, dndRef, ...item }): JSX.Element => {
+  const { name, className = '' } = item;
+
   const {
-    ref,
-    drag,
-    drop,
+    dragRef,
     isDragging,
     isOver,
     isLock,
     isSelected,
+    drag,
+    drop,
     onMouseOver,
     onMouseOut
-  } = useDragDrop(props, acceptTypes);
+  } = useDragDrop(item, dndRef, state, dispatch);
 
-  const classNames = stringClassNames({
-    [className]: true,
-    'drop-item drop-field': true,
+  const { handleItemClick, handleClick } = useItemClick(item, dndRef, state, dispatch);
+
+  const itemClassNames = classNames(className, 'drop-item', 'drop-field', {
     'is-dragging': isDragging,
     'is-over': isOver,
     'is-lock': isLock,
-    'is-selected': isSelected
+    'is-selected': isSelected,
   });
 
-  const handleChange = () => {
-    console.log('on-change');
-  }
-
-  const handleClick = (name: string) => {
-    switch (name) {
-      case DndActionClickType.MENU_EDIT:
-        dispatch?.({
-          type: DndActionTypes.SET_SELECTED_ITEM_ACTIVE,
-          payload: true
-        });
-        break;
-      case DndActionClickType.MENU_CLONE:
-        dispatch?.({
-          type: DndActionTypes.CLONE_ITEM,
-          payload: props
-        });
-        break;
-      case DndActionClickType.MENU_REMOVE:
-        if (dndRef?.elementRef) delete dndRef.elementRef[`${id}`];
-        dispatch?.({
-          type: DndActionTypes.REMOVE_ITEM,
-          payload: props
-        });
-        break;
-      default:
-    }
-  }
-
-  const handleItemClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-
-    const selectedItem = (state?.item?.id == id) ? null : {
-      id,
-      isActive: false,
-      onChange: handleChange,
-      onClick: handleClick
-    };
-
-    console.log(selectedItem);
-
-    dispatch?.({
-      type: DndActionTypes.SET_SELECTED_ITEM,
-      payload: selectedItem
-    });
-  }
-
-  drag(drop(ref));
+  drag(drop(dragRef));
 
   return (
     <div
-      ref={ref}
-      className={classNames}
+      ref={dragRef}
+      className={itemClassNames}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
       onClick={handleItemClick}

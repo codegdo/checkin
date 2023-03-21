@@ -1,32 +1,33 @@
-import React, { PropsWithChildren, useCallback, useMemo } from 'react';
+import React, { PropsWithChildren, useCallback, useEffect, useMemo } from 'react';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
-import stringClassNames from 'classnames';
+import classNames from 'classnames';
 
-import { useDragDrop } from './use-dragdrop.hook';
-
+import useDragDrop from './use-dragdrop.hook';
 import DragDropRender from './dragdrop.render';
-import { DndActionClickType, DndItem, DndItemType } from './dragdrop.type';
 import DragDropMenu from './dragdrop.menu';
-import { DndActionTypes } from './dragdrop.context';
 import DropPlaceholder from './drop.placeholder';
+import { DndItem } from './dragdrop.type';
+import useItemClick from './use-itemclick.hook';
+
 
 type DropBlockProps = DndItem;
 
-const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...props }): JSX.Element => {
-  const { state, dispatch, id, className = '', name, dataType, data = [], value = '' } = props;
-  const acceptTypes = Object.values(DndItemType);
+const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ state, dispatch, dndRef, children, ...item }): JSX.Element => {
+  const { id, name, dataType, className = '', value = '', data = [] } = item;
+
   const {
-    ref,
-    drag,
-    drop,
+    dragRef,
     isDragging,
     isOver,
+    isLock,
     isSelected,
     isDropEmpty,
+    drag,
+    drop,
     onMouseOver,
     onMouseOut
-  } = useDragDrop(props, acceptTypes);
+  } = useDragDrop(item, dndRef, state, dispatch);
 
   const parsedComponent = useMemo(() => {
     const sanitizedValue = DOMPurify.sanitize(value, { ADD_TAGS: ['jsx'] });
@@ -40,7 +41,7 @@ const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...p
 
             if (name === 'placeholder') {
               return <DropPlaceholder
-                {...props}
+                {...item}
                 id={`${id}_${key}`}
                 dataType='placeholder'
                 data={items}
@@ -55,8 +56,9 @@ const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...p
     });
   }, [data]);
 
-  const classNames = stringClassNames({
-    [className]: true,
+  const { handleItemClick, handleClick } = useItemClick(item, dndRef, state, dispatch);
+
+  const itemClassNames = classNames(className, {
     [`drop-item drop-${name}`]: dataType !== 'area',
     'is-dragging': isDragging,
     'is-over': isOver,
@@ -64,54 +66,12 @@ const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ children, ...p
     'is-empty': isDropEmpty,
   });
 
-  const handleChange = () => {
-    console.log('on-change');
-  }
-
-  const handleClick = (name: string) => {
-    switch (name) {
-      case DndActionClickType.MENU_EDIT:
-
-        break;
-      case DndActionClickType.MENU_CLONE:
-        dispatch?.({
-          type: DndActionTypes.CLONE_ITEM,
-          payload: props
-        });
-        break;
-      case DndActionClickType.MENU_REMOVE:
-        dispatch?.({
-          type: DndActionTypes.REMOVE_ITEM,
-          payload: props
-        });
-        break;
-      default:
-    }
-  }
-
-  const handleItemClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-
-    const selectedItem = (state?.item?.id == id) ? null : {
-      id,
-      onChange: handleChange,
-      onClick: handleClick
-    };
-
-    console.log(selectedItem);
-
-    dispatch?.({
-      type: DndActionTypes.SET_SELECTED_ITEM,
-      payload: selectedItem
-    });
-  }
-
-  drag(drop(ref));
+  drag(drop(dragRef));
 
   return (
     <div
-      ref={ref}
-      className={classNames}
+      ref={dragRef}
+      className={itemClassNames}
       onMouseOver={onMouseOver}
       onMouseOut={onMouseOut}
       onClick={handleItemClick}

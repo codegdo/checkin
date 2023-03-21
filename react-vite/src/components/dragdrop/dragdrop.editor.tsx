@@ -9,11 +9,13 @@ interface Offset {
   left: number;
 }
 
-const DragDropEditor = (): JSX.Element | null => {
+function DragDropEditor(): JSX.Element | null {
   const refDiv = useRef<HTMLDivElement>(null);
+  const refDrag = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState<Offset>({ top: 0, left: 0 });
+
   const { state } = useWrapperContext(DragDropContext);
-  const { isActive } = state?.item || {};
+  const { isEdit } = state?.item || {};
 
   const { itemType, initialSourceClientOffset, differenceFromInitialOffset } = useDragLayer(monitor => ({
     initialSourceClientOffset: monitor.getInitialSourceClientOffset(),
@@ -23,11 +25,11 @@ const DragDropEditor = (): JSX.Element | null => {
 
   const [, drag, dragPreview] = useDrag(() => ({
     type: 'panel',
-    item: { type: 'panel'},
-    canDrag: () => {
-      dragPreview(getEmptyImage(), { captureDraggingState: false });
-      return true;
-    }
+    item: { type: 'panel' }
+  }));
+
+  const [, drop] = useDrop(() => ({
+    accept: 'panel'
   }));
 
   useEffect(() => {
@@ -39,17 +41,19 @@ const DragDropEditor = (): JSX.Element | null => {
     }
   }, [initialSourceClientOffset, differenceFromInitialOffset, itemType]);
 
-  const handleClickOutside = () => console.log('clicked outside');
-  useOnClickOutside(refDiv, handleClickOutside);
+  // const handleClickOutside = () => console.log('clicked outside');
+  // useOnClickOutside(refDiv, handleClickOutside);
 
-  return isActive ? (
+  drag(drop(refDrag));
+
+  return isEdit ? (
     <div ref={refDiv}>
       <div ref={dragPreview} style={{ position: 'fixed', ...offset }} >
-        <div ref={drag}>head</div>
+        <div ref={refDrag}>head</div>
         <div>content</div>
       </div>
     </div>
   ) : null;
-};
+}
 
 export default DragDropEditor;

@@ -12,22 +12,27 @@ import {
   XYCoord,
 } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { DndActionTypes } from './dragdrop.context';
+import { defaultDndRef, defaultDndState, DndAction, DndActionTypes, DndRef, DndState } from './dragdrop.context';
 import { dndHelper } from './dragdrop.helper';
-import { DndItem } from './dragdrop.type';
+import { DndItem, DndItemType } from './dragdrop.type';
 
-export const useDragDrop = <T extends DndItem>(
-  { dndRef, state, dispatch, ...item }: T,
-  acceptTypes: string | string[] = []
-) => {
+function useDragDrop(
+  item: DndItem,
+  dndRef: DndRef = defaultDndRef,
+  state: DndState = defaultDndState,
+  dispatch: React.Dispatch<DndAction> = () => console.log('dispatch'),
+) {
+
   const { id, dataType, parentId, childId, position, data, settings } = item;
-  const ref = useRef<HTMLDivElement>(null);
-  const currentElement = ref.current;
+  const dragRef = useRef<HTMLDivElement>(null);
+  const currentElement = dragRef.current;
+
   const dropRef = dndRef?.dropRef;
-  const elementRef = dndRef?.elementRef;
+  const domRef = dndRef?.domRef;
   const isDropEmpty = data?.length === 0;
   const isSelected = state?.item?.id == id;
   const isLock = settings?.canDrag === false;
+  const acceptTypes = Object.values(DndItemType);
 
   let { current: previousY } = useRef<number | null>(null);
   let { current: currentY } = useRef<number | null>(null);
@@ -42,7 +47,7 @@ export const useDragDrop = <T extends DndItem>(
 
     // Get dimensions and positions
     const height = currentElement.clientHeight;
-    const draggedElement = elementRef?.[`${dropRef.dragId}`];
+    const draggedElement = domRef?.[`${dropRef.dragId}`];
     const position = dropRef.position as number;
     const dragPosition = dropRef.dragPosition as number;
     const direction = dropRef.direction;
@@ -276,10 +281,10 @@ export const useDragDrop = <T extends DndItem>(
   }, [offset, dropRef, updateDropTargetClassList]);
 
   useEffect(() => {
-    if (elementRef && currentElement) {
-      elementRef[`${id}`] = currentElement;
+    if (domRef && currentElement) {
+      domRef[`${id}`] = currentElement;
     }
-  }, [elementRef, currentElement, id]);
+  }, [domRef, currentElement, id]);
 
   // Destructure the values returned by the useDrop hook
   const [{ isOver }, drop] = useDrop({
@@ -303,7 +308,7 @@ export const useDragDrop = <T extends DndItem>(
             // Set canDrop to false to prevent dropping on an occupied placeholder
             dropRef.canDrop = false;
             // Remove the current ref class name from the drop ref's element
-            removeElementClassName(elementRef?.[`${dropRef.id}`]);
+            removeElementClassName(domRef?.[`${dropRef.id}`]);
           }
           // Return early to prevent further execution of this function
           return;
@@ -312,7 +317,7 @@ export const useDragDrop = <T extends DndItem>(
         // If they don't match, update the dropRef with the new item's properties
         if (`${dropRef.id}` !== `${id}`) {
           // Remove the current reference class name from the drop reference's currentRef
-          removeElementClassName(elementRef?.[`${dropRef.id}`]);
+          removeElementClassName(domRef?.[`${dropRef.id}`]);
 
           // Set the dropRef's properties based on the new item's properties
           dropRef.id = id;
@@ -400,9 +405,9 @@ export const useDragDrop = <T extends DndItem>(
         // Check if the item was dropped onto a valid target
         const didDrop = monitor.didDrop();
 
-        /* if (didDrop && elementRef) {
-          // Check if elementRef is not null or undefined
-          for (const element of Object.values(elementRef)) {
+        /* if (didDrop && domRef) {
+          // Check if domRef is not null or undefined
+          for (const element of Object.values(domRef)) {
             // Use Object.values() to iterate over the values of the object
             console.log(element);
             removeElementClassName(element);
@@ -460,7 +465,7 @@ export const useDragDrop = <T extends DndItem>(
   };
 
   return {
-    ref,
+    dragRef,
     isOver,
     isDragging,
     isSelected,
@@ -472,3 +477,5 @@ export const useDragDrop = <T extends DndItem>(
     onMouseOut
   };
 };
+
+export default useDragDrop;

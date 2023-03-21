@@ -4,17 +4,21 @@ import { DragDropProps } from './dragdrop.component';
 import { DndItem } from './dragdrop.type';
 import { dndHelper } from './dragdrop.helper';
 
-interface State {
+export interface DndState {
   data: DndItem[];
-  item: DndItem | null;
+  item: DndItem & {
+    isEdit?: boolean
+    onChange?: () => void;
+    onClick?: () => void;
+  } | null;
 }
 
-interface Action {
+export interface DndAction {
   type: DndActionTypes | string;
   payload: any;
 }
 
-type DropRef = Partial<DndItem> & {
+export type DropRef = Partial<DndItem> & {
   dragId?: string | number;
   dragPosition?: number | null;
   x?: number;
@@ -26,15 +30,15 @@ type DropRef = Partial<DndItem> & {
   canDrop?: boolean;
 }
 
-interface DndRef {
+export interface DndRef {
   dropRef: DropRef;
   itemRef: DndItem | null;
-  elementRef?: Record<string, HTMLDivElement | null>;
+  domRef: Record<string, HTMLDivElement | null>;
 }
 
 export interface DragDropContextValue {
-  state: State;
-  dispatch: Dispatch<Action>;
+  state: DndState;
+  dispatch: Dispatch<DndAction>;
   dndRef: DndRef;
 }
 
@@ -51,12 +55,12 @@ export enum DndActionTypes {
   REMOVE_ITEM = 'REMOVE_ITEM'
 }
 
-const dndReducer = (state: State, action: Action) => {
+const dndReducer = (state: DndState, action: DndAction) => {
   const { type, payload } = action;
 
   switch (type) {
     case DndActionTypes.SET_SELECTED_ITEM_ACTIVE:
-      return { ...state, item: { ...state.item, isActive: true } };
+      return { ...state, item: { ...state.item, isEdit: true } };
 
     case DndActionTypes.SET_SELECTED_ITEM:
       const selectedItem = payload;
@@ -114,15 +118,17 @@ const dndReducer = (state: State, action: Action) => {
   }
 };
 
-const defaultDndRef = {
+export const defaultDndRef = {
   dropRef: {},
   itemRef: null,
-  elementRef: {}
+  domRef: {}
 }
 
+export const defaultDndState = { data: [], item: null }
+
 export const DragDropContext = React.createContext<DragDropContextValue>({
-  state: { data: [], item: null },
-  dispatch: () => { },
+  state: defaultDndState,
+  dispatch: () => console.log('dispatch'),
   dndRef: defaultDndRef
 });
 
@@ -131,7 +137,7 @@ const DragDropProvider: React.FC<DragDropProviderProps> = ({
   data,
   ...props
 }) => {
-  const [state, dispatch] = useReducer(dndReducer, { data: [], item: null });
+  const [state, dispatch] = useReducer(dndReducer, defaultDndState);
   const { current: dndRef } = useRef(defaultDndRef);
 
   const memoizedContextValue = useCallback(() => ({
