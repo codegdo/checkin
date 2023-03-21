@@ -11,7 +11,6 @@ interface Offset {
 
 const DragDropEditor = (): JSX.Element | null => {
   const refDiv = useRef<HTMLDivElement>(null);
-  const refDrag = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState<Offset>({ top: 0, left: 0 });
   const { state } = useWrapperContext(DragDropContext);
   const { isActive } = state?.item || {};
@@ -24,15 +23,11 @@ const DragDropEditor = (): JSX.Element | null => {
 
   const [, drag, dragPreview] = useDrag(() => ({
     type: 'panel',
-    item: { type: 'panel', ref: refDrag },
+    item: { type: 'panel'},
     canDrag: () => {
       dragPreview(getEmptyImage(), { captureDraggingState: false });
       return true;
     }
-  }));
-
-  const [, drop] = useDrop(() => ({
-    accept: 'panel'
   }));
 
   useEffect(() => {
@@ -44,15 +39,13 @@ const DragDropEditor = (): JSX.Element | null => {
     }
   }, [initialSourceClientOffset, differenceFromInitialOffset, itemType]);
 
-  drag(drop(refDrag));
-
   const handleClickOutside = () => console.log('clicked outside');
   useOnClickOutside(refDiv, handleClickOutside);
 
   return isActive ? (
     <div ref={refDiv}>
       <div ref={dragPreview} style={{ position: 'fixed', ...offset }} >
-        <div ref={refDrag}>head</div>
+        <div ref={drag}>head</div>
         <div>content</div>
       </div>
     </div>
