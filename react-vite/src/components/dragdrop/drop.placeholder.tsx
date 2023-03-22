@@ -7,7 +7,7 @@ import { DndItem, DndItemType } from './dragdrop.type';
 
 type DropPlaceholderProps = DndItem;
 
-const DropPlaceholder: React.FC<DropPlaceholderProps> = ({ state, dispatch, dndRef, ...item }) => {
+function DropPlaceholder({ state, dispatch, dndRef, ...item }: DropPlaceholderProps): JSX.Element {
   const { data = [] } = item;
 
   const {

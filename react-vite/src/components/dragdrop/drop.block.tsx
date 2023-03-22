@@ -13,7 +13,7 @@ import useItemClick from './use-itemclick.hook';
 
 type DropBlockProps = DndItem;
 
-const DropBlock: React.FC<PropsWithChildren<DropBlockProps>> = ({ state, dispatch, dndRef, children, ...item }): JSX.Element => {
+function DropBlock({ state, dispatch, dndRef, children, ...item }: PropsWithChildren<DropBlockProps>): JSX.Element {
   const { id, name, dataType, className = '', value = '', data = [] } = item;
 
   const {

@@ -34,11 +34,11 @@ function useItemClick<T extends HTMLElement = HTMLElement>(
         });
         break;
       case DndActionClickType.MENU_REMOVE:
-        //if (dndRef?.elementRef) delete dndRef.elementRef[`${id}`];
         dispatch?.({
           type: DndActionTypes.REMOVE_ITEM,
           payload: item
         });
+        if (dndRef?.domRef) delete dndRef.domRef[`${id}`];
         break;
       default:
     }

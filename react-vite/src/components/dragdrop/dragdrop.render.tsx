@@ -13,7 +13,7 @@ export interface DragDropRenderProps {
   data?: DndItem[];
 }
 
-const DragDropRender: React.FC<DragDropRenderProps> = memo(({ data = [] }): JSX.Element => {
+const DragDropRender = memo(function({ data = [] }: DragDropRenderProps): JSX.Element {
   const context = useWrapperContext(DragDropContext);
   return (
     <>

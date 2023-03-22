@@ -4,7 +4,7 @@ import useDragDrop from './use-dragdrop.hook';
 import { DragDropContext } from './dragdrop.context';
 import { DndItem } from './dragdrop.type';
 
-const DragItem: React.FC<PropsWithChildren<DndItem>> = ({ children, ...item }) => {
+function DragItem({ children, ...item }: PropsWithChildren<DndItem>): JSX.Element {
   const { dndRef, state, dispatch } = useWrapperContext(DragDropContext);
   const { name, label, className = 'drag-item' } = item;
 

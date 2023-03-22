@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { DndItem } from './dragdrop.type';
 
-const DropElement: React.FC<DndItem> = (item): JSX.Element => {
+type DropElementProps = DndItem;
+
+function DropElement({ state, dispatch, dndRef, children, ...item }: PropsWithChildren<DropElementProps>): JSX.Element {
 
   return (
     <></>

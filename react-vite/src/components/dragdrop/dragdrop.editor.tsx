@@ -12,48 +12,57 @@ interface Offset {
 function DragDropEditor(): JSX.Element | null {
   const refDiv = useRef<HTMLDivElement>(null);
   const refDrag = useRef<HTMLDivElement>(null);
-  const [offset, setOffset] = useState<Offset>({ top: 0, left: 0 });
+  const [offset, setOffset] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
 
   const { state } = useWrapperContext(DragDropContext);
-  const { isEdit } = state?.item || {};
+  const isEditMode = state?.item?.isEdit ?? false;
 
-  const { itemType, initialSourceClientOffset, differenceFromInitialOffset } = useDragLayer(monitor => ({
+  const { itemType, initialSourceClientOffset, differenceFromInitialOffset } = useDragLayer((monitor) => ({
     initialSourceClientOffset: monitor.getInitialSourceClientOffset(),
     differenceFromInitialOffset: monitor.getDifferenceFromInitialOffset(),
-    itemType: monitor.getItemType()
+    itemType: monitor.getItemType(),
   }));
 
-  const [, drag, dragPreview] = useDrag(() => ({
+  const [, drag] = useDrag(() => ({
     type: 'panel',
-    item: { type: 'panel' }
+    item: { type: 'panel' },
   }));
 
   const [, drop] = useDrop(() => ({
-    accept: 'panel'
+    accept: 'panel',
   }));
 
   useEffect(() => {
-    if (initialSourceClientOffset && differenceFromInitialOffset && itemType === 'panel') {
+    if (itemType === 'panel' && initialSourceClientOffset && differenceFromInitialOffset) {
       setOffset({
         top: Math.round(initialSourceClientOffset.y + differenceFromInitialOffset.y),
-        left: Math.round(initialSourceClientOffset.x + differenceFromInitialOffset.x)
+        left: Math.round(initialSourceClientOffset.x + differenceFromInitialOffset.x),
       });
     }
-  }, [initialSourceClientOffset, differenceFromInitialOffset, itemType]);
+  }, [itemType, initialSourceClientOffset, differenceFromInitialOffset]);
 
-  // const handleClickOutside = () => console.log('clicked outside');
-  // useOnClickOutside(refDiv, handleClickOutside);
+  const handleClickOutside = () => console.log('clicked outside');
+  useOnClickOutside(refDiv, handleClickOutside);
 
-  drag(drop(refDrag));
+  useEffect(() => {
+    if (isEditMode) {
+      drag(drop(refDrag));
+    }
+  }, [isEditMode, drag, drop]);
 
-  return isEdit ? (
+  if (!isEditMode) {
+    return null;
+  }
+
+  return (
     <div ref={refDiv}>
-      <div ref={dragPreview} style={{ position: 'fixed', ...offset }} >
-        <div ref={refDrag}>head</div>
+      <div ref={refDrag} style={{ position: 'fixed', ...offset }}>
+        <div>head</div>
         <div>content</div>
       </div>
     </div>
-  ) : null;
+  );
 }
+
 
 export default DragDropEditor;

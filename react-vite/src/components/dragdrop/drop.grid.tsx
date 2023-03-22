@@ -2,7 +2,9 @@ import React from 'react';
 
 import { DndItem } from './dragdrop.type';
 
-const DropGrid: React.FC<DndItem> = (): JSX.Element => {
+type DropGridProps = DndItem;
+
+function DropGrid({ state, dispatch, dndRef, ...item }: DropGridProps): JSX.Element {
 
   return (
     <></>

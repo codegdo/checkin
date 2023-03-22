@@ -2,7 +2,9 @@ import React from 'react';
 
 import { DndItem } from './dragdrop.type';
 
-const DropGroup: React.FC<DndItem> = (): JSX.Element => {
+type DropGroupProps = DndItem;
+
+function DropGroup({ state, dispatch, dndRef, ...item }: DropGroupProps): JSX.Element {
 
   return (
     <></>

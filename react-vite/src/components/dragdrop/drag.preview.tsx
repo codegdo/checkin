@@ -13,9 +13,9 @@ const layerStyles: CSSProperties = {
   height: '100%',
 }
 
-interface DragPreviewProps { }
+//interface DragPreviewProps { }
 
-const DragPreview: React.FC<DragPreviewProps> = () => {
+function DragPreview(): JSX.Element | null {
   const { item, itemType, isDragging, initialSourceClientOffset, clientOffset } = useDragLayer((monitor) => ({
     initialSourceClientOffset: monitor.getInitialSourceClientOffset(),
     clientOffset: monitor.getClientOffset(),

@@ -7,7 +7,7 @@ import { dndHelper } from './dragdrop.helper';
 import DragDropRender from './dragdrop.render';
 import DropBlock from './drop.block';
 
-const DropArea: React.FC = () => {
+function DropArea(): JSX.Element {
   const { state, ...context } = useWrapperContext(DragDropContext);
   const data = dndHelper.nomalizeData(state?.data);
 

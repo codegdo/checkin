@@ -4,7 +4,7 @@ import { DndActionClickType } from './dragdrop.type';
 interface DragDropMenuProps {
   onClick: (name: string) => void
 }
-const DragDropMenu: React.FC<DragDropMenuProps> = ({onClick}): JSX.Element => {
+function DragDropMenu({ onClick }: DragDropMenuProps): JSX.Element {
   
   const handleClick = (name: string) => {
     onClick(name);

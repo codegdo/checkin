@@ -132,11 +132,7 @@ export const DragDropContext = React.createContext<DragDropContextValue>({
   dndRef: defaultDndRef
 });
 
-const DragDropProvider: React.FC<DragDropProviderProps> = ({
-  children,
-  data,
-  ...props
-}) => {
+function DragDropProvider({ children, data, ...props }: DragDropProviderProps): JSX.Element {
   const [state, dispatch] = useReducer(dndReducer, defaultDndState);
   const { current: dndRef } = useRef(defaultDndRef);
 

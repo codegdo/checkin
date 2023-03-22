@@ -316,7 +316,7 @@ class DragDropHelper {
       }
       // If dragging from top and over bottom, drop below the current drop position
       else if (isDraggingFromTopOverBottom) {
-        dropIndex = dropPosition + 1;
+        // dropIndex = dropPosition + 1;
       }
       // If not dragging from top and not over bottom, drop above the current drop position
       else {
@@ -464,7 +464,6 @@ class DragDropHelper {
     // Check if any of the drag item ids match the stripped drop item id.
     // If yes, it means that the drag item is nested inside the drop item, so we return true.
     return dragItemIds.some((dragItemId) => dragItemId === dropItemId);
-
   }
 
   // Returns the styles for an item that is being dragged and dropped

@@ -14,7 +14,7 @@ export interface DragDropProps extends PropsWithChildren {
   onCallback?: (key?: string, values?: any) => void;
 }
 
-const DragDrop: React.FC<DragDropProps> = ({ children, ...props }): JSX.Element => {
+function DragDrop({ children, ...props }: DragDropProps): JSX.Element {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
   return (
     <DndProvider backend={backend}>

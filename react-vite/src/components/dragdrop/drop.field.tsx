@@ -9,7 +9,7 @@ import useItemClick from './use-itemclick.hook';
 
 type DropFieldProps = DndItem;
 
-const DropField: React.FC<DropFieldProps> = ({ state, dispatch, dndRef, ...item }): JSX.Element => {
+function DropField({ state, dispatch, dndRef, ...item }: DropFieldProps): JSX.Element {
   const { name, className = '' } = item;
 
   const {
