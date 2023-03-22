@@ -12,9 +12,9 @@ import {
   XYCoord,
 } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { defaultDndRef, defaultDndState, DndAction, DndActionTypes, DndRef, DndState } from './dragdrop.context';
+import { defaultDndRef, defaultDndState, DndAction, DndRef, DndState } from './dragdrop.context';
 import { dndHelper } from './dragdrop.helper';
-import { DndItem, DndItemType } from './dragdrop.type';
+import { DndActionType, DndItem, DndItemType } from './dragdrop.type';
 
 function useDragDrop(
   item: DndItem,
@@ -421,7 +421,7 @@ function useDragDrop(
         if (didDrop && dropRef?.canDrop) {
           // Dispatch an action to move or add the item to the drop target
           dispatch?.({
-            type: currentElement ? DndActionTypes.MOVE_ITEM : DndActionTypes.ADD_ITEM,
+            type: currentElement ? DndActionType.MOVE_ITEM : DndActionType.ADD_ITEM,
             payload: {
               dragItem,
               dropRef,

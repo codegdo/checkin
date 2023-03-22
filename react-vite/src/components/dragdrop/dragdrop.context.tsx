@@ -1,7 +1,7 @@
 import React, { Dispatch, PropsWithChildren, useCallback, useEffect, useReducer, useRef } from 'react';
 
 import { DragDropProps } from './dragdrop.component';
-import { DndItem } from './dragdrop.type';
+import { DndActionType, DndItem } from './dragdrop.type';
 import { dndHelper } from './dragdrop.helper';
 
 export interface DndState {
@@ -14,7 +14,7 @@ export interface DndState {
 }
 
 export interface DndAction {
-  type: DndActionTypes | string;
+  type: DndActionType | string;
   payload: any;
 }
 
@@ -44,33 +44,22 @@ export interface DragDropContextValue {
 
 interface DragDropProviderProps extends PropsWithChildren<DragDropProps> { };
 
-
-export enum DndActionTypes {
-  SET_SELECTED_ITEM = 'SET_SELECTED_ITEM',
-  SET_SELECTED_ITEM_ACTIVE = 'SET_SELECTED_ITEM_ACTIVE',
-  SET_INITIAL_ITEMS = 'SET_INITIAL_ITEMS',
-  ADD_ITEM = 'ADD_ITEM',
-  MOVE_ITEM = 'MOVE_ITEM',
-  CLONE_ITEM = 'CLONE_ITEM',
-  REMOVE_ITEM = 'REMOVE_ITEM'
-}
-
 const dndReducer = (state: DndState, action: DndAction) => {
   const { type, payload } = action;
 
   switch (type) {
-    case DndActionTypes.SET_SELECTED_ITEM_ACTIVE:
+    case DndActionType.SET_SELECTED_ITEM_EDIT:
       return { ...state, item: { ...state.item, isEdit: true } };
 
-    case DndActionTypes.SET_SELECTED_ITEM:
+    case DndActionType.SET_SELECTED_ITEM:
       const selectedItem = payload;
       return { ...state, item: selectedItem };
 
-    case DndActionTypes.SET_INITIAL_ITEMS:
+    case DndActionType.SET_INITIAL_ITEMS:
       const initialItems = [...payload];
       return { ...state, data: initialItems };
 
-    case DndActionTypes.ADD_ITEM: {
+    case DndActionType.ADD_ITEM: {
       const { dragItem, dropRef } = payload;
 
       // Generate a new item with an ID and default values, 
@@ -90,7 +79,7 @@ const dndReducer = (state: DndState, action: DndAction) => {
       return { ...state, data: updatedData };
     }
 
-    case DndActionTypes.MOVE_ITEM: {
+    case DndActionType.MOVE_ITEM: {
       const { dragItem, dropRef } = payload;
 
       // Move the item to the new position and update the parent-child relationships in the data
@@ -99,14 +88,14 @@ const dndReducer = (state: DndState, action: DndAction) => {
       return { ...state, data: updatedData };
     }
 
-    case DndActionTypes.CLONE_ITEM: {
+    case DndActionType.CLONE_ITEM: {
       // Clone the selected item and add it to the data, then clear the selected item
       const clonedData = dndHelper.cloneItems(payload, state.data);
 
       return { ...state, data: clonedData, item: null };
     }
 
-    case DndActionTypes.REMOVE_ITEM: {
+    case DndActionType.REMOVE_ITEM: {
       // Remove the selected item and its children from the data, then clear the selected item
       const removedData = dndHelper.removeItems(payload, state.data);
 
@@ -143,7 +132,7 @@ function DragDropProvider({ children, data, ...props }: DragDropProviderProps): 
   }), [state, dispatch, dndRef]);
 
   useEffect(() => {
-    dispatch({ type: DndActionTypes.SET_INITIAL_ITEMS, payload: data });
+    dispatch({ type: DndActionType.SET_INITIAL_ITEMS, payload: data });
   }, [data]);
 
   return (

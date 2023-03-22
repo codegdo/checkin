@@ -1,5 +1,5 @@
 import { SessionData, SessionOptions, Store } from 'express-session';
-import { Repository } from 'typeorm';
+import { LessThan, Repository } from 'typeorm';
 import { Session } from './session.entity';
 
 export type Ttl =
@@ -53,64 +53,38 @@ export class SessionStore extends Store {
     }
   }
 
-  async set(sid: string, session: SessionData, callback?: (err?: any) => void) {
-    const args = [sid];
-    let data: string;
+  async set(sid: string, session: SessionData, callback?: (err?: any) => void): Promise<void> {
+    const data = JSON.stringify(session);
+    const ttl = this.getTTL(session, sid);
+    const expiredAt = Date.now() + ttl * 1000;
 
     try {
-      data = JSON.stringify(session);
+      const existingSession = await this.repository.findOne({ where: { id: sid }, withDeleted: true });
+
+      if (existingSession) {
+        await this.repository.update(
+          { id: sid },
+          { expiredAt, data },
+        );
+      } else {
+        await this.repository.insert({ id: sid, expiredAt, data });
+      }
+
+      callback?.();
     } catch (err) {
-      return callback && callback(err);
+      callback?.(err);
+      this.handleError(err);
     }
-
-    args.push(data);
-
-    const ttl = this.getTTL(session, sid);
-    args.push('EX', ttl.toString());
 
     if (this.cleanupLimit) {
-      const sessionIds = await this.getSessionIds();
-
-      try {
-        await this.repository
-          .createQueryBuilder('session')
-          .delete()
-          .where(`id IN (${sessionIds})`);
-      } catch (err) {
-        console.log(err);
-      }
+      await this.cleanupExpiredSessions(expiredAt);
     }
+  }
 
-    try {
-      await this.repository.findOneOrFail({
-        where: { id: sid },
-        withDeleted: true,
-      });
-      await this.repository.update(
-        {
-          //destroyedAt: null,
-          id: sid,
-        },
-        {
-          expiredAt: Date.now() + ttl * 1000,
-          id: sid,
-          data,
-        },
-      );
-      callback && callback();
-    } catch (err) {
-      try {
-        await this.repository.insert({
-          expiredAt: Date.now() + ttl * 1000,
-          id: sid,
-          data,
-        });
-        callback && callback();
-      } catch (err) {
-        callback && callback(err);
-        this.handleError(err);
-      }
-    }
+  private async cleanupExpiredSessions(expiredAt) {
+    await this.repository.delete({
+      expiredAt: LessThan(expiredAt),
+    });
   }
 
   async destroy(sid: string, callback?: (err?: any) => void) {

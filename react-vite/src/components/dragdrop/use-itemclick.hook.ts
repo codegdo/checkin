@@ -1,6 +1,7 @@
 import React from 'react';
-import { defaultDndRef, defaultDndState, DndAction, DndActionTypes, DndRef, DndState } from './dragdrop.context';
-import { DndActionClickType, DndItem } from './dragdrop.type';
+import { ActionClickType } from '../../constants';
+import { defaultDndRef, defaultDndState, DndAction, DndRef, DndState } from './dragdrop.context';
+import { DndItem, DndActionType } from './dragdrop.type';
 
 type UseItemClickReturn = {
   handleItemClick: (e: React.MouseEvent<HTMLDivElement>) => void,
@@ -21,26 +22,27 @@ function useItemClick<T extends HTMLElement = HTMLElement>(
 
   const handleClick = (actionType: string) => {
     switch (actionType) {
-      case DndActionClickType.MENU_EDIT:
+      case ActionClickType.MENU_EDIT:
         dispatch?.({
-          type: DndActionTypes.SET_SELECTED_ITEM_ACTIVE,
+          type: DndActionType.SET_SELECTED_ITEM_EDIT,
           payload: true
         });
         break;
-      case DndActionClickType.MENU_CLONE:
+      case ActionClickType.MENU_CLONE:
         dispatch?.({
-          type: DndActionTypes.CLONE_ITEM,
+          type: DndActionType.CLONE_ITEM,
           payload: item
         });
         break;
-      case DndActionClickType.MENU_REMOVE:
+      case ActionClickType.MENU_REMOVE:
         dispatch?.({
-          type: DndActionTypes.REMOVE_ITEM,
+          type: DndActionType.REMOVE_ITEM,
           payload: item
         });
         if (dndRef?.domRef) delete dndRef.domRef[`${id}`];
         break;
       default:
+        console.log('click');
     }
   }
 
@@ -57,7 +59,7 @@ function useItemClick<T extends HTMLElement = HTMLElement>(
     console.log(selectedItem);
 
     dispatch?.({
-      type: DndActionTypes.SET_SELECTED_ITEM,
+      type: DndActionType.SET_SELECTED_ITEM,
       payload: selectedItem
     });
   }

@@ -1,0 +1,7 @@
+export enum ActionClickType {
+  MENU_EDIT = 'MENU_EDIT',
+  MENU_CLONE = 'MENU_CLONE',
+  MENU_REMOVE = 'MENU_REMOVE',
+
+  PANEL_CLOSE = 'PANEL_CLOSE',
+}

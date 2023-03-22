@@ -1,7 +1,8 @@
 import { registerAs } from '@nestjs/config';
+import * as mainEntities from 'src/models/main/entities';
 
 export const databaseConfig = registerAs('database', () => {
-  const options = {
+  const databaseOptions = {
     type: 'postgres',
     host: process.env.POSTGRES_HOST,
     username: process.env.POSTGRES_USERNAME,
@@ -11,13 +12,13 @@ export const databaseConfig = registerAs('database', () => {
     logging: true,
   };
 
-  const checkin = {
-    ...options,
+  const checkinDatabaseOptions = {
+    ...databaseOptions,
     database: process.env.DATABASE_CHECKIN,
     name: 'default',
-    entities: [__dirname + '/../models/**/*.entity{.ts,.js}'],
+    entities: [...Object.values(mainEntities)],
     autoLoadEntities: true,
   };
 
-  return { checkin };
+  return { checkin: checkinDatabaseOptions };
 });
