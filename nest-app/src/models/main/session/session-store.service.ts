@@ -1,33 +1,36 @@
 import { SessionData, SessionOptions, Store } from 'express-session';
-import { LessThan, Repository } from 'typeorm';
+import { In, IsNull, Repository } from 'typeorm';
 import { Session } from './session.entity';
 
 export type Ttl =
   | number
   | ((store: SessionStore, session: SessionData, sid?: string) => number);
 
-type SessionStoreOptions = Partial<
-  SessionOptions & {
-    cleanupLimit: number;
-    limitSubquery: boolean;
-    onError: (s: SessionStore, e: Error) => void;
-    ttl: Ttl;
-  }
->;
+type CallbackFn = (error?: Error | null, session?: SessionData | null) => void;
+type OnCatchError = (s: SessionStore, e: Error) => void;
+
+type SessionStoreOptions = Partial<SessionOptions & {
+  cleanupLimit: number;
+  limitSubquery: boolean;
+  onError: OnCatchError;
+  ttl: Ttl;
+}>;
 
 export class SessionStore extends Store {
-  private cleanupLimit: number | undefined;
+  private cleanupLimit?: number;
   private limitSubquery = true;
+  private ttl?: Ttl;
+  private onError?: OnCatchError;
   private repository!: Repository<Session>;
-  private ttl: Ttl | undefined;
-  private onError: ((s: SessionStore, e: Error) => void) | undefined;
 
   constructor(options: SessionStoreOptions = {}) {
-    super(options as any);
-    this.cleanupLimit = options?.cleanupLimit;
-    this.limitSubquery = options?.limitSubquery;
-    this.ttl = options?.ttl;
-    this.onError = options?.onError;
+    super();
+    this.cleanupLimit = options.cleanupLimit;
+    if (options.limitSubquery !== undefined) {
+      this.limitSubquery = options.limitSubquery;
+    }
+    this.ttl = options.ttl;
+    this.onError = options.onError;
   }
 
   connect(repository: Repository<Session>) {
@@ -36,84 +39,135 @@ export class SessionStore extends Store {
     return this;
   }
 
-  async get(sid: string, callback: (err: any, session?: SessionData) => void) {
-    try {
-      const result = await this.createQueryBuilder()
-        .andWhere('session.id = :id', { id: sid })
-        .getOne();
+  // Define the `get` method to retrieve a session by ID
+  async get(sid: string, callback: CallbackFn): Promise<void> {
+    console.log(`GET ${sid}`);
 
-      if (!result) {
-        return callback(null);
+    try {
+      // Try to find the session in the repository by ID
+      const session = await this.repository.findOne({ where: { id: sid } });
+
+      // If the session is not found, return the callback without an error or session data
+      if (!session) {
+        console.log(`Session not found for ${sid}`);
+        return callback();
       }
 
-      callback(null, JSON.parse(result.data));
+      console.log(`GOT session data for ${sid}`);
+      // Parse the session data from JSON and return it via the callback without an error
+      const sessionData = JSON.parse(session.data);
+      callback(null, sessionData);
     } catch (err) {
+      // If an error occurs during the session retrieval, return the error via the callback and log it
+      console.log(`Failed to get session data for ${sid}`);
       callback(err);
       this.handleError(err);
     }
   }
 
-  async set(sid: string, session: SessionData, callback?: (err?: any) => void): Promise<void> {
-    const data = JSON.stringify(session);
-    const ttl = this.getTTL(session, sid);
-    const expiredAt = Date.now() + ttl * 1000;
-
+  // Define the `set` method to store a session by ID
+  async set(sid: string, session: SessionData, callback?: CallbackFn): Promise<void> {
     try {
-      const existingSession = await this.repository.findOne({ where: { id: sid }, withDeleted: true });
+      // Convert the session data to JSON
+      const data = JSON.stringify(session);
 
-      if (existingSession) {
+      // Determine the TTL (Time To Live) for the session based on the session data and ID
+      const ttl = this.getTTL(session, sid);
+
+      // Calculate the expiration time for the session based on the TTL and the current time
+      const expiredAt = Date.now() + ttl * 1000;
+
+      // Define the arguments for the Redis SET command that will be used to store the session data
+      const args = ['EX', ttl.toString(), 'NX', sid, data];
+      console.log(`SET "${sid}" ttl:${ttl}`);
+
+      // Define a helper function to remove expired sessions
+      const cleanupExpiredSessions = async () => {
+        // If the cleanup limit is not set, do nothing
+        if (!this.cleanupLimit) {
+          return;
+        }
+
+        // Get a comma-separated string of expired session IDs from Redis
+        const expiredSessionIds = await this.getExpiredSessionIds();
+
+        // Split the comma-separated string of expired session IDs into an array
+        const sessionIdsArray = expiredSessionIds.split(', ');
+
+        // If there are any expired session IDs, delete them from the repository
+        if (sessionIdsArray.length > 0 && expiredSessionIds !== 'NULL') {
+          await this.repository.delete({ id: In(sessionIdsArray) });
+        }
+      };
+
+      // Call the `cleanupExpiredSessions` helper function to remove expired sessions
+      await cleanupExpiredSessions();
+
+      // Try to find the session in the repository by ID, including deleted records
+      const sessionRecord = await this.repository.findOne({ where: { id: sid }, withDeleted: true });
+
+      // If the session already exists in the repository, update its expiredAt and data fields
+      if (sessionRecord) {
         await this.repository.update(
-          { id: sid },
-          { expiredAt, data },
+          { destroyedAt: IsNull(), id: sid },
+          { expiredAt, data }
         );
       } else {
-        await this.repository.insert({ id: sid, expiredAt, data });
+        // If the session does not already exist in the repository, insert a new record for it
+        await this.repository.insert({ id: sid, data, expiredAt });
       }
 
-      callback?.();
+      console.log('SET complete');
+      // If a callback function was provided, call it without an error
+      if (callback) callback(null);
     } catch (err) {
-      callback?.(err);
+      // If an error occurs during the session storage, return the error via the callback and log it
+      if (callback) callback(err);
       this.handleError(err);
     }
-
-    if (this.cleanupLimit) {
-      await this.cleanupExpiredSessions(expiredAt);
-    }
   }
 
-  private async cleanupExpiredSessions(expiredAt) {
-    await this.repository.delete({
-      expiredAt: LessThan(expiredAt),
-    });
-  }
-
-  async destroy(sid: string, callback?: (err?: any) => void) {
+  // Deletes one or more session records from the database.
+  async destroy(sid: string | string[], callback?: CallbackFn) {
+    console.log(`Deleting session(s) "${sid}"`);
     try {
+      // If sid is an array, use Promise.all to delete each session record one by one
       await Promise.all(
         (Array.isArray(sid) ? sid : [sid]).map((id) =>
           this.repository.delete(id),
         ),
       );
-      callback && callback();
+      console.log(`Session(s) "${sid}" deleted`);
+      // Call the callback function (if provided) with no error
+      if (callback) callback(null);
     } catch (err) {
-      callback && callback(err);
+      // If an error occurs, call the handleError method to handle it, and call the callback function with the error passed as an argument if provided
+      if (callback) callback(err);
       this.handleError(err);
     }
   }
 
-  async touch(
-    sid: string,
-    session: SessionData,
-    callback?: (err?: any) => void,
-  ) {
+  // Updates the expiry time of a session identified by sid
+  async touch(sid: string, session: SessionData, callback?: CallbackFn) {
+    // Calculate the time-to-live (TTL) for the session
     const ttl = this.getTTL(session);
+
+    if (session?.cookie?.expires) {
+      console.log(`Skipping updating session "${sid}" expiration`);
+      if (callback) callback();
+      return;
+    }
+
+    console.log(`Updating session "${sid}" expiration (TTL: ${ttl}s)`);
     try {
-      await this.repository
-        .createQueryBuilder('session')
+      // Update the session's expiry time in the repository
+      await this.repository.createQueryBuilder('session')
         .update({ expiredAt: Date.now() + ttl * 1000 })
         .whereInIds([sid])
         .execute();
 
+      console.log(`Session "${sid}" expiration updated`);
+      // Call the callback function (if provided) with no error
       callback && callback(null);
     } catch (err) {
       callback && callback(err);
@@ -121,79 +175,79 @@ export class SessionStore extends Store {
     }
   }
 
-  async all(callback: (err: any, sessions?: SessionData[]) => void) {
+  // Retrieves all active sessions from the repository.
+  async getAllSessions(): Promise<SessionData[]> {
     try {
-      const result = await this.createQueryBuilder().getMany();
+      // Retrieve all sessions with expiry time greater than current time
+      const result = await this.repository.createQueryBuilder('session')
+        .where('session.expiredAt > :expiredAt', { expiredAt: Date.now() })
+        .getMany();
+
+      // Map the results to an array of session data objects
       const sessions = result.map((session) => {
         const sess = JSON.parse(session.data);
         sess.id = session.id;
         return sess;
       });
-      callback(null, sessions);
+
+      // Return the array of session data objects
+      return sessions;
     } catch (err) {
-      callback(err, null);
       this.handleError(err);
     }
   }
 
-  private createQueryBuilder() {
-    return this.repository
-      .createQueryBuilder('session')
-      .where('session.expiredAt > :expiredAt', { expiredAt: Date.now() });
-  }
-
-  private async getSessionIds() {
+  // Retrieves the IDs of all expired sessions from the repository.
+  private async getExpiredSessionIds() {
     try {
-      const q = await this.repository
-        .createQueryBuilder('session')
+      // Retrieve expired session IDs from the repository
+      const expiredSessions = await this.repository.createQueryBuilder('session')
         .withDeleted()
         .select('session.id')
-        .where(`session.expiredAt <= ${Date.now()}`)
-        .limit(this.cleanupLimit);
+        .where('session.expiredAt <= :now', { now: Date.now() })
+        .limit(this.cleanupLimit)
+        .getMany();
 
+      // Join the IDs into a comma-separated string
       if (this.limitSubquery) {
-        return q.getQuery();
+        return expiredSessions
+          .map((session) => `'${session.id.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`)
+          .join(', ');
       } else {
-        const result = await q.getMany();
-
-        return (
-          result
-            .map((item) => {
-              const { id } = item;
-
-              if (id === 'string') {
-                return `${id.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}`;
-              } else {
-                return `${id}`;
-              }
-            })
-            .join(', ') || 'NULL'
-        );
+        return expiredSessions
+          .map((session) => session.id)
+          .join(', ') || 'NULL';
       }
     } catch (err) {
       this.handleError(err);
     }
   }
 
+  // Calculates the time-to-live (TTL) for a session based on the session data and configuration settings.
   private getTTL(session: SessionData, sid?: string) {
+    // If TTL is a number, return it
     if (typeof this.ttl === 'number') {
       return this.ttl;
     }
+
+    // If TTL is a function, call it with this instance, session data, and session ID (if provided)
     if (typeof this.ttl === 'function') {
       return this.ttl(this, session, sid);
     }
 
+    // If TTL is not a number or function, calculate it based on the session cookie's maxAge value or set it to 1 day by default
     const maxAge = session.cookie.maxAge;
     const oneDay = 86400;
-
     return typeof maxAge === 'number' ? Math.floor(maxAge / 1000) : oneDay;
   }
 
+  // Handles errors that occur during session management operations.
   private handleError(err: Error) {
-    console.log('handleError');
+    // If an error handling function is provided, call it with this instance and the error object
     if (this.onError) {
       this.onError(this, err);
     } else {
+      // If no error handling function is provided, emit a 'disconnect' event with the error object
       this.emit('disconnect', err);
     }
   }

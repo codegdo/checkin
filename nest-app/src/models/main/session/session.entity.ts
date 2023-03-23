@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, PrimaryColumn } from 'typeorm';
+import { BaseEntity, Column, DeleteDateColumn, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity({ database: 'db_checkin', schema: 'main_sec', name: 'session' })
 export class Session extends BaseEntity {
@@ -10,4 +10,7 @@ export class Session extends BaseEntity {
 
   @Column({ name: 'expired_at', type: 'bigint' })
   expiredAt: number;
+
+  @DeleteDateColumn({ name: 'destroyed_at' })
+  destroyedAt?: Date;
 }

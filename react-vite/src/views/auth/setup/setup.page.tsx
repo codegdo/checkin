@@ -4,7 +4,6 @@ import { DragDrop, DragItem } from '../../../components/dragdrop';
 const json = [
   {
     id: '1',
-    className: '',
     name: 'block',
     type: 'div',
     dataType: 'block',
@@ -12,43 +11,59 @@ const json = [
     parentId: null,
     childId: null,
     position: 0,
-    settings: {}
+    settings: {},
+    styles: {}
   },
   {
     id: '2',
-    className: '',
     name: 'field2',
+    label: '',
+    description: '',
+    placeholder: '',
+    note: '',
     type: 'text',
     dataType: 'field',
     data: [],
+    value: '',
     parentId: '1',
     childId: null,
     position: 1,
-    settings: {}
+    settings: {},
+    styles: {}
   },
   {
     id: '3',
-    className: '',
     name: 'field3',
+    label: '',
+    description: '',
+    placeholder: '',
+    note: '',
     type: 'text',
     dataType: 'field',
     data: [],
+    value: '',
     parentId: '1',
     childId: null,
     position: 2,
-    settings: {}
+    settings: {},
+    styles: {}
   },
   {
     id: '4',
-    className: '',
     name: 'field4',
+    label: '',
+    description: '',
+    placeholder: '',
+    note: '',
     type: 'text',
     dataType: 'field',
     data: [],
+    value: '',
     parentId: '1',
     childId: null,
     position: 3,
-    settings: {}
+    settings: {},
+    styles: {}
   }
 ]
 
