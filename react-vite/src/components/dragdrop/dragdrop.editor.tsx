@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useDrag, useDragLayer, useDrop, XYCoord } from 'react-dnd';
-import { getEmptyImage } from 'react-dnd-html5-backend';
+import { useDrag, useDragLayer, useDrop } from 'react-dnd';
+
 import { useOnClickOutside, useWrapperContext } from '../../hooks';
-import { Editor } from '../editor';
+import { Editor, EditorTab, EditorRender } from '../editor';
+import { EditorData } from '../editor/editor.component';
 import { DragDropContext } from './dragdrop.context';
 
 interface Offset {
@@ -10,32 +11,36 @@ interface Offset {
   left: number;
 }
 
+const EditorMemo = React.memo(Editor);
+
 function DragDropEditor(): JSX.Element | null {
-  const refDiv = useRef<HTMLDivElement>(null);
-  const refDrag = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState<Offset>({ top: 0, left: 0 });
+  const [editorData, setEditorData] = useState<EditorData>({});
 
   const { state } = useWrapperContext(DragDropContext);
-  const { onChange, onClick } = state?.item || {};
-  const isEditMode = state?.item?.isEdit ?? false;
+  const { item } = state || {};
+  const { onChange, onClick, isEdit } = item || {};
 
-  const { itemType, initialSourceClientOffset, differenceFromInitialOffset } = useDragLayer((monitor) => ({
-    initialSourceClientOffset: monitor.getInitialSourceClientOffset(),
-    differenceFromInitialOffset: monitor.getDifferenceFromInitialOffset(),
-    itemType: monitor.getItemType(),
-  }));
+  const { itemType, initialSourceClientOffset, differenceFromInitialOffset } =
+    useDragLayer((monitor) => ({
+      initialSourceClientOffset: monitor.getInitialSourceClientOffset(),
+      differenceFromInitialOffset: monitor.getDifferenceFromInitialOffset(),
+      itemType: monitor.getItemType(),
+    }));
 
   const [, drag, preview] = useDrag(() => ({
-    type: 'panel',
-    item: { type: 'panel' },
+    type: "panel",
+    item: { type: "panel" },
   }));
 
   const [, drop] = useDrop(() => ({
-    accept: 'panel',
+    accept: "panel",
   }));
 
   useEffect(() => {
-    if (itemType === 'panel' && initialSourceClientOffset && differenceFromInitialOffset) {
+    if (itemType === "panel" && initialSourceClientOffset && differenceFromInitialOffset) {
       setOffset({
         top: Math.round(initialSourceClientOffset.y + differenceFromInitialOffset.y),
         left: Math.round(initialSourceClientOffset.x + differenceFromInitialOffset.x),
@@ -43,28 +48,35 @@ function DragDropEditor(): JSX.Element | null {
     }
   }, [itemType, initialSourceClientOffset, differenceFromInitialOffset]);
 
-  const handleClickOutside = () => console.log('clicked outside');
-  useOnClickOutside(refDiv, handleClickOutside);
+  const handleClickOutside = () => console.log("clicked outside");
+  useOnClickOutside(editorRef, handleClickOutside);
 
   const handleClick = () => {
-    onClick && onClick();
-  }
+    onClick?.();
+  };
 
   useEffect(() => {
-    if (isEditMode) {
-      drag(drop(refDrag));
+    if (isEdit) {
+      drag(drop(dragRef));
+      setEditorData({ design: [] });
+    } else {
+      setEditorData({});
     }
-  }, [isEditMode, drag, drop]);
+  }, [isEdit, drag, drop]);
 
-  if (!isEditMode) {
+  if (!isEdit) {
     return null;
   }
 
   return (
-    <div ref={refDiv}>
-      <div ref={preview} style={{ position: 'fixed', ...offset }}>
-        <Editor data={{ design: [] }}>
-          <div ref={refDrag}>head <button type='button' onClick={handleClick}>close</button></div>
+    <div ref={editorRef}>
+      <div ref={preview} style={{ position: "fixed", ...offset }}>
+        <Editor data={editorData}>
+          <div ref={dragRef}>
+            head <button type="button" onClick={handleClick}>close</button>
+          </div>
+          <EditorTab />
+          <EditorRender />
         </Editor>
       </div>
     </div>

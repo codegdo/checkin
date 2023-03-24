@@ -1,7 +1,7 @@
 import React from 'react';
-import { ActionClickType } from '../../constants';
-import { defaultDndRef, defaultDndState, DndAction, DndRef, DndState } from './dragdrop.context';
-import { DndItem, DndActionType } from './dragdrop.type';
+import { ActionClickType } from '../../../constants';
+import { defaultDndRef, defaultDndState, DndAction, DndRef, DndState } from '../dragdrop.context';
+import { DndItem, DndActionType } from '../dragdrop.type';
 
 type UseItemClickReturn = {
   handleItemClick: (e: React.MouseEvent<HTMLDivElement>) => void,

@@ -1,7 +1,7 @@
 import { CSSProperties, useEffect, useState } from 'react';
 import { useDragLayer } from 'react-dnd';
 
-import { dndHelper } from './dragdrop.helper';
+import { dndHelper } from './helpers/dragdrop.helper';
 
 const layerStyles: CSSProperties = {
   position: 'fixed',

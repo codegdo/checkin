@@ -23,84 +23,84 @@ export class SecurityGuard implements CanActivate {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     @InjectRepository(Session)
     private sessionsRepository: Repository<Session>,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     console.log('Security Guard');
+
     const request = context.switchToHttp().getRequest();
-    const { data } = request.session;
-    const { key, accessToken, refreshToken } =
-      this.extractTokenFromHeader(request);
+    const sessionData = request.session?.data;
+    const { accessToken, refreshToken } = this.extractTokenFromHeader(request);
 
-    if (data) {
-      request[REQUEST_USER_KEY] = data?.user;
-    } else if (accessToken) {
-      const [sid, isAccessTokenExpired] = await this.verifyToken(accessToken, {
-        algorithms: ['RS256'],
-        publicKey: this.jwtConfiguration.publicKey,
-      });
-
-      if (isAccessTokenExpired) {
-        await this.refreshSession(refreshToken);
-      }
-
-      const { data: sessionData } =
-        await this.sessionsRepository.findOneByOrFail({ id: sid });
-      const { data: payload } = JSON.parse(sessionData);
-
-      request[REQUEST_USER_KEY] = payload?.user;
-    } else {
-      await this.refreshSession(refreshToken);
+    if (sessionData) {
+      request[REQUEST_USER_KEY] = sessionData.user;
+      return true;
     }
 
+    if (!accessToken) {
+      await this.refreshSession(refreshToken);
+      return true;
+    }
+
+    const [sessionId, isAccessTokenExpired] = await this.verifyToken(accessToken, {
+      algorithms: ['RS256'],
+      publicKey: this.jwtConfiguration.publicKey,
+    });
+
+    if (isAccessTokenExpired) {
+      await this.refreshSession(refreshToken);
+      return true;
+    }
+
+    const session = await this.sessionsRepository.findOneByOrFail({ id: sessionId });
+    const { data } = JSON.parse(session.data);
+
+    request[REQUEST_USER_KEY] = data.user;
     return true;
   }
 
   private async refreshSession(token: string) {
-    if (token) {
-      const [sid, isRefreshTokenExpired] = await this.verifyToken(token, {});
-      console.log(isRefreshTokenExpired);
-      if (sid && isRefreshTokenExpired) {
-        // what to do with refresh token???
-        throw new UnauthorizedException('Refresh Token Required');
-      }
-
-      sid && (await this.sessionsRepository.delete({ id: sid }));
-      throw new UnauthorizedException();
-    } else {
+    if (!token) {
       throw new UnauthorizedException();
     }
+
+    const [sessionId, isRefreshTokenExpired] = await this.verifyToken(token, {});
+
+    if (!sessionId || !isRefreshTokenExpired) {
+      throw new UnauthorizedException();
+    }
+
+    await this.sessionsRepository.delete({ id: sessionId });
+    // TODO: generate new access and refresh tokens and return them
   }
 
   private async verifyToken(token: string, options: JwtVerifyOptions) {
-    let sid = null;
-    let isTokenExpired;
-
     try {
-      const verifyToken = await this.jwtService.verifyAsync(token, {
-        ...options,
-      });
-      sid = verifyToken.sid;
-      isTokenExpired = false;
-      console.log(token);
+      const verifyToken = await this.jwtService.verifyAsync(token, options);
+      return [verifyToken.sid, false];
     } catch (err) {
       if (err.name === 'TokenExpiredError') {
         const verifyToken = await this.jwtService.verifyAsync(token, {
           ...options,
           ignoreExpiration: true,
         });
-        sid = verifyToken?.sid;
-        isTokenExpired = true;
+        return [verifyToken?.sid, true];
       }
+      throw new UnauthorizedException();
     }
-
-    return [sid, isTokenExpired];
   }
 
   private extractTokenFromHeader(request: Request) {
-    const [key, accessToken] = request.headers.authorization?.split(' ') ?? [];
-    const [_, refreshToken] =
-      (request.headers['x-refresh-token'] as string)?.split(' ') ?? [];
-    return { key, accessToken, refreshToken };
+    const authHeader = request.headers.authorization;
+    const refreshTokenHeader = request.headers['x-refresh-token'];
+
+    const authParts = typeof authHeader === 'string' ? authHeader.split(' ') : [];
+    const refreshParts = typeof refreshTokenHeader === 'string' ? refreshTokenHeader.split(' ') : [];
+
+    const authType = authParts.length > 0 ? authParts[0] : null;
+    const accessToken = authParts.length > 1 ? authParts[1] : null;
+    const refreshToken = refreshParts.length > 1 ? refreshParts[1] : null;
+
+    return { authType, accessToken, refreshToken };
   }
 }

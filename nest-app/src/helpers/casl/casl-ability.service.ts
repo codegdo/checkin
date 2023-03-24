@@ -10,13 +10,11 @@ import { IamService } from 'src/api/iam/iam.service';
 export class CaslAbilityService {
   constructor(private readonly iamService: IamService) { }
 
-  async defineAbilityForUser(user, contextPermission) {
+  async createForUser(user, contextPermission) {
     const { can, cannot, build } = new AbilityBuilder(createMongoAbility);
-    const userPermissionPolicy = await this.iamService.getUserPermissionPolicy(
-      user,
-    );
+    const userPermissionPolicy = await this.iamService.getUserPermissionPolicy(user);
 
-    console.log('defineAbilityForUser', userPermissionPolicy);
+    console.log('createForUser', userPermissionPolicy);
 
     if (!userPermissionPolicy) {
       cannot('manage', 'all');
@@ -24,10 +22,7 @@ export class CaslAbilityService {
     }
 
     const { policies } = userPermissionPolicy;
-
-    const policyPermissions = policies.reduce((acc, policy) => {
-      return [...acc, ...policy.data.statement];
-    }, []);
+    const policyPermissions = policies.flatMap(policy => policy.data.statement);
 
     if (policyPermissions.length == 0) {
       cannot('manage', 'all');
@@ -36,10 +31,9 @@ export class CaslAbilityService {
 
     policyPermissions.forEach(({ effect, action, resource, condition }) => {
       if (effect === 'allow') {
-        can(action, resource);
-      }
-      if (effect === 'deny') {
-        cannot(action, resource);
+        can(action, resource, condition);
+      } else if (effect === 'deny') {
+        cannot(action, resource, condition);
       }
     });
 

@@ -1,7 +1,7 @@
 import { XYCoord } from 'react-dnd';
 
-import UtilHelper, { util } from '../../helpers/util.helper';
-import { DndItem, DndItemType } from './dragdrop.type';
+import UtilHelper, { util } from '../../../helpers/util.helper';
+import { DndItem, DndItemType } from '../dragdrop.type';
 
 interface Item {
   id?: number | string;

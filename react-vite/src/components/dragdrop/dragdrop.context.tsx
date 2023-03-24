@@ -2,7 +2,7 @@ import React, { Dispatch, PropsWithChildren, useCallback, useEffect, useReducer,
 
 import { DragDropProps } from './dragdrop.component';
 import { DndActionType, DndItem } from './dragdrop.type';
-import { dndHelper } from './dragdrop.helper';
+import { dndHelper } from './helpers/dragdrop.helper';
 
 export interface DndState {
   data: DndItem[];

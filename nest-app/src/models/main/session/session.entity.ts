@@ -11,6 +11,7 @@ export class Session extends BaseEntity {
   @Column({ name: 'expired_at', type: 'bigint' })
   expiredAt: number;
 
-  @DeleteDateColumn({ name: 'destroyed_at' })
-  destroyedAt?: Date;
+  @DeleteDateColumn({ name: 'deleted_at' })
+  //@Column({ name: 'deleted_at', type: 'timestamp', nullable: true })
+  deletedAt?: Date;
 }

@@ -9,21 +9,20 @@ import { DataSource } from 'typeorm';
 import { jwtConfig, sessionConfig } from 'src/configs';
 import { IamService } from './iam.service';
 import { IamController } from './iam.controller';
-import { Session, SessionStore, UserRepository } from 'src/models/main';
 import {
   AuthGuard,
   SecurityGuard,
   PermissionGuard,
+  AccessGuard,
   RoleGuard,
 } from 'src/guards';
-
-import { AccessGuard } from 'src/guards/access.guard';
 import { CaslAbilityService, UtilService } from 'src/helpers';
+import { TypeormStore } from 'src/customs';
+import { Session, UserRepository } from 'src/models/main';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Session]),
-    TypeOrmModule.forFeature([UserRepository]),
+    TypeOrmModule.forFeature([Session, UserRepository]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
     SessionModule.forRootAsync({
@@ -35,15 +34,16 @@ import { CaslAbilityService, UtilService } from 'src/helpers';
       ): Promise<NestSessionOptions> => {
         const config = await configService.get('session');
         const repository = dataSource.getRepository(Session);
+        const sessionStore = new TypeormStore({
+          cleanupLimit: 10,
+          limitSubquery: false,
+          //ttl: 3600000,
+        }).connect(repository);
 
         return {
           session: {
             ...config,
-            store: new SessionStore({
-              cleanupLimit: 10,
-              limitSubquery: false,
-              //ttl: 3600000,
-            }).connect(repository),
+            store: sessionStore,
           },
         };
       },

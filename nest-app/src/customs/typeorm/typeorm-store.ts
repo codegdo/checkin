@@ -1,13 +1,13 @@
 import { SessionData, SessionOptions, Store } from 'express-session';
 import { In, IsNull, Repository } from 'typeorm';
-import { Session } from './session.entity';
+import { Session } from '../../models/main/session/session.entity';
 
 export type Ttl =
   | number
-  | ((store: SessionStore, session: SessionData, sid?: string) => number);
+  | ((store: TypeormStore, session: SessionData, sid?: string) => number);
 
 type CallbackFn = (error?: Error | null, session?: SessionData | null) => void;
-type OnCatchError = (s: SessionStore, e: Error) => void;
+type OnCatchError = (s: TypeormStore, e: Error) => void;
 
 type SessionStoreOptions = Partial<SessionOptions & {
   cleanupLimit: number;
@@ -16,7 +16,7 @@ type SessionStoreOptions = Partial<SessionOptions & {
   ttl: Ttl;
 }>;
 
-export class SessionStore extends Store {
+export class TypeormStore extends Store {
   private cleanupLimit?: number;
   private limitSubquery = true;
   private ttl?: Ttl;
@@ -25,7 +25,7 @@ export class SessionStore extends Store {
 
   constructor(options: SessionStoreOptions = {}) {
     super();
-    this.cleanupLimit = options.cleanupLimit;
+    this.cleanupLimit = options.cleanupLimit ?? 0;
     if (options.limitSubquery !== undefined) {
       this.limitSubquery = options.limitSubquery;
     }
@@ -79,37 +79,20 @@ export class SessionStore extends Store {
 
       // Define the arguments for the Redis SET command that will be used to store the session data
       const args = ['EX', ttl.toString(), 'NX', sid, data];
+      // await this.redisClient.setAsync(args);
       console.log(`SET "${sid}" ttl:${ttl}`);
 
-      // Define a helper function to remove expired sessions
-      const cleanupExpiredSessions = async () => {
-        // If the cleanup limit is not set, do nothing
-        if (!this.cleanupLimit) {
-          return;
-        }
-
-        // Get a comma-separated string of expired session IDs from Redis
-        const expiredSessionIds = await this.getExpiredSessionIds();
-
-        // Split the comma-separated string of expired session IDs into an array
-        const sessionIdsArray = expiredSessionIds.split(', ');
-
-        // If there are any expired session IDs, delete them from the repository
-        if (sessionIdsArray.length > 0 && expiredSessionIds !== 'NULL') {
-          await this.repository.delete({ id: In(sessionIdsArray) });
-        }
-      };
-
       // Call the `cleanupExpiredSessions` helper function to remove expired sessions
-      await cleanupExpiredSessions();
+      await this.cleanupExpiredSessions();
 
       // Try to find the session in the repository by ID, including deleted records
       const sessionRecord = await this.repository.findOne({ where: { id: sid }, withDeleted: true });
+      //const sessionRecord = await this.repository.findOne({ where: { id: sid } });
 
       // If the session already exists in the repository, update its expiredAt and data fields
       if (sessionRecord) {
         await this.repository.update(
-          { destroyedAt: IsNull(), id: sid },
+          { id: sid, deletedAt: IsNull() },
           { expiredAt, data }
         );
       } else {
@@ -135,6 +118,7 @@ export class SessionStore extends Store {
       await Promise.all(
         (Array.isArray(sid) ? sid : [sid]).map((id) =>
           this.repository.delete(id),
+          //this.repository.update(id, { deletedAt: new Date() }),
         ),
       );
       console.log(`Session(s) "${sid}" deleted`);
@@ -197,6 +181,27 @@ export class SessionStore extends Store {
     }
   }
 
+  // Define a helper function to remove expired sessions
+  private async cleanupExpiredSessions() {
+    // If the cleanup limit is not set, do nothing
+    if (!this.cleanupLimit) {
+      return;
+    }
+
+    // Get a comma-separated string of expired session IDs from Redis
+    const expiredSessionIds = await this.getExpiredSessionIds();
+
+    if (expiredSessionIds) {
+      // Split the comma-separated string of expired session IDs into an array
+      const sessionIdsArray = expiredSessionIds.split(', ');
+
+      // If there are any expired session IDs, delete them from the repository
+      if (sessionIdsArray.length > 0 && expiredSessionIds !== 'NULL') {
+        await this.repository.delete({ id: In(sessionIdsArray) });
+      }
+    }
+  }
+
   // Retrieves the IDs of all expired sessions from the repository.
   private async getExpiredSessionIds() {
     try {
@@ -205,6 +210,7 @@ export class SessionStore extends Store {
         .withDeleted()
         .select('session.id')
         .where('session.expiredAt <= :now', { now: Date.now() })
+        //.andWhere('session.deletedAt IS NULL')
         .limit(this.cleanupLimit)
         .getMany();
 
@@ -252,3 +258,5 @@ export class SessionStore extends Store {
     }
   }
 }
+
+// inspired connect-typeorm

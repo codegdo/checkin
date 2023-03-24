@@ -29,6 +29,8 @@
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
+    "slate": "^0.91.4",
+    "slate-react": "^0.92.0",
     "yup": "^1.0.2"
   },
   "devDependencies": {

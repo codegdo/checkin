@@ -9,9 +9,8 @@ import { REQUEST_USER_KEY } from 'src/types';
 @Injectable()
 export class AccessGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) { }
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const contextAccess = this.reflector.getAllAndOverride<AccessLevelEnum[]>(
       ACCESS_KEY,
       [context.getHandler(), context.getClass()],
@@ -26,13 +25,14 @@ export class AccessGuard implements CanActivate {
     ];
 
     return contextAccess.some((level) => {
-      if (accessLevel === 'system') {
+      if (accessLevel === AccessLevelEnum.System) {
         return true;
-      } else if (accessLevel === 'internal') {
+      } else if (accessLevel === AccessLevelEnum.Internal) {
         return level === 'system' ? false : true;
       } else {
         return level === accessLevel;
       }
     });
   }
+
 }

@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import EditorProvider from './editor.context';
 
-interface EditorData {
+export interface EditorData {
   content?: any[],
   design?: any[],
   setting?: any[]

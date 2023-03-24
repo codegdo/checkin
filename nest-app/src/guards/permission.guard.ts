@@ -17,38 +17,30 @@ export class PermissionGuard implements CanActivate {
   ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const contextPermission = this.reflector.getAllAndOverride<
-      PermissionType[]
-    >(PERMISSION_KEY, [context.getHandler(), context.getClass()]);
+    const contextPermissions = this.reflector.getAllAndOverride<PermissionType[]>(PERMISSION_KEY, [context.getHandler(), context.getClass()]);
 
-    if (!contextPermission) {
+    if (!contextPermissions) {
       return true;
     }
 
     const request = context.switchToHttp().getRequest();
     const { user } = request;
 
-    const { ability } = await this.caslAbility.defineAbilityForUser(
-      user,
-      contextPermission,
-    );
+    const { ability } = await this.caslAbility.createForUser(user, contextPermissions);
 
-    const allow = contextPermission.every((permission) =>
-      this.isAllowed(ability, permission),
-    );
+    const allow = contextPermissions.every(permission => this.isAllowed(ability, permission));
 
     return allow;
   }
 
   private isAllowed(ability, permission) {
-    console.log(permission);
-
-    return ability.can(...permission);
+    const [action, resource] = permission;
+    return ability.can(action, resource);
   }
 
   private extractRoutes(request) {
-    const route = request.originalUrl.split('?').shift();
-    const [_, api, ...routes] = route.split('/');
+    const { pathname } = new URL(request.originalUrl, `http://${request.headers.host}`);
+    const [, api, ...routes] = pathname.split('/');
     return routes;
   }
 }

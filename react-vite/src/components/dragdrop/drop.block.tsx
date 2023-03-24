@@ -3,12 +3,12 @@ import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import classNames from 'classnames';
 
-import useDragDrop from './use-dragdrop.hook';
+import useDragDrop from './hooks/use-dragdrop.hook';
 import DragDropRender from './dragdrop.render';
 import DragDropMenu from './dragdrop.menu';
 import DropPlaceholder from './drop.placeholder';
 import { DndItem } from './dragdrop.type';
-import useItemClick from './use-itemclick.hook';
+import useItemClick from './hooks/use-itemclick.hook';
 
 
 type DropBlockProps = DndItem;

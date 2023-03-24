@@ -6,8 +6,9 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
-import { AUTH_TYPE_KEY } from 'src/decorators/auth.decorator';
-import { AuthType } from 'src/types/auth.enum';
+
+import { AuthType } from 'src/constants';
+import { AUTH_TYPE_KEY } from 'src/decorators';
 import { AccessGuard } from './access.guard';
 import { PermissionGuard } from './permission.guard';
 import { RoleGuard } from './role.guard';
@@ -38,32 +39,26 @@ export class AuthGuard implements CanActivate {
       [context.getHandler(), context.getClass()],
     ) ?? [AuthGuard.defaultAuthType];
 
-    const guards = authTypes.map((type) => this.authTypeGuardMap[type]).flat();
+    const guards = authTypes.flatMap(type => this.authTypeGuardMap[type]);
 
+    let error: Error | null = null;
 
-
-    let error = new UnauthorizedException();
-    let canActivate = true;
-
-    for (const instance of guards) {
-
-      const isGuard = await Promise.resolve(
-        instance.canActivate(context),
-      ).catch((err) => {
+    for (const guard of guards) {
+      try {
+        const canActivate = await guard.canActivate(context);
+        if (!canActivate) {
+          return false;
+        }
+      } catch (err) {
         error = err;
-        canActivate = false;
-      });
-
-      if (!isGuard) {
-        canActivate = false;
-        break;
       }
     }
 
-    if (canActivate) {
-      return true;
+    if (error) {
+      throw error;
     }
 
-    throw error;
+    return true;
   }
+
 }

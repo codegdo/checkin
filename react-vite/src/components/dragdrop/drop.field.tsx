@@ -1,11 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import useDragDrop from './use-dragdrop.hook';
+import useDragDrop from './hooks/use-dragdrop.hook';
 import DragDropMenu from './dragdrop.menu';
-import { DndActionTypes } from './dragdrop.context';
-import { DndActionClickType, DndItem, DndItemType } from './dragdrop.type';
-import useItemClick from './use-itemclick.hook';
+//import { DndActionTypes } from './dragdrop.context';
+import { DndItem } from './dragdrop.type';
+import useItemClick from './hooks/use-itemclick.hook';
 
 type DropFieldProps = DndItem;
 
