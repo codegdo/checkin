@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Form } from '../../../components/form';
-import { useFormJson } from '../../../hooks';
+import { Form, FormData } from '../../../components/form';
+import { formHelper } from '../../../helpers';
+import { useLoadJson } from '../../../hooks';
 
 const Signup: React.FC = (): JSX.Element => {
-  const form = useFormJson('signup.form.json');
+  const [formData] = useLoadJson<FormData>('signup.form.json');
 
-  if (!form) {
+  if (!formData) {
     return <div>loading...</div>;
   }
 
-  console.log(form);
+  const normalizedData = formHelper.normalize(formData);
+  const form = { ...formData, data: normalizedData };
 
   return <Form title={form?.label} data={form.data} options={{ keyOption: 'id' }} />;
 }
+
 
 export default Signup;

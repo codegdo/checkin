@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 
-import { useOnClickOutside, useWrapperContext } from '../../hooks';
+import { useLoadJson, useOnClickOutside, useWrapperContext } from '../../hooks';
 import { Editor, EditorTab, EditorRender } from '../editor';
 import { EditorData } from '../editor/editor.component';
 import { DragDropContext } from './dragdrop.context';
@@ -17,7 +17,7 @@ function DragDropEditor(): JSX.Element | null {
   const editorRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState<Offset>({ top: 0, left: 0 });
-  const [editorData, setEditorData] = useState<EditorData>({});
+  const [jsonData, loadJsonData] = useLoadJson<EditorData>(undefined, false);
 
   const { state } = useWrapperContext(DragDropContext);
   const { item } = state || {};
@@ -58,11 +58,10 @@ function DragDropEditor(): JSX.Element | null {
   useEffect(() => {
     if (isEdit) {
       drag(drop(dragRef));
-      setEditorData({ design: [] });
-    } else {
-      setEditorData({});
+
+      loadJsonData('field.editor.json');
     }
-  }, [isEdit, drag, drop]);
+  }, [isEdit, drag, drop, loadJsonData]);
 
   if (!isEdit) {
     return null;
@@ -71,7 +70,7 @@ function DragDropEditor(): JSX.Element | null {
   return (
     <div ref={editorRef}>
       <div ref={preview} style={{ position: "fixed", ...offset }}>
-        <Editor data={editorData}>
+        <Editor data={jsonData}>
           <div ref={dragRef}>
             head <button type="button" onClick={handleClick}>close</button>
           </div>
@@ -82,6 +81,7 @@ function DragDropEditor(): JSX.Element | null {
     </div>
   );
 }
+
 
 
 export default DragDropEditor;
