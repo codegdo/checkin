@@ -1,7 +1,5 @@
 import React from 'react';
 
-function EditorSetting() {
+export const EditorSetting = () => {
   return <div>setting</div>
 }
-
-export default EditorSetting;

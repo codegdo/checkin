@@ -1,12 +1,14 @@
-import React, { PropsWithChildren, useEffect } from 'react';
+import React, { createContext, FC, PropsWithChildren, useEffect } from 'react';
 import { EditorProps } from './editor.component';
 
-export const EditorContext = React.createContext({});
+export interface EditorContextValue<T> extends EditorProps<T> {}
 
-function EditorProvider({ children, ...props }: PropsWithChildren<EditorProps>) {
-  return <EditorContext.Provider value={{ ...props }}>
-    {children}
-  </EditorContext.Provider>
+export const EditorContext = createContext<EditorContextValue<any>>({} as EditorContextValue<any>);
+type EditorProviderProps = PropsWithChildren<EditorProps<any>>;
+
+export const EditorProvider:FC<EditorProviderProps> = ({ children, ...props }) => {
+  const value = { ...props };
+
+  console.log(value);
+  return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>;
 }
-
-export default EditorProvider;

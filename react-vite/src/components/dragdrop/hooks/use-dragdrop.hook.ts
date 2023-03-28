@@ -16,12 +16,12 @@ import { defaultDndRef, defaultDndState, DndAction, DndRef, DndState } from '../
 import { dndHelper } from '../helpers/dragdrop.helper';
 import { DndActionType, DndItem, DndItemType } from '../dragdrop.type';
 
-function useDragDrop(
+export const useDragDrop = (
   item: DndItem,
   dndRef: DndRef = defaultDndRef,
   state: DndState = defaultDndState,
   dispatch: React.Dispatch<DndAction> = () => console.log('dispatch'),
-) {
+) => {
 
   const { id, dataType, parentId, childId, position, data, settings } = item;
   const dragRef = useRef<HTMLDivElement>(null);
@@ -477,5 +477,3 @@ function useDragDrop(
     onMouseOut
   };
 };
-
-export default useDragDrop;

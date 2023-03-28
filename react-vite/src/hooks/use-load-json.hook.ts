@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 
 const mapKey = {
   'signup.form.json': '../views/auth/signup/signup.form.json',
+  'block.editor.json': '../components/dragdrop/jsons/block.editor.json',
+  'element.editor.json': '../components/dragdrop/jsons/element.editor.json',
   'field.editor.json': '../components/dragdrop/jsons/field.editor.json'
 };
 
@@ -32,8 +34,7 @@ export const useLoadJson = <T>(
     if (shouldLoad && key) {
       loadJsonData();
     }
-    console.log('LOAD', jsonData);
-  }, [shouldLoad, key, loadJsonData, jsonData]);
+  }, [shouldLoad, key, loadJsonData]);
 
   return [jsonData, loadJsonData];
 };

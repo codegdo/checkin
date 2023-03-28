@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { DragDrop, DragItem } from '../../../components/dragdrop';
 
+
 const json = [
   {
     id: '1',
@@ -73,12 +74,13 @@ const Setup: React.FC = (): JSX.Element => {
     <DragDrop data={json}>
       <DragItem name='block' type='div' dataType='block' />
       <DragItem name='component' type='div' dataType='block' value={`<div class="row">
-      <div class="column"><jsx id='placeholder_0'></jsx></div>
-      <div class="column"><jsx id='placeholder_1'></jsx></div>
-    </div>`} />
+        <div class="column"><jsx id='placeholder_0'></jsx></div>
+        <div class="column"><jsx id='placeholder_1'></jsx></div>
+      </div>`} />
       <DragItem name='field' type='textbox' dataType='field' />
     </DragDrop>
   );
+  
 }
 
 export default Setup;

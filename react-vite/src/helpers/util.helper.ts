@@ -2,6 +2,9 @@ import { DndItem, DndItemType } from '../components';
 
 type Element = DndItem;
 
+type ClassName = string | undefined | null;
+type ClassMap = Record<string, boolean>;
+
 class UtilHelper {
   cloneDeep<T>(obj: T): T {
     if (typeof obj !== 'object' || obj === null) {
@@ -86,6 +89,25 @@ class UtilHelper {
     const str = prefix ? `${prefix}${separator}${randomString}` : `${randomChar}${separator}${randomString}`;
 
     return str;
+  }
+
+  classNames(...args: any[]): string {
+    const classes = new Set<ClassName>();
+  
+    for (const arg of args) {
+      if (typeof arg === 'string') {
+        classes.add(arg);
+      } else if (typeof arg === 'object' && arg !== null) {
+        const classMap = arg as ClassMap;
+        for (const [className, enabled] of Object.entries(classMap)) {
+          if (enabled) {
+            classes.add(className);
+          }
+        }
+      }
+    }
+  
+    return Array.from(classes).filter((c) => !!c).join(' ');
   }
 }
 

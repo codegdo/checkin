@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { FC } from 'react';
 import stringClassNames from 'classnames';
 
-import useDragDrop from './hooks/use-dragdrop.hook';
-import DragDropRender from './dragdrop.render';
+import { useDragDrop} from './hooks/use-dragdrop.hook';
+import { DragDropRender } from './dragdrop.render';
 import { DndItem, DndItemType } from './dragdrop.type';
 
 type DropPlaceholderProps = DndItem;
 
-function DropPlaceholder({ state, dispatch, dndRef, ...item }: DropPlaceholderProps): JSX.Element {
+export const DropPlaceholder: FC<DropPlaceholderProps> = ({ state, dispatch, dndRef, ...item }): JSX.Element => {
   const { data = [] } = item;
 
   const {
@@ -33,5 +33,4 @@ function DropPlaceholder({ state, dispatch, dndRef, ...item }: DropPlaceholderPr
   return <div ref={dragRef} className={classNames}><DragDropRender data={data} /></div>
 };
 
-export default DropPlaceholder;
 

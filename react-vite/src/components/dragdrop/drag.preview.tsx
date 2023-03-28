@@ -15,7 +15,7 @@ const layerStyles: CSSProperties = {
 
 //interface DragPreviewProps { }
 
-function DragPreview(): JSX.Element | null {
+export const DragPreview = (): JSX.Element | null => {
   const { item, itemType, isDragging, initialSourceClientOffset, clientOffset } = useDragLayer((monitor) => ({
     initialSourceClientOffset: monitor.getInitialSourceClientOffset(),
     clientOffset: monitor.getClientOffset(),
@@ -34,5 +34,3 @@ function DragPreview(): JSX.Element | null {
     </div>
   );
 };
-
-export default DragPreview;

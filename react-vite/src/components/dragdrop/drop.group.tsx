@@ -1,14 +1,11 @@
-import React from 'react';
-
+import React, { FC, PropsWithChildren } from 'react';
 import { DndItem } from './dragdrop.type';
 
-type DropGroupProps = DndItem;
+type DropGroupProps = PropsWithChildren<DndItem>;
 
-function DropGroup({ state, dispatch, dndRef, ...item }: DropGroupProps): JSX.Element {
+export const DropGroup: FC<DropGroupProps> = ({ state, dispatch, dndRef, children, ...item }): JSX.Element => {
 
   return (
     <></>
   );
 };
-
-export default DropGroup;

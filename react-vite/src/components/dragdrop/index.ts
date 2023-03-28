@@ -1,5 +1,5 @@
-export { default as DragDrop } from './dragdrop.component';
-export { default as DragItem } from './drag.item';
+export * from './dragdrop.component';
+export * from './drag.item';
 export * from './dragdrop.type';
 
 

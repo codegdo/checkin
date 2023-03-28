@@ -1,7 +1,5 @@
 import React from 'react';
 
-function EditorRender() {
+export const EditorRender = () => {
   return <></>
 }
-
-export default EditorRender;

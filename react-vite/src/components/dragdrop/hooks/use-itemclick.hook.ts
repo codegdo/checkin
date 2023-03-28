@@ -8,12 +8,12 @@ type UseItemClickReturn = {
   handleClick: (actionType: string) => void
 }
 
-function useItemClick<T extends HTMLElement = HTMLElement>(
+export const useItemClick = <T extends HTMLElement = HTMLElement>(
   item: DndItem,
   dndRef: DndRef = defaultDndRef,
   state: DndState = defaultDndState,
   dispatch: React.Dispatch<DndAction> = () => console.log('dispatch'),
-): UseItemClickReturn {
+): UseItemClickReturn => {
   const { id } = item;
 
   const handleChange = () => {
@@ -66,5 +66,3 @@ function useItemClick<T extends HTMLElement = HTMLElement>(
 
   return { handleItemClick, handleClick }
 }
-
-export default useItemClick;

@@ -1,17 +1,16 @@
-import React from 'react';
 import classNames from 'classnames';
+import React, { useEffect, useState, MouseEvent, FC } from 'react';
+import { ActionClickType } from '../../constants';
 
-import useDragDrop from './hooks/use-dragdrop.hook';
-import DragDropMenu from './dragdrop.menu';
-//import { DndActionTypes } from './dragdrop.context';
-import { DndItem } from './dragdrop.type';
-import useItemClick from './hooks/use-itemclick.hook';
+import { DragDropMenu } from './dragdrop.menu';
+import { DndActionType, DndItem } from './dragdrop.type';
+import {useDragDrop} from './hooks/use-dragdrop.hook';
+import {useItemClick} from './hooks/use-itemclick.hook';
 
 type DropFieldProps = DndItem;
 
-function DropField({ state, dispatch, dndRef, ...item }: DropFieldProps): JSX.Element {
-  const { name, className = '' } = item;
-
+export const DropField: FC<DropFieldProps> = ({ state, dispatch, dndRef, ...item }): JSX.Element => {
+  const { id, name, className = '' } = item;
   const {
     dragRef,
     isDragging,
@@ -36,17 +35,11 @@ function DropField({ state, dispatch, dndRef, ...item }: DropFieldProps): JSX.El
   drag(drop(dragRef));
 
   return (
-    <div
-      ref={dragRef}
-      className={itemClassNames}
-      onMouseOver={onMouseOver}
-      onMouseOut={onMouseOut}
-      onClick={handleItemClick}
-    >
-      {isSelected && <DragDropMenu onClick={handleClick} />}
+    <div ref={dragRef} className={itemClassNames} onClick={handleItemClick}>
+      {
+        isSelected && <DragDropMenu onClick={handleClick} />
+      }
       {name}
     </div>
-  );
+  )
 };
-
-export default DropField;

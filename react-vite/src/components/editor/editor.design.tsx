@@ -1,7 +1,5 @@
 import React from 'react';
 
-function EditorDesign() {
+export const EditorDesign = () => {
   return <div>design</div>
 }
-
-export default EditorDesign;

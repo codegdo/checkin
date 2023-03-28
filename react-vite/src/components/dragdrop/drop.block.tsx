@@ -1,21 +1,20 @@
-import React, { PropsWithChildren, useCallback, useEffect, useMemo } from 'react';
+import React, { FC, useEffect, useMemo, useState, MouseEvent, PropsWithChildren } from 'react';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
+
+import { DragDropRender } from './dragdrop.render';
+import { DragDropMenu } from './dragdrop.menu';
+import {useItemClick} from './hooks/use-itemclick.hook';
+import {useDragDrop} from './hooks/use-dragdrop.hook';
 import classNames from 'classnames';
-
-import useDragDrop from './hooks/use-dragdrop.hook';
-import DragDropRender from './dragdrop.render';
-import DragDropMenu from './dragdrop.menu';
-import DropPlaceholder from './drop.placeholder';
+import { DropPlaceholder } from './drop.placeholder';
 import { DndItem } from './dragdrop.type';
-import useItemClick from './hooks/use-itemclick.hook';
 
+type DropBlockProps = PropsWithChildren<DndItem>;
 
-type DropBlockProps = DndItem;
+export const DropBlock: FC<DropBlockProps> = ({ state, dispatch, dndRef, children, ...item }): JSX.Element => {
 
-function DropBlock({ state, dispatch, dndRef, children, ...item }: PropsWithChildren<DropBlockProps>): JSX.Element {
   const { id, name, dataType, className = '', value = '', data = [] } = item;
-
   const {
     dragRef,
     isDragging,
@@ -28,6 +27,7 @@ function DropBlock({ state, dispatch, dndRef, children, ...item }: PropsWithChil
     onMouseOver,
     onMouseOut
   } = useDragDrop(item, dndRef, state, dispatch);
+  const { handleItemClick, handleClick } = useItemClick(item, dndRef, state, dispatch);
 
   const parsedComponent = useMemo(() => {
     const sanitizedValue = DOMPurify.sanitize(value, { ADD_TAGS: ['jsx'] });
@@ -56,8 +56,6 @@ function DropBlock({ state, dispatch, dndRef, children, ...item }: PropsWithChil
     });
   }, [data]);
 
-  const { handleItemClick, handleClick } = useItemClick(item, dndRef, state, dispatch);
-
   const itemClassNames = classNames(className, {
     [`drop-item drop-${name}`]: dataType !== 'area',
     'is-dragging': isDragging,
@@ -68,18 +66,10 @@ function DropBlock({ state, dispatch, dndRef, children, ...item }: PropsWithChil
 
   drag(drop(dragRef));
 
-  return (
-    <div
-      ref={dragRef}
-      className={itemClassNames}
-      onMouseOver={onMouseOver}
-      onMouseOut={onMouseOut}
-      onClick={handleItemClick}
-    >
-      {isSelected && <DragDropMenu onClick={handleClick} />}
-      {name === 'component' ? <>{parsedComponent}</> : children || <DragDropRender data={data} />}
-    </div>
-  );
+  return <div ref={dragRef} className={itemClassNames} onClick={handleItemClick}>
+    {
+      isSelected && <DragDropMenu onClick={handleClick} />
+    }
+    {name === 'component' ? <>{parsedComponent}</> : children || <DragDropRender data={[...data]} />}
+  </div>
 };
-
-export default DropBlock;

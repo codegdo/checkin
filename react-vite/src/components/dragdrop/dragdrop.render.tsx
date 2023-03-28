@@ -1,19 +1,21 @@
 import React, { memo } from 'react';
-import { useWrapperContext } from '../../hooks';
-import { DragDropContext } from './dragdrop.context';
 
+import { useWrapperContext } from '../../hooks';
+
+import { DragDropContext } from './dragdrop.context';
 import { DndItem, DndItemType } from './dragdrop.type';
-import DropBlock from './drop.block';
-import DropElement from './drop.element';
-import DropField from './drop.field';
-import DropGrid from './drop.grid';
-import DropGroup from './drop.group';
+
+import { DropBlock } from './drop.block';
+import { DropElement } from './drop.element';
+import { DropField } from './drop.field';
+import { DropGrid } from './drop.grid';
+import { DropGroup } from './drop.group';
 
 export interface DragDropRenderProps {
   data?: DndItem[];
 }
 
-const DragDropRender = memo(function({ data = [] }: DragDropRenderProps): JSX.Element {
+export const DragDropRender = memo(({ data = [] }: DragDropRenderProps): JSX.Element => {
   const context = useWrapperContext(DragDropContext);
   return (
     <>
@@ -34,5 +36,3 @@ const DragDropRender = memo(function({ data = [] }: DragDropRenderProps): JSX.El
     </>
   );
 });
-
-export default DragDropRender;

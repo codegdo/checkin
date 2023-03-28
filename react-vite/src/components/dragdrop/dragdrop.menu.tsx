@@ -1,12 +1,11 @@
-import React, { MouseEvent } from 'react';
+import React, { FC, MouseEvent } from 'react';
 import { ActionClickType } from '../../constants';
 
 interface DragDropMenuProps {
   onClick: (actionType: string) => void
 }
 
-function DragDropMenu({ onClick }: DragDropMenuProps): JSX.Element {
-
+export const DragDropMenu: FC<DragDropMenuProps> = ({ onClick }): JSX.Element => {
   const handleClick = (actionType: string) => {
     onClick(actionType);
   }
@@ -23,6 +22,4 @@ function DragDropMenu({ onClick }: DragDropMenuProps): JSX.Element {
       <button type='button' onClick={() => handleClick(ActionClickType.MENU_REMOVE)}>Remove</button>
     </div>
   );
-};
-
-export default DragDropMenu;
+}

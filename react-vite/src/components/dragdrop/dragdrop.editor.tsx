@@ -13,7 +13,7 @@ interface Offset {
 
 const EditorMemo = React.memo(Editor);
 
-function DragDropEditor(): JSX.Element | null {
+export const DragDropEditor = (): JSX.Element | null => {
   const editorRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState<Offset>({ top: 0, left: 0 });
@@ -21,7 +21,7 @@ function DragDropEditor(): JSX.Element | null {
 
   const { state } = useWrapperContext(DragDropContext);
   const { item } = state || {};
-  const { onChange, onClick, isEdit } = item || {};
+  const { onChange, onClick, isEdit, ...value } = item || {};
 
   const { itemType, initialSourceClientOffset, differenceFromInitialOffset } =
     useDragLayer((monitor) => ({
@@ -58,10 +58,19 @@ function DragDropEditor(): JSX.Element | null {
   useEffect(() => {
     if (isEdit) {
       drag(drop(dragRef));
-
-      loadJsonData('field.editor.json');
+      switch(item?.dataType) {
+        case 'block':
+          loadJsonData('block.editor.json');
+          break;
+        case 'element':
+          loadJsonData('element.editor.json');
+          break;
+        case 'field':
+          loadJsonData('field.editor.json');
+          break;
+      }
     }
-  }, [isEdit, drag, drop, loadJsonData]);
+  }, [isEdit]);
 
   if (!isEdit) {
     return null;
@@ -70,7 +79,7 @@ function DragDropEditor(): JSX.Element | null {
   return (
     <div ref={editorRef}>
       <div ref={preview} style={{ position: "fixed", ...offset }}>
-        <Editor data={jsonData}>
+        <Editor data={jsonData} value={value}>
           <div ref={dragRef}>
             head <button type="button" onClick={handleClick}>close</button>
           </div>
@@ -81,7 +90,3 @@ function DragDropEditor(): JSX.Element | null {
     </div>
   );
 }
-
-
-
-export default DragDropEditor;

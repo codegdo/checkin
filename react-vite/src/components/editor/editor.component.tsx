@@ -1,5 +1,5 @@
-import React, { PropsWithChildren } from 'react';
-import EditorProvider from './editor.context';
+import React, { FC, PropsWithChildren } from 'react';
+import { EditorProvider} from './editor.context';
 
 export interface EditorData {
   content?: any[],
@@ -7,14 +7,15 @@ export interface EditorData {
   setting?: any[]
 }
 
-export interface EditorProps {
-  data?: EditorData
-}
+export type EditorProps<T> = PropsWithChildren<{
+  data?: EditorData,
+  value?: T, 
+  onChange?: () => void,
+  onClick?: () => void
+}> 
 
-function Editor({ children, ...props }: PropsWithChildren<EditorProps>): JSX.Element {
+export const Editor: FC<EditorProps<any>> = ({ children, ...props }): JSX.Element => {
   return <EditorProvider {...props}>
     {children}
   </EditorProvider>
 }
-
-export default Editor;

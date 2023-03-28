@@ -1,4 +1,4 @@
-import React, { Dispatch, PropsWithChildren, useCallback, useEffect, useReducer, useRef } from 'react';
+import React, { Dispatch, FC, PropsWithChildren, useEffect, useReducer, useRef } from 'react';
 
 import { DragDropProps } from './dragdrop.component';
 import { DndActionType, DndItem } from './dragdrop.type';
@@ -116,30 +116,25 @@ export const defaultDndRef = {
 export const defaultDndState = { data: [], item: null }
 
 export const DragDropContext = React.createContext<DragDropContextValue>({
+  dndRef: defaultDndRef,
   state: defaultDndState,
   dispatch: () => console.log('dispatch'),
-  dndRef: defaultDndRef
 });
 
-function DragDropProvider({ children, data, ...props }: DragDropProviderProps): JSX.Element {
+export const DragDropProvider: FC<DragDropProviderProps> = ({ children, data, ...props }): JSX.Element => {
   const [state, dispatch] = useReducer(dndReducer, defaultDndState);
   const { current: dndRef } = useRef(defaultDndRef);
 
-  const memoizedContextValue = useCallback(() => ({
-    state,
-    dispatch,
-    dndRef
-  }), [state, dispatch, dndRef]);
-
   useEffect(() => {
-    dispatch({ type: DndActionType.SET_INITIAL_ITEMS, payload: data });
-  }, [data]);
+    dispatch({
+      type: DndActionType.SET_INITIAL_ITEMS,
+      payload: data
+    });
+  }, []);
 
   return (
-    <DragDropContext.Provider value={memoizedContextValue()}>
+    <DragDropContext.Provider value={{ dndRef, state, dispatch }}>
       {children}
     </DragDropContext.Provider>
   );
 };
-
-export default DragDropProvider;
