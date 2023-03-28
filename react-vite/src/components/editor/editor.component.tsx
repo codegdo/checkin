@@ -1,20 +1,16 @@
-import React, { FC, PropsWithChildren } from 'react';
-import { EditorProvider} from './editor.context';
+import React, { PropsWithChildren } from 'react';
+import { DndItem } from '../dragdrop';
+import { EditorProvider } from './editor.context';
+import { EditorData } from './editor.type';
 
-export interface EditorData {
-  content?: any[];
-  design?: any[];
-  setting?: any[];
-}
-
-type EditorProps<T> = PropsWithChildren<{
+export interface EditorProps<T> extends PropsWithChildren {
   data?: EditorData;
-  value?: T;
+  value: T;
   onChange?: () => void;
   onClick?: () => void;
-}>;
+};
 
-export function Editor<T>({ children, ...props }: EditorProps<T>): JSX.Element {
+export function Editor<T>({ children, ...props }: EditorProps<T>) {
   return (
     <EditorProvider {...props}>
       {children}

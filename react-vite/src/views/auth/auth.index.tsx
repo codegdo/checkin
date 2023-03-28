@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
-const Index: React.FC = (): JSX.Element => {
+function Index() {
   return <Outlet />
 };
 

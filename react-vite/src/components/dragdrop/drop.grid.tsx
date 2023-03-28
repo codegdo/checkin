@@ -1,9 +1,9 @@
-import React, { FC, PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 import { DndItem } from './dragdrop.type';
 
 type DropGridProps = PropsWithChildren<DndItem>;
 
-export const DropGrid: FC<DropGridProps> = ({ state, dispatch, dndRef, children, ...item }): JSX.Element => {
+export function DropGrid({ state, dispatch, dndRef, children, ...item }: DropGridProps) {
 
   return (
     <></>

@@ -18,12 +18,10 @@ export interface FormProps extends PropsWithChildren {
   onCallback?: (key?: string, values?: any) => void;
 }
 
-const Form: React.FC<FormProps> = ({ children, ...props }): JSX.Element => {
+export function Form({ children, ...props }: FormProps) {
   return (
     <FormProvider {...props}>
       {children ? <FormRender>{children}</FormRender> : <FormRender data={props.data} />}
     </FormProvider>
   );
 };
-
-export default Form;

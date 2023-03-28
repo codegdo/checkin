@@ -5,12 +5,10 @@ interface BlockProps extends PropsWithChildren {
   data?: any
 }
 
-const FormGroup: React.FC<BlockProps> = ({ children, data }): JSX.Element => {
+export function FormGroup({ children, data }: BlockProps) {
   return <div>
     {
       children ? children : <FormRender data={data} />
     }
   </div>
 }
-
-export default FormGroup;

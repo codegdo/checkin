@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export const Nav: React.FC<any> = (): JSX.Element => {
+export function Nav() {
   return <></>;
   return <nav>
     <Link to="/">Home</Link>

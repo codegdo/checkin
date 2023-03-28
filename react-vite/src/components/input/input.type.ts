@@ -13,7 +13,7 @@ export interface InputProps {
   text?: string;
   unit?: string;
   isReset?: boolean;
-  onChange?: (keyvalue: KeyValue) => void;
+  onChange?: (keyValue: KeyValue) => void;
 }
 
 export interface LabelProps {

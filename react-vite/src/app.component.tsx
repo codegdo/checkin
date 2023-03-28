@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
 import { styleHelper } from './helpers';
 
-export const App: React.FC = (): JSX.Element => {
+export function App() {
 
   useEffect(() => {
     void (async () => {

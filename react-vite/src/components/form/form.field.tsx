@@ -16,7 +16,7 @@ export interface FieldProps {
   isRequired?: boolean;
 }
 
-const FormField: React.FC<FieldProps> = ({ id, type, name, label, description, value, isRequired }): JSX.Element => {
+export function FormField({ id, type, name, label, description, value, isRequired }: FieldProps) {
   const { form = {}, error = {}, validation, options, isSubmit, isReset } = useWrapperContext(FormContext);
   const [isError, setIsError] = useState(false);
   const timerRef = useRef<number | null>(null);
@@ -84,5 +84,3 @@ const FormField: React.FC<FieldProps> = ({ id, type, name, label, description, v
     </div>
   );
 }
-
-export default FormField;

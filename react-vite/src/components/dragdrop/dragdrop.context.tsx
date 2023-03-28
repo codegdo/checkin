@@ -1,16 +1,18 @@
-import React, { Dispatch, FC, PropsWithChildren, useEffect, useReducer, useRef } from 'react';
+import React, { Dispatch, PropsWithChildren, useEffect, useReducer, useRef } from 'react';
 
 import { DragDropProps } from './dragdrop.component';
 import { DndActionType, DndItem } from './dragdrop.type';
 import { dndHelper } from './helpers/dragdrop.helper';
 
+export type SelectedDndItem = DndItem & {
+  isEdit?: boolean
+  onChange?: () => void;
+  onClick?: () => void;
+};
+
 export interface DndState {
   data: DndItem[];
-  item: DndItem & {
-    isEdit?: boolean
-    onChange?: () => void;
-    onClick?: () => void;
-  } | null;
+  item: SelectedDndItem | null;
 }
 
 export interface DndAction {
@@ -41,8 +43,6 @@ export interface DragDropContextValue {
   dispatch: Dispatch<DndAction>;
   dndRef: DndRef;
 }
-
-interface DragDropProviderProps extends PropsWithChildren<DragDropProps> { };
 
 const dndReducer = (state: DndState, action: DndAction) => {
   const { type, payload } = action;
@@ -121,7 +121,7 @@ export const DragDropContext = React.createContext<DragDropContextValue>({
   dispatch: () => console.log('dispatch'),
 });
 
-export const DragDropProvider: FC<DragDropProviderProps> = ({ children, data, ...props }): JSX.Element => {
+export function DragDropProvider({ children, data, ...props }: DragDropProps) {
   const [state, dispatch] = useReducer(dndReducer, defaultDndState);
   const { current: dndRef } = useRef(defaultDndRef);
 
@@ -130,7 +130,7 @@ export const DragDropProvider: FC<DragDropProviderProps> = ({ children, data, ..
       type: DndActionType.SET_INITIAL_ITEMS,
       payload: data
     });
-  }, []);
+  }, [data]);
 
   return (
     <DragDropContext.Provider value={{ dndRef, state, dispatch }}>

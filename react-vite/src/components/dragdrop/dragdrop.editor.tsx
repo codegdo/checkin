@@ -3,17 +3,17 @@ import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 
 import { useLoadJson, useOnClickOutside, useWrapperContext } from '../../hooks';
 import { Editor, EditorTab, EditorRender } from '../editor';
-import { EditorData } from '../editor/editor.component';
-import { DragDropContext } from './dragdrop.context';
+import { EditorData } from '../editor/editor.type';
+import { EditorContent } from '../editor/editor.content';
+import { DragDropContext, SelectedDndItem } from './dragdrop.context';
+import { DndItem } from './dragdrop.type';
 
 interface Offset {
   top: number;
   left: number;
 }
 
-const EditorMemo = React.memo(Editor);
-
-export const DragDropEditor = (): JSX.Element | null => {
+export function DragDropEditor() {
   const editorRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState<Offset>({ top: 0, left: 0 });
@@ -21,7 +21,7 @@ export const DragDropEditor = (): JSX.Element | null => {
 
   const { state } = useWrapperContext(DragDropContext);
   const { item } = state || {};
-  const { onChange, onClick, isEdit, ...value } = item || {};
+  const { onChange: handleItemChange, onClick: handleItemClick, isEdit, ...value }: SelectedDndItem = item as DndItem || {};
 
   const { itemType, initialSourceClientOffset, differenceFromInitialOffset } =
     useDragLayer((monitor) => ({
@@ -52,13 +52,13 @@ export const DragDropEditor = (): JSX.Element | null => {
   useOnClickOutside(editorRef, handleClickOutside);
 
   const handleClick = () => {
-    onClick?.();
+    //onClick?.();
   };
 
   useEffect(() => {
-    if (isEdit) {
+    if (isEdit && item?.dataType) {
       drag(drop(dragRef));
-      switch(item?.dataType) {
+      switch (item?.dataType) {
         case 'block':
           loadJsonData('block.editor.json');
           break;
@@ -70,7 +70,7 @@ export const DragDropEditor = (): JSX.Element | null => {
           break;
       }
     }
-  }, [isEdit]);
+  }, [isEdit, item?.dataType]);
 
   if (!isEdit) {
     return null;
@@ -79,12 +79,12 @@ export const DragDropEditor = (): JSX.Element | null => {
   return (
     <div ref={editorRef}>
       <div ref={preview} style={{ position: "fixed", ...offset }}>
-        <Editor data={jsonData} value={value}>
+        <Editor<DndItem> data={jsonData} value={value} onChange={handleItemChange} onClick={handleItemClick}>
           <div ref={dragRef}>
             head <button type="button" onClick={handleClick}>close</button>
           </div>
           <EditorTab />
-          <EditorRender />
+          <EditorContent />
         </Editor>
       </div>
     </div>

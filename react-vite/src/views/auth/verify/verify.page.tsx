@@ -2,7 +2,7 @@ import React, { } from 'react';
 import { useRedirect } from '../../../hooks';
 
 
-const Verify: React.FC = (): JSX.Element => {
+function Verify() {
   useRedirect();
 
   return <>verify</>;

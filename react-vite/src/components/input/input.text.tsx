@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { InputProps } from './input.type';
 
-export const InputText: React.FC<InputProps> = ({ type, name, text, value: initialValue, isReset, onChange }): JSX.Element => {
+export function InputText({ type, name, text, value: initialValue, isReset, onChange }: InputProps) {
 
   const [value, setValue] = useState(initialValue);
 

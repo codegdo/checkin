@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState, MouseEvent, PropsWithChildren } from 'react';
+import React, { useMemo, PropsWithChildren } from 'react';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 
@@ -12,8 +12,7 @@ import { util } from '../../helpers';
 
 type DropBlockProps = PropsWithChildren<DndItem>;
 
-export const DropBlock: FC<DropBlockProps> = ({ state, dispatch, dndRef, children, ...item }): JSX.Element => {
-
+export function DropBlock({ state, dispatch, dndRef, children, ...item }: DropBlockProps) {
   const { id, name, dataType, className = '', value = '', data = [] } = item;
   const {
     dragRef,

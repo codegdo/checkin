@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Index: React.FC = (): JSX.Element => {
+function Index() {
 
   const handleToggle = () => {
     const body = document.body || document.getElementsByTagName('body')[0];

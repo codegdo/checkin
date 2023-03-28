@@ -1,4 +1,4 @@
-import { CSSProperties, useEffect, useState } from 'react';
+import { CSSProperties } from 'react';
 import { useDragLayer } from 'react-dnd';
 
 import { dndHelper } from './helpers/dragdrop.helper';
@@ -15,7 +15,7 @@ const layerStyles: CSSProperties = {
 
 //interface DragPreviewProps { }
 
-export const DragPreview = (): JSX.Element | null => {
+export function DragPreview() {
   const { item, itemType, isDragging, initialSourceClientOffset, clientOffset } = useDragLayer((monitor) => ({
     initialSourceClientOffset: monitor.getInitialSourceClientOffset(),
     clientOffset: monitor.getClientOffset(),

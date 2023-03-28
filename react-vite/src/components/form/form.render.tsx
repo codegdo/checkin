@@ -1,9 +1,9 @@
 import React, { memo, PropsWithChildren } from 'react';
-import FormBlock from './form.block';
-import FormField from './form.field';
-import FormElement from './form.element';
-import FormGrid from './form.grid';
-import FormGroup from './form.group';
+import { FormBlock } from './form.block';
+import { FormField } from './form.field';
+import { FormElement } from './form.element';
+import { FormGrid } from './form.grid';
+import { FormGroup } from './form.group';
 import { DataType, Element } from './form.type';
 
 
@@ -12,7 +12,7 @@ interface FormRenderProps extends PropsWithChildren {
   data?: Element[]
 }
 
-export const FormRender: React.FC<FormRenderProps> = memo(({ data = [], children }): JSX.Element => {
+export const FormRender = memo(({ data = [], children }: FormRenderProps) => {
   return (
     <>
       {

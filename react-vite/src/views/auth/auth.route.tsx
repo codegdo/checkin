@@ -9,7 +9,7 @@ const Signup = Partial(lazy(() => import('./signup/signup.page')));
 const Verify = Partial(lazy(() => import('./verify/verify.page')));
 const Setup = Partial(lazy(() => import('./setup/setup.page')));
 
-export const AuthRoute = () => {
+export function AuthRoute() {
 
   let routes = useRoutes([
     {

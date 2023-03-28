@@ -15,7 +15,7 @@ export interface DragDropRenderProps {
   data?: DndItem[];
 }
 
-export const DragDropRender = memo(({ data = [] }: DragDropRenderProps): JSX.Element => {
+export const DragDropRender = memo(({ data = [] }: DragDropRenderProps) => {
   const context = useWrapperContext(DragDropContext);
   return (
     <>

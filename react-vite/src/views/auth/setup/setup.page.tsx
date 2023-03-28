@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { DragDrop, DragItem } from '../../../components/dragdrop';
 
-
 const json = [
   {
     id: '1',
@@ -68,7 +67,7 @@ const json = [
   }
 ]
 
-const Setup: React.FC = (): JSX.Element => {
+function Setup() {
 
   return (
     <DragDrop data={json}>
@@ -80,7 +79,7 @@ const Setup: React.FC = (): JSX.Element => {
       <DragItem name='field' type='textbox' dataType='field' />
     </DragDrop>
   );
-  
+
 }
 
 export default Setup;

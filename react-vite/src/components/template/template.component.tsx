@@ -1,4 +1,4 @@
-import React, { ComponentType, lazy, Suspense, useMemo } from 'react';
+import React, { ComponentType, FC, lazy, Suspense, useMemo } from 'react';
 import parse, { HTMLReactParserOptions } from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import { Nav } from '../nav/nav.component';
@@ -29,7 +29,7 @@ interface Options {
   fallback: boolean;
 }
 
-export const Template = (Component: React.FC<TemplateProps | {}>) => (props: TemplateProps): JSX.Element => {
+export const Template = (Component: FC<TemplateProps | {}>) => (props: TemplateProps) => {
 
   const options = ({ fallback }: Options): HTMLReactParserOptions => {
     return {
@@ -42,7 +42,7 @@ export const Template = (Component: React.FC<TemplateProps | {}>) => (props: Tem
             case 'jsx_main':
               return fallback ? <div>loading</div> : <Component {...props} />
             case 'jsx_nav':
-              return <Nav {...props} />
+              return <Nav />
             default:
               return;
           }

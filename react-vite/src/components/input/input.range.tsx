@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { linearGradient } from '../../utils';
 import { InputProps } from './input.type';
 
-export const InputRange: React.FC<InputProps> = ({ name, text, value: initialValue = '0', defaultValue, unit = 'px', onChange }): JSX.Element => {
+export function InputRange({ name, text, value: initialValue = '0', defaultValue, unit = 'px', onChange }: InputProps) {
 
   const [value, setValue] = useState(initialValue || defaultValue);
   const [backgroundImage, setBackgroundImage] = useState('');

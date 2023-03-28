@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 
-export interface ButtonProps {
+interface ButtonProps extends PropsWithChildren {
   name?: string;
   className?: string;
   text?: string;
@@ -8,7 +8,7 @@ export interface ButtonProps {
   onClick?: (name: string) => void;
 }
 
-export const Button: React.FC<PropsWithChildren<ButtonProps>> = ({ name = 'button', className = 'button', text = 'button', disabled = false, onClick, children }): JSX.Element => {
+export function Button({ name = 'button', className = 'button', text = 'button', disabled = false, onClick, children }: ButtonProps) {
 
   const handleClick = () => {
     onClick && onClick(name);

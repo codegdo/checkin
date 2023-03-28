@@ -3,7 +3,7 @@ import { Form, FormData } from '../../../components/form';
 import { formHelper } from '../../../helpers';
 import { useLoadJson } from '../../../hooks';
 
-const Signup: React.FC = (): JSX.Element => {
+function Signup() {
   const [formData] = useLoadJson<FormData>('signup.form.json');
 
   if (!formData) {

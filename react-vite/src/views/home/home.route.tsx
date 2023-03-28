@@ -4,7 +4,7 @@ import { Template } from "../../components";
 
 const Index = Template(lazy(() => import('./home.index')));
 
-export const HomeRoute = () => {
+export function HomeRoute() {
 
   let routes = useRoutes([
     {

@@ -5,7 +5,7 @@ import { Template } from "../../components";
 const Index = Template(lazy(() => import('./iam.index')));
 const UserList = Template(lazy(() => import('./user/user.list')));
 
-export const IamRoute = () => {
+export function IamRoute() {
 
   let routes = useRoutes([
     {

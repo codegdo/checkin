@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 
-const VerifyCompany: React.FC = (): JSX.Element => {
+function VerifyCompany() {
   return <>Company</>;
 }
 

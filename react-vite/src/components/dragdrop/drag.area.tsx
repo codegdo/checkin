@@ -1,8 +1,8 @@
-import React, { FC, PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 
-type DragAreaProps = PropsWithChildren<{}>;
+interface DragAreaProps extends PropsWithChildren { };
 
-export const DragArea: FC<DragAreaProps> = ({ children }): JSX.Element => {
+export function DragArea({ children }: DragAreaProps) {
   return (
     <div className='drag-area'>
       {children}

@@ -1,5 +1,5 @@
 import React from 'react';
 
-export function Control() {
+export function WidgetRender() {
   return <></>
 }

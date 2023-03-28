@@ -5,7 +5,8 @@ interface DragDropMenuProps {
   onClick: (actionType: string) => void
 }
 
-export const DragDropMenu: FC<DragDropMenuProps> = ({ onClick }): JSX.Element => {
+export function DragDropMenu({ onClick }: DragDropMenuProps) {
+
   const handleClick = (actionType: string) => {
     onClick(actionType);
   }

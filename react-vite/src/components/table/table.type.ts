@@ -1,3 +1,5 @@
+import { PropsWithChildren } from "react";
+
 export interface ColumnProps {
   id?: string | number;
   className?: string;
@@ -7,7 +9,7 @@ export interface ColumnProps {
   role?: string;
 }
 
-export interface TableProps<T> {
+export interface TableProps<T> extends PropsWithChildren {
   data?: T[];
   columns?: ColumnProps[];
   className?: string;

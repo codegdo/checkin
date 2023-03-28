@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Index: React.FC = (): JSX.Element => {
+function Index() {
   return <div>IAM</div>;
 };
 

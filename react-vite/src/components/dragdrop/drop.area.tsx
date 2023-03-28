@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 
 import { useWrapperContext } from "../../hooks";
 import { DataType } from "../form";
@@ -8,7 +8,7 @@ import { DragDropRender } from "./dragdrop.render";
 import { DropBlock } from "./drop.block";
 import { dndHelper } from "./helpers/dragdrop.helper";
 
-export const DropArea: FC = (): JSX.Element => {
+export function DropArea() {
   const { state, ...context } = useWrapperContext(DragDropContext);
   const data = dndHelper.nomalizeData(state?.data);
 

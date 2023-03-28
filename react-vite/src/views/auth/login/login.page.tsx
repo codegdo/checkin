@@ -4,7 +4,7 @@ import { Form, FormBlock, FormField, FormGrid, FormGroup, FormElement } from '..
 import { loginApi } from './login.api'
 import { useAction, useRedirect } from '../../../hooks';
 
-const Login: React.FC = (): JSX.Element => {
+function Login() {
 
   const { updateCurrent, updateUser } = useAction();
   const { status, isSuccess, data, mutate: submitLogin } = loginApi();

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { TableContext } from './table.component';
 
-export const THead: React.FC = (): JSX.Element => {
+export function THead() {
 
   const ctx = useContext(TableContext);
 

@@ -8,7 +8,7 @@ export interface BlockProps extends PropsWithChildren {
   data?: Element[];
 }
 
-const FormBlock: React.FC<BlockProps> = ({ type = 'div', className, data = [], children }): JSX.Element => {
+export function FormBlock({ type = 'div', className, data = [], children }: BlockProps) {
 
   const JSXElement = type as keyof JSX.IntrinsicElements;
 
@@ -18,5 +18,3 @@ const FormBlock: React.FC<BlockProps> = ({ type = 'div', className, data = [], c
     </JSXElement>
   );
 }
-
-export default FormBlock;

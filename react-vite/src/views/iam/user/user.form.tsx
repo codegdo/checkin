@@ -1,6 +1,6 @@
 import React from 'react';
 
-const UserForm: React.FC = (): JSX.Element => {
+function UserForm() {
   return <div>User</div>;
 };
 

@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { describe, expect, test } from 'vitest';
-import { dndHelper } from '../../src/helpers';
+import { dndHelper } from '../../../../src/components/dragdrop/helpers/dragdrop.helper';
 
 interface Item {
   id: string,

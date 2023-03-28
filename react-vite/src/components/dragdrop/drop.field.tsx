@@ -1,15 +1,15 @@
-import React, { useEffect, useState, MouseEvent, FC } from 'react';
+import React from 'react';
 import { ActionClickType } from '../../constants';
 import { util } from '../../helpers';
 
 import { DragDropMenu } from './dragdrop.menu';
 import { DndActionType, DndItem } from './dragdrop.type';
-import {useDragDrop} from './hooks/use-dragdrop.hook';
-import {useItemClick} from './hooks/use-itemclick.hook';
+import { useDragDrop } from './hooks/use-dragdrop.hook';
+import { useItemClick } from './hooks/use-itemclick.hook';
 
 type DropFieldProps = DndItem;
 
-export const DropField: FC<DropFieldProps> = ({ state, dispatch, dndRef, ...item }): JSX.Element => {
+export function DropField({ state, dispatch, dndRef, ...item }: DropFieldProps) {
   const { id, name, className = '' } = item;
   const {
     dragRef,

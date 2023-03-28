@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAction, useFetch } from '../../../hooks';
 import { AppState } from '../../../store/reducers';
 
-const Logout: React.FC = (): JSX.Element | null => {
+function Logout() {
   const { user } = useSelector((state: AppState) => state);
   const { logoutCurrent } = useAction();
   const { mutate: logout } = useFetch('/api/auth/logout');

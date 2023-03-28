@@ -1,6 +1,6 @@
 import React from 'react';
 
-const UserList: React.FC = (): JSX.Element => {
+function UserList() {
   return <div>User</div>;
 };
 

@@ -5,7 +5,7 @@ interface GridProps extends PropsWithChildren {
   data?: any
 }
 
-const FormGrid: React.FC<GridProps> = ({ children }): JSX.Element => {
+export function FormGrid({ children }: GridProps) {
 
   const columns = useMemo(() => {
     const cols: any[] = [];
@@ -28,5 +28,3 @@ const FormGrid: React.FC<GridProps> = ({ children }): JSX.Element => {
   //return <Table columns={[...columns]} />
   return <></>
 }
-
-export default FormGrid;

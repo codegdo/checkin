@@ -12,7 +12,7 @@ export interface ElementProps extends PropsWithChildren {
   className?: string;
 }
 
-const FormElement: React.FC<ElementProps> = ({ type, name, label, value, className, children }): JSX.Element => {
+export function FormElement({ type, name, label, value, className, children }: ElementProps) {
 
   const { status, onClick } = useWrapperContext(FormContext);
 
@@ -28,5 +28,3 @@ const FormElement: React.FC<ElementProps> = ({ type, name, label, value, classNa
       return <span>Element not found</span>
   }
 }
-
-export default FormElement;
