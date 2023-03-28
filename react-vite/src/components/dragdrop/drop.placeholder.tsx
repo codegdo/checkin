@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import stringClassNames from 'classnames';
 
 import { useDragDrop} from './hooks/use-dragdrop.hook';
 import { DragDropRender } from './dragdrop.render';
 import { DndItem, DndItemType } from './dragdrop.type';
+import { util } from '../../helpers';
 
 type DropPlaceholderProps = DndItem;
 
@@ -23,14 +23,13 @@ export const DropPlaceholder: FC<DropPlaceholderProps> = ({ state, dispatch, dnd
     onMouseOut
   } = useDragDrop(item, dndRef, state, dispatch);
 
-  const classNames = stringClassNames({
-    'drop-placeholder': true,
+  const itemClassNames = util.classNames('drop-placeholder', {
     'is-over': isOver
   });
 
   drag(drop(dragRef));
 
-  return <div ref={dragRef} className={classNames}><DragDropRender data={data} /></div>
+  return <div ref={dragRef} className={itemClassNames}><DragDropRender data={data} /></div>
 };
 
 

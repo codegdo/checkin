@@ -1,6 +1,6 @@
-import classNames from 'classnames';
 import React, { useEffect, useState, MouseEvent, FC } from 'react';
 import { ActionClickType } from '../../constants';
+import { util } from '../../helpers';
 
 import { DragDropMenu } from './dragdrop.menu';
 import { DndActionType, DndItem } from './dragdrop.type';
@@ -25,7 +25,7 @@ export const DropField: FC<DropFieldProps> = ({ state, dispatch, dndRef, ...item
 
   const { handleItemClick, handleClick } = useItemClick(item, dndRef, state, dispatch);
 
-  const itemClassNames = classNames(className, 'drop-item', 'drop-field', {
+  const itemClassNames = util.classNames(className, 'drop-item', 'drop-field', {
     'is-dragging': isDragging,
     'is-over': isOver,
     'is-lock': isLock,

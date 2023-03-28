@@ -4,11 +4,11 @@ import DOMPurify from 'dompurify';
 
 import { DragDropRender } from './dragdrop.render';
 import { DragDropMenu } from './dragdrop.menu';
-import {useItemClick} from './hooks/use-itemclick.hook';
-import {useDragDrop} from './hooks/use-dragdrop.hook';
-import classNames from 'classnames';
+import { useItemClick } from './hooks/use-itemclick.hook';
+import { useDragDrop } from './hooks/use-dragdrop.hook';
 import { DropPlaceholder } from './drop.placeholder';
 import { DndItem } from './dragdrop.type';
+import { util } from '../../helpers';
 
 type DropBlockProps = PropsWithChildren<DndItem>;
 
@@ -56,7 +56,7 @@ export const DropBlock: FC<DropBlockProps> = ({ state, dispatch, dndRef, childre
     });
   }, [data]);
 
-  const itemClassNames = classNames(className, {
+  const itemClassNames = util.classNames(className, {
     [`drop-item drop-${name}`]: dataType !== 'area',
     'is-dragging': isDragging,
     'is-over': isOver,
