@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 
 const mapKey = {
   'signup.form.json': '../views/auth/signup/signup.form.json',
-  'block.editor.json': '../components/dragdrop/jsons/block.editor.json',
-  'element.editor.json': '../components/dragdrop/jsons/element.editor.json',
-  'field.editor.json': '../components/dragdrop/jsons/field.editor.json'
+  'block.edit.json': '../components/dragdrop/jsons/block.edit.json',
+  'element.edit.json': '../components/dragdrop/jsons/element.edit.json',
+  'field.edit.json': '../components/dragdrop/jsons/field.edit.json'
 };
 
 export const useLoadJson = <T>(

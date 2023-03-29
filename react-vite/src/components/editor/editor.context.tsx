@@ -1,24 +1,58 @@
-import React, { createContext, FC, PropsWithChildren, useEffect, useState } from 'react';
+import React, { createContext, FC, PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { KeyValue } from '../input';
 import { EditorProps } from './editor.component';
+import { DataSource } from './editor.type';
 
-export interface EditorContextValue<T> extends EditorProps<T> {
-  tab: string,
-  setTab: React.Dispatch<React.SetStateAction<string>>
+export interface EditorContextValue<T> {
+  dataSource: DataSource;
+  dataRef: Record<string, string>;
+  dataObject: T;
+  activeTab: string;
+  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+  onChange: (keyValue: KeyValue) => void;
+  onClick: () => void;
 }
 
 export const EditorContext = createContext<EditorContextValue<any>>({} as EditorContextValue<any>);
 
 type EditorProviderProps<T> = PropsWithChildren<EditorProps<T>>;
 
-export function EditorProvider<T>({ data = {}, children, ...rest }: EditorProviderProps<T>) {
+export function EditorProvider<T>({
+  dataSource = {},
+  dataObject,
+  children,
+  onChange,
+  onClick
+}: EditorProviderProps<T>) {
+  const [activeTab, setActiveTab] = useState('');
+  const { current: dataRef } = useRef<Record<string, string>>({});
 
-  const [tab, setTab] = useState('');
-  const contextValue: EditorContextValue<T> = { data, tab, setTab, ...rest };
+  const handleDataChange = ({ key, value }: KeyValue) => {
+    dataRef[key] = value;
+
+    const updatedData = { ...dataObject };
+    (updatedData as Record<string, string>)[key] = value;
+
+    console.log('EDITOR CHANGE', updatedData);
+  };
+
+  const handleActionClick = () => { };
+
+  const contextValue: EditorContextValue<T> = {
+    dataSource,
+    dataRef,
+    dataObject,
+    activeTab,
+    setActiveTab,
+    onChange: handleDataChange,
+    onClick: handleActionClick,
+
+  };
 
   useEffect(() => {
-    const defaultTab = Object.keys(data)[0] || '';
-    setTab(defaultTab);
-  }, [data]);
+    const defaultTab = Object.keys(dataSource)[0] || '';
+    setActiveTab(defaultTab);
+  }, [dataSource]);
 
   return (
     <div>

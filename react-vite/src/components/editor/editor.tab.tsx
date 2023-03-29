@@ -3,10 +3,11 @@ import { useWrapperContext } from '../../hooks';
 import { EditorContext } from './editor.context';
 
 export function EditorTab() {
-  const { data = {}, tab, setTab } = useWrapperContext(EditorContext);
+  const { dataSource = {}, dataRef, activeTab, setActiveTab } = useWrapperContext(EditorContext);
 
   const handleClick = (key: string) => {
-    setTab(key);
+    setActiveTab(key);
+    console.log('CLICK', dataRef);
   }
 
   const handleTabClick = (e: MouseEvent<HTMLDivElement>) => {
@@ -15,7 +16,7 @@ export function EditorTab() {
   };
 
   return <div onClick={handleTabClick}>
-    {Object.keys(data).map((key) => {
+    {Object.keys(dataSource).map((key) => {
       return <button key={key} name={key} type='button' onClick={() => handleClick(key)}>{key}</button>
     })}
   </div>

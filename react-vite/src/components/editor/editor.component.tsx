@@ -1,18 +1,18 @@
 import React, { PropsWithChildren } from 'react';
 import { DndItem } from '../dragdrop';
 import { EditorProvider } from './editor.context';
-import { EditorData } from './editor.type';
+import { DataSource } from './editor.type';
 
 export interface EditorProps<T> extends PropsWithChildren {
-  data?: EditorData;
-  value: T;
+  dataSource?: DataSource;
+  dataObject: T;
   onChange?: () => void;
   onClick?: () => void;
 };
 
 export function Editor<T>({ children, ...props }: EditorProps<T>) {
   return (
-    <EditorProvider {...props}>
+    <EditorProvider<T> {...props}>
       {children}
     </EditorProvider>
   );

@@ -16,8 +16,8 @@ const json = [
   },
   {
     id: '2',
-    name: 'field2',
-    label: '',
+    name: 'firstName',
+    label: 'First Name',
     description: '',
     placeholder: '',
     note: '',
@@ -33,8 +33,8 @@ const json = [
   },
   {
     id: '3',
-    name: 'field3',
-    label: '',
+    name: 'lastName',
+    label: 'Last Name',
     description: '',
     placeholder: '',
     note: '',
@@ -50,8 +50,8 @@ const json = [
   },
   {
     id: '4',
-    name: 'field4',
-    label: '',
+    name: 'emailAddress',
+    label: 'Email Address',
     description: '',
     placeholder: '',
     note: '',

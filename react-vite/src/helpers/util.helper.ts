@@ -5,6 +5,16 @@ type Element = DndItem;
 type ClassName = string | undefined | null;
 type ClassMap = Record<string, boolean>;
 
+type SetObjectValueResult<T> = {
+  value: T[keyof T] | null;
+  updatedObject: T;
+};
+
+type PartialWithIndexSignature<T> = Partial<T> & {
+  [key: string]: any;
+};
+
+
 class UtilHelper {
   cloneDeep<T>(obj: T): T {
     if (typeof obj !== 'object' || obj === null) {
@@ -93,7 +103,7 @@ class UtilHelper {
 
   classNames(...args: any[]): string {
     const classes = new Set<ClassName>();
-  
+
     for (const arg of args) {
       if (typeof arg === 'string') {
         classes.add(arg);
@@ -106,8 +116,59 @@ class UtilHelper {
         }
       }
     }
-  
+
     return Array.from(classes).filter((c) => !!c).join(' ');
+  }
+
+  /**
+   * Returns an object containing the value at the specified property path
+   * in the given object, and a new object with the same values but with
+   * the value at the specified property path updated to the given value (if
+   * provided).
+   *
+   * @param object - The object to search for the property path.
+   * @param propertyPath - The property path to search for (in dot notation).
+   * @param value - The value to set at the specified property path (optional).
+   * @returns An object containing the value at the specified property path
+   * and the updated object.
+  */
+  getSetObjectValue<T extends Record<string, any>>(
+    object: T,
+    propertyPath: string,
+    value?: T[keyof T]
+  ): SetObjectValueResult<T> {
+    const propertyNames = propertyPath.split('.');
+    let updatedObject: Record<string, any> = { ...object };
+    let currentValue: any = object;
+
+    for (let i = 0; i < propertyNames.length; i++) {
+      const propertyName = propertyNames[i];
+
+      if (typeof propertyName !== 'string') {
+        throw new Error('Property names must be strings');
+      }
+
+      if (currentValue[propertyName] === undefined) {
+        if (i === propertyNames.length - 1) {
+          currentValue[propertyName] = value ?? null;
+        } else {
+          currentValue[propertyName] = {};
+        }
+      }
+
+      if (i === propertyNames.length - 1) {
+        if (value !== undefined) {
+          currentValue[propertyName] = value;
+        }
+
+        return { value: currentValue[propertyName], updatedObject: updatedObject as T };
+      }
+
+      updatedObject[propertyName] = { ...currentValue[propertyName] };
+      currentValue = currentValue[propertyName];
+    }
+
+    return { value: null, updatedObject: updatedObject as T };
   }
 }
 
@@ -128,15 +189,44 @@ console.log(grouped);
 
 const [filtered1, filtered2] = filterArray(arr, item => item.dataType === 'block');
 
-// Output:
-// {
-//   'Fruit': [
-//     { name: 'Apple', category: 'Fruit' },
-//     { name: 'Banana', category: 'Fruit' },
-//   ],
-//   'Vegetable': [
-//     { name: 'Carrot', category: 'Vegetable' },
-//     { name: 'Broccoli', category: 'Vegetable' },
-//   ],
-// }
+Output:
+{
+  'Fruit': [
+    { name: 'Apple', category: 'Fruit' },
+    { name: 'Banana', category: 'Fruit' },
+  ],
+  'Vegetable': [
+    { name: 'Carrot', category: 'Vegetable' },
+    { name: 'Broccoli', category: 'Vegetable' },
+  ],
+}
+
+
+
+const obj = {
+  name: 'John',
+  age: 25,
+  address: {
+    city: 'New York',
+    state: 'NY',
+    country: 'USA'
+  }
+};
+
+const result = getSetObjectValue(obj, 'address.zip', '10001');
+
+Output:
+{
+  value: '10001',
+  updatedObject: {
+    name: 'John',
+    age: 25,
+    address: {
+      city: 'New York',
+      state: 'NY',
+      country: 'USA',
+      zip: '10001'
+    }
+  }
+}
 */

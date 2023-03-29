@@ -16,12 +16,19 @@ import { defaultDndRef, defaultDndState, DndAction, DndRef, DndState } from '../
 import { dndHelper } from '../helpers/dragdrop.helper';
 import { DndActionType, DndItem, DndItemType } from '../dragdrop.type';
 
-export const useDragDrop = (
-  item: DndItem,
-  dndRef: DndRef = defaultDndRef,
-  state: DndState = defaultDndState,
-  dispatch: React.Dispatch<DndAction> = () => console.log('dispatch'),
-) => {
+export type useDragDropProps = {
+  item: DndItem;
+  dndRef?: DndRef;
+  dndState?: DndState;
+  dispatch?: React.Dispatch<DndAction>;
+};
+
+export function useDragDrop({
+  item,
+  dndRef,
+  dndState,
+  dispatch = () => console.log("dispatch"),
+}: useDragDropProps) {
 
   const { id, dataType, parentId, childId, position, data, settings } = item;
   const dragRef = useRef<HTMLDivElement>(null);
@@ -30,7 +37,7 @@ export const useDragDrop = (
   const dropRef = dndRef?.dropRef;
   const domRef = dndRef?.domRef;
   const isDropEmpty = data?.length === 0;
-  const isSelected = state?.item?.id == id;
+  const isSelected = dndState?.item?.id == id;
   const isLock = settings?.canDrag === false;
   const acceptTypes = Object.values(DndItemType);
 

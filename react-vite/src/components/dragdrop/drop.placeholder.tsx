@@ -21,7 +21,7 @@ export function DropPlaceholder({ state, dispatch, dndRef, ...item }: DropPlaceh
     drop,
     onMouseOver,
     onMouseOut
-  } = useDragDrop(item, dndRef, state, dispatch);
+  } = useDragDrop({ item, dndRef, dndState: state, dispatch });
 
   const itemClassNames = util.classNames('drop-placeholder', {
     'is-over': isOver

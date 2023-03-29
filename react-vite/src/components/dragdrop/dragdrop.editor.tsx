@@ -2,11 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 
 import { useLoadJson, useOnClickOutside, useWrapperContext } from '../../hooks';
-import { Editor, EditorTab, EditorRender } from '../editor';
-import { EditorData } from '../editor/editor.type';
-import { EditorContent } from '../editor/editor.content';
+import { Editor, EditorTab, EditorContent } from '../editor';
 import { DragDropContext, SelectedDndItem } from './dragdrop.context';
 import { DndItem } from './dragdrop.type';
+import { DataSource } from '../editor/editor.type';
 
 interface Offset {
   top: number;
@@ -17,11 +16,11 @@ export function DragDropEditor() {
   const editorRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<HTMLDivElement>(null);
   const [offset, setOffset] = useState<Offset>({ top: 0, left: 0 });
-  const [jsonData, loadJsonData] = useLoadJson<EditorData>(undefined, false);
+  const [dataSource, loadJsonData] = useLoadJson<DataSource>(undefined, false);
 
   const { state } = useWrapperContext(DragDropContext);
   const { item } = state || {};
-  const { onChange: handleItemChange, onClick: handleItemClick, isEdit, ...value }: SelectedDndItem = item as DndItem || {};
+  const { onChange: handleItemChange, onClick: handleItemClick, isEdit, ...dataObject }: SelectedDndItem = item as DndItem || {};
 
   const { itemType, initialSourceClientOffset, differenceFromInitialOffset } =
     useDragLayer((monitor) => ({
@@ -60,13 +59,13 @@ export function DragDropEditor() {
       drag(drop(dragRef));
       switch (item?.dataType) {
         case 'block':
-          loadJsonData('block.editor.json');
+          loadJsonData('block.edit.json');
           break;
         case 'element':
-          loadJsonData('element.editor.json');
+          loadJsonData('element.edit.json');
           break;
         case 'field':
-          loadJsonData('field.editor.json');
+          loadJsonData('field.edit.json');
           break;
       }
     }
@@ -79,7 +78,7 @@ export function DragDropEditor() {
   return (
     <div ref={editorRef}>
       <div ref={preview} style={{ position: "fixed", ...offset }}>
-        <Editor<DndItem> data={jsonData} value={value} onChange={handleItemChange} onClick={handleItemClick}>
+        <Editor<DndItem> dataSource={dataSource} dataObject={dataObject} onChange={handleItemChange} onClick={handleItemClick}>
           <div ref={dragRef}>
             head <button type="button" onClick={handleClick}>close</button>
           </div>

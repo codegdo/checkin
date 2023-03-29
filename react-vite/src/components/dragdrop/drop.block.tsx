@@ -1,10 +1,10 @@
-import React, { useMemo, PropsWithChildren } from 'react';
+import React, { useMemo, PropsWithChildren, MouseEvent } from 'react';
 import parse from 'html-react-parser';
 import DOMPurify from 'dompurify';
 
 import { DragDropRender } from './dragdrop.render';
 import { DragDropMenu } from './dragdrop.menu';
-import { useItemClick } from './hooks/use-itemclick.hook';
+import { useSelectable } from './hooks/use-selectable.hook';
 import { useDragDrop } from './hooks/use-dragdrop.hook';
 import { DropPlaceholder } from './drop.placeholder';
 import { DndItem } from './dragdrop.type';
@@ -25,8 +25,8 @@ export function DropBlock({ state, dispatch, dndRef, children, ...item }: DropBl
     drop,
     onMouseOver,
     onMouseOut
-  } = useDragDrop(item, dndRef, state, dispatch);
-  const { handleItemClick, handleClick } = useItemClick(item, dndRef, state, dispatch);
+  } = useDragDrop({ item, dndRef, dndState: state, dispatch });
+  const { currentItem, handleActionClick, handleElementClick } = useSelectable({ item, dndRef, dndState: state, dispatch });
 
   const parsedComponent = useMemo(() => {
     const sanitizedValue = DOMPurify.sanitize(value, { ADD_TAGS: ['jsx'] });
@@ -63,11 +63,20 @@ export function DropBlock({ state, dispatch, dndRef, children, ...item }: DropBl
     'is-empty': isDropEmpty,
   });
 
+  const handleItemClick = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    handleElementClick(e);
+  };
+
+  const handleMenuClick = (actionType: string) => {
+    handleActionClick(actionType);
+  };
+
   drag(drop(dragRef));
 
   return <div ref={dragRef} className={itemClassNames} onClick={handleItemClick}>
     {
-      isSelected && <DragDropMenu onClick={handleClick} />
+      isSelected && <DragDropMenu onClick={handleMenuClick} />
     }
     {name === 'component' ? <>{parsedComponent}</> : children || <DragDropRender data={[...data]} />}
   </div>

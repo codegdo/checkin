@@ -1,16 +1,16 @@
-import React from 'react';
-import { ActionClickType } from '../../constants';
+import React, { MouseEvent } from 'react';
+
 import { util } from '../../helpers';
+import { Input, Label } from '../input';
 
 import { DragDropMenu } from './dragdrop.menu';
 import { DndActionType, DndItem } from './dragdrop.type';
 import { useDragDrop } from './hooks/use-dragdrop.hook';
-import { useItemClick } from './hooks/use-itemclick.hook';
+import { useSelectable } from './hooks/use-selectable.hook';
 
 type DropFieldProps = DndItem;
 
 export function DropField({ state, dispatch, dndRef, ...item }: DropFieldProps) {
-  const { id, name, className = '' } = item;
   const {
     dragRef,
     isDragging,
@@ -21,9 +21,11 @@ export function DropField({ state, dispatch, dndRef, ...item }: DropFieldProps) 
     drop,
     onMouseOver,
     onMouseOut
-  } = useDragDrop(item, dndRef, state, dispatch);
+  } = useDragDrop({ item, dndRef, dndState: state, dispatch });
 
-  const { handleItemClick, handleClick } = useItemClick(item, dndRef, state, dispatch);
+  const { currentItem, handleActionClick, handleElementClick } = useSelectable({ item, dndRef, dndState: state, dispatch });
+
+  const { name, type, className, label } = currentItem;
 
   const itemClassNames = util.classNames(className, 'drop-item', 'drop-field', {
     'is-dragging': isDragging,
@@ -32,14 +34,24 @@ export function DropField({ state, dispatch, dndRef, ...item }: DropFieldProps) 
     'is-selected': isSelected,
   });
 
+  const handleItemClick = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    handleElementClick(e);
+  };
+
+  const handleMenuClick = (actionType: string) => {
+    handleActionClick(actionType);
+  };
+
   drag(drop(dragRef));
 
   return (
     <div ref={dragRef} className={itemClassNames} onClick={handleItemClick}>
       {
-        isSelected && <DragDropMenu onClick={handleClick} />
+        isSelected && <DragDropMenu onClick={handleMenuClick} />
       }
-      {name}
+      <Label label={label} />
+      <Input name={name} type={type} />
     </div>
   )
 };

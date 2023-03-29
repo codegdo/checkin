@@ -35,8 +35,8 @@ export const FormContext = React.createContext<FormContextProps>(initialProps);
 
 export function FormProvider({ data, status, options = {}, onCallback, children }: FormProps) {
 
-  const { current: form } = useRef<{ [key: string]: string }>({});
-  const { current: error } = useRef<{ [key: string]: string }>({});
+  const { current: form } = useRef<Record<string, string>>({});
+  const { current: error } = useRef<Record<string, string>>({});
   const { current: validation } = useRef({ schema });
 
   const [isSubmit, setIsSubmit] = useState(false);

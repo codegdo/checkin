@@ -10,7 +10,7 @@ export function DragItem({ children, ...item }: DragItemProps) {
   const { dndRef, state, dispatch } = useWrapperContext(DragDropContext);
   const { name, label, className = 'drag-item' } = item;
 
-  const { drag } = useDragDrop(item, dndRef, state, dispatch);
+  const { drag } = useDragDrop({ item, dndRef, dndState: state, dispatch });
 
   return (
     <div ref={drag} className={className}>

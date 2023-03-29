@@ -7,7 +7,7 @@ export interface ItemData {
   data?: ItemData[];
 }
 
-export interface EditorData {
+export interface DataSource {
   content?: ItemData[];
   design?: ItemData[];
   setting?: ItemData[];
