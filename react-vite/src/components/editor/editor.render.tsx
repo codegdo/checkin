@@ -1,5 +1,6 @@
 import React from 'react';
 import { useWrapperContext } from '../../hooks';
+import { Control } from '../control';
 import { EditorContext } from './editor.context';
 import { ItemData } from './editor.type';
 
@@ -11,7 +12,7 @@ export function EditorRender({ data = [] }: EditorRenderProps) {
   return (
     <>
       {data.map((item) => {
-        const { id, name, dataType, data: nestedData } = item;
+        const { id, name, type, dataType, data: nestedData } = item;
 
         switch (dataType) {
           case 'panel':
@@ -21,7 +22,15 @@ export function EditorRender({ data = [] }: EditorRenderProps) {
               </div>
             );
           case 'control':
-            return <div key={id}>{name}</div>;
+            return (
+              <Control 
+                key={id} 
+                id={id} 
+                type={type} 
+                onChange={onChange} 
+                onClick={onClick} 
+              />
+            );
           default:
             return null;
         }
