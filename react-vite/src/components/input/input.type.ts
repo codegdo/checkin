@@ -7,8 +7,8 @@ export interface InputProps {
   id?: string | number;
   type: string;
   name: string;
-  value?: string | number;
-  defaultValue?: string | number;
+  value?: string;
+  defaultValue?: string;
   data?: any;
   text?: string;
   unit?: string;

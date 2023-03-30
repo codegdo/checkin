@@ -5,10 +5,7 @@ type Element = DndItem;
 type ClassName = string | undefined | null;
 type ClassMap = Record<string, boolean>;
 
-type SetObjectValueResult<T> = {
-  value: T[keyof T] | null;
-  updatedObject: T;
-};
+type SetObjectValueResult<T> = { updatedData: T, value?: T[keyof T] };
 
 type PartialWithIndexSignature<T> = Partial<T> & {
   [key: string]: any;
@@ -132,43 +129,27 @@ class UtilHelper {
    * @returns An object containing the value at the specified property path
    * and the updated object.
   */
-  getSetObjectValue<T extends Record<string, any>>(
+  getSetObjectValue<T>(
     object: T,
     propertyPath: string,
     value?: T[keyof T]
   ): SetObjectValueResult<T> {
-    const propertyNames = propertyPath.split('.');
-    let updatedObject: Record<string, any> = { ...object };
-    let currentValue: any = object;
-
-    for (let i = 0; i < propertyNames.length; i++) {
-      const propertyName = propertyNames[i];
-
-      if (typeof propertyName !== 'string') {
-        throw new Error('Property names must be strings');
+    const pathSegments = propertyPath.split('.');
+    let currentObject: any = object;
+    let lastSegment = pathSegments.pop()!;
+  
+    for (let segment of pathSegments) {
+      if (!(segment in currentObject)) {
+        currentObject[segment] = {};
       }
-
-      if (currentValue[propertyName] === undefined) {
-        if (i === propertyNames.length - 1) {
-          currentValue[propertyName] = value ?? null;
-        } else {
-          currentValue[propertyName] = {};
-        }
-      }
-
-      if (i === propertyNames.length - 1) {
-        if (value !== undefined) {
-          currentValue[propertyName] = value;
-        }
-
-        return { value: currentValue[propertyName], updatedObject: updatedObject as T };
-      }
-
-      updatedObject[propertyName] = { ...currentValue[propertyName] };
-      currentValue = currentValue[propertyName];
+      currentObject = currentObject[segment];
     }
-
-    return { value: null, updatedObject: updatedObject as T };
+  
+    if (value !== undefined) {
+      currentObject[lastSegment] = value;
+    }
+  
+    return { updatedData: object, value: currentObject[lastSegment] };
   }
 }
 

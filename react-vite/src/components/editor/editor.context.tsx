@@ -1,4 +1,5 @@
 import React, { createContext, FC, PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { util } from '../../helpers';
 import { KeyValue } from '../input';
 import { EditorProps } from './editor.component';
 import { DataSource } from './editor.type';
@@ -30,8 +31,7 @@ export function EditorProvider<T>({
   const handleDataChange = ({ key, value }: KeyValue) => {
     dataRef[key] = value;
 
-    const updatedData = { ...dataObject };
-    (updatedData as Record<string, string>)[key] = value;
+    const {updatedData} = util.getSetObjectValue(dataObject, key, value);
     
     onChange?.(updatedData);
     console.log('DATA REF', dataRef);
