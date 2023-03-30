@@ -32,8 +32,10 @@ export function EditorProvider<T>({
 
     const updatedData = { ...dataObject };
     (updatedData as Record<string, string>)[key] = value;
-
-    console.log('EDITOR CHANGE', updatedData);
+    
+    onChange?.(updatedData);
+    console.log('DATA REF', dataRef);
+    console.log('UPDATED DATA', updatedData);
   };
 
   const handleActionClick = () => { };

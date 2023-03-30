@@ -10,34 +10,38 @@ interface EditorRenderProps extends ItemData { }
 export function EditorRender({ data = [] }: EditorRenderProps) {
   const { dataObject, dataRef, onChange, onClick } = useWrapperContext(EditorContext);
 
+  const renderData = (data: ItemData[] = []) => {
+    return data.map(({ id, name = '', type, dataType, data: nestedData }) => {
+      if (dataType === 'panel') {
+        return (
+          <div key={id}>
+            {renderData(nestedData)}
+          </div>
+        );
+      } else if (dataType === 'control') {
+        const { value } = util.getSetObjectValue(dataObject, name);
+        const controlValue = dataRef[name] ?? value;
+
+        return (
+          <Control
+            key={id}
+            id={id}
+            name={name}
+            type={type}
+            value={controlValue}
+            onChange={onChange}
+            onClick={onClick}
+          />
+        );
+      } else {
+        return null;
+      }
+    });
+  };
+
   return (
     <>
-      {data.map(({ id, name = '', type, dataType, data: nestedData }) => {
-        let { value } = util.getSetObjectValue(dataObject, name);
-
-        switch (dataType) {
-          case 'panel':
-            return (
-              <div key={id}>
-                <EditorRender data={nestedData} />
-              </div>
-            );
-          case 'control':
-            return (
-              <Control
-                key={id}
-                id={id}
-                name={name}
-                type={type}
-                value={dataType === 'control' ? (dataRef[name] ?? value) : undefined}
-                onChange={onChange}
-                onClick={onClick}
-              />
-            );
-          default:
-            return null;
-        }
-      })}
+      {renderData(data)}
     </>
   );
 }

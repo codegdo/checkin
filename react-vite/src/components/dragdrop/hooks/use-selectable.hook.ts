@@ -20,8 +20,10 @@ export function useSelectable({
 
   const [currentItem, setCurrentItem] = useState<DndItem>(item);
 
-  const handleChange = (updateItem: Partial<DndItem>) => {
-    console.log("on-change", updateItem);
+  const handleChange = (updatedItem: Partial<DndItem>) => {
+
+    setCurrentItem(prevItem => ({...prevItem, ...updatedItem}));
+    console.log("on-change", updatedItem);
   };
 
   const handleActionClick = (actionType: string) => {

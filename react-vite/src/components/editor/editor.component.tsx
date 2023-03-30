@@ -6,7 +6,7 @@ import { DataSource } from './editor.type';
 export interface EditorProps<T> extends PropsWithChildren {
   dataSource?: DataSource;
   dataObject: T;
-  onChange?: () => void;
+  onChange?: (updatedData: T) => void;
   onClick?: () => void;
 };
 
