@@ -47,6 +47,13 @@ export function useSelectable({
         });
         if (dndRef?.domRef) delete dndRef.domRef[`${currentItem.id}`];
         break;
+      case ActionClickType.EDITOR_CLOSE:
+        console.log('EDITOR CLOSE', currentItem);
+        // dispatch?.({
+        //   type: DndActionType.CLONE_ITEM,
+        //   payload: item,
+        // });
+        break;
       default:
         console.log("click");
     }
@@ -54,6 +61,8 @@ export function useSelectable({
 
   const handleElementClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
+
+    console.log('EDIT SELECT', currentItem);
 
     const newSelectedItem = dndState?.item?.id === currentItem.id ? null : {
       ...currentItem,
@@ -63,7 +72,7 @@ export function useSelectable({
     };
 
     console.log(newSelectedItem);
-
+    
     dispatch?.({
       type: DndActionType.SET_SELECTED_ITEM,
       payload: newSelectedItem,

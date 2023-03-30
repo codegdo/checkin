@@ -10,8 +10,8 @@ export interface EditorContextValue<T> {
   dataObject: T;
   activeTab: string;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
-  onChange: (keyValue: KeyValue) => void;
-  onClick: () => void;
+  onDataChange: (keyValue: KeyValue) => void;
+  onActionClick: (actionType: string) => void;
 }
 
 export const EditorContext = createContext<EditorContextValue<any>>({} as EditorContextValue<any>);
@@ -22,8 +22,8 @@ export function EditorProvider<T>({
   dataSource = {},
   dataObject,
   children,
-  onChange,
-  onClick
+  onDataChange,
+  onActionClick
 }: EditorProviderProps<T>) {
   const [activeTab, setActiveTab] = useState('');
   const { current: dataRef } = useRef<Record<string, string>>({});
@@ -33,7 +33,7 @@ export function EditorProvider<T>({
 
     const {updatedData} = util.getSetObjectValue(dataObject, key, value);
     
-    onChange?.(updatedData);
+    onDataChange?.(updatedData);
     console.log('DATA REF', dataRef);
     console.log('UPDATED DATA', updatedData);
   };
@@ -46,8 +46,8 @@ export function EditorProvider<T>({
     dataObject,
     activeTab,
     setActiveTab,
-    onChange: handleDataChange,
-    onClick: handleActionClick,
+    onDataChange: handleDataChange,
+    onActionClick: handleActionClick,
 
   };
 

@@ -6,6 +6,7 @@ import { Editor, EditorTab, EditorContent } from '../editor';
 import { DragDropContext, SelectedDndItem } from './dragdrop.context';
 import { DndItem } from './dragdrop.type';
 import { DataSource } from '../editor/editor.type';
+import { ActionClickType } from '../../constants';
 
 interface Offset {
   top: number;
@@ -20,7 +21,7 @@ export function DragDropEditor() {
 
   const { state } = useWrapperContext(DragDropContext);
   const { item } = state || {};
-  const { onChange: handleItemChange, onClick: handleItemClick, isEdit, ...dataObject }: SelectedDndItem = item as DndItem || {};
+  const { onChange: handleDataChange, onClick: handleActionClick, isEdit, ...dataObject }: SelectedDndItem = item as DndItem || {};
 
   const { itemType, initialSourceClientOffset, differenceFromInitialOffset } =
     useDragLayer((monitor) => ({
@@ -47,11 +48,15 @@ export function DragDropEditor() {
     }
   }, [itemType, initialSourceClientOffset, differenceFromInitialOffset]);
 
-  const handleClickOutside = () => console.log("clicked outside");
+  const handleClickOutside = () => {
+    console.log("clicked outside");
+    handleActionClick?.(ActionClickType.EDITOR_CLOSE);
+  }
+
   useOnClickOutside(editorRef, handleClickOutside);
 
   const handleClick = () => {
-    //onClick?.();
+    handleActionClick?.(ActionClickType.EDITOR_CLOSE);
   };
 
   useEffect(() => {
@@ -78,7 +83,7 @@ export function DragDropEditor() {
   return (
     <div ref={editorRef}>
       <div ref={preview} style={{ position: "fixed", ...offset }}>
-        <Editor<DndItem> dataSource={dataSource} dataObject={dataObject} onChange={handleItemChange} onClick={handleItemClick}>
+        <Editor<DndItem> dataSource={dataSource} dataObject={dataObject} onDataChange={handleDataChange} onActionClick={handleActionClick}>
           <div ref={dragRef}>
             head <button type="button" onClick={handleClick}>close</button>
           </div>

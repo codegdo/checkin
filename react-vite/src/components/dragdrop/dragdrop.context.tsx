@@ -7,7 +7,7 @@ import { dndHelper } from './helpers/dragdrop.helper';
 export type SelectedDndItem = DndItem & {
   isEdit?: boolean
   onChange?: () => void;
-  onClick?: () => void;
+  onClick?: (actionType: string) => void;
 };
 
 export interface DndState {

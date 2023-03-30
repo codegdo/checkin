@@ -7,5 +7,5 @@ export interface ControlData {
   data?: Record<string, any>;
   value?: string;
   onChange?: (keyValue: KeyValue) => void;
-  onClick?: () => void;
+  onClick?: (actionType: string) => void;
 }

@@ -15,7 +15,7 @@ interface InputRangeProps {
 export function InputRange({
   name,
   text = '',
-  value: initialValue = '0',
+  value: initialValue,
   defaultValue,
   unit = 'px',
   onChange,

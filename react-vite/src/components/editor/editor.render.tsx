@@ -8,7 +8,7 @@ import { ItemData } from './editor.type';
 interface EditorRenderProps extends ItemData { }
 
 export function EditorRender({ data = [] }: EditorRenderProps) {
-  const { dataObject, dataRef, onChange, onClick } = useWrapperContext(EditorContext);
+  const { dataObject, dataRef, onDataChange, onActionClick } = useWrapperContext(EditorContext);
 
   const renderData = (data: ItemData[] = []) => {
     return data.map(({ id, name = '', type, dataType, data: nestedData }) => {
@@ -29,8 +29,8 @@ export function EditorRender({ data = [] }: EditorRenderProps) {
             name={name}
             type={type}
             value={controlValue}
-            onChange={onChange}
-            onClick={onClick}
+            onChange={onDataChange}
+            onClick={onActionClick}
           />
         );
       } else {
