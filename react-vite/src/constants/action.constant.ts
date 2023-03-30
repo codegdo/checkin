@@ -5,4 +5,5 @@ export enum ActionClickType {
 
   EDITOR_CLOSE = 'EDITOR_CLOSE',
   EDITOR_SAVE = 'EDITOR_SAVE',
+  EDITOR_RESET = 'EDITOR_RESET',
 }

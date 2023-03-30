@@ -4,10 +4,11 @@ import { EditorProvider } from './editor.context';
 import { DataSource } from './editor.type';
 
 export interface EditorProps<T> extends PropsWithChildren {
+  title?: string;
   dataSource?: DataSource;
   dataObject: T;
-  onDataChange?: (updatedData: T) => void;
-  onActionClick?: (actionType:string) => void;
+  onChange?: (updatedData: T) => void;
+  onClick?: (actionType: string) => void;
 };
 
 export function Editor<T>({ children, ...props }: EditorProps<T>) {

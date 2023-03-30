@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useCallback, useEffect, useState } from 'react';
 import { ActionClickType } from '../../../constants';
 import { defaultDndRef, defaultDndState, DndAction, DndRef, DndState } from '../dragdrop.context';
 import { DndItem, DndActionType } from '../dragdrop.type';
@@ -18,12 +18,21 @@ export function useSelectable({
   dispatch = () => console.log("dispatch"),
 }: useSelectableProps) {
 
-  const [currentItem, setCurrentItem] = useState<DndItem>(item);
+  const [selectedItem, setSelectedItem] = useState<DndItem>(item);
+  const [isUpdate, setIsUpdate] = useState(false);
+
+  useEffect(() => {
+    if (isUpdate) {
+      dispatch?.({
+        type: DndActionType.UPDATE_ITEM,
+        payload: selectedItem,
+      });
+    }
+    return () => setIsUpdate(false);
+  }, [selectedItem, isUpdate]);
 
   const handleChange = (updatedItem: Partial<DndItem>) => {
-
-    setCurrentItem(prevItem => ({...prevItem, ...updatedItem}));
-    console.log("on-change", updatedItem);
+    setSelectedItem(prevItem => ({ ...prevItem, ...updatedItem }));
   };
 
   const handleActionClick = (actionType: string) => {
@@ -45,39 +54,47 @@ export function useSelectable({
           type: DndActionType.REMOVE_ITEM,
           payload: item,
         });
-        if (dndRef?.domRef) delete dndRef.domRef[`${currentItem.id}`];
+        if (dndRef?.domRef) delete dndRef.domRef[`${selectedItem.id}`];
+        break;
+      case ActionClickType.EDITOR_SAVE:
+        setIsUpdate(true);
         break;
       case ActionClickType.EDITOR_CLOSE:
-        console.log('EDITOR CLOSE', currentItem);
-        // dispatch?.({
-        //   type: DndActionType.CLONE_ITEM,
-        //   payload: item,
-        // });
+        setIsUpdate(true);
+        dispatch?.({
+          type: DndActionType.SET_SELECTED_ITEM_NULL,
+          payload: null,
+        });
+        break;
+      case ActionClickType.EDITOR_RESET:
+
+        setSelectedItem(prevItem => ({ ...prevItem, ...selectedItem }));
+
+        dispatch?.({
+          type: DndActionType.RESET_ITEM,
+          payload: selectedItem,
+        });
         break;
       default:
         console.log("click");
     }
-  };
+  }
 
   const handleElementClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
 
-    console.log('EDIT SELECT', currentItem);
-
-    const newSelectedItem = dndState?.item?.id === currentItem.id ? null : {
-      ...currentItem,
+    const newSelectedItem = dndState?.item?.id === selectedItem.id ? null : {
+      ...selectedItem,
       isEdit: false,
       onChange: handleChange,
       onClick: handleActionClick,
     };
 
-    console.log(newSelectedItem);
-    
     dispatch?.({
       type: DndActionType.SET_SELECTED_ITEM,
       payload: newSelectedItem,
     });
   };
 
-  return { currentItem, handleActionClick, handleElementClick };
+  return { selectedItem, handleActionClick, handleElementClick };
 };

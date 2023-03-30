@@ -23,9 +23,9 @@ export function DropField({ state, dispatch, dndRef, ...item }: DropFieldProps) 
     onMouseOut
   } = useDragDrop({ item, dndRef, dndState: state, dispatch });
 
-  const { currentItem, handleActionClick, handleElementClick } = useSelectable({ item, dndRef, dndState: state, dispatch });
+  const { selectedItem, handleActionClick, handleElementClick } = useSelectable({ item, dndRef, dndState: state, dispatch });
 
-  const { name, type, className, label } = currentItem;
+  const { name, type, className, label } = selectedItem;
 
   const itemClassNames = util.classNames(className, 'drop-item', 'drop-field', {
     'is-dragging': isDragging,

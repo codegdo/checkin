@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 
 import { useLoadJson, useOnClickOutside, useWrapperContext } from '../../hooks';
-import { Editor, EditorTab, EditorContent } from '../editor';
+import { Editor, EditorTab, EditorContent, EditorHeader, EditorFooter } from '../editor';
 import { DragDropContext, SelectedDndItem } from './dragdrop.context';
 import { DndItem } from './dragdrop.type';
 import { DataSource } from '../editor/editor.type';
@@ -49,14 +49,14 @@ export function DragDropEditor() {
   }, [itemType, initialSourceClientOffset, differenceFromInitialOffset]);
 
   const handleClickOutside = () => {
-    console.log("clicked outside");
-    handleActionClick?.(ActionClickType.EDITOR_CLOSE);
+    handleActionClick?.(ActionClickType.EDITOR_SAVE);
   }
 
   useOnClickOutside(editorRef, handleClickOutside);
 
-  const handleClick = () => {
-    handleActionClick?.(ActionClickType.EDITOR_CLOSE);
+  const handleClick = (actionType: string) => {
+    //alert(actionType);
+    handleActionClick?.(actionType);
   };
 
   useEffect(() => {
@@ -83,12 +83,11 @@ export function DragDropEditor() {
   return (
     <div ref={editorRef}>
       <div ref={preview} style={{ position: "fixed", ...offset }}>
-        <Editor<DndItem> dataSource={dataSource} dataObject={dataObject} onDataChange={handleDataChange} onActionClick={handleActionClick}>
-          <div ref={dragRef}>
-            head <button type="button" onClick={handleClick}>close</button>
-          </div>
+        <Editor<DndItem> title={item?.dataType} dataSource={dataSource} dataObject={dataObject} onChange={handleDataChange} onClick={handleClick}>
+          <EditorHeader ref={dragRef} />
           <EditorTab />
           <EditorContent />
+          <EditorFooter />
         </Editor>
       </div>
     </div>

@@ -6,7 +6,7 @@ import { dndHelper } from './helpers/dragdrop.helper';
 
 export type SelectedDndItem = DndItem & {
   isEdit?: boolean
-  onChange?: () => void;
+  onChange?: (updatedData: DndItem) => void;
   onClick?: (actionType: string) => void;
 };
 
@@ -49,7 +49,10 @@ const dndReducer = (state: DndState, action: DndAction) => {
 
   switch (type) {
     case DndActionType.SET_SELECTED_ITEM_EDIT:
-      return { ...state, item: { ...state.item, isEdit: true } };
+      return { ...state, item: { ...state.item, isEdit: payload } };
+
+    case DndActionType.SET_SELECTED_ITEM_NULL:
+      return { ...state, item: null };
 
     case DndActionType.SET_SELECTED_ITEM:
       const selectedItem = payload;
@@ -100,6 +103,20 @@ const dndReducer = (state: DndState, action: DndAction) => {
       const removedData = dndHelper.removeItems(payload, state.data);
 
       return { ...state, data: removedData, item: null };
+    }
+
+    case DndActionType.UPDATE_ITEM: {
+
+      const updatedData = dndHelper.updateItems(payload, state.data);
+
+      return { ...state, data: updatedData };
+    }
+
+    case DndActionType.RESET_ITEM: {
+
+      const updatedData = dndHelper.resetItems(payload, state.data);
+
+      return { ...state, data: updatedData };
     }
 
     default:

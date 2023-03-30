@@ -191,6 +191,29 @@ class DragDropHelper {
     return updatedData;
   }
 
+  updateItems(item: Item, data: Item[]): Item[] {
+    const updatedData = data.map((currentItem) => {
+      if (currentItem.id === item.id) {
+        return { ...currentItem, ...item };
+      }
+      return currentItem;
+    });
+
+    return updatedData;
+  }
+
+  resetItems(item: Item, data: Item[]): Item[] {
+    console.log('RESET ITEM', item);
+    const updatedData = data.map((currentItem) => {
+      if (currentItem.id === item.id) {
+        return { ...currentItem, ...item };
+      }
+      return currentItem;
+    });
+
+    return updatedData;
+  }
+
   countIdsRecursive(data: Item[], ids: string[] = []): string[] {
     return data?.reduce((acc: string[], curr: Item) => {
       const currId = `${curr.id}`;

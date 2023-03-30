@@ -6,6 +6,7 @@ export interface ControlData {
   type?: string;
   data?: Record<string, any>;
   value?: string;
+  isReset?: boolean;
   onChange?: (keyValue: KeyValue) => void;
   onClick?: (actionType: string) => void;
 }

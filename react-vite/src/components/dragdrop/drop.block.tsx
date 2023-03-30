@@ -26,7 +26,7 @@ export function DropBlock({ state, dispatch, dndRef, children, ...item }: DropBl
     onMouseOver,
     onMouseOut
   } = useDragDrop({ item, dndRef, dndState: state, dispatch });
-  const { currentItem, handleActionClick, handleElementClick } = useSelectable({ item, dndRef, dndState: state, dispatch });
+  const { selectedItem, handleActionClick, handleElementClick } = useSelectable({ item, dndRef, dndState: state, dispatch });
 
   const parsedComponent = useMemo(() => {
     const sanitizedValue = DOMPurify.sanitize(value, { ADD_TAGS: ['jsx'] });
