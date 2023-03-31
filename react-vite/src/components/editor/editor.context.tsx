@@ -10,7 +10,6 @@ export interface EditorContextValue<T> {
   dataSource: DataSource;
   dataRef: Record<string, string>;
   dataObject: T;
-  initialRef: Record<string, string>;
   activeTab: string;
   isReset?: boolean;
   setActiveTab: React.Dispatch<React.SetStateAction<string>>;
@@ -34,7 +33,6 @@ export function EditorProvider<T>({
   const [activeTab, setActiveTab] = useState('');
   const [isReset, setIsReset] = useState(false);
   let { current: dataRef } = useRef<Record<string, string>>({});
-  const { current: initialRef } = useRef<Record<string, string>>({});
 
   useEffect(() => {
     const defaultTab = Object.keys(dataSource)[0] || '';
@@ -43,7 +41,6 @@ export function EditorProvider<T>({
 
   useEffect(() => {
     if (isReset) {
-      dataRef = { ...initialRef };
       setIsReset(false);
     }
   }, [isReset]);
@@ -65,7 +62,6 @@ export function EditorProvider<T>({
     dataSource,
     dataRef,
     dataObject,
-    initialRef,
     activeTab,
     isReset,
     setActiveTab,

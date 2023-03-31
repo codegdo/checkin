@@ -8,10 +8,10 @@ import { ItemData } from './editor.type';
 interface EditorRenderProps extends ItemData { }
 
 export function EditorRender({ data = [] }: EditorRenderProps) {
-  const { dataObject, dataRef, initialRef, isReset, onChange: handleDataChange, onClick: handleActionClick } = useWrapperContext(EditorContext);
+  const { dataObject, dataRef, isReset, onChange: handleDataChange, onClick: handleActionClick } = useWrapperContext(EditorContext);
 
-  const renderData = (data: ItemData[] = []) => {
-    return data.map(({ id, name = '', type, dataType, data: nestedData }) => {
+  const renderData = (items: ItemData[] = []) => {
+    return items.map(({ id, name = '', type, dataType, data: nestedData }) => {
       if (dataType === 'panel') {
         return (
           <div key={id}>
@@ -19,21 +19,17 @@ export function EditorRender({ data = [] }: EditorRenderProps) {
           </div>
         );
       } else if (dataType === 'control') {
-
-        let controlValue = '';
-        const value = util.getObjectValue(dataObject, name) ?? '';
-
-        if (!initialRef.hasOwnProperty(name)) {
-          initialRef[name] = value;
+        if (!(name in dataRef)) {
+          const value = util.getObjectValue(dataObject, name) ?? '';
+          dataRef[name] = value;
         }
 
         if (isReset) {
-          controlValue = initialRef[name];
-          //util.getSetObjectValue(dataObject, name, initialRef[name]);
-        } else {
-          controlValue = value;
-          dataRef[name] = controlValue
+          const value = util.getObjectValue(dataObject, name) ?? '';
+          dataRef[name] = value;
         }
+
+        const controlValue = dataRef[name];
 
         return (
           <Control
@@ -59,3 +55,6 @@ export function EditorRender({ data = [] }: EditorRenderProps) {
     </>
   );
 }
+
+
+
