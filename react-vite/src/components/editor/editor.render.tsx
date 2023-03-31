@@ -21,32 +21,19 @@ export function EditorRender({ data = [] }: EditorRenderProps) {
       } else if (dataType === 'control') {
 
         let controlValue = '';
-        const { value } = util.getSetObjectValue(dataObject, name);
+        const value = util.getObjectValue(dataObject, name) ?? '';
 
         if (!initialRef.hasOwnProperty(name)) {
           initialRef[name] = value;
         }
 
         if (isReset) {
-          const { value: resetValue } = util.getSetObjectValue(dataObject, name, initialRef[name] || '');
-
-
-          controlValue = initialRef[name] || '';
-
-
-          console.log('AAAAAA', controlValue);
+          controlValue = initialRef[name];
+          //util.getSetObjectValue(dataObject, name, initialRef[name]);
         } else {
-          controlValue = dataRef[name] ?? value;
+          controlValue = value;
+          dataRef[name] = controlValue
         }
-
-        // const { value } = util.getSetObjectValue(dataObject, name);
-
-        // if (!initialRef.hasOwnProperty(name)) {
-        //   initialRef[name] = value;
-        // }
-
-        // let controlValue = isReset ? (initialRef[name] || '') : (dataRef[name] ?? value);
-
 
         return (
           <Control

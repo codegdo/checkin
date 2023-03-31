@@ -34,7 +34,7 @@ export function EditorProvider<T>({
   const [activeTab, setActiveTab] = useState('');
   const [isReset, setIsReset] = useState(false);
   let { current: dataRef } = useRef<Record<string, string>>({});
-  let { current: initialRef } = useRef<Record<string, string>>({});
+  const { current: initialRef } = useRef<Record<string, string>>({});
 
   useEffect(() => {
     const defaultTab = Object.keys(dataSource)[0] || '';
@@ -43,23 +43,18 @@ export function EditorProvider<T>({
 
   useEffect(() => {
     if (isReset) {
-      dataRef = {};
-      console.log('RESET INITIAL REF', initialRef, dataObject);
+      dataRef = { ...initialRef };
+      setIsReset(false);
     }
-    return () => setIsReset(false);
   }, [isReset]);
 
   const handleChange = ({ key, value }: KeyValue) => {
     dataRef[key] = value;
-
-    const { updatedData } = util.getSetObjectValue(dataObject, key, value);
-
-    handleDataChange?.(updatedData);
+    handleDataChange?.({ key, value });
   };
 
   const handleClick = (actionType: string) => {
     if (actionType === ActionClickType.EDITOR_RESET) {
-
       setIsReset(true);
     }
     handleActionClick?.(actionType);

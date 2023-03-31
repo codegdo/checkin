@@ -7,6 +7,7 @@ import { DragDropContext, SelectedDndItem } from './dragdrop.context';
 import { DndItem } from './dragdrop.type';
 import { DataSource } from '../editor/editor.type';
 import { ActionClickType } from '../../constants';
+import { KeyValue } from '../input';
 
 interface Offset {
   top: number;
@@ -54,6 +55,10 @@ export function DragDropEditor() {
 
   useOnClickOutside(editorRef, handleClickOutside);
 
+  const handleChange = (keyValue: KeyValue) => {
+    handleDataChange?.(keyValue);
+  }
+
   const handleClick = (actionType: string) => {
     //alert(actionType);
     handleActionClick?.(actionType);
@@ -83,7 +88,7 @@ export function DragDropEditor() {
   return (
     <div ref={editorRef}>
       <div ref={preview} style={{ position: "fixed", ...offset }}>
-        <Editor<DndItem> title={item?.dataType} dataSource={dataSource} dataObject={dataObject} onChange={handleDataChange} onClick={handleClick}>
+        <Editor<DndItem> title={item?.dataType} dataSource={dataSource} dataObject={dataObject} onChange={handleChange} onClick={handleClick}>
           <EditorHeader ref={dragRef} />
           <EditorTab />
           <EditorContent />

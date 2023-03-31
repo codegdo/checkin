@@ -2,6 +2,8 @@ import React, { MouseEvent, useCallback, useEffect, useState } from 'react';
 import { ActionClickType } from '../../../constants';
 import { defaultDndRef, defaultDndState, DndAction, DndRef, DndState } from '../dragdrop.context';
 import { DndItem, DndActionType } from '../dragdrop.type';
+import { KeyValue } from '../../input';
+import { util } from '../../../helpers';
 
 
 type useSelectableProps = {
@@ -22,17 +24,20 @@ export function useSelectable({
   const [isUpdate, setIsUpdate] = useState(false);
 
   useEffect(() => {
-    if (isUpdate) {
-      dispatch?.({
+    if (isUpdate && dispatch) {
+      dispatch({
         type: DndActionType.UPDATE_ITEM,
         payload: selectedItem,
       });
+      setIsUpdate(false);
     }
-    return () => setIsUpdate(false);
   }, [selectedItem, isUpdate]);
 
-  const handleChange = (updatedItem: Partial<DndItem>) => {
-    setSelectedItem(prevItem => ({ ...prevItem, ...updatedItem }));
+  const handleChange = ({ key, value }: KeyValue) => {
+    setSelectedItem((prevItem) => ({
+      ...prevItem,
+      ...util.setObjectValue(prevItem, key, value),
+    }));
   };
 
   const handleActionClick = (actionType: string) => {

@@ -3,10 +3,11 @@ import React, { Dispatch, PropsWithChildren, useEffect, useReducer, useRef } fro
 import { DragDropProps } from './dragdrop.component';
 import { DndActionType, DndItem } from './dragdrop.type';
 import { dndHelper } from './helpers/dragdrop.helper';
+import { KeyValue } from '../input';
 
 export type SelectedDndItem = DndItem & {
   isEdit?: boolean
-  onChange?: (updatedData: DndItem) => void;
+  onChange?: (keyValue: KeyValue) => void;
   onClick?: (actionType: string) => void;
 };
 

@@ -17,19 +17,19 @@ export function InputRange({
   name,
   text = '',
   value: initialValue,
-  defaultValue,
+  defaultValue = '0',
   unit = 'px',
   isReset,
   onChange,
 }: InputProps) {
 
-  const [value, setValue] = useState<string>(initialValue || defaultValue || '0');
+  const [value, setValue] = useState<string>(initialValue || defaultValue);
   const [backgroundImage, setBackgroundImage] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
 
-    const newValue = initialValue || defaultValue || '0';
+    const newValue = initialValue || defaultValue;
     setValue(newValue);
     //setBackgroundImage(getBackgroundImage(newValue));
   }, [initialValue, defaultValue]);
@@ -37,7 +37,7 @@ export function InputRange({
   useEffect(() => {
 
     if (isReset) {
-      const newValue = '0';
+      const newValue = initialValue || defaultValue;
       setValue(newValue);
       //setBackgroundImage(getBackgroundImage(newValue));
     }

@@ -5,7 +5,11 @@ type Element = DndItem;
 type ClassName = string | undefined | null;
 type ClassMap = Record<string, boolean>;
 
-type SetObjectValueResult<T> = { updatedData: T, value?: T[keyof T] };
+type SetObjectValueResult<T> = { obj: T; ref: T[keyof T]; value?: T[keyof T] };
+
+interface ObjectValue {
+  [key: string]: any
+}
 
 type PartialWithIndexSignature<T> = Partial<T> & {
   [key: string]: any;
@@ -117,39 +121,44 @@ class UtilHelper {
     return Array.from(classes).filter((c) => !!c).join(' ');
   }
 
-  /**
-   * Returns an object containing the value at the specified property path
-   * in the given object, and a new object with the same values but with
-   * the value at the specified property path updated to the given value (if
-   * provided).
-   *
-   * @param object - The object to search for the property path.
-   * @param propertyPath - The property path to search for (in dot notation).
-   * @param value - The value to set at the specified property path (optional).
-   * @returns An object containing the value at the specified property path
-   * and the updated object.
-  */
-  getSetObjectValue<T>(
-    object: T,
-    propertyPath: string,
-    value?: T[keyof T]
-  ): SetObjectValueResult<T> {
-    const pathSegments = propertyPath.split('.');
-    let currentObject: any = object;
-    let lastSegment = pathSegments.pop()!;
-  
-    for (let segment of pathSegments) {
-      if (!(segment in currentObject)) {
-        currentObject[segment] = {};
+  getObjectValue(obj: ObjectValue, propertyPath: string): any {
+    const keys: string[] = propertyPath.split('.');
+    let value: ObjectValue | undefined = obj;
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (!value || !value.hasOwnProperty(key)) {
+        return null;
       }
-      currentObject = currentObject[segment];
+      value = value[key];
     }
-  
-    if (value !== undefined) {
-      currentObject[lastSegment] = value;
+    return value;
+  }
+
+  setObjectValue(obj: ObjectValue, propertyPath: string, value: any): ObjectValue {
+    const keys: string[] = propertyPath.split(".");
+    let target: ObjectValue = { ...obj };
+    let current: ObjectValue = target;
+
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (!current.hasOwnProperty(key)) {
+        if (value === null || value === undefined) {
+          return target;
+        }
+        current[key] = i === keys.length - 1 ? value : {};
+      }
+      if (i === keys.length - 1) {
+        if (value === null || value === undefined) {
+          delete current[key];
+        } else {
+          current[key] = value;
+        }
+      } else {
+        current[key] = { ...current[key] };
+      }
+      current = current[key];
     }
-  
-    return { updatedData: object, value: currentObject[lastSegment] };
+    return target;
   }
 }
 
