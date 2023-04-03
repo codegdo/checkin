@@ -68,7 +68,6 @@ export function EditorProvider<T>({
     setIsReset,
     onChange: handleChange,
     onClick: handleClick,
-
   };
 
   return (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { InputProps } from './input.type';
 
-export function InputSelect({ name, text, value: initialValue, data = [], onChange }: InputProps) {
+export function InputSelect({ name, note, value: initialValue, data = [], onChange }: InputProps) {
 
   const [value, setValue] = useState(initialValue);
 
@@ -24,6 +24,6 @@ export function InputSelect({ name, text, value: initialValue, data = [], onChan
         })
       }
     </select>
-    {text && <span className='text'>{text}</span>}
+    {note && <span className='note'>{note}</span>}
   </div>
 }

@@ -5,13 +5,14 @@ export interface KeyValue {
 
 export interface InputProps {
   id?: string | number;
-  type: string;
   name: string;
+  type: string;
   value?: string;
   defaultValue?: string;
   data?: any;
-  text?: string;
-  unit?: string;
+  placeholder?: string;
+  note?: string;
+
   isReset?: boolean;
   onChange?: (keyValue: KeyValue) => void;
 }

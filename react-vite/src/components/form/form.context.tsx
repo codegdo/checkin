@@ -1,8 +1,22 @@
 import React, { PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 
 import { validationHelper, ObjectSchema } from '../../helpers';
-import { FormProps } from './form.component';
 import { Element } from './form.type';
+
+interface FormOptions {
+  keyOption?: string;
+}
+
+interface FormProps extends PropsWithChildren {
+  title?: string;
+  description?: string;
+  className?: string;
+  data?: Element[];
+
+  status?: string | undefined;
+  options?: FormOptions;
+  onCallback?: (key?: string, values?: any) => void;
+}
 
 export interface FormContextProps {
   data?: Element[];
@@ -47,24 +61,21 @@ export function FormProvider({ data, status, options = {}, onCallback, children 
       if (Object.keys(error).length === 0) {
         onCallback?.('submit', form);
       }
-
+      setIsSubmit(false);
       console.log('WATCH', form);
       console.log('ERROR', error);
     }
-
-    return () => setIsSubmit(false)
   }, [isSubmit]);
 
   useEffect(() => {
     if (isReset) {
       console.log('WATCH', form);
       console.log('ERROR', error);
+      setIsReset(false);
     }
-
-    return () => setIsReset(false);
   }, [isReset]);
 
-  const onClick = useCallback(async (key: string) => {
+  const handleClick = useCallback(async (key: string) => {
     switch (key) {
       case 'submit':
         // validation
@@ -89,7 +100,7 @@ export function FormProvider({ data, status, options = {}, onCallback, children 
 
   return (
     <form onSubmit={(e) => e.preventDefault()}>
-      <FormContext.Provider value={{ data, form, error, validation, status, options, isSubmit, isReset, onClick }}>
+      <FormContext.Provider value={{ data, form, error, validation, status, options, isSubmit, isReset, onClick: handleClick }}>
         {children}
       </FormContext.Provider>
     </form>

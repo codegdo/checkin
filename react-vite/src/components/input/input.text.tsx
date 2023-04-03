@@ -4,7 +4,7 @@ import { InputProps } from './input.type';
 export function InputText({
   type,
   name,
-  text,
+  note,
   value: initialValue = '',
   isReset = false,
   onChange,
@@ -29,10 +29,10 @@ export function InputText({
         className="input"
         type={type}
         name={name}
-        value={value || ''}
+        value={value}
         onChange={handleChange}
       />
-      {text && <span className="text">{text}</span>}
+      {note && <span className="note">{note}</span>}
     </div>
   );
 }
