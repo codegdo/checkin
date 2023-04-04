@@ -47,7 +47,7 @@ const initialProps: FormContextProps = {
 
 export const FormContext = React.createContext<FormContextProps>(initialProps);
 
-export function FormProvider({ data, status, options = {}, onCallback, children }: FormProps) {
+export function FormProvider({ data, status, options = {}, children, onCallback }: FormProps) {
 
   const { current: form } = useRef<Record<string, string>>({});
   const { current: error } = useRef<Record<string, string>>({});

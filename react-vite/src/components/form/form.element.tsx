@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from 'react';
 
 import { useWrapperContext } from '../../hooks';
 import { Button } from '../element/element.button';
-import { FormContext } from './form.context';
+import { FormContext } from './form.component';
 
 export interface ElementProps extends PropsWithChildren {
   type?: string;

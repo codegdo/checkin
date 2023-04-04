@@ -26,7 +26,7 @@ export function DropBlock({ state, dispatch, dndRef, children, ...item }: DropBl
     onMouseOver,
     onMouseOut
   } = useDragDrop({ item, dndRef, dndState: state, dispatch });
-  const { selectedItem, handleActionClick, handleElementClick } = useSelectable({ item, dndRef, dndState: state, dispatch });
+  const { selectedItem, onClick, onItemClick } = useSelectable({ item, dndRef, dndState: state, dispatch });
 
   const parsedComponent = useMemo(() => {
     const sanitizedValue = DOMPurify.sanitize(value, { ADD_TAGS: ['jsx'] });
@@ -65,11 +65,11 @@ export function DropBlock({ state, dispatch, dndRef, children, ...item }: DropBl
 
   const handleItemClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    handleElementClick(e);
+    onItemClick(e);
   };
 
   const handleMenuClick = (actionType: string) => {
-    handleActionClick(actionType);
+    onClick(actionType);
   };
 
   drag(drop(dragRef));

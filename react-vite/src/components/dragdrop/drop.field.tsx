@@ -23,7 +23,7 @@ export function DropField({ state, dispatch, dndRef, ...item }: DropFieldProps) 
     onMouseOut
   } = useDragDrop({ item, dndRef, dndState: state, dispatch });
 
-  const { selectedItem, handleActionClick, handleElementClick } = useSelectable({ item, dndRef, dndState: state, dispatch });
+  const { selectedItem, onClick, onItemClick } = useSelectable({ item, dndRef, dndState: state, dispatch });
 
   const { name, type, className, label } = selectedItem;
 
@@ -36,11 +36,11 @@ export function DropField({ state, dispatch, dndRef, ...item }: DropFieldProps) 
 
   const handleItemClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    handleElementClick(e);
+    onItemClick(e);
   };
 
   const handleMenuClick = (actionType: string) => {
-    handleActionClick(actionType);
+    onClick(actionType);
   };
 
   drag(drop(dragRef));

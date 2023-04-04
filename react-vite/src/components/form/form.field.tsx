@@ -3,7 +3,7 @@ import { validationHelper } from '../../helpers';
 
 import { useWrapperContext } from '../../hooks';
 import { Label, Input, KeyValue } from '../input';
-import { FormContext } from './form.context';
+import { FormContext } from './form.component';
 
 export interface FieldProps {
   id?: string | number;
@@ -19,34 +19,32 @@ export interface FieldProps {
   isRequired?: boolean;
 }
 
-export function FormField(props: FieldProps) {
+export function FormField({
+  id,
+  type,
+  name,
+  label,
+  description,
+  value,
+  defaultValue = "",
+  isRequired,
+}: FieldProps) {
+
   const {
-    id,
-    type,
-    name,
-    label,
-    description,
-    value,
-    defaultValue = "",
-    isRequired,
-  } = props;
+    form = {},
+    error = {},
+    options = {},
+    validation,
+    isSubmit,
+    isReset
+  } = useWrapperContext(FormContext);
 
-  const { form = {}, error = {}, validation, options, isSubmit, isReset } =
-    useWrapperContext(FormContext);
-
-  const initalValue = value ?? defaultValue;
-  const [isError, setIsError] = useState(false);
-
-  const timerRef = useRef<number | null>(null);
+  const fieldValue = value ?? defaultValue;
   const fieldName = label ?? id ?? name;
+  const fieldKey = (options?.keyOption === "id" && id) ? id : name;
 
-  const fieldKey = useMemo(() => {
-    if (options?.keyOption === "id" && id) {
-      return id;
-    } else {
-      return name;
-    }
-  }, [options, id, name]);
+  const [isError, setIsError] = useState(false);
+  const timerRef = useRef<number | null>(null);
 
   const schema = useMemo(
     () => validationHelper.fieldSchema({ type, isRequired }),
@@ -61,26 +59,23 @@ export function FormField(props: FieldProps) {
     );
 
     if (errors[fieldKey]) {
-      error[fieldKey] = errors[fieldKey].replace(
-        options?.keyOption === "id" ? `${id ?? name}` : name,
-        `${fieldName}`
-      );
+      error[fieldKey] = errors[fieldKey].replace(`${fieldKey}`, `${fieldName}`);
       setIsError(true);
     } else {
       delete error[fieldKey];
       setIsError(false);
     }
-  }, [form, error, validation, fieldKey, options?.keyOption, id, name, fieldName]);
+  }, [form, error, validation, fieldKey, fieldName]);
 
   useEffect(() => {
-    form[fieldKey] = initalValue;
+    form[fieldKey] = fieldValue;
     validation.schema = validation.schema.shape({ [fieldKey]: schema });
 
     if (isReset) {
       delete error[fieldKey];
       setIsError(false);
     }
-  }, [form, fieldKey, schema, validation, initalValue, isReset, error]);
+  }, [form, error, schema, validation, fieldKey, fieldValue, isReset]);
 
   useEffect(() => {
     if (isSubmit) {
@@ -105,7 +100,7 @@ export function FormField(props: FieldProps) {
 
       timerRef.current = window.setTimeout(validateField, 0);
     },
-    [form, fieldKey, error, validateField]
+    [fieldKey, form, error, validateField]
   );
 
   return (
@@ -114,7 +109,7 @@ export function FormField(props: FieldProps) {
       <Input
         type={type}
         name={name}
-        value={isReset ? initalValue : form[fieldKey]}
+        value={isReset ? fieldValue : form[fieldKey]}
         isReset={isReset}
         onChange={handleChange}
       />

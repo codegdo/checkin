@@ -19,14 +19,9 @@ function Login() {
     }
   }, [isSuccess, data]);
 
-  const handleCallback = (keyname: any, data: any) => {
-    switch (keyname) {
-      case 'submit':
-        submitLogin({ body: data });
-        break;
-      case 'cancel':
-        break;
-      default:
+  const handleCallback = (data: string | Record<string, string>) => {
+    if (typeof data === 'object') {
+      submitLogin({ body: data });
     }
   }
 

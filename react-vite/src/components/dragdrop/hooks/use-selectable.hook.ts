@@ -33,14 +33,14 @@ export function useSelectable({
     }
   }, [selectedItem, isUpdate]);
 
-  const handleChange = ({ key, value }: KeyValue) => {
+  const onChange = ({ key, value }: KeyValue) => {
     setSelectedItem((prevItem) => ({
       ...prevItem,
       ...util.setObjectValue(prevItem, key, value),
     }));
   };
 
-  const handleActionClick = (actionType: string) => {
+  const onClick = (actionType: string) => {
     switch (actionType) {
       case ActionClickType.MENU_EDIT:
         dispatch?.({
@@ -85,14 +85,14 @@ export function useSelectable({
     }
   }
 
-  const handleElementClick = (e: MouseEvent<HTMLDivElement>) => {
+  const onItemClick = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
 
     const newSelectedItem = dndState?.item?.id === selectedItem.id ? null : {
       ...selectedItem,
       isEdit: false,
-      onChange: handleChange,
-      onClick: handleActionClick,
+      onChange: onChange,
+      onClick: onClick,
     };
 
     dispatch?.({
@@ -101,5 +101,5 @@ export function useSelectable({
     });
   };
 
-  return { selectedItem, handleActionClick, handleElementClick };
+  return { selectedItem, onClick, onItemClick };
 };

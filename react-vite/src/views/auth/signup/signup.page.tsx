@@ -13,7 +13,18 @@ function Signup() {
   const normalizedData = formHelper.normalize(formData);
   const form = { ...formData, data: normalizedData };
 
-  return <Form title={form?.label} data={form.data} options={{ keyOption: 'id' }} />;
+  const handleCallback = (data: string | Record<string, string>) => {
+    if (typeof data === 'object') {
+      console.log(data);
+    }
+  }
+
+  return <Form
+    title={form?.label}
+    data={form.data}
+    options={{ keyOption: 'id' }}
+    onCallback={handleCallback}
+  />;
 }
 
 
