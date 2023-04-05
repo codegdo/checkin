@@ -27,8 +27,8 @@ export function EditorProvider<T>({
   dataSource = {},
   dataObject,
   children,
-  onChange: handleDataChange,
-  onClick: handleActionClick
+  onChange,
+  onClick
 }: EditorProviderProps<T>) {
   const [activeTab, setActiveTab] = useState('');
   const [isReset, setIsReset] = useState(false);
@@ -47,14 +47,14 @@ export function EditorProvider<T>({
 
   const handleChange = ({ key, value }: KeyValue) => {
     dataRef[key] = value;
-    handleDataChange?.({ key, value });
+    onChange?.({ key, value });
   };
 
   const handleClick = (actionType: string) => {
     if (actionType === ActionClickType.EDITOR_RESET) {
       setIsReset(true);
     }
-    handleActionClick?.(actionType);
+    onClick?.(actionType);
   };
 
   const contextValue: EditorContextValue<T> = {
