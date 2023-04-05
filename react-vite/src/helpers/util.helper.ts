@@ -15,6 +15,10 @@ type PartialWithIndexSignature<T> = Partial<T> & {
   [key: string]: any;
 };
 
+type CurryableFunction<T extends any[], R> =
+  | ((...args: T) => R)
+  | ((...args: T) => CurryableFunction<T, R>);
+
 
 class UtilHelper {
   cloneDeep<T>(obj: T): T {
@@ -119,6 +123,23 @@ class UtilHelper {
     }
 
     return Array.from(classes).filter((c) => !!c).join(' ');
+  }
+
+  curry<T extends any[], R>(func: (...args: T) => R): CurryableFunction<T, R> {
+    const expectedArgsCount = func.length;
+
+    function curried(...args: T): any {
+      if (args.length >= expectedArgsCount) {
+        return func(...args);
+      } else {
+        return function partiallyApplied(...moreArgs: T) {
+          const allArgs = args.concat(moreArgs) as T;
+          return curried(...allArgs);
+        };
+      }
+    }
+
+    return curried;
   }
 
   getObjectValue(obj: ObjectValue, propertyPath: string): any {

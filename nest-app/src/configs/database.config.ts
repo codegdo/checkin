@@ -10,6 +10,8 @@ export const databaseConfig = registerAs('database', () => {
     port: +process.env.POSTGRES_PORT,
     synchronize: false,
     logging: true,
+    max: 10,
+    min: 2
   };
 
   const checkinDatabaseOptions = {

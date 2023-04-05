@@ -117,7 +117,8 @@ export class TypeormStore extends Store {
       // If sid is an array, use Promise.all to delete each session record one by one
       await Promise.all(
         (Array.isArray(sid) ? sid : [sid]).map((id) =>
-          this.repository.delete(id),
+          this.repository.softDelete(id)
+          //this.repository.delete(id),
           //this.repository.update(id, { deletedAt: new Date() }),
         ),
       );

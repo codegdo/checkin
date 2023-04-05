@@ -12,7 +12,7 @@ import {
   XYCoord,
 } from 'react-dnd';
 import { getEmptyImage } from 'react-dnd-html5-backend';
-import { defaultDndRef, defaultDndState, DndAction, DndRef, DndState } from '../dragdrop.context';
+import { DndAction, DndRef, DndState } from '../dragdrop.context';
 import { dndHelper } from '../helpers/dragdrop.helper';
 import { DndActionType, DndItem, DndItemType } from '../dragdrop.type';
 

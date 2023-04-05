@@ -1,5 +1,5 @@
 import React, { MouseEvent, useCallback, useEffect, useState } from 'react';
-import { ActionClickType } from '../../../constants';
+import { ActionClickType, ActionEditorEnum, ActionMenuEnum } from '../../../constants';
 import { defaultDndRef, defaultDndState, DndAction, DndRef, DndState } from '../dragdrop.context';
 import { DndItem, DndActionType } from '../dragdrop.type';
 import { KeyValue } from '../../input';
@@ -42,36 +42,36 @@ export function useSelectable({
 
   const onClick = (actionType: string) => {
     switch (actionType) {
-      case ActionClickType.MENU_EDIT:
+      case ActionMenuEnum.MENU_EDIT:
         dispatch?.({
           type: DndActionType.SET_SELECTED_ITEM_EDIT,
           payload: true,
         });
         break;
-      case ActionClickType.MENU_CLONE:
+      case ActionMenuEnum.MENU_CLONE:
         dispatch?.({
           type: DndActionType.CLONE_ITEM,
           payload: item,
         });
         break;
-      case ActionClickType.MENU_REMOVE:
+      case ActionMenuEnum.MENU_REMOVE:
         dispatch?.({
           type: DndActionType.REMOVE_ITEM,
           payload: item,
         });
         if (dndRef?.domRef) delete dndRef.domRef[`${selectedItem.id}`];
         break;
-      case ActionClickType.EDITOR_SAVE:
+      case ActionEditorEnum.EDITOR_SAVE:
         setIsUpdate(true);
         break;
-      case ActionClickType.EDITOR_CLOSE:
+      case ActionEditorEnum.EDITOR_CLOSE:
         setIsUpdate(true);
         dispatch?.({
           type: DndActionType.SET_SELECTED_ITEM_NULL,
           payload: null,
         });
         break;
-      case ActionClickType.EDITOR_RESET:
+      case ActionEditorEnum.EDITOR_RESET:
 
         setSelectedItem(prevItem => ({ ...prevItem, ...selectedItem }));
 
