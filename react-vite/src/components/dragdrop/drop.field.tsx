@@ -10,7 +10,7 @@ import { useSelectable } from './hooks/use-selectable.hook';
 
 type DropFieldProps = DndItem;
 
-export function DropField({ state, dispatch, dndRef, ...item }: DropFieldProps) {
+export function DropField({ state: dndState, dispatch, dndRef, ...item }: DropFieldProps) {
   const {
     dragRef,
     isDragging,
@@ -21,9 +21,9 @@ export function DropField({ state, dispatch, dndRef, ...item }: DropFieldProps) 
     drop,
     onMouseOver,
     onMouseOut
-  } = useDragDrop({ item, dndRef, dndState: state, dispatch });
+  } = useDragDrop({ item, dndRef, dndState, dispatch });
 
-  const { selectedItem, onClick, onItemClick } = useSelectable({ item, dndRef, dndState: state, dispatch });
+  const { selectedItem, onClick, onItemClick } = useSelectable({ item, dndRef, dndState, dragRef, dispatch });
 
   const { name, type, className, label } = selectedItem;
 

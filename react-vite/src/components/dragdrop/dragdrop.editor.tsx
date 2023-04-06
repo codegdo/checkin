@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { JSXElementConstructor, ReactElement, ReactNode, useEffect, useRef, useState } from 'react';
 import { useDrag, useDragLayer, useDrop } from 'react-dnd';
 
 import { useLoadJson, useOnClickOutside, useWrapperContext } from '../../hooks';
@@ -8,6 +8,8 @@ import { DndItem } from './dragdrop.type';
 import { DataSource } from '../editor/editor.type';
 import { ActionClickType } from '../../constants';
 import { KeyValue } from '../input';
+import { util } from '../../helpers';
+import { dndHelper } from './helpers/dragdrop.helper';
 
 interface Offset {
   top: number;
@@ -17,21 +19,29 @@ interface Offset {
 export function DragDropEditor() {
   const editorRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<HTMLDivElement>(null);
-  const [offset, setOffset] = useState<Offset>({ top: 0, left: 0 });
+  const { current: offsetRef } = useRef({ top: 0, left: 0 });
   const [dataSource, loadJsonData] = useLoadJson<DataSource>(undefined, false);
 
   const { state } = useWrapperContext(DragDropContext);
   const { item } = state || {};
-  const { onChange: handleDataChange, onClick: handleActionClick, isEdit, ...dataObject }: SelectedDndItem = item as DndItem || {};
+  const { itemRef, isEdit, onChange, onClick, ...dataObject }: SelectedDndItem = item as DndItem || {};
 
-  const { itemType, initialSourceClientOffset, differenceFromInitialOffset } =
-    useDragLayer((monitor) => ({
-      initialSourceClientOffset: monitor.getInitialSourceClientOffset(),
-      differenceFromInitialOffset: monitor.getDifferenceFromInitialOffset(),
-      itemType: monitor.getItemType(),
-    }));
+  const { itemType, offset } =
+    useDragLayer((monitor) => {
+      const itemType = monitor.getItemType();
+      const offset = { top: 0, left: 0 };
+      const initialSourceClientOffset = monitor.getInitialSourceClientOffset();
+      const differenceFromInitialOffset = monitor.getDifferenceFromInitialOffset();
 
-  const [, drag, preview] = useDrag(() => ({
+      if (initialSourceClientOffset && differenceFromInitialOffset) {
+        offset.top = Math.round(initialSourceClientOffset.y + differenceFromInitialOffset.y);
+        offset.left = Math.round(initialSourceClientOffset.x + differenceFromInitialOffset.x);
+      }
+
+      return { itemType, offset }
+    });
+
+  const [, drag] = useDrag(() => ({
     type: "panel",
     item: { type: "panel" },
   }));
@@ -41,32 +51,57 @@ export function DragDropEditor() {
   }));
 
   useEffect(() => {
-    if (itemType === "panel" && initialSourceClientOffset && differenceFromInitialOffset) {
-      setOffset({
-        top: Math.round(initialSourceClientOffset.y + differenceFromInitialOffset.y),
-        left: Math.round(initialSourceClientOffset.x + differenceFromInitialOffset.x),
-      });
+    if (itemType === "panel") {
+      //const previewTarget = preview(previewRef) as unknown as React.RefObject<HTMLDivElement>;
+
+      if (editorRef.current) {
+        editorRef.current.style.top = `${offset.top}px`;
+        editorRef.current.style.left = `${offset.left}px`;
+
+        offsetRef.top = offset.top;
+        offsetRef.left = offset.left;
+      }
+
     }
-  }, [itemType, initialSourceClientOffset, differenceFromInitialOffset]);
+  }, [itemType, offset]);
 
   const handleClickOutside = () => {
-    handleActionClick?.(ActionClickType.EDITOR_SAVE);
+    onClick?.(ActionClickType.EDITOR_SAVE);
   }
 
   useOnClickOutside(editorRef, handleClickOutside);
 
   const handleChange = (keyValue: KeyValue) => {
-    handleDataChange?.(keyValue);
+    onChange?.(keyValue);
   }
 
   const handleClick = (actionType: string) => {
     //alert(actionType);
-    handleActionClick?.(actionType);
+    onClick?.(actionType);
   };
 
   useEffect(() => {
     if (isEdit && item?.dataType) {
+      // const target = itemRef?.current;
+      // const itemOffset = { top: 0, left: 0 };
+
+      // if (target) {
+      //   const rect = target.getBoundingClientRect();
+      //   itemOffset.top = rect.top;
+      //   itemOffset.left = rect.left;
+      // }
+
+      // const editorDimension = { width: 203, height: 288 }
+
+      const position = dndHelper.calculateEditorPosition(itemRef, editorRef);
+
+      if (editorRef.current) {
+        editorRef.current.style.top = `${position.y}px`;
+        editorRef.current.style.left = `${position.x}px`;
+      }
+
       drag(drop(dragRef));
+
       switch (item?.dataType) {
         case 'block':
           loadJsonData('block.edit.json');
@@ -86,15 +121,15 @@ export function DragDropEditor() {
   }
 
   return (
-    <div ref={editorRef}>
-      <div ref={preview} style={{ position: "fixed", ...offset }}>
-        <Editor<DndItem> title={item?.dataType} dataSource={dataSource} dataObject={dataObject} onChange={handleChange} onClick={handleClick}>
-          <EditorHeader ref={dragRef} />
-          <EditorTab />
-          <EditorContent />
-          <EditorFooter />
-        </Editor>
-      </div>
+    <div ref={editorRef} style={{ position: 'fixed' }}>
+      <Editor<DndItem> title={item?.dataType} dataSource={dataSource} dataObject={dataObject} onChange={handleChange} onClick={handleClick}>
+        <EditorHeader ref={dragRef} />
+        <EditorTab />
+        <EditorContent />
+        <EditorFooter />
+      </Editor>
     </div>
   );
 }
+
+//display: 'inline-flex', transform: `translate(${offset.left}px, ${offset.top}px)`

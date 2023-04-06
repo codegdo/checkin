@@ -6,7 +6,8 @@ import { dndHelper } from './helpers/dragdrop.helper';
 import { KeyValue } from '../input';
 
 export type SelectedDndItem = DndItem & {
-  isEdit?: boolean
+  itemRef?: React.RefObject<HTMLDivElement>;
+  isEdit?: boolean;
   onChange?: (keyValue: KeyValue) => void;
   onClick?: (actionType: string) => void;
 };
@@ -35,7 +36,6 @@ export type DropRef = Partial<DndItem> & {
 
 export interface DndRef {
   dropRef: DropRef;
-  itemRef: DndItem | null;
   domRef: Record<string, HTMLDivElement | null>;
 }
 
@@ -127,7 +127,6 @@ const dndReducer = (state: DndState, action: DndAction) => {
 
 export const defaultDndRef = {
   dropRef: {},
-  itemRef: null,
   domRef: {}
 }
 

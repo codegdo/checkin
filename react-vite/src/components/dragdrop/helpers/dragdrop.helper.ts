@@ -461,6 +461,73 @@ class DragDropHelper {
     }
   }
 
+  calculateEditorPosition(itemRef: React.RefObject<HTMLDivElement> | undefined, editorRef: React.RefObject<HTMLDivElement>) {
+    if (!itemRef?.current || !editorRef.current) {
+      return { x: 0, y: 0 }
+    }
+    const itemRect = itemRef.current.getBoundingClientRect();
+    const editorRect = editorRef.current.getBoundingClientRect();
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    let editorX, editorY;
+
+    // Calculate the available space on each side of the item
+    const spaceLeft = itemRect.left;
+    const spaceRight = windowWidth - itemRect.right;
+    const spaceTop = itemRect.top;
+    const spaceBottom = windowHeight - itemRect.bottom;
+
+    // Check which side has the most available space
+    if (spaceLeft >= spaceRight && spaceLeft >= spaceTop && spaceLeft >= spaceBottom) {
+      // Position the editor to the left of the item
+      editorX = itemRect.left - editorRect.width;
+      editorY = Math.max(0, itemRect.top + (itemRect.height / 2) - (editorRect.height / 2));
+    } else if (spaceRight >= spaceLeft && spaceRight >= spaceTop && spaceRight >= spaceBottom) {
+      // Position the editor to the right of the item
+      editorX = itemRect.right;
+      editorY = Math.max(0, itemRect.top + (itemRect.height / 2) - (editorRect.height / 2));
+    } else if (spaceTop >= spaceLeft && spaceTop >= spaceRight && spaceTop >= spaceBottom) {
+      // Position the editor above the item
+      editorX = Math.max(0, itemRect.left + (itemRect.width / 2) - (editorRect.width / 2));
+      editorY = itemRect.top - editorRect.height;
+    } else {
+      // Position the editor below the item
+      //editorX = Math.max(0, itemRect.left + (itemRect.width / 2) - (editorRect.width / 2));
+      editorX = itemRect.left;
+      editorY = itemRect.bottom;
+    }
+
+    // Check if the editor is pushed off the screen
+    if (editorX < 0) {
+      editorX = 0;
+    } else if (editorX + editorRect.width > windowWidth) {
+      editorX = windowWidth - editorRect.width;
+    }
+
+    if (editorY < 0) {
+      editorY = 0;
+    } else if (editorY + editorRect.height > windowHeight) {
+      editorY = windowHeight - editorRect.height;
+    }
+
+    // Check if the editor is too wide for the window
+    if (editorRect.width > windowWidth) {
+      editorX = 0;
+    } else if (editorX + editorRect.width > windowWidth) {
+      editorX = windowWidth - editorRect.width;
+    }
+
+    // Check if the editor is too tall for the window
+    if (editorRect.height > windowHeight) {
+      editorY = 0;
+    } else if (editorY + editorRect.height > windowHeight) {
+      editorY = windowHeight - editorRect.height;
+    }
+
+    return { x: editorX, y: editorY };
+  }
+
   nomalizeData(data: DndItem[] = []) {
     const cloneData = this.util.cloneDeep(data);
 

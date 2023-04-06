@@ -12,7 +12,7 @@ import { util } from '../../helpers';
 
 type DropBlockProps = PropsWithChildren<DndItem>;
 
-export function DropBlock({ state, dispatch, dndRef, children, ...item }: DropBlockProps) {
+export function DropBlock({ state: dndState, dispatch, dndRef, children, ...item }: DropBlockProps) {
   const { id, name, dataType, className = '', value = '', data = [] } = item;
   const {
     dragRef,
@@ -25,8 +25,8 @@ export function DropBlock({ state, dispatch, dndRef, children, ...item }: DropBl
     drop,
     onMouseOver,
     onMouseOut
-  } = useDragDrop({ item, dndRef, dndState: state, dispatch });
-  const { selectedItem, onClick, onItemClick } = useSelectable({ item, dndRef, dndState: state, dispatch });
+  } = useDragDrop({ item, dndRef, dndState, dispatch });
+  const { selectedItem, onClick, onItemClick } = useSelectable({ item, dndRef, dndState, dragRef, dispatch });
 
   const parsedComponent = useMemo(() => {
     const sanitizedValue = DOMPurify.sanitize(value, { ADD_TAGS: ['jsx'] });

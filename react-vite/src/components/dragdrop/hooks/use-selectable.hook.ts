@@ -1,6 +1,6 @@
-import React, { MouseEvent, useCallback, useEffect, useState } from 'react';
-import { ActionClickType, ActionEditorEnum, ActionMenuEnum } from '../../../constants';
-import { defaultDndRef, defaultDndState, DndAction, DndRef, DndState } from '../dragdrop.context';
+import React, { MouseEvent, useEffect, useState } from 'react';
+import { ActionEditorEnum, ActionMenuEnum } from '../../../constants';
+import { DndAction, DndRef, DndState } from '../dragdrop.context';
 import { DndItem, DndActionType } from '../dragdrop.type';
 import { KeyValue } from '../../input';
 import { util } from '../../../helpers';
@@ -10,6 +10,7 @@ type useSelectableProps = {
   item: DndItem;
   dndRef?: DndRef;
   dndState?: DndState;
+  dragRef?: React.RefObject<HTMLDivElement>;
   dispatch?: React.Dispatch<DndAction>;
 };
 
@@ -17,6 +18,7 @@ export function useSelectable({
   item,
   dndRef,
   dndState,
+  dragRef,
   dispatch = () => console.log("dispatch"),
 }: useSelectableProps) {
 
@@ -36,7 +38,7 @@ export function useSelectable({
   const onChange = ({ key, value }: KeyValue) => {
     setSelectedItem((prevItem) => ({
       ...prevItem,
-      ...util.setObjectValue(prevItem, key, value),
+      ...util.setObjectValue(key, prevItem, value),
     }));
   };
 
@@ -90,6 +92,7 @@ export function useSelectable({
 
     const newSelectedItem = dndState?.item?.id === selectedItem.id ? null : {
       ...selectedItem,
+      itemRef: dragRef,
       isEdit: false,
       onChange: onChange,
       onClick: onClick,

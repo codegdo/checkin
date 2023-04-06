@@ -19,13 +19,8 @@ export function EditorRender({ data = [] }: EditorRenderProps) {
           </div>
         );
       } else if (dataType === 'control') {
-        if (!(name in dataRef)) {
-          const value = util.getObjectValue(dataObject, name) ?? '';
-          dataRef[name] = value;
-        }
-
-        if (isReset) {
-          const value = util.getObjectValue(dataObject, name) ?? '';
+        if (!(name in dataRef) || isReset) {
+          const value = util.getObjectValue(name, dataObject) ?? '';
           dataRef[name] = value;
         }
 

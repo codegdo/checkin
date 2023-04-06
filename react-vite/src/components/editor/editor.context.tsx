@@ -1,4 +1,4 @@
-import React, { createContext, FC, PropsWithChildren, useEffect, useRef, useState } from 'react';
+import React, { createContext, PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { ActionClickType } from '../../constants';
 import { util } from '../../helpers';
 import { KeyValue } from '../input';

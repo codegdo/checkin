@@ -142,26 +142,31 @@ class UtilHelper {
     return curried;
   }
 
-  getObjectValue(obj: ObjectValue, propertyPath: string): any {
+  getObjectValue(propertyPath: string, obj: ObjectValue): any {
     const keys: string[] = propertyPath.split('.');
     let value: ObjectValue | undefined = obj;
+
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
+
       if (!value || !value.hasOwnProperty(key)) {
         return null;
       }
+
       value = value[key];
     }
+
     return value;
   }
 
-  setObjectValue(obj: ObjectValue, propertyPath: string, value: any): ObjectValue {
+  setObjectValue(propertyPath: string, obj: ObjectValue, value: any): ObjectValue {
     const keys: string[] = propertyPath.split(".");
     let target: ObjectValue = { ...obj };
     let current: ObjectValue = target;
 
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
+
       if (!current.hasOwnProperty(key)) {
         if (value === null || value === undefined) {
           return target;
