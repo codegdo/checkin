@@ -470,7 +470,7 @@ class DragDropHelper {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
 
-    let editorX, editorY;
+    let editorX = 0, editorY = 0;
 
     // Calculate the available space on each side of the item
     const spaceLeft = itemRect.left;
@@ -478,25 +478,69 @@ class DragDropHelper {
     const spaceTop = itemRect.top;
     const spaceBottom = windowHeight - itemRect.bottom;
 
-    // Check which side has the most available space
-    if (spaceLeft >= spaceRight && spaceLeft >= spaceTop && spaceLeft >= spaceBottom) {
-      // Position the editor to the left of the item
-      editorX = itemRect.left - editorRect.width;
-      editorY = Math.max(0, itemRect.top + (itemRect.height / 2) - (editorRect.height / 2));
-    } else if (spaceRight >= spaceLeft && spaceRight >= spaceTop && spaceRight >= spaceBottom) {
-      // Position the editor to the right of the item
-      editorX = itemRect.right;
-      editorY = Math.max(0, itemRect.top + (itemRect.height / 2) - (editorRect.height / 2));
-    } else if (spaceTop >= spaceLeft && spaceTop >= spaceRight && spaceTop >= spaceBottom) {
-      // Position the editor above the item
-      editorX = Math.max(0, itemRect.left + (itemRect.width / 2) - (editorRect.width / 2));
-      editorY = itemRect.top - editorRect.height;
-    } else {
-      // Position the editor below the item
-      //editorX = Math.max(0, itemRect.left + (itemRect.width / 2) - (editorRect.width / 2));
-      editorX = itemRect.left;
-      editorY = itemRect.bottom;
+    const sortedSpaces = [{spaceLeft}, {spaceRight}, {spaceTop}, {spaceBottom}].sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
+    const [biggestSpace, secondSpace] = sortedSpaces.map(obj => Object.keys(obj)[0]);
+    console.log('SPACE', biggestSpace, secondSpace);
+
+    switch(biggestSpace) {
+      case 'spaceLeft': {
+        // Position the editor to the left of the item
+        editorX = itemRect.left - editorRect.width;
+        editorY = Math.max(0, itemRect.top);
+        break;
+      }
+      case 'spaceRight': {
+        // Position the editor to the right of the item
+        if(spaceRight >= editorRect.width) {
+          editorX = itemRect.right;
+        } else {
+          if(spaceRight + itemRect.width > editorRect.width) {
+            editorX = itemRect.right - (editorRect.width - spaceRight);
+          } else {
+            editorX = 0;
+          }
+        }
+        
+        editorY = Math.max(0, itemRect.top);
+        break;
+      }
+      case 'spaceTop': {
+        // Position the editor above the item
+        editorY = itemRect.top - editorRect.height;
+        editorX = Math.max(0, itemRect.left);
+        break;
+      }
+      case 'spaceBottom': {
+        // Position the editor below the item
+        editorY = itemRect.bottom;
+        editorX = itemRect.left;
+        break;
+      }
+      default: {
+        editorY = 0;
+        editorX = 0;
+      }
     }
+
+    // // Check which side has the most available space
+    // if (spaceLeft >= spaceRight && spaceLeft >= spaceTop && spaceLeft >= spaceBottom) {
+    //   // Position the editor to the left of the item
+    //   editorX = itemRect.left - editorRect.width;
+    //   editorY = Math.max(0, itemRect.top + (itemRect.height / 2) - (editorRect.height / 2));
+    // } else if (spaceRight >= spaceLeft && spaceRight >= spaceTop && spaceRight >= spaceBottom) {
+    //   // Position the editor to the right of the item
+    //   editorX = itemRect.right;
+    //   editorY = Math.max(0, itemRect.top + (itemRect.height / 2) - (editorRect.height / 2));
+    // } else if (spaceTop >= spaceLeft && spaceTop >= spaceRight && spaceTop >= spaceBottom) {
+    //   // Position the editor above the item
+    //   editorX = Math.max(0, itemRect.left + (itemRect.width / 2) - (editorRect.width / 2));
+    //   editorY = itemRect.top - editorRect.height;
+    // } else {
+    //   // Position the editor below the item
+    //   //editorX = Math.max(0, itemRect.left + (itemRect.width / 2) - (editorRect.width / 2));
+    //   editorX = itemRect.left;
+    //   editorY = itemRect.bottom;
+    // }
 
     // Check if the editor is pushed off the screen
     if (editorX < 0) {
