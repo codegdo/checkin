@@ -10,6 +10,7 @@ import { DropElement } from './drop.element';
 import { DropField } from './drop.field';
 import { DropGrid } from './drop.grid';
 import { DropGroup } from './drop.group';
+import { DropPlaceholder } from './drop.placeholder';
 
 export interface DragDropRenderProps {
   data?: DndItem[];
@@ -25,6 +26,7 @@ export const DragDropRender = memo(({ data = [] }: DragDropRenderProps) => {
 
           switch (dataType) {
             case DndItemType.BLOCK: return <DropBlock key={id} {...item} {...context} />;
+            case DndItemType.PLACEHOLDER: return <DropPlaceholder key={id} {...item} {...context} />;
             case DndItemType.ELEMENT: return <DropElement key={id} {...item} {...context} />;
             case DndItemType.FIELD: return <DropField key={id} {...item} {...context} />;
             case DndItemType.GROUP: return <DropGroup key={id} {...item} {...context} />;

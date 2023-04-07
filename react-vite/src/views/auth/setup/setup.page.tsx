@@ -64,7 +64,19 @@ const json = [
     position: 3,
     settings: {},
     styles: {}
-  }
+  },
+  {
+    id: '10',
+    name: 'block',
+    type: 'div',
+    dataType: 'placeholder',
+    data: [],
+    parentId: null,
+    childId: null,
+    position: 10,
+    settings: {},
+    styles: {}
+  },
 ]
 
 function Setup() {

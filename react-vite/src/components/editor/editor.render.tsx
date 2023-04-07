@@ -2,7 +2,7 @@ import React from 'react';
 import { util } from '../../helpers';
 import { useWrapperContext } from '../../hooks';
 import { Control } from '../control';
-import { EditorContext } from './editor.context';
+import { EditorContext } from './editor.component';
 import { ItemData } from './editor.type';
 
 interface EditorRenderProps extends ItemData { }

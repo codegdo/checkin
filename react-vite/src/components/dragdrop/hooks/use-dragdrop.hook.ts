@@ -237,6 +237,8 @@ export function useDragDrop({
         currentElement
       );
 
+      // BUG with elementWidth and elementHeight
+
       // Calculate the horizontal and vertical offset based on the clientX, centerY, and elementWidth/elementHeight
       const horizontalOffset = dndHelper.determineOffsetX(clientX, centerY, elementWidth);
       const verticalOffset = dndHelper.determineOffsetY(clientY, centerY, elementHeight);
@@ -250,17 +252,20 @@ export function useDragDrop({
       let currentOffset = displayStyle === 'column' ? verticalOffset : horizontalOffset;
       let currentDirection = displayStyle === 'column' ? verticalDirection : horizontalDirection;
 
+      console.log('PLACEHOLDER', dropRef.dataType);
+
       if (dropRef.dataType === 'placeholder') {
+        console.log('PLACEHOLDER');
         currentOffset = 'middle';
       }
 
-      //console.log(verticalDirection);
+      console.log(currentOffset);
 
       if (dropRef) {
         dropRef.direction = verticalDirection;
       }
 
-      // Set the offset state with the currentOffset and the clientOffsetPosition
+      // Set the offset state with the currentOffset and the currentDirection
       setOffset(`${currentOffset} ${currentDirection}`);
     }
   }, [currentElement, dropRef, setOffset]);
@@ -302,7 +307,7 @@ export function useDragDrop({
       // Get references to the current element and drop ref
       // If either is missing, return early
       if (!currentElement || !dropRef) return;
-
+      console.log('BUG', id, dataType, acceptTypes);
       // Check if the hovered item's id matches the current item's id
       if (monitor.isOver({ shallow: true })) {
         // Extract the item ID from the drag item's ID
@@ -311,6 +316,7 @@ export function useDragDrop({
         // If the dragged item is the same as the current drop target, do nothing
         // Or the dragged item is on nested children of drop target
         if (dragItemId === `${id}`) {
+
           if (dropRef.canDrop) {
             // Set canDrop to false to prevent dropping on an occupied placeholder
             dropRef.canDrop = false;

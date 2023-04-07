@@ -3,6 +3,11 @@ import { XYCoord } from 'react-dnd';
 import UtilHelper, { util } from '../../../helpers/util.helper';
 import { DndItem, DndItemType } from '../dragdrop.type';
 
+interface Position {
+  x: number;
+  y: number;
+}
+
 interface Item {
   id?: number | string;
   dataType: string;
@@ -339,7 +344,7 @@ class DragDropHelper {
       }
       // If dragging from top and over bottom, drop below the current drop position
       else if (isDraggingFromTopOverBottom) {
-        // dropIndex = dropPosition + 1;
+        dropIndex = dropPosition + 1;
       }
       // If not dragging from top and not over bottom, drop above the current drop position
       else {
@@ -418,11 +423,11 @@ class DragDropHelper {
   determineOffsetX(
     clientX: number,
     middleX: number,
-    targetWidth: number
+    elementWidth: number
   ): 'left' | 'right' | 'middle' {
-    return clientX <= middleX - targetWidth
+    return clientX <= middleX - elementWidth
       ? 'left'
-      : clientX >= middleX + targetWidth
+      : clientX >= middleX + elementWidth
         ? 'right'
         : 'middle';
   }
@@ -462,85 +467,88 @@ class DragDropHelper {
   }
 
   calculateEditorPosition(itemRef: React.RefObject<HTMLDivElement> | undefined, editorRef: React.RefObject<HTMLDivElement>) {
+    const defaultPosition = { x: 0, y: 0 };
+
     if (!itemRef?.current || !editorRef.current) {
-      return { x: 0, y: 0 }
+      return defaultPosition;
     }
+
     const itemRect = itemRef.current.getBoundingClientRect();
     const editorRect = editorRef.current.getBoundingClientRect();
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
 
-    let editorX = 0, editorY = 0;
+    const availableSpace = {
+      left: itemRect.left,
+      right: windowWidth - itemRect.right,
+      top: itemRect.top,
+      bottom: windowHeight - itemRect.bottom,
+    };
 
-    // Calculate the available space on each side of the item
-    const spaceLeft = itemRect.left;
-    const spaceRight = windowWidth - itemRect.right;
-    const spaceTop = itemRect.top;
-    const spaceBottom = windowHeight - itemRect.bottom;
+    const sortedSpaces = Object.entries(availableSpace).sort((a, b) => b[1] - a[1]);
+    const [largestSpace] = sortedSpaces.map(([key]) => key);
 
-    const sortedSpaces = [{spaceLeft}, {spaceRight}, {spaceTop}, {spaceBottom}].sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
-    const [biggestSpace, secondSpace] = sortedSpaces.map(obj => Object.keys(obj)[0]);
-    console.log('SPACE', biggestSpace, secondSpace);
+    let editorX = 0;
+    let editorY = 0;
 
-    switch(biggestSpace) {
-      case 'spaceLeft': {
-        // Position the editor to the left of the item
-        editorX = itemRect.left - editorRect.width;
-        editorY = Math.max(0, itemRect.top);
-        break;
-      }
-      case 'spaceRight': {
-        // Position the editor to the right of the item
-        if(spaceRight >= editorRect.width) {
-          editorX = itemRect.right;
-        } else {
-          if(spaceRight + itemRect.width > editorRect.width) {
-            editorX = itemRect.right - (editorRect.width - spaceRight);
-          } else {
-            editorX = 0;
-          }
-        }
-        
-        editorY = Math.max(0, itemRect.top);
-        break;
-      }
-      case 'spaceTop': {
-        // Position the editor above the item
-        editorY = itemRect.top - editorRect.height;
-        editorX = Math.max(0, itemRect.left);
-        break;
-      }
-      case 'spaceBottom': {
-        // Position the editor below the item
-        editorY = itemRect.bottom;
-        editorX = itemRect.left;
-        break;
-      }
-      default: {
-        editorY = 0;
-        editorX = 0;
+    const adjustVerticalPosition = () => {
+      if (availableSpace.top > availableSpace.bottom && availableSpace.top > editorRect.height) {
+        editorY = itemRect.bottom - editorRect.height;
+      } else if (availableSpace.bottom > availableSpace.top && availableSpace.bottom > editorRect.height) {
+        editorY = itemRect.top;
+      } else {
+        editorY = Math.max(0, (availableSpace.top / 2) + (availableSpace.bottom / 2) + (itemRect.height / 2) - (editorRect.height / 2));
       }
     }
 
-    // // Check which side has the most available space
-    // if (spaceLeft >= spaceRight && spaceLeft >= spaceTop && spaceLeft >= spaceBottom) {
-    //   // Position the editor to the left of the item
-    //   editorX = itemRect.left - editorRect.width;
-    //   editorY = Math.max(0, itemRect.top + (itemRect.height / 2) - (editorRect.height / 2));
-    // } else if (spaceRight >= spaceLeft && spaceRight >= spaceTop && spaceRight >= spaceBottom) {
-    //   // Position the editor to the right of the item
-    //   editorX = itemRect.right;
-    //   editorY = Math.max(0, itemRect.top + (itemRect.height / 2) - (editorRect.height / 2));
-    // } else if (spaceTop >= spaceLeft && spaceTop >= spaceRight && spaceTop >= spaceBottom) {
-    //   // Position the editor above the item
-    //   editorX = Math.max(0, itemRect.left + (itemRect.width / 2) - (editorRect.width / 2));
-    //   editorY = itemRect.top - editorRect.height;
-    // } else {
-    //   // Position the editor below the item
-    //   //editorX = Math.max(0, itemRect.left + (itemRect.width / 2) - (editorRect.width / 2));
-    //   editorX = itemRect.left;
-    //   editorY = itemRect.bottom;
-    // }
+    const adjustHorizontalPosition = () => {
+      if (availableSpace.left > availableSpace.right && availableSpace.left > editorRect.width) {
+        editorX = itemRect.right - editorRect.width;
+      } else if (availableSpace.right > availableSpace.left && availableSpace.right > editorRect.width) {
+        editorX = itemRect.left;
+      } else {
+        editorX = Math.max(0, (availableSpace.left / 2) + (availableSpace.right / 2) + (itemRect.width / 2) - (editorRect.width / 2));
+      }
+    }
+
+    switch (largestSpace) {
+      case 'left': {
+        if (availableSpace.left >= editorRect.width) {
+          editorX = itemRect.left - editorRect.width;
+        } else if (availableSpace.left + itemRect.width > editorRect.width) {
+          editorX = itemRect.left + (editorRect.width - availableSpace.left);
+        }
+        adjustVerticalPosition();
+        break;
+      }
+      case 'right': {
+        if (availableSpace.right >= editorRect.width) {
+          editorX = itemRect.right;
+        } else if (availableSpace.right + itemRect.width > editorRect.width) {
+          editorX = itemRect.right - (editorRect.width - availableSpace.right);
+        }
+        adjustVerticalPosition();
+        break;
+      }
+      case 'top': {
+        if (availableSpace.top >= editorRect.height) {
+          editorY = itemRect.top - editorRect.height;
+        } else if (availableSpace.top + itemRect.height > editorRect.height) {
+          editorY = itemRect.top + (editorRect.height - availableSpace.top);
+        }
+        adjustHorizontalPosition();
+        break;
+      }
+      case 'bottom': {
+        if (availableSpace.bottom >= editorRect.height) {
+          editorY = itemRect.bottom;
+        } else if (availableSpace.bottom + itemRect.height > editorRect.height) {
+          editorY = itemRect.bottom - (editorRect.height - availableSpace.bottom);
+        }
+        adjustHorizontalPosition();
+        break;
+      }
+    }
 
     // Check if the editor is pushed off the screen
     if (editorX < 0) {
@@ -571,6 +579,7 @@ class DragDropHelper {
 
     return { x: editorX, y: editorY };
   }
+
 
   nomalizeData(data: DndItem[] = []) {
     const cloneData = this.util.cloneDeep(data);

@@ -1,6 +1,6 @@
 import React, { MouseEvent } from 'react';
 import { useWrapperContext } from '../../hooks';
-import { EditorContext } from './editor.context';
+import { EditorContext } from './editor.component';
 
 export function EditorTab() {
   const { dataSource = {}, dataRef, activeTab, setActiveTab } = useWrapperContext(EditorContext);

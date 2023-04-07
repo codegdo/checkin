@@ -20,7 +20,7 @@ interface FormProps extends PropsWithChildren {
   onCallback?: (data: string | any) => void;
 }
 
-export interface FormContextProps {
+export interface FormContextValue {
   data?: Element[];
   form?: { [key: string]: any };
   error?: { [key: string]: string };
@@ -33,21 +33,19 @@ export interface FormContextProps {
   onClick?: (key: string) => void;
 }
 
-export const FormContext = React.createContext<FormContextProps>({ validation: { schema } });
+export const FormContext = React.createContext<FormContextValue>({ validation: { schema } });
 
 export function Form({ data, status, options, children, onCallback }: FormProps) {
 
   const {
-    form, error, validation, isSubmit, isReset, onClick
+    form, error, validation, isSubmit, isReset, onClick: handleClick
   } = useForm({ onCallback });
 
-  const handleClick = (actionType: string) => {
-    onClick(actionType);
-  }
+  const contextValue: FormContextValue = { data, status, options, form, error, validation, isSubmit, isReset, onClick: handleClick };
 
   return (
     <form onSubmit={(e) => e.preventDefault()}>
-      <FormContext.Provider value={{ data, status, options, form, error, validation, isSubmit, isReset, onClick: handleClick }}>
+      <FormContext.Provider value={contextValue}>
         {children ? <FormRender>{children}</FormRender> : <FormRender data={data} />}
       </FormContext.Provider>
     </form>

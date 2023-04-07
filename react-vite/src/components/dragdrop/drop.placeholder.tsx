@@ -24,7 +24,8 @@ export function DropPlaceholder({ state, dispatch, dndRef, ...item }: DropPlaceh
   } = useDragDrop({ item, dndRef, dndState: state, dispatch });
 
   const itemClassNames = util.classNames('drop-placeholder', {
-    'is-over': isOver
+    'is-over': isOver,
+    'is-empty': isDropEmpty
   });
 
   drag(drop(dragRef));

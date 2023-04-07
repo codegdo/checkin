@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, MouseEvent } from 'react';
 import { ActionClickType } from '../../constants';
 import { useWrapperContext } from '../../hooks';
-import { EditorContext } from './editor.context';
+import { EditorContext } from './editor.component';
 
 interface EditorHeaderProps extends PropsWithChildren {
   className?: string;
