@@ -252,14 +252,9 @@ export function useDragDrop({
       let currentOffset = displayStyle === 'column' ? verticalOffset : horizontalOffset;
       let currentDirection = displayStyle === 'column' ? verticalDirection : horizontalDirection;
 
-      console.log('PLACEHOLDER', dropRef.dataType);
-
       if (dropRef.dataType === 'placeholder') {
-        console.log('PLACEHOLDER');
         currentOffset = 'middle';
       }
-
-      console.log(currentOffset);
 
       if (dropRef) {
         dropRef.direction = verticalDirection;
@@ -303,13 +298,13 @@ export function useDragDrop({
     // The type of the drop can accept
     accept: acceptTypes,
     // A function to determine dragged over
-    hover: useCallback((dragItem: DndItem, monitor: DropTargetMonitor<DndItem, unknown>) => {
-      // Get references to the current element and drop ref
-      // If either is missing, return early
-      if (!currentElement || !dropRef) return;
-      console.log('BUG', id, dataType, acceptTypes);
+    hover: useCallback((dragItem: DndItem, monitor: DropTargetMonitor<DndItem, unknown>) => {  
       // Check if the hovered item's id matches the current item's id
       if (monitor.isOver({ shallow: true })) {
+        // Get references to the current element and drop ref
+        // If either is missing, return early
+        if (!currentElement || !dropRef) return;
+
         // Extract the item ID from the drag item's ID
         const [dragItemId] = `${dragItem.id}`.split('_');
 

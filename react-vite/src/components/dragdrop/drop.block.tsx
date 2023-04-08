@@ -41,6 +41,9 @@ export function DropBlock({ state: dndState, dispatch, dndRef, children, ...item
             if (name === 'placeholder') {
               return <DropPlaceholder
                 {...item}
+                dndRef={dndRef}
+                state={dndState}
+                dispatch={dispatch}
                 id={`${id}_${key}`}
                 dataType='placeholder'
                 data={items}
