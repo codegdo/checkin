@@ -59,7 +59,7 @@ export function Editor<T>({
   };
 
   return (
-    <div>
+    <div className='editor'>
       <EditorContext.Provider value={contextValue}>
         {children}
       </EditorContext.Provider>

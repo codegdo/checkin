@@ -423,7 +423,7 @@ class DragDropHelper {
   determineOffsetX(
     clientX: number,
     middleX: number,
-    elementWidth: number
+    elementWidth: number = 0
   ): 'left' | 'right' | 'middle' {
     return clientX <= middleX - elementWidth
       ? 'left'
@@ -435,13 +435,35 @@ class DragDropHelper {
   determineOffsetY(
     clientY: number,
     middleY: number,
-    elementHeight: number
+    elementHeight: number = 0
   ): 'top' | 'bottom' | 'middle' {
     return clientY <= middleY - elementHeight
       ? 'top'
       : clientY >= middleY + elementHeight
         ? 'bottom'
         : 'middle';
+  }
+
+  determineDirectionX(startX: number | null, endX: number | null, clientX: number): string | undefined {
+    if (startX === null) {
+      startX = clientX;
+    } else {
+      endX = clientX;
+
+      if (endX < startX) {
+        // Mouse is moving left
+        startX = endX;
+        return 'left';
+      } else if (endX > startX) {
+        // Mouse is moving right
+        // Move the mouse right down
+        window.scrollBy(0, 1);
+        startX = endX;
+        return 'right';
+      } else {
+        return 'no movement'
+      }
+    }
   }
 
   determineDirectionY(startY: number | null, endY: number | null, clientY: number): string | undefined {
@@ -580,7 +602,6 @@ class DragDropHelper {
     return { x: editorX, y: editorY };
   }
 
-
   nomalizeData(data: DndItem[] = []) {
     const cloneData = this.util.cloneDeep(data);
 
@@ -672,7 +693,20 @@ class DragDropHelper {
     return 'column';
   }
 
-  getElementSize(element: HTMLElement) {
+  getPlaceholderInnerSize(element: HTMLElement) {
+    let width = 0;
+    let height = 0;
+
+    if (element.classList.contains('is-empty')) {
+      const style = window.getComputedStyle(element, ':after');
+      width = (parseFloat(style.width) || 0) / 2;
+      height = (parseFloat(style.height) || 0) / 2;
+    }
+
+    return { width, height };
+  }
+
+  getElementInnerSize(element: HTMLElement) {
     let width = 0;
     let height = 0;
 

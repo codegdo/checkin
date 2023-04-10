@@ -110,7 +110,7 @@ export function DragDropEditor() {
   }
 
   return (
-    <div ref={editorRef} style={{ position: 'fixed', width: '185px', height: '290px' }}>
+    <div ref={editorRef} className='dnd-editor' style={{ position: 'fixed' }}>
       <Editor<DndItem> title={item?.dataType} dataSource={dataSource} dataObject={dataObject} onChange={handleChange} onClick={handleClick}>
         <EditorHeader ref={dragRef} />
         <EditorTab />

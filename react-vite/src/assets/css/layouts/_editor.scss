@@ -1,0 +1,26 @@
+.editor {
+  background: #fff;
+  box-shadow: rgb(0 0 0 / 20%) 0 4px 16px;
+  //box-shadow: rgba(0, 0, 0, 0.12) 0px 4px 16px 0px,rgba(0, 0, 0, 0.08) 0px 0px 1px 0px;
+  z-index: 9;
+}
+
+.editor-header {
+  padding: 1rem;
+}
+
+.editor-tab {
+  display: flex;
+}
+
+.editor-tab button {
+  flex: 1;
+}
+
+.editor-content {
+  padding: 1rem;
+}
+
+.editor-footer {
+  padding: 1rem;
+}

@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
-    "@tanstack/react-query": "^4.28.0",
+    "@tanstack/react-query": "^4.29.1",
     "classnames": "^2.3.2",
     "dompurify": "^3.0.1",
     "html-react-parser": "^3.0.15",
@@ -39,7 +39,7 @@
     "@types/dompurify": "^3.0.1",
     "@types/jest": "^29.5.0",
     "@types/node": "^18.15.11",
-    "@types/react": "^18.0.33",
+    "@types/react": "^18.0.34",
     "@types/react-dom": "^18.0.11",
     "@types/react-redux": "^7.1.25",
     "@vitejs/plugin-react": "^3.1.0",
@@ -48,6 +48,6 @@
     "sass": "^1.61.0",
     "typescript": "^5.0.4",
     "vite": "^4.2.1",
-    "vitest": "^0.29.8"
+    "vitest": "^0.30.0"
   }
 }

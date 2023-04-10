@@ -9,6 +9,10 @@ export function EditorContent() {
   const { dataSource = {}, activeTab } = useWrapperContext(EditorContext);
   const data = dataSource[activeTab as keyof DataSource];
 
-  return <EditorRender data={data} />
+  return (
+    <div className='editor-content'>
+      <EditorRender data={data} />
+    </div>
+  );
 
 }

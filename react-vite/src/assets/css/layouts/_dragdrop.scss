@@ -63,7 +63,13 @@
 }
 
 .dnd-menu {
+  display: flex;
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 2;
+  transform: translateY(-100%);
+}
+
+.dnd-editor {
 }

@@ -15,7 +15,7 @@ export function EditorTab() {
     e.stopPropagation();
   };
 
-  return <div onClick={handleTabClick}>
+  return <div className='editor-tab' onClick={handleTabClick}>
     {Object.keys(dataSource).map((key) => {
       return <button key={key} name={key} type='button' onClick={() => handleClick(key)}>{key}</button>
     })}

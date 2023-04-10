@@ -233,17 +233,17 @@ export function useDragDrop({
       const clientX = currentClientOffset.x - boundingRect.left;
 
       // Get the width and height of the drop target element
-      const { width: elementWidth, height: elementHeight } = dndHelper.getElementSize(
+      const { width: elementInnerWidth, height: elementInnerHeight } = dndHelper.getPlaceholderInnerSize(
         currentElement
       );
 
       // BUG with elementWidth and elementHeight
 
       // Calculate the horizontal and vertical offset based on the clientX, centerY, and elementWidth/elementHeight
-      const horizontalOffset = dndHelper.determineOffsetX(clientX, centerY, elementWidth);
-      const verticalOffset = dndHelper.determineOffsetY(clientY, centerY, elementHeight);
+      const horizontalOffset = dndHelper.determineOffsetX(clientX, centerX, elementInnerWidth);
+      const verticalOffset = dndHelper.determineOffsetY(clientY, centerY, elementInnerHeight);
+      const horizontalDirection = determineDirectionX(currentClientOffset.x);
       const verticalDirection = determineDirectionY(currentClientOffset.y);
-      const horizontalDirection = initialClientOffset.y < currentClientOffset.y ? 'left' : 'right';
 
       // Determine the display style of the drop target
       const displayStyle = dndHelper.getElementDisplay(currentElement);
@@ -298,7 +298,7 @@ export function useDragDrop({
     // The type of the drop can accept
     accept: acceptTypes,
     // A function to determine dragged over
-    hover: useCallback((dragItem: DndItem, monitor: DropTargetMonitor<DndItem, unknown>) => {  
+    hover: useCallback((dragItem: DndItem, monitor: DropTargetMonitor<DndItem, unknown>) => {
       // Check if the hovered item's id matches the current item's id
       if (monitor.isOver({ shallow: true })) {
         // Get references to the current element and drop ref
