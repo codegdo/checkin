@@ -82,17 +82,6 @@ export function DragDropEditor() {
 
   useEffect(() => {
     if (isEdit && item?.dataType) {
-      // const target = itemRef?.current;
-      // const itemOffset = { top: 0, left: 0 };
-
-      // if (target) {
-      //   const rect = target.getBoundingClientRect();
-      //   itemOffset.top = rect.top;
-      //   itemOffset.left = rect.left;
-      // }
-
-      // const editorDimension = { width: 203, height: 288 }
-
       const position = dndHelper.calculateEditorPosition(itemRef, editorRef);
 
       if (editorRef.current) {
@@ -121,7 +110,7 @@ export function DragDropEditor() {
   }
 
   return (
-    <div ref={editorRef} style={{ position: 'fixed' }}>
+    <div ref={editorRef} style={{ position: 'fixed', width: '185px', height: '290px' }}>
       <Editor<DndItem> title={item?.dataType} dataSource={dataSource} dataObject={dataObject} onChange={handleChange} onClick={handleClick}>
         <EditorHeader ref={dragRef} />
         <EditorTab />
