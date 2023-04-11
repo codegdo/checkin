@@ -1,0 +1,16 @@
+.tab {
+  display: flex;
+  position: relative;
+}
+
+.tab-button {
+  flex: 1;
+}
+
+.tab-glider {
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  height: 2px;
+  background-color: #333;
+}

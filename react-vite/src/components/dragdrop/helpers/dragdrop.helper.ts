@@ -513,7 +513,7 @@ class DragDropHelper {
     let editorX = 0;
     let editorY = 0;
 
-    const adjustVerticalPosition = () => {
+    const justifyVerticalPosition = () => {
       if (availableSpace.top > availableSpace.bottom && availableSpace.top > editorRect.height) {
         editorY = itemRect.bottom - editorRect.height;
       } else if (availableSpace.bottom > availableSpace.top && availableSpace.bottom > editorRect.height) {
@@ -523,7 +523,7 @@ class DragDropHelper {
       }
     }
 
-    const adjustHorizontalPosition = () => {
+    const justifyHorizontalPosition = () => {
       if (availableSpace.left > availableSpace.right && availableSpace.left > editorRect.width) {
         editorX = itemRect.right - editorRect.width;
       } else if (availableSpace.right > availableSpace.left && availableSpace.right > editorRect.width) {
@@ -540,7 +540,7 @@ class DragDropHelper {
         } else if (availableSpace.left + itemRect.width > editorRect.width) {
           editorX = itemRect.left + (editorRect.width - availableSpace.left);
         }
-        adjustVerticalPosition();
+        justifyVerticalPosition();
         break;
       }
       case 'right': {
@@ -549,7 +549,7 @@ class DragDropHelper {
         } else if (availableSpace.right + itemRect.width > editorRect.width) {
           editorX = itemRect.right - (editorRect.width - availableSpace.right);
         }
-        adjustVerticalPosition();
+        justifyVerticalPosition();
         break;
       }
       case 'top': {
@@ -558,7 +558,7 @@ class DragDropHelper {
         } else if (availableSpace.top + itemRect.height > editorRect.height) {
           editorY = itemRect.top + (editorRect.height - availableSpace.top);
         }
-        adjustHorizontalPosition();
+        justifyHorizontalPosition();
         break;
       }
       case 'bottom': {
@@ -567,7 +567,7 @@ class DragDropHelper {
         } else if (availableSpace.bottom + itemRect.height > editorRect.height) {
           editorY = itemRect.bottom - (editorRect.height - availableSpace.bottom);
         }
-        adjustHorizontalPosition();
+        justifyHorizontalPosition();
         break;
       }
     }

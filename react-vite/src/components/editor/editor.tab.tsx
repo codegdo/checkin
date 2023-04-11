@@ -1,14 +1,10 @@
 import React, { MouseEvent } from 'react';
 import { useWrapperContext } from '../../hooks';
 import { EditorContext } from './editor.component';
+import { Control } from '../control';
 
 export function EditorTab() {
-  const { dataSource = {}, dataRef, activeTab, setActiveTab } = useWrapperContext(EditorContext);
-
-  const handleClick = (key: string) => {
-    setActiveTab(key);
-    console.log('CLICK', dataRef);
-  }
+  const { dataSource = {}, activeTab, setActiveTab } = useWrapperContext(EditorContext);
 
   const handleTabClick = (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -16,8 +12,6 @@ export function EditorTab() {
   };
 
   return <div className='editor-tab' onClick={handleTabClick}>
-    {Object.keys(dataSource).map((key) => {
-      return <button key={key} name={key} type='button' onClick={() => handleClick(key)}>{key}</button>
-    })}
+    <Control name="tabs" type="tab" data={Object.keys(dataSource)} value={activeTab} onClick={setActiveTab} />
   </div>
 }
