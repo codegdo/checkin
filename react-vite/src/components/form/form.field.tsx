@@ -41,7 +41,7 @@ export function FormField({
 
   const fieldValue = value ?? defaultValue;
   const fieldName = label ?? id ?? name;
-  const fieldKey = (options?.keyOption === "id" && id) ? id : name;
+  const fieldKey = (options?.mapKey === "id" && id) ? id : name;
 
   const [isError, setIsError] = useState(false);
   const timerRef = useRef<number | null>(null);

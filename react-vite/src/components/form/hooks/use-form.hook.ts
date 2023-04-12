@@ -5,6 +5,7 @@ import { validationHelper, ObjectSchema } from '../../../helpers';
 export const schema = validationHelper.objectSchema();
 
 interface UseFormOptions {
+  steps?: string[];
   onCallback?: (data: string | FormValues) => void;
 }
 
@@ -16,13 +17,14 @@ export interface FormErrors {
   [key: string]: string;
 }
 
-export const useForm = ({ onCallback }: UseFormOptions = {}) => {
+export const useForm = ({ steps = [], onCallback }: UseFormOptions = {}) => {
   const formRef = useRef<FormValues>({});
   const errorRef = useRef<FormErrors>({});
   const validationRef = useRef({ schema });
 
   const [isSubmit, setIsSubmit] = useState(false);
   const [isReset, setIsReset] = useState(false);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   useEffect(() => {
     if (isSubmit) {
@@ -60,10 +62,15 @@ export const useForm = ({ onCallback }: UseFormOptions = {}) => {
     }
   }, [onCallback]);
 
+  const previous = () => { };
+
+  const next = () => { };
+
   return {
     form: formRef.current,
     error: errorRef.current,
     validation: validationRef.current,
+    currentStepIndex,
     isSubmit,
     isReset,
     onClick,

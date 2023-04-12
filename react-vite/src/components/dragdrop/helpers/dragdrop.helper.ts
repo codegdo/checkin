@@ -344,7 +344,7 @@ class DragDropHelper {
       }
       // If dragging from top and over bottom, drop below the current drop position
       else if (isDraggingFromTopOverBottom) {
-        dropIndex = dropPosition + 1;
+        //dropIndex = dropPosition + 1;
       }
       // If not dragging from top and not over bottom, drop above the current drop position
       else {

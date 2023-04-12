@@ -22,7 +22,8 @@ function Signup() {
   return <Form
     title={form?.label}
     data={form.data}
-    options={{ keyOption: 'id' }}
+    options={{ mapKey: 'id' }}
+    steps={['1', '2', '3']}
     onCallback={handleCallback}
   />;
 }

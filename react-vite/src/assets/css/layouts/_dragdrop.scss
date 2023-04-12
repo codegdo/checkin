@@ -69,6 +69,7 @@
   left: 0;
   z-index: 2;
   transform: translateY(-100%);
+  transition: all 0.3s ease-out;
 }
 
 .dnd-editor {

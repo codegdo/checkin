@@ -3,12 +3,9 @@ import { ControlData } from './control.type';
 
 interface ControlTabProps extends ControlData { };
 
-export function ControlTab({
-  className = 'tab',
-  data = [],
-  value,
-  onClick,
-}: ControlTabProps) {
+export function ControlTab(props: ControlTabProps) {
+  const { className = 'tab', data = [], value, onClick } = props;
+
   const [slide, setSlide] = useState({ width: 0, position: 0 });
   const tabRef = useRef<HTMLDivElement>(null);
 
@@ -18,18 +15,22 @@ export function ControlTab({
       const rect = target.getBoundingClientRect();
       const elWidth = rect.width / data.length;
       const xPosition = data.indexOf(value) * 100;
-      setSlide((prevState) => ({ ...prevState, width: elWidth, position: xPosition }));
+      setSlide({ width: elWidth, position: xPosition });
     }
-  }, []);
+  }, [data, value]);
 
   const handleClick = (
     e: MouseEvent<HTMLButtonElement>,
     name: string,
     index: number
   ) => {
-
-    const xPosition = data.indexOf(name) * 100;
-    setSlide((prevState) => ({ ...prevState, position: xPosition }));
+    const target = tabRef.current;
+    if (target) {
+      const rect = target.getBoundingClientRect();
+      const elWidth = rect.width / data.length;
+      const xPosition = data.indexOf(name) * 100;
+      setSlide({ width: elWidth, position: xPosition });
+    }
 
     if (onClick) {
       onClick(name);
@@ -49,7 +50,10 @@ export function ControlTab({
           {name}
         </button>
       ))}
-      <span className="tab-glider" style={{ width: `${slide.width}px`, transform: `translateX(${slide.position}%)` }}></span>
+      <span
+        className="tab-glider"
+        style={{ width: `${slide.width}px`, transform: `translateX(${slide.position}%)` }}
+      />
     </div>
   );
 }

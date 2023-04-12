@@ -12,6 +12,7 @@ export enum ElementType {
 
 export enum DataType {
   AREA = 'area',
+  STEP = 'step',
   PLACEHOLDER = 'placeholder',
   BLOCK = 'block',
   ELEMENT = 'element',
@@ -43,7 +44,7 @@ export interface Field extends Data {
 }
 
 export interface Block extends Data {
-  placeholderId?: number | string;
+
 }
 
 export interface FormData {
@@ -54,5 +55,5 @@ export interface FormData {
   className?: string;
   data: Element[];
   fields: Field[];
-  formFields: Field[];
+  steps: string[];
 }

@@ -9,12 +9,12 @@ class FormHelper {
   }
 
   normalize(form: FormData) {
-    const { data = [], formFields = [] } = this.util.cloneDeep(form);
+    const { data = [], fields = [] } = this.util.cloneDeep(form);
 
     const list: Element[] = [];
 
     const group: Record<string, Element[]> = this.util.groupBy(
-      formFields,
+      fields,
       (item) => item?.parentId as string
     );
 

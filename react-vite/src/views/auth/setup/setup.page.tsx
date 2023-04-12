@@ -71,6 +71,7 @@ function Setup() {
 
   return (
     <DragDrop data={json}>
+      <DragItem name='pagination' type='div' dataType='pagination' />
       <DragItem name='block' type='div' dataType='block' />
       <DragItem name='component' type='div' dataType='block' value={`<div class="row">
         <div class="column"><jsx id='placeholder_0'></jsx></div>
