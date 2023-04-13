@@ -1,2 +1,71 @@
 .form {
 }
+
+.form-steps {
+  position: relative;
+  overflow: hidden;
+
+  &.is-first {
+    button[name='previous'] {
+      display: none;
+    }
+  }
+
+  &.is-last {
+    button[name='next'] {
+      display: none;
+    }
+
+    button[name='submit'] {
+      display: inline-block;
+    }
+  }
+}
+
+.form-steps [data-step] {
+  background-color: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  //transform: translateX(10%);
+  //transition: all 0.3s ease-out;
+
+  &.is-active {
+    animation: step-slide-in 250ms 150ms ease-in-out both;
+    position: static;
+  }
+
+  &.is-invisible {
+    opacity: 0;
+    animation: step-slide-out 250ms ease-in-out;
+    z-index: -1;
+  }
+}
+
+.form-steps button[name='submit'] {
+  display: none;
+}
+
+@keyframes step-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(10%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes step-slide-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(10%);
+  }
+}

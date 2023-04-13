@@ -1,11 +1,13 @@
 import React, { memo, PropsWithChildren } from 'react';
+
+import { FormSection } from './form.section';
 import { FormBlock } from './form.block';
 import { FormField } from './form.field';
 import { FormElement } from './form.element';
 import { FormGrid } from './form.grid';
 import { FormGroup } from './form.group';
 import { DataType, Element } from './form.type';
-import { FormStep } from './form.step';
+
 
 
 
@@ -15,15 +17,14 @@ interface FormRenderProps extends PropsWithChildren {
 
 export const FormRender = memo(({ data = [], children }: FormRenderProps) => {
 
-
   return (
     <>
       {
-        children ? children : data.map((item, i) => {
+        children || data.map((item, i) => {
           const { dataType } = item;
 
           switch (dataType) {
-            case DataType.STEP: return <FormStep key={i} {...item} />;
+            case DataType.SECTION: return <FormSection key={i} {...item} />;
             case DataType.BLOCK: return <FormBlock key={i} {...item} />;
             case DataType.ELEMENT: return <FormElement key={i} {...item} />;
             case DataType.FIELD: return <FormField key={i} {...item} />;

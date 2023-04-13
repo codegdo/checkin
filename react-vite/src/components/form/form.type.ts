@@ -12,7 +12,7 @@ export enum ElementType {
 
 export enum DataType {
   AREA = 'area',
-  STEP = 'step',
+  SECTION = 'section',
   PLACEHOLDER = 'placeholder',
   BLOCK = 'block',
   ELEMENT = 'element',

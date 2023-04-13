@@ -18,7 +18,7 @@
       "value": null,
       "position": 0,
       "parentId": null,
-      "placeholderId": null
+      "childId": null
     },
     {
       "id": "f-main",
@@ -34,7 +34,7 @@
       "value": null,
       "position": 3,
       "parentId": null,
-      "placeholderId": null
+      "childId": null
     },
     {
       "id": "f-footer",
@@ -50,7 +50,7 @@
       "value": null,
       "position": 7,
       "parentId": null,
-      "placeholderId": null
+      "childId": null
     },
     {
       "id": "f-title",
@@ -66,7 +66,7 @@
       "value": null,
       "position": 2,
       "parentId": "f-header",
-      "placeholderId": null
+      "childId": null
     },
     {
       "id": "f-submit",
@@ -82,7 +82,7 @@
       "value": null,
       "position": 8,
       "parentId": "f-footer",
-      "placeholderId": null
+      "childId": null
     },
     {
       "id": "f-signup",
@@ -98,7 +98,7 @@
       "value": "/auth/signup",
       "position": 9,
       "parentId": "f-footer",
-      "placeholderId": null
+      "childId": null
     }
   ],
   "fields": [
@@ -116,7 +116,7 @@
       "value": "",
       "position": 4,
       "parentId": "f-main",
-      "placeholderId": null,
+      "childId": null,
       "map": "sec.user.username",
       "lookup": null,
       "isRequired": true
@@ -135,7 +135,7 @@
       "value": "",
       "position": 5,
       "parentId": "f-main",
-      "placeholderId": null,
+      "childId": null,
       "map": "sec.user.password",
       "lookup": null,
       "isRequired": true
@@ -154,7 +154,7 @@
       "value": "",
       "position": 6,
       "parentId": "f-main",
-      "placeholderId": null,
+      "childId": null,
       "map": "sec.user.emailAddress",
       "lookup": null,
       "isRequired": true

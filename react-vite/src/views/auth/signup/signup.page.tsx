@@ -22,7 +22,7 @@ function Signup() {
   return <Form
     title={form?.label}
     data={form.data}
-    options={{ mapKey: 'id' }}
+    options={{ mapKey: 'id', isMultiSteps: true }}
     steps={['1', '2', '3']}
     onCallback={handleCallback}
   />;

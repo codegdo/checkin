@@ -28,23 +28,40 @@ export const useForm = ({ steps = [], onCallback }: UseFormOptions = {}) => {
 
   useEffect(() => {
     if (isSubmit) {
-      if (Object.keys(errorRef.current).length === 0) {
+      const hasNoErrors = Object.keys(errorRef.current).length === 0;
+
+      if (hasNoErrors) {
         onCallback?.(formRef.current);
       }
+
       setIsSubmit(false);
     }
   }, [isSubmit]);
 
+  const resetForm = useCallback(() => {
+    setIsReset(true);
+  }, []);
+
   useEffect(() => {
     if (isReset) {
+      formRef.current = {};
+      errorRef.current = {};
+      setCurrentStepIndex(0);
       setIsReset(false);
     }
   }, [isReset]);
 
+  const goToPreviousStep = useCallback(() => {
+    setCurrentStepIndex(index => Math.max(0, index - 1));
+  }, []);
+
+  const goToNextStep = useCallback(() => {
+    setCurrentStepIndex(index => Math.min(steps.length - 1, index + 1));
+  }, [steps.length]);
+
   const onClick = useCallback(async (actionType: string) => {
     switch (actionType) {
       case 'submit':
-        // validation
         const initialErrors = Object.keys(errorRef.current).length === 0;
 
         if (initialErrors) {
@@ -55,16 +72,18 @@ export const useForm = ({ steps = [], onCallback }: UseFormOptions = {}) => {
         setIsSubmit(true);
         break;
       case 'reset':
-        setIsReset(true);
+        resetForm();
+        break;
+      case 'previous':
+        goToPreviousStep();
+        break;
+      case 'next':
+        goToNextStep();
         break;
       default:
         onCallback?.(actionType);
     }
-  }, [onCallback]);
-
-  const previous = () => { };
-
-  const next = () => { };
+  }, [onCallback, resetForm, goToPreviousStep, goToNextStep]);
 
   return {
     form: formRef.current,
