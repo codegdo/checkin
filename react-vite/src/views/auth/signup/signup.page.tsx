@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Form, FormData } from '../../../components/form';
-import { formHelper } from '../../../helpers';
+import React from 'react';
+import { Form, FormData, formHelper } from '../../../components/form';
 import { useLoadJson } from '../../../hooks';
 
 function Signup() {
@@ -10,7 +9,7 @@ function Signup() {
     return <div>loading...</div>;
   }
 
-  const normalizedData = formHelper.normalize(formData);
+  const normalizedData = formHelper.normalizeFormData(formData);
   const form = { ...formData, data: normalizedData };
 
   const handleCallback = (data: string | Record<string, string>) => {
@@ -22,7 +21,7 @@ function Signup() {
   return <Form
     title={form?.label}
     data={form.data}
-    options={{ mapKey: 'id', isMultiSteps: true }}
+    options={{ mapKey: 'id', isMultiSteps: true, animation: 'slide' }}
     steps={['1', '2', '3']}
     onCallback={handleCallback}
   />;

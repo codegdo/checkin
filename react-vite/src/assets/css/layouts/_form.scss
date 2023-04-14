@@ -1,10 +1,10 @@
 .form {
 }
+.form-section {
+  background-color: #fff;
+}
 
-.form-steps {
-  position: relative;
-  overflow: hidden;
-
+.form_steps {
   &.is-first {
     button[name='previous'] {
       display: none;
@@ -22,31 +22,41 @@
   }
 }
 
-.form-steps [data-step] {
-  background-color: #fff;
-  position: absolute;
-  top: 0;
-  left: 0;
-  //transform: translateX(10%);
-  //transition: all 0.3s ease-out;
-
-  &.is-active {
-    animation: step-slide-in 250ms 150ms ease-in-out both;
-    position: static;
-  }
-
-  &.is-invisible {
-    opacity: 0;
-    animation: step-slide-out 250ms ease-in-out;
-    z-index: -1;
-  }
-}
-
-.form-steps button[name='submit'] {
+.form_steps button[name='submit'] {
   display: none;
 }
 
-@keyframes step-slide-in {
+.animation-slide {
+  position: relative;
+
+  .is-inactive {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    z-index: -1;
+  }
+
+  &.on-previous {
+    .is-active {
+      animation: previous-slide-in 250ms 250ms ease-in-out both;
+    }
+    .is-active + .is-inactive {
+      animation: previous-slide-out 250ms ease-in-out both;
+    }
+  }
+
+  &.on-next {
+    .is-active {
+      animation: next-slide-in 250ms 250ms ease-in-out both;
+    }
+    .is-inactive:has(+ .is-active) {
+      animation: next-slide-out 250ms ease-in-out both;
+    }
+  }
+}
+
+@keyframes previous-slide-in {
   0% {
     opacity: 0;
     transform: translateX(10%);
@@ -58,7 +68,31 @@
   }
 }
 
-@keyframes step-slide-out {
+@keyframes previous-slide-out {
+  0% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-10%);
+  }
+}
+
+@keyframes next-slide-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-10%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes next-slide-out {
   0% {
     opacity: 1;
     transform: translateX(0);

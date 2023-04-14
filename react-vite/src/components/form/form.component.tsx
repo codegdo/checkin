@@ -8,6 +8,7 @@ import { FormRender } from './form.render';
 interface FormOptions {
   mapKey?: string;
   isMultiSteps?: boolean;
+  animation?: 'slide';
 }
 
 interface FormProps extends PropsWithChildren {
@@ -46,6 +47,7 @@ export function Form({ className = 'form', data, status, options, steps = [], ch
     error,
     validation,
     currentStepIndex,
+    direction,
     isSubmit,
     isReset,
     onClick: handleClick
@@ -66,9 +68,12 @@ export function Form({ className = 'form', data, status, options, steps = [], ch
   };
 
   const classNames = util.classNames(className, {
-    'form-steps': options?.isMultiSteps && steps.length > 0,
+    'form_steps': options?.isMultiSteps && steps.length > 0,
     'is-first': options?.isMultiSteps && currentStepIndex === 0,
-    'is-last': options?.isMultiSteps && currentStepIndex === steps?.length - 1
+    'is-last': options?.isMultiSteps && currentStepIndex === steps?.length - 1,
+    'on-previous': options?.isMultiSteps && direction === 'previous',
+    'on-next': options?.isMultiSteps && direction === 'next',
+    'animation-slide': options?.isMultiSteps && options?.animation === 'slide',
   });
 
   return (

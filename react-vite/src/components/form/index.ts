@@ -5,3 +5,4 @@ export * from './form.element';
 export * from './form.grid';
 export * from './form.group';
 export * from './form.type';
+export * from './helpers/form.helper';

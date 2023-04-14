@@ -1,14 +1,17 @@
-import { Element, FormData } from '../components/form';
-import UtilHelper, { util } from './util.helper';
+import UtilHelper, { util } from "../../../helpers/util.helper";
+import { Element, FormData, DataType } from '../form.type';
 
 class FormHelper {
+  static normalizeFormData(formData: FormData) {
+    throw new Error('Method not implemented.');
+  }
   private util: UtilHelper;
 
   constructor(util: UtilHelper) {
     this.util = util;
   }
 
-  normalize(form: FormData) {
+  normalizeFormData(form: FormData) {
     const { data = [], fields = [] } = this.util.cloneDeep(form);
 
     const list: Element[] = [];
@@ -27,7 +30,11 @@ class FormHelper {
     }
 
     data.forEach((item: Element) => {
-      return this.mapToParent(list, item);
+      return this.util.mapToParent(
+        list,
+        item,
+        (item) => (item.dataType === DataType.SECTION || item.dataType === DataType.BLOCK)
+      );
     });
 
     console.log(list);
@@ -86,9 +93,6 @@ class FormHelper {
     // console.warn(`Fail mapToParent: ${parentId}`, { id, dataType, data, position, parentId });
     return false;
   }
-
-
-
 
 }
 

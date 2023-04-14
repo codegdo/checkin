@@ -1,4 +1,4 @@
-import { DndItem, DndItemType } from '../components';
+import { DndItem, DndItemType, ElementType } from '../components';
 
 type Element = DndItem;
 
@@ -62,6 +62,22 @@ class UtilHelper {
     });
 
     return [filtered1, filtered2];
+  }
+
+  nomalizeData(data: Element[] = []) {
+    const cloneData = this.cloneDeep(data);
+
+    const list: Element[] = [];
+
+    cloneData.forEach((item: Element) => {
+      return this.mapToParent(
+        list,
+        item,
+        (item) => (item.dataType === 'section' || item.dataType === 'block')
+      );
+    });
+
+    return list;
   }
 
   mapToParent(

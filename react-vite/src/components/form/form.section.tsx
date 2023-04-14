@@ -12,14 +12,14 @@ export interface SectionProps extends PropsWithChildren {
   data?: Element[];
 }
 
-export function FormSection({ id, type = 'div', className = '', data = [], children }: SectionProps) {
+export function FormSection({ id, type = 'div', className = 'form-section', data = [], children }: SectionProps) {
 
   const { currentStepIndex, steps = [] } = useWrapperContext(FormContext);
   const index = steps.indexOf(`${id}`);
 
   const classNames = util.classNames(className, {
     'is-active': currentStepIndex === index,
-    'is-invisible': currentStepIndex !== index,
+    'is-inactive': currentStepIndex !== index,
   });
 
   const JSXElement = type as keyof JSX.IntrinsicElements;

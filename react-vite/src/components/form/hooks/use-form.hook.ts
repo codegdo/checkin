@@ -25,6 +25,7 @@ export const useForm = ({ steps = [], onCallback }: UseFormOptions = {}) => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [isReset, setIsReset] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [direction, setDirection] = useState('');
 
   useEffect(() => {
     if (isSubmit) {
@@ -53,10 +54,12 @@ export const useForm = ({ steps = [], onCallback }: UseFormOptions = {}) => {
 
   const goToPreviousStep = useCallback(() => {
     setCurrentStepIndex(index => Math.max(0, index - 1));
+    setDirection('previous');
   }, []);
 
   const goToNextStep = useCallback(() => {
     setCurrentStepIndex(index => Math.min(steps.length - 1, index + 1));
+    setDirection('next');
   }, [steps.length]);
 
   const onClick = useCallback(async (actionType: string) => {
@@ -90,6 +93,7 @@ export const useForm = ({ steps = [], onCallback }: UseFormOptions = {}) => {
     error: errorRef.current,
     validation: validationRef.current,
     currentStepIndex,
+    direction,
     isSubmit,
     isReset,
     onClick,
