@@ -38,7 +38,7 @@ describe('InputText', () => {
 
   it('renders the text prop', () => {
     const { getByText } = render(
-      <InputText type="text" name="test" text="Test input" />
+      <InputText type="text" name="test" value="Test input" />
     );
     const textElement = getByText('Test input');
     expect(textElement).toBeInTheDocument();

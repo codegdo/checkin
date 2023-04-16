@@ -54,20 +54,72 @@ class FormHelper {
     return list;
   }
 
-  // mapToSection(section) {
-  //   const sectionId = section.id;
-  //   const fields = [];
+  checkErrorInArray(array: string[], error: Record<string, string>) {
+    return array.some(value => error.hasOwnProperty(value));
+  }
 
-  //   section.data.forEach(item => {
-  //     if (item.type === 'field') {
-  //       fields.push(item);
-  //     } else if (item.type === 'block') {
-  //       fields.push(...extractFields(item));
+  findSectionIndexByKey(sections: (Record<string, string[]> | string)[], key: string): number {
+    for (let i = 0; i < sections.length; i++) {
+      if (typeof sections[i] === "string" && sections[i] === key) {
+        return i;
+      } else if (typeof sections[i] === "object" && sections[i] !== null) {
+        const keys = Object.keys(sections[i]);
+        if (keys.includes(key)) {
+          return i;
+        }
+      }
+    }
+    return -1;
+  }
+
+  // extractFields(data: Element[] = [], mapKey:string) {
+  //   const fields: string[] = [];
+
+  //   data.forEach(field => {
+  //     if (field.dataType === 'field') {
+  //       const keyId = field[`${mapKey}`]; 
+  //       fields.push(keyId);
+  //     } else if (field.dataType === 'block') {
+  //       fields.push(...this.extractFields(field.data, mapKey));
   //     }
   //   });
 
-  //   outputObject[sectionId] = fields;
   //   return fields;
+  // }
+
+  extractFields(data: Element[] = [], mapKey: string): string[] {
+    return data.flatMap((field) => {
+      if (field.dataType === "field") {
+        const keyId = field[mapKey];
+        return [keyId];
+      } else if (field.dataType === "block") {
+        return this.extractFields(field.data, mapKey);
+      } else {
+        return [];
+      }
+    });
+  }
+
+  mapFieldToSection(data: Element[] = [], mapKey: string) {
+    const filteredSections = data.filter((item) => item.dataType === "section");
+    return filteredSections.map((section) => {
+      const sectionId = section.id;
+      const sectionFields = this.extractFields(section.data, mapKey);
+      return { [`${sectionId}`]: sectionFields };
+    });
+  }
+
+  // mapFieldToSection(data: Element[] = [], mapKey:string) {
+  //   const filteredSections = data.filter(item => item.dataType === 'section');
+  //   const result: Record<string, string[]> = {};
+    
+  //   filteredSections.forEach(section => {
+  //     const sectionId = section.id;
+  //     const sectionFields = this.extractFields(section?.data, mapKey);
+  //     result[`${sectionId}`] = sectionFields;
+  //   });
+
+  //   return result;
   // }
 
   mapToParent(list: Element[], item: Element): boolean {

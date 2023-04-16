@@ -37,6 +37,7 @@ interface Data {
   childId?: string | null;
   settings?: Record<string, any>;
   isActive?: boolean;
+  [key: string]: any;
 }
 
 export interface Field extends Data {
@@ -45,6 +46,12 @@ export interface Field extends Data {
 
 export interface Block extends Data {
 
+}
+
+export interface FormOptions {
+  mapKey?: string;
+  isMultiSteps?: boolean;
+  animation?: 'slide';
 }
 
 export interface FormData {
@@ -56,4 +63,5 @@ export interface FormData {
   data: Element[];
   fields: Field[];
   steps: string[];
+  options?:FormOptions
 }

@@ -1,11 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { validationHelper, ObjectSchema } from '../../../helpers';
+import { Element, FormOptions } from '../form.type';
+import {formHelper} from "../helpers/form.helper";
 
 export const schema = validationHelper.objectSchema();
 
 interface UseFormOptions {
-  steps?: string[];
+  data?: Element[];
+  options?: FormOptions
+  steps?: string[] | Record<string, string[]>[];
   onCallback?: (data: string | FormValues) => void;
 }
 
@@ -17,16 +21,18 @@ export interface FormErrors {
   [key: string]: string;
 }
 
-export const useForm = ({ steps = [], onCallback }: UseFormOptions = {}) => {
+export const useForm = ({data, options, onCallback }: UseFormOptions = {}) => {
   const formRef = useRef<FormValues>({});
   const errorRef = useRef<FormErrors>({});
   const validationRef = useRef({ schema });
 
   const [isSubmit, setIsSubmit] = useState(false);
   const [isReset, setIsReset] = useState(false);
+  const [isReload, setIsReload] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [steps, setSteps] = useState<(Record<string, string[]> | string)[]>([]);
   const [direction, setDirection] = useState('');
-
+  
   useEffect(() => {
     if (isSubmit) {
       const hasNoErrors = Object.keys(errorRef.current).length === 0;
@@ -39,9 +45,11 @@ export const useForm = ({ steps = [], onCallback }: UseFormOptions = {}) => {
     }
   }, [isSubmit]);
 
-  const resetForm = useCallback(() => {
-    setIsReset(true);
-  }, []);
+  useEffect(() => {
+    if (isReload) {
+      setIsReload(false);
+    }
+  }, [isReload]);
 
   useEffect(() => {
     if (isReset) {
@@ -52,15 +60,40 @@ export const useForm = ({ steps = [], onCallback }: UseFormOptions = {}) => {
     }
   }, [isReset]);
 
+  useEffect(() => {
+    if(options?.isMultiSteps) {
+      const mapKey = options?.mapKey || 'name'; 
+      const sections = formHelper.mapFieldToSection(data, mapKey);
+      setSteps(sections);
+    }
+  }, [data, options]);
+
+  const resetForm = useCallback(() => {
+    setIsReset(true);
+  }, []);
+
   const goToPreviousStep = useCallback(() => {
     setCurrentStepIndex(index => Math.max(0, index - 1));
     setDirection('previous');
   }, []);
 
-  const goToNextStep = useCallback(() => {
+  const goToNextStep = useCallback(async () => {
+    const errors = await validationHelper.checkValidation(validationRef.current, formRef.current);
+    Object.assign(errorRef.current, errors);
+    
+    const array = Object.values(steps[currentStepIndex]).flat();
+    const hasError = formHelper.checkErrorInArray(array, errors);
+
+    console.log(hasError, array);
+
+    if(hasError) {
+      setIsReload(true);
+      return;
+    }
+
     setCurrentStepIndex(index => Math.min(steps.length - 1, index + 1));
     setDirection('next');
-  }, [steps.length]);
+  }, [steps.length, currentStepIndex]);
 
   const onClick = useCallback(async (actionType: string) => {
     switch (actionType) {
@@ -95,7 +128,9 @@ export const useForm = ({ steps = [], onCallback }: UseFormOptions = {}) => {
     currentStepIndex,
     direction,
     isSubmit,
+    isReload,
     isReset,
+    steps,
     onClick,
   };
 };

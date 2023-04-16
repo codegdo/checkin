@@ -4,6 +4,7 @@ import { Element } from './form.type';
 import { util } from '../../helpers';
 import { useWrapperContext } from '../../hooks';
 import { FormContext } from './form.component';
+import {formHelper} from './helpers/form.helper';
 
 export interface SectionProps extends PropsWithChildren {
   id?: number | string;
@@ -14,8 +15,8 @@ export interface SectionProps extends PropsWithChildren {
 
 export function FormSection({ id, type = 'div', className = 'form-section', data = [], children }: SectionProps) {
 
-  const { currentStepIndex, steps = [] } = useWrapperContext(FormContext);
-  const index = steps.indexOf(`${id}`);
+  const { currentStepIndex, steps = [] } = useWrapperContext(FormContext);  
+  const index = formHelper.findSectionIndexByKey(steps, `${id}`); //steps.indexOf(`${id}`);
 
   const classNames = util.classNames(className, {
     'is-active': currentStepIndex === index,

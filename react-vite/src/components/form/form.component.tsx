@@ -18,7 +18,6 @@ interface FormProps extends PropsWithChildren {
   data?: Element[];
 
   status?: string | undefined;
-  steps?: string[];
   options?: FormOptions;
   onCallback?: (data: string | any) => void;
 }
@@ -28,30 +27,32 @@ export interface FormContextValue {
   form?: { [key: string]: any };
   error?: { [key: string]: string };
   validation: { schema: ObjectSchema };
-  steps?: string[];
+  steps?: (Record<string, string[]> | string)[];
   currentStepIndex?: number;
   status?: string | undefined;
   options?: FormOptions;
 
   isSubmit?: boolean;
+  isReload?: boolean;
   isReset?: boolean;
   onClick?: (key: string) => void;
 }
 
 export const FormContext = React.createContext<FormContextValue>({ validation: { schema } });
 
-export function Form({ className = 'form', data, status, options, steps = [], children, onCallback }: FormProps) {
-
+export function Form({ className = 'form', data, status, options, children, onCallback }: FormProps) {
   const {
     form,
     error,
     validation,
     currentStepIndex,
     direction,
+    steps,
     isSubmit,
+    isReload,
     isReset,
     onClick: handleClick
-  } = useForm({ steps, onCallback });
+  } = useForm({data, options, onCallback });
 
   const contextValue: FormContextValue = {
     data,
@@ -63,6 +64,7 @@ export function Form({ className = 'form', data, status, options, steps = [], ch
     steps,
     currentStepIndex,
     isSubmit,
+    isReload,
     isReset,
     onClick: handleClick
   };

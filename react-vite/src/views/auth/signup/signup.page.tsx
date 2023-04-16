@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, FormData, formHelper } from '../../../components/form';
-import { useLoadJson } from '../../../hooks';
 
 function Signup() {
-  const [formData] = useLoadJson<FormData>('signup.form.json');
+  const [formData, setFormData] = useState<FormData>();
+
+  useEffect(() => {
+    const loadFormData = async () => {
+      const json = await import('./signup.form.json');
+      setFormData(json.default as any);
+    }
+
+    loadFormData();
+  }, []);
 
   if (!formData) {
     return <div>loading...</div>;
@@ -11,7 +19,7 @@ function Signup() {
 
   const normalizedData = formHelper.normalizeFormData(formData);
   const form = { ...formData, data: normalizedData };
-
+  
   const handleCallback = (data: string | Record<string, string>) => {
     if (typeof data === 'object') {
       console.log(data);
@@ -19,10 +27,9 @@ function Signup() {
   }
 
   return <Form
-    title={form?.label}
+    title={form.label}
     data={form.data}
-    options={{ mapKey: 'id', isMultiSteps: true, animation: 'slide' }}
-    steps={['1', '2', '3']}
+    options={form.options}
     onCallback={handleCallback}
   />;
 }

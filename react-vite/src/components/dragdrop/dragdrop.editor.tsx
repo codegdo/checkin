@@ -20,7 +20,8 @@ export function DragDropEditor() {
   const editorRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<HTMLDivElement>(null);
   const { current: offsetRef } = useRef({ top: 0, left: 0 });
-  const [dataSource, loadJsonData] = useLoadJson<DataSource>(undefined, false);
+  //const [dataSource, loadJsonData] = useLoadJson<DataSource>(undefined, false);
+  const [jsonData, setJsonData] = useState<DataSource>();
 
   const { state } = useWrapperContext(DragDropContext);
   const { item } = state || {};
@@ -92,15 +93,30 @@ export function DragDropEditor() {
       drag(drop(dragRef));
 
       switch (item?.dataType) {
-        case 'block':
-          loadJsonData('block.edit.json');
+        case 'block':{
+          const loadJsonBlock = async () => {
+            const jsonBlock = await import('./jsons/block.edit.json');
+            setJsonData(jsonBlock.default as any);
+          };
+          loadJsonBlock();
           break;
-        case 'element':
-          loadJsonData('element.edit.json');
+        }
+        case 'element':{
+          const loadJsonElement = async () => {
+            const jsonElement = await import('./jsons/element.edit.json');
+            setJsonData(jsonElement.default as any);
+          };
+          loadJsonElement();
           break;
-        case 'field':
-          loadJsonData('field.edit.json');
+        }
+        case 'field': {
+          const loadJsonField = async () => {
+            const jsonField = await import('./jsons/field.edit.json');
+            setJsonData(jsonField.default as any);
+          };
+          loadJsonField();
           break;
+        }
       }
     }
   }, [isEdit, item?.dataType]);
@@ -111,7 +127,7 @@ export function DragDropEditor() {
 
   return (
     <div ref={editorRef} className='dnd-editor' style={{ position: 'fixed' }}>
-      <Editor<DndItem> title={item?.dataType} dataSource={dataSource} dataObject={dataObject} onChange={handleChange} onClick={handleClick}>
+      <Editor<DndItem> title={item?.dataType} dataSource={jsonData} dataObject={dataObject} onChange={handleChange} onClick={handleClick}>
         <EditorHeader ref={dragRef} />
         <EditorTab />
         <EditorContent />

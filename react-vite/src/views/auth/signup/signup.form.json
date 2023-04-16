@@ -309,5 +309,10 @@
       "lookup": null,
       "isRequired": true
     }
-  ]
+  ],
+  "options": {
+    "mapKey": "id",
+    "animation": "slide",
+    "isMultiSteps": true
+  }
 }

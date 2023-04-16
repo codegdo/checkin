@@ -36,6 +36,7 @@ export function FormField({
     options = {},
     validation,
     isSubmit,
+    isReload,
     isReset
   } = useWrapperContext(FormContext);
 
@@ -78,7 +79,7 @@ export function FormField({
   }, [form, error, schema, validation, fieldKey, fieldValue, isReset]);
 
   useEffect(() => {
-    if (isSubmit) {
+    if (isSubmit || isReload) {
       validateField();
     }
 
@@ -87,7 +88,7 @@ export function FormField({
         clearTimeout(timerRef.current);
       }
     };
-  }, [isSubmit, validateField]);
+  }, [isSubmit, isReload, validateField]);
 
   const handleChange = useCallback(
     ({ value }: { value: string }) => {
