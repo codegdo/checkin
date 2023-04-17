@@ -8,9 +8,6 @@ import { FormGrid } from './form.grid';
 import { FormGroup } from './form.group';
 import { DataType, Element } from './form.type';
 
-
-
-
 interface FormRenderProps extends PropsWithChildren {
   data?: Element[]
 }

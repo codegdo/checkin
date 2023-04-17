@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { validationHelper } from '../../helpers';
 
 import { useWrapperContext } from '../../hooks';
@@ -35,6 +35,8 @@ export function FormField({
     error = {},
     options = {},
     validation,
+    steps = [],
+    currentStepIndex = 0,
     isSubmit,
     isReload,
     isReset
@@ -66,6 +68,7 @@ export function FormField({
       delete error[fieldKey];
       setIsError(false);
     }
+
   }, [form, error, validation, fieldKey, fieldName]);
 
   useEffect(() => {
@@ -79,7 +82,7 @@ export function FormField({
   }, [form, error, schema, validation, fieldKey, fieldValue, isReset]);
 
   useEffect(() => {
-    if (isSubmit || isReload) {
+    if (isSubmit) {
       validateField();
     }
 
@@ -89,6 +92,21 @@ export function FormField({
       }
     };
   }, [isSubmit, isReload, validateField]);
+
+  useEffect(() => {
+    if (isReload) {
+      const array = Object.values(steps[currentStepIndex]).flat();
+      if (array.indexOf(fieldKey) >= 0) {
+        validateField();
+      }
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [isReload, steps, currentStepIndex, validateField]);
 
   const handleChange = useCallback(
     ({ value }: { value: string }) => {

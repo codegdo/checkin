@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { validationHelper, ObjectSchema } from '../../../helpers';
 import { Element, FormOptions } from '../form.type';
-import {formHelper} from "../helpers/form.helper";
+import { formHelper } from "../helpers/form.helper";
 
 export const schema = validationHelper.objectSchema();
 
@@ -21,7 +21,7 @@ export interface FormErrors {
   [key: string]: string;
 }
 
-export const useForm = ({data, options, onCallback }: UseFormOptions = {}) => {
+export const useForm = ({ data, options, onCallback }: UseFormOptions = {}) => {
   const formRef = useRef<FormValues>({});
   const errorRef = useRef<FormErrors>({});
   const validationRef = useRef({ schema });
@@ -32,7 +32,7 @@ export const useForm = ({data, options, onCallback }: UseFormOptions = {}) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [steps, setSteps] = useState<(Record<string, string[]> | string)[]>([]);
   const [direction, setDirection] = useState('');
-  
+
   useEffect(() => {
     if (isSubmit) {
       const hasNoErrors = Object.keys(errorRef.current).length === 0;
@@ -61,12 +61,18 @@ export const useForm = ({data, options, onCallback }: UseFormOptions = {}) => {
   }, [isReset]);
 
   useEffect(() => {
-    if(options?.isMultiSteps) {
-      const mapKey = options?.mapKey || 'name'; 
+    if (options?.isMultiSteps) {
+      const mapKey = options?.mapKey || 'name';
       const sections = formHelper.mapFieldToSection(data, mapKey);
       setSteps(sections);
     }
   }, [data, options]);
+
+  useEffect(() => {
+    validationHelper.checkValidation(validationRef.current, formRef.current).then(errors => {
+      Object.assign(errorRef.current, errors);
+    });
+  }, [isReset]);
 
   const resetForm = useCallback(() => {
     setIsReset(true);
@@ -78,15 +84,10 @@ export const useForm = ({data, options, onCallback }: UseFormOptions = {}) => {
   }, []);
 
   const goToNextStep = useCallback(async () => {
-    const errors = await validationHelper.checkValidation(validationRef.current, formRef.current);
-    Object.assign(errorRef.current, errors);
-    
     const array = Object.values(steps[currentStepIndex]).flat();
-    const hasError = formHelper.checkErrorInArray(array, errors);
+    const hasError = formHelper.checkErrorInArray(array, errorRef.current);
 
-    console.log(hasError, array);
-
-    if(hasError) {
+    if (hasError) {
       setIsReload(true);
       return;
     }
@@ -98,13 +99,6 @@ export const useForm = ({data, options, onCallback }: UseFormOptions = {}) => {
   const onClick = useCallback(async (actionType: string) => {
     switch (actionType) {
       case 'submit':
-        const initialErrors = Object.keys(errorRef.current).length === 0;
-
-        if (initialErrors) {
-          const errors = await validationHelper.checkValidation(validationRef.current, formRef.current);
-          Object.assign(errorRef.current, errors);
-        }
-
         setIsSubmit(true);
         break;
       case 'reset':
