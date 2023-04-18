@@ -76,7 +76,7 @@ class ValidationHelper {
     return num;
   }
 
-  private stringSchema({ type, name, isRequired }: any) {
+  private stringSchema({ type, isRequired }: any) {
     //let str = Joi.string();
     let str = Yup.string();
 

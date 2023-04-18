@@ -27,8 +27,8 @@ export interface FormContextValue {
   form?: { [key: string]: any };
   error?: { [key: string]: string };
   validation: { schema: ObjectSchema };
+  stepIndex?: number;
   steps?: (Record<string, string[]> | string)[];
-  currentStepIndex?: number;
   status?: string | undefined;
   options?: FormOptions;
 
@@ -45,14 +45,14 @@ export function Form({ className = 'form', data, status, options, children, onCa
     form,
     error,
     validation,
-    currentStepIndex,
     direction,
+    stepIndex,
     steps,
     isSubmit,
     isReload,
     isReset,
     onClick: handleClick
-  } = useForm({data, options, onCallback });
+  } = useForm({ data, options, onCallback });
 
   const contextValue: FormContextValue = {
     data,
@@ -62,7 +62,7 @@ export function Form({ className = 'form', data, status, options, children, onCa
     error,
     validation,
     steps,
-    currentStepIndex,
+    stepIndex,
     isSubmit,
     isReload,
     isReset,
@@ -71,8 +71,8 @@ export function Form({ className = 'form', data, status, options, children, onCa
 
   const classNames = util.classNames(className, {
     'form_steps': options?.isMultiSteps && steps.length > 0,
-    'is-first': options?.isMultiSteps && currentStepIndex === 0,
-    'is-last': options?.isMultiSteps && currentStepIndex === steps?.length - 1,
+    'is-first': options?.isMultiSteps && stepIndex === 0,
+    'is-last': options?.isMultiSteps && stepIndex === steps?.length - 1,
     'on-previous': options?.isMultiSteps && direction === 'previous',
     'on-next': options?.isMultiSteps && direction === 'next',
     'animation-slide': options?.isMultiSteps && options?.animation === 'slide',

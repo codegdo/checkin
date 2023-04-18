@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
-import { validationHelper } from '../../helpers';
+import { util, validationHelper } from '../../helpers';
 
 import { useWrapperContext } from '../../hooks';
 import { Label, Input, KeyValue } from '../input';
 import { FormContext } from './form.component';
+import { useField } from './hooks/use-field.hook';
 
 export interface FieldProps {
   id?: string | number;
@@ -30,109 +31,34 @@ export function FormField({
   isRequired,
 }: FieldProps) {
 
-  const {
-    form = {},
-    error = {},
-    options = {},
-    validation,
-    steps = [],
-    currentStepIndex = 0,
-    isSubmit,
-    isReload,
-    isReset
-  } = useWrapperContext(FormContext);
-
-  const fieldValue = value ?? defaultValue;
-  const fieldName = label ?? id ?? name;
-  const fieldKey = (options?.mapKey === "id" && id) ? id : name;
-
-  const [isError, setIsError] = useState(false);
-  const timerRef = useRef<number | null>(null);
-
-  const schema = useMemo(
+  const fieldSchema = useMemo(
     () => validationHelper.fieldSchema({ type, isRequired }),
     [type, isRequired]
   );
 
-  const validateField = useCallback(async () => {
-    const errors = await validationHelper.checkValidation(
-      validation,
-      form,
-      `${fieldKey}`
-    );
+  const { fieldLabel, fieldValue, errorMessage, isError, isReset, handleChange } = useField({
+    fieldId: id,
+    fieldName: name,
+    fieldLabel: label,
+    fieldValue: value ?? defaultValue,
+    fieldSchema
+  });
 
-    if (errors[fieldKey]) {
-      error[fieldKey] = errors[fieldKey].replace(`${fieldKey}`, `${fieldName}`);
-      setIsError(true);
-    } else {
-      delete error[fieldKey];
-      setIsError(false);
-    }
-
-  }, [form, error, validation, fieldKey, fieldName]);
-
-  useEffect(() => {
-    form[fieldKey] = fieldValue;
-    validation.schema = validation.schema.shape({ [fieldKey]: schema });
-
-    if (isReset) {
-      delete error[fieldKey];
-      setIsError(false);
-    }
-  }, [form, error, schema, validation, fieldKey, fieldValue, isReset]);
-
-  useEffect(() => {
-    if (isSubmit) {
-      validateField();
-    }
-
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    };
-  }, [isSubmit, isReload, validateField]);
-
-  useEffect(() => {
-    if (isReload) {
-      const array = Object.values(steps[currentStepIndex]).flat();
-      if (array.indexOf(fieldKey) >= 0) {
-        validateField();
-      }
-    }
-
-    return () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    };
-  }, [isReload, steps, currentStepIndex, validateField]);
-
-  const handleChange = useCallback(
-    ({ value }: { value: string }) => {
-      form[fieldKey] = value;
-      delete error[fieldKey];
-
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-
-      timerRef.current = window.setTimeout(validateField, 0);
-    },
-    [fieldKey, form, error, validateField]
-  );
+  const classNames = util.classNames({
+    'is-error': isError,
+  });
 
   return (
-    <div className={isError ? "error" : ""}>
-      <Label label={label} description={description} />
+    <div className={classNames}>
+      <Label label={fieldLabel} description={description} />
       <Input
         type={type}
         name={name}
-        value={isReset ? fieldValue : form[fieldKey]}
+        value={fieldValue}
         isReset={isReset}
         onChange={handleChange}
       />
-      {isError && <span>{error[fieldKey]}</span>}
+      {isError && <span>{errorMessage}</span>}
     </div>
   );
 }

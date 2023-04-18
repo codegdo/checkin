@@ -29,7 +29,7 @@ export const useForm = ({ data, options, onCallback }: UseFormOptions = {}) => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [isReset, setIsReset] = useState(false);
   const [isReload, setIsReload] = useState(false);
-  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [stepIndex, setStepIndex] = useState(0);
   const [steps, setSteps] = useState<(Record<string, string[]> | string)[]>([]);
   const [direction, setDirection] = useState('');
 
@@ -55,7 +55,7 @@ export const useForm = ({ data, options, onCallback }: UseFormOptions = {}) => {
     if (isReset) {
       formRef.current = {};
       errorRef.current = {};
-      setCurrentStepIndex(0);
+      setStepIndex(0);
       setIsReset(false);
     }
   }, [isReset]);
@@ -79,12 +79,12 @@ export const useForm = ({ data, options, onCallback }: UseFormOptions = {}) => {
   }, []);
 
   const goToPreviousStep = useCallback(() => {
-    setCurrentStepIndex(index => Math.max(0, index - 1));
+    setStepIndex(index => Math.max(0, index - 1));
     setDirection('previous');
   }, []);
 
   const goToNextStep = useCallback(async () => {
-    const array = Object.values(steps[currentStepIndex]).flat();
+    const array = Object.values(steps[stepIndex]).flat();
     const hasError = formHelper.checkErrorInArray(array, errorRef.current);
 
     if (hasError) {
@@ -92,9 +92,9 @@ export const useForm = ({ data, options, onCallback }: UseFormOptions = {}) => {
       return;
     }
 
-    setCurrentStepIndex(index => Math.min(steps.length - 1, index + 1));
+    setStepIndex(index => Math.min(steps.length - 1, index + 1));
     setDirection('next');
-  }, [steps.length, currentStepIndex]);
+  }, [steps.length, stepIndex]);
 
   const onClick = useCallback(async (actionType: string) => {
     switch (actionType) {
@@ -119,7 +119,7 @@ export const useForm = ({ data, options, onCallback }: UseFormOptions = {}) => {
     form: formRef.current,
     error: errorRef.current,
     validation: validationRef.current,
-    currentStepIndex,
+    stepIndex,
     direction,
     isSubmit,
     isReload,
