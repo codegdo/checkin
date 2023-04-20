@@ -40,6 +40,17 @@ Payroll Management
 QR Codes
 Reviews
 
+Instant Payment Notification (IPN)
+
+stripe
+REF = Refunded
+SUB = Subscription
+INV = Invoice
+CUS = customer
+CHG = charge
+CRD = card 
+CPN = coupon
+
 https://mailchimp.com/resources/marketing-acronyms-104/
 
 appointment status

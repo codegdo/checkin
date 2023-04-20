@@ -1,0 +1,87 @@
+Here are example schemas for the contact, contact_audit, and contact_snapshot tables:
+
+CREATE TABLE contact (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255),
+  email VARCHAR(255),
+  phone VARCHAR(255)
+);
+
+CREATE TABLE contact_audit (
+  id SERIAL PRIMARY KEY,
+  contact_id INTEGER REFERENCES contact(id),
+  changed_at TIMESTAMP,
+  changed_by VARCHAR(255),
+  action VARCHAR(255),
+  old_values JSONB,
+  new_values JSONB
+);
+
+CREATE TABLE contact_snapshot (
+  id SERIAL PRIMARY KEY,
+  contact_id INTEGER REFERENCES contact(id),
+  created_at TIMESTAMP,
+  values JSONB
+);
+
+The contact table stores information about contacts, such as their name, email, and phone number. The contact_audit table is used to record changes to a contact's information over time, including who made the change, what action was taken, and the old and new values. The contact_snapshot table is used to store snapshots of a contact's information at a specific point in time.
+
+Here is an example of how you might use these tables:
+
+-- Create a new contact
+INSERT INTO contact (name, email, phone)
+VALUES ('John Doe', 'johndoe@example.com', '555-1234');
+
+-- Take a snapshot of the contact's information
+INSERT INTO contact_snapshot (contact_id, created_at, values)
+SELECT id, now(), row_to_json(contact)
+FROM contact
+WHERE id = 1;
+
+-- Update the contact's phone number
+UPDATE contact
+SET phone = '555-5678'
+WHERE id = 1;
+
+-- Record the change in the contact_audit table
+INSERT INTO contact_audit (contact_id, changed_at, changed_by, action, old_values, new_values)
+SELECT id, now(), 'Alice', 'Update', row_to_json(old_contact), row_to_json(contact)
+FROM contact, LATERAL (
+  SELECT *
+  FROM contact
+  WHERE id = 1
+) AS old_contact
+WHERE contact.id = 1;
+
+In this example, we first create a new contact with the name "John Doe", email "johndoe@example.com", and phone number "555-1234". We then take a snapshot of this contact's information by inserting a row into the contact_snapshot table.
+
+Next, we update the contact's phone number to "555-5678". We record this change in the contact_audit table by inserting a row that contains the old and new values of the contact's information, as well as information about who made the change and when it was made.
+
+These tables can be used to keep track of changes to contacts over time and to create reports on historical data.
+
+
+To generate a report of a contact's historical data, we can use a combination of the contact, contact_audit, and contact_snapshot tables. Here's an example query that returns a report of all changes to a contact's information, including the old and new values and the user who made the change:
+
+
+SELECT
+  snapshot.created_at AS snapshot_date,
+  snapshot.values->>'name' AS name,
+  snapshot.values->>'email' AS email,
+  snapshot.values->>'phone' AS phone,
+  audit.changed_at AS change_date,
+  audit.changed_by,
+  audit.action,
+  audit.old_values->>'name' AS old_name,
+  audit.old_values->>'email' AS old_email,
+  audit.old_values->>'phone' AS old_phone,
+  audit.new_values->>'name' AS new_name,
+  audit.new_values->>'email' AS new_email,
+  audit.new_values->>'phone' AS new_phone
+FROM contact_snapshot snapshot
+LEFT JOIN contact_audit audit ON snapshot.contact_id = audit.contact_id
+WHERE snapshot.contact_id = 1 -- replace with the ID of the contact you want to generate a report for
+ORDER BY snapshot.created_at DESC;
+
+This query joins the contact_snapshot and contact_audit tables on the contact_id field, and uses a left join so that all snapshots are returned, even if there are no corresponding audit records. It then selects the relevant fields from both tables and orders the results by the snapshot date in descending order.
+
+Note that in this example query, we assume that the contact_id we want to generate a report for is 1. You will need to replace this with the ID of the contact you want to generate a report for.
