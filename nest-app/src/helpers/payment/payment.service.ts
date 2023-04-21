@@ -9,13 +9,27 @@ export class PaymentService {
   constructor(
     private configService: ConfigService
   ) {
-    // this.stripe = new Stripe(configService.get('STRIPE_SECRET_KEY'), {
-    //   apiVersion: '2022-11-15',
-    // });
+    this.stripe = new Stripe(configService.get('STRIPE_SECRET_KEY'), {
+      apiVersion: configService.get('STRIPE_API_VERSION'),
+    });
   }
 
   addCreditCard() {
     console.log(this.configService.get('STRIPE_SECRET_KEY'));
+  }
+
+  async createPaymentSession() {
+
+  }
+
+  async createPaymentIntent(amount: number) {
+    const paymentIntent = await this.stripe.paymentIntents.create({
+      amount,
+      currency: 'usd',
+      // receipt_email: ''
+    });
+
+    return paymentIntent;
   }
 }
 

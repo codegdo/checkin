@@ -1,4 +1,4 @@
-import { Module, ValidationPipe } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,6 +8,9 @@ import { databaseConfig } from './configs';
 import { AccountModule } from './api/account/account.module';
 import { MonitorModule } from './api/monitor/monitor.module';
 import { DataSource } from 'typeorm';
+import { WebhookModule } from './api/webhook/webhook.module';
+//import { JsonBodyMiddleware } from './middlewares/jsonbody.middleware';
+//import { RawBodyMiddleware } from './middlewares/rawbody.middleware';
 
 @Module({
   imports: [
@@ -30,6 +33,7 @@ import { DataSource } from 'typeorm';
     AccountModule,
     IamModule,
     MonitorModule,
+    WebhookModule,
   ],
   providers: [
     {
@@ -49,4 +53,17 @@ import { DataSource } from 'typeorm';
   ],
   controllers: [],
 })
-export class AppModule { }
+export class AppModule {
+  constructor() { }
+
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer
+  //     .apply(RawBodyMiddleware)
+  //     .forRoutes({
+  //       path: '/webhook/stripe',
+  //       method: RequestMethod.POST
+  //     })
+  //     .apply(JsonBodyMiddleware)
+  //     .forRoutes('*');
+  // }
+}

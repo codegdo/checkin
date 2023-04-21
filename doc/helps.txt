@@ -31,3 +31,8 @@ $ adb -s 2681572e reverse tcp:5000 tcp:5000
 npm i -g npm-check-updates
 ncu -u
 npm install
+
+-- stripe
+https://github.com/stripe/stripe-cli/releases/tag/v1.14.0
+1/ download stripe.exe then cd to the location where stripe.exe example: cd C:\Users\gdo\Desktop\desktop
+2/ in terminal run: .\stripe (stripe cli command)
