@@ -35,6 +35,7 @@ export class PaymentService {
 
     return paymentIntent;
   }
+
   // customers and setup intents
   // save a card on the customer with setup intent
   // endpoint /wallet
@@ -42,11 +43,11 @@ export class PaymentService {
     // get customer from stripe
 
     return this.stripe.setupIntents.create({
-      customer:'customerId'
+      customer: 'customerId'
     })
   }
 
-  async listPaymentMethods(accountId:string) {
+  async listPaymentMethods(accountId: string) {
     // get customer
     return this.stripe.paymentMethods.list({
       customer: 'customer.id',
@@ -68,11 +69,11 @@ export class PaymentService {
   }
 
   // endpoint billing/subscriptions
-  async createSubscription(accountId: string, plan: string, payment_method:string) {
+  async createSubscription(accountId: string, plan: string, payment_method: string) {
     // get customer
 
     // attach the payment method to the customer
-    await this.stripe.paymentMethods.attach(payment_method, { 
+    await this.stripe.paymentMethods.attach(payment_method, {
       customer: 'customer.id'
     });
 
@@ -86,14 +87,14 @@ export class PaymentService {
     // create subscription
     const subscription = await this.stripe.subscriptions.create({
       customer: 'customer.id',
-      items: [{plan}],
+      items: [{ plan }],
       expand: ['latest_invoice.payment_intent']
     });
 
     const invoice = subscription.latest_invoice as Stripe.Invoice;
     const payment_intent = invoice.payment_intent as Stripe.PaymentIntent;
 
-    if(payment_intent.status === 'succeeded') {
+    if (payment_intent.status === 'succeeded') {
       // update database
       // {stripeCustomerId, activePlans}
     }
@@ -102,7 +103,7 @@ export class PaymentService {
   }
 
   // unsubscribe or cancel
-  async cancelSubscription(accountId: string, subscriptionId:string) {
+  async cancelSubscription(accountId: string, subscriptionId: string) {
     // find customer from stripe
 
     // check
@@ -114,7 +115,7 @@ export class PaymentService {
       cancel_at_period_end: true
     });
 
-    if(subscription.status === 'canceled') {
+    if (subscription.status === 'canceled') {
       // update database
     }
 
@@ -132,7 +133,7 @@ export class PaymentService {
     return subscriptions;
   }
 
-  
+
 }
 
 

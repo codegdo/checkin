@@ -1,16 +1,20 @@
-import { MiddlewareConsumer, Module, RequestMethod, ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, MiddlewareConsumer, Module, RequestMethod, ValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 
 import { AuthModule, IamModule } from './api';
 import { databaseConfig } from './configs';
+import { LoggingInterceptor } from './interceptors';
+
 import { AccountModule } from './api/account/account.module';
-import { MonitorModule } from './api/monitor/monitor.module';
-import { DataSource } from 'typeorm';
 import { WebhookModule } from './api/webhook/webhook.module';
+import { BillingModule } from './api/billing/billing.module';
+
 //import { JsonBodyMiddleware } from './middlewares/jsonbody.middleware';
 //import { RawBodyMiddleware } from './middlewares/rawbody.middleware';
+import { ManagementModule } from './api/management/management.module';
 
 @Module({
   imports: [
@@ -32,7 +36,8 @@ import { WebhookModule } from './api/webhook/webhook.module';
     AuthModule,
     AccountModule,
     IamModule,
-    MonitorModule,
+    BillingModule,
+    ManagementModule,
     WebhookModule,
   ],
   providers: [
@@ -49,7 +54,15 @@ import { WebhookModule } from './api/webhook/webhook.module';
           enableImplicitConversion: true,
         },
       }),
-    }
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ClassSerializerInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
   ],
   controllers: [],
 })

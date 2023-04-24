@@ -122,6 +122,15 @@ class UtilHelper {
     return str;
   }
 
+  randomId(chars: number = 8) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let id = '';
+    for (let i = 0; i < chars; i++) {
+      id += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return id;
+  }
+
   classNames(...args: any[]): string {
     const classes = new Set<ClassName>();
 

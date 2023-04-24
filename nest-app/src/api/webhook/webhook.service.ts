@@ -13,7 +13,7 @@ export class WebhookService {
       const event = await this.paymentService.constructEvent(signature, payload);
       const data = event.data.object as Stripe.PaymentIntent;
 
-      switch(event.type) {
+      switch (event.type) {
         case 'payment_intent.created':
           this.paymentCreated(data);
           break;
@@ -25,22 +25,22 @@ export class WebhookService {
           break;
       }
 
-    } catch(err) {
+    } catch (err) {
       console.log(err);
     }
   }
 
-  paymentCreated(data: Stripe.PaymentIntent) {
+  private paymentCreated(data: Stripe.PaymentIntent) {
     // add your business logic here
     console.log('PAYMENT CREATED', data);
   }
 
-  paymentSucceeded(data: Stripe.PaymentIntent) {
+  private paymentSucceeded(data: Stripe.PaymentIntent) {
     // add your business logic here
     console.log('PAYMENT SUCCESS', data);
   }
 
-  paymentFailed(data: Stripe.PaymentIntent) {
+  private paymentFailed(data: Stripe.PaymentIntent) {
     // add your business logic here
     console.log('PAYMENT FAIL', data);
   }

@@ -9,6 +9,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, { rawBody: true });
 
   const configService = app.get(ConfigService);
+  const port = configService.get('PORT');
 
   app.setGlobalPrefix('api');
   app.enableCors({
@@ -23,6 +24,6 @@ async function bootstrap() {
     //exposedHeaders: ['Authorization ', 'Expiry', 'X-Refresh-Token'],
   });
 
-  await app.listen(5000);
+  await app.listen(port || 5000);
 }
 bootstrap();
