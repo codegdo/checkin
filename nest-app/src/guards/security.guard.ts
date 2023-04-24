@@ -104,3 +104,5 @@ export class SecurityGuard implements CanActivate {
     return { authType, accessToken, refreshToken };
   }
 }
+
+// if(req.headers?.authorization?.startWith('Bearer '))

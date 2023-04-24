@@ -1,6 +1,9 @@
 import { Controller, Post, RawBodyRequest, Req, Headers, HttpCode, HttpStatus } from '@nestjs/common';
 import { WebhookService } from './webhook.service';
+import { Auth } from 'src/decorators';
+import { AuthType } from 'src/constants';
 
+@Auth(AuthType.None)
 @Controller('webhook')
 export class WebhookController {
   constructor(
@@ -14,6 +17,8 @@ export class WebhookController {
     @Req() req: RawBodyRequest<Request>
   ) {
     this.webhookService.handleIncomingStripeEvent(signature, req.rawBody);
+    //console.log('SIGNATURE', signature);
+    //console.log('rawBody', req.rawBody);
   }
 }
 
