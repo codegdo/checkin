@@ -1,6 +1,5 @@
-import { Injectable, Logger, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as util from 'util';
 import Stripe from 'stripe';
 
 @Injectable()
@@ -15,8 +14,12 @@ export class StripeService {
     });
   }
 
-  async constructEvent(signature: string, payload: Buffer) {
-    return this.stripe.webhooks.constructEvent(payload, signature, this.configService.get('STRIPE_WEBHOOK_SECRET'));
+  async constructEvent(payload: string | Buffer, header: string | Buffer | string[], secret: string, tolerance?: number, cryptoProvider?: Stripe.CryptoProvider) {
+    return this.stripe.webhooks.constructEvent(payload, header, secret, tolerance, cryptoProvider);
+  }
+
+  async createCheckoutSession(params: Stripe.Checkout.SessionCreateParams, options?: Stripe.RequestOptions) {
+    return this.stripe.checkout.sessions.create(params, options);
   }
 
   async createPaymentIntent(paymentIntentParams: Stripe.PaymentIntentCreateParams, options?: Stripe.RequestOptions) {
@@ -27,7 +30,7 @@ export class StripeService {
     return this.stripe.subscriptions.create(params, options);
   }
 
-  async cancelDescription(id: string, params?: Stripe.SubscriptionDeleteParams, options?: Stripe.RequestOptions) {
+  async cancelSubscription(id: string, params?: Stripe.SubscriptionDeleteParams, options?: Stripe.RequestOptions) {
     return this.stripe.subscriptions.del(id, params, options);
   }
 }

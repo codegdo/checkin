@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { App } from "./app.component";
 import { AuthGuard } from "./components";
 
-import { AuthRoute, HomeRoute, IamRoute } from './views';
+import { AuthRoute, HomeRoute, IamRoute, SubscriptionRoute } from './views';
 
 const routes = [
   {
@@ -11,6 +11,9 @@ const routes = [
       {
         path: '/auth/*',
         element: <AuthRoute />
+      }, {
+        path: '/billing/*',
+        element: <SubscriptionRoute />
       },
       {
         element: <AuthGuard />,

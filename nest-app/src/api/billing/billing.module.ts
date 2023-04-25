@@ -5,6 +5,7 @@ import { StripeService } from './stripe/stripe.service';
 
 @Module({
   controllers: [BillingController],
-  providers: [BillingService, StripeService]
+  providers: [BillingService, StripeService],
+  exports: [BillingService],
 })
-export class BillingModule {}
+export class BillingModule { }

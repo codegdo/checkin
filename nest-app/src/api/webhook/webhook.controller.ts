@@ -23,3 +23,5 @@ export class WebhookController {
 }
 
 //https://wanago.io/2021/07/05/api-nestjs-stripe-events-webhooks/
+// .\stripe listen --forward-to localhost:5000/v1/webhook/stripe
+// .\stripe trigger payment_intent.created

@@ -10,4 +10,4 @@ export interface LoginData {
   };
 }
 
-export const loginApi = () => useFetch<LoginData>('/api/auth/login');
+export const loginApi = () => useFetch<LoginData>('/v1/auth/login');

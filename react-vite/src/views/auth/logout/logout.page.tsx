@@ -8,7 +8,7 @@ import { AppState } from '../../../store/reducers';
 function Logout() {
   const { user } = useSelector((state: AppState) => state);
   const { logoutCurrent } = useAction();
-  const { mutate: logout } = useFetch('/api/auth/logout');
+  const { mutate: logout } = useFetch('/v1/auth/logout');
   const navigate = useNavigate();
 
   useEffect(() => {
