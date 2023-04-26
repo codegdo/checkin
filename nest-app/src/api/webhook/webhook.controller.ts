@@ -17,8 +17,6 @@ export class WebhookController {
     @Req() req: RawBodyRequest<Request>
   ) {
     this.webhookService.handleIncomingStripeEvent(signature, req.rawBody);
-    //console.log('SIGNATURE', signature);
-    //console.log('rawBody', req.rawBody);
   }
 }
 

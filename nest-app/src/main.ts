@@ -3,6 +3,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
 
 import { AppModule } from './app.module';
+import { VersioningType } from '@nestjs/common';
 
 
 async function bootstrap() {
@@ -13,11 +14,15 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const port = configService.get('PORT');
-  const apiVersion = configService.get('API_VERSION');
 
-  app.setGlobalPrefix(apiVersion || 'v1');
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+    prefix: 'v',
+  });
+
   app.enableCors({
-    origin: configService.get('CLIENT_HOST'),
+    origin: configService.get('CLIENT_URL'),
     credentials: true,
     allowedHeaders: [
       'Content-Type',

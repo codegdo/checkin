@@ -1,26 +1,40 @@
 import { Injectable, Logger, UnprocessableEntityException } from '@nestjs/common';
-import * as util from 'util';
-
-import { StripeService } from './stripe/stripe.service';
 import { ConfigService } from '@nestjs/config';
+import * as util from 'util';
+import Stripe from 'stripe';
 
 @Injectable()
 export class BillingService {
-  private url: string;
+  private readonly url: string;
+  private readonly webhookSecret: string;
+  private readonly stripe: Stripe;
 
-  constructor(
-    private readonly stripeService: StripeService,
-    private readonly configService: ConfigService
-  ) {
+  constructor(private readonly configService: ConfigService) {
     this.url = configService.get('CLIENT_HOST');
+    this.webhookSecret = configService.get('STRIPE_WEBHOOK_SECRET');
+    this.stripe = new Stripe(configService.get('STRIPE_SECRET_KEY'), {
+      apiVersion: configService.get('STRIPE_API_VERSION'),
+    });
   }
 
-  async constructEvent(payload: Buffer, signature: string,) {
-    return this.stripeService.constructEvent(payload, signature, this.configService.get('STRIPE_WEBHOOK_SECRET'));
+  constructEventFromWebhookSignature(signature: string, payload: Buffer) {
+    const webhookSecret = this.webhookSecret;
+    return this.stripe.webhooks.constructEvent(payload, signature, webhookSecret);
+  }
+
+  async createCustomer(accountId: string, email: string, params?: Stripe.CustomerCreateParams) {
+    const customer = await this.stripe.customers.create({
+      email,
+      metadata: {
+        accountId
+      },
+      ...params
+    });
+    return customer;
   }
 
   async createCheckoutSession(items) {
-    return this.stripeService.createCheckoutSession({
+    return this.stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: items,
       mode: 'subscription',
@@ -60,7 +74,7 @@ export class BillingService {
         metadata: { orderId },
       };
 
-      return await this.stripeService.createPaymentIntent(paymentIntentParams);
+      return await this.stripe.paymentIntents.create(paymentIntentParams);
     } catch (error) {
       Logger.error(
         '[stripeService] Error creating a payment intent',
@@ -81,7 +95,7 @@ export class BillingService {
   async createSubscription(accountId: string, source: string, plan: string, coupon?: string) {
     // const customer = await getCustomer(accountId);
     //await attachSource(accountId, source);
-    const subscription = await this.stripeService.createSubscription({
+    const subscription = await this.stripe.subscriptions.create({
       customer: 'customerId',
       coupon: '',
       items: [
@@ -98,7 +112,24 @@ export class BillingService {
   }
 
   async cancelSubscription() {
-    const subscription = await this.stripeService.cancelSubscription('subscriptionId');
+    const subscription = await this.stripe.subscriptions.del('subscriptionId');
     return subscription;
   }
+
+  paymentIntentCreated(data: Stripe.Event.Data.Object) {
+    // add your business logic here
+    console.log('PAYMENT CREATED', data);
+  }
+
+  paymentIntentSucceeded(data: Stripe.Event.Data.Object) {
+    // add your business logic here
+    console.log('PAYMENT SUCCESS', data);
+  }
+
+  paymentIntentFailed(data: Stripe.Event.Data.Object) {
+    // add your business logic here
+    console.log('PAYMENT FAIL', data);
+  }
+
+
 }

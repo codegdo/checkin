@@ -16,6 +16,7 @@ import {
 } from '../../helpers';
 
 import { UserRepository } from 'src/models/main/user/user.repository';
+import { BillingModule } from '../billing/billing.module';
 
 
 @Module({
@@ -23,6 +24,7 @@ import { UserRepository } from 'src/models/main/user/user.repository';
     TypeOrmModule.forFeature([UserRepository]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
+    BillingModule
   ],
   providers: [
     {

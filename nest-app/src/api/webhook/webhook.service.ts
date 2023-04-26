@@ -1,27 +1,44 @@
 import { Injectable } from '@nestjs/common';
-import { PaymentService } from 'src/helpers';
-import Stripe from 'stripe';
+import { BillingService } from '../billing/billing.service';
 
 @Injectable()
 export class WebhookService {
   constructor(
-    private readonly paymentService: PaymentService,
+    private readonly billingService: BillingService
   ) { }
 
   async handleIncomingStripeEvent(signature: string, payload: Buffer) {
     try {
-      const event = await this.paymentService.constructEvent(signature, payload);
-      const data = event.data.object as Stripe.PaymentIntent;
+      const event = await this.billingService.constructEventFromWebhookSignature(signature, payload);
+      const data = event.data.object;
 
       switch (event.type) {
+        case 'checkout.session.completed':
+          break;
+
+        case 'customer.subscription.created':
+          break;
+        case 'customer.subscription.deleted':
+          break;
+        case 'customer.subscription.paused':
+          break;
+        case 'customer.subscription.resumed':
+          break;
+        case 'customer.subscription.trial_will_end':
+          break;
+
         case 'payment_intent.created':
-          this.paymentCreated(data);
+          this.billingService.paymentIntentCreated(data);
           break;
         case 'payment_intent.succeeded':
-          this.paymentSucceeded(data);
+          this.billingService.paymentIntentSucceeded(data);
           break;
         case 'payment_intent.payment_failed':
-          this.paymentFailed(data);
+          this.billingService.paymentIntentFailed(data);
+          break;
+        case 'invoice.payment.succeeded':
+          break;
+        case 'invoice.payment.failed':
           break;
       }
 
@@ -30,18 +47,4 @@ export class WebhookService {
     }
   }
 
-  private paymentCreated(data: Stripe.PaymentIntent) {
-    // add your business logic here
-    console.log('PAYMENT CREATED', data);
-  }
-
-  private paymentSucceeded(data: Stripe.PaymentIntent) {
-    // add your business logic here
-    console.log('PAYMENT SUCCESS', data);
-  }
-
-  private paymentFailed(data: Stripe.PaymentIntent) {
-    // add your business logic here
-    console.log('PAYMENT FAIL', data);
-  }
 }

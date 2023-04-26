@@ -13,6 +13,7 @@ import { UserRepository } from 'src/models/main';
 import { UserLoginDto, UserSignupDto } from 'src/models/main/user/user.dto';
 import { HashingService, KeyGenService } from 'src/helpers';
 import { AppStatus } from 'src/constants';
+import { BillingService } from '../billing/billing.service';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,8 @@ export class AuthService {
     @Inject(jwtConfig.KEY)
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     @InjectRepository(UserRepository)
-    private userRepository: UserRepository,
+    private readonly userRepository: UserRepository,
+    private readonly billingService: BillingService
   ) { }
 
   async signup({ password, ...dto }: UserSignupDto) {
@@ -39,6 +41,17 @@ export class AuthService {
       if (!data) {
         throw new NotFoundException();
       }
+
+      // TODO
+
+      // create new stripe customer from api
+      const newCustomer = await this.billingService.createCustomer('accountId', 'email');
+
+      // create new trial subscription
+
+      // 
+
+      // update database with stripe subscription
 
       return data;
     } catch (err) {
