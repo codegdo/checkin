@@ -8,7 +8,7 @@ import {
   useElements,
 } from '@stripe/react-stripe-js';
 
-const stripePromise = loadStripe('pk_test_51MzKdfH96P4IQUl5zwXTBULwBreMcDy1HXKVRb5wmGiZtLfdNXE0ntN2nlpmUxq65aoht9Ug0sKircMaieWapTW000W3dlQoeP');
+//const stripePromise = loadStripe('pk_test_51MzKdfH96P4IQUl5zwXTBULwBreMcDy1HXKVRb5wmGiZtLfdNXE0ntN2nlpmUxq65aoht9Ug0sKircMaieWapTW000W3dlQoeP');
 
 const CheckoutForm = () => {
   const stripe = useStripe();
@@ -20,6 +20,8 @@ const CheckoutForm = () => {
     if (elements == null) {
       return;
     }
+
+    //stripe?.confirmCardPayment();
 
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
