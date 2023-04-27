@@ -14,24 +14,6 @@ CREATE TABLE main_sec.policy (
   updated_by varchar(50),
 );
 
-CREATE TABLE main_sec.policy(
-  id integer generated always as identity not null,
-  name varchar(100),
-  description text,
-  data jsonb,
-
-  access_level_id integer,
-  account_id integer,
-  is_active boolean,
-
-  created_at timestamp default current_timestamp,
-  updated_at timestamp,
-  created_by varchar(45) default current_user,
-  updated_by varchar(45),
-  --
-  primary key(id)
-);
-
 --
 
 INSERT

@@ -75,7 +75,7 @@ export class TypeormStore extends Store {
       const ttl = this.getTTL(session, sid);
 
       // Calculate the expiration time for the session based on the TTL and the current time
-      const expiredAt = Date.now() + ttl * 1000;
+      const expiration = Date.now() + ttl * 1000;
 
       // Define the arguments for the Redis SET command that will be used to store the session data
       const args = ['EX', ttl.toString(), 'NX', sid, data];
@@ -89,15 +89,15 @@ export class TypeormStore extends Store {
       const sessionRecord = await this.repository.findOne({ where: { id: sid }, withDeleted: true });
       //const sessionRecord = await this.repository.findOne({ where: { id: sid } });
 
-      // If the session already exists in the repository, update its expiredAt and data fields
+      // If the session already exists in the repository, update its expiration and data fields
       if (sessionRecord) {
         await this.repository.update(
           { id: sid, deletedAt: IsNull() },
-          { expiredAt, data }
+          { expiration, data }
         );
       } else {
         // If the session does not already exist in the repository, insert a new record for it
-        await this.repository.insert({ id: sid, data, expiredAt });
+        await this.repository.insert({ id: sid, data, expiration });
       }
 
       console.log('SET complete');
@@ -147,7 +147,7 @@ export class TypeormStore extends Store {
     try {
       // Update the session's expiry time in the repository
       await this.repository.createQueryBuilder('session')
-        .update({ expiredAt: Date.now() + ttl * 1000 })
+        .update({ expiration: Date.now() + ttl * 1000 })
         .whereInIds([sid])
         .execute();
 
@@ -165,7 +165,7 @@ export class TypeormStore extends Store {
     try {
       // Retrieve all sessions with expiry time greater than current time
       const result = await this.repository.createQueryBuilder('session')
-        .where('session.expiredAt > :expiredAt', { expiredAt: Date.now() })
+        .where('session.expiration > :expiration', { expiration: Date.now() })
         .getMany();
 
       // Map the results to an array of session data objects
@@ -210,7 +210,7 @@ export class TypeormStore extends Store {
       const expiredSessions = await this.repository.createQueryBuilder('session')
         .withDeleted()
         .select('session.id')
-        .where('session.expiredAt <= :now', { now: Date.now() })
+        .where('session.expiration <= :now', { now: Date.now() })
         //.andWhere('session.deletedAt IS NULL')
         .limit(this.cleanupLimit)
         .getMany();

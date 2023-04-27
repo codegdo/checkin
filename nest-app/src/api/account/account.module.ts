@@ -3,7 +3,6 @@ import { AccountService } from './account.service';
 import { AccountController } from './account.controller';
 import { PaymentService } from 'src/helpers/payment/payment.service';
 import { ConfigModule } from '@nestjs/config';
-import { stripeConfig } from 'src/configs';
 
 @Module({
   imports: [],

@@ -8,8 +8,8 @@ export class Session extends BaseEntity {
   @Column({ name: 'data', type: 'json' })
   data: string;
 
-  @Column({ name: 'expired_at', type: 'bigint' })
-  expiredAt: number;
+  @Column({ name: 'expiration', type: 'bigint' })
+  expiration: number;
 
   @DeleteDateColumn({ name: 'deleted_at' })
   //@Column({ name: 'deleted_at', type: 'timestamp', nullable: true })

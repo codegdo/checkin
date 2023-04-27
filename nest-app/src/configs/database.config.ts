@@ -1,5 +1,5 @@
 import { registerAs } from '@nestjs/config';
-import * as mainEntities from 'src/models/main/entities';
+import * as entities from 'src/models';
 
 export const databaseConfig = registerAs('database', () => {
   const databaseOptions = {
@@ -16,9 +16,9 @@ export const databaseConfig = registerAs('database', () => {
 
   const checkinDatabaseOptions = {
     ...databaseOptions,
-    database: process.env.DATABASE_CHECKIN,
+    database: process.env.POSTGRES_DB_CHECKIN,
     name: 'default',
-    entities: [...Object.values(mainEntities)],
+    entities: [...Object.values(entities)],
     autoLoadEntities: true,
   };
 

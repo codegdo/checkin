@@ -29,41 +29,19 @@ export class AuthService {
   ) { }
 
   async signup({ password, ...dto }: UserSignupDto) {
-    //console.log(hash);
+
     try {
       // hash password
       const hashedPassword = await this.hashingService.hash(password);
-      const data = await this.userRepository.signupUser({
-        ...dto,
-        password: hashedPassword,
-      });
 
-      if (!data) {
-        throw new NotFoundException();
-      }
 
-      // TODO
-
-      // create new stripe customer from api
-      const newCustomer = await this.billingService.createCustomer('accountId', 'email');
-
-      // create new trial subscription
-
-      // 
-
-      // update database with stripe subscription
-
-      return data;
     } catch (err) {
-      const pgUniqueViolationErrorCode = '23505';
-
-      if (err.code === pgUniqueViolationErrorCode) {
-        throw new ConflictException();
-      }
-
       throw err;
-      //this.loggerService.handleError(err);
     }
+  }
+
+  async verify(verifyToken: string) {
+
   }
 
   async login({ username, password }: UserLoginDto, sessionId: string) {
@@ -92,7 +70,7 @@ export class AuthService {
         sessionId,
       );
 
-      const status = this.generateStatus(data.user);
+      const status = this.updateStatus(data.user);
 
       const navigation = this.generateNavigation();
 
@@ -113,7 +91,7 @@ export class AuthService {
 
   }
 
-  private generateStatus(user) {
+  private updateStatus(user) {
     let status = null;
 
     if (user) {
@@ -167,3 +145,43 @@ export class AuthService {
     );
   }
 }
+
+/*
+async signup({ password, ...dto }: UserSignupDto) {
+
+    try {
+      // hash password
+      const hashedPassword = await this.hashingService.hash(password);
+      const data = await this.userRepository.signupUser({
+        ...dto,
+        password: hashedPassword,
+      });
+
+      if (!data) {
+        throw new NotFoundException();
+      }
+
+      // TODO
+
+      // create new stripe customer from api
+      const newCustomer = await this.billingService.createCustomer('accountId', 'email');
+
+      // create new trial subscription
+
+      // 
+
+      // update database with stripe subscription
+
+      return data;
+    } catch (err) {
+      const pgUniqueViolationErrorCode = '23505';
+
+      if (err.code === pgUniqueViolationErrorCode) {
+        throw new ConflictException();
+      }
+
+      throw err;
+      //this.loggerService.handleError(err);
+    }
+  }
+*/

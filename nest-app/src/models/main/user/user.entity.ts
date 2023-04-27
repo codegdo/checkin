@@ -35,27 +35,24 @@ export class User extends BaseEntity {
   @Column({ name: 'role_id' })
   roleId: number;
 
-  @Column({ name: 'contact_id' })
-  contactId: number;
-
   @Column({ name: 'company_id' })
   companyId: number;
 
-  @Column({ name: 'is_new_password' })
-  isNewPassword: boolean;
+  @Column({ name: 'is_reset_required' })
+  isResetRequired: boolean;
 
   @Column({ name: 'is_active' })
   isActive: boolean;
-
-  @Column({ name: 'created_by' })
-  createdBy: string;
-
-  @Column({ name: 'updated_by' })
-  updatedBy: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @Column({ name: 'created_by' })
+  createdBy: string;
+
+  @Column({ name: 'updated_by' })
+  updatedBy: string;
 }
