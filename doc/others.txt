@@ -40,6 +40,14 @@ Payroll Management
 QR Codes
 Reviews
 
+
+// Resource
+Project Request
+Demo Request
+Trial Request
+Service Request
+Client Request
+
 Instant Payment Notification (IPN)
 
 stripe
