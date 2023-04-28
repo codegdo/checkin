@@ -1,13 +1,13 @@
-CREATE FUNCTION main_dbo.fn_get_module_object(p_access_level varchar)
+CREATE FUNCTION main_dbo.fn_get_module_object(p_access_level VARCHAR)
 RETURNS TABLE (
-  module varchar,
-  module_group varchar,
-  view varchar,
-  view_group varchar,
-  object varchar
-) as $$
+  module VARCHAR,
+  module_group VARCHAR,
+  view VARCHAR,
+  view_group VARCHAR,
+  object VARCHAR
+) AS $$
 DECLARE
-  access_level varchar = p_access_level;
+  access_level VARCHAR = p_access_level;
 BEGIN
   RETURN QUERY
   SELECT
@@ -16,36 +16,37 @@ BEGIN
     v.name,
     v2.name,
     o.name
-  FROM main_dbo.module m
-    inner join main_dbo.module m2 on m2.id = m.parent_id
-    join main_dbo.module_view mv on m.id = mv.module_id
-    join main_dbo.view v on mv.view_id = v.id
-    inner join main_dbo.view v2 on v2.id = v.parent_id
-    join main_dbo.view_object vo on v.id = vo.view_id
-    join main_dbo.object o on vo.object_id = o.id
+  FROM
+    main_dbo.module m
+    INNER JOIN main_dbo.module m2 ON m2.id = m.parent_id
+    JOIN main_dbo.module_view mv ON m.id = mv.module_id
+    JOIN main_dbo.view v ON mv.view_id = v.id
+    INNER JOIN main_dbo.view v2 ON v2.id = v.parent_id
+    JOIN main_dbo.view_object vo ON v.id = vo.view_id
+    JOIN main_dbo.object o ON vo.object_id = o.id
   WHERE (
-    case
-      when access_level = 'internal'
-        then m.is_internal
-        and m.is_active
-        and v.is_internal
-        and v.is_active
-        and o.is_active
-      when access_level = 'external'
-        then m.is_external
-        and m.is_active
-        and v.is_external
-        and v.is_active
-        and o.is_active
-      when access_level = 'system'
-        then m.is_active 
-        and v.is_active
-        and o.is_active
-      else
-        m.is_active is null
-    end
+    CASE
+      WHEN access_level = 'internal'
+        THEN m.is_internal
+          AND m.is_active
+          AND v.is_internal
+          AND v.is_active
+          AND o.is_active
+      WHEN access_level = 'external'
+        THEN m.is_external
+          AND m.is_active
+          AND v.is_external
+          AND v.is_active
+          AND o.is_active
+      WHEN access_level = 'system'
+        THEN m.is_active 
+          AND v.is_active
+          AND o.is_active
+      ELSE
+        m.is_active IS NULL
+    END
   );
 END;
-$$ language plpgsql;
+$$ LANGUAGE plpgsql;
 
 SELECT * FROM main_dbo.fn_get_module_object('external');

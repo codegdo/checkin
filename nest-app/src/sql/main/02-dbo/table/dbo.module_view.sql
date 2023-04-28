@@ -1,27 +1,15 @@
 -- MODULE_VIEW
 CREATE TABLE main_dbo.module_view (
-  module_id int NOT NULL,
-  view_id int NOT NULL,
-  company_id int,
+  module_id INT NOT NULL,
+  view_id INT NOT NULL,
+  company_id INT,
 
   PRIMARY KEY (module_id, view_id),
   FOREIGN KEY (module_id) REFERENCES main_dbo.module(id) ON DELETE SET NULL ON UPDATE CASCADE,
   FOREIGN KEY (view_id) REFERENCES main_dbo.view(id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
-CREATE TABLE main_dbo.module_view (
-  module_id integer not null,
-  view_id integer not null,
-  company_id integer,
-  created_at timestamp default current_timestamp,
-  created_by varchar(45) default current_user,
-  --
-  primary key (module_id, view_id),
-  foreign key (module_id) references main_dbo.module(id) on delete set null,
-  foreign key (view_id) references main_dbo.view(id) on delete set null
-);
-
-CREATE INDEX idx_module_view on main_dbo.module_view(module_id, view_id);
+CREATE INDEX idx_module_view ON main_dbo.module_view(module_id, view_id);
 
 INSERT INTO main_dbo.module_view(module_id, view_id, company_id) VALUES
 (1,1,null),

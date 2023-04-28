@@ -1,26 +1,14 @@
--- VIEW_OBJECT
 CREATE TABLE main_dbo.view_object (
-  view_id int NOT NULL,
-  object_id int NOT NULL,
-  company_id int,
-  --
+  view_id INT NOT NULL,
+  object_id INT NOT NULL,
+  company_id INT,
+
   PRIMARY KEY (view_id, object_id),
   FOREIGN KEY (view_id) REFERENCES main_dbo.view(id) ON DELETE CASCADE,
   FOREIGN KEY (object_id) REFERENCES main_dbo.object(id) ON DELETE CASCADE
 );
 
-
-CREATE TABLE main_dbo.view_object (
-  view_id integer not null,
-  object_id integer not null,
-  company_id integer,
-  --
-  primary key (view_id, object_id),
-  foreign key (view_id) references main_dbo.view(id) on delete set null,
-  foreign key (object_id) references main_dbo.object(id) on delete set null 
-);
-
-CREATE INDEX idx_view_object on main_dbo.view_object(view_id, object_id);
+CREATE INDEX idx_view_object ON main_dbo.view_object (view_id, object_id);
 
 INSERT INTO main_dbo.view_object(view_id, object_id, company_id) VALUES
 (1,4,null),

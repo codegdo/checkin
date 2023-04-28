@@ -1,11 +1,11 @@
--- PERMISSION_LEVEL
+-- Create the 'main_sec.permission_level' table
 CREATE TABLE IF NOT EXISTS main_sec.permission_level (
-  id serial PRIMARY KEY,
-  name varchar(100),
-
-  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-  created_by varchar(50) DEFAULT CURRENT_USER,
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_by VARCHAR(50) DEFAULT CURRENT_USER
 );
+
 
 --
 

@@ -1,7 +1,8 @@
--- CREATE TABLE SESSION
+-- Create the 'main_sec.session' table
 CREATE TABLE main_sec.session (
-  id character VARYING PRIMARY KEY,
-  data jsonb,
-  expiration bigint,
-  deleted_at date
+  id CHARACTER VARYING PRIMARY KEY,
+  data JSONB,
+  expiration BIGINT,
+  deleted_at DATE
 );
+

@@ -1,17 +1,5 @@
 --TERRITORY
-CREATE TABLE main_pub.territory (
-  id int PRIMARY KEY,
-  country varchar(50) NOT NULL,
-  code varchar(3) NOT NULL,
-  state varchar(50),
-  state_code varchar(2),
-  region varchar(30),
-
-  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-  created_by varchar(45) DEFAULT CURRENT_USER,
-);
-
-CREATE TABLE main_pub.territory (
+create table main_pub.territory (
   id integer not null,
   country varchar(90),
   country_code varchar(3),
@@ -26,9 +14,9 @@ CREATE TABLE main_pub.territory (
 );
 
 -- US
-INSERT
-INTO main_pub.territory (id, country, country_code, state, state_code, region)
-VALUES
+insert
+into main_pub.territory (id, country, country_code, state, state_code, region)
+values
 (1, 'United States', 'USA', 'Alaska', 'AK', 'Americas'),
 (2, 'United States', 'USA', 'Alabama', 'AL', 'Americas'),
 (3, 'United States', 'USA', 'Arkansas', 'AR', 'Americas'),

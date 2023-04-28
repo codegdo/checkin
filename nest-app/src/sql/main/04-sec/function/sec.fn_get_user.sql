@@ -12,9 +12,8 @@ RETURNS TABLE (
   last_name VARCHAR,
   email_address VARCHAR,
   phone_number VARCHAR
-) AS $$
-DECLARE
-  --
+)
+AS $$
 BEGIN
   RETURN QUERY
   SELECT
@@ -30,11 +29,13 @@ BEGIN
     c.last_name,
     c.email_address,
     c.phone_number
-  FROM main_sec.user u
-  JOIN main_sec.group g ON g.id = u.group_id
-  JOIN main_sec.access_level al ON al.id = g.access_level_id
-  JOIN main_org.contact c ON c.id = u.contact_id
-  WHERE (
+  FROM
+    main_sec.user u
+    JOIN main_sec.group g ON g.id = u.group_id
+    JOIN main_sec.access_level al ON al.id = g.access_level_id
+    JOIN main_org.contact c ON c.id = u.contact_id
+  WHERE
+  (
     CASE
       WHEN (p_user_id ~ '^\d+$') THEN
         u.id = CAST(p_user_id AS INT)
@@ -46,7 +47,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 SELECT * FROM main_sec.fn_get_user('2');
-
 
 select
        t.row_num,

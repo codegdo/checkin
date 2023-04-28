@@ -2,26 +2,26 @@
 CREATE PROCEDURE main_sec.pr_user_signup(
   p_form_data json,
   OUT data json
-) as $$
+) AS $$
 DECLARE
   --
 BEGIN
-  WITH c as (
+  WITH c AS (
     INSERT INTO main_org.contact(first_name, last_name, email_address, phone_number)
-    VALUES(
+    VALUES (
       p_form_data::jsonb ->> 'firstName',
       p_form_data::jsonb ->> 'lastName',
       p_form_data::jsonb ->> 'emailAddress',
       p_form_data::jsonb ->> 'phoneNumber'
     )
     RETURNING id, email_address, phone_number
-  ), u as (
+  ), u AS (
     INSERT INTO main_sec.user(username, password, group_id, contact_id)
-    VALUES(
+    VALUES (
       p_form_data::jsonb ->> 'username',
       p_form_data::jsonb ->> 'password',
       (p_form_data::jsonb ->> 'groupId')::int,
-      (select id from c)
+      (SELECT id FROM c)
     )
     RETURNING id, username, contact_id, is_active
   )
@@ -34,21 +34,14 @@ BEGIN
       u.is_active "isActive",
       c.phone_number "phoneNumber",
       c.email_address "emailAddress"
-    FROM u LEFT JOIN c on c.id = u.contact_id
+    FROM u LEFT JOIN c ON c.id = u.contact_id
   ) d;
   COMMIT;
   --raise notice 'Value: %', p_form_data::jsonb ->> 'firstName';
-  --WITH c as (), u as () SELECT json_agg(d)::json ->> 0 INTO data FROM () d;
+  --WITH c AS (), u AS () SELECT json_agg(d)::json ->> 0 INTO data FROM () d;
 
-  --EXCEPTION when SQLSTATE '23505' then
+  --EXCEPTION WHEN SQLSTATE '23505' THEN
   --raise notice 'ERROR %', SQLERRM;
   --raise exception '% %', SQLERRM, SQLSTATE;
 END;
-$$ language plpgsql;
-
-CALL main_sec.pr_user_signup('{"firstName": "giang", "lastName":"do", "emailAddress":"giang@cmr.bz", "phoneNumber":"8583571474", "username":"gdo3", "password":"do", "groupId":1}', null);
-
-select * from main_sec.user;
-select * from main_org.contact;
-
-
+$$ LANGUAGE plpgsql;

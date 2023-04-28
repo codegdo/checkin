@@ -1,34 +1,18 @@
--- VIEW
 CREATE TABLE main_dbo.view (
-  id int PRIMARY KEY,
-  name varchar(50) NOT NULL,
-  parent_id int,
+  id INT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  parent_id INT,
 
-  is_external boolean DEFAULT false,
-  is_internal boolean DEFAULT true,
-  is_active boolean,
+  is_external BOOLEAN DEFAULT FALSE,
+  is_internal BOOLEAN DEFAULT TRUE,
+  is_active BOOLEAN,
 
-  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-  created_by varchar(50) DEFAULT CURRENT_USER
-  --
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_by VARCHAR(50) DEFAULT CURRENT_USER,
+  
   FOREIGN KEY (parent_id) REFERENCES main_dbo.view(id) ON DELETE SET NULL
 );
 
-CREATE TABLE main_dbo.view (
-  id integer not null,
-  name varchar(45) not null,
-  parent_id integer,
-
-  is_external boolean default false,
-  is_internal boolean default true,
-  is_active boolean,
-
-  created_at timestamp default current_timestamp,
-  created_by varchar(45) default current_user,
-  --
-  primary key (id),
-  foreign key (parent_id) references main_dbo.view(id) on delete set null 
-);
 
 INSERT INTO main_dbo.view(id, name, parent_id, is_external, is_internal, is_active) VALUES
 

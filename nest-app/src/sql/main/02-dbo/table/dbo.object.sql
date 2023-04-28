@@ -1,30 +1,14 @@
--- OBJECT
 CREATE TABLE main_dbo.object (
-  id int PRIMARY KEY,
-  name varchar(50) NOT NULL,
+  id INT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
 
-  is_external boolean DEFAULT FALSE,
-  is_internal boolean DEFAULT TRUE,
-  is_custom boolean DEFAULT FALSE,
-  is_active boolean DEFAULT TRUE,
+  is_external BOOLEAN DEFAULT FALSE,
+  is_internal BOOLEAN DEFAULT TRUE,
+  is_custom BOOLEAN DEFAULT FALSE,
+  is_active BOOLEAN DEFAULT TRUE,
 
-  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-  created_by varchar(50) DEFAULT CURRENT_USER
-);
-
-CREATE TABLE main_dbo.object (
-  id integer not null ,
-  name varchar(45) NOT NULL,
-
-  is_external boolean default false,
-  is_internal boolean default true,
-  is_custom boolean default false,
-  is_active boolean default true,
-
-  created_at timestamp default current_timestamp,
-  created_by varchar(45) default current_user,
-  --
-  primary key (id)
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_by VARCHAR(50) DEFAULT CURRENT_USER
 );
 
 INSERT INTO main_dbo.object(id, name, is_external, is_internal, is_custom, is_active) VALUES

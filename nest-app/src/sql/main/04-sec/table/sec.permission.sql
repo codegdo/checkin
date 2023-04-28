@@ -1,17 +1,16 @@
--- PERMISSION
+-- Create the 'main_sec.permission' table
 CREATE TABLE main_sec.permission (
-  id serial PRIMARY KEY,
-  name varchar(100) UNIQUE,
-  permission_level_id int,
-  view_id int,
-  is_active boolean DEFAULT FALSE,
-
-  created_at timestamp DEFAULT CURRENT_TIMESTAMP,
-  created_by varchar(50) DEFAULT CURRENT_USER,
-
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) UNIQUE,
+  permission_level_id INT,
+  view_id INT,
+  is_active BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_by VARCHAR(50) DEFAULT CURRENT_USER,
   FOREIGN KEY (permission_level_id) REFERENCES main_sec.permission_level(id) ON DELETE SET NULL,
-  FOREIGN KEY (view_id) REFERENCES main_sec.view(id) ON DELETE SET NULL,
+  FOREIGN KEY (view_id) REFERENCES main_sec.view(id) ON DELETE SET NULL
 );
+
 
 
 /*
