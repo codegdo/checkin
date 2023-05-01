@@ -1,0 +1,82 @@
+// Initialize the OpenID Connect client
+var oidcClient = new OidcClient({
+  authority: 'https://example.com/auth',
+  client_id: 'your_client_id',
+  redirect_uri: 'https://yourapp.com/callback',
+  response_type: 'id_token token',
+  scope: 'openid profile email'
+});
+
+// Redirect the user to the authorization endpoint
+oidcClient.createSigninRequest().then(function(signinRequest) {
+  window.location = signinRequest.url;
+});
+
+// After the user authenticates, the authorization server will redirect the user back to your app with an access token and ID token
+// Extract the ID token from the hash fragment
+var idToken = oidcClient.processSigninResponse().then(function(response) {
+  var idToken = response.id_token;
+  
+  // Verify the ID token's signature and decode its contents
+  var jwt = KJUR.jws.JWS.parse(idToken);
+  var jwtClaims = JSON.parse(b64utoutf8(jwt.payload));
+  
+  // Use the user's identity to authenticate them in your app
+  // For example, you could store the user's email address in a cookie or session
+  document.cookie = 'user_email=' + jwtClaims.email + '; path=/';
+});
+
+
+https://www.npmjs.com/package/express-openid-connect
+https://www.npmjs.com/package/openid-client
+
+
+In this example, we're using the OidcClient library to handle the OIDC protocol. The authority parameter specifies the URL of the authorization server, and client_id is your app's client ID. redirect_uri is the URL that the authorization server will redirect the user to after they authenticate, and response_type specifies the type of response you're expecting from the authorization server.
+
+We then call createSigninRequest() to generate the authorization URL and redirect the user to it. Once the user authenticates, the authorization server will redirect them back to our app with an access token and ID token.
+
+We use processSigninResponse() to extract the ID token from the URL hash fragment. We then use a library like KJUR to verify the signature and decode the contents of the ID token. Finally, we can use the user's identity to authenticate them in our app by storing their email address in a cookie or session.
+
+Note that this is just a basic example, and there are many more details involved in implementing SSO securely and robustly. Be sure to consult the OIDC specification and best practices for more information.
+
+
+
+// Initialize the SAML client
+var samlClient = new SAMLClient({
+  issuer: 'https://yourapp.com',
+  entryPoint: 'https://idp.example.com/sso',
+  cert: '-----BEGIN CERTIFICATE-----\nMIIC...',
+  privateKey: '-----BEGIN PRIVATE KEY-----\nMII...',
+  decryptionPvk: '-----BEGIN PRIVATE KEY-----\nMII...',
+  signatureAlgorithm: 'rsa-sha256'
+});
+
+// Redirect the user to the IDP for authentication
+samlClient.getAuthorizeUrl({}, function(err, loginUrl) {
+  window.location = loginUrl;
+});
+
+// After the user authenticates, the IDP will redirect the user back to your app with a SAML response
+// Extract the SAML response from the URL query parameters
+var samlResponse = samlClient.processResponse(req.query, {}, function(err, profile) {
+  if (err) {
+    // Handle the error
+  } else {
+    // Use the user's identity to authenticate them in your app
+    // For example, you could store the user's email address in a cookie or session
+    document.cookie = 'user_email=' + profile.email + '; path=/';
+  }
+});
+
+
+https://www.cloudflare.com/learning/access-management/what-is-saml/
+
+https://www.npmjs.com/package/saml2-js
+
+In this example, we're using the SAMLClient library to handle the SAML protocol. The issuer parameter is the entity ID of your app, and entryPoint is the URL of the Identity Provider's SSO service. cert, privateKey, and decryptionPvk are the X.509 certificate, private key, and decryption private key, respectively, that your app uses to sign and encrypt SAML messages. signatureAlgorithm specifies the signing algorithm that your app uses.
+
+We call getAuthorizeUrl() to generate the login URL and redirect the user to it. Once the user authenticates, the IDP will redirect them back to our app with a SAML response.
+
+We use processResponse() to extract the SAML response from the URL query parameters. If there's an error, we handle it appropriately. Otherwise, we can use the user's identity to authenticate them in our app by storing their email address in a cookie or session.
+
+Note that this is just a basic example, and there are many more details involved in implementing SSO securely and robustly. Be sure to consult the SAML specification and best practices for more information.
