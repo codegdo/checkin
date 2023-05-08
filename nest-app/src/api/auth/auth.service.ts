@@ -102,7 +102,7 @@ export class AuthService {
       } else if (!isActive && companyId) {
         status = AppStatus.INACTIVE;
       } else if (isActive && !companyId) {
-        status = AppStatus.REQUIRE_VERIFY_COMPANY;
+        status = AppStatus.REQUIRE_VERIFY;
       } else if (!isActive && !companyId) {
         status = AppStatus.REQUIRE_VERIFY;
       }

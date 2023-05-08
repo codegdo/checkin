@@ -39,8 +39,16 @@ export class UserSignupDto {
   password: string;
 
   @IsNotEmpty()
+  @IsString()
+  companyName: string;
+
+  @IsNotEmpty()
+  @IsString()
+  website: string;
+
+  @IsNotEmpty()
   @IsNumber()
-  groupId: number;
+  numEmployees: number;
 }
 
 export interface UserSignupData {

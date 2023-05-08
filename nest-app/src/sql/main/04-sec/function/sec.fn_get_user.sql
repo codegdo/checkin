@@ -1,17 +1,17 @@
-CREATE FUNCTION main_sec.fn_get_user (p_user_id VARCHAR)
+CREATE FUNCTION main_sec.fn_get_user (p_user_id varchar)
 RETURNS TABLE (
-  id INT,
-  username VARCHAR,
-  company_id INT,
-  is_active BOOLEAN,
-  group_name VARCHAR,
-  is_owner BOOLEAN,
-  group_level INT,
-  access_level VARCHAR,
-  first_name VARCHAR,
-  last_name VARCHAR,
-  email_address VARCHAR,
-  phone_number VARCHAR
+  id int,
+  username varchar,
+  company_id int,
+  is_active boolean,
+  group_name varchar,
+  is_owner boolean,
+  group_level int,
+  access_level varchar,
+  first_name varchar,
+  last_name varchar,
+  email_address varchar,
+  phone_number varchar
 )
 AS $$
 BEGIN
@@ -38,7 +38,7 @@ BEGIN
   (
     CASE
       WHEN (p_user_id ~ '^\d+$') THEN
-        u.id = CAST(p_user_id AS INT)
+        u.id = CAST(p_user_id AS int)
       ELSE
         u.username = p_user_id
     END
