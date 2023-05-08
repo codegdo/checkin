@@ -14,6 +14,24 @@ Inbound Rules: PostgresSQL
 // ELASTIC BEANTALK
 eb-dev | eb-stage | eb-prod
 
+// CDK
+https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
+npm i -g aws-cdk
+cdk --version
+
+cdk init app --language typescript
+
+cdk synth // compile project
+
+cdk bootstrap // bootstrap cloudformation
+
+cdk deploy
+
+cdk doctor
+
+cdk diff
+
 
 
 
