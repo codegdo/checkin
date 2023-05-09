@@ -13,6 +13,8 @@ COPY . .
 
 RUN pnpm run build
 
+
+
 FROM node:alpine As production
 
 ARG NODE_ENV=production
@@ -23,7 +25,7 @@ WORKDIR /usr/src/app
 COPY package.json ./
 COPY pnpm-lock.yaml ./
 
-RUN npm install -p pnpm
+RUN npm install -g pnpm
 
 RUN pnpm install --prod 
 

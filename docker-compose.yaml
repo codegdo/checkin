@@ -1,0 +1,12 @@
+services:
+  iam:
+    build:
+      context: ./nest-micro
+      dockerfile: ./apps/iam/Dockerfile
+      target: development
+    command: pnpm run start:dev iam
+    ports:
+      - '5000:5000'
+    volumes:
+      - ./nest-micro:/usr/src/app
+      - /usr/src/app/node_modules

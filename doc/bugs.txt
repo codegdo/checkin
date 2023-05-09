@@ -1,0 +1,5 @@
+docker-compose
+ Error: Cannot find module '/usr/src/app/node_modules/@nestjs/cli/bin/nest.js'
+
+ Fix: add volumes
+ - /usr/src/app/node_modules
