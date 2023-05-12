@@ -1,8 +1,0 @@
-BACKUP
-1/ Right click [database] > Export with 'pg_dump'
-2/ Path to pg_dump = C:\Program Files\PostgreSQL\14\bin\pg_dump.exe
-
-RESTORE
-1/ Right click [database] > Restore
-2/ Select type psql not pg_restore = C:/Program Files/PostgreSQL/14/bin/psql.exe
-

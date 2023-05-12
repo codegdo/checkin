@@ -6,6 +6,86 @@ type Item = {
   parentId: number | string | null;
 };
 
+export function mapToParent(list: Item[], item: Item): boolean {
+  if (item.parentId == null) {
+    list.push({ ...item });
+    return true;
+  }
+
+  for (const i of list) {
+    if (i.id === item.parentId) {
+      i.data?.push({ ...item });
+      return true;
+    }
+
+    if (i.dataType === 'block' && mapToParent(i.data, { ...item })) {
+      return true;
+    }
+  }
+
+  // console.warn(`Fail mapToParent: ${parentId}`, { id, dataType, data, position, parentId });
+  return false;
+}
+
+/*
+type Item = {
+  id: string;
+  dataType: 'block';
+  data: Item[];
+  position: number;
+  parentId: number | string;
+}
+
+class FormHelper {
+  normalize(form: any) {
+    const { data = [], fields = [] } = _.cloneDeep(form);
+
+    const list = data.map((item: any) => {
+      const newItem = { ...item };
+      mapToParent(list, newItem);
+      return newItem;
+    });
+
+    const group: { [key: string]: any[] } = _.groupBy(fields, 'parentId');
+
+    for (const key in group) {
+      const index = list.findIndex(item => item.id === key);
+      if (index !== -1) {
+        list[index].data.push(...group[key]);
+      }
+    }
+
+    //console.log(list);
+
+    return list;
+  }
+
+  mapField(data: any) {
+    const _data = _.cloneDeep(data);
+    const list: Item[] = [];
+
+    _data.forEach((item: Item, index: number) => {
+      item.position = index;
+      const newItem = { ...item };
+      mapToParent(list, newItem);
+      list.push(newItem);
+    });
+
+    return list;
+  }
+}
+
+*/
+
+/*
+type Item = {
+  id: string;
+  dataType: 'block';
+  data: Item[];
+  position: number;
+  parentId: number | string | null;
+};
+
 export function mapToParent(list: Item[], item: Item): void {
   let bool = false;
 
@@ -32,7 +112,7 @@ export function mapToParent(list: Item[], item: Item): void {
     // console.warn(`Fail mapToParent: ${item.parentId}`, item);
   }
 }
-
+*/
 /*
   input:
   {

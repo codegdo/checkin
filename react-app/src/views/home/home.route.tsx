@@ -1,17 +1,21 @@
-import React, { lazy } from 'react';
-import { useRoutes } from 'react-router-dom';
-
-import { Template } from '../../components/template/template.component';
+import { lazy } from "react";
+import { useRoutes } from "react-router-dom";
+import { Template } from "../../components";
 
 const Index = Template(lazy(() => import('./home.index')));
 
-export const HomeRoute: React.FC = (): JSX.Element => {
-  const routes = useRoutes([
+export function HomeRoute() {
+
+  let routes = useRoutes([
     {
       path: '/',
       element: <Index route="home" page="index" />
+    },
+    {
+      path: '*',
+      element: <>not found home</>
     }
   ]);
 
-  return <>{routes}</>;
-};
+  return routes
+}

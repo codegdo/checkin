@@ -1,93 +1,68 @@
-import React, { FC } from 'react';
+import React, { createContext, PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { DataSource } from './editor.type';
+import { KeyValue } from '../input';
+import { ActionClickType } from '../../constants';
+import { useEditor } from './hooks/use-editor.hook';
 
-import { Box, BoxHeader, BoxMain, BoxFooter } from '../box';
-import { EditorProps } from './editor.type';
-import { EditorProvider } from './editor.context';
-import { EditorRender } from './editor.render';
-import { EditorTab } from './editor.tab';
+export interface EditorProps<T> extends PropsWithChildren {
+  title?: string;
+  dataSource?: DataSource;
+  dataObject: T;
+  onChange?: (keyValue: KeyValue) => void;
+  onClick?: (actionType: string) => void;
+};
 
-export const Editor: FC<EditorProps> = (props) => {
-
-  return <EditorProvider {...props}>
-    <Box className='editor fixed'>
-      <BoxHeader className='editor-header'>
-        <EditorTab />
-      </BoxHeader>
-      <BoxMain className='editor-main'>
-        <EditorRender />
-      </BoxMain>
-      <BoxFooter className='editor-footer'>
-      </BoxFooter>
-    </Box>
-  </EditorProvider>
+export interface EditorContextValue<T> {
+  title?: string;
+  dataSource: DataSource;
+  dataRef: Record<string, string>;
+  dataObject: T;
+  activeTab: string;
+  isReset?: boolean;
+  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+  setIsReset: React.Dispatch<React.SetStateAction<boolean>>;
+  onChange: (keyValue: KeyValue) => void;
+  onClick: (actionType: string) => void;
 }
 
+export const EditorContext = createContext<EditorContextValue<any>>({} as EditorContextValue<any>);
 
-/*
-{!tab && name}
-{tab && <button name='' type='button' onClick={handleTabClick}>back</button>}
-//
-{
-  !tab && <nav className='editor-tab'>
-    {Object.keys(data).map((key) => {
-      return <div key={key}><button className={(tab == key) ? 'active' : ''} name={key} type='button' onClick={handleTabClick}>{key}</button></div>
-    })}
-  </nav>
-}
-{
-  tab && <main className='editor-main'>
-    {Object.keys(data).map((key, i) => {
-      switch (key) {
-        case 'content':
-          return (tab == key) && <EditorContent key={key} data={data[key]} onChange={onChange} />;
-        case 'style':
-          return (tab == key) && <EditorDesign key={key} />;
-        case 'setting':
-          return (tab == key) && <EditorSetting key={key} />;
-        default:
-          return <></>
-      }
-    })}
-  </main>
-} 
-//
-<button name='cancel' type='button' onClick={onClick}>Cancel</button>
+export function Editor<T>({
+  title,
+  dataSource = {},
+  dataObject,
+  children,
+  onChange,
+  onClick
+}: EditorProps<T>) {
+  const {
+    dataRef,
+    activeTab,
+    isReset,
+    setActiveTab,
+    setIsReset,
+    handleChange,
+    handleClick
+  } = useEditor({ dataSource, onChange, onClick });
 
+  const contextValue: EditorContextValue<T> = {
+    title,
+    dataSource,
+    dataObject,
+    dataRef,
+    activeTab,
+    isReset,
+    setActiveTab,
+    setIsReset,
+    onChange: handleChange,
+    onClick: handleClick,
+  };
 
-
-return <div className={(isDragging && dragType !== 'editor') ? 'editor hidden' : 'editor'}>
-    <header className='editor-header' ref={ref}>
-      {!tab && name}
-      {tab && <button name='' type='button' onClick={handleTabClick}>back</button>}
-    </header>
-    <div>
-      {
-        !tab && <nav className='editor-tab'>
-          {Object.keys(data).map((key) => {
-            return <div key={key}><button className={(tab == key) ? 'active' : ''} name={key} type='button' onClick={handleTabClick}>{key}</button></div>
-          })}
-        </nav>
-      }
-      {
-        tab && <main className='editor-main'>
-          {Object.keys(data).map((key, i) => {
-            switch (key) {
-              case 'content':
-                return (tab == key) && <EditorContent key={key} data={data[key]} onChange={onChange} />;
-              case 'style':
-                return (tab == key) && <EditorDesign key={key} />;
-              case 'setting':
-                return (tab == key) && <EditorSetting key={key} />;
-              default:
-                return <></>
-            }
-          })}
-        </main>
-      }
+  return (
+    <div className='editor'>
+      <EditorContext.Provider value={contextValue}>
+        {children}
+      </EditorContext.Provider>
     </div>
-    <footer className='editor-footer'>
-      <button name='cancel' type='button' onClick={onClick}>Cancel</button>
-    </footer>
-  </div>
-
-*/
+  );
+};

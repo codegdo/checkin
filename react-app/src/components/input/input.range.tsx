@@ -1,49 +1,57 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
-import { styleHelper } from '../../helpers';
-import { InputProps } from './input.type';
+import React, { useEffect, useRef, useState, ChangeEvent } from 'react';
 
-export const InputRange: React.FC<InputProps> = ({ name, text, value: initialValue = '0', defaultValue, unit = 'px', onChange }): JSX.Element => {
+import { InputProps, KeyValue } from './input.type';
 
-  const [value, setValue] = useState(initialValue || defaultValue);
-  const [backgroundImage, setBackgroundImage] = useState('');
-  const ref = useRef<HTMLInputElement>(null);
-  let linearGradient = '';
+interface InputRangeProps extends InputProps {
+  unit?: string;
+}
+
+export function InputRange({
+  name,
+  note,
+  value: initialValue,
+  defaultValue = '0',
+  placeholder = '',
+  unit = 'px',
+  isReset,
+  onChange,
+}: InputRangeProps) {
+
+  const [value, setValue] = useState<string>(initialValue || defaultValue);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setValue(initialValue || defaultValue);
-    setBackgroundImage(linearGradient);
-  }, [initialValue]);
+    const newValue = initialValue || defaultValue;
+    setValue(newValue);
+  }, [initialValue, defaultValue]);
 
   useEffect(() => {
-    if (ref.current) {
-      const { style } = ref.current;
-
-      if (style.backgroundImage) {
-        linearGradient = styleHelper.linearGradient(style.backgroundImage, `${parseInt(value) * 5}%`)
-      } else if (window.getComputedStyle(ref.current).backgroundImage) {
-        linearGradient = styleHelper.linearGradient(window.getComputedStyle(ref.current).backgroundImage, `${parseInt(value) * 5}%`)
-      } else {
-        linearGradient = `linear-gradient(
-          90deg,
-          #ddd 0%,
-          #000 0%,
-          #000 ${parseInt(value) * 5}%,
-          #ddd ${parseInt(value) * 5}%
-        )`;
-      }
-
-      setBackgroundImage(linearGradient);
+    if (isReset) {
+      const newValue = initialValue || defaultValue;
+      setValue(newValue);
     }
-  }, [value, backgroundImage]);
+  }, [isReset]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target;
-    setValue(target.value);
-    onChange && onChange({ key: name, value: target.value });
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    setValue(newValue);
+    onChange && onChange({ key: name, value: newValue });
   }
 
-  return <div>
-    <input ref={ref} type='range' className='input' min='0' max='20' step='1' value={value == null ? 0 : value} style={{ backgroundImage }} onChange={handleChange} />
-    {value !== null && <span className='text'>{value + unit}</span>}
-  </div>
+  return (
+    <div>
+      <input
+        ref={inputRef}
+        type="range"
+        className="input"
+        min="0"
+        max="20"
+        step="1"
+        value={value}
+        onChange={handleChange}
+      />
+      {note && <span className="note">{note + ' '}</span>}
+      <span className="unit">{value + unit}</span>
+    </div>
+  );
 }

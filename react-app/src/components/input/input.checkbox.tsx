@@ -1,14 +1,15 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { InputProps } from './input.type';
 
-export const InputCheckbox: FC<any> = ({ onChange }): JSX.Element => {
+export function InputCheckbox({ onChange }: InputProps) {
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     console.log('CHECKED', checked);
-    onChange && onChange();
+    onChange && onChange({ key: '', value: '' });
   }, [checked]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const target = e.target;
     setChecked(target.checked);
   }

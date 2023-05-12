@@ -1,10 +1,21 @@
-export const SESSION_GET = 'session/GET';
-export const SESSION_UPDATE = 'session/UPDATE';
-export const SESSION_DELETE = 'session/DELETE';
+import { AppStatus } from '../../constants';
 
 export interface SessionState {
-  isLogin?: boolean;
-  user?: { [x: string]: string | number | boolean } | null;
-  locationId?: number | null;
-  orgId?: number | null;
+  loggedIn?: boolean;
+  status?: AppStatus;
+  user?: UserData;
+}
+
+export interface UserData {
+  id: number;
+  firstName: string;
+  lastName: string;
+  emailAddress: string;
+  phoneNumber: string;
+  username: string;
+  accessLevel: string;
+  groupLevel: number;
+  accountId: number;
+  isOwner: boolean;
+  isActive: boolean;
 }

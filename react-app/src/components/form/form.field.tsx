@@ -1,33 +1,65 @@
-import React, { useContext, useEffect } from 'react';
-import { Input } from '../input/input.component';
-import { Label } from '../input/input.label';
-import { FormContext } from './form.context';
+import React, { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import { util, validationHelper } from '../../helpers';
 
-interface FieldProps {
+import { useWrapperContext } from '../../hooks';
+import { Label, Input, KeyValue } from '../input';
+import { FormContext } from './form.component';
+import { useField } from './hooks/use-field.hook';
+
+export interface FieldProps {
   id?: string | number;
   name: string;
   type: string;
   label?: string;
   description?: string;
+  note?: string;
+  placeholder?: string;
+  className?: string;
   value?: string;
+  defaultValue?: string;
+  isRequired?: boolean;
 }
 
-export const Field: React.FC<FieldProps> = (props): JSX.Element => {
+export function FormField({
+  id,
+  type,
+  name,
+  label,
+  description,
+  value,
+  defaultValue = "",
+  isRequired,
+}: FieldProps) {
 
-  const { form } = useContext(FormContext);
-  const { label, description, name, type, value } = props;
+  const fieldSchema = useMemo(
+    () => validationHelper.fieldSchema({ type, isRequired }),
+    [type, isRequired]
+  );
 
-  useEffect(() => {
-    form[props.name] = value;
-  }, []);
+  const { fieldLabel, fieldValue, errorMessage, isError, isReset, handleChange } = useField({
+    fieldId: id,
+    fieldName: name,
+    fieldLabel: label,
+    fieldValue: value ?? defaultValue,
+    fieldSchema
+  });
 
-  const handleChange = (key: string, value: string) => {
-    form[key] = value;
-    console.log(form, key, value);
-  }
+  const classNames = util.classNames({
+    'is-error': isError,
+  });
 
-  return <div>
-    <Label label={label} description={description} />
-    <Input type={type} name={name} value={value} onChange={handleChange} />
-  </div>
+  return (
+    <div className={classNames}>
+      <Label label={fieldLabel} description={description} />
+      <Input
+        type={type}
+        name={name}
+        value={fieldValue}
+        isReset={isReset}
+        onChange={handleChange}
+      />
+      {isError && <span>{errorMessage}</span>}
+    </div>
+  );
 }
+

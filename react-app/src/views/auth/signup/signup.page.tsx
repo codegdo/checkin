@@ -1,55 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Form, FormData, formHelper } from '../../../components/form';
 
-import { Form } from '../../../components/form/form.component';
-import { Block } from '../../../components/form/form.block';
-import { Field } from '../../../components/form/form.field';
-import { postSignupService } from './signup.service';
+function Signup() {
+  const [formData, setFormData] = useState<FormData>();
 
-const form = {
-  title: 'Login',
-  data: [{
-    id: 1,
-    role: 'block',
-    data: [
-      {
-        id: 2,
-        name: 'username',
-        type: 'text',
-        role: 'field',
-        data: null
-      }
-    ]
-  }]
-}
+  useEffect(() => {
+    const loadFormData = async () => {
+      const json = await import('./signup.form.json');
+      setFormData(json.default as any);
+    }
 
-const Signup: React.FC = (props): JSX.Element => {
+    loadFormData();
+  }, []);
 
-  const { status, data, postSignup } = postSignupService();
-
-  const handleSubmit = () => {
-    void postSignup({
-      body: JSON.stringify({
-        data: {
-          firstName: 'giang',
-          lastName: 'do',
-          emailAddress: 'giang@cmr.bz',
-          phoneNumber: '8583571474',
-          username: 'gdo',
-          password: '123456',
-          groupId: 2
-        }
-      })
-    });
+  if (!formData) {
+    return <div>loading...</div>;
   }
 
-  return <>
-    <Form title="Signup">
-      <Block>
-        <Field type="text" name="username" />
-      </Block>
-    </Form>
-    <button type="button" onClick={handleSubmit}>submit</button>
-  </>
+  const normalizedData = formHelper.normalizeFormData(formData);
+  const form = { ...formData, data: normalizedData };
+  
+  const handleCallback = (data: string | Record<string, string>) => {
+    if (typeof data === 'object') {
+      console.log(data);
+    }
+  }
+
+  return <Form
+    title={form.label}
+    data={form.data}
+    options={form.options}
+    onCallback={handleCallback}
+  />;
 }
+
 
 export default Signup;

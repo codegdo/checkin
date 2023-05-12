@@ -1,58 +1,55 @@
-import { useCallback, useReducer } from 'react';
-import { http, RequestOption, RequestOptionBody } from '../libs';
+import { useCallback, useState } from 'react';
+import { http, RequestOptions } from '../helpers';
 
-type Action = {
-  type: 'IDLE' | 'PENDING' | 'SUCCESS' | 'FAILURE';
-  payload?: any;
-};
+import { BASE_URL } from '../app.config';
+import { stringifyUrl } from '../utils';
 
-interface State {
+type ResponseFetch<T> = {
   status: string;
-  response?: any;
-}
-
-type Callback<T> = (option?: RequestOption | RequestOptionBody<T>) => Promise<void>;
-
-const initialState = {
-  status: 'idle',
-  response: null,
-};
-
-const reducer = (state: State, { type, payload: response }: Action) => {
-  switch (type) {
-    case 'PENDING':
-      return { status: 'loading' };
-    case 'SUCCESS':
-      return { status: 'success', response };
-    case 'FAILURE':
-      return { status: 'error', response };
-    default:
-      return state;
-  }
+  isIdle: boolean;
+  isLoading: boolean;
+  isError: boolean;
+  isSuccess: boolean;
+  error: T | undefined;
+  data: T | undefined;
+  mutate: (options?: RequestOptions) => void;
 };
 
 export const useFetch = <T>(
-  url?: string
-): [State, Callback<T>] => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  url: string,
+  params: object = {}
+): ResponseFetch<T> => {
+  const [status, setStatus] = useState('idle');
+  const [data, setData] = useState<T>();
+  const [error, setError] = useState<T>();
+  const isIdle = status === 'idle';
+  const isLoading = status === 'loading';
+  const isError = status === 'error';
+  const isSuccess = status === 'success';
 
-  const callback = useCallback(async (option?: RequestOptionBody<T>) => {
-    const pathUrl = url || option?.url;
-
-    if (!pathUrl) {
-      console.warn('Invalid fetch url');
-      return;
-    }
+  const callback = useCallback(async (options: RequestOptions = {}) => {
+    const baseUrl = options?.baseUrl ?? BASE_URL;
+    const strUrl = stringifyUrl(`${baseUrl}${url}`, params);
 
     try {
-      dispatch({ type: 'PENDING' });
-      const payload = await http.request(pathUrl, option);
-      dispatch({ type: 'SUCCESS', payload });
+      setStatus('loading');
+      const response = await http.request<T>(strUrl, options);
+      setData(response?.data);
+      setStatus('success');
     } catch (err: any) {
-      console.log(err);
-      dispatch({ type: 'FAILURE', payload: err });
+      setError(err);
+      setStatus('error');
     }
   }, []);
 
-  return [state, callback];
+  return {
+    status,
+    isIdle,
+    isLoading,
+    isError,
+    isSuccess,
+    data,
+    error,
+    mutate: callback,
+  };
 };

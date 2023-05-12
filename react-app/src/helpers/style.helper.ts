@@ -1,27 +1,24 @@
 class StyleHelper {
-  linearGradient(str: string, value: string) {
-    //"linear-gradient(90deg, rgb(231, 231, 231) 0%, rgb(14, 14, 14) 0%, rgb(14, 14, 14) 0%, rgb(231, 231, 231) 0%)"
+  private head: HTMLHeadElement;
 
-    str = str.substring(str.indexOf('(') + 1, str.lastIndexOf(')'));
-    //"90deg, rgb(231, 231, 231) 0%, rgb(14, 14, 14) 0%, rgb(14, 14, 14) 0%, rgb(231, 231, 231) 0%"
+  constructor() {
+    this.head = document.head || document.getElementsByTagName('head')[0];
+  }
 
-    const arr = str.split(/,(?![^(]*\))(?![^"']*["'](?:[^"']*["'][^"']*["'])*[^"']*$)/);
-    /*[
-      "90deg", 
-      "rgb(231, 231, 231) 0%", 
-      "rgb(14, 14, 14) 0%", 
-      "rgb(14, 14, 14) 0%", 
-      "rgb(231, 231, 231) 0%"
-    ]*/
+  public setHeadStyle(id: string, css: string): void {
+    const [exist] = Array.from(this.head.children).filter(
+      (child) => child.id === id
+    );
 
-    if (arr.length === 5) {
-      const v3 = arr[3].substring(0, arr[3].lastIndexOf(' '));
-      const v4 = arr[4].substring(0, arr[4].lastIndexOf(' '));
-      arr[3] = v3 + value;
-      arr[4] = v4 + value;
+    if (!exist) {
+      const style = document.createElement('style');
+      //style.type = 'text/css';
+      style.id = id;
+      style.innerHTML = css;
+      this.head.appendChild(style);
+    } else {
+      exist.innerHTML = css;
     }
-
-    return `linear-gradient(${arr.join()})`;
   }
 }
 

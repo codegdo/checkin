@@ -1,27 +1,22 @@
 {
   "compilerOptions": {
-    "target": "ES2019",
-    "module": "commonjs",
-    "lib": ["ES2019", "dom", "dom.iterable"],
-    "allowJs": true,
-    "jsx": "preserve",
-    "composite": true,
-    "outDir": "dist",
-    "rootDir": "src",
-    "sourceMap": true,
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns" : true,
-    "stripInternal": true,
-    "moduleResolution": "node",
-    "types": ["react", "react-dom", "react-router-dom", "node"],
-    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "forceConsistentCasingInFileNames": true
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "types": ["jest", "node"]
   },
-  "exclude": ["node_modules"],
-  "include": ["src/**/*", "src/**/*.json",]
+  "include": ["src", "test", "cypress"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

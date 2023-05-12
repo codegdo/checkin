@@ -1,7 +1,13 @@
-export interface ControlProps {
-  data: any;
-  values: any;
-  onChange: ({ key, value }: { key: string; value: any }) => void;
-  onClick: () => void;
+import { KeyValue } from "../input";
+
+export interface ControlData {
+  id?: number | string;
+  className?: string;
+  name: string;
+  type?: string;
+  data?: Record<string, any>;
+  value?: string;
+  isReset?: boolean;
+  onChange?: (keyValue: KeyValue) => void;
+  onClick?: (actionType: string) => void;
 }
-export interface ControlContextProps extends ControlProps { }

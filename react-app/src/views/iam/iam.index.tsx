@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React from 'react';
 
-const Index: FC = (): JSX.Element => {
-  return <div>SETUP</div>;
+function Index() {
+  return <div>IAM</div>;
 };
 
 export default Index;

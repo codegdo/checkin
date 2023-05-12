@@ -1,8 +1,7 @@
-export const randomString = (prefix?: string): string => {
-  //const character = 'abcdefghijklmnopqurstuvwxyz'.split('')[Math.floor(Math.random() * 27)];
-  const n = Math.floor(Math.random() * 27);
-  const character = 'abcdefghijklmnopqurstuvwxyz'.substring(n, n + 1);
-  const random = Math.random().toString(16).slice(12);
-  const str = prefix ? (prefix + '-' + character + random) : (character + '-' + random);
+export const randomString = (prefix?: string, separator: string = '-'): string => {
+  const randomChar = 'abcdefghijklmnopqrstuvwxyz'.charAt(Math.floor(Math.random() * 26));
+  const randomString = Math.random().toString(16).slice(4, 9);
+  const str = prefix ? `${prefix}${separator}${randomString}` : `${randomChar}${separator}${randomString}`;
+
   return str;
 };

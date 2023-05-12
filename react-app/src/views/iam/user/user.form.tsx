@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React from 'react';
 
-const UserForm: FC = (): JSX.Element => {
-  return <></>
+function UserForm() {
+  return <div>User</div>;
 };
 
 export default UserForm;

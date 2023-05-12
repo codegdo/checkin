@@ -1,70 +1,44 @@
 import React, { useEffect } from 'react';
 
-import { Form } from '../../../components/form/form.component';
-import { Block } from '../../../components/form/form.block';
-import { Field } from '../../../components/form/form.field';
-import { GridView } from '../../../components/gridview/gridview.component';
-import { Column } from '../../../components/gridview/gridview.column';
-import { Button } from '../../../components/element/element.button';
-import { FieldGroup } from '../../../components/form/form.group';
-import { FieldGrid } from '../../../components/form/form.grid';
+import { Form, FormBlock, FormField, FormGrid, FormGroup, FormElement } from '../../../components/form';
+import { loginApi } from './login.api'
+import { useAction, useRedirect } from '../../../hooks';
 
-import { colorHelper } from '../../../helpers';
-import { tint, shade } from 'tint-shade-color';
+function Login() {
 
-const form = {
-  title: 'Login',
-  data: [{
-    id: 1,
-    role: 'block',
-    data: [
-      {
-        id: 2,
-        name: 'username',
-        type: 'text',
-        role: 'field',
-        data: null
-      }
-    ]
-  }]
-}
+  const { updateCurrent, updateUser } = useAction();
+  const { status, isSuccess, data, mutate: submitLogin } = loginApi();
 
-const Login: React.FC = (props): JSX.Element => {
-
-  console.log(props);
+  useRedirect();
 
   useEffect(() => {
-    const tint = colorHelper.tintColor('#75e900', 0.5);
-    const shade = colorHelper.shadeColor('#75e900', 0.5);
-    const tints = colorHelper.tintPalette('#75e900', 4);
+    if (isSuccess && data) {
+      const { current, user } = data;
+      updateCurrent(current);
+      updateUser(user);
+    }
+  }, [isSuccess, data]);
 
-    const palette = colorHelper.fullPalette('#1ea3f8', 4, '$secondary');
+  const handleCallback = (data: string | Record<string, string>) => {
+    if (typeof data === 'object') {
+      submitLogin({ body: data });
+    }
+  }
 
-    console.log(palette.join(' '));
-    //console.log(shade);
-  }, []);
-
-  return <>
-    <Form title="Login">
-      <Block>
-        <Field type="text" name="username" label="Username" />
-        <Field type="password" name="password" label="Password" />
-        <FieldGroup>
-          <Field type="text" name="firstName" label="First Name" />
-          <Field type="text" name="lastName" label="Last Name" />
-        </FieldGroup>
-        <FieldGrid>
-          <Field type="text" name="firstName" label="First Name" />
-          <Field type="text" name="lastName" label="Last Name" />
-        </FieldGrid>
-      </Block>
-    </Form>
-    <button type="button" className="button">Button</button>
-    <button type="button" className="button btn-primary">Primary</button>
-    <button type="button" className="button btn-secondary">Secondary</button>
-    <button type="button" className="button btn-light">Light</button>
-    <button type="button" className="button btn-dark">Dark</button>
-  </>
-}
+  return <Form title="Login" status={status} onCallback={handleCallback}>
+    <FormBlock type="section">
+      <FormBlock>
+        <FormField type="text" name="username" label="Username" isRequired={true} />
+        <FormField type="password" name="password" label="Password" isRequired={true} />
+      </FormBlock>
+    </FormBlock>
+    <FormBlock type="section">
+      <FormElement type="button" name="submit" label="Login" />
+      <FormElement type="button" name="reset" label="Reset" />
+    </FormBlock>
+  </Form>;
+};
 
 export default Login;
+
+

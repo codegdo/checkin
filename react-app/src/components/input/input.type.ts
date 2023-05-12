@@ -1,13 +1,20 @@
+export interface KeyValue {
+  key: string;
+  value: any;
+}
+
 export interface InputProps {
   id?: string | number;
-  type: string;
   name: string;
-  value?: string | number;
-  defaultValue?: string | number;
+  type: string;
+  value?: string;
+  defaultValue?: string;
   data?: any;
-  text?: string;
-  unit?: string;
-  onChange?: ({ key, value }: { key: string; value: any }) => void;
+  placeholder?: string;
+  note?: string;
+
+  isReset?: boolean;
+  onChange?: (keyValue: KeyValue) => void;
 }
 
 export interface LabelProps {

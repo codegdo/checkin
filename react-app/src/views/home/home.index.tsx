@@ -1,31 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { DragDrop, Draggable } from '../../components/dragdrop';
-//import { useAction } from '../../hooks';
+import React from 'react';
 
-const Index: React.FC = (): JSX.Element => {
-  //const { updateLayout, getLayoutAsync, getThemeAsync } = useAction();
-  const [form, setForm] = useState<FormData>();
+function Index() {
 
-  // load form
-  useEffect(() => {
-    void (async () => {
-      const json: any = (await import('../auth/login/login.form.json')).default;
-      setForm(json);
-    })();
-  }, []);
-
-  useEffect(() => {
-    console.log(form);
-  }, [form]);
-
-  if (!form) {
-    return <div>loading...</div>
+  const handleToggle = () => {
+    const body = document.body || document.getElementsByTagName('body')[0];
+    body.toggleAttribute('data-scheme-dark');
   }
 
   return <div>
-    <DragDrop data={form}>
-      <Draggable />
-    </DragDrop>
+    HOME <br />
+    <button type="button" className="button" onClick={handleToggle}>Toggle</button>
   </div>;
 };
 

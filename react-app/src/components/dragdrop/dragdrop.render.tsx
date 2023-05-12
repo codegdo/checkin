@@ -1,53 +1,40 @@
-import React, { memo, PropsWithChildren } from 'react';
+import React, { memo } from 'react';
 
-import { formHelper } from '../../helpers';
 import { useWrapperContext } from '../../hooks';
-import { DragDropBlock } from './dragdrop.block';
+
 import { DragDropContext } from './dragdrop.context';
-import { DragDropElement } from './dragdrop.element';
-import { DragDropField } from './dragdrop.field';
+import { DndItem, DndItemType } from './dragdrop.type';
 
-interface RenderProps {
-  data?: any[]
+import { DropBlock } from './drop.block';
+import { DropElement } from './drop.element';
+import { DropField } from './drop.field';
+import { DropGrid } from './drop.grid';
+import { DropGroup } from './drop.group';
+import { DropPlaceholder } from './drop.placeholder';
+
+export interface DragDropRenderProps {
+  data?: DndItem[];
 }
 
-export const DragDropRender: React.FC = (): JSX.Element => {
+export const DragDropRender = memo(({ data = [] }: DragDropRenderProps) => {
   const context = useWrapperContext(DragDropContext);
-  const data = formHelper.mapField(context?.state?.data);
+  return (
+    <>
+      {
+        data.map((item, i) => {
+          const { id, dataType } = item;
 
-  console.log(data);
-
-  return <DragDropBlock
-    id="dropzone"
-    className="form"
-    name="block"
-    dataType="dropzone"
-    {...context}
-  >
-    <Render data={data} />
-  </DragDropBlock>
-
-}
-
-export const Render: React.FC<PropsWithChildren<RenderProps>> = memo(({ data = [] }): JSX.Element => {
-
-  const context = useWrapperContext(DragDropContext);
-
-  return <>
-    {
-      data.map((item) => {
-        switch (item.dataType) {
-          case 'block':
-          case 'dropzone':
-          case 'placeholder':
-            return <DragDropBlock key={item.id} {...item} {...context} />
-          case 'element':
-            return <DragDropElement key={item.id} {...item} {...context} />
-          case 'field':
-            return <DragDropField key={item.id} {...item} {...context} />
-          default: return null;
-        }
-      })
-    }
-  </>
-})
+          switch (dataType) {
+            case DndItemType.BLOCK: return <DropBlock key={id} {...item} {...context} />;
+            case DndItemType.PLACEHOLDER: return <DropPlaceholder key={id} {...item} {...context} />;
+            case DndItemType.ELEMENT: return <DropElement key={id} {...item} {...context} />;
+            case DndItemType.FIELD: return <DropField key={id} {...item} {...context} />;
+            case DndItemType.GROUP: return <DropGroup key={id} {...item} {...context} />;
+            case DndItemType.GRID: return <DropGrid key={id} {...item} {...context} />;
+            default: return null;
+          }
+        })
+      }
+    </>
+  );
+});

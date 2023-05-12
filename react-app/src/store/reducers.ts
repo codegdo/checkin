@@ -3,42 +3,38 @@ import { persistReducer } from 'redux-persist';
 import { PersistPartial } from 'redux-persist/es/persistReducer';
 import storage from 'redux-persist/lib/storage';
 
-import { initialSessionState, sessionReducer } from './session/session.reducer';
-import { initialLayout, layoutReducer } from './layout/layout.reducer';
+import { currentReducer, initialCurrent } from './current/current.reducer';
 import { initialTheme, themeReducer } from './theme/theme.reducer';
-import { initialNavState, navReducer } from './nav/nav.reducer';
-import { initialPolicyState, policyReducer } from './policy/policy.reducer';
-import { initialLocation, locationReducer } from './location/location.reducer';
+import { initialUser, userReducer } from './user/user.reducer';
 
 export type AppState = ReturnType<typeof appReducer>;
 type RootReducer = ReturnType<typeof rootReducer>;
 
 export const appReducer = combineReducers({
-  session: sessionReducer,
-  layout: layoutReducer,
+  current: currentReducer,
+  user: userReducer,
   theme: themeReducer,
-  nav: navReducer,
-  policy: policyReducer,
-  locations: locationReducer
 });
 
-const rootReducer = (state: AppState | undefined, action: AnyAction): AppState => {
+const rootReducer = (
+  state: AppState | undefined,
+  action: AnyAction
+): AppState => {
   // reset store
-  if (action.type === 'session/DELETE') {
+  if (action.type === 'current/LOGOUT') {
     void storage.removeItem('persist:root');
 
     state = {
       ...state,
-      session: initialSessionState,
-      layout: initialLayout,
+      current: initialCurrent,
+      user: initialUser,
       theme: initialTheme,
-      nav: initialNavState,
-      policy: initialPolicyState,
-      locations: initialLocation
     };
   }
   return appReducer(state, action);
 };
 
-export const persistedReducer: Reducer<RootReducer & PersistPartial, AnyAction> =
-  persistReducer({ key: 'root', storage }, rootReducer);
+export const persistedReducer: Reducer<
+  RootReducer & PersistPartial,
+  AnyAction
+> = persistReducer({ key: 'root', storage }, rootReducer);

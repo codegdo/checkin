@@ -4,7 +4,7 @@ import { InputRange } from './input.range';
 import { InputText } from './input.text';
 import { InputProps } from './input.type';
 
-export const Input: React.FC<InputProps> = ({ ...props }): JSX.Element | null => {
+export function Input({ ...props }: InputProps) {
 
   switch (props.type) {
     case 'text':

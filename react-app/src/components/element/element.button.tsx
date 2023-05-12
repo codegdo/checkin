@@ -1,11 +1,20 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
-export const Button: React.FC<any> = ({ onCallback }): JSX.Element => {
+interface ButtonProps extends PropsWithChildren {
+  name?: string;
+  className?: string;
+  text?: string;
+  disabled?: boolean;
+  onClick?: (name: string) => void;
+}
+
+export function Button({ name = 'button', className = 'button', text = 'button', disabled = false, onClick, children }: ButtonProps) {
 
   const handleClick = () => {
-    console.log('click');
-    onCallback && onCallback();
+    onClick && onClick(name);
   }
 
-  return <button onClick={handleClick}>Button</button>
+  return <button className={className} type="button" name={name} disabled={disabled} onClick={handleClick}>
+    {children ? children : text}
+  </button>
 }

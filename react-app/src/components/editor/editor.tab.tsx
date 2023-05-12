@@ -1,25 +1,17 @@
-import React, { FC, useContext } from 'react';
-import { EditorContext } from './editor.context';
-import { EditorContextProps } from './editor.type';
+import React, { MouseEvent } from 'react';
+import { useWrapperContext } from '../../hooks';
+import { EditorContext } from './editor.component';
+import { Control } from '../control';
 
-export const EditorTab: FC = (): JSX.Element => {
-  const ctx = useContext((EditorContext) as React.Context<EditorContextProps>);
+export function EditorTab() {
+  const { dataSource = {}, activeTab, setActiveTab } = useWrapperContext(EditorContext);
 
-  if (!ctx) {
-    throw new Error();
-  }
+  const handleTabClick = (e: MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
 
-  const { editor, tab, setTab } = ctx;
-
-  const handleTabClick = (event: any) => {
-    setTab(event.target.name);
-  }
-
-  return <>
-    {Object.keys(editor).map((key) => {
-      return <span key={key}>
-        <button className={(tab == key) ? 'active' : ''} name={key} type='button' onClick={handleTabClick}>{key}</button>
-      </span>
-    })}
-  </>
+  return <div className='editor-tab' onClick={handleTabClick}>
+    <Control name="tabs" type="tab" data={Object.keys(dataSource)} value={activeTab} onClick={setActiveTab} />
+  </div>
 }

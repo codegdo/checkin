@@ -1,41 +1,36 @@
-import React, { PropsWithChildren, useContext } from 'react';
-import { Block } from './form.block';
-import { FormContext } from './form.context';
-import { Field } from './form.field';
-import { FieldGrid } from './form.grid';
-import { FieldGroup } from './form.group';
-import { FormContextProps } from './form.type';
+import React, { memo, PropsWithChildren } from 'react';
 
-interface RenderProps {
-  data?: any[]
+import { FormSection } from './form.section';
+import { FormBlock } from './form.block';
+import { FormField } from './form.field';
+import { FormElement } from './form.element';
+import { FormGrid } from './form.grid';
+import { FormGroup } from './form.group';
+import { DataType, Element } from './form.type';
+
+interface FormRenderProps extends PropsWithChildren {
+  data?: Element[]
 }
 
-export const Render: React.FC<PropsWithChildren<RenderProps>> = ({ data, children }): JSX.Element | null => {
-  console.log('DATA', data);
+export const FormRender = memo(({ data = [], children }: FormRenderProps) => {
 
-  const ctx = useContext((FormContext as Object) as React.Context<FormContextProps>);
+  return (
+    <>
+      {
+        children || data.map((item, i) => {
+          const { dataType } = item;
 
-  if (!ctx) {
-    throw new Error();
-  }
-
-  const { onClick } = ctx;
-
-  return <>
-    {
-      children ? children : data && data?.map((item, i) => {
-        const { role } = item;
-
-        switch (role) {
-          case 'block': return <Block key={i} {...item} />;
-          case 'field': return <Field key={i} {...item} />;
-          case 'group': return <FieldGroup key={i} {...item} />;
-          case 'grid': return <FieldGrid key={i} {...item} />;
-          default: return null;
-        }
-      })
-    }
-    <button type='button' onClick={() => onClick('key', 'value')}>Click</button>
-
-  </>
-}
+          switch (dataType) {
+            case DataType.SECTION: return <FormSection key={i} {...item} />;
+            case DataType.BLOCK: return <FormBlock key={i} {...item} />;
+            case DataType.ELEMENT: return <FormElement key={i} {...item} />;
+            case DataType.FIELD: return <FormField key={i} {...item} />;
+            case DataType.GROUP: return <FormGroup key={i} {...item} />;
+            case DataType.GRID: return <FormGrid key={i} {...item} />;
+            default: return null;
+          }
+        })
+      }
+    </>
+  );
+});

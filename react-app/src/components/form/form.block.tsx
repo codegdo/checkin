@@ -1,14 +1,20 @@
 import React, { PropsWithChildren } from 'react';
-import { Render } from './form.render';
+import { FormRender } from './form.render';
+import { Element } from './form.type';
 
-interface BlockProps {
-  data?: any
+export interface BlockProps extends PropsWithChildren {
+  type?: string;
+  className?: string;
+  data?: Element[];
 }
 
-export const Block: React.FC<PropsWithChildren<BlockProps>> = ({ children, data }): JSX.Element => {
-  return <div>
-    {
-      children ? children : data && <Render data={data} />
-    }
-  </div>
+export function FormBlock({ type = 'div', className, data = [], children }: BlockProps) {
+
+  const JSXElement = type as keyof JSX.IntrinsicElements;
+
+  return (
+    <JSXElement className={className}>
+      {children ? children : <FormRender data={data} />}
+    </JSXElement>
+  );
 }

@@ -1,12 +1,15 @@
 services:
-  iam:
+  nest_app:
     build:
-      context: ./nest-micro
-      dockerfile: ./apps/iam/Dockerfile
+      context: ./nest-app
+      dockerfile: ./Dockerfile
       target: development
-    command: pnpm run start:dev iam
+    command: npm run start:dev nest_app
     ports:
       - '5000:5000'
+    environment:
+      - POSTGRES_HOST=host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
-      - ./nest-micro:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./nest-app:/usr/src/app

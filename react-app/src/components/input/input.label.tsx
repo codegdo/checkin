@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { LabelProps } from './input.type';
 
-export const Label: FC<LabelProps> = ({ className, label, description, styles }): JSX.Element => {
+export function Label({ className, label, description, styles }: LabelProps) {
   return <>
     {
       (label || description) &&

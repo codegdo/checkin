@@ -1,3 +1,1 @@
-export interface ThemeState {
-  [x: string]: string;
-}
+export interface ThemeState { }

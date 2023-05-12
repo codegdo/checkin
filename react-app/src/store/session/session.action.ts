@@ -1,22 +1,18 @@
-import { AnyAction } from 'redux';
-import { SessionState, SESSION_GET, SESSION_UPDATE, SESSION_DELETE } from './session.type';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { SessionState } from './session.type';
 
-export function getSession(payload: SessionState): AnyAction {
-  return {
-    type: SESSION_GET,
-    payload,
-  };
-}
+export const getSession = createAction('session/GET');
+export const updateSession = createAction<SessionState>(
+  'session/UPDATE'
+);
+export const deleteSession = createAction('session/DELETE');
 
-export function updateSession(payload: SessionState): AnyAction {
-  return {
-    type: SESSION_UPDATE,
-    payload,
-  };
-}
-
-export function deleteSession(): AnyAction {
-  return {
-    type: SESSION_DELETE,
-  };
-}
+export const refreshSessionAsync = createAsyncThunk(
+  'session/REFRESH',
+  () => {
+    const data = new Promise((resolve) =>
+      setTimeout(() => resolve({ data: '' }), 5000)
+    );
+    return data;
+  }
+);

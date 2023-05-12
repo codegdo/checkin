@@ -4,17 +4,24 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 
 import { DragDropProvider } from './dragdrop.context';
-import { DragDropRender } from './dragdrop.render';
-import { DragDropProps } from './dragdrop.type';
+import { DropArea } from './drop.area';
 import { DragDropEditor } from './dragdrop.editor';
+import { DragPreview } from './drag.preview';
+import { DragArea } from './drag.area';
 
-export const DragDrop: React.FC<PropsWithChildren<DragDropProps>> = ({ children, onCallback, ...props }): JSX.Element => {
+export interface DragDropProps extends PropsWithChildren {
+  data?: any;
+  onCallback?: (key?: string, values?: any) => void;
+}
+
+export function DragDrop({ children, ...props }: DragDropProps) {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
   return (
     <DndProvider backend={backend}>
       <DragDropProvider {...props}>
-        <DragDropRender />
-        {children}
+        <DropArea />
+        <DragArea>{children}</DragArea>
+        <DragPreview />
         <DragDropEditor />
       </DragDropProvider>
     </DndProvider>

@@ -1,15 +1,14 @@
-export interface EditorProps {
-  type: string;
-  values: any;
-  onChange: ({ key, value }: { key: string; value: any }) => void;
-  onClick: () => void;
+export interface ItemData {
+  id?: number | string;
+  name?: string;
+  label?: string;
+  type?: string;
+  dataType?: 'panel' | 'control';
+  data?: ItemData[];
 }
-export interface EditorContextProps {
-  editor: any;
-  values: any;
-  tab: string;
-  setTab: any;
-  //setValues: any;
-  onChange: any;
-  onClick: any;
+
+export interface DataSource {
+  content?: ItemData[];
+  design?: ItemData[];
+  setting?: ItemData[];
 }

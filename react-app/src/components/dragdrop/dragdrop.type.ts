@@ -1,22 +1,19 @@
-export interface DragDropProps {
-  data?: any;
-  current?: any;
-  onCallback?: (key?: string, value?: string) => void;
+import { FormData, Element, DataType } from '../form';
+import { DragDropContextValue } from './dragdrop.context';
+
+export enum DndActionType {
+  SET_SELECTED_ITEM = 'SET_SELECTED_ITEM',
+  SET_SELECTED_ITEM_EDIT = 'SET_SELECTED_ITEM_EDIT',
+  SET_SELECTED_ITEM_NULL = 'SET_SELECTED_ITEM_NULL',
+  SET_INITIAL_ITEMS = 'SET_INITIAL_ITEMS',
+  ADD_ITEM = 'ADD_ITEM',
+  MOVE_ITEM = 'MOVE_ITEM',
+  CLONE_ITEM = 'CLONE_ITEM',
+  REMOVE_ITEM = 'REMOVE_ITEM',
+  UPDATE_ITEM = 'UPDATE_ITEM',
+  RESET_ITEM = 'UPDATE_RESET',
 }
 
-export interface DragDropContextProps extends DragDropProps {
-  state: DragDropState;
-  current: any;
-  dispatch?: React.Dispatch<DragDropAction>,
-  onCallback?: () => void;
-}
-
-export type DragDropAction = {
-  type: 'INIT' | 'MOVE_ITEM' | 'ADD_ITEM' | 'DELETE_ITEM' | 'UPDATE_ITEM' | 'DUPLICATE_ITEM' | 'SET_ITEM_EDIT' | 'SET_ITEM_ACTIVE';
-  payload?: any;
-};
-
-export type DragDropState = {
-  data: any[];
-  item: any;
-};
+export const DndItemType = { ...DataType };
+export type DndItem = Element & Partial<DragDropContextValue>;
+export type DndData = FormData;

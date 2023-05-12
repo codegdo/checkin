@@ -3,7 +3,7 @@ import { TableContext } from './table.component';
 import { TR } from './table.tr';
 import { TableProps, TBodyProps } from './table.type';
 
-export const TBody = <T extends Object>(_props: TBodyProps<T>): JSX.Element => {
+export function TBody<T extends Object>(_props: TBodyProps<T>) {
 
   const ctx = useContext((TableContext as Object) as React.Context<TableProps<T>>);
 

@@ -1,105 +1,157 @@
-import React, { PropsWithChildren, useCallback, useEffect, useReducer, useRef, useState } from 'react';
+import React, { Dispatch, PropsWithChildren, useEffect, useReducer, useRef } from 'react';
 
-import { initialState, reducer } from './dragdrop.reducer';
-import { DragDropContextProps, DragDropProps } from './dragdrop.type';
+import { DragDropProps } from './dragdrop.component';
+import { DndActionType, DndItem } from './dragdrop.type';
+import { dndHelper } from './helpers/dragdrop.helper';
+import { KeyValue } from '../input';
 
-export const DragDropContext = React.createContext<DragDropContextProps>({
-  state: { data: [], item: null },
-  current: null
+export type SelectedDndItem = DndItem & {
+  itemRef?: React.RefObject<HTMLDivElement>;
+  isEdit?: boolean;
+  onChange?: (keyValue: KeyValue) => void;
+  onClick?: (actionType: string) => void;
+};
+
+export interface DndState {
+  data: DndItem[];
+  item: SelectedDndItem | null;
+}
+
+export interface DndAction {
+  type: DndActionType | string;
+  payload: any;
+}
+
+export type DropRef = Partial<DndItem> & {
+  dragId?: string | number;
+  dragPosition?: number | null;
+  x?: number;
+  y?: number;
+  translateX?: number;
+  translateY?: number;
+  offset?: string;
+  direction?: string;
+  canDrop?: boolean;
+}
+
+export interface DndRef {
+  dropRef: DropRef;
+  domRef: Record<string, HTMLDivElement | null>;
+}
+
+export interface DragDropContextValue {
+  state: DndState;
+  dispatch: Dispatch<DndAction>;
+  dndRef: DndRef;
+}
+
+const dndReducer = (state: DndState, action: DndAction) => {
+  const { type, payload } = action;
+
+  switch (type) {
+    case DndActionType.SET_SELECTED_ITEM_EDIT:
+      return { ...state, item: { ...state.item, isEdit: payload } };
+
+    case DndActionType.SET_SELECTED_ITEM_NULL:
+      return { ...state, item: null };
+
+    case DndActionType.SET_SELECTED_ITEM:
+      const selectedItem = payload;
+      return { ...state, item: selectedItem };
+
+    case DndActionType.SET_INITIAL_ITEMS:
+      const initialItems = [...payload];
+      return { ...state, data: initialItems };
+
+    case DndActionType.ADD_ITEM: {
+      const { dragItem, dropRef } = payload;
+
+      // Generate a new item with an ID and default values, 
+      // and add it to the data at the given drop reference
+      // and set position equal -1 to determine new item
+      const newItem = {
+        id: dndHelper.generateNewId(),
+        data: [],
+        parentId: null,
+        childId: null,
+        position: -1,
+        ...dragItem,
+      };
+
+      const updatedData = dndHelper.addItems(newItem, dropRef, state.data);
+
+      return { ...state, data: updatedData };
+    }
+
+    case DndActionType.MOVE_ITEM: {
+      const { dragItem, dropRef } = payload;
+
+      // Move the item to the new position and update the parent-child relationships in the data
+      const updatedData = dndHelper.moveItems(dragItem, dropRef, state.data);
+
+      return { ...state, data: updatedData };
+    }
+
+    case DndActionType.CLONE_ITEM: {
+      // Clone the selected item and add it to the data, then clear the selected item
+      const clonedData = dndHelper.cloneItems(payload, state.data);
+
+      return { ...state, data: clonedData, item: null };
+    }
+
+    case DndActionType.REMOVE_ITEM: {
+      // Remove the selected item and its children from the data, then clear the selected item
+      const removedData = dndHelper.removeItems(payload, state.data);
+
+      return { ...state, data: removedData, item: null };
+    }
+
+    case DndActionType.UPDATE_ITEM: {
+
+      const updatedData = dndHelper.updateItems(payload, state.data);
+
+      return { ...state, data: updatedData };
+    }
+
+    case DndActionType.RESET_ITEM: {
+
+      const updatedData = dndHelper.resetItems(payload, state.data);
+
+      return { ...state, data: updatedData };
+    }
+
+    default:
+      return state;
+  }
+};
+
+export const defaultDndRef = {
+  dropRef: {},
+  domRef: {}
+}
+
+export const defaultDndState = { data: [], item: null }
+
+export const DragDropContext = React.createContext<DragDropContextValue>({
+  dndRef: defaultDndRef,
+  state: defaultDndState,
+  dispatch: () => console.log('dispatch'),
 });
 
-export const DragDropProvider: React.FC<PropsWithChildren<DragDropProps>> = ({ children, data, ...props }) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { current } = useRef({});
+export function DragDropProvider({ children, data, ...props }: DragDropProps) {
+  const [state, dispatch] = useReducer(dndReducer, defaultDndState);
+  const { current: dndRef } = useRef(defaultDndRef);
 
   useEffect(() => {
-    const payload = [...data.data, ...data.fields].sort((a, b) => {
-      return a.position - b.position;
-    }).filter((item, index) => {
-      item.position = index;
-      return item;
-    });
-
     dispatch({
-      type: 'INIT',
-      payload
+      type: DndActionType.SET_INITIAL_ITEMS,
+      payload: data
     });
-  }, []);
+  }, [data]);
 
-  useEffect(() => {
-
-    // if (item && state.data.length > item.length) {
-    //   const newId = state.data[item.position + 1].id;
-    //   setItem({ ...item, id: newId });
-    // }
-
-    console.log('NEW STATE', state);
-  }, [state]);
-
-  // const moveItem = useCallback((payload: any) => {
-
-  //   dispatch({
-  //     type: 'MOVE_ITEM',
-  //     payload
-  //   });
-
-  // }, [state]);
-
-  // const addItem = useCallback((payload: any) => {
-
-  //   dispatch({
-  //     type: 'ADD_ITEM',
-  //     payload
-  //   });
-
-  // }, [state]);
-
-  // const deleteItem = useCallback((payload: any) => {
-
-  //   dispatch({
-  //     type: 'DELETE_ITEM',
-  //     payload
-  //   });
-
-  //   setItem(null);
-  // }, [state]);
-
-  // const duplicateItem = useCallback((payload: any) => {
-
-  //   dispatch({
-  //     type: 'DUPLICATE_ITEM',
-  //     payload
-  //   });
-
-  // }, [state, item]);
-
-  // const updateItem = useCallback((payload: any) => {
-
-  //   dispatch({
-  //     type: 'UPDATE_ITEM',
-  //     payload
-  //   });
-
-  //   setItem(null);
-  // }, [state]);
-
-  const onCallback = useCallback(() => {
-    //
-  }, []);
-
-  return <DragDropContext.Provider value={{
-    state,
-    current,
-    //item,
-    dispatch,
-    //setItem,
-    //moveItem,
-    //addItem,
-    //deleteItem,
-    //duplicateItem,
-    //updateItem,
-    onCallback
-  }}>
-    {children}
-  </DragDropContext.Provider>
-}
+  return (
+    <DragDropContext.Provider value={{ dndRef, state, dispatch }}>
+      {children}
+    </DragDropContext.Provider>
+  );
+};

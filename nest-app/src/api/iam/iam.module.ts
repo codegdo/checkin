@@ -19,6 +19,7 @@ import {
 import { CaslAbilityService, UtilService } from 'src/helpers';
 import { TypeormStore } from 'src/customs';
 import { Session, UserRepository } from 'src/models/main';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { Session, UserRepository } from 'src/models/main';
         };
       },
     }),
+    UserModule,
   ],
   providers: [
     {
