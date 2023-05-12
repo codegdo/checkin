@@ -13,3 +13,8 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - ./nest-app:/usr/src/app
+  nest_notification:
+    build:
+      context: ./nest-notification
+      dockerfile: ./Dockerfile
+      target: development
