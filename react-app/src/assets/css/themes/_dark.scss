@@ -1,0 +1,5 @@
+@import './colors', '../base/mixins', '../components/mixins';
+
+@include theme-color;
+@include theme-color-base;
+@include theme-color-button;

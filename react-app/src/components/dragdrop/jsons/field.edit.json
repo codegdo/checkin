@@ -1,0 +1,75 @@
+{
+  "content": [
+    {
+      "id": "c-label-1",
+      "name": "panel",
+      "label": "Label",
+      "type": "div",
+      "dataType": "panel",
+      "data": [
+        {
+          "id": "c-label-2",
+          "name": "label",
+          "label": "Label",
+          "type": "text",
+          "dataType": "control"
+        },
+        {
+          "id": "c-label-3",
+          "name": "styles.label.fontSize",
+          "label": "Label",
+          "type": "range",
+          "dataType": "control"
+        }
+      ]
+    },
+    {
+      "id": "c-description-1",
+      "name": "panel",
+      "label": "Description",
+      "type": "div",
+      "dataType": "panel",
+      "data": [
+        {
+          "id": "c-description-2",
+          "name": "description",
+          "label": "Description",
+          "type": "text",
+          "dataType": "control"
+        },
+        {
+          "id": "c-description-3",
+          "name": "styles.description.fontSize",
+          "label": "Description",
+          "type": "range",
+          "dataType": "control"
+        }
+      ]
+    },
+    {
+      "id": "c-note-1",
+      "name": "panel",
+      "label": "Note",
+      "type": "div",
+      "dataType": "panel",
+      "data": [
+        {
+          "id": "c-note-2",
+          "name": "note",
+          "label": "Note",
+          "type": "text",
+          "dataType": "control"
+        },
+        {
+          "id": "c-note-3",
+          "name": "styles.note.fontSize",
+          "label": "Note",
+          "type": "range",
+          "dataType": "control"
+        }
+      ]
+    }
+  ],
+  "design": [],
+  "setting": []
+}
