@@ -4,16 +4,16 @@ import {
   AbilityBuilder,
   createMongoAbility,
 } from '@casl/ability';
-import { IamService } from 'src/api/iam/iam.service';
+//import { IamService } from 'src/api/iam/iam.service';
 
 @Injectable()
 export class CaslAbilityService {
-  constructor(private readonly iamService: IamService) { }
+  //constructor(private readonly iamService: IamService) { }
 
   async createForUser(user, contextPermission) {
     const { can, cannot, build } = new AbilityBuilder(createMongoAbility);
-    const userPermissionPolicy = await this.iamService.getUserPermissionPolicy(user);
-
+    //const userPermissionPolicy = await this.iamService.getUserPermissionPolicy(user);
+    const userPermissionPolicy = { policies: [] };
     console.log('createForUser', userPermissionPolicy);
 
     if (!userPermissionPolicy) {

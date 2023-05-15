@@ -1,6 +1,6 @@
 import { SetMetadata } from '@nestjs/common';
-import { AccessLevelEnum } from 'src/models/main';
+import { AccessLevel } from 'src/constants';
 
 export const ACCESS_KEY = 'access_key';
-export const Access = (...access: AccessLevelEnum[]) =>
+export const Access = (...access: AccessLevel[]) =>
   SetMetadata(ACCESS_KEY, access);

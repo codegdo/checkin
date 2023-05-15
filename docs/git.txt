@@ -1,0 +1,2 @@
+# remove .git file
+rm -rf .git

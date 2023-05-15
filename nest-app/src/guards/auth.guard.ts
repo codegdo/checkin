@@ -9,10 +9,10 @@ import { Observable } from 'rxjs';
 
 import { AuthType } from 'src/constants';
 import { AUTH_TYPE_KEY } from 'src/decorators';
-import { AccessGuard } from './access.guard';
-import { PermissionGuard } from './permission.guard';
-import { RoleGuard } from './role.guard';
-import { SecurityGuard } from './security.guard';
+
+import { AuthSession } from './auth.session';
+import { AuthAccess } from './auth.access';
+import { AuthPermission } from './auth.permission';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -21,16 +21,15 @@ export class AuthGuard implements CanActivate {
     AuthType,
     CanActivate | CanActivate[]
   > = {
-      [AuthType.Bear]: [this.securityGuard, this.accessGuard, this.roleGuard, this.permissionGuard],
+      [AuthType.Bear]: [this.authSession, this.authAccess, this.authPermission],
       [AuthType.None]: { canActivate: () => true },
     };
 
   constructor(
     private readonly reflector: Reflector,
-    private readonly securityGuard: SecurityGuard,
-    private readonly accessGuard: AccessGuard,
-    private readonly roleGuard: RoleGuard,
-    private readonly permissionGuard: PermissionGuard,
+    private readonly authSession: AuthSession,
+    private readonly authAccess: AuthAccess,
+    private readonly authPermission: AuthPermission,
   ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

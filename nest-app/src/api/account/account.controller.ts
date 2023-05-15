@@ -7,23 +7,22 @@ import {
   Put,
 } from '@nestjs/common';
 import { Access, Permission } from 'src/decorators';
-import { AccessLevelEnum } from 'src/models/main';
+
 import { ProfileAction } from 'src/helpers';
 import { AccountService } from './account.service';
+import { AccessLevel } from 'src/constants';
 
-@Access(AccessLevelEnum.External)
+@Access(AccessLevel.EXTERNAL)
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) { }
 
-  @HttpCode(HttpStatus.OK)
   @Get('profile')
   @Permission([ProfileAction.GET_PROFILE, 'account'])
   getProfile() {
     //return this.accountService.signup();
   }
 
-  @HttpCode(HttpStatus.OK)
   @Put('profile')
   @Permission([ProfileAction.UPDATE_PROFILE, 'account'])
   updateProfile() {

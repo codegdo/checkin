@@ -1,7 +1,12 @@
 import { registerAs } from '@nestjs/config';
 import * as entities from 'src/models';
 
+import * as fs from 'fs';
+import * as path from 'path';
+
+
 export const databaseConfig = registerAs('database', () => {
+
   const databaseOptions = {
     type: 'postgres',
     host: process.env.POSTGRES_HOST,

@@ -1,8 +1,9 @@
+version: '3.7'
 services:
   nest_app:
     build:
       context: ./nest-app
-      dockerfile: ./Dockerfile
+      dockerfile: Dockerfile
       target: development
     command: npm run start:dev nest_app
     ports:
@@ -10,11 +11,6 @@ services:
     environment:
       - POSTGRES_HOST=host.docker.internal
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - "host.docker.internal:host-gateway" #window
     volumes:
       - ./nest-app:/usr/src/app
-  nest_notification:
-    build:
-      context: ./nest-notification
-      dockerfile: ./Dockerfile
-      target: development
