@@ -6,7 +6,6 @@ import { Access, Permission } from 'src/decorators';
 @Controller('user')
 export class UserController {
 
-
   @Get('users')
   @Permission([UserAction.GET_ALL_USER, 'iam'])
   getAllUser() {

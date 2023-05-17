@@ -1,11 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { SessionModule } from 'nestjs-session';
-import { databaseConfig, sessionConfig } from 'src/configs';
-import { Session } from 'src/models/main';
+import { databaseConfig } from 'src/configs';
 import { DataSource } from 'typeorm';
-import { TypeormStore } from '../typeorm/typeorm-store';
 
 @Module({
   imports: [
@@ -20,31 +17,31 @@ import { TypeormStore } from '../typeorm/typeorm-store';
       },
       dataSourceFactory: async (options) => {
         const dataSource = await new DataSource(options).initialize();
+        //await dataSource.manager.query(`CREATE TABLE main_sec.user`);
+        const queryRunner = await dataSource.createQueryRunner();
+        var result = await queryRunner.manager.query(
+          `
+          CREATE TABLE IF NOT EXISTS main_sec.user (
+            id SERIAL PRIMARY KEY,
+            username VARCHAR(30) UNIQUE NOT NULL,
+            password VARCHAR(100) NOT NULL,
+            passcode NUMERIC(4),
+            group_id INT,
+            role_id INT,
+            company_id INT,
+            is_reset_required BOOLEAN DEFAULT FALSE,
+            is_active BOOLEAN DEFAULT FALSE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            created_by VARCHAR(50) DEFAULT CURRENT_USER,
+            updated_by VARCHAR(50)
+          )
+          `
+        );
+
+        console.log('TEST', result);
         return dataSource;
       }
-    }),
-    SessionModule.forRootAsync({
-      imports: [ConfigModule.forFeature(sessionConfig)],
-      inject: [ConfigService, DataSource],
-      useFactory: async (
-        configService: ConfigService,
-        dataSource: DataSource,
-      ) => {
-        const config = await configService.get('session');
-        const repository = dataSource.getRepository(Session);
-        const sessionStore = new TypeormStore({
-          cleanupLimit: 10,
-          limitSubquery: false,
-          //ttl: 3600000,
-        }).connect(repository);
-
-        return {
-          session: {
-            ...config,
-            store: sessionStore,
-          },
-        };
-      },
     })
   ],
   providers: [],

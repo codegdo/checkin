@@ -10,7 +10,7 @@ import { IamService } from './iam.service';
 import { IamController } from './iam.controller';
 import {
   AuthGuard,
-  SecurityGuard,
+  SessionGuard,
   PermissionGuard,
   AccessGuard,
   RoleGuard,
@@ -21,10 +21,10 @@ import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Session, UserRepository]),
-    JwtModule.registerAsync(jwtConfig.asProvider()),
-    ConfigModule.forFeature(jwtConfig),
-    UserModule,
+    // TypeOrmModule.forFeature([Session, UserRepository]),
+    // JwtModule.registerAsync(jwtConfig.asProvider()),
+    // ConfigModule.forFeature(jwtConfig),
+    // UserModule,
   ],
   providers: [
     // {

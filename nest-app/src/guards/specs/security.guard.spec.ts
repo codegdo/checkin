@@ -1,4 +1,4 @@
-import { SecurityGuard } from '../security.guard';
+import { SecurityGuard } from '../session.guard';
 
 describe('SecurityGuard', () => {
   it('should be defined', () => {

@@ -6,21 +6,21 @@ import { UserRepository } from 'src/models/main';
 
 @Injectable()
 export class IamService {
-  constructor(
-    @Inject(jwtConfig.KEY)
-    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
+  // constructor(
+  //   @Inject(jwtConfig.KEY)
+  //   private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
 
-    @InjectRepository(UserRepository)
-    private userRepository: UserRepository,
-  ) {}
+  //   @InjectRepository(UserRepository)
+  //   private userRepository: UserRepository,
+  // ) {}
 
-  async getUserPermissionPolicy(user) {
-    try {
-      const data = await this.userRepository.getUserPermissionPolicy(user);
+  // async getUserPermissionPolicy(user) {
+  //   try {
+  //     const data = await this.userRepository.getUserPermissionPolicy(user);
 
-      return data;
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  //     return data;
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }
 }

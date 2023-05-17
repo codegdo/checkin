@@ -1,0 +1,134 @@
+import { Connection } from 'typeorm';
+
+async function createTable() {
+  const connection = await Connection.create({
+    // Your TypeORM connection options here
+  });
+
+  const queryRunner = connection.createQueryRunner();
+  await queryRunner.connect();
+  await queryRunner.startTransaction();
+
+  try {
+    await queryRunner.query(`
+      CREATE TABLE main_sec.user (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(30) UNIQUE NOT NULL,
+        password VARCHAR(100) NOT NULL,
+        passcode NUMERIC(4),
+        group_id INT,
+        role_id INT,
+        company_id INT,
+        is_reset_required BOOLEAN DEFAULT FALSE,
+        is_active BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        created_by VARCHAR(50) DEFAULT CURRENT_USER,
+        updated_by VARCHAR(50),
+        FOREIGN KEY (group_id) REFERENCES main_sec.group(id)
+      )
+    `);
+
+    // Add a trigger to update the updated_at column on every update
+    await queryRunner.query(`
+      CREATE OR REPLACE FUNCTION update_updated_at_column()
+      RETURNS TRIGGER AS $$
+      BEGIN
+        NEW.updated_at = NOW();
+        RETURN NEW;
+      END;
+      $$ language 'plpgsql';
+
+      CREATE TRIGGER update_user_updated_at
+      BEFORE UPDATE ON main_sec.user
+      FOR EACH ROW
+      EXECUTE FUNCTION update_updated_at_column();
+    `);
+
+    await queryRunner.commitTransaction();
+  } catch (err) {
+    console.error('Error creating table:', err);
+    await queryRunner.rollbackTransaction();
+  } finally {
+    await queryRunner.release();
+    await connection.close();
+  }
+}
+
+// Call the function to create the table
+createTable().catch(console.error);
+
+
+
+const fs = require('fs');
+
+async function processSQLFile(fileName) {
+  try {
+    const sql = fs.readFileSync(fileName, 'utf8');
+    const queries = sql.split(';').map(query => query.trim()).filter(query => query !== '');
+
+    for (const query of queries) {
+      if (query.startsWith('COPY')) {
+        const matches = query.match(/COPY\s+(.*?)\s+FROM\s+(.*?)\s+DELIMITERS/gmi);
+        if (matches) {
+          const table = matches[0].split(' ')[1];
+          const fileName = matches[0].split(' ')[3];
+          const copyString = `COPY ${table} FROM STDIN DELIMITERS ',' CSV HEADER`;
+          const stream = client.copyFrom(copyString);
+
+          await new Promise((resolve, reject) => {
+            stream.on('close', () => resolve());
+            stream.on('error', error => reject(error));
+            fs.createReadStream(fileName).pipe(stream);
+          });
+        }
+      } else {
+        await client.query(query);
+      }
+    }
+  } catch (error) {
+    console.error('Error processing SQL file:', error);
+  }
+}
+
+
+const fs = require('fs');
+const path = require('path');
+const { getConnection } = require('typeorm');
+
+async function processSQLFile(fileName) {
+  try {
+    const filePath = path.join(__dirname, fileName);
+    const sql = fs.readFileSync(filePath, 'utf8');
+    const queries = sql.split(';').map(query => query.trim()).filter(query => query !== '');
+
+    const connection = getConnection(); // Assuming you have an established TypeORM connection
+
+    for (const query of queries) {
+      await connection.query(query);
+    }
+
+    console.log('SQL file processed successfully.');
+  } catch (error) {
+    console.error('Error processing SQL file:', error);
+  }
+}
+
+let files = [];
+
+const getFilesRecursively = (directory) => {
+  const filesInDirectory = fs.readdirSync(directory);
+  for (const file of filesInDirectory) {
+    const absolute = path.join(directory, file);
+    if (fs.statSync(absolute).isDirectory()) {
+      getFilesRecursively(absolute);
+    } else {
+      files.push(absolute);
+    }
+  }
+};
+
+const entities = fs.readdirSync(path.join(__dirname, '../../', 'src/sql/main')).filter(file => path.extname(file) === '.sql').map(file => file)
+
+console.log(path.join(path.dirname(__filename), '../', 'models'), entities);
+

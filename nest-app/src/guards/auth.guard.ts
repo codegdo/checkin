@@ -10,9 +10,9 @@ import { Observable } from 'rxjs';
 import { AuthType } from 'src/constants';
 import { AUTH_TYPE_KEY } from 'src/decorators';
 
-import { AuthSession } from './auth.session';
-import { AuthAccess } from './auth.access';
-import { AuthPermission } from './auth.permission';
+import { SessionGuard } from './session.guard';
+import { AccessGuard } from './access.guard';
+import { PermissionGuard } from './permission.guard';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -27,9 +27,9 @@ export class AuthGuard implements CanActivate {
 
   constructor(
     private readonly reflector: Reflector,
-    private readonly authSession: AuthSession,
-    private readonly authAccess: AuthAccess,
-    private readonly authPermission: AuthPermission,
+    private readonly authSession: SessionGuard,
+    private readonly authAccess: AccessGuard,
+    private readonly authPermission: PermissionGuard,
   ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

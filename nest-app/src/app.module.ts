@@ -8,8 +8,12 @@ import { AccountModule } from './api/account/account.module';
 import { WebhookModule } from './api/webhook/webhook.module';
 import { BillingModule } from './api/billing/billing.module';
 
-import { DatabaseModule, GuardModule } from './common';
-
+import {
+  DatabaseModule,
+  GuardModule,
+  SessionModule,
+  ClientModule
+} from './common';
 
 @Module({
   imports: [
@@ -20,6 +24,8 @@ import { DatabaseModule, GuardModule } from './common';
     WebhookModule,
     DatabaseModule,
     GuardModule,
+    SessionModule,
+    ClientModule
   ],
   providers: [
     {

@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile
       target: development
     command: npm run start:dev nest_app
+    env_file:
+      - ./nest-app/.env
     ports:
       - '5000:5000'
     environment:
@@ -14,3 +16,31 @@ services:
       - "host.docker.internal:host-gateway" #window
     volumes:
       - ./nest-app:/usr/src/app
+  nest_sender:
+    build:
+      context: ./nest-sender
+      dockerfile: Dockerfile
+      target: development
+    command: npm run start:dev nest_sender
+    env_file:
+      - ./nest-sender/.env
+    environment:
+      - POSTGRES_HOST=host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway" #window
+    volumes:
+      - ./nest-sender:/usr/src/app
+  nest_worker:
+    build:
+      context: ./nest-worker
+      dockerfile: Dockerfile
+      target: development
+    command: npm run start:dev nest_worker
+    env_file:
+      - ./nest-worker/.env
+    environment:
+      - POSTGRES_HOST=host.docker.internal
+    extra_hosts:
+      - "host.docker.internal:host-gateway" #window
+    volumes:
+      - ./nest-worker:/usr/src/app

@@ -4,7 +4,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { jwtConfig } from 'src/configs';
-import { AuthAccess, AuthGuard, AuthPermission, AuthSession } from 'src/guards';
+import { AccessGuard, AuthGuard, PermissionGuard, SessionGuard } from 'src/guards';
 import { CaslAbilityService, UtilService } from 'src/helpers';
 import { Session, UserRepository } from 'src/models/main';
 
@@ -19,9 +19,9 @@ import { Session, UserRepository } from 'src/models/main';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
-    AuthSession,
-    AuthAccess,
-    AuthPermission,
+    SessionGuard,
+    AccessGuard,
+    PermissionGuard,
 
     CaslAbilityService,
     UtilService,
