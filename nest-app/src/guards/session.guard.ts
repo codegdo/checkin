@@ -12,7 +12,7 @@ import { Request } from 'express';
 
 import { jwtConfig } from 'src/configs';
 import { Session } from 'src/models/main';
-import { REQUEST_USER_KEY } from 'src/types';
+import { REQUEST_USER_KEY } from 'src/interfaces';
 import { Repository } from 'typeorm';
 
 @Injectable()

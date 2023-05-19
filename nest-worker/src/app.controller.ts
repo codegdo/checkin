@@ -7,5 +7,8 @@ export class AppController {
   constructor(private readonly appService: AppService) { }
 
   @EventPattern('migration_up')
-  async migrationUp() { }
+  async migrationUp() {
+    console.log('WORKER CALL');
+    return 'WORKER CALL';
+  }
 }

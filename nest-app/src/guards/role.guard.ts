@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { ROLES_KEY } from 'src/decorators';
 import { AccessLevelEnum } from 'src/models/main';
-import { REQUEST_USER_KEY } from 'src/types';
+import { REQUEST_USER_KEY } from 'src/interfaces';
 
 @Injectable()
 export class RoleGuard implements CanActivate {

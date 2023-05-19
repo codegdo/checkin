@@ -1,0 +1,4 @@
+ https://developer.redis.com/create/windows/
+ 
+ sudo service redis-server restart
+ sudo service redis-server stop

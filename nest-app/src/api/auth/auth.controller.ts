@@ -13,8 +13,8 @@ import {
   UserSignupBody,
   UserSignupDto,
 } from 'src/models/main/user/user.dto';
-import { SESSION_DATA_KEY } from 'src/types';
-import { AuthType } from 'src/types/auth.enum';
+import { SESSION_DATA_KEY } from 'src/interfaces';
+import { AuthType } from 'src/interfaces/auth.enum';
 import { AuthService } from './auth.service';
 
 @Auth(AuthType.None)
