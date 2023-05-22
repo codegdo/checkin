@@ -18,7 +18,7 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
   },
-  "watchOptions": {
-    "watchFile": "fixedPollingInterval"
-  }
+  // "watchOptions": {
+  //   "watchFile": "fixedPollingInterval"
+  // }
 }

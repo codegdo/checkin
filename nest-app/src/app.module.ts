@@ -1,10 +1,5 @@
 import { ClassSerializerInterceptor, MiddlewareConsumer, Module, RequestMethod, ValidationPipe } from '@nestjs/common';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
-import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
-import type { RedisClientOptions } from 'redis';
-//import * as redisStore from 'cache-manager-redis-store';
-import { redisStore } from 'cache-manager-redis-yet';
-
 
 import { AuthModule, IamModule } from './api';
 import { LoggingInterceptor } from './interceptors';
@@ -15,12 +10,16 @@ import { BillingModule } from './api/billing/billing.module';
 import { ConsoleModule } from './api/console/console.module';
 
 import {
+  //CacheModule,
   DatabaseModule,
   GuardModule,
   SessionModule
 } from './common';
-import { BullModule } from './common/bull/bull.module';
 
+import { BullModule } from './common/bull/bull.module';
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
+import { RedisClientOptions } from 'redis';
+import { redisStore } from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -34,13 +33,13 @@ import { BullModule } from './common/bull/bull.module';
     GuardModule,
     SessionModule,
     BullModule,
-    CacheModule.register<RedisClientOptions>({
-      store: redisStore,
-
-      // Store-specific configuration:
-      host: 'localhost',
-      port: 6379,
-    }),
+    // CacheModule.registerAsync({
+    //   useFactory: async (): Promise<RedisClientOptions & { store: any; host: string; port: number }> => ({
+    //     store: redisStore,
+    //     host: 'localhost',
+    //     port: 6379,
+    //   }) as RedisClientOptions & { store: any; host: string; port: number },
+    // }),
   ],
   providers: [
     {
@@ -65,11 +64,10 @@ import { BullModule } from './common/bull/bull.module';
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
     },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
-    },
-
+    // {
+    //   provide: APP_INTERCEPTOR,
+    //   useClass: CacheInterceptor,
+    // },
   ],
   controllers: [],
 })

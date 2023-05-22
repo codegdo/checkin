@@ -21,20 +21,11 @@ import { DataSource } from 'typeorm';
         const queryRunner = await dataSource.createQueryRunner();
         var result = await queryRunner.manager.query(
           `
-          CREATE TABLE IF NOT EXISTS main_sec.user (
-            id SERIAL PRIMARY KEY,
-            username VARCHAR(30) UNIQUE NOT NULL,
-            password VARCHAR(100) NOT NULL,
-            passcode NUMERIC(4),
-            group_id INT,
-            role_id INT,
-            company_id INT,
-            is_reset_required BOOLEAN DEFAULT FALSE,
-            is_active BOOLEAN DEFAULT FALSE,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            created_by VARCHAR(50) DEFAULT CURRENT_USER,
-            updated_by VARCHAR(50)
+          CREATE TABLE IF NOT EXISTS main_sec.session (
+            id CHARACTER VARYING PRIMARY KEY,
+            data JSONB,
+            expiration BIGINT,
+            deleted_at DATE
           )
           `
         );

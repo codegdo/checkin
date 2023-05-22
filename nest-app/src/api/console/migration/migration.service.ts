@@ -13,7 +13,7 @@ export class MigrationService {
   async migrationUp() {
     // obserable
     await this.migrationService.send('migration_up', { type: 'migration' }).subscribe(async (response) => {
-      console.log(response);
+      console.log('RESPONSE FROM WORKER', response);
       return response;
     });
   }
