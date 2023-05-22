@@ -21,7 +21,7 @@ import { TypeormStore } from '../store/typeorm.store';
       ) => {
         const config = await configService.get('session');
         const repository = dataSource.getRepository(Session);
-        const sessionStore = new TypeormStore({
+        const store = new TypeormStore({
           cleanupLimit: 10,
           limitSubquery: false,
           //ttl: 3600000,
@@ -30,7 +30,7 @@ import { TypeormStore } from '../store/typeorm.store';
         return {
           session: {
             ...config,
-            store: sessionStore,
+            store,
           },
         };
       },

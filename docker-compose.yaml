@@ -16,8 +16,8 @@ services:
       - SEND_HOST=nest_sender
       - WORKER_HOST=nest_worker
     extra_hosts:
-      #- "host.docker.internal:host-gateway" #window
-      - "host.docker.internal: 172.17.0.1"
+      - "host.docker.internal:host-gateway" #window
+      #- "host.docker.internal: 172.17.0.1"
     volumes:
       - ./nest-app:/usr/src/app
   nest_sender:
@@ -31,8 +31,8 @@ services:
     environment:
       - POSTGRES_HOST=host.docker.internal
     extra_hosts:
-      #- "host.docker.internal:host-gateway" #window
-      - "host.docker.internal: 172.17.0.1"
+      - "host.docker.internal:host-gateway" #window
+      #- "host.docker.internal: 172.17.0.1"
     volumes:
       - ./nest-sender:/usr/src/app
   nest_worker:
@@ -46,7 +46,7 @@ services:
     environment:
       - POSTGRES_HOST=host.docker.internal
     extra_hosts:
-      #- "host.docker.internal:host-gateway" #window
-      - "host.docker.internal: 172.17.0.1"
+      - "host.docker.internal:host-gateway" #window
+      #- "host.docker.internal: 172.17.0.1"
     volumes:
       - ./nest-worker:/usr/src/app

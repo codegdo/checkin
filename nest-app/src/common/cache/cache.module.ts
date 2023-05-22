@@ -1,42 +1,30 @@
 import { Module } from '@nestjs/common';
-import { CacheInterceptor, CacheModule as NestCacheModule } from '@nestjs/cache-manager';
-//import { redisStore } from 'cache-manager-ioredis-yet';
-//import Redis from 'ioredis';
-import * as redisStore from 'cache-manager-redis-store';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CacheStore, CacheModule as NestCacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-store';
+
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-	imports:[
-    NestCacheModule.register({
+  imports: [
+    NestCacheModule.registerAsync({
+      isGlobal: true,
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        store: redisStore,
-        socket: {
-          host: configService.get('REDIS_HOST'),
-          port: +configService.get('REDIS_PORT'),
-        }
-        // client: new Redis({
-        //     host: configService.get('REDIS_HOST'),
-        //     port: +configService.get('REDIS_PORT'),
-        // })
-      }),
+      useFactory: async (config: ConfigService) => {
+        const store = await redisStore({
+          socket: {
+            host: config.get('REDIS_HOST'),
+            port: +config.get('REDIS_PORT'),
+          },
+          password: config.get('REDIS_PASSWORD'),
+          ttl: 60
+        });
+
+        return {
+          store: store as unknown as CacheStore
+        };
+      },
       inject: [ConfigService],
     }),
-		// NestCacheModule.register({
-		// 	store: redisStore,
-		// 	client: new Redis({
-		// 			host: 'localhost',
-		// 			port: 6379,
-		// 	})
-		// }),
-	],
-	providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CacheInterceptor,
-    },
-
   ]
 })
-export class CacheModule {}
+export class CacheModule { }

@@ -1,5 +1,6 @@
 import { ClassSerializerInterceptor, MiddlewareConsumer, Module, RequestMethod, ValidationPipe } from '@nestjs/common';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
+import { redisStore } from 'cache-manager-redis-store';
 
 import { AuthModule, IamModule } from './api';
 import { LoggingInterceptor } from './interceptors';
@@ -10,16 +11,18 @@ import { BillingModule } from './api/billing/billing.module';
 import { ConsoleModule } from './api/console/console.module';
 
 import {
-  //CacheModule,
+  CacheModule,
+  //ClientModule,
   DatabaseModule,
   GuardModule,
   SessionModule
 } from './common';
 
 import { BullModule } from './common/bull/bull.module';
-import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
-import { RedisClientOptions } from 'redis';
-import { redisStore } from 'cache-manager-redis-store';
+//import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
+//import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
+//import { RedisClientOptions } from 'redis';
+//import { redisStore } from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -33,13 +36,19 @@ import { redisStore } from 'cache-manager-redis-store';
     GuardModule,
     SessionModule,
     BullModule,
-    // CacheModule.registerAsync({
-    //   useFactory: async (): Promise<RedisClientOptions & { store: any; host: string; port: number }> => ({
-    //     store: redisStore,
-    //     host: 'localhost',
-    //     port: 6379,
-    //   }) as RedisClientOptions & { store: any; host: string; port: number },
+    CacheModule,
+    // CacheModule.register({
+    //   // @ts-ignore
+    //   store: async () => await redisStore({
+    //     // Store-specific configuration:
+    //     socket: {
+    //       host: 'localhost',
+    //       port: 6379,
+    //     }
+    //   }),
+    //   isGlobal: true
     // }),
+
   ],
   providers: [
     {

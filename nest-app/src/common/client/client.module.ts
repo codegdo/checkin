@@ -61,7 +61,7 @@ export class ClientModule {
           }
         ])
       ],
-      global: options.global,
+      global: true,
     }
   }
 }
