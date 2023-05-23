@@ -9,6 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     NestCacheModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: async (config: ConfigService) => {
         const store = await redisStore({
           socket: {
@@ -23,7 +24,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           store: store as unknown as CacheStore
         };
       },
-      inject: [ConfigService],
+
     }),
   ]
 })

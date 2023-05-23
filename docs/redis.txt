@@ -7,3 +7,4 @@
  https://stackoverflow.com/questions/68912168/how-to-use-redis-as-a-store-for-express-session-nestjs
  https://dnlytras.com/snippets/redis-session
  https://dev.to/nestjs/setting-up-sessions-with-nestjs-passport-and-redis-210
+ https://blog.bitsrc.io/authentication-work-flow-using-express-session-and-passportjs-4291231285a5
