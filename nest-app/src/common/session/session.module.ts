@@ -1,15 +1,14 @@
-import { Inject, Module, OnApplicationBootstrap } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SessionModule as NestSessionModule } from 'nestjs-session';
 import { databaseConfig, sessionConfig } from 'src/configs';
-import { Session } from 'src/models/main';
 import { DataSource } from 'typeorm';
-import { createClient } from 'redis';
 import { Cache } from 'cache-manager';
 
 import { TypeormStore } from '../store/typeorm.store';
 import { RedisStore } from '../store/redis.store';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Session } from 'src/models/main';
 
 @Module({
   imports: [
@@ -30,12 +29,19 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
         //await cacheManager.set('cache_session', 'hello cache');
         //await cacheManager.del('cache_session');
 
-        // const repository = dataSource.getRepository(Session);
+        const repository = dataSource.getRepository(Session);
+
         // const store = new TypeormStore({
         //   cleanupLimit: 10,
         //   limitSubquery: false,
         //   //ttl: 3600000,
         // }).connect(repository);
+
+        // store.on('connect', () => {
+        //   console.log('TypeormStore connected!');
+        // });
+
+        // store.connect(repository);
 
         const store = new RedisStore({});
 
