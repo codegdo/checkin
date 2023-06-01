@@ -24,6 +24,10 @@ export class MigrationService {
       const cachedItem = await this.cacheManager.get('cached_item');
       console.log(cachedItem);
 
+      const all = await this.cacheManager.store.keys('sess*');
+
+      console.log('ALL', all);
+
       return response;
     });
   }
