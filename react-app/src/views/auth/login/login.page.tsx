@@ -4,10 +4,16 @@ import { Form, FormBlock, FormField, FormGrid, FormGroup, FormElement } from '..
 import { loginApi } from './login.api'
 import { useAction, useRedirect } from '../../../hooks';
 
+import { randomString } from 'shared-code';
+
 function Login() {
 
   const { updateCurrent, updateUser } = useAction();
   const { status, isSuccess, data, mutate: submitLogin } = loginApi();
+
+  const rd = randomString();
+
+  console.log(rd);
 
   useRedirect();
 
