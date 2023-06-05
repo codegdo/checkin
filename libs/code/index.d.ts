@@ -1,1 +1,1 @@
-declare module 'shared-code';
+declare module '@libs/shared-code';

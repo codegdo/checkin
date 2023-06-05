@@ -1,5 +1,5 @@
-import { randomString } from "./utils"
+import * as utils from "./utils";
 
-export default {
-  randomString
+export {
+  utils
 }

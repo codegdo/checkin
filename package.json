@@ -1,5 +1,11 @@
 {
   "scripts": {
+    "link:code": "cd libs/code && npm install && npm run build && npm link",
+    "install:nest-app": "cd apps/nest-app && npm install",
+    "install:react-app": "cd apps/react-app && npm install",
+    "install:nest": "npm install && npm run link:code && npm run install:nest-app",
+    "install:react": "npm install && npm run link:code && npm run install:react-app",
+    "install:all": "npm install && npm run link:code && run-p install:nest-app install:react-app",
     "dev:api": "cd apps/nest-app && npm run start:dev api",
     "dev:worker": "cd apps/nest-app && npm run start:dev worker",
     "dev:react": "cd apps/react-app && npm run dev",

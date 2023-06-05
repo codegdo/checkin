@@ -1,6 +1,28 @@
 
-docker ps
+docker ps -a
 
 docker images
 
 docker system prune -a
+
+docker exec -it [id] /bin/bash
+
+
+docker build -t react-app:1.0 . (. is current of dockerfile is going to execute)
+
+docker build -t react-app:1.0 -f ./apps/react-app/Dockerfile .
+docker run -d -p 3000:3000 react-app:1.0
+
+docker logs [container id]
+docker stop [container id]
+docker kill [container id]
+
+docker run (working image) -d detach -p port --name
+docker start [id] (working with container)
+
+# commands
+cd
+ls 
+pwd
+env
+exit

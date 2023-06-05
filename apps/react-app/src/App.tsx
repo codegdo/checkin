@@ -3,8 +3,14 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+import { utils } from '@libs/shared-code';
+
 function App() {
   const [count, setCount] = useState(0)
+
+  const rd = utils.randomString();
+
+  console.log(rd);
 
   return (
     <>
