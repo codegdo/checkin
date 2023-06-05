@@ -1,7 +1,7 @@
 {
-  "name": "shared-code",
+  "name": "libs-code",
   "version": "1.0.0",
-  "description": "shared code",
+  "description": "library shared code",
   "private": true,
   "main": "dist/index.js",
   "typings": "dist/index",

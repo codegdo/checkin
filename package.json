@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "dev:api": "cd apps/nest-app && npm run start:dev api",
+    "dev:worker": "cd apps/nest-app && npm run start:dev worker",
+    "dev:react": "cd apps/react-app && npm run dev",
+    "dev": "run-p dev:api dev:worker dev:react"
+  },
+  "dependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
