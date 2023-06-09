@@ -2,4 +2,6 @@ nest new [name]
 nest g library [name]
 nest g app [name]
 
+https://graphviz.gitlab.io/download/
+
 https://stackoverflow.com/questions/74573177/in-nestjs-i-added-redis-as-cache-manager-when-i-specify-ttl-0-it-throws-a
