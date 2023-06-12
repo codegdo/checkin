@@ -16,12 +16,8 @@ function AuthRoute() {
 
   let routes = useRoutes([
     {
-      path: '/',
+      path: '/*',
       element: <Index route="auth" page="index" />
-    },
-    {
-      path: '*',
-      element: <div>not found auth</div>
     }
   ]);
 

@@ -8,6 +8,10 @@ const Signup = PartialLoader(lazy(() => import('./signup/signup.page')));
 function Index() {
   let routes = useRoutes([
     {
+      path: '/',
+      element: <Login route="auth" page="login" />
+    },
+    {
       path: '/login',
       element: <Login route="auth" page="login" />
     },
@@ -17,7 +21,7 @@ function Index() {
     },
     {
       path: '*',
-      element: <div>not found auth</div>
+      element: <div>not found auth.index</div>
     }
   ]);
 
