@@ -14,36 +14,38 @@ const html = DOMPurify.sanitize(`
   </div>
 `, { ADD_TAGS: ['jsx'] });
 
-const TemplateLoader = (Component: FC<TemplateProps | {}>) => (props: TemplateProps) => {
+function Template(Component: FC<TemplateProps | object>) {
 
-  const options = ({ fallback }: Options): HTMLReactParserOptions => {
-    return {
-      replace: (domNode): any => {
+  return function TemplateLoader(props: TemplateProps) {
+    const options = ({ fallback }: Options): HTMLReactParserOptions => {
+      return {
+        replace: (domNode): false | void | object | Element | null | undefined => {
+          if ('attribs' in domNode) {
+            const { attribs } = domNode;
 
-        if ('attribs' in domNode) {
-          const { attribs } = domNode;
-
-          switch (attribs.id) {
-            case 'jsx_main':
-              return fallback ? <div>loading</div> : <Component {...props} />
-            case 'jsx_nav':
-              return <div>NAV</div>
-            default:
-              return;
+            switch (attribs.id) {
+              case 'jsx_main':
+                return fallback ? <div>loading</div> : <Component {...props} />;
+              case 'jsx_nav':
+                return <div>NAV</div>;
+              default:
+                return null;
+            }
           }
         }
-      }
-    }
+      };
+    };
+
+    const [template, fallback] = useMemo(() => {
+      return [parse(html, options({ fallback: false })), parse(html, options({ fallback: true }))];
+    }, []);
+
+    return (
+      <Suspense fallback={fallback}>
+        {template}
+      </Suspense>
+    );
   };
-
-  const [template, fallback] = useMemo(() => {
-    return [parse(html, options({ fallback: false })), parse(html, options({ fallback: true }))];
-  }, []);
-
-  return <Suspense fallback={fallback}>
-    {template}
-  </Suspense>
 }
 
-export default TemplateLoader;
-
+export default Template;

@@ -1,10 +1,10 @@
 import React from 'react';
 
-function ItemEditor(props: any) {
+function ItemEditor() {
 
   return (
     <>
-      MENU
+      EDITOR
     </>
   )
 }

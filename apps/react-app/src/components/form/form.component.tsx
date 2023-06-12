@@ -6,9 +6,11 @@ import FormRender from './form.render';
 function Form() {
 
   return (
-    <FormProvider value=''>
-      <FormRender data={[]} />
-    </FormProvider>
+    <form>
+      <FormProvider value=''>
+        <FormRender data={[]} />
+      </FormProvider>
+    </form>
   )
 }
 

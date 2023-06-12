@@ -4,7 +4,7 @@ function DragItem(props: any) {
 
   return (
     <>
-      ITEM
+      DRAG_ITEM
     </>
   )
 }

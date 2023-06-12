@@ -1,21 +1,21 @@
 import React from 'react';
 
-//import { useWrapperContext } from '../../hooks';
-//import DragDropContext from './dragdrop.provider';
 import ItemMenu from './item.menu';
 import ItemEditor from './item.editor';
+import { Field } from '../types';
 
-function ItemField(props: any) {
-  //const context = useWrapperContext(DragDropContext);
+type ItemFieldProps = Field & {
+  ctx: string;
+};
+
+function ItemField(props: ItemFieldProps) {
 
   return (
-    <>
+    <div>
       <ItemMenu />
       <ItemEditor />
-      {
-        props.children
-      }
-    </>
+      <label>FIELD</label>
+    </div>
   )
 }
 

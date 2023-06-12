@@ -1,21 +1,21 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
-//import { useWrapperContext } from '../../hooks';
-//import DragDropContext from './dragdrop.provider';
 import ItemMenu from './item.menu';
 import ItemEditor from './item.editor';
+import { Field } from '../types';
 
-function ItemBlock(props: any) {
-  //const context = useWrapperContext(DragDropContext);
+type DropBlockProps = PropsWithChildren<Field>;
+
+function ItemBlock(props: DropBlockProps) {
 
   return (
-    <>
+    <div>
       <ItemMenu />
       <ItemEditor />
       {
         props.children
       }
-    </>
+    </div>
   )
 }
 

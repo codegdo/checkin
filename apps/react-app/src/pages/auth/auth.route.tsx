@@ -14,14 +14,14 @@ const Index = TemplateLoader(lazy(() => import('./auth.index')));
 
 function AuthRoute() {
 
-  let routes = useRoutes([
+  const routes = useRoutes([
     {
       path: '/*',
       element: <Index route="auth" page="index" />
     }
   ]);
 
-  return <>{routes}</>
+  return routes;
 }
 
 export default AuthRoute;

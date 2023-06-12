@@ -1,20 +1,14 @@
 import React from 'react';
 
-//import { useWrapperContext } from '../../hooks';
-//import DragDropContext from './dragdrop.provider';
 import ItemMenu from './item.menu';
 import ItemEditor from './item.editor';
 
-function ItemElement(props: any) {
-  //const context = useWrapperContext(DragDropContext);
+function ItemElement() {
 
   return (
     <>
       <ItemMenu />
       <ItemEditor />
-      {
-        props.children
-      }
     </>
   )
 }

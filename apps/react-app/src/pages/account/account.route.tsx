@@ -7,7 +7,7 @@ const Index = TemplateLoader(lazy(() => import('./account.index')));
 
 function AccountRoute() {
 
-  let routes = useRoutes([
+  const routes = useRoutes([
     {
       path: '/',
       element: <Index route="account" page="index" />
@@ -18,7 +18,7 @@ function AccountRoute() {
     }
   ]);
 
-  return <>{routes}</>
+  return routes;
 }
 
 export default AccountRoute;
