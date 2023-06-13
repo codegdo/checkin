@@ -24,21 +24,20 @@ export enum DataType {
   GRID = 'grid',
 }
 
-interface SharedField {
+interface ElementField {
   id: number | string;
   name: string;
   type: string | ElementType | FieldType;
   dataType: string | DataType;
 }
 
-interface FormField extends SharedField {
+interface FormField extends ElementField {
   label?: string;
+  description?: string;
 }
 
-type HtmlField = SharedField;
-
-export type Field = FormField & HtmlField & {
-  data?: (FormField | HtmlField)[];
+export type Field = ElementField & FormField & {
+  data?: (ElementField | FormField)[];
 };
 
 export interface DragField {
