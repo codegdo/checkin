@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
+import { Field } from '../types';
 
-function ItemPlaceholder(props: any) {
+type ItemPlaceholderProps = PropsWithChildren<Field & {
+  ctx: string;
+}>;
+
+function ItemPlaceholder(props: ItemPlaceholderProps) {
   return (
-    <>
-
+    <div>
       {
         props.children
       }
-    </>
+    </div>
   )
 }
 

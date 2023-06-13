@@ -29,6 +29,8 @@ interface ElementField {
   name: string;
   type: string | ElementType | FieldType;
   dataType: string | DataType;
+  data?: (ElementField | FormField)[] | null;
+  value?: string | null;
 }
 
 interface FormField extends ElementField {
@@ -36,12 +38,10 @@ interface FormField extends ElementField {
   description?: string;
 }
 
-export type Field = ElementField & FormField & {
-  data?: (ElementField | FormField)[];
-};
+export type Field = ElementField | FormField;
 
 export interface DragField {
-  id?: string | number;
+  id?: string | number | null;
   type: FieldType | ElementType;
   dataType: DataType;
 }

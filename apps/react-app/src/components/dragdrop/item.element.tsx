@@ -2,8 +2,13 @@ import React from 'react';
 
 import ItemMenu from './item.menu';
 import ItemEditor from './item.editor';
+import { Field } from '../types';
 
-function ItemElement() {
+type ItemElementProps = Field & {
+  ctx: string;
+};
+
+function ItemElement(props: ItemElementProps) {
 
   return (
     <>

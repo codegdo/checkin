@@ -1,6 +1,10 @@
 import React from 'react';
 
-function ItemEditor() {
+interface ItemEditorProps {
+  onCallback?: () => void;
+}
+
+function ItemEditor(props: ItemEditorProps) {
 
   return (
     <>

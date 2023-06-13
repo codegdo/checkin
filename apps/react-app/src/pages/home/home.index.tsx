@@ -14,7 +14,7 @@ const apiResponse = [
         name: 'field',
         type: 'text',
         dataType: 'field',
-        data: null
+        data: null,
       },
     ],
   },

@@ -1,6 +1,10 @@
 import React from 'react';
 
-function ItemMenu(props: any) {
+interface ItemMenuProps {
+  onCallback?: () => void;
+}
+
+function ItemMenu(props: ItemMenuProps) {
 
   return (
     <>
