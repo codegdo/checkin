@@ -40,6 +40,10 @@ interface FormField extends ElementField {
 
 export type Field = ElementField | FormField;
 
+export type ExtendedField = Field & {
+  selected?: boolean;
+}
+
 export interface DragField {
   id?: string | number | null;
   type: FieldType | ElementType;

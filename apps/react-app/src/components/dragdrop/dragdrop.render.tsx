@@ -10,12 +10,15 @@ import ItemPlaceholder from './item.placeholder';
 import ItemGrid from './item.grid';
 import ItemGroup from './item.group';
 import { Field } from '../types';
+import { useWrapperContext } from '../../hooks';
+import DragDropContext from './dragdrop.provider';
 
-interface DragDropRenderProps {
-  data: Field[] | null;
-}
+function DragDropRender(): ReactNode {
 
-function DragDropRender({ data = [] }: DragDropRenderProps): ReactNode {
+  const ctx = useWrapperContext(DragDropContext);
+
+  // normalize data
+  const normalizeData = ctx.state.data;
 
   const renderItems = (items: Field[]): ReactNode[] => {
     return items.map(item => {
@@ -23,7 +26,7 @@ function DragDropRender({ data = [] }: DragDropRenderProps): ReactNode {
 
       switch (dataType) {
         case 'block':
-          return data && <ItemBlock key={item.id} {...item} ctx={''}>{renderItems(data)}</ItemBlock>;
+          return data && <ItemBlock key={item.id} {...item} ctx={ctx}>{renderItems(data)}</ItemBlock>;
         case 'placeholder':
           return data && <ItemPlaceholder key={item.id} {...item} ctx={''}>{renderItems(data)}</ItemPlaceholder>;
         case 'grid':
@@ -31,7 +34,7 @@ function DragDropRender({ data = [] }: DragDropRenderProps): ReactNode {
         case 'group':
           return <ItemGroup key={item.id} {...item} ctx={''} />;
         case 'field':
-          return <ItemField key={item.id} {...item} ctx={''} />;
+          return <ItemField key={item.id} {...item} ctx={ctx} />;
         case 'element':
           return <ItemElement key={item.id} {...item} ctx={''} />;
         default:
@@ -40,11 +43,11 @@ function DragDropRender({ data = [] }: DragDropRenderProps): ReactNode {
     });
   };
 
-  if (data === null) {
+  if (normalizeData === null) {
     return null;
   }
 
-  return renderItems(data);
+  return renderItems(normalizeData);
 }
 
 export default DragDropRender;
