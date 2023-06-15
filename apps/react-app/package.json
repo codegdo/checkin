@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@libs/shared-code": "file:../../libs/code",
+    "@libs/shared-code": "file:../../libs/code/dist",
     "dompurify": "^3.0.3",
     "html-react-parser": "^4.0.0",
     "react": "^18.2.0",

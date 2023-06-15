@@ -40,10 +40,10 @@ export function DragDrop({ data = [], dragFields = [] }: DragDropProps) {
     e.stopPropagation();
 
     const target = e.target as Element;
-    const clickedElement = target.closest('div[data-id]');
+    const el = target.closest('div[data-id]');
 
-    if (clickedElement) {
-      const id = clickedElement.getAttribute('data-id');
+    if (el) {
+      const id = el.getAttribute('data-id');
       const item = state.data.find(item => item.id == id);
 
       if (item) {
@@ -65,10 +65,32 @@ export function DragDrop({ data = [], dragFields = [] }: DragDropProps) {
     }
   };
 
+  const handleMouseOver = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    const target = e.target as Element;
+    const el = target.closest('div[data-id]');
+
+    if (el) {
+      el.classList.add('is-hover');
+    }
+  };
+
+  const handleMouseOut = (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    const target = e.target as Element;
+    const el = target.closest('div[data-id]');
+
+    if (el) {
+      el.classList.remove('is-hover');
+    }
+  };
+
   return (
     <DndProvider backend={backend}>
       <DragDropProvider value={{ state, dispatch, dnd }}>
-        <div ref={ref} onClick={handleItemClick}>
+        <div ref={ref} onClick={handleItemClick} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
           <DragDropRender />
         </div>
         <div>

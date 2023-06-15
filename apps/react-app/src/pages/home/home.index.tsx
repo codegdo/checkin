@@ -8,10 +8,18 @@ const apiResponse = [
     name: 'block',
     type: 'div',
     dataType: 'block',
-    data: [],
+    data: [
+      {
+        id: 2,
+        name: 'field',
+        type: 'text',
+        dataType: 'field',
+        data: null,
+      },
+    ],
   },
   {
-    id: 2,
+    id: 3,
     name: 'field',
     type: 'text',
     dataType: 'field',
