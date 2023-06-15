@@ -47,17 +47,19 @@ export function DragDrop({ data = [], dragFields = [] }: DragDropProps) {
       const item = state.data.find(item => item.id == id);
 
       if (item) {
-        let selected = false;
-
         if (state.item?.id == item.id) {
-          selected = state.isSelecting;
+          dispatch({
+            type: DndActionType.UNSELECT_ITEM,
+            payload: null
+          });
+          return;
         }
 
         const updatedItem = { ...item };
 
         dispatch({
           type: DndActionType.SELECT_ITEM,
-          payload: { item: updatedItem, isSelecting: !selected }
+          payload: { item: updatedItem }
         });
       }
     }

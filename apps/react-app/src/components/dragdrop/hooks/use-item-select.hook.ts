@@ -1,16 +1,38 @@
 import { useState } from "react";
+import { DndActionType, DndContextValue } from "../types";
 //import { useClickOutside } from "../../../hooks";
 
-export function useItemSelect(ref: any) {
-  const [isSelect, setIsSelect] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
+export function useItemSelect(id: number | string, ctx: DndContextValue) {
+  const { state, dispatch } = ctx;
+  const { item, isSelecting, isEditing } = state || {};
 
-  // useClickOutside(ref, () => {
-  //   console.log('CLICK OUT SIDE BLOCK');
-  // });
+  console.log('CTX', ctx);
+
+  const match = item?.id == id;
+  const isSelect = match ? isSelecting ?? false : false;
+  const isEdit = match ? isEditing ?? false : false;
+
+  const onClick = (name: keyof typeof DndActionType) => {
+    switch (name) {
+      case DndActionType.OPEN_EDITING_ITEM:
+        dispatch({
+          type: name,
+          payload: null
+        });
+        break;
+      case DndActionType.CLOSE_EDITING_ITEM:
+        dispatch({
+          type: name,
+          payload: null
+        });
+        break;
+      default:
+    }
+  }
 
   return {
     isSelect,
-    isEdit
+    isEdit,
+    onClick
   }
 }

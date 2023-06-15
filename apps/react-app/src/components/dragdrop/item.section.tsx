@@ -1,22 +1,24 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useRef } from 'react';
 
 import ItemMenu from './item.menu';
 import ItemEditor from './item.editor';
 import { Field } from '../types';
+import { useItemSelect } from './hooks';
+import { DndContextValue } from './types';
 
 type ItemSectionProps = PropsWithChildren<Field & {
-  ctx: string;
+  ctx: DndContextValue;
 }>;
 
-function ItemSection(props: ItemSectionProps) {
+function ItemSection({ id, ctx, children }: ItemSectionProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const {isSelect, isEdit, onClick} = useItemSelect(id, ctx);
 
   return (
-    <div>
-      <ItemMenu />
-      <ItemEditor />
-      {
-        props.children
-      }
+    <div data-id={`${id}`} ref={ref}>
+      {isSelect && <ItemMenu onCallback={onClick} />}
+      {children}
+      {isEdit && <ItemEditor onCallback={onClick} />}
     </div>
   )
 }

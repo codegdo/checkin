@@ -8,7 +8,6 @@ interface InitialItemsPayload {
 
 interface SelectItemPayload {
   item: ExtendedField;
-  isSelecting: boolean;
 }
 
 type ActionPayload = InitialItemsPayload | SelectItemPayload | null;
@@ -23,13 +22,12 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
     }
 
     case DndActionType.SELECT_ITEM: {
-      const { item, isSelecting } = action.payload as SelectItemPayload;
+      const { item } = action.payload as SelectItemPayload;
       const selectItem = { ...item };
       return {
         ...state,
         item: selectItem,
-        isSelecting,
-        isEditing: false,
+        isSelecting: true,
       };
     }
 

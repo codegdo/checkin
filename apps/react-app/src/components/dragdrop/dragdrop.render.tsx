@@ -12,8 +12,10 @@ import ItemGroup from './item.group';
 import { Field } from '../types';
 import { useWrapperContext } from '../../hooks';
 import DragDropContext from './dragdrop.provider';
+import ItemArea from './item.area';
+import ItemSection from './item.section';
 
-function DragDropRender(): ReactNode {
+function DragDropRender(): JSX.Element | null {
 
   const ctx = useWrapperContext(DragDropContext);
 
@@ -25,6 +27,10 @@ function DragDropRender(): ReactNode {
       const { dataType, data = [] } = item;
 
       switch (dataType) {
+        case 'area':
+          return data && <ItemArea key={item.id} {...item} ctx={ctx}>{renderItems(data)}</ItemArea>;
+        case 'section':
+          return data && <ItemSection key={item.id} {...item} ctx={ctx}>{renderItems(data)}</ItemSection>;
         case 'block':
           return data && <ItemBlock key={item.id} {...item} ctx={ctx}>{renderItems(data)}</ItemBlock>;
         case 'placeholder':
@@ -47,7 +53,7 @@ function DragDropRender(): ReactNode {
     return null;
   }
 
-  return renderItems(normalizeData);
+  return <>{renderItems(normalizeData)}</>;
 }
 
 export default DragDropRender;

@@ -4,7 +4,7 @@ import ItemMenu from './item.menu';
 import ItemEditor from './item.editor';
 import { Field } from '../types';
 import { useItemSelect } from './hooks';
-import { DndActionType, DndContextValue } from './types';
+import { DndContextValue } from './types';
 
 type ItemFieldProps = Field & {
   ctx: DndContextValue;
@@ -12,38 +12,13 @@ type ItemFieldProps = Field & {
 
 function ItemField({ id, ctx }: ItemFieldProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const { state, dispatch } = ctx;
-  const { item, isSelecting, isEditing } = state || {};
-
-  console.log('CTX', ctx);
-
-  const match = item?.id == id;
-  const isSelect = match ? isSelecting ?? false : false;
-  const isEdit = match ? isEditing ?? false : false;
-
-  const handleClick = (name: keyof typeof DndActionType) => {
-    switch (name) {
-      case DndActionType.OPEN_EDITING_ITEM:
-        dispatch({
-          type: name,
-          payload: null
-        });
-        break;
-      case DndActionType.CLOSE_EDITING_ITEM:
-        dispatch({
-          type: name,
-          payload: null
-        });
-        break;
-      default:
-    }
-  }
+  const {isSelect, isEdit, onClick} = useItemSelect(id, ctx);
 
   return (
     <div data-id={`${id}`} ref={ref}>
-      {isSelect && <ItemMenu onCallback={handleClick} />}
+      {isSelect && <ItemMenu onCallback={onClick} />}
       <label>FIELD</label>
-      {isEdit && <ItemEditor onCallback={handleClick} />}
+      {isEdit && <ItemEditor onCallback={onClick} />}
     </div>
   )
 }
