@@ -1,21 +1,20 @@
-import { PropsWithChildren, useRef } from 'react';
+import { PropsWithChildren } from 'react';
 
 import ItemMenu from './item.menu';
 import ItemEditor from './item.editor';
-import { Field } from '../types';
-import { useItemSelect } from './hooks';
-import { DndContextValue } from './types';
+import { Field, DndContextValue } from '../types';
+import { useDragDrop, useItemSelect } from './hooks';
 
 type ItemBlockProps = PropsWithChildren<Field & {
   ctx: DndContextValue;
 }>;
 
-function ItemBlock({ id, ctx, children }: ItemBlockProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const {isSelect, isEdit, onClick} = useItemSelect(id, ctx);
+function ItemBlock({ ctx, children, ...item }: ItemBlockProps) {
+  const { ref } = useDragDrop({ item, ctx });
+  const { isSelect, isEdit, onClick } = useItemSelect(item.id, ctx);
 
   return (
-    <div data-id={`${id}`} ref={ref}>
+    <div data-id={`${item.id}`} ref={ref}>
       {isSelect && <ItemMenu onCallback={onClick} />}
       {children}
       {isEdit && <ItemEditor onCallback={onClick} />}

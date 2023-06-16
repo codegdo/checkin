@@ -3,12 +3,12 @@ import { DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-import { DragDropProvider, dndRef, initialState } from './dragdrop.provider';
+import { DragDropProvider, defaultDndRef, initialState } from './dragdrop.provider';
 import DragDropRender from './dragdrop.render';
 import DragRender from './drag.render';
 import { DragField, Field } from '../types';
 import { dndReducer } from './reducers';
-import { DndActionType } from './types';
+import { DndActionType } from '../types';
 
 interface DragDropProps {
   data: Field[];
@@ -18,8 +18,7 @@ interface DragDropProps {
 export function DragDrop({ data = [], dragFields = [] }: DragDropProps) {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
   const [state, dispatch] = useReducer(dndReducer, initialState);
-  const { current: dnd } = useRef(dndRef);
-  const ref = useRef(null);
+  const { current: dndRef } = useRef(defaultDndRef);
 
   useEffect(() => {
     dispatch({
@@ -28,73 +27,11 @@ export function DragDrop({ data = [], dragFields = [] }: DragDropProps) {
     });
   }, [data]);
 
-  // useClickOutside(ref, () => {
-  //   dispatch({
-  //     type: DndActionType.UNSELECT_ITEM,
-  //     payload: null
-  //   });
-  // });
-
-  const handleItemClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-
-    const target = e.target as Element;
-    const el = target.closest('div[data-id]');
-
-    if (el) {
-      const id = el.getAttribute('data-id');
-      const item = state.data.find(item => item.id == id);
-
-      if (item) {
-        if (state.item?.id == item.id) {
-          dispatch({
-            type: DndActionType.UNSELECT_ITEM,
-            payload: null
-          });
-          return;
-        }
-
-        const updatedItem = { ...item };
-
-        dispatch({
-          type: DndActionType.SELECT_ITEM,
-          payload: { item: updatedItem }
-        });
-      }
-    }
-  };
-
-  const handleMouseOver = (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    const target = e.target as Element;
-    const el = target.closest('div[data-id]');
-
-    if (el) {
-      el.classList.add('is-hover');
-    }
-  };
-
-  const handleMouseOut = (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    const target = e.target as Element;
-    const el = target.closest('div[data-id]');
-
-    if (el) {
-      el.classList.remove('is-hover');
-    }
-  };
-
   return (
     <DndProvider backend={backend}>
-      <DragDropProvider value={{ state, dispatch, dnd }}>
-        <div ref={ref} onClick={handleItemClick} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
-          <DragDropRender />
-        </div>
-        <div>
-          <DragRender data={dragFields} />
-        </div>
+      <DragDropProvider value={{ state, dispatch, dndRef }}>
+        <DragDropRender />
+        <DragRender data={dragFields} />
       </DragDropProvider>
     </DndProvider>
   )

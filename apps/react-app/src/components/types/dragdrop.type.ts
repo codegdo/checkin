@@ -1,5 +1,5 @@
 import { Dispatch } from "react";
-import { ExtendedField, Field } from "../../types";
+import { ExtendedField, Field } from "./field.type";
 
 export enum DndActionType {
   INITIAL_ITEMS = 'INITIAL_ITEMS',
@@ -17,15 +17,19 @@ export enum DndActionType {
   RESET_ITEM = 'UPDATE_RESET',
 }
 
+type DropRef = Partial<Field> | null;
+type DomRef = Record<string, HTMLDivElement | null>;
+
 interface DndRef {
-  drop: object;
-  dom: object;
+  drop: DropRef;
+  domList: DomRef;
+  touchItems: (string | number)[];
 }
 
 export interface DndContextValue {
   state: DndState;
   dispatch: Dispatch<DndAction>;
-  dnd: DndRef;
+  dndRef: DndRef;
 }
 
 export interface DndState {

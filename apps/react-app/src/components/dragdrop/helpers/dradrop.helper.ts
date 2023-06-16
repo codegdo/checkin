@@ -1,5 +1,5 @@
 import { UtilsInterface, utils } from '@libs/shared-code';
-import { Field } from '../../types';
+import { DataType, Field } from '../../types';
 
 class DragDropHelper {
   private utils: UtilsInterface;
@@ -13,10 +13,16 @@ class DragDropHelper {
     const list: Field[] = [];
 
     cloneData.forEach((item: Field) => {
-      return this.utils.mapToParent<Field>(list, item, (item: Field) => item.dataType == 'block');
+      return this.utils.mapToParent<Field>(list, item, (item: Field) => (item.dataType == DataType.SECTION || item.dataType == DataType.BLOCK));
     });
-    
-    return list;
+
+    return [{
+      id: 'dropArea',
+      name: 'area',
+      type: 'div',
+      dataType: DataType.AREA,
+      data: [...list]
+    }];
   }
 
 }

@@ -1,6 +1,5 @@
-import { ExtendedField, Field } from "../../types";
+import { ExtendedField, Field, DndAction, DndActionType, DndState } from "../../types";
 import { defaultStatus } from "../dragdrop.provider";
-import { DndAction, DndActionType, DndState } from "../types";
 
 interface InitialItemsPayload {
   data: Field[]

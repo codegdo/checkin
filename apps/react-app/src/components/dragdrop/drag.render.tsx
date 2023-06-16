@@ -13,9 +13,9 @@ function DragRender(_props: DragRenderProps) {
   //const _ctx = useWrapperContext(DragDropContext);
 
   return (
-    <>
+    <div className="drag-area">
       <DragItem />
-    </>
+    </div>
   );
 }
 

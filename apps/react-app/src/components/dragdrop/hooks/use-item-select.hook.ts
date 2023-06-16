@@ -1,5 +1,5 @@
 
-import { DndActionType, DndContextValue } from "../types";
+import { DndActionType, DndContextValue } from "../../types";
 //import { useClickOutside } from "../../../hooks";
 
 export function useItemSelect(id: number | string, ctx: DndContextValue) {

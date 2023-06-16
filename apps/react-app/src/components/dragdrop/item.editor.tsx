@@ -1,5 +1,5 @@
 import React from 'react';
-import { DndActionType } from './types';
+import { DndActionType } from '../types';
 
 interface ItemEditorProps {
   onCallback?: (name: keyof typeof DndActionType) => void;
