@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { FormProvider } from './form.provider';
 import FormRender from './form.render';

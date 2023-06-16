@@ -28,6 +28,7 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
         ...state,
         item: selectItem,
         isSelecting: true,
+        isEditing: false
       };
     }
 

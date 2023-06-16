@@ -1,4 +1,3 @@
-import React from 'react';
 
 import ItemMenu from './item.menu';
 import ItemEditor from './item.editor';
@@ -8,7 +7,7 @@ type ItemGroupProps = Field & {
   ctx: string;
 };
 
-function ItemGroup(props: ItemGroupProps) {
+function ItemGroup(_props: ItemGroupProps) {
 
   return (
     <>

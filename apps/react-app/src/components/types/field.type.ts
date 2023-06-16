@@ -31,6 +31,7 @@ interface ElementField {
   dataType: string | DataType;
   data?: (ElementField | FormField)[] | null;
   value?: string | null;
+  parentId?: number | string | null;
 }
 
 interface FormField extends ElementField {

@@ -1,4 +1,3 @@
-import React from 'react';
 import { DragDrop } from '../../components';
 
 // Example API response
@@ -8,15 +7,16 @@ const apiResponse = [
     name: 'block',
     type: 'div',
     dataType: 'block',
-    data: [
-      {
-        id: 2,
-        name: 'field',
-        type: 'text',
-        dataType: 'field',
-        data: null,
-      },
-    ],
+    data: [],
+    parentId: null
+  },
+  {
+    id: 2,
+    name: 'field',
+    type: 'text',
+    dataType: 'field',
+    data: null,
+    parentId: 1
   },
   {
     id: 3,
@@ -24,6 +24,7 @@ const apiResponse = [
     type: 'text',
     dataType: 'field',
     data: null,
+    parentId: null
   },
 ];
 

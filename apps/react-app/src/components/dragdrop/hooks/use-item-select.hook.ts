@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import { DndActionType, DndContextValue } from "../types";
 //import { useClickOutside } from "../../../hooks";
 
@@ -15,7 +15,7 @@ export function useItemSelect(id: number | string, ctx: DndContextValue) {
   const onClick = (name: keyof typeof DndActionType) => {
     switch (name) {
       case DndActionType.OPEN_EDITING_ITEM:
-        dispatch({
+        !isEditing && dispatch({
           type: name,
           payload: null
         });

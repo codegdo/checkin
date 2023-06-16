@@ -1,6 +1,5 @@
-import React from 'react';
 
-function DragItem(props: any) {
+function DragItem() {
 
   return (
     <>

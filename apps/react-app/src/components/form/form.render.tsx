@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
+import React from 'react';
 
-import { useWrapperContext } from '../../hooks';
+//import { useWrapperContext } from '../../hooks';
 
-import FormContext from './form.provider';
+//import FormContext from './form.provider';
 
 import ItemBlock from './item.block';
 import ItemField from './item.field';
@@ -13,7 +13,7 @@ import ItemGroup from './item.group';
 
 
 function FormRender({ data = [] }: { data: any[] }) {
-  const context = useWrapperContext(FormContext);
+  //const _context = useWrapperContext(FormContext);
 
   const renderItems = (items: any[]): React.ReactNode[] => {
     return items.map(item => {

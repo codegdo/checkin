@@ -1,4 +1,4 @@
-import { Item, UtilsInterface, utils } from '@libs/shared-code';
+import { UtilsInterface, utils } from '@libs/shared-code';
 import { Field } from '../../types';
 
 class DragDropHelper {
@@ -8,14 +8,17 @@ class DragDropHelper {
     this.utils = utils;
   }
 
-  nomalizeData(data: Field[]) {
+  normalizeData(data: Field[]) {
     const cloneData = this.utils.objClone(data);
-    const list: Item[] = [];
+    const list: Field[] = [];
 
-    cloneData.forEach((item: Item) => {
-      return this.utils.mapToParent(list, item, (item) => item.dataType == 'block');
+    cloneData.forEach((item: Field) => {
+      return this.utils.mapToParent<Field>(list, item, (item: Field) => item.dataType == 'block');
     });
+    
+    return list;
   }
+
 }
 
 export const dndHelper = new DragDropHelper(utils);

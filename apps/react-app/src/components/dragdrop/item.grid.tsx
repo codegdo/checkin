@@ -1,4 +1,3 @@
-import React from 'react';
 
 import ItemMenu from './item.menu';
 import ItemEditor from './item.editor';
@@ -8,7 +7,7 @@ type ItemGridProps = Field & {
   ctx: string;
 };
 
-function ItemGrid(props: ItemGridProps) {
+function ItemGrid(_props: ItemGridProps) {
 
   return (
     <>

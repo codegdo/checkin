@@ -1,6 +1,5 @@
-import React from 'react';
 
-function ItemMenu(props: any) {
+function ItemMenu() {
 
   return (
     <>

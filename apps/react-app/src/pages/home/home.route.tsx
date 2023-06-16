@@ -1,4 +1,4 @@
-import React, { lazy } from "react";
+import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
 
 import TemplateLoader from "../../components/loader/template.loader";

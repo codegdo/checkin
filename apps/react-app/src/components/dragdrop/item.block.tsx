@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useRef } from 'react';
+import { PropsWithChildren, useRef } from 'react';
 
 import ItemMenu from './item.menu';
 import ItemEditor from './item.editor';

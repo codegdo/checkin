@@ -9,7 +9,6 @@ import DragRender from './drag.render';
 import { DragField, Field } from '../types';
 import { dndReducer } from './reducers';
 import { DndActionType } from './types';
-import { useClickOutside } from '../../hooks';
 
 interface DragDropProps {
   data: Field[];
@@ -101,4 +100,4 @@ export function DragDrop({ data = [], dragFields = [] }: DragDropProps) {
   )
 }
 
-// npx madge src/components/dragdrop/dragdrop.component.tsx --image src/components/dragdrop/dragdrop.graph.png
+// npx madge src/components/dragdrop/dragdrop.component.tsx --image src/components/dragdrop/dragdrop.graph.png --warning

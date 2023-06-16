@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 
 import ItemMenu from './item.menu';
 import ItemEditor from './item.editor';

@@ -1,4 +1,4 @@
-import React, { FC, Suspense, useMemo } from 'react';
+import { FC, Suspense, useMemo } from 'react';
 import parse, { HTMLReactParserOptions } from 'html-react-parser';
 import DOMPurify from 'dompurify';
 import { Options, TemplateProps } from './types';

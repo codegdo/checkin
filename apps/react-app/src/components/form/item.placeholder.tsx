@@ -1,9 +1,5 @@
-import React from 'react';
-
 
 function ItemPlaceholder(props: any) {
-
-
   return (
     <>
       {

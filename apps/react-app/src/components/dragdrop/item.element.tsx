@@ -1,4 +1,3 @@
-import React from 'react';
 
 import ItemMenu from './item.menu';
 import ItemEditor from './item.editor';
@@ -8,7 +7,7 @@ type ItemElementProps = Field & {
   ctx: string;
 };
 
-function ItemElement(props: ItemElementProps) {
+function ItemElement(_props: ItemElementProps) {
 
   return (
     <>
