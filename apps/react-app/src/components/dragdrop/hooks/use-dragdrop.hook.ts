@@ -91,14 +91,18 @@ export function useDragDrop({ item, ctx }: Params) {
       currentRef.classList.add(...classNames.split(' '));
   }
 
-  const removeClass = (currentRef: HTMLDivElement, classNames: string) => {
-    currentRef.classList.remove(...classNames.split(' '));
-    // const lastId = dndRef.touchItems.at(-1);
-    // const lastItem = dndRef.domList[`${lastId}`];
-
-    // if (lastItem) {
-    //   lastItem.classList.remove('on-top');
-    // }
+  const removeClass = (currentRef: HTMLDivElement) => {
+    currentRef.classList.remove(
+      'on-top-left', 
+      'on-top-right', 
+      'on-top-middle', 
+      'on-bottom-left', 
+      'on-bottom-right', 
+      'on-bottom-middle', 
+      'on-middle-left', 
+      'on-middle-right', 
+      'on-middle-middle'
+    );
   }
 
   const nestedItems = () => false;
@@ -108,7 +112,6 @@ export function useDragDrop({ item, ctx }: Params) {
     const initialClientOffset = monitor.getInitialClientOffset();
 
     if (!clientOffset || !initialClientOffset) return;
-
     // 
     if (dndRef.clientX == clientOffset.x && dndRef.clientY == clientOffset.y) return;
 
@@ -127,18 +130,24 @@ export function useDragDrop({ item, ctx }: Params) {
     //const verticalDirection = getVerticleDirection(clientOffset.y);
     //const horizontalDirection = getHorizontalDirection(clientOffset.x);
 
-    const offset = `on-${verticalOffset} on-${horizontalOffset}`;
+    const offset = `on-${verticalOffset}-${horizontalOffset}`;
+
+    if(monitor.isOver({ shallow: true })) { 
+      if(!currentRef.classList.contains(offset)) {
+        addClass(currentRef, offset);
+        console.log('IS DRAGOVER ADD CSS');
+      } 
+    }
 
     if(dndRef.offset == offset) return;
 
-    dndRef.offset && removeClass(currentRef, dndRef.offset);
+    dndRef.offset && removeClass(currentRef);
 
     dndRef.offset = offset;
 
     addClass(currentRef, offset);
 
     console.log('offset', offset);
-    //console.log('direction', verticalDirection, horizontalDirection);
   };
 
   const handleHover = useCallback(
@@ -151,8 +160,6 @@ export function useDragDrop({ item, ctx }: Params) {
           if (dndRef.drop) {
 
             dndRef.drop = null;
-            //removeClass();
-
             console.log('unsetItem');
           }
           return;
@@ -160,14 +167,13 @@ export function useDragDrop({ item, ctx }: Params) {
 
         if (dndRef.drop?.id !== item.id) {
 
-          //removeClass();
           dndRef.drop = { ...item };
           dndRef.touchItems.push(item.id);
           console.log('setItem');
         }
 
         hoverItem(dragRef.current, monitor);
-
+        
         //console.log('dragItem', dragItem);
         //console.log('hoverItem', item);
       }
@@ -199,12 +205,14 @@ export function useDragDrop({ item, ctx }: Params) {
     [],
   );
 
-  const [, drag] = useDrag(() => ({
+  const [{isDragging}, drag] = useDrag(() => ({
     type: dataType,
     item,
     canDrag: handleDragStart,
     end: handleDragEnd,
-    collect: (monitor) => ({}),
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging()
+    }),
   }), []);
 
   const [{ isOver }, drop] = useDrop(() => ({
@@ -222,13 +230,21 @@ export function useDragDrop({ item, ctx }: Params) {
     }
   }, []);
 
-  if (!isOver) {
-    //removeClass();
-  }
+  useEffect(() => {
+    if (!isOver) {
+      const lastItemId = dndRef.touchItems.at(-1);
+      const lastTargetItem = dndRef.domList[`${lastItemId}`];
+
+      lastTargetItem && removeClass(lastTargetItem);
+      
+      console.log('IS DRAGOUT REMOVE CSS', dndRef);
+    }
+  }, [isOver]);
 
   drag(drop(dragRef));
 
   return {
-    ref: dragRef
+    ref: dragRef,
+    isDragging
   };
 }
