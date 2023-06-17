@@ -6,7 +6,7 @@ export function useItemSelect(id: number | string, ctx: DndContextValue) {
   const { state, dispatch } = ctx;
   const { item, isSelecting, isEditing } = state || {};
 
-  console.log('CTX', ctx);
+  //console.log('CTX', ctx);
 
   const match = item?.id == id;
   const isSelect = match ? isSelecting ?? false : false;

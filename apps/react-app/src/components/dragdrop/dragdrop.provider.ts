@@ -17,7 +17,8 @@ export const defaultDndRef = {
   domList: {},
   touchItems: [],
   clientX: 0,
-  clientY: 0
+  clientY: 0,
+  offset: ''
 };
 
 const dispatch: DndContextValue['dispatch'] = () => {
@@ -27,7 +28,7 @@ const dispatch: DndContextValue['dispatch'] = () => {
 const DragDropContext = React.createContext<DndContextValue>({
   state: initialState,
   dispatch,
-  dndRef: defaultDndRef
+  dndRef: defaultDndRef,
 });
 
 export const DragDropProvider = DragDropContext.Provider;

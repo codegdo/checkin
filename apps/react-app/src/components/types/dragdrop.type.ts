@@ -26,6 +26,7 @@ interface DndRef {
   touchItems: (string | number)[];
   clientX: number;
   clientY: number;
+  offset: string;
 }
 
 export interface DndContextValue {
