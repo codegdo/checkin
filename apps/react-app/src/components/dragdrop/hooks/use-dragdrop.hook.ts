@@ -7,10 +7,42 @@ interface Params {
   ctx: DndContextValue
 }
 
+interface XYDirection {
+  x: number | null;
+  currentX: number | null;
+  y: number | null;
+  currentY: number | null;
+}
+
 export function useDragDrop({ item, ctx }: Params) {
   const { dataType } = item;
   const { dndRef } = ctx;
   const dragRef = useRef<HTMLDivElement>(null);
+  const {current: directionRef} = useRef<XYDirection>({
+    x: null, 
+    currentX: null, 
+    y: null, 
+    currentY: null
+  });
+
+  const determineDirectionY = useCallback((clientY: number) => {
+    if (directionRef.y === null) {
+      directionRef.y = clientY;
+    } else {
+      directionRef.currentY = clientY;
+
+      if (directionRef.currentY < directionRef.y) {
+        directionRef.y = directionRef.currentY;
+        return 'up';
+      } else if (directionRef.currentY > directionRef.y) {
+        window.scrollBy(0, 1);
+        directionRef.y = directionRef.currentY;
+        return 'down';
+      } else {
+        return 'no movement';
+      }
+    }
+  }, []);
 
   const addClass = (classNames: string) => {
     if (dragRef.current && !dragRef.current.classList.contains(classNames)) {
@@ -29,17 +61,29 @@ export function useDragDrop({ item, ctx }: Params) {
 
   const nestedItems = () => false;
 
-  const hoverItem = (monitor: DropTargetMonitor<Field>) => {
+  const hoverItem = (currentRef: HTMLDivElement, monitor: DropTargetMonitor<Field>) => {
     const clientOffset = monitor.getClientOffset();
     const initialClientOffset = monitor.getInitialClientOffset();
 
     if (!clientOffset || !initialClientOffset) return;
 
+    // Only update the position if it has changed
+    if (dndRef.clientX == clientOffset.x && dndRef.clientY == clientOffset.y) return;
 
+    dndRef.clientX = clientOffset.x;
+    dndRef.clientY = clientOffset.y;
+
+    const clientRect = currentRef.getBoundingClientRect();
+    const centerY = (clientRect.bottom - clientRect.top) / 2;
+    const centerX = (clientRect.right - clientRect.left) / 2;
+    const clientY = clientOffset.y - clientRect.top;
+    const clientX = clientOffset.x - clientRect.left;
+
+    const verticalDirection = determineDirectionY(clientOffset.y);
 
     addClass('on-top');
 
-    //console.log('currentDrag', dragRef.current);
+    console.log('direction', verticalDirection);
   };
 
   const handleHover = useCallback(
@@ -64,11 +108,10 @@ export function useDragDrop({ item, ctx }: Params) {
           removeClass();
           dndRef.drop = { ...item };
           dndRef.touchItems.push(item.id);
-
           console.log('setItem');
         }
 
-        hoverItem(monitor);
+        hoverItem(dragRef.current, monitor);
 
         //console.log('dragItem', dragItem);
         //console.log('hoverItem', item);

@@ -24,6 +24,8 @@ interface DndRef {
   drop: DropRef;
   domList: DomRef;
   touchItems: (string | number)[];
+  clientX: number;
+  clientY: number;
 }
 
 export interface DndContextValue {
