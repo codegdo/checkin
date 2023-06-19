@@ -87,8 +87,8 @@ export function useDragDrop({ item, ctx }: Params) {
     }
   };
 
-  const addClass = (currentRef: HTMLDivElement, classNames: string) => {
-      currentRef.classList.add(...classNames.split(' '));
+  const addClass = (currentRef: HTMLDivElement, className: string) => {
+      currentRef.classList.add(className);
   }
 
   const removeClass = (currentRef: HTMLDivElement) => {
