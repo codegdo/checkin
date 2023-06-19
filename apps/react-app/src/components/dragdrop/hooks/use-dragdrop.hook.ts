@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useRef } from "react";
+import { utils } from '@libs/shared-code';
+
 import { DataType, Field, DndContextValue } from "../../types";
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 
@@ -18,17 +20,17 @@ export function useDragDrop({ item, ctx }: Params) {
   const { dataType } = item;
   const { dndRef } = ctx;
   const dragRef = useRef<HTMLDivElement>(null);
-  const {current: directionRef} = useRef<XYDirection>({
-    x: null, 
-    currentX: null, 
-    y: null, 
+  const { current: directionRef } = useRef<XYDirection>({
+    x: null,
+    currentX: null,
+    y: null,
     currentY: null
   });
 
   const getOffsetX = (
     clientX: number,
     centerX: number,
-    elementWidth: number = 0
+    elementWidth = 0
   ): 'left' | 'right' | 'middle' => {
     return clientX <= centerX - elementWidth
       ? 'left'
@@ -40,8 +42,8 @@ export function useDragDrop({ item, ctx }: Params) {
   const getOffsetY = (
     clientY: number,
     centerY: number,
-    elementHeight: number = 0
-  ): 'top' | 'bottom' | 'middle' => {
+    elementHeight = 0
+  ) => {
     return clientY <= centerY - elementHeight
       ? 'top'
       : clientY >= centerY + elementHeight
@@ -49,65 +51,74 @@ export function useDragDrop({ item, ctx }: Params) {
         : 'middle';
   }
 
-  const getVerticleDirection = (clientY: number) => {
-    if (directionRef.y === null) {
-      directionRef.y = clientY;
-    } else {
-      directionRef.currentY = clientY;
+  // const getVerticleDirection = (clientY: number) => {
+  //   if (directionRef.y === null) {
+  //     directionRef.y = clientY;
+  //   } else {
+  //     directionRef.currentY = clientY;
 
-      if (directionRef.currentY < directionRef.y) {
-        directionRef.y = directionRef.currentY;
-        return 'up';
-      } else if (directionRef.currentY > directionRef.y) {
-        window.scrollBy(0, 1);
-        directionRef.y = directionRef.currentY;
-        return 'down';
-      } else {
-        return 'no movement Y';
-      }
-    }
-  };
+  //     if (directionRef.currentY < directionRef.y) {
+  //       directionRef.y = directionRef.currentY;
+  //       return 'up';
+  //     } else if (directionRef.currentY > directionRef.y) {
+  //       window.scrollBy(0, 1);
+  //       directionRef.y = directionRef.currentY;
+  //       return 'down';
+  //     } else {
+  //       return 'no movement Y';
+  //     }
+  //   }
+  // };
 
-  const getHorizontalDirection = (clientX: number) => {
-    if (directionRef.x === null) {
-      directionRef.x = clientX;
-    } else {
-      directionRef.currentX = clientX;
+  // const getHorizontalDirection = (clientX: number) => {
+  //   if (directionRef.x === null) {
+  //     directionRef.x = clientX;
+  //   } else {
+  //     directionRef.currentX = clientX;
 
-      if (directionRef.currentX < directionRef.x) {
-        directionRef.x = directionRef.currentX;
-        return 'left';
-      } else if (directionRef.currentX > directionRef.x) {
-        window.scrollBy(0, 1);
-        directionRef.x = directionRef.currentX;
-        return 'right';
-      } else {
-        return 'no movement X';
-      }
-    }
-  };
+  //     if (directionRef.currentX < directionRef.x) {
+  //       directionRef.x = directionRef.currentX;
+  //       return 'left';
+  //     } else if (directionRef.currentX > directionRef.x) {
+  //       window.scrollBy(0, 1);
+  //       directionRef.x = directionRef.currentX;
+  //       return 'right';
+  //     } else {
+  //       return 'no movement X';
+  //     }
+  //   }
+  // };
 
   const addClass = (currentRef: HTMLDivElement, className: string) => {
-      currentRef.classList.add(className);
+    currentRef.classList.add(className);
   }
 
   const removeClass = (currentRef: HTMLDivElement) => {
     currentRef.classList.remove(
-      'on-top-left', 
-      'on-top-right', 
-      'on-top-middle', 
-      'on-bottom-left', 
-      'on-bottom-right', 
-      'on-bottom-middle', 
-      'on-middle-left', 
-      'on-middle-right', 
+      'on-top-left',
+      'on-top-right',
+      'on-top-middle',
+      'on-bottom-left',
+      'on-bottom-right',
+      'on-bottom-middle',
+      'on-middle-left',
+      'on-middle-right',
       'on-middle-middle'
     );
   }
 
-  const nestedItems = () => false;
+  const hasNestedItems = useCallback((dragItem: Field): boolean => {
+    if (dragItem.dataType == DataType.FIELD) return false;
 
-  const hoverItem = (currentRef: HTMLDivElement, monitor: DropTargetMonitor<Field>) => {
+    const itemData = dragItem.data || [];
+    const nestedIds = utils.countItems(itemData, (child) => child.dataType == 'block');
+
+    //console.log('NESTEITEM', nestedItemIds, item.id);
+
+    return nestedIds.includes(`${item.id}`);
+  }, [item.id]);
+
+  const hoverItem = useCallback((currentRef: HTMLDivElement, monitor: DropTargetMonitor<Field>) => {
     const clientOffset = monitor.getClientOffset();
     const initialClientOffset = monitor.getInitialClientOffset();
 
@@ -126,29 +137,29 @@ export function useDragDrop({ item, ctx }: Params) {
 
     const verticalOffset = getOffsetY(clientY, centerY);
     const horizontalOffset = getOffsetX(clientX, centerX);
-    
+
     //const verticalDirection = getVerticleDirection(clientOffset.y);
     //const horizontalDirection = getHorizontalDirection(clientOffset.x);
 
     const offset = `on-${verticalOffset}-${horizontalOffset}`;
 
-    if(monitor.isOver({ shallow: true })) { 
-      if(!currentRef.classList.contains(offset)) {
-        addClass(currentRef, offset);
+    if (monitor.isOver({ shallow: true })) {
+      if (!currentRef.classList.contains(offset)) {
+        dndRef.canDrop && addClass(currentRef, offset);
         console.log('IS DRAGOVER ADD CSS');
-      } 
+      }
     }
 
-    if(dndRef.offset == offset) return;
+    if (dndRef.offset == offset) return;
 
     dndRef.offset && removeClass(currentRef);
 
     dndRef.offset = offset;
 
-    addClass(currentRef, offset);
+    dndRef.canDrop && addClass(currentRef, offset);
 
     console.log('offset', offset);
-  };
+  }, [dndRef]);
 
   const handleHover = useCallback(
     (dragItem: Field, monitor: DropTargetMonitor<Field>) => {
@@ -156,29 +167,33 @@ export function useDragDrop({ item, ctx }: Params) {
 
         if (!dragRef.current) return;
 
-        if (dragItem.id == item.id && !nestedItems()) {
+        if (dragItem.id == item.id) {
           if (dndRef.drop) {
-
             dndRef.drop = null;
             console.log('unsetItem');
+          }
+          if (dndRef.canDrop) {
+            dndRef.canDrop = false;
+            console.log('resetCanDrop');
           }
           return;
         }
 
         if (dndRef.drop?.id !== item.id) {
-
           dndRef.drop = { ...item };
+          dndRef.canDrop = !hasNestedItems(dragItem);
           dndRef.touchItems.push(item.id);
-          console.log('setItem');
+          console.log('setItem', dndRef);
+          console.log('setCanDrop', dndRef.canDrop);
         }
 
         hoverItem(dragRef.current, monitor);
-        
+
         //console.log('dragItem', dragItem);
         //console.log('hoverItem', item);
       }
     },
-    [],
+    [dndRef, item, hoverItem, hasNestedItems],
   );
 
   const handleDragStart = useCallback(
@@ -190,7 +205,7 @@ export function useDragDrop({ item, ctx }: Params) {
       }
       return true;
     },
-    [],
+    [dndRef],
   );
 
   const handleDragEnd = useCallback(
@@ -202,10 +217,10 @@ export function useDragDrop({ item, ctx }: Params) {
         console.log('dndRef', dndRef);
       }
     },
-    [],
+    [dndRef, item],
   );
 
-  const [{isDragging}, drag] = useDrag(() => ({
+  const [{ isDragging }, drag] = useDrag(() => ({
     type: dataType,
     item,
     canDrag: handleDragStart,
@@ -220,6 +235,7 @@ export function useDragDrop({ item, ctx }: Params) {
     hover: handleHover,
     collect: (monitor) => ({
       isOver: monitor.isOver({ shallow: true }),
+      canDrop: monitor.canDrop()
     }),
   }), []);
 
@@ -228,7 +244,7 @@ export function useDragDrop({ item, ctx }: Params) {
     if (!dndRef.domList[key]) {
       dndRef.domList[key] = dragRef.current;
     }
-  }, []);
+  }, [dndRef, item]);
 
   useEffect(() => {
     if (!isOver) {
@@ -236,15 +252,16 @@ export function useDragDrop({ item, ctx }: Params) {
       const lastTargetItem = dndRef.domList[`${lastItemId}`];
 
       lastTargetItem && removeClass(lastTargetItem);
-      
-      console.log('IS DRAGOUT REMOVE CSS', dndRef);
+
+      console.log('IS DRAGOUT REMOVE CSS');
     }
-  }, [isOver]);
+  }, [dndRef, isOver]);
 
   drag(drop(dragRef));
 
   return {
     ref: dragRef,
-    isDragging
+    isDragging,
+    isOver
   };
 }

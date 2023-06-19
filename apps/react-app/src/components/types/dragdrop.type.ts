@@ -27,6 +27,7 @@ interface DndRef {
   clientX: number;
   clientY: number;
   offset: string;
+  canDrop: boolean;
 }
 
 export interface DndContextValue {

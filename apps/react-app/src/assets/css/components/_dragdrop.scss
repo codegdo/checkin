@@ -1,0 +1,23 @@
+.drop-item {
+  border: 1px dashed #ddd;
+  background-color: #fff;
+  padding: 1rem;
+  transition: all 0.5s ease-out;
+  position: relative;
+}
+
+.is-dragging {
+  opacity: 0.3;
+}
+
+.on-top-left,
+.on-top-right,
+.on-top-middle {
+  border-top-color: #333;
+}
+
+.on-bottom-left,
+.on-bottom-right,
+.on-bottom-middle {
+  border-bottom-color: #333;
+}

@@ -18,7 +18,8 @@ export const defaultDndRef = {
   touchItems: [],
   clientX: 0,
   clientY: 0,
-  offset: ''
+  offset: '',
+  canDrop: true
 };
 
 const dispatch: DndContextValue['dispatch'] = () => {

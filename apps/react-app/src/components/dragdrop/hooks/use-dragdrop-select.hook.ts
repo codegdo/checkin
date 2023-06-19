@@ -2,7 +2,7 @@
 import { DndActionType, DndContextValue } from "../../types";
 //import { useClickOutside } from "../../../hooks";
 
-export function useItemSelect(id: number | string, ctx: DndContextValue) {
+export function useDragDropSelect(id: number | string, ctx: DndContextValue) {
   const { state, dispatch } = ctx;
   const { item, isSelecting, isEditing } = state || {};
 
