@@ -17,7 +17,7 @@ interface XYDirection {
 }
 
 export function useDragDrop({ item, ctx }: Params) {
-  const { dataType } = item;
+  const { id, dataType } = item;
   const { dndRef, dispatch } = ctx;
   const dragRef = useRef<HTMLDivElement>(null);
   // const { current: directionRef } = useRef<XYDirection>({
@@ -113,10 +113,8 @@ export function useDragDrop({ item, ctx }: Params) {
     const itemData = dragItem.data || [];
     const nestedIds = utils.countItems(itemData, (child) => child.dataType == 'block');
 
-    //console.log('NESTEITEM', nestedItemIds, item.id);
-
-    return nestedIds.includes(`${item.id}`);
-  }, [item.id]);
+    return nestedIds.includes(`${id}`);
+  }, [id]);
 
   const hoverItem = useCallback((currentRef: HTMLDivElement, monitor: DropTargetMonitor<Field>) => {
     const clientOffset = monitor.getClientOffset();
@@ -215,9 +213,9 @@ export function useDragDrop({ item, ctx }: Params) {
         console.log('dragItemDrop', dragItem);
         console.log('hoverItemDrop', item);
         console.log('dndRef', dndRef);
-        
+
         dispatch({
-          type: DndActionType.MOVE_ITEM, 
+          type: DndActionType.MOVE_ITEM,
           payload: {
             dragItem,
             dropItem: dndRef.drop,

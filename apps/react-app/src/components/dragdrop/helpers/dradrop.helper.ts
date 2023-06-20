@@ -25,9 +25,38 @@ class DragDropHelper {
     }];
   }
 
-  findDropPosition(dragPosition: number, dropPosition:number, offset: string) {
-
+  formatKebabCase(str: string) {
+    return str.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
   }
+
+  findDropPosition(
+    dragPosition = 0,
+    dropPosition = 0,
+    offset: string
+  ): string {
+    const overTop = offset.includes('top');
+    const overBottom = offset.includes('bottom');
+    const overMiddle = offset.includes('middle');
+
+    const fromTop = dragPosition < dropPosition;
+    const fromBottom = dragPosition > dropPosition;
+
+    const obj = {
+      fromTopOverTop: fromTop && overTop,
+      fromTopOverBottom: fromTop && overBottom,
+      fromTopOverMiddle: fromTop && overMiddle,
+      fromBottomOverTop: fromBottom && overTop,
+      fromBottomOverBottom: fromBottom && overBottom,
+      fromBottomOverMiddle: fromBottom && overMiddle
+    };
+
+    const position = Object.entries(obj)
+      .filter(([, value]) => value === true)
+      .map(([key]) => key)[0] || '';
+
+    return this.formatKebabCase(position);
+  }
+
 
   findDropIndex(dragItem: Field, dropItem: Field, offset: string) {
     return 5;

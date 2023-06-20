@@ -1,5 +1,5 @@
 import { utils } from "@libs/shared-code";
-import { ExtendedField, Field, DndAction, DndActionType, DndState } from "../../types";
+import { ExtendedField, Field, DndAction, DndActionType, DndState, DataType } from "../../types";
 import { defaultStatus } from "../dragdrop.provider";
 import { dndHelper } from "../helpers";
 
@@ -54,9 +54,32 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
     case DndActionType.MOVE_ITEM: {
       const { dragItem, dropItem, offset } = action.payload as MoveItemsPayload;
 
-      console.log(dragItem, dropItem, offset);
-      //const 
-      const dropIndex = dndHelper.findDropIndex(dragItem, dropItem, offset);
+      const {
+        dataType: dragDataType,
+        data: dragData,
+        position: dragPosition
+      } = dragItem || {};
+
+      const {
+        dataType: dropDataType,
+        data: dropData,
+        position: dropPosition
+      } = dropItem || {};
+
+      const offsetPosition = dndHelper.findDropPosition(
+        dragPosition !== null ? dragPosition : 0,
+        dropPosition !== null ? dropPosition : 0,
+        offset
+      );
+
+      const dragCount = dragDataType == DataType.BLOCK ? utils.countItems(dragData || [], (item) => item.dataType === DataType.BLOCK).length + 1 : 1;
+      const dropCount = dropDataType == DataType.BLOCK ? utils.countItems(dropData || [], (item) => item.dataType === DataType.BLOCK).length + 1 : 1;
+
+      const dataType = `${dragDataType}-${dropDataType}`;
+
+      console.log('POSITION', offsetPosition, dragCount, dropCount, dataType);
+
+      //const dropIndex = dndHelper.findDropIndex(dropPosition, offsetPosition, dragCount, dropCount);
 
       return state;
 
