@@ -16,6 +16,7 @@ export const defaultDndRef = {
   drop: null,
   domList: {},
   touchItems: [],
+  nestedItems: [],
   clientX: 0,
   clientY: 0,
   offset: '',

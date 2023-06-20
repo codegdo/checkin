@@ -32,6 +32,7 @@ interface ElementField {
   data?: (ElementField | FormField)[] | null;
   value?: string | null;
   parentId?: number | string | null;
+  position?: number | null;
 }
 
 interface FormField extends ElementField {

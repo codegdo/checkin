@@ -8,7 +8,8 @@ const apiResponse = [
     type: 'div',
     dataType: 'block',
     data: [],
-    parentId: null
+    parentId: null,
+    position: 0
   },
   {
     id: 2,
@@ -16,7 +17,8 @@ const apiResponse = [
     type: 'text',
     dataType: 'field',
     data: null,
-    parentId: 1
+    parentId: 1,
+    position: 1,
   },
   {
     id: 3,
@@ -24,7 +26,8 @@ const apiResponse = [
     type: 'text',
     dataType: 'field',
     data: null,
-    parentId: null
+    parentId: null,
+    position: 2
   },
 ];
 

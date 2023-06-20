@@ -24,6 +24,7 @@ interface DndRef {
   drop: DropRef;
   domList: DomRef;
   touchItems: (string | number)[];
+  nestedItems: string[];
   clientX: number;
   clientY: number;
   offset: string;

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { utils } from '@libs/shared-code';
 
-import { DataType, Field, DndContextValue } from "../../types";
+import { DataType, Field, DndContextValue, DndActionType } from "../../types";
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 
 interface Params {
@@ -18,14 +18,14 @@ interface XYDirection {
 
 export function useDragDrop({ item, ctx }: Params) {
   const { dataType } = item;
-  const { dndRef } = ctx;
+  const { dndRef, dispatch } = ctx;
   const dragRef = useRef<HTMLDivElement>(null);
-  const { current: directionRef } = useRef<XYDirection>({
-    x: null,
-    currentX: null,
-    y: null,
-    currentY: null
-  });
+  // const { current: directionRef } = useRef<XYDirection>({
+  //   x: null,
+  //   currentX: null,
+  //   y: null,
+  //   currentY: null
+  // });
 
   const getOffsetX = (
     clientX: number,
@@ -211,10 +211,19 @@ export function useDragDrop({ item, ctx }: Params) {
   const handleDragEnd = useCallback(
     (dragItem: Field, monitor: DragSourceMonitor<Field>) => {
       //removeClass();
-      if (monitor.didDrop()) {
+      if (monitor.didDrop() && dndRef.canDrop) {
         console.log('dragItemDrop', dragItem);
         console.log('hoverItemDrop', item);
         console.log('dndRef', dndRef);
+        
+        dispatch({
+          type: DndActionType.MOVE_ITEM, 
+          payload: {
+            dragItem,
+            dropItem: dndRef.drop,
+            offset: dndRef.offset
+          }
+        });
       }
     },
     [dndRef, item],
@@ -253,7 +262,7 @@ export function useDragDrop({ item, ctx }: Params) {
 
       lastTargetItem && removeClass(lastTargetItem);
 
-      console.log('IS DRAGOUT REMOVE CSS');
+      console.log('IS DRAGOUT REMOVE CSS', dndRef, item);
     }
   }, [dndRef, isOver]);
 
