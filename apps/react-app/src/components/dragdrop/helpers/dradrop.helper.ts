@@ -42,19 +42,17 @@ class DragDropHelper {
     const fromBottom = dragPosition > dropPosition;
 
     const obj = {
-      fromTopOverTop: fromTop && overTop,
-      fromTopOverBottom: fromTop && overBottom,
-      fromTopOverMiddle: fromTop && overMiddle,
-      fromBottomOverTop: fromBottom && overTop,
-      fromBottomOverBottom: fromBottom && overBottom,
-      fromBottomOverMiddle: fromBottom && overMiddle
+      'from-top-over-top': fromTop && overTop,
+      'from-top-over-bottom': fromTop && overBottom,
+      'from-top-over-middle': fromTop && overMiddle,
+      'from-bottom-over-top': fromBottom && overTop,
+      'from-bottom-over-bottom': fromBottom && overBottom,
+      'from-bottom-over-middle': fromBottom && overMiddle
     };
 
-    const position = Object.entries(obj)
+    return Object.entries(obj)
       .filter(([, value]) => value === true)
       .map(([key]) => key)[0] || '';
-
-    return this.formatKebabCase(position);
   }
 
 
