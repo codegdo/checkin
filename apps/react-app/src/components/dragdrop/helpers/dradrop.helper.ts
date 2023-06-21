@@ -1,6 +1,20 @@
 import { UtilsInterface, utils } from '@libs/shared-code';
 import { DataType, Field } from '../../types';
 
+interface FindDropIndexParams {
+  dropPosition: number;
+  offsetPosition: string;
+  dragCount: number;
+  dropChildren: number;
+  dataType: string;
+}
+
+interface FindDropPositionParams {
+  dragIndex: number;
+  dropIndex: number;
+  offset: string;
+}
+
 class DragDropHelper {
   private utils: UtilsInterface;
 
@@ -29,17 +43,17 @@ class DragDropHelper {
     return str.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
   }
 
-  findDropPosition(
-    dragPosition = 0,
-    dropPosition = 0,
-    offset: string
-  ): string {
+  findDropPosition({
+    dragIndex,
+    dropIndex,
+    offset
+  }: FindDropPositionParams): string {
     const overTop = offset.includes('top');
     const overBottom = offset.includes('bottom');
     const overMiddle = offset.includes('middle');
 
-    const fromTop = dragPosition < dropPosition;
-    const fromBottom = dragPosition > dropPosition;
+    const fromTop = dragIndex < dropIndex;
+    const fromBottom = dragIndex > dropIndex;
 
     const obj = {
       'from-top-over-top': fromTop && overTop,
@@ -56,8 +70,14 @@ class DragDropHelper {
   }
 
 
-  findDropIndex(dragItem: Field, dropItem: Field, offset: string) {
-    return 5;
+  findDropIndex({
+    dataType,
+    dropPosition, 
+    offsetPosition, 
+    dragCount, 
+    dropChildren
+  }: FindDropIndexParams) {
+    return dropPosition + dropChildren;
   }
 
 }

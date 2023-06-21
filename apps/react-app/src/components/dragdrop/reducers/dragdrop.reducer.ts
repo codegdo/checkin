@@ -66,20 +66,36 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
         position: dropPosition
       } = dropItem || {};
 
-      const offsetPosition = dndHelper.findDropPosition(
-        dragPosition !== null ? dragPosition : 0,
-        dropPosition !== null ? dropPosition : 0,
+      const dragIndex = dragPosition ?? 0;
+      const dropIndex = dropPosition ?? 0;
+
+      const offsetPosition = dndHelper.findDropPosition({
+        dragIndex,
+        dropIndex,
         offset
-      );
+      });
 
       const dragCount = dragDataType == DataType.BLOCK ? utils.countItems(dragData || [], (item) => item.dataType === DataType.BLOCK).length + 1 : 1;
-      const dropCount = dropDataType == DataType.BLOCK ? utils.countItems(dropData || [], (item) => item.dataType === DataType.BLOCK).length + 1 : 1;
+      const dropChildren = dropDataType == DataType.BLOCK ? utils.countItems(dropData || [], (item) => item.dataType === DataType.BLOCK).length : 0;
 
       const dataType = `${dragDataType}-${dropDataType}`;
 
-      console.log('POSITION', offsetPosition, dragCount, dropCount, dataType);
+      //console.log('POSITION', offsetPosition, dragCount, dropCount, dataType);
 
-      //const dropIndex = dndHelper.findDropIndex(dropPosition, offsetPosition, dragCount, dropCount);
+      const newDropIndex = dndHelper.findDropIndex({
+        dataType, 
+        dragCount, 
+        dropChildren,
+        dropPosition: dropPosition ?? 0, 
+        offsetPosition
+      });
+
+
+
+      const draggedItems = state.data.slice(dragIndex, dragIndex + dragCount);
+      const remainingItems = state.data.filter((_, index) => index < dragIndex || index >= dragIndex + dragCount);
+
+      console.log('draggedItems', draggedItems, remainingItems);
 
       return state;
 
