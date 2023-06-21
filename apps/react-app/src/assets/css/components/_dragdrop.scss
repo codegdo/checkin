@@ -10,6 +10,22 @@
   opacity: 0.3;
 }
 
+.is-empty:after {
+  content: 'drop...';
+  display: block;
+
+  padding: 1rem;
+  text-align: center;
+  color: #ccc;
+  background: #f8f8f8;
+  border: 1px dashed #f8f8f8;
+  transition: all 0.3s ease-out;
+}
+
+.on-middle-middle:after {
+  border-color: #333;
+}
+
 .on-top-left,
 .on-top-right,
 .on-top-middle {

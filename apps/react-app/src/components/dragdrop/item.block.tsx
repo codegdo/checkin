@@ -16,7 +16,8 @@ function ItemBlock({ ctx, children, ...item }: ItemBlockProps) {
 
   const classNames = utils.classNames('drop-item', {
     'is-dragging': isDragging,
-    'is-over': isOver
+    'is-over': isOver,
+    'is-empty': item.data?.length == 0
   });
 
   return (

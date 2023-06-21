@@ -61,47 +61,64 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
       } = dragItem || {};
 
       const {
-        dataType: dropDataType,
-        data: dropData,
+        id: dropId,
+        //dataType: dropDataType,
+        //data: dropData,
+        parentId: dropParentId,
         position: dropPosition
       } = dropItem || {};
 
       const dragIndex = dragPosition ?? 0;
-      const dropIndex = dropPosition ?? 0;
+      let dropIndex = dropPosition ?? 0;
 
-      const offsetPosition = dndHelper.findDropPosition({
-        dragIndex,
-        dropIndex,
-        offset
-      });
+      // const offsetPosition = dndHelper.findDropPosition({
+      //   dragIndex,
+      //   dropIndex,
+      //   offset
+      // });
 
       const dragCount = dragDataType == DataType.BLOCK ? utils.countItems(dragData || [], (item) => item.dataType === DataType.BLOCK).length + 1 : 1;
-      const dropChildren = dropDataType == DataType.BLOCK ? utils.countItems(dropData || [], (item) => item.dataType === DataType.BLOCK).length : 0;
+      //const dropCount = dropDataType == DataType.BLOCK ? utils.countItems(dropData || [], (item) => item.dataType === DataType.BLOCK).length : 0;
 
-      const dataType = `${dragDataType}-${dropDataType}`;
+      //const dataType = `${dragDataType}-${dropDataType}`;
 
-      //console.log('POSITION', offsetPosition, dragCount, dropCount, dataType);
+      // const newDropIndex = dndHelper.findDropIndex({
+      //   dataType,
+      //   dragCount,
+      //   dropChildren,
+      //   dropPosition: dropPosition ?? 0,
+      //   offsetPosition
+      // });
 
-      const newDropIndex = dndHelper.findDropIndex({
-        dataType, 
-        dragCount, 
-        dropChildren,
-        dropPosition: dropPosition ?? 0, 
-        offsetPosition
+      const data = [...state.data];
+
+      const draggedItems = data.splice(dragIndex, dragCount);
+      const remainingItems = data;
+
+      if (draggedItems.length > 0) {
+        const firstDraggedItem = draggedItems[0];
+        firstDraggedItem.parentId = offset == 'on-middle-middle' ? dropId : dropParentId;
+      }
+
+      if (dragIndex < dropIndex) {
+        // from UP to DOWN
+        dropIndex = dropIndex - dragCount + 1;
+      } else {
+        // from DOWN to UP
+        if (offset == 'on-middle-middle') {
+          dropIndex = dropIndex + 1;
+        }
+      }
+
+      remainingItems.splice(dropIndex, 0, ...draggedItems);
+
+      remainingItems.forEach((item, index) => {
+        item.position = index;
       });
 
+      console.log('updatedData', remainingItems);
 
-
-      const draggedItems = state.data.slice(dragIndex, dragIndex + dragCount);
-      const remainingItems = state.data.filter((_, index) => index < dragIndex || index >= dragIndex + dragCount);
-
-      console.log('draggedItems', draggedItems, remainingItems);
-
-      return state;
-
-      //const updatedData = dndHelper.moveItems(dragItem, dropItem);
-
-      //return { ...state, data: updatedData };
+      return { ...state, data: [...remainingItems] };
     }
 
     default: return state;

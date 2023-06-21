@@ -29,6 +29,24 @@ const apiResponse = [
     parentId: null,
     position: 2
   },
+  {
+    id: '4',
+    name: 'block',
+    type: 'div',
+    dataType: 'block',
+    data: [],
+    parentId: null,
+    position: 3
+  },
+  {
+    id: 5,
+    name: 'field',
+    type: 'text',
+    dataType: 'field',
+    data: null,
+    parentId: 4,
+    position: 4,
+  },
 ];
 
 // Map the API response to use enum values

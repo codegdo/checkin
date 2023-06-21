@@ -21,7 +21,7 @@ function ItemField({ ctx, ...item }: ItemFieldProps) {
   return (
     <div className={classNames} data-id={`${item.id}`} ref={ref}>
       {isSelect && <ItemMenu onCallback={onClick} />}
-      <label>FIELD</label>
+      <label>{`${item.name} ${item.id}`}</label>
       {isEdit && <ItemEditor onCallback={onClick} />}
     </div>
   )

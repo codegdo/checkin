@@ -17,9 +17,10 @@ interface XYDirection {
 }
 
 export function useDragDrop({ item, ctx }: Params) {
-  const { id, dataType } = item;
+  const { id, dataType, data = [] } = item;
   const { dndRef, dispatch } = ctx;
   const dragRef = useRef<HTMLDivElement>(null);
+
   // const { current: directionRef } = useRef<XYDirection>({
   //   x: null,
   //   currentX: null,
@@ -27,14 +28,27 @@ export function useDragDrop({ item, ctx }: Params) {
   //   currentY: null
   // });
 
+  const calculateElementSize = (currentRef: HTMLDivElement) => {
+    let width = 0;
+    let height = 0;
+
+    if (currentRef.classList.contains('is-empty')) {
+      const style = window.getComputedStyle(currentRef, ':after');
+      width = (parseFloat(style.width) || 0) / 2;
+      height = (parseFloat(style.height) || 0) / 2;
+    }
+
+    return { width, height };
+  }
+
   const getOffsetX = (
     clientX: number,
     centerX: number,
-    elementWidth = 0
+    width = 0
   ): 'left' | 'right' | 'middle' => {
-    return clientX <= centerX - elementWidth
+    return clientX <= centerX - width
       ? 'left'
-      : clientX >= centerX + elementWidth
+      : clientX >= centerX + width
         ? 'right'
         : 'middle';
   }
@@ -42,11 +56,11 @@ export function useDragDrop({ item, ctx }: Params) {
   const getOffsetY = (
     clientY: number,
     centerY: number,
-    elementHeight = 0
+    height = 0
   ) => {
-    return clientY <= centerY - elementHeight
+    return clientY <= centerY - height
       ? 'top'
-      : clientY >= centerY + elementHeight
+      : clientY >= centerY + height
         ? 'bottom'
         : 'middle';
   }
@@ -127,14 +141,18 @@ export function useDragDrop({ item, ctx }: Params) {
     dndRef.clientX = clientOffset.x;
     dndRef.clientY = clientOffset.y;
 
+
+
     const clientRect = currentRef.getBoundingClientRect();
     const centerY = (clientRect.bottom - clientRect.top) / 2;
     const centerX = (clientRect.right - clientRect.left) / 2;
     const clientY = clientOffset.y - clientRect.top;
     const clientX = clientOffset.x - clientRect.left;
 
-    const verticalOffset = getOffsetY(clientY, centerY);
-    const horizontalOffset = getOffsetX(clientX, centerX);
+    const { width, height } = calculateElementSize(currentRef);
+
+    const verticalOffset = getOffsetY(clientY, centerY, height);
+    const horizontalOffset = getOffsetX(clientX, centerX, width);
 
     //const verticalDirection = getVerticleDirection(clientOffset.y);
     //const horizontalDirection = getHorizontalDirection(clientOffset.x);
