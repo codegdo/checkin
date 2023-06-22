@@ -22,18 +22,22 @@
   transition: all 0.3s ease-out;
 }
 
-.on-middle-middle:after {
+.on-middle:after {
   border-color: #333;
 }
 
-.on-top-left,
-.on-top-right,
-.on-top-middle {
+.on-top {
   border-top-color: #333;
 }
 
-.on-bottom-left,
-.on-bottom-right,
-.on-bottom-middle {
+.on-bottom {
   border-bottom-color: #333;
+}
+
+.on-left {
+  border-left-color: #333;
+}
+
+.on-right {
+  border-right-color: #333;
 }

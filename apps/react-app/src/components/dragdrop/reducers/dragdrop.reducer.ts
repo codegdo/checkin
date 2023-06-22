@@ -62,8 +62,8 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
 
       const {
         id: dropId,
-        //dataType: dropDataType,
-        //data: dropData,
+        dataType: dropDataType,
+        data: dropData,
         parentId: dropParentId,
         position: dropPosition
       } = dropItem || {};
@@ -71,14 +71,14 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
       const dragIndex = dragPosition ?? 0;
       let dropIndex = dropPosition ?? 0;
 
-      // const offsetPosition = dndHelper.findDropPosition({
-      //   dragIndex,
-      //   dropIndex,
-      //   offset
-      // });
+      const offsetPosition = dndHelper.findDropPosition({
+        dragIndex,
+        dropIndex,
+        offset
+      });
 
       const dragCount = dragDataType == DataType.BLOCK ? utils.countItems(dragData || [], (item) => item.dataType === DataType.BLOCK).length + 1 : 1;
-      //const dropCount = dropDataType == DataType.BLOCK ? utils.countItems(dropData || [], (item) => item.dataType === DataType.BLOCK).length : 0;
+      const dropCount = dropDataType == DataType.BLOCK ? utils.countItems(dropData || [], (item) => item.dataType === DataType.BLOCK).length : 0;
 
       //const dataType = `${dragDataType}-${dropDataType}`;
 
@@ -97,17 +97,30 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
 
       if (draggedItems.length > 0) {
         const firstDraggedItem = draggedItems[0];
-        firstDraggedItem.parentId = offset == 'on-middle-middle' ? dropId : dropParentId;
+        firstDraggedItem.parentId = offset == 'on-middle' ? dropId : dropParentId;
       }
 
-      if (dragIndex < dropIndex) {
-        // from UP to DOWN
-        dropIndex = dropIndex - dragCount + 1;
-      } else {
-        // from DOWN to UP
-        if (offset == 'on-middle-middle') {
-          dropIndex = dropIndex + 1;
+      // from UP to DOWN
+      if(dragIndex - dropIndex == -dragCount) {
+        if(offsetPosition == 'from-top-over-top') {
+          console.log(-1);
+          return state;
         }
+      } else if(dragIndex - dropIndex == dropCount + 1) {
+        if(offsetPosition == 'from-bottom-over-bottom') {
+          console.log(1);
+          return state;
+        }
+      }
+
+      console.log('0');
+
+      if (dragIndex < dropIndex) { 
+        console.log('from UP to DOWN');
+        dropIndex = dropIndex + dropCount;
+      } else if (offset == 'on-middle') {
+        console.log('ON MIDDLE');
+        dropIndex = dropIndex + 1;
       }
 
       remainingItems.splice(dropIndex, 0, ...draggedItems);

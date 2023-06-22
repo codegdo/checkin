@@ -109,15 +109,11 @@ export function useDragDrop({ item, ctx }: Params) {
 
   const removeClass = (currentRef: HTMLDivElement) => {
     currentRef.classList.remove(
-      'on-top-left',
-      'on-top-right',
-      'on-top-middle',
-      'on-bottom-left',
-      'on-bottom-right',
-      'on-bottom-middle',
-      'on-middle-left',
-      'on-middle-right',
-      'on-middle-middle'
+      'on-top',
+      'on-bottom',
+      'on-left',
+      'on-right',
+      'on-middle'
     );
   }
 
@@ -141,8 +137,6 @@ export function useDragDrop({ item, ctx }: Params) {
     dndRef.clientX = clientOffset.x;
     dndRef.clientY = clientOffset.y;
 
-
-
     const clientRect = currentRef.getBoundingClientRect();
     const centerY = (clientRect.bottom - clientRect.top) / 2;
     const centerX = (clientRect.right - clientRect.left) / 2;
@@ -157,7 +151,7 @@ export function useDragDrop({ item, ctx }: Params) {
     //const verticalDirection = getVerticleDirection(clientOffset.y);
     //const horizontalDirection = getHorizontalDirection(clientOffset.x);
 
-    const offset = `on-${verticalOffset}-${horizontalOffset}`;
+    const offset = `on-${verticalOffset}`;
 
     if (monitor.isOver({ shallow: true })) {
       if (!currentRef.classList.contains(offset)) {
@@ -278,7 +272,7 @@ export function useDragDrop({ item, ctx }: Params) {
 
       lastTargetItem && removeClass(lastTargetItem);
 
-      console.log('IS DRAGOUT REMOVE CSS', dndRef, item);
+      //console.log('IS DRAGOUT REMOVE CSS', dndRef, item);
     }
   }, [dndRef, isOver]);
 
