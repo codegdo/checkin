@@ -55,7 +55,7 @@ class DragDropHelper {
     const fromTop = dragIndex < dropIndex;
     const fromBottom = dragIndex > dropIndex;
 
-    const obj = {
+    const position = {
       'from-top-over-top': fromTop && overTop,
       'from-top-over-bottom': fromTop && overBottom,
       'from-top-over-middle': fromTop && overMiddle,
@@ -64,7 +64,7 @@ class DragDropHelper {
       'from-bottom-over-middle': fromBottom && overMiddle
     };
 
-    return Object.entries(obj)
+    return Object.entries(position)
       .filter(([, value]) => value === true)
       .map(([key]) => key)[0] || '';
   }
@@ -72,9 +72,9 @@ class DragDropHelper {
 
   findDropIndex({
     dataType,
-    dropPosition, 
-    offsetPosition, 
-    dragCount, 
+    dropPosition,
+    offsetPosition,
+    dragCount,
     dropChildren
   }: FindDropIndexParams) {
     return dropPosition + dropChildren;

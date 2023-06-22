@@ -156,7 +156,7 @@ export function useDragDrop({ item, ctx }: Params) {
     if (monitor.isOver({ shallow: true })) {
       if (!currentRef.classList.contains(offset)) {
         dndRef.canDrop && addClass(currentRef, offset);
-        console.log('IS DRAGOVER ADD CSS');
+        //console.log('IS DRAGOVER ADD CSS');
       }
     }
 
@@ -168,7 +168,7 @@ export function useDragDrop({ item, ctx }: Params) {
 
     dndRef.canDrop && addClass(currentRef, offset);
 
-    console.log('offset', offset);
+    //console.log('offset', offset);
   }, [dndRef]);
 
   const handleHover = useCallback(
@@ -180,11 +180,11 @@ export function useDragDrop({ item, ctx }: Params) {
         if (dragItem.id == item.id) {
           if (dndRef.drop) {
             dndRef.drop = null;
-            console.log('unsetItem');
+            //console.log('unsetItem');
           }
           if (dndRef.canDrop) {
             dndRef.canDrop = false;
-            console.log('resetCanDrop');
+            //console.log('resetCanDrop');
           }
           return;
         }
@@ -193,8 +193,8 @@ export function useDragDrop({ item, ctx }: Params) {
           dndRef.drop = { ...item };
           dndRef.canDrop = !hasNestedItems(dragItem);
           dndRef.touchItems.push(item.id);
-          console.log('setItem', dndRef);
-          console.log('setCanDrop', dndRef.canDrop);
+          //console.log('setItem', dndRef);
+          //console.log('setCanDrop', dndRef.canDrop);
         }
 
         hoverItem(dragRef.current, monitor);
@@ -208,7 +208,7 @@ export function useDragDrop({ item, ctx }: Params) {
 
   const handleDragStart = useCallback(
     () => {
-      console.log('startDrag');
+      //console.log('startDrag');
       if (dndRef.drop) {
         dndRef.drop = null;
         dndRef.touchItems = [];
@@ -222,9 +222,9 @@ export function useDragDrop({ item, ctx }: Params) {
     (dragItem: Field, monitor: DragSourceMonitor<Field>) => {
       //removeClass();
       if (monitor.didDrop() && dndRef.canDrop) {
-        console.log('dragItemDrop', dragItem);
-        console.log('hoverItemDrop', item);
-        console.log('dndRef', dndRef);
+        //console.log('dragItemDrop', dragItem);
+        //console.log('hoverItemDrop', item);
+        //console.log('dndRef', dndRef);
 
         dispatch({
           type: DndActionType.MOVE_ITEM,
@@ -236,7 +236,7 @@ export function useDragDrop({ item, ctx }: Params) {
         });
       }
     },
-    [dndRef, item],
+    [],
   );
 
   const [{ isDragging }, drag] = useDrag(() => ({
