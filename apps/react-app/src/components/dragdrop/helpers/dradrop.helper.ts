@@ -48,9 +48,9 @@ class DragDropHelper {
     dropIndex,
     offset
   }: FindDropPositionParams): string {
-    const overTop = offset.includes('top');
-    const overBottom = offset.includes('bottom');
-    const overMiddle = offset.includes('middle');
+    const overTop = offset === 'on-top';
+    const overBottom = offset === 'on-bottom';
+    const overMiddle = offset === 'on-middle';
 
     const fromTop = dragIndex < dropIndex;
     const fromBottom = dragIndex > dropIndex;
@@ -58,10 +58,9 @@ class DragDropHelper {
     const position = {
       'from-top-over-top': fromTop && overTop,
       'from-top-over-bottom': fromTop && overBottom,
-      'from-top-over-middle': fromTop && overMiddle,
       'from-bottom-over-top': fromBottom && overTop,
       'from-bottom-over-bottom': fromBottom && overBottom,
-      'from-bottom-over-middle': fromBottom && overMiddle
+      'over-middle': overMiddle
     };
 
     return Object.entries(position)

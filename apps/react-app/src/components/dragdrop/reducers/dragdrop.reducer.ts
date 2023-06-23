@@ -89,8 +89,6 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
         firstDraggedItem.parentId = offset === 'on-middle' ? dropId : dropParentId;
       }
 
-      console.log(offsetPosition, dropItem);
-
       switch (offsetPosition) {
         case 'from-top-over-top':
           dropIndex -= dragCount;
@@ -105,15 +103,11 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
             dropIndex += dropCount + 1;
           }
           break;
-        case 'from-bottom-over-top':
-          break;
-        case 'from-top-over-middle':
-        case 'from-bottom-over-middle':
+        case 'over-middle':
           dropIndex += 1;
           break;
         default:
-        // Handle other offset positions if needed
-
+        // from-bottom-over-top
       }
 
       remainingItems.splice(dropIndex, 0, ...draggedItems);
