@@ -25,7 +25,7 @@ function mapToParent<T extends Item>(
           child.data = [];
         }
         mapToParent(child.data as T[], { ...item }, condition);
-        return;
+        //return;
       }
     }
   }

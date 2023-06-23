@@ -1,20 +1,24 @@
 
-//import { useWrapperContext } from '../../hooks';
-//import DragDropContext from './dragdrop.provider';
+import { useWrapperContext } from '../../hooks';
+import DragDropContext from './dragdrop.provider';
 
 import DragItem from './drag.item';
-import { DragField } from '../types';
+import { Field } from '../types';
 
 interface DragRenderProps {
-  data?: DragField[];
+  data?: Field[];
 }
 
-function DragRender(_props: DragRenderProps) {
-  //const _ctx = useWrapperContext(DragDropContext);
+function DragRender({ data = [] }: DragRenderProps) {
+  const ctx = useWrapperContext(DragDropContext);
 
   return (
     <div className="drag-area">
-      <DragItem />
+      {
+        data.map((item, index) => {
+          return <DragItem key={index} {...item} ctx={ctx} />
+        })
+      }
     </div>
   );
 }

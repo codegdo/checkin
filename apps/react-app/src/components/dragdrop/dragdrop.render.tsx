@@ -1,4 +1,4 @@
-import { memo, FC } from 'react';
+import { FC } from 'react';
 
 import ItemArea from './item.area';
 import ItemSection from './item.section';
@@ -24,6 +24,8 @@ const RenderItems: FC<RenderItemsProps> = ({ items }) => {
     <>
       {items.map((item) => {
         const { dataType, data = [] } = item;
+
+        console.log();
 
         switch (dataType) {
           case 'area':
@@ -72,13 +74,11 @@ function DragDropRender(): JSX.Element | null {
   // normalize data
   const normalizeData = dndHelper.normalizeData(ctx.state.data);
 
-  const MemoizedRenderItems = memo(RenderItems);
-
   if (normalizeData === null) {
     return null;
   }
 
-  return <MemoizedRenderItems items={normalizeData} />;
+  return <RenderItems items={normalizeData} />;
 }
 
 export default DragDropRender;

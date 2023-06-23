@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 import { utils } from '@libs/shared-code';
 
 import ItemMenu from './item.menu';
@@ -11,7 +11,7 @@ type ItemBlockProps = PropsWithChildren<Field & {
 }>;
 
 function ItemBlock({ ctx, children, ...item }: ItemBlockProps) {
-  const { ref, isDragging, isOver } = useDragDrop({ item, ctx });
+  const { ref, drag, drop, isDragging, isOver } = useDragDrop({ item, ctx });
   const { isSelect, isEdit, onClick } = useDragDropSelect(item.id, ctx);
 
   const classNames = utils.classNames('drop-item', {
@@ -19,6 +19,8 @@ function ItemBlock({ ctx, children, ...item }: ItemBlockProps) {
     'is-over': isOver,
     'is-empty': item.data?.length == 0
   });
+
+  drag(drop(ref));
 
   return (
     <div className={classNames} data-id={`${item.id}`} ref={ref}>

@@ -1,7 +1,7 @@
 import { DragDrop } from '../../components';
 
 // Example API response
-const apiResponse = [
+const data = [
   {
     id: '1',
     name: 'block',
@@ -49,6 +49,30 @@ const apiResponse = [
   },
 ];
 
+const dragFields = [
+  {
+    id: '',
+    name: 'block',
+    type: 'div',
+    dataType: 'block',
+    data: []
+  },
+  //
+
+];
+
+
+function Index() {
+  return <div>
+    <DragDrop data={data} dragFields={dragFields} />
+  </div>
+}
+
+export default Index;
+
+
+
+
 // Map the API response to use enum values
 // const json: Field[] = apiResponse.map(item => ({
 //   ...item,
@@ -59,11 +83,3 @@ const apiResponse = [
 //     type: FieldType[dataItem.type.toUpperCase() as keyof typeof FieldType],
 //   })),
 // }));
-
-function Index() {
-  return <div>
-    <DragDrop data={apiResponse} />
-  </div>
-}
-
-export default Index;

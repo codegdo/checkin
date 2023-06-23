@@ -46,8 +46,4 @@ export type ExtendedField = Field & {
   selected?: boolean;
 }
 
-export interface DragField {
-  id?: string | number | null;
-  type: FieldType | ElementType;
-  dataType: DataType;
-}
+export type DragField = Partial<Field>

@@ -193,7 +193,7 @@ export function useDragDrop({ item, ctx }: Params) {
           dndRef.drop = { ...item };
           dndRef.canDrop = !hasNestedItems(dragItem);
           dndRef.touchItems.push(item.id);
-          //console.log('setItem', dndRef);
+          //console.log('setItem');
           //console.log('setCanDrop', dndRef.canDrop);
         }
 
@@ -220,14 +220,14 @@ export function useDragDrop({ item, ctx }: Params) {
 
   const handleDragEnd = useCallback(
     (dragItem: Field, monitor: DragSourceMonitor<Field>) => {
-      //removeClass();
+
       if (monitor.didDrop() && dndRef.canDrop) {
         //console.log('dragItemDrop', dragItem);
         //console.log('hoverItemDrop', item);
         //console.log('dndRef', dndRef);
 
         dispatch({
-          type: DndActionType.MOVE_ITEM,
+          type: dragRef.current ? DndActionType.MOVE_ITEM : DndActionType.ADD_ITEM,
           payload: {
             dragItem,
             dropItem: dndRef.drop,
@@ -236,7 +236,7 @@ export function useDragDrop({ item, ctx }: Params) {
         });
       }
     },
-    [],
+    [dispatch, dndRef.canDrop, dndRef.drop, dndRef.offset],
   );
 
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -247,7 +247,7 @@ export function useDragDrop({ item, ctx }: Params) {
     collect: (monitor) => ({
       isDragging: monitor.isDragging()
     }),
-  }), []);
+  }), [item]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: Object.values(DataType),
@@ -256,11 +256,11 @@ export function useDragDrop({ item, ctx }: Params) {
       isOver: monitor.isOver({ shallow: true }),
       canDrop: monitor.canDrop()
     }),
-  }), []);
+  }), [item]);
 
   useEffect(() => {
     const key = `${item.id}`;
-    if (!dndRef.domList[key]) {
+    if (item.id && !dndRef.domList[key]) {
       dndRef.domList[key] = dragRef.current;
     }
   }, [dndRef, item]);
@@ -276,9 +276,11 @@ export function useDragDrop({ item, ctx }: Params) {
     }
   }, [dndRef, isOver]);
 
-  drag(drop(dragRef));
+  //drag(drop(dragRef));
 
   return {
+    drag,
+    drop,
     ref: dragRef,
     isDragging,
     isOver

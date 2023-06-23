@@ -6,13 +6,13 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DragDropProvider, defaultDndRef, initialState } from './dragdrop.provider';
 import DragDropRender from './dragdrop.render';
 import DragRender from './drag.render';
-import { DragField, Field } from '../types';
+import { Field } from '../types';
 import { dndReducer } from './reducers';
 import { DndActionType } from '../types';
 
 interface DragDropProps {
   data: Field[];
-  dragFields?: DragField[];
+  dragFields?: Field[];
 }
 
 export function DragDrop({ data = [], dragFields = [] }: DragDropProps) {

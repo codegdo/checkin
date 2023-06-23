@@ -10,13 +10,15 @@ type ItemFieldProps = Field & {
 };
 
 function ItemField({ ctx, ...item }: ItemFieldProps) {
-  const { ref, isDragging, isOver } = useDragDrop({ item, ctx });
+  const { ref, drag, drop, isDragging, isOver } = useDragDrop({ item, ctx });
   const { isSelect, isEdit, onClick } = useDragDropSelect(item.id, ctx);
 
   const classNames = utils.classNames('drop-item', {
     'is-dragging': isDragging,
     'is-over': isOver
   });
+
+  drag(drop(ref));
 
   return (
     <div className={classNames} data-id={`${item.id}`} ref={ref}>
