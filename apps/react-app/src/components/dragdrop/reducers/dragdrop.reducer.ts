@@ -53,7 +53,7 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
 
     case DndActionType.ADD_ITEM: {
       const { dragItem, dropItem, offset } = action.payload as MoveItemsPayload;
-
+      console.log(dragItem, dropItem);
       const {
         id: dropId,
         dataType: dropDataType,

@@ -1,9 +1,23 @@
+.drag-area {
+  display: flex;
+}
+
+.drag-item {
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 5px;
+}
+
 .drop-item {
   border: 1px dashed #ddd;
   background-color: #fff;
   padding: 1rem;
   transition: all 0.5s ease-out;
   position: relative;
+}
+
+.is-disabled {
+  opacity: .5;
 }
 
 .is-dragging {

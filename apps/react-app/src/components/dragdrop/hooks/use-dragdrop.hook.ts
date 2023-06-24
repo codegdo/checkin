@@ -6,7 +6,8 @@ import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dn
 
 interface Params {
   item: Field;
-  ctx: DndContextValue
+  ctx: DndContextValue,
+  draggable?: boolean
 }
 
 interface XYDirection {
@@ -16,7 +17,7 @@ interface XYDirection {
   currentY: number | null;
 }
 
-export function useDragDrop({ item, ctx }: Params) {
+export function useDragDrop({ item, ctx, draggable = true }: Params) {
   const { id, dataType, data = [] } = item;
   const { dndRef, dispatch } = ctx;
   const dragRef = useRef<HTMLDivElement>(null);
@@ -121,7 +122,7 @@ export function useDragDrop({ item, ctx }: Params) {
     if (dragItem.dataType == DataType.FIELD) return false;
 
     const itemData = dragItem.data || [];
-    const nestedIds = utils.countItems(itemData, (child) => child.dataType == 'block');
+    const nestedIds = utils.countItems(itemData, (child: Field) => child.dataType == 'block');
 
     return nestedIds.includes(`${id}`);
   }, [id]);
@@ -213,21 +214,24 @@ export function useDragDrop({ item, ctx }: Params) {
         dndRef.drop = null;
         dndRef.touchItems = [];
       }
-      return true;
+
+      return draggable;
     },
-    [dndRef],
+    [dndRef, draggable],
   );
 
   const handleDragEnd = useCallback(
     (dragItem: Field, monitor: DragSourceMonitor<Field>) => {
 
       if (monitor.didDrop() && dndRef.canDrop) {
-        //console.log('dragItemDrop', dragItem);
-        //console.log('hoverItemDrop', item);
-        //console.log('dndRef', dndRef);
+        //console.log('dragItem', dragItem);
+        //console.log('hoverItem', item);
+        //console.log('dropItem', dndRef.drop);
+        //console.log('currentRef', dragRef.current);
+        const isMoveItem = dragRef.current?.getAttribute('data-id');
 
         dispatch({
-          type: dragRef.current ? DndActionType.MOVE_ITEM : DndActionType.ADD_ITEM,
+          type: isMoveItem ? DndActionType.MOVE_ITEM : DndActionType.ADD_ITEM,
           payload: {
             dragItem,
             dropItem: dndRef.drop,
@@ -236,7 +240,7 @@ export function useDragDrop({ item, ctx }: Params) {
         });
       }
     },
-    [dispatch, dndRef.canDrop, dndRef.drop, dndRef.offset],
+    [dispatch, dndRef.canDrop, dndRef.drop, dndRef.offset, dragRef.current],
   );
 
   const [{ isDragging }, drag] = useDrag(() => ({
