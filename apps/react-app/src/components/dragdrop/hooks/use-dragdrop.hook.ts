@@ -34,7 +34,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
     let height = 0;
 
     if (currentRef.classList.contains('is-empty')) {
-      const style = window.getComputedStyle(currentRef, ':after');
+      const style = window.getComputedStyle(currentRef);
       width = (parseFloat(style.width) || 0) / 2;
       height = (parseFloat(style.height) || 0) / 2;
     }
@@ -118,30 +118,30 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
     );
   }
 
-  const getTransitionDuration = (element: HTMLElement): number => {
-    const styles = window.getComputedStyle(element);
-    const transitionDuration = styles.getPropertyValue('transition-duration');
+  // const getTransitionDuration = (element: HTMLElement): number => {
+  //   const styles = window.getComputedStyle(element);
+  //   const transitionDuration = styles.getPropertyValue('transition-duration');
 
-    if (transitionDuration) {
-      const durations = transitionDuration.split(',');
+  //   if (transitionDuration) {
+  //     const durations = transitionDuration.split(',');
 
-      if (durations.length > 0) {
-        // Extract the maximum transition duration in seconds
-        const maxDuration = Math.max(
-          ...durations.map(duration => {
-            const value = parseFloat(duration);
+  //     if (durations.length > 0) {
+  //       // Extract the maximum transition duration in seconds
+  //       const maxDuration = Math.max(
+  //         ...durations.map(duration => {
+  //           const value = parseFloat(duration);
 
-            // Handle various time units (e.g., 's', 'ms')
-            return duration.includes('ms') ? value / 1000 : value;
-          })
-        );
+  //           // Handle various time units (e.g., 's', 'ms')
+  //           return duration.includes('ms') ? value / 1000 : value;
+  //         })
+  //       );
 
-        return maxDuration;
-      }
-    }
+  //       return maxDuration;
+  //     }
+  //   }
 
-    return 0;
-  }
+  //   return 0;
+  // }
 
   const hasNestedItems = useCallback((dragItem: Field): boolean => {
     if (dragItem.dataType == DataType.FIELD) return false;
@@ -155,56 +155,50 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
   const hoverItem = useCallback((currentRef: HTMLDivElement, monitor: DropTargetMonitor<Field>) => {
     const clientOffset = monitor.getClientOffset();
     const initialClientOffset = monitor.getInitialClientOffset();
-  
+
     if (!clientOffset || !initialClientOffset) return;
-  
+
     if (dndRef.clientX === clientOffset.x && dndRef.clientY === clientOffset.y) return;
-  
+
     dndRef.clientX = clientOffset.x;
     dndRef.clientY = clientOffset.y;
-  
+
     const clientRect = currentRef.getBoundingClientRect();
     const centerY = (clientRect.bottom - clientRect.top) / 2;
     const centerX = (clientRect.right - clientRect.left) / 2;
     const clientY = clientOffset.y - clientRect.top;
     const clientX = clientOffset.x - clientRect.left;
-  
+
     const { width, height } = calculateElementSize(currentRef);
-  
+
     const verticalOffset = getOffsetY(clientY, centerY, height);
     const horizontalOffset = getOffsetX(clientX, centerX, width);
-  
+
     const offset = `on-${verticalOffset}`;
-  
-    if (dndRef.canDrop && !currentRef.classList.contains(offset)) {
-      const transitionDuration = getTransitionDuration(currentRef);
-      console.log(transitionDuration);
-  
-      if (transitionDuration > 0) {
-        const transitionEndHandler = () => {
-          // Transition has ended, add the class now
-          addClass(currentRef, offset);
-          if (dndRef.offset === offset) return;
-          dndRef.offset = offset;
-          dndRef.offset && removeClass(currentRef);
-  
-          // Clean up the event listener
-          currentRef.removeEventListener('transitionend', transitionEndHandler);
-        };
-  
-        currentRef.addEventListener('transitionend', transitionEndHandler);
-      } else {
-        // No transition duration, add the class immediately
+
+    if (dndRef.canDrop) {
+
+      // stop calling addclass when transitioning then replace offset with 'is-transition'
+      if (!currentRef.classList.contains(offset)) {
+        //addClass(currentRef, 'is-transition');
         addClass(currentRef, offset);
-        if (dndRef.offset === offset) return;
-        dndRef.offset = offset;
-        dndRef.offset && removeClass(currentRef);
+
+        // const handleTransitionEnd = () => {
+        //   currentRef.classList.remove('is-transition');
+        //   currentRef.removeEventListener('transitionend', handleTransitionEnd);
+        // };
+
+        // currentRef.addEventListener('transitionend', handleTransitionEnd, { once: true });
       }
+
+      if (dndRef.offset === offset) return;
+      dndRef.offset = offset;
+
+      removeClass(currentRef);
     }
+
   }, [dndRef]);
-  
-  
-  
+
 
   const handleDragOver = useCallback(
     (dragItem: Field, monitor: DropTargetMonitor<Field>) => {

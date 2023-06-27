@@ -699,6 +699,7 @@ class DragDropHelper {
 
     if (element.classList.contains('is-empty')) {
       const style = window.getComputedStyle(element, ':after');
+      console.log(style.width);
       width = (parseFloat(style.width) || 0) / 2;
       height = (parseFloat(style.height) || 0) / 2;
     }

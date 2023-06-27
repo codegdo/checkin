@@ -12,12 +12,12 @@
   border: 1px dashed #ddd;
   background-color: #fff;
   padding: 1rem;
-  transition: all 3s ease-out;
+  transition: all 0.3s ease-out;
   position: relative;
 }
 
 .is-disabled {
-  opacity: .5;
+  opacity: 0.5;
 }
 
 .is-dragging {
@@ -27,7 +27,6 @@
 .is-empty:after {
   content: 'drop...';
   display: block;
-
   padding: 1rem;
   text-align: center;
   color: #ccc;

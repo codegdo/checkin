@@ -70,9 +70,10 @@ class DragDropHelper {
     const position = {
       'from-top-over-top': fromTop && overTop,
       'from-top-over-bottom': fromTop && overBottom,
+      'from-top-over-middle': fromTop && overMiddle,
       'from-bottom-over-top': fromBottom && overTop,
       'from-bottom-over-bottom': fromBottom && overBottom,
-      'over-middle': overMiddle
+      'from-bottom-over-middle': fromBottom && overMiddle
     };
 
     return Object.entries(position)

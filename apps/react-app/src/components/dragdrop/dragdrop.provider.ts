@@ -20,7 +20,7 @@ export const defaultDndRef = {
   clientX: 0,
   clientY: 0,
   offset: '',
-  canDrop: true
+  canDrop: true,
 };
 
 const dispatch: DndContextValue['dispatch'] = () => {

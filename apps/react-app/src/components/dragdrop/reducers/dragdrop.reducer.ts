@@ -158,6 +158,7 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
           dropIndex -= dragCount;
           break;
         case 'from-top-over-bottom':
+        case 'from-top-over-middle':
           dropIndex += dropCount + 1 - dragCount;
           break;
         case 'from-bottom-over-bottom':
@@ -167,7 +168,7 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
             dropIndex += dropCount + 1;
           }
           break;
-        case 'over-middle':
+        case 'from-bottom-over-middle':
           dropIndex += 1;
           break;
         default:

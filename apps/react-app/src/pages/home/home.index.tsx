@@ -59,6 +59,13 @@ const dragFields = [
   },
   //
   {
+    id: 5,
+    name: 'field',
+    type: 'text',
+    dataType: 'field',
+    data: []
+  },
+  {
     id: 6,
     name: 'field',
     type: 'text',
