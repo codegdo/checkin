@@ -17,6 +17,25 @@ export enum DndActionType {
   RESET_ITEM = 'UPDATE_RESET',
 }
 
+export enum RestrictedDataType {
+  AREA_AREA = 'area_area',
+
+  SECTION_COLUMN = 'section_column',
+  SECTION_BLOCK = 'section_block',
+  SECTION_PLACEHOLDER = 'section_placeholder',
+  SECTION_FIELD = 'section_field',
+  SECTION_GRID = 'section_grid',
+  SECTION_GROUP = 'section_group',
+  SECTION_ELEMENT = 'section_element',
+
+  COLUMN_BLOCK = 'column_block',
+  COLUMN_PLACEHOLDER = 'column_placeholder',
+  COLUMN_FIELD = 'column_field',
+  COLUMN_GRID = 'column_grid',
+  COLUMN_GROUP = 'column_group',
+  COLUMN_ELEMENT = 'column_element',
+}
+
 type DropRef = Partial<Field> | null;
 type DomRef = Record<string, HTMLDivElement | null>;
 

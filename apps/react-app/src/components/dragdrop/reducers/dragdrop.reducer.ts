@@ -53,7 +53,11 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
 
     case DndActionType.ADD_ITEM: {
       const { dragItem, dropItem, offset } = action.payload as MoveItemsPayload;
-      console.log(dragItem, dropItem);
+
+      const {
+        dataType: dragDataType
+      } = dragItem || {};
+
       const {
         id: dropId,
         dataType: dropDataType,
@@ -74,7 +78,10 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
         position: -1,
       };
 
-      const dropIds = dropDataType === DataType.BLOCK ? utils.countItems(dropData || [], item => item.dataType === DataType.BLOCK) : [];
+      const hasChildren = dragDataType === DataType.BLOCK || dragDataType === DataType.SECTION;
+      const condition = (item: Field) => (item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION);
+
+      const dropIds = hasChildren ? utils.countItems(dropData || [], condition) : [];
       const dropCount = dropIds.length;
 
       let dropIndex = dropPosition ?? 0;
@@ -88,6 +95,11 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
           break;
         default:
         // on-top
+      }
+
+      if (dropDataType === DataType.AREA) {
+        dropIndex = offset === 'on-bottom' ? state.data.length : 0;
+        newItem.parentId = null;
       }
 
       const updatedData = [...state.data];
@@ -124,8 +136,11 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
 
       const offsetPosition = dndHelper.findDropPosition({ dragIndex, dropIndex, offset });
 
-      const dragIds = dragDataType === DataType.BLOCK ? utils.countItems(dragData || [], item => item.dataType === DataType.BLOCK) : [];
-      const dropIds = dropDataType === DataType.BLOCK ? utils.countItems(dropData || [], item => item.dataType === DataType.BLOCK) : [];
+      const hasChildren = dragDataType === DataType.BLOCK || dragDataType === DataType.SECTION;
+      const condition = (item: Field) => (item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION);
+
+      const dragIds = hasChildren ? utils.countItems(dragData || [], condition) : [];
+      const dropIds = hasChildren ? utils.countItems(dropData || [], condition) : [];
 
       const dragCount = dragIds.length + 1;
       const dropCount = dropIds.length;
@@ -133,19 +148,6 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
       const data = [...state.data];
       const draggedItems = data.splice(dragIndex, dragCount);
       const remainingItems = data;
-
-      // if (draggedItems.length > 0) {
-      //   const [firstDraggedItem] = draggedItems;
-      //   firstDraggedItem.parentId = offset === 'on-middle' ? dropId : dropParentId;
-      // }
-
-      // console.log('draggedItems', draggedItems);
-
-      // draggedItems.find(item => {
-      //   if (item.id == dragId) {
-      //     item.parentId = offset === 'on-middle' ? dropId : dropParentId;
-      //   }
-      // });
 
       const [firstDraggedItem] = draggedItems;
 
@@ -173,6 +175,11 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
           break;
         default:
         // from-bottom-over-top
+      }
+
+      if (dropDataType === DataType.AREA) {
+        dropIndex = offset === 'on-bottom' ? state.data.length : 0;
+        firstDraggedItem.parentId = null;
       }
 
       remainingItems.splice(dropIndex, 0, ...draggedItems);

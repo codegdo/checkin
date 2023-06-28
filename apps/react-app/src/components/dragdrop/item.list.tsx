@@ -6,11 +6,11 @@ import ItemEditor from './item.editor';
 import { Field, DndContextValue } from '../types';
 import { useDragDrop, useDragDropSelect } from './hooks';
 
-type ItemSectionProps = PropsWithChildren<Field & {
+type ItemBlockProps = PropsWithChildren<Field & {
   ctx: DndContextValue;
 }>;
 
-function ItemSection({ ctx, children, ...item }: ItemSectionProps) {
+function ItemList({ ctx, children, ...item }: ItemBlockProps) {
   const { ref, drag, drop, isDragging, isOver } = useDragDrop({ item, ctx });
   const { isSelect, isEdit, onClick } = useDragDropSelect(item.id, ctx);
 
@@ -31,4 +31,4 @@ function ItemSection({ ctx, children, ...item }: ItemSectionProps) {
   )
 }
 
-export default ItemSection;
+export default ItemList;

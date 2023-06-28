@@ -52,6 +52,13 @@ const data = [
 const dragFields = [
   {
     id: '',
+    name: 'section',
+    type: 'section',
+    dataType: 'section',
+    data: []
+  },
+  {
+    id: '',
     name: 'block',
     type: 'div',
     dataType: 'block',

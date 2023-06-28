@@ -28,11 +28,13 @@ function DragDropPreview() {
     return null;
   }
 
+  const dragStyles = dndHelper.getDragPreviewStyles(initialSourceClientOffset, clientOffset, false);
+
   return (
     <div style={layerStyles}>
-      <div className='drag-preview' style={dndHelper.getItemStyles(initialSourceClientOffset, clientOffset, false)}>{item?.name}</div>
+      <div className='drag-preview' style={dragStyles}>{item?.name}</div>
     </div>
   );
-};
+}
 
 export default DragDropPreview;

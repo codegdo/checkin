@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { utils } from '@libs/shared-code';
 
-import { DataType, Field, DndContextValue, DndActionType } from "../../types";
+import { DataType, Field, DndContextValue, DndActionType, RestrictedDataType } from "../../types";
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 
@@ -119,39 +119,18 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
     );
   }
 
-  // const getTransitionDuration = (element: HTMLElement): number => {
-  //   const styles = window.getComputedStyle(element);
-  //   const transitionDuration = styles.getPropertyValue('transition-duration');
-
-  //   if (transitionDuration) {
-  //     const durations = transitionDuration.split(',');
-
-  //     if (durations.length > 0) {
-  //       // Extract the maximum transition duration in seconds
-  //       const maxDuration = Math.max(
-  //         ...durations.map(duration => {
-  //           const value = parseFloat(duration);
-
-  //           // Handle various time units (e.g., 's', 'ms')
-  //           return duration.includes('ms') ? value / 1000 : value;
-  //         })
-  //       );
-
-  //       return maxDuration;
-  //     }
-  //   }
-
-  //   return 0;
-  // }
-
-  const hasNestedItems = useCallback((dragItem: Field): boolean => {
-    if (dragItem.dataType == DataType.FIELD) return false;
-
+  const checkCanDrop = useCallback((dragItem: Field): boolean => {
     const itemData = dragItem.data || [];
-    const nestedIds = utils.countItems(itemData, (child: Field) => child.dataType == 'block');
+    const restrictedDataTypes = Object.values(RestrictedDataType);
+    const condition = (field: Field) => (field.dataType === DataType.BLOCK || field.dataType === DataType.SECTION);
+    const nestedItemIds = utils.countItems(itemData, condition);
+    const keyDataType = `${dragItem.dataType}_${dataType}`;
 
-    return nestedIds.includes(`${id}`);
-  }, [id]);
+    const hasNestedItems = nestedItemIds.includes(`${id}`);
+    const isRestrictedDataTypes = restrictedDataTypes.includes(keyDataType as RestrictedDataType);
+
+    return !hasNestedItems && !isRestrictedDataTypes;
+  }, [id, dataType]);
 
   const hoverItem = useCallback((currentRef: HTMLDivElement, monitor: DropTargetMonitor<Field>) => {
     const clientOffset = monitor.getClientOffset();
@@ -179,10 +158,16 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
 
     if (dndRef.canDrop) {
 
+      if (offset === 'on-middle' && monitor.getItemType() === DataType.SECTION && dataType === DataType.SECTION) {
+        return;
+      }
+
       // stop calling addclass when transitioning then replace 'offset' with 'is-transitioning'
       if (!currentRef.classList.contains(offset)) {
-        //addClass(currentRef, 'is-transitioning');
+
         addClass(currentRef, offset);
+
+        // addClass(currentRef, 'is-transitioning');
 
         // const handleTransitionEnd = () => {
         //   currentRef.classList.remove('is-transitioning');
@@ -198,8 +183,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
       removeClass(currentRef);
     }
 
-  }, [dndRef]);
-
+  }, [dataType, dndRef]);
 
   const handleDragOver = useCallback(
     (dragItem: Field, monitor: DropTargetMonitor<Field>) => {
@@ -210,8 +194,6 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
         if (dragItem.id == item.id) {
           if (dndRef.drop) {
             dndRef.drop = null;
-          }
-          if (dndRef.canDrop) {
             dndRef.canDrop = false;
           }
           return;
@@ -219,7 +201,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
 
         if (dndRef.drop?.id !== item.id) {
           dndRef.drop = { ...item };
-          dndRef.canDrop = !hasNestedItems(dragItem);
+          dndRef.canDrop = checkCanDrop(dragItem);
           dndRef.touchItems.push(item.id);
         }
 
@@ -229,14 +211,11 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
         //console.log('hoverItem', item);
       }
     },
-    [dndRef, item, hoverItem, hasNestedItems],
+    [item, dndRef, hoverItem, checkCanDrop],
   );
 
   const handleDragStart = useCallback(
     () => {
-      preview(getEmptyImage(), { captureDraggingState: false });
-      
-      //console.log('startDrag');
       if (dndRef.drop) {
         dndRef.drop = null;
         dndRef.touchItems = [];
@@ -255,7 +234,6 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
         //console.log('hoverItem', item);
         //console.log('dropItem', dndRef.drop);
         //console.log('currentRef', dragRef.current);
-        //const isMoveItem = dragRef.current?.getAttribute('data-id');
 
         dispatch({
           type: dragRef.current ? DndActionType.MOVE_ITEM : DndActionType.ADD_ITEM,
@@ -267,7 +245,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
         });
       }
     },
-    [dispatch, dndRef.canDrop, dndRef.drop, dndRef.offset, dragRef.current],
+    [dispatch, dndRef.drop, dndRef.canDrop, dndRef.offset],
   );
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
@@ -282,10 +260,10 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: Object.values(DataType),
+    canDrop: () => dndRef.canDrop,
     hover: handleDragOver,
     collect: (monitor) => ({
-      isOver: monitor.isOver({ shallow: true }),
-      canDrop: monitor.canDrop()
+      isOver: monitor.isOver({ shallow: true })
     }),
   }), [item]);
 
@@ -306,6 +284,13 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
       //console.log('IS DRAGOUT REMOVE CSS', dndRef, item);
     }
   }, [dndRef, isOver]);
+
+  useEffect(() => {
+    preview(getEmptyImage(), { captureDraggingState: false });
+    return () => {
+      preview(null);
+    };
+  }, [drag, preview]);
 
   //drag(drop(dragRef));
 

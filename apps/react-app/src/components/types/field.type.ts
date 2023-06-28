@@ -16,6 +16,7 @@ export enum ElementType {
 export enum DataType {
   AREA = 'area',
   SECTION = 'section',
+  COLUMN = 'column',
   BLOCK = 'block',
   PLACEHOLDER = 'placeholder',
   ELEMENT = 'element',

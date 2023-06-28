@@ -28,7 +28,7 @@ class DragDropHelper {
     const list: Field[] = [];
 
     cloneData.forEach((item: Field) => {
-      return utils.mapToParent(list, item, (item: Field) => (item.dataType == DataType.BLOCK));
+      return utils.mapToParent(list, item, (item: Field) => (item.dataType == DataType.SECTION || item.dataType == DataType.BLOCK));
     });
 
     return [{
@@ -36,6 +36,7 @@ class DragDropHelper {
       name: 'area',
       type: 'div',
       dataType: DataType.AREA,
+      parentId: null,
       data: [...list]
     }];
   }
@@ -88,19 +89,17 @@ class DragDropHelper {
     return [snappedX, snappedY]
   }
 
-  getItemStyles(
+  getDragPreviewStyles(
     initialOffset: XYCoord | null,
     currentOffset: XYCoord | null,
     isSnapToGrid: boolean,
   ) {
-    // If either initialOffset or currentOffset is null, return the styles to hide the item
     if (!initialOffset || !currentOffset) {
       return {
         display: 'none',
       };
     }
 
-    // Calculate the new x and y coordinates based on the current offset and whether snapping to grid is enabled
     let { x, y } = currentOffset;
 
     if (isSnapToGrid) {
@@ -111,25 +110,12 @@ class DragDropHelper {
       y += initialOffset.y;
     }
 
-    // Create the transform style with the new x and y coordinates
     const transform = `translate(${x}px, ${y}px)`;
 
-    // Return an object with the transform style and its Webkit version
     return {
       transform,
       WebkitTransform: transform,
     };
-  }
-
-
-  findDropIndex({
-    dataType,
-    dropPosition,
-    offsetPosition,
-    dragCount,
-    dropChildren
-  }: FindDropIndexParams) {
-    return dropPosition + dropChildren;
   }
 
 }

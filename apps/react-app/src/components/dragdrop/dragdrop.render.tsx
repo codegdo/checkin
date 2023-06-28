@@ -3,6 +3,7 @@ import { FC } from 'react';
 import ItemArea from './item.area';
 import ItemSection from './item.section';
 import ItemBlock from './item.block';
+import ItemList from './item.list';
 import ItemPlaceholder from './item.placeholder';
 import ItemField from './item.field';
 import ItemElement from './item.element';
@@ -45,6 +46,12 @@ const RenderItems: FC<RenderItemsProps> = ({ items }) => {
               <ItemBlock key={item.id} {...item} ctx={ctx}>
                 <RenderItems items={data} />
               </ItemBlock>
+            );
+          case 'list':
+            return data && (
+              <ItemList key={item.id} {...item} ctx={ctx}>
+                <RenderItems items={data} />
+              </ItemList>
             );
           case 'placeholder':
             return data && (

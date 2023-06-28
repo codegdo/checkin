@@ -1,14 +1,18 @@
 import { PropsWithChildren, useRef } from 'react';
 
 import { Field, DndActionType, DndContextValue } from '../types';
+import { useDragDrop } from './hooks';
+import { utils } from '@libs/shared-code';
 
 type ItemAreaProps = PropsWithChildren<Field & {
   ctx: DndContextValue;
 }>;
 
-function ItemArea({ ctx, children }: ItemAreaProps) {
-  const ref = useRef(null);
+function ItemArea({ ctx, children, ...item }: ItemAreaProps) {
+  //const ref = useRef(null);
   const { state, dispatch } = ctx;
+
+  const { ref, drop, isOver } = useDragDrop({ item, ctx });
 
   const handleItemClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -61,8 +65,14 @@ function ItemArea({ ctx, children }: ItemAreaProps) {
     }
   };
 
+  const classNames = utils.classNames('drop-area', {
+    'is-over': isOver
+  });
+
+  drop(ref);
+
   return (
-    <div className="drop-area" ref={ref} onClick={handleItemClick} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>{children}</div>
+    <div className={classNames} ref={ref} onClick={handleItemClick} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>{children}</div>
   )
 }
 
