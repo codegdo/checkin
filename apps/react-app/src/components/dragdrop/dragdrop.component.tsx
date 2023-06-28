@@ -9,6 +9,7 @@ import DragRender from './drag.render';
 import { Field } from '../types';
 import { dndReducer } from './reducers';
 import { DndActionType } from '../types';
+import DragDropPreview from './dragdrop.preview';
 
 interface DragDropProps {
   data: Field[];
@@ -32,6 +33,7 @@ export function DragDrop({ data = [], dragFields = [] }: DragDropProps) {
       <DragDropProvider value={{ state, dispatch, dndRef }}>
         <DragDropRender />
         <DragRender data={dragFields} />
+        <DragDropPreview />
       </DragDropProvider>
     </DndProvider>
   )

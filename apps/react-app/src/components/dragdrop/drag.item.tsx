@@ -15,10 +15,10 @@ function DragItem({ ctx, ...item }: DragItemProps) {
     'is-disabled': !isDragEnabled
   });
 
-  drag(ref);
+  //drag(ref);
 
   return (
-    <div ref={ref} className={classNames}>
+    <div ref={drag} className={classNames}>
       {`DRAG_ITEM ${item.dataType}`}
     </div>
   )

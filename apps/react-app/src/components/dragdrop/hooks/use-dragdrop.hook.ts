@@ -3,6 +3,7 @@ import { utils } from '@libs/shared-code';
 
 import { DataType, Field, DndContextValue, DndActionType } from "../../types";
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
+import { getEmptyImage } from "react-dnd-html5-backend";
 
 interface Params {
   item: Field;
@@ -34,7 +35,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
     let height = 0;
 
     if (currentRef.classList.contains('is-empty')) {
-      const style = window.getComputedStyle(currentRef);
+      const style = window.getComputedStyle(currentRef, ':after');
       width = (parseFloat(style.width) || 0) / 2;
       height = (parseFloat(style.height) || 0) / 2;
     }
@@ -178,13 +179,13 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
 
     if (dndRef.canDrop) {
 
-      // stop calling addclass when transitioning then replace offset with 'is-transition'
+      // stop calling addclass when transitioning then replace 'offset' with 'is-transitioning'
       if (!currentRef.classList.contains(offset)) {
-        //addClass(currentRef, 'is-transition');
+        //addClass(currentRef, 'is-transitioning');
         addClass(currentRef, offset);
 
         // const handleTransitionEnd = () => {
-        //   currentRef.classList.remove('is-transition');
+        //   currentRef.classList.remove('is-transitioning');
         //   currentRef.removeEventListener('transitionend', handleTransitionEnd);
         // };
 
@@ -233,6 +234,8 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
 
   const handleDragStart = useCallback(
     () => {
+      preview(getEmptyImage(), { captureDraggingState: false });
+      
       //console.log('startDrag');
       if (dndRef.drop) {
         dndRef.drop = null;
@@ -252,10 +255,10 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
         //console.log('hoverItem', item);
         //console.log('dropItem', dndRef.drop);
         //console.log('currentRef', dragRef.current);
-        const isMoveItem = dragRef.current?.getAttribute('data-id');
+        //const isMoveItem = dragRef.current?.getAttribute('data-id');
 
         dispatch({
-          type: isMoveItem ? DndActionType.MOVE_ITEM : DndActionType.ADD_ITEM,
+          type: dragRef.current ? DndActionType.MOVE_ITEM : DndActionType.ADD_ITEM,
           payload: {
             dragItem,
             dropItem: dndRef.drop,
@@ -267,7 +270,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
     [dispatch, dndRef.canDrop, dndRef.drop, dndRef.offset, dragRef.current],
   );
 
-  const [{ isDragging }, drag] = useDrag(() => ({
+  const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: dataType,
     item,
     canDrag: handleDragStart,
