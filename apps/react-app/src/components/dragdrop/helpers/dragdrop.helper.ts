@@ -2,14 +2,6 @@ import { UtilsInterface, utils } from '@libs/shared-code';
 import { DataType, Field } from '../../types';
 import { XYCoord } from 'react-dnd';
 
-interface FindDropIndexParams {
-  dropPosition: number;
-  offsetPosition: string;
-  dragCount: number;
-  dropChildren: number;
-  dataType: string;
-}
-
 interface FindDropPositionParams {
   dragIndex: number;
   dropIndex: number;

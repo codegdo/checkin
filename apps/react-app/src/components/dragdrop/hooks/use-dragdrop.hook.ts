@@ -19,7 +19,7 @@ interface XYDirection {
 }
 
 export function useDragDrop({ item, ctx, draggable = true }: Params) {
-  const { id, dataType, data = [] } = item;
+  const { id, dataType } = item;
   const { dndRef, dispatch } = ctx;
   const dragRef = useRef<HTMLDivElement>(null);
 
@@ -132,58 +132,60 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
     return !hasNestedItems && !isRestrictedDataTypes;
   }, [id, dataType]);
 
-  const hoverItem = useCallback((currentRef: HTMLDivElement, monitor: DropTargetMonitor<Field>) => {
-    const clientOffset = monitor.getClientOffset();
-    const initialClientOffset = monitor.getInitialClientOffset();
+  const hoverItem = useCallback(
+    (currentRef: HTMLDivElement, monitor: DropTargetMonitor<Field>) => {
+      const clientOffset = monitor.getClientOffset();
+      const initialClientOffset = monitor.getInitialClientOffset();
 
-    if (!clientOffset || !initialClientOffset) return;
+      if (!clientOffset || !initialClientOffset) return;
 
-    if (dndRef.clientX === clientOffset.x && dndRef.clientY === clientOffset.y) return;
+      if (dndRef.clientX === clientOffset.x && dndRef.clientY === clientOffset.y) return;
 
-    dndRef.clientX = clientOffset.x;
-    dndRef.clientY = clientOffset.y;
+      dndRef.clientX = clientOffset.x;
+      dndRef.clientY = clientOffset.y;
 
-    const clientRect = currentRef.getBoundingClientRect();
-    const centerY = (clientRect.bottom - clientRect.top) / 2;
-    const centerX = (clientRect.right - clientRect.left) / 2;
-    const clientY = clientOffset.y - clientRect.top;
-    const clientX = clientOffset.x - clientRect.left;
+      const clientRect = currentRef.getBoundingClientRect();
+      const centerY = (clientRect.bottom - clientRect.top) / 2;
+      const centerX = (clientRect.right - clientRect.left) / 2;
+      const clientY = clientOffset.y - clientRect.top;
+      const clientX = clientOffset.x - clientRect.left;
 
-    const { width, height } = calculateElementSize(currentRef);
+      const { width, height } = calculateElementSize(currentRef);
 
-    const verticalOffset = getOffsetY(clientY, centerY, height);
-    const horizontalOffset = getOffsetX(clientX, centerX, width);
+      const verticalOffset = getOffsetY(clientY, centerY, height);
+      const horizontalOffset = getOffsetX(clientX, centerX, width);
 
-    const offset = `on-${verticalOffset}`;
+      const offset = `on-${verticalOffset}`;
 
-    if (dndRef.canDrop) {
+      if (dndRef.canDrop) {
 
-      if (offset === 'on-middle' && monitor.getItemType() === DataType.SECTION && dataType === DataType.SECTION) {
-        return;
+        if (offset === 'on-middle' && monitor.getItemType() === DataType.SECTION && dataType === DataType.SECTION) {
+          return;
+        }
+
+        // stop calling addclass when transitioning then replace 'offset' with 'is-transitioning'
+        if (!currentRef.classList.contains(offset)) {
+
+          addClass(currentRef, offset);
+
+          // addClass(currentRef, 'is-transitioning');
+
+          // const handleTransitionEnd = () => {
+          //   currentRef.classList.remove('is-transitioning');
+          //   currentRef.removeEventListener('transitionend', handleTransitionEnd);
+          // };
+
+          // currentRef.addEventListener('transitionend', handleTransitionEnd, { once: true });
+        }
+
+        if (dndRef.offset === offset) return;
+        dndRef.offset = offset;
+
+        removeClass(currentRef);
       }
 
-      // stop calling addclass when transitioning then replace 'offset' with 'is-transitioning'
-      if (!currentRef.classList.contains(offset)) {
-
-        addClass(currentRef, offset);
-
-        // addClass(currentRef, 'is-transitioning');
-
-        // const handleTransitionEnd = () => {
-        //   currentRef.classList.remove('is-transitioning');
-        //   currentRef.removeEventListener('transitionend', handleTransitionEnd);
-        // };
-
-        // currentRef.addEventListener('transitionend', handleTransitionEnd, { once: true });
-      }
-
-      if (dndRef.offset === offset) return;
-      dndRef.offset = offset;
-
-      removeClass(currentRef);
-    }
-
-  }, [dataType, dndRef]);
+    }, [dataType, dndRef]
+  );
 
   const handleDragOver = useCallback(
     (dragItem: Field, monitor: DropTargetMonitor<Field>) => {
@@ -228,8 +230,8 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
 
   const handleDragEnd = useCallback(
     (dragItem: Field, monitor: DragSourceMonitor<Field>) => {
-
-      if (monitor.didDrop() && dndRef.canDrop) {
+      const {drop, offset, canDrop} = dndRef;
+      if (monitor.didDrop() && canDrop) {
         //console.log('dragItem', dragItem);
         //console.log('hoverItem', item);
         //console.log('dropItem', dndRef.drop);
@@ -239,13 +241,13 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
           type: dragRef.current ? DndActionType.MOVE_ITEM : DndActionType.ADD_ITEM,
           payload: {
             dragItem,
-            dropItem: dndRef.drop,
-            offset: dndRef.offset
+            dropItem: drop,
+            offset
           }
         });
       }
     },
-    [dispatch, dndRef.drop, dndRef.canDrop, dndRef.offset],
+    [dispatch, dndRef],
   );
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
@@ -277,9 +279,9 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
   useEffect(() => {
     if (!isOver) {
       const lastItemId = dndRef.touchItems.at(-1);
-      const lastTargetItem = dndRef.domList[`${lastItemId}`];
+      const lastElement = dndRef.domList[`${lastItemId}`];
 
-      lastTargetItem && removeClass(lastTargetItem);
+      lastElement && removeClass(lastElement);
 
       //console.log('IS DRAGOUT REMOVE CSS', dndRef, item);
     }
@@ -290,9 +292,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
     return () => {
       preview(null);
     };
-  }, [drag, preview]);
-
-  //drag(drop(dragRef));
+  }, [preview]);
 
   return {
     drag,
