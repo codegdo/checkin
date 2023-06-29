@@ -202,7 +202,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
         }
 
         if (dndRef.drop?.id !== item.id) {
-          dndRef.drop = { ...item };
+          dndRef.drop = item;
           dndRef.canDrop = checkCanDrop(dragItem);
           dndRef.touchItems.push(item.id);
         }
