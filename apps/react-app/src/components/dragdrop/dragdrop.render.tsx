@@ -1,26 +1,24 @@
 import { FC } from 'react';
 
-import ItemArea from './item.area';
-import ItemSection from './item.section';
-import ItemBlock from './item.block';
-import ItemList from './item.list';
-import ItemPlaceholder from './item.placeholder';
-import ItemField from './item.field';
-import ItemElement from './item.element';
-import ItemGrid from './item.grid';
-import ItemGroup from './item.group';
+import DropArea from './drop.area';
+import DropSection from './drop.section';
+import DropBlock from './drop.block';
+import DropPlaceholder from './drop.placeholder';
+import DropField from './drop.field';
+import DropElement from './drop.element';
+import DropGrid from './drop.grid';
+import DropGroup from './drop.group';
 import DragDropContext from './dragdrop.provider';
 import { dndHelper } from './helpers';
-import { Field } from '../types';
+import { DndContextValue, Field } from '../types';
 import { useWrapperContext } from '../../hooks';
 
-interface RenderItemsProps {
+interface RenderProps {
   items: Field[];
+  ctx: DndContextValue;
 }
 
-const RenderItems: FC<RenderItemsProps> = ({ items }) => {
-  const ctx = useWrapperContext(DragDropContext);
-
+const render = ({ items, ctx }:RenderProps) => {
   return (
     <>
       {items.map((item) => {
@@ -31,42 +29,36 @@ const RenderItems: FC<RenderItemsProps> = ({ items }) => {
         switch (dataType) {
           case 'area':
             return data && (
-              <ItemArea key={item.id} {...item} ctx={ctx}>
-                <RenderItems items={data} />
-              </ItemArea>
+              <DropArea key={item.id} {...item} ctx={ctx}>
+                {render({ items: data, ctx })}
+              </DropArea>
             );
           case 'section':
             return data && (
-              <ItemSection key={item.id} {...item} ctx={ctx}>
-                <RenderItems items={data} />
-              </ItemSection>
+              <DropSection key={item.id} {...item} ctx={ctx}>
+                {render({ items: data, ctx })}
+              </DropSection>
             );
           case 'block':
             return data && (
-              <ItemBlock key={item.id} {...item} ctx={ctx}>
-                <RenderItems items={data} />
-              </ItemBlock>
-            );
-          case 'list':
-            return data && (
-              <ItemList key={item.id} {...item} ctx={ctx}>
-                <RenderItems items={data} />
-              </ItemList>
+              <DropBlock key={item.id} {...item} ctx={ctx}>
+                {render({ items: data, ctx })}
+              </DropBlock>
             );
           case 'placeholder':
             return data && (
-              <ItemPlaceholder key={item.id} {...item} ctx={''}>
-                <RenderItems items={data} />
-              </ItemPlaceholder>
+              <DropPlaceholder key={item.id} {...item} ctx={''}>
+                {render({ items: data, ctx})}
+              </DropPlaceholder>
             );
           case 'grid':
-            return <ItemGrid key={item.id} {...item} ctx={''} />;
+            return <DropGrid key={item.id} {...item} ctx={''} />;
           case 'group':
-            return <ItemGroup key={item.id} {...item} ctx={''} />;
+            return <DropGroup key={item.id} {...item} ctx={''} />;
           case 'field':
-            return <ItemField key={item.id} {...item} ctx={ctx} />;
+            return <DropField key={item.id} {...item} ctx={ctx} />;
           case 'element':
-            return <ItemElement key={item.id} {...item} ctx={''} />;
+            return <DropElement key={item.id} {...item} ctx={''} />;
           default:
             return null;
         }
@@ -85,7 +77,7 @@ function DragDropRender(): JSX.Element | null {
     return null;
   }
 
-  return <RenderItems items={normalizeData} />;
+  return <>{render({ items: normalizeData, ctx })}</>;
 }
 
 export default DragDropRender;

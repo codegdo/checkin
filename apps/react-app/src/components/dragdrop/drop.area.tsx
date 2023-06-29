@@ -4,11 +4,11 @@ import { Field, DndActionType, DndContextValue } from '../types';
 import { useDragDrop } from './hooks';
 import { utils } from '@libs/shared-code';
 
-type ItemAreaProps = PropsWithChildren<Field & {
+type DropAreaProps = PropsWithChildren<Field & {
   ctx: DndContextValue;
 }>;
 
-function ItemArea({ ctx, children, ...item }: ItemAreaProps) {
+function DropArea({ ctx, children, ...item }: DropAreaProps) {
   //const ref = useRef(null);
   const { state, dispatch } = ctx;
 
@@ -76,4 +76,4 @@ function ItemArea({ ctx, children, ...item }: ItemAreaProps) {
   )
 }
 
-export default ItemArea;
+export default DropArea;

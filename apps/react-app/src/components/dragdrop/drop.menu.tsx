@@ -1,11 +1,11 @@
 import React from 'react';
 import { DndActionType } from '../types';
 
-interface ItemEditorProps {
+interface DropMenuProps {
   onCallback?: (name: keyof typeof DndActionType) => void;
 }
 
-function ItemEditor({ onCallback }: ItemEditorProps) {
+function DropMenu({ onCallback }: DropMenuProps) {
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -21,9 +21,9 @@ function ItemEditor({ onCallback }: ItemEditorProps) {
 
   return (
     <div onClick={handleClick}>
-      <button type="button" name={DndActionType.CLOSE_EDITING_ITEM}>Close</button>
+      <button type="button" name={DndActionType.OPEN_EDITING_ITEM}>Edit</button>
     </div>
   )
 }
 
-export default ItemEditor;
+export default DropMenu;

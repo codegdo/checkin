@@ -158,9 +158,10 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
       const offset = `on-${verticalOffset}`;
 
       if (dndRef.canDrop) {
-
-        if (offset === 'on-middle' && monitor.getItemType() === DataType.SECTION && dataType === DataType.SECTION) {
-          return;
+        
+        if (offset === 'on-middle') {
+          const isSectionDataType = monitor.getItemType() === DataType.SECTION && dataType === DataType.SECTION;
+          if(isSectionDataType) return;
         }
 
         // stop calling addclass when transitioning then replace 'offset' with 'is-transitioning'

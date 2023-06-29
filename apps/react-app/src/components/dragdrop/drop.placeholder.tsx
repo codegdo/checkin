@@ -1,11 +1,11 @@
 import { PropsWithChildren } from 'react';
 import { Field } from '../types';
 
-type ItemPlaceholderProps = PropsWithChildren<Field & {
+type DropPlaceholderProps = PropsWithChildren<Field & {
   ctx: string;
 }>;
 
-function ItemPlaceholder(props: ItemPlaceholderProps) {
+function DropPlaceholder(props: DropPlaceholderProps) {
   return (
     <div>
       {
@@ -15,4 +15,4 @@ function ItemPlaceholder(props: ItemPlaceholderProps) {
   )
 }
 
-export default ItemPlaceholder;
+export default DropPlaceholder;

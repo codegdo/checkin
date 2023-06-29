@@ -1,16 +1,16 @@
-import { PropsWithChildren, useEffect } from 'react';
+import { PropsWithChildren } from 'react';
 import { utils } from '@libs/shared-code';
 
-import ItemMenu from './item.menu';
-import ItemEditor from './item.editor';
+import ItemMenu from './drop.menu';
+import ItemEditor from './drop.editor';
 import { Field, DndContextValue } from '../types';
 import { useDragDrop, useDragDropSelect } from './hooks';
 
-type ItemBlockProps = PropsWithChildren<Field & {
+type DropSectionProps = PropsWithChildren<Field & {
   ctx: DndContextValue;
 }>;
 
-function ItemList({ ctx, children, ...item }: ItemBlockProps) {
+function DropSection({ ctx, children, ...item }: DropSectionProps) {
   const { ref, drag, drop, isDragging, isOver } = useDragDrop({ item, ctx });
   const { isSelect, isEdit, onClick } = useDragDropSelect(item.id, ctx);
 
@@ -31,4 +31,4 @@ function ItemList({ ctx, children, ...item }: ItemBlockProps) {
   )
 }
 
-export default ItemList;
+export default DropSection;
