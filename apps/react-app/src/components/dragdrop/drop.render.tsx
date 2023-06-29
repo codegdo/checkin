@@ -67,7 +67,7 @@ const render = ({ items, ctx }:RenderProps) => {
   );
 };
 
-function DragDropRender(): JSX.Element | null {
+function DropRender(): JSX.Element | null {
   const ctx = useWrapperContext(DragDropContext);
 
   // normalize data
@@ -80,4 +80,4 @@ function DragDropRender(): JSX.Element | null {
   return <>{render({ items: normalizeData, ctx })}</>;
 }
 
-export default DragDropRender;
+export default DropRender;

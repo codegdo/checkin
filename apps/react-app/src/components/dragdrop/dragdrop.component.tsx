@@ -1,15 +1,15 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 import { DragDropProvider, defaultDndRef, initialState } from './dragdrop.provider';
-import DragDropRender from './dragdrop.render';
+import DropRender from './drop.render';
 import DragRender from './drag.render';
+import DragDropPreview from './dragdrop.preview';
 import { Field } from '../types';
 import { dndReducer } from './reducers';
 import { DndActionType } from '../types';
-import DragDropPreview from './dragdrop.preview';
 
 interface DragDropProps {
   data: Field[];
@@ -31,7 +31,7 @@ export function DragDrop({ data = [], dragFields = [] }: DragDropProps) {
   return (
     <DndProvider backend={backend}>
       <DragDropProvider value={{ state, dispatch, dndRef }}>
-        <DragDropRender />
+        <DropRender />
         <DragRender data={dragFields} />
         <DragDropPreview />
       </DragDropProvider>
