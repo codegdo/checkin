@@ -7,3 +7,8 @@ export interface Field {
   parentId?: string | number | null;
   position?: number;
 }
+
+export interface ElementInnerSize {
+  innerWidth: number;
+  innerHeight: number;
+}

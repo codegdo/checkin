@@ -81,7 +81,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
   //       directionRef.y = directionRef.currentY;
   //       return 'down';
   //     } else {
-  //       return 'no movement Y';
+  //       return 'no-movement';
   //     }
   //   }
   // };
@@ -100,7 +100,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
   //       directionRef.x = directionRef.currentX;
   //       return 'right';
   //     } else {
-  //       return 'no movement X';
+  //       return 'no-movement-x';
   //     }
   //   }
   // };
@@ -158,10 +158,10 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
       const offset = `on-${verticalOffset}`;
 
       if (dndRef.canDrop) {
-        
+
         if (offset === 'on-middle') {
           const isSectionDataType = monitor.getItemType() === DataType.SECTION && dataType === DataType.SECTION;
-          if(isSectionDataType) return;
+          if (isSectionDataType) return;
         }
 
         // stop calling addclass when transitioning then replace 'offset' with 'is-transitioning'
@@ -231,7 +231,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
 
   const handleDragEnd = useCallback(
     (dragItem: Field, monitor: DragSourceMonitor<Field>) => {
-      const {drop, offset, canDrop} = dndRef;
+      const { drop, offset, canDrop } = dndRef;
       if (monitor.didDrop() && canDrop) {
         //console.log('dragItem', dragItem);
         //console.log('hoverItem', item);
