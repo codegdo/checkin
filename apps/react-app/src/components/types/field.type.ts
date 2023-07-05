@@ -30,6 +30,18 @@ interface ElementField {
   name: string;
   type: string | ElementType | FieldType;
   dataType: string | DataType;
+  
+  data?: (ElementField | FormField)[] | null;
+  value?: string | null;
+  parentId?: number | string | null;
+  position?: number | null;
+}
+
+interface Item {
+  id: number | string;
+  name: string;
+  group: string | DataType;
+  type: string | ElementType | FieldType;
   data?: (ElementField | FormField)[] | null;
   value?: string | null;
   parentId?: number | string | null;

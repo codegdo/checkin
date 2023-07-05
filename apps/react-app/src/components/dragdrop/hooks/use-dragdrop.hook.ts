@@ -237,6 +237,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
         //console.log('hoverItem', item);
         //console.log('dropItem', dndRef.drop);
         //console.log('currentRef', dragRef.current);
+        console.log(dndRef);
 
         dispatch({
           type: dragRef.current ? DndActionType.MOVE_ITEM : DndActionType.ADD_ITEM,
