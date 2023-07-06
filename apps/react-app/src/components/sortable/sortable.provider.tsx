@@ -18,6 +18,7 @@ interface SortableRef {
   cordinate: { x: number, y: number };
   translate: { x: number, y: number };
   canDrop: boolean;
+  isTransitioning: boolean;
 }
 
 export interface SortableContextValue {
@@ -38,7 +39,8 @@ export const defaultRef = {
   offset: null,
   cordinate: { x: 0, y: 0 },
   translate: { x: 0, y: 0 },
-  canDrop: true
+  canDrop: true,
+  isTransitioning: false
 }
 
 const SortableContext = React.createContext<SortableContextValue>({

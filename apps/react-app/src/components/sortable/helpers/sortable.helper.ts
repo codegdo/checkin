@@ -67,6 +67,7 @@ class SortableHelper {
   }
 
   getDirectionX(clientX: number, currentRef: XYDirection) {
+
     if (currentRef.x === null) {
       currentRef.x = clientX;
     } else {
@@ -76,7 +77,7 @@ class SortableHelper {
         currentRef.x = currentRef.currentX;
         return 'left';
       } else if (currentRef.currentX > currentRef.x) {
-        window.scrollBy(0, 1);
+        //window.scrollBy(0, 1);
         currentRef.x = currentRef.currentX;
         return 'right';
       } else {
@@ -95,7 +96,7 @@ class SortableHelper {
         currentRef.y = currentRef.currentY;
         return 'up';
       } else if (currentRef.currentY > currentRef.y) {
-        window.scrollBy(0, 1);
+        //window.scrollBy(0, 1);
         currentRef.y = currentRef.currentY;
         return 'down';
       } else {
@@ -105,6 +106,7 @@ class SortableHelper {
   }
 
   getDirection(clientOffset: XYCoord, directionRef: React.MutableRefObject<XYDirection>) {
+
     const verticalDirection = this.getDirectionY(clientOffset.y, directionRef.current);
     const horizontalDirection = this.getDirectionX(clientOffset.x, directionRef.current);
 
