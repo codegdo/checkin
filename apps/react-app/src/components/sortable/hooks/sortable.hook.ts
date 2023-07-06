@@ -89,47 +89,55 @@ export const useSortable = ({ item, ctx }: Params) => {
 
         if (item.id == dragItem.parentId) return;
 
-        if (!dragRef.current.classList.contains('is-transitioning')) {
 
-          dragRef.current.classList.add('is-transitioning');
-
-          const dragElement = ref.doms[`${dragItem.id}`];
+        const dragElement = ref.doms[`${dragItem.id}`];
           const dropElement = dragRef.current;
 
           if (dragElement && dropElement) {
             const boundingRect = dragElement.getBoundingClientRect();
             const height = boundingRect.height;
-            let h = 0;
-            
-            //
+            let dragY = 0;
+            let dropY = 0;
+
+            const index = dragItem?.position - item?.position;
+
+            console.log('INDEX', index);
+
             if(dragItem?.position > item?.position && direction === 'up') {
-              ref.translate.y -= height;
-              h += height;
+              dragY += height * index;
+              dropY += height;
             }
             if(dragItem?.position < item?.position && direction === 'down') {
-              ref.translate.y += height;
-              h -= height;
+              dragY -= height * index;
+              dropY -= height;
             }
 
-            dragElement.style.transform = `translate(0px, ${ref.translate.y}px)`;
-            dropElement.style.transform = `translate(0px, ${h}px)`;
+            dragElement.style.transform = `translate(0px, ${dragY}px)`;
+            dropElement.style.transform = `translate(0px, ${dropY}px)`;
 
-          //   if (direction === 'down') {
-          //     ref.translate.y += height;
 
-          //     console.log(ref.translate.y);
+        if (!dragRef.current.classList.contains('is-transitioning')) {
 
-          //     dragElement.style.transform = `translate(0px, ${ref.translate.y}px)`;
-          //     dropElement.style.transform = `translate(0px, -${height}px)`;
+          dragRef.current.classList.add('is-transitioning');
 
-          //   } else if (direction === 'up') {
-          //     ref.translate.y -= height;
+          
 
-          //     console.log(ref.translate.y);
+            // if (direction === 'down') {
+            //   ref.translate.y += height;
 
-          //     dragElement.style.transform = `translate(0px, ${ref.translate.y}px)`;
-          //     dropElement.style.transform = `translate(0px, 0px)`;
-          //   }
+            //   console.log(ref.translate.y);
+
+            //   dragElement.style.transform = `translate(0px, ${ref.translate.y}px)`;
+            //   dropElement.style.transform = `translate(0px, -${height}px)`;
+
+            // } else if (direction === 'up') {
+            //   ref.translate.y -= height;
+
+            //   console.log(ref.translate.y);
+
+            //   dragElement.style.transform = `translate(0px, ${ref.translate.y}px)`;
+            //   dropElement.style.transform = `translate(0px, 0px)`;
+            // }
           }
 
           const handleTransitionEnd = () => {
