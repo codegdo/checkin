@@ -81,7 +81,11 @@ export const useSortable = ({ item, ctx }: Params) => {
           direction = horizontalDirection;
         }
 
+        if(!direction) return;
+
         const offset = `${position} ${direction}`;
+
+        console.log('DIRECTION', direction);
 
         if (item.id == dragItem.parentId) return;
 
@@ -89,12 +93,26 @@ export const useSortable = ({ item, ctx }: Params) => {
 
           dragRef.current.classList.add('is-transitioning');
 
-          // const dragElement = ref.doms[`${dragItem.id}`];
-          // const dropElement = dragRef.current;
+          const dragElement = ref.doms[`${dragItem.id}`];
+          const dropElement = dragRef.current;
 
-          // if (dragElement && dropElement) {
-          //   const boundingRect = dragElement.getBoundingClientRect();
-          //   const height = boundingRect.height;
+          if (dragElement && dropElement) {
+            const boundingRect = dragElement.getBoundingClientRect();
+            const height = boundingRect.height;
+            let h = 0;
+            
+            //
+            if(dragItem?.position > item?.position && direction === 'up') {
+              ref.translate.y -= height;
+              h += height;
+            }
+            if(dragItem?.position < item?.position && direction === 'down') {
+              ref.translate.y += height;
+              h -= height;
+            }
+
+            dragElement.style.transform = `translate(0px, ${ref.translate.y}px)`;
+            dropElement.style.transform = `translate(0px, ${h}px)`;
 
           //   if (direction === 'down') {
           //     ref.translate.y += height;
@@ -112,7 +130,7 @@ export const useSortable = ({ item, ctx }: Params) => {
           //     dragElement.style.transform = `translate(0px, ${ref.translate.y}px)`;
           //     dropElement.style.transform = `translate(0px, 0px)`;
           //   }
-          // }
+          }
 
           const handleTransitionEnd = () => {
             if (dragRef.current) {
@@ -125,16 +143,11 @@ export const useSortable = ({ item, ctx }: Params) => {
         }
 
         // set offset
-        if (ref.offset === offset) return;
+        //if (ref.offset === offset) return;
+        //ref.offset = offset;
+
+        if(ref.offset?.includes(position)) return;
         ref.offset = offset;
-
-
-
-
-
-
-
-
 
         console.log('dragOver', offset);
       }
