@@ -66,6 +66,42 @@ class SortableHelper {
     return { innerWidth, innerHeight };
   }
 
+  getTranslateY(element: HTMLElement) {
+
+    const transform = new DOMMatrix(window.getComputedStyle(element).getPropertyValue('transform'));
+    return transform.m42;
+
+    // const transform = window.getComputedStyle(element).getPropertyValue('transform');
+    // const matrix = transform.match(/matrix(?:3d)?\(([^)]+)\)/);
+
+    // if (matrix) {
+    //   const values = matrix[1].split(', ');
+    //   if (values.length >= 14) {
+    //     const translateY = parseFloat(values[13]);
+    //     return translateY;
+    //   }
+    // }
+
+    // return 0;
+  }
+
+  getTranslateX(element: HTMLElement) {
+
+    const transform = new DOMMatrix(window.getComputedStyle(element).getPropertyValue('transform'));
+    return transform.m41;
+
+    // const transform = window.getComputedStyle(element).getPropertyValue('transform');
+    // const matrix = transform.match(/matrix(?:3d)?\(([^)]+)\)/);
+
+    // if (matrix) {
+    //   const values = matrix[1].split(', ');
+    //   const translateX = parseFloat(values[12]);
+    //   return translateX;
+    // }
+
+    // return 0;
+  }
+
   getDirectionX(clientX: number, currentRef: XYDirection) {
 
     if (currentRef.x === null) {

@@ -8,6 +8,11 @@ export interface Field {
   position?: number;
 }
 
+export interface ExtendedField extends Field {
+  siblings?: string[]
+}
+
+
 export interface ElementInnerSize {
   innerWidth: number;
   innerHeight: number;

@@ -7,6 +7,7 @@ import { sortableHelper } from "../helpers";
 interface Params {
   item: Field;
   ctx: SortableContextValue;
+  siblings?: string[];
 }
 
 export interface XYDirection {
@@ -23,7 +24,7 @@ const defaultDirection = {
   currentY: null
 };
 
-export const useSortable = ({ item, ctx }: Params) => {
+export const useSortable = ({ item, ctx, siblings }: Params) => {
   const { ref } = ctx;
   const { id, group } = item;
   const dragRef = useRef<HTMLDivElement>(null);
@@ -31,6 +32,7 @@ export const useSortable = ({ item, ctx }: Params) => {
 
   const handleDragStart = useCallback(() => {
     if (id === 'sortable-area') return false;
+    console.log('DRAG TYPE', dragRef.current, siblings);
     return true;
   }, [item]);
 
@@ -90,10 +92,11 @@ export const useSortable = ({ item, ctx }: Params) => {
 
         const offset = `${position} ${direction}`;
 
-        if (ref.offset === offset) return;
+        //if (ref.offset === offset) return;
         ref.offset = offset;
 
-        ref.isTransitioning = true;
+        // if (ref.isTransitioning) return;
+        // ref.isTransitioning = true;
 
         // todo
         if (item.group == 'area' || item.group == 'block') return;
@@ -106,16 +109,20 @@ export const useSortable = ({ item, ctx }: Params) => {
 
         if (dragElement && dropElement) {
           const boundingRect = dragElement.getBoundingClientRect();
-          const elementHeight = boundingRect.height;
+          const elementHeight = Math.round(boundingRect.height);
           let translateDrag = index * elementHeight;
           let translateDrop = 0;
 
           if (index > 0) {
             translateDrag = -translateDrag;
             translateDrop = elementHeight;
+            //ref.translate.y += elementHeight;
+            //ref.touched.push(elementHeight);
 
             if (direction === 'down') {
               translateDrag += elementHeight;
+              //ref.translate.y -= elementHeight;
+              //ref.touched.push(-elementHeight);
               translateDrop = 0;
             }
           }
@@ -123,25 +130,40 @@ export const useSortable = ({ item, ctx }: Params) => {
           if (index < 0) {
             translateDrag = -translateDrag;
             translateDrop = -elementHeight;
+            //ref.translate.y -= elementHeight;
+            //ref.touched.push(-elementHeight);
 
             if (direction === 'up') {
               translateDrag -= elementHeight;
+              //ref.translate.y += elementHeight;
+              //ref.touched.push(elementHeight);
               translateDrop = 0;
             }
           }
 
-          dragElement.style.transform = `translate(0px, ${translateDrag}px)`;
-          dropElement.style.transform = `translate(0px, ${translateDrop}px)`;
+          console.log('INDEX', translateDrag);
 
-          const handleTransitionEnd = () => {
-            ref.isTransitioning = false;
-            dropElement.removeEventListener('transitionend', handleTransitionEnd);
-          };
+          ref.translate.y = translateDrag;
+          ref.touched[`${id}`] = translateDrop;
+          //ref.touched.push(translateDrop);
 
-          dropElement.addEventListener('transitionend', handleTransitionEnd);
+          const sum = Object.values(ref.touched).reduce((acc, curr) => acc + curr, 0);
 
+          if (ref.translate.y + sum == 0) {
+            dragElement.style.transform = `translate(0px, ${translateDrag}px)`;
+            dropElement.style.transform = `translate(0px, ${translateDrop}px)`;
+          }
+
+          //dropElement.setAttribute('data-translate', `${translateDrop}`);
+
+          // const handleTransitionEnd = () => {
+          //   console.log('TRANSITION END');
+          //   ref.isTransitioning = false;
+          //   dropElement.removeEventListener('transitionend', handleTransitionEnd);
+          // };
+
+          // dropElement.addEventListener('transitionend', handleTransitionEnd);
         }
-
       }
     }
   }, [item]);
@@ -167,12 +189,42 @@ export const useSortable = ({ item, ctx }: Params) => {
 
   useEffect(() => {
     if (!isOver && dragRef.current) {
-      console.log('dragOut', dragRef.current);
+
       directionRef.current = { ...defaultDirection };
-      if (ref.isTransitioning) {
-        console.log('dragOut', ref.isTransitioning);
-        ref.isTransitioning = false;
-      }
+
+      // const sum = Object.values(ref.touched).reduce((acc, curr) => acc + curr, 0);
+
+      // if (ref.translate.y + sum !== 0) {
+      //   //dragRef.current.removeAttribute('style');
+      //   siblings?.forEach(function (id) {
+      //     const element = ref.doms[id];
+
+      //     if (element) {
+      //       element.removeAttribute('style');
+      //     }
+      //   });
+      // }
+
+
+
+      // let translateY = 0;
+
+      // siblings?.forEach(function (id) {
+      //   const element = ref.doms[id];
+
+      //   if (element) {
+      //     const translateValue = element.getAttribute('data-translate');
+      //     const numericValue = translateValue !== null ? parseFloat(translateValue) : 0;
+      //     translateY += numericValue;
+      //   }
+
+      // });
+
+      // if ((translateY + ref.translate.y) !== 0) {
+      //   dragRef.current.removeAttribute('style');
+      // }
+
+      console.log('dragOut', ref.touched);
 
     }
   }, [isOver, dragRef]);
@@ -192,6 +244,49 @@ export const useSortable = ({ item, ctx }: Params) => {
 
 
 /*
+
+siblings?.forEach(function (id) {
+        //console.log(id);
+        //target.removeAttribute('style');
+        const element = ref.doms[id];
+        if (element) {
+          const tranlateY = sortableHelper.getTranslateY(element);
+          console.log('tranlateY', tranlateY);
+        }
+
+      });
+
+      //console.log(ref.doms)
+
+      // if (Array.isArray(ref.doms)) {
+      //   console.log(ref.doms)
+      //   ref.doms.forEach(function (element) {
+      //     //target.removeAttribute('style');
+      //     const tranlateY = sortableHelper.getTranslateY(element);
+      //     console.log('tranlateY', tranlateY);
+      //   });
+      // }
+
+
+      if (ref.translate.y) {
+        //console.log('dragOut', sortableHelper.getTranslateY(dragRef.current));
+        if (Array.isArray(ref.doms)) {
+          ref.doms.forEach(function (element) {
+            //target.removeAttribute('style');
+            const tranlateY = sortableHelper.getTranslateY(element);
+            console.log('tranlateY', tranlateY);
+          });
+        }
+
+        // //dragRef.current.removeAttribute('style');
+        // console.log('dragOut', dragRef.current);
+      }
+      // if (ref.isTransitioning) {
+      //   console.log('dragOut', ref.isTransitioning);
+      //   ref.isTransitioning = false;
+      // }
+
+
 const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
     if (monitor.isOver({ shallow: true })) {
 

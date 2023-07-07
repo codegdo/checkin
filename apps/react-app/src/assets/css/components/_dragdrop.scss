@@ -30,6 +30,7 @@
 
 .is-dragging {
   opacity: 0.3;
+  pointer-events: none;
 }
 
 .drop-area:empty:after,

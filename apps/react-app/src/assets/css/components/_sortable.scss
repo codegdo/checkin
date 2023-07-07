@@ -8,3 +8,9 @@
   background-color: #fff;
   transition: all 0.3s ease-out;
 }
+
+.is-dragging {
+  //position: fixed;
+  visibility: hidden;
+  z-index: 0;
+}

@@ -1,14 +1,14 @@
 import { classNames } from "../../utils";
 import { useSortable } from "./hooks";
 import { SortableContextValue } from "./sortable.provider";
-import { Field } from "./types";
+import { ExtendedField } from "./types";
 
-type SortableItemProps = Field & {
+type SortableItemProps = ExtendedField & {
   ctx: SortableContextValue;
 };
 
-function SortableItem({ ctx, ...item }: SortableItemProps) {
-  const { ref, isDragging, isOver, drag, drop } = useSortable({ ctx, item });
+function SortableItem({ ctx, siblings, ...item }: SortableItemProps) {
+  const { ref, isDragging, isOver, drag, drop } = useSortable({ ctx, item, siblings });
   const className = classNames('sortable-item', {
     'is-over': isOver,
     'is-dragging': isDragging

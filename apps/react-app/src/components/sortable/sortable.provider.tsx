@@ -12,7 +12,7 @@ export interface SortableState {
 interface SortableRef {
   drop: DropRef;
   doms: DomRef;
-  touched: (number | string)[];
+  touched: Record<string, number>;
   nested: (number | string)[];
   offset: string | null;
   cordinate: { x: number, y: number };
@@ -34,7 +34,7 @@ export const defaultState = {
 export const defaultRef = {
   drop: null,
   doms: {},
-  touched: [],
+  touched: {},
   nested: [],
   offset: null,
   cordinate: { x: 0, y: 0 },
