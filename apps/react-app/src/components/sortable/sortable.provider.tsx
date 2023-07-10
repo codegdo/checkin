@@ -15,6 +15,7 @@ interface SortableRef {
   touched: Record<string, number>;
   nested: (number | string)[];
   offset: string | null;
+  direction: string | null;
   cordinate: { x: number, y: number };
   translate: { x: number, y: number };
   canDrop: boolean;
@@ -37,6 +38,7 @@ export const defaultRef = {
   touched: {},
   nested: [],
   offset: null,
+  direction: null,
   cordinate: { x: 0, y: 0 },
   translate: { x: 0, y: 0 },
   canDrop: true,

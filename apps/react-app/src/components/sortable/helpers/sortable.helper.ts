@@ -180,6 +180,24 @@ class SortableHelper {
     return { verticalOffset, horizontalOffset };
   }
 
+  setTranslateX(doms: Record<string, HTMLDivElement>, ids: string[], translateX: number) {
+    ids.forEach(id => {
+      const dom = doms[id];
+      if (dom) {
+        dom.style.transform = `translateX(${translateX}px)`;
+      }
+    });
+  }
+
+  setTranslateY(doms: Record<string, HTMLDivElement>, ids: string[], translateY: number) {
+    ids.forEach(id => {
+      const dom = doms[id];
+      if (dom) {
+        dom.style.transform = `translateY(${translateY}px) scale(1,1)`;
+      }
+    });
+  }
+
   renderData(data: Field[]) {
     const cloneData = cloneObject(data);
     const list: Field[] = [];

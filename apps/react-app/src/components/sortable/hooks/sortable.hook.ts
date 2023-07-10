@@ -3,6 +3,7 @@ import { SortableContextValue } from "../sortable.provider";
 import { Field } from "../types";
 import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { sortableHelper } from "../helpers";
+import { filterArrayRangeExclusingStart } from "../../../utils";
 
 interface Params {
   item: Field;
@@ -24,7 +25,7 @@ const defaultDirection = {
   currentY: null
 };
 
-export const useSortable = ({ item, ctx, siblings }: Params) => {
+export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
   const { ref } = ctx;
   const { id, group } = item;
   const dragRef = useRef<HTMLDivElement>(null);
@@ -32,7 +33,17 @@ export const useSortable = ({ item, ctx, siblings }: Params) => {
 
   const handleDragStart = useCallback(() => {
     if (id === 'sortable-area') return false;
-    console.log('DRAG TYPE', dragRef.current, siblings);
+    
+    // const dragElement = ref.doms[`${item.id}`];
+    // if(dragElement) {
+    //   const rangeIds = filterArrayRangeExclusingStart(siblings, `${item.id}`, `${siblings[siblings.length - 1]}`);
+    //   const boundingRect = dragElement.getBoundingClientRect();
+    //   const tranlateY = Math.round(boundingRect.height);
+    //   sortableHelper.setTranslateY(ref?.doms, rangeIds, tranlateY);
+    // }
+    
+    console.log('DRAG TYPE');
+
     return true;
   }, [item]);
 
@@ -55,7 +66,10 @@ export const useSortable = ({ item, ctx, siblings }: Params) => {
         return;
       }
 
-      if (ref.drop?.id !== item.id && !ref.isTransitioning) {
+      // todo
+      if (item.group == 'area' || item.group == 'block') return;
+
+      if (ref.drop?.id !== item.id) {
         ref.drop = item;
         ref.canDrop = true;
         console.log('set-drop');
@@ -90,22 +104,81 @@ export const useSortable = ({ item, ctx, siblings }: Params) => {
           direction = position === 'on-top' ? 'down' : 'up';
         }
 
-        const offset = `${position} ${direction}`;
+        const offset = `${position}`;
 
-        //if (ref.offset === offset) return;
+        if (ref.offset === offset) return;
         ref.offset = offset;
 
         // if (ref.isTransitioning) return;
         // ref.isTransitioning = true;
-
-        // todo
-        if (item.group == 'area' || item.group == 'block') return;
-
         const dragElement = ref.doms[`${dragItem.id}`];
+        const dropElement = dragRef.current;
+
+        if(dragItem.parentId == item.parentId) {
+          if(dragElement && dropElement) {
+            const boundingRect = dragElement.getBoundingClientRect();
+            const elementHeight = Math.round(boundingRect.height);
+            const dragIndex = dragItem.position || 0;
+            const dropIndex = item.position || 0;
+            const index = dragIndex - dropIndex;
+            const tranlateY = index * elementHeight;
+            //const rangeIds = filterArrayRangeExclusingStart(siblings, `${dragItem.id}`, `${item.id}`);
+            let translateDrag = tranlateY;
+            let translateDrop = 0;
+
+            //if(ref.translate.y === tranlateY && ref.direction) return;
+            ref.translate.y = tranlateY;
+            ref.direction = direction;
+
+            if (index > 0) {
+              translateDrag = direction === 'up' ? -tranlateY : -tranlateY + elementHeight;
+              translateDrop = direction === 'up' ? elementHeight : 0;;
+            }
+
+            if (index < 0) {
+              translateDrag = direction === 'down' ? -tranlateY : -tranlateY - elementHeight;
+              translateDrop = direction === 'down' ? -elementHeight : 0;
+            }
+
+            dragElement.style.transform = `translate(0px, ${translateDrag}px)`;
+            dropElement.style.transform = `translate(0px, ${translateDrop}px)`;
+
+            //sortableHelper.setTranslateY(ref.doms, rangeIds, translateDrop);
+            
+            // ref.touched[`${id}`] = translateDrop;
+            
+            // const sum = Object.values(ref.touched).reduce((acc, curr) => acc + curr, 0);
+
+            // if (ref.translate.y === sum) {
+              
+            // } else {
+            //   console.log('MESSUP', ref.touched, ref.translate, sum);
+            //   sortableHelper.setTranslateY(ref.doms, rangeIds, translateDrop);
+            // } 
+            
+          }
+        } else {
+          if(dragElement && dropElement) {
+            var parentElement = dropElement.parentNode;
+            
+            if(parentElement) {
+              parentElement.insertBefore(dragElement, dropElement);
+            }
+            
+
+            //dropElement.insertBefore(dragElement, dropElement.firstChild)
+            //dropElement.appendChild(dragElement);
+          }
+          
+          console.log('DIFFERENT PARENT');
+        }
+    
+        /* const dragElement = ref.doms[`${dragItem.id}`];
         const dropElement = dragRef.current;
         const dragIndex = dragItem.position || 0;
         const dropIndex = item.position || 0;
         const index = dragIndex - dropIndex;
+        const rangeIds = filterArrayRangeExclusingStart(siblings, `${dragItem.id}`, `${item.id}`);
 
         if (dragElement && dropElement) {
           const boundingRect = dragElement.getBoundingClientRect();
@@ -116,13 +189,9 @@ export const useSortable = ({ item, ctx, siblings }: Params) => {
           if (index > 0) {
             translateDrag = -translateDrag;
             translateDrop = elementHeight;
-            //ref.translate.y += elementHeight;
-            //ref.touched.push(elementHeight);
 
             if (direction === 'down') {
               translateDrag += elementHeight;
-              //ref.translate.y -= elementHeight;
-              //ref.touched.push(-elementHeight);
               translateDrop = 0;
             }
           }
@@ -130,31 +199,29 @@ export const useSortable = ({ item, ctx, siblings }: Params) => {
           if (index < 0) {
             translateDrag = -translateDrag;
             translateDrop = -elementHeight;
-            //ref.translate.y -= elementHeight;
-            //ref.touched.push(-elementHeight);
 
             if (direction === 'up') {
               translateDrag -= elementHeight;
-              //ref.translate.y += elementHeight;
-              //ref.touched.push(elementHeight);
               translateDrop = 0;
             }
           }
 
-          console.log('INDEX', translateDrag);
+          if(ref.translate.y === translateDrag) return;
+
+          console.log('INDEX', translateDrag, item.id);
 
           ref.translate.y = translateDrag;
           ref.touched[`${id}`] = translateDrop;
-          //ref.touched.push(translateDrop);
 
           const sum = Object.values(ref.touched).reduce((acc, curr) => acc + curr, 0);
 
           if (ref.translate.y + sum == 0) {
             dragElement.style.transform = `translate(0px, ${translateDrag}px)`;
             dropElement.style.transform = `translate(0px, ${translateDrop}px)`;
-          }
-
-          //dropElement.setAttribute('data-translate', `${translateDrop}`);
+          } else {
+            console.log('MESSUP');
+            sortableHelper.setTranslateY(ref.doms, rangeIds, translateDrop);
+          } 
 
           // const handleTransitionEnd = () => {
           //   console.log('TRANSITION END');
@@ -163,7 +230,7 @@ export const useSortable = ({ item, ctx, siblings }: Params) => {
           // };
 
           // dropElement.addEventListener('transitionend', handleTransitionEnd);
-        }
+        }*/
       }
     }
   }, [item]);
@@ -224,7 +291,7 @@ export const useSortable = ({ item, ctx, siblings }: Params) => {
       //   dragRef.current.removeAttribute('style');
       // }
 
-      console.log('dragOut', ref.touched);
+      //console.log('dragOut', ref.touched);
 
     }
   }, [isOver, dragRef]);
