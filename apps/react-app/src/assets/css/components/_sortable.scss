@@ -5,6 +5,7 @@
   flex-direction: column;
   user-select: none;
   overflow: hidden;
+  transition: all 0.3s ease-out;
 }
 .sortable-item {
   padding: 1rem;

@@ -4,9 +4,9 @@ import { Sortable } from "../../../components";
 const data = [
   {
     id: '1',
-    name: 'block',
+    name: 'list',
     type: 'div',
-    group: 'block',
+    group: 'list',
     data: [],
     parentId: null,
     position: 0
@@ -40,9 +40,9 @@ const data = [
   },
   {
     id: '5',
-    name: 'block',
+    name: 'list',
     type: 'div',
-    group: 'block',
+    group: 'list',
     data: [],
     parentId: null,
     position: 4

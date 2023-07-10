@@ -2,9 +2,32 @@ import { XYCoord } from "react-dnd";
 import { cloneObject, mapToParent } from "../../../utils";
 import { ElementInnerSize, Field } from "../types";
 import { XYDirection } from "../hooks";
-
+import { SortableRef } from "../sortable.provider";
 
 class SortableHelper {
+  resetDrop(ref: SortableRef) {
+    if (ref.canDrop) {
+      ref.drop = null;
+      ref.offset = null;
+      ref.canDrop = false;
+      console.log('reset-drop');
+    }
+  }
+
+  setDrop(ref: SortableRef, item: Field) {
+    ref.drop = item;
+    ref.canDrop = true;
+    console.log('set-drop');
+  }
+
+  sameCoordinates(coord1: XYCoord | null, coord2: XYCoord | null) {
+    return coord1 && coord2 && coord1.x === coord2.x && coord1.y === coord2.y;
+  }
+
+  translateContainedDragElement() { }
+
+  translateNonContainedDragElement() { }
+
   getClientDisplay(element: HTMLElement) {
     const parentNode = element.parentNode;
 
@@ -203,7 +226,7 @@ class SortableHelper {
     const list: Field[] = [];
 
     cloneData.forEach((item: Field) => {
-      return mapToParent(list, item, (item: Field) => (item.group === 'block'));
+      return mapToParent(list, item, (item: Field) => (item.group === 'list'));
     });
 
     return [{

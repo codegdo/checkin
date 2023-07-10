@@ -9,9 +9,10 @@ export interface SortableState {
   data: Field[]
 }
 
-interface SortableRef {
+export interface SortableRef {
   drop: DropRef;
   doms: DomRef;
+  parentNode: Node["parentNode"] | null;
   touched: Record<string, number>;
   nested: (number | string)[];
   offset: string | null;
@@ -19,6 +20,7 @@ interface SortableRef {
   cordinate: { x: number, y: number };
   translate: { x: number, y: number };
   canDrop: boolean;
+  hasChild: boolean;
   isTransitioning: boolean;
 }
 
@@ -35,6 +37,7 @@ export const defaultState = {
 export const defaultRef = {
   drop: null,
   doms: {},
+  parentNode: null,
   touched: {},
   nested: [],
   offset: null,
@@ -42,6 +45,7 @@ export const defaultRef = {
   cordinate: { x: 0, y: 0 },
   translate: { x: 0, y: 0 },
   canDrop: true,
+  hasChild: true,
   isTransitioning: false
 }
 

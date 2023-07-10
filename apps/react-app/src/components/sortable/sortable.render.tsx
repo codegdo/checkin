@@ -24,7 +24,7 @@ const render = ({ data, ctx }: RenderProps) => {
 
           switch (group) {
             case 'area':
-            case 'block':
+            case 'list':
               return (
                 <SortableList key={item.id} {...item} ctx={ctx} siblings={siblings}>
                   {render({ data: _data, ctx })}
