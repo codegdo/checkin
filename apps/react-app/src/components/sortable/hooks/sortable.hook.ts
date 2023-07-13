@@ -87,24 +87,116 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
     if (ref.offset === position) return;
     ref.offset = position;
 
+    const itemToList = (dragItem.group + '-' + item.group) == 'field-list';
+    const listToField = (dragItem.group + '-' + item.group) == 'list-field';
+
     const dragElement = ref.doms[`${dragItem.id}`];
     const dropElement = dragRef.current;
     const parentElement = dropElement.parentNode;
 
-    const itemToList = (dragItem.group + '-' + item.group) == 'field-list';
-    const listToField = (dragItem.group + '-' + item.group) == 'list-field';
-
     if (!parentElement || !dragElement || itemToList || listToField) return;
 
     if (parentElement.contains(dragElement)) {
+      if (ref.parentNode !== parentElement) {
+        ref.parentNode = parentElement;
+      }
+
+      if (dragElement && dropElement) {
+        const elements = Array.from(parentElement.children) as HTMLElement[];
+        const fromIndex = elements.indexOf(dragElement);
+        const toIndex = elements.indexOf(dropElement);
+
+        const translateY = elements[toIndex].offsetHeight;
+        const translateIndices: number[] = [];
+
+        if (fromIndex < toIndex) {
+          for (let i = fromIndex + 1; i <= toIndex; i++) {
+            translateIndices.push(i);
+          }
+        } else {
+          for (let i = fromIndex - 1; i >= toIndex; i--) {
+            translateIndices.push(i);
+          }
+        }
+
+
+        elements.forEach((element, index) => {
+          if (index === fromIndex) {
+            const translateYValue = fromIndex < toIndex ? translateY : -translateY;
+            if (direction === 'up') {
+              element.style.transform = `translateY(-${translateYValue}px)`;
+            } else {
+              element.style.transform = `translateY(${translateYValue}px)`;
+            }
+            console.log('fromIndex', translateYValue);
+          } else if (translateIndices.includes(index)) {
+            const translateYValue = fromIndex < toIndex ? -elements[index - 1].offsetHeight : elements[index + 1].offsetHeight;
+            if (direction === 'up') {
+              element.style.transform = `translateY(-${translateYValue}px)`;
+            } else {
+              element.style.transform = `translateY(${translateYValue}px)`;
+            }
+            console.log('translateIndices', translateYValue);
+          } else if (index === toIndex) {
+            const translateYValue = direction === 'up' ? elements[index - 1].offsetHeight : -elements[index + 1].offsetHeight;
+            element.style.transform = `translateY(${translateYValue}px)`;
+            console.log('toIndex', translateYValue);
+          } else {
+            console.log('else');
+            element.style.transform = `translateY(0)`;
+          }
+        });
+
+        /*  elements.forEach((element, index) => {
+           if (index === fromIndex) {
+             const translateYValue = fromIndex < toIndex ? translateY : -translateY;
+             if (direction === 'up') {
+               element.style.transform = `translateY(-${translateYValue}px)`;
+             } else {
+               element.style.transform = `translateY(${translateYValue}px)`;
+             }
+           } else if (translateIndices.includes(index)) {
+             const translateYValue = fromIndex < toIndex ? -elements[index - 1].offsetHeight : elements[index + 1].offsetHeight;
+             if (direction === 'up') {
+               element.style.transform = `translateY(-${translateYValue}px)`;
+             } else {
+               element.style.transform = `translateY(${translateYValue}px)`;
+             }
+           } else if (index === toIndex) {
+             element.style.transform = `translateY(0)`;
+           } else {
+             element.style.transform = `translateY(0)`;
+           }
+         }); */
+
+        /* const newElements = elements.map((element, index) => {
+          if (index === fromIndex) {
+            const translateYValue = fromIndex < toIndex ? translateY : -translateY;
+            //element.style.transform = `translateY(${translateYValue}px)`;
+            return { id: element.id, translateYValue }
+          } else if (translateIndices.includes(index)) {
+            const translateYValue = fromIndex < toIndex ? -elements[index - 1].offsetHeight : elements[index + 1].offsetHeight;
+            return { id: element.id, translateYValue }
+            //element.style.transform = `translateY(${translateYValue}px)`;
+          } else {
+            //element.style.transform = `translateY(0)`;
+            return { id: element.id, translateYValue: 0 }
+          }
+          //return element;
+          return { id: element.id, translateYValue: null }
+        });
+
+        console.log('CALCULATE', newElements); */
+      }
+    }
+
+    /* if (parentElement.contains(dragElement)) {
 
       if (ref.parentNode !== parentElement) {
         ref.parentNode = parentElement;
       }
 
       if (dragElement && dropElement) {
-
-
         const dragIndex = Array.from(parentElement.children).indexOf(dragElement);
         const dropIndex = Array.from(parentElement.children).indexOf(dropElement);
 
@@ -113,8 +205,15 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
         const dropRect = dropElement.getBoundingClientRect();
         const dropHeight = Math.round(dropRect.height);
 
-        const index = dragIndex - dropIndex;
+        if (dragHeight > dropHeight) {
+          //
+        } else if (dragHeight < dropHeight) {
+          //
+        } else {
+          //
+        }
 
+        const index = dragIndex - dropIndex;
         const tranlateY = index * dragHeight;
 
         let translateDrag = tranlateY;
@@ -152,7 +251,9 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
       if (dragElement && dropElement) {
         parentElement.insertBefore(dragElement, dropElement);
       }
-    }
+    } */
+
+
   }, [item, ref]);
 
 
