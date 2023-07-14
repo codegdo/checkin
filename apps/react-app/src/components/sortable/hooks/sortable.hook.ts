@@ -84,175 +84,121 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
       direction = position === 'on-top' ? 'down' : 'up';
     }
 
-    if (ref.offset === position) return;
-    ref.offset = position;
+    const offset = `${position} ${direction}`
+
+    if (ref.offset === offset) return;
+    ref.offset = offset;
 
     const itemToList = (dragItem.group + '-' + item.group) == 'field-list';
     const listToField = (dragItem.group + '-' + item.group) == 'list-field';
 
-    const dragElement = ref.doms[`${dragItem.id}`];
     const dropElement = dragRef.current;
     const parentElement = dropElement.parentNode;
 
-    if (!parentElement || !dragElement || itemToList || listToField) return;
+    if (!parentElement || itemToList || listToField) return;
 
-    if (parentElement.contains(dragElement)) {
-      if (ref.parentNode !== parentElement) {
-        ref.parentNode = parentElement;
-      }
+    const elements = Array.from(parentElement.children) as HTMLElement[];
+    const dragElement = elements.find(element => element.id == dragItem.id);
 
-      if (dragElement && dropElement) {
-        const elements = Array.from(parentElement.children) as HTMLElement[];
-        const fromIndex = elements.indexOf(dragElement);
-        const toIndex = elements.indexOf(dropElement);
+    if (dragElement) {
 
-        const translateY = elements[toIndex].offsetHeight;
-        const translateIndices: number[] = [];
+      const fromIndex = elements.indexOf(dragElement);
+      const toIndex = elements.indexOf(dropElement);
+      const translateYDrop = elements[fromIndex].offsetHeight;
+      let translateYDrag = 0;
 
-        if (fromIndex < toIndex) {
-          for (let i = fromIndex + 1; i <= toIndex; i++) {
-            translateIndices.push(i);
+      // const translateElements = elements.filter((element, index) => {
+      //   if (fromIndex < toIndex) {
+      //     if (index > fromIndex && index <= toIndex) {
+      //       translateYDrag += element.offsetHeight;
+      //       return true;
+      //     }
+      //   } else {
+      //     if (index < fromIndex && index >= toIndex) {
+      //       translateYDrag -= element.offsetHeight;
+      //       return true;
+      //     }
+      //   }
+      // });
+
+      if (fromIndex < toIndex) {
+        //const translateElements = elements.slice(fromIndex + 1, toIndex + 1);
+        const translateElements = elements.filter((element, index) => {
+          if (index > fromIndex && index <= toIndex) {
+            translateYDrag += element.offsetHeight;
+            return true;
           }
+        });
+
+        if (direction === 'down') {
+          translateElements.forEach(element => {
+            //translateYDrag += element.offsetHeight; //
+            element.style.transform = `translateY(-${translateYDrop}px)`;
+          });
+          dragElement.style.transform = `translateY(${translateYDrag}px)`;
         } else {
-          for (let i = fromIndex - 1; i >= toIndex; i--) {
-            translateIndices.push(i);
-          }
+
+          // elements.slice(toIndex).filter(element => (element.style.transform !== '')).forEach((element) => {
+          //   const translateYDragValue = translateYDrag - element.offsetHeight;
+          //   if (translateYDragValue === 0) {
+          //     dragElement.removeAttribute('style');
+          //   } else {
+          //     dragElement.style.transform = `translateY(${translateYDragValue}px)`;
+          //   }
+          //   element.removeAttribute('style');
+          // });
+
+          // console.log(test, test1);
+
+          elements.forEach((element, index) => {
+            if (index >= toIndex && element.style.transform !== '') {
+              const translateYDragValue = translateYDrag - element.offsetHeight;
+              if (translateYDragValue === 0) {
+                dragElement.removeAttribute('style');
+              } else {
+                dragElement.style.transform = `translateY(${translateYDragValue}px)`;
+              }
+              element.removeAttribute('style');
+              console.log(element);
+            }
+          });
         }
-
-
-        elements.forEach((element, index) => {
-          if (index === fromIndex) {
-            const translateYValue = fromIndex < toIndex ? translateY : -translateY;
-            if (direction === 'up') {
-              element.style.transform = `translateY(-${translateYValue}px)`;
-            } else {
-              element.style.transform = `translateY(${translateYValue}px)`;
-            }
-            console.log('fromIndex', translateYValue);
-          } else if (translateIndices.includes(index)) {
-            const translateYValue = fromIndex < toIndex ? -elements[index - 1].offsetHeight : elements[index + 1].offsetHeight;
-            if (direction === 'up') {
-              element.style.transform = `translateY(-${translateYValue}px)`;
-            } else {
-              element.style.transform = `translateY(${translateYValue}px)`;
-            }
-            console.log('translateIndices', translateYValue);
-          } else if (index === toIndex) {
-            const translateYValue = direction === 'up' ? elements[index - 1].offsetHeight : -elements[index + 1].offsetHeight;
-            element.style.transform = `translateY(${translateYValue}px)`;
-            console.log('toIndex', translateYValue);
-          } else {
-            console.log('else');
-            element.style.transform = `translateY(0)`;
+      } else {
+        const translateElements1 = elements.slice(toIndex, fromIndex);
+        const translateElements = elements.filter((element, index) => {
+          if (index < fromIndex && index >= toIndex) {
+            translateYDrag -= element.offsetHeight;
+            return true;
           }
         });
 
-        /*  elements.forEach((element, index) => {
-           if (index === fromIndex) {
-             const translateYValue = fromIndex < toIndex ? translateY : -translateY;
-             if (direction === 'up') {
-               element.style.transform = `translateY(-${translateYValue}px)`;
-             } else {
-               element.style.transform = `translateY(${translateYValue}px)`;
-             }
-           } else if (translateIndices.includes(index)) {
-             const translateYValue = fromIndex < toIndex ? -elements[index - 1].offsetHeight : elements[index + 1].offsetHeight;
-             if (direction === 'up') {
-               element.style.transform = `translateY(-${translateYValue}px)`;
-             } else {
-               element.style.transform = `translateY(${translateYValue}px)`;
-             }
-           } else if (index === toIndex) {
-             element.style.transform = `translateY(0)`;
-           } else {
-             element.style.transform = `translateY(0)`;
-           }
-         }); */
-
-        /* const newElements = elements.map((element, index) => {
-          if (index === fromIndex) {
-            const translateYValue = fromIndex < toIndex ? translateY : -translateY;
-            //element.style.transform = `translateY(${translateYValue}px)`;
-            return { id: element.id, translateYValue }
-          } else if (translateIndices.includes(index)) {
-            const translateYValue = fromIndex < toIndex ? -elements[index - 1].offsetHeight : elements[index + 1].offsetHeight;
-            return { id: element.id, translateYValue }
-            //element.style.transform = `translateY(${translateYValue}px)`;
-          } else {
-            //element.style.transform = `translateY(0)`;
-            return { id: element.id, translateYValue: 0 }
-          }
-          //return element;
-          return { id: element.id, translateYValue: null }
-        });
-
-        console.log('CALCULATE', newElements); */
+        if (direction === 'up') {
+          translateElements.forEach(element => {
+            element.style.transform = `translateY(${translateYDrop}px)`;
+          });
+          dragElement.style.transform = `translateY(${translateYDrag}px)`;
+        } else {
+          elements.forEach((element, index) => {
+            if (index <= toIndex && element.style.transform !== '') {
+              const translateYDragValue = translateYDrag + element.offsetHeight;
+              if (translateYDragValue === 0) {
+                dragElement.removeAttribute('style');
+              } else {
+                dragElement.style.transform = `translateY(${translateYDragValue}px)`;
+              }
+              element.removeAttribute('style');
+            }
+          });
+        }
       }
+
+      if (ref.dropElement !== dropElement) {
+        ref.dropElement?.removeAttribute('style');
+        ref.dropElement = dropElement;
+      }
+
+
     }
-
-    /* if (parentElement.contains(dragElement)) {
-
-      if (ref.parentNode !== parentElement) {
-        ref.parentNode = parentElement;
-      }
-
-      if (dragElement && dropElement) {
-        const dragIndex = Array.from(parentElement.children).indexOf(dragElement);
-        const dropIndex = Array.from(parentElement.children).indexOf(dropElement);
-
-        const dragRect = dragElement.getBoundingClientRect();
-        const dragHeight = Math.round(dragRect.height);
-        const dropRect = dropElement.getBoundingClientRect();
-        const dropHeight = Math.round(dropRect.height);
-
-        if (dragHeight > dropHeight) {
-          //
-        } else if (dragHeight < dropHeight) {
-          //
-        } else {
-          //
-        }
-
-        const index = dragIndex - dropIndex;
-        const tranlateY = index * dragHeight;
-
-        let translateDrag = tranlateY;
-        let translateDrop = 0;
-
-        ref.translate.y = tranlateY;
-        ref.direction = direction;
-
-        if (index > 0) {
-          translateDrag = direction === 'up' ? -tranlateY : -tranlateY + dragHeight;
-          translateDrop = direction === 'up' ? dropHeight : 0;
-        }
-
-        if (index < 0) {
-          translateDrag = direction === 'down' ? -tranlateY : -tranlateY - dragHeight;
-          translateDrop = direction === 'down' ? -dropHeight : 0;
-        }
-
-        dragElement.style.transform = `translate(0px, ${translateDrag}px)`;
-        dropElement.style.transform = `translate(0px, ${translateDrop}px)`;
-      }
-    } else {
-      if (ref.parentNode) {
-        Array.from(ref.parentNode.children).forEach(childElement => {
-          childElement.removeAttribute('style');
-        });
-      }
-
-      if (ref.parentNode !== parentElement) {
-        ref.parentNode = parentElement;
-      }
-
-      ref.parentNode = dropElement.parentNode;
-
-      if (dragElement && dropElement) {
-        parentElement.insertBefore(dragElement, dropElement);
-      }
-    } */
-
 
   }, [item, ref]);
 
@@ -277,10 +223,10 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
   }), [item]);
 
   useEffect(() => {
-    if (!isOver && dragRef.current) {
+    if (!isOver) {
       directionRef.current = { ...defaultDirection };
     }
-  }, [isOver, dragRef, ref.hasChild]);
+  }, [isOver, directionRef]);
 
 
   useEffect(() => {
@@ -296,6 +242,283 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
     isDragging
   }
 }
+
+/*
+const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
+  if (!monitor.isOver({ shallow: true })) return;
+
+  if (!dragRef.current || dragItem.id === item.id) {
+    sortableHelper.resetDrop(ref);
+    return;
+  }
+
+  const { drop, cordinate } = ref;
+
+  if (drop?.id !== item.id) {
+    sortableHelper.setDrop(ref, item);
+  }
+
+  const clientOffset = monitor.getClientOffset();
+  const sameCoordinates = cordinate.x === clientOffset?.x && cordinate.y === clientOffset?.y;
+
+  if (!clientOffset || !ref.canDrop || sameCoordinates) return;
+
+  cordinate.x = clientOffset.x;
+  cordinate.y = clientOffset.y;
+
+  const clientRect = dragRef.current.getBoundingClientRect();
+  const clientInnerSize = sortableHelper.getClientInnerSize(dragRef.current);
+  const clientDisplay = sortableHelper.getClientDisplay(dragRef.current);
+
+  const { verticalOffset, horizontalOffset } = sortableHelper.getOffset(clientRect, clientOffset, clientInnerSize);
+  const { verticalDirection, horizontalDirection } = sortableHelper.getDirection(clientOffset, directionRef);
+
+  let position = `on-${verticalOffset}`;
+  let direction = verticalDirection;
+
+  if (clientDisplay === 'row') {
+    position = `on-${horizontalOffset}`;
+    direction = horizontalDirection;
+  }
+
+  if (!direction || direction === 'no-movement') {
+    direction = position === 'on-top' ? 'down' : 'up';
+  }
+
+  const offset = `${position} ${direction}`;
+
+  if (ref.offset === offset) return;
+  ref.offset = offset;
+
+  const itemToList = `${dragItem.group}-${item.group}` === 'field-list';
+  const listToField = `${dragItem.group}-${item.group}` === 'list-field';
+
+  const dropElement = dragRef.current;
+  const parentElement = dropElement.parentNode;
+
+  if (!parentElement || itemToList || listToField) return;
+
+  const elements = Array.from(parentElement.children) as HTMLElement[];
+  const dragElement = elements.find(element => element.id === dragItem.id);
+
+  if (!dragElement) return;
+
+  const fromIndex = elements.indexOf(dragElement);
+  const toIndex = elements.indexOf(dropElement);
+  const translateYDrop = elements[fromIndex].offsetHeight;
+
+  let translateYDrag = 0;
+  let translateElements: HTMLElement[] = [];
+
+  if (fromIndex < toIndex) {
+    translateElements = elements.slice(fromIndex + 1, toIndex + 1);
+    if (direction === 'down') {
+      translateElements.forEach(element => {
+        translateYDrag += element.offsetHeight;
+        element.style.transform = `translateY(-${translateYDrop}px)`;
+      });
+    } else {
+      elements.slice(toIndex).forEach(element => {
+        if (element.style.transform && element.style.transform.includes('translate')) {
+          translateYDrag -= element.offsetHeight;
+          element.style.transform = '';
+        }
+      });
+      if (translateYDrag !== 0) {
+        dragElement.style.transform = `translateY(${translateYDrag}px)`;
+      } else {
+        dragElement.removeAttribute('style');
+      }
+    }
+  } else {
+    translateElements = elements.slice(toIndex, fromIndex);
+    if (direction === 'up') {
+      translateElements.forEach(element => {
+        translateYDrag -= element.offsetHeight;
+        element.style.transform = `translateY(${translateYDrop}px)`;
+      });
+    } else {
+      elements.slice(0, toIndex + 1).forEach(element => {
+        if (element.style.transform && element.style.transform.includes('translate')) {
+          translateYDrag += element.offsetHeight;
+          element.style.transform = '';
+        }
+      });
+      if (translateYDrag !== 0) {
+        dragElement.style.transform = `translateY(${translateYDrag}px)`;
+      } else {
+        dragElement.removeAttribute('style');
+      }
+    }
+  }
+
+  if (ref.dropElement !== dropElement) {
+    if (ref.dropElement) {
+      ref.dropElement.removeAttribute('style');
+    }
+    ref.dropElement = dropElement;
+  }
+}, [item, ref]);
+
+*/
+
+/*if (dragElement && dropElement) {
+        const fromIndex = elements.indexOf(dragElement);
+        const toIndex = elements.indexOf(dropElement);
+
+        const translateElements = elements.filter((_, index) => {
+          if (fromIndex < toIndex) {
+            return index > fromIndex && index <= toIndex;
+          } else {
+            return index < fromIndex && index >= toIndex;
+          }
+        });
+
+        console.log(translateElements);
+
+         const translateY = elements[toIndex].offsetHeight;
+        const translateIndices: number[] = [];
+
+        if (fromIndex < toIndex) {
+          for (let i = fromIndex + 1; i <= toIndex; i++) {
+            translateIndices.push(i);
+          }
+
+        } else {
+
+          for (let i = fromIndex - 1; i >= toIndex; i--) {
+            translateIndices.push(i);
+          }
+        }
+
+
+        elements.forEach((element, index) => {
+          if (index === fromIndex) {
+            const translateYValue = fromIndex < toIndex ? translateY : -translateY;
+            if (direction === 'up') {
+              element.style.transform = `translateY(-${translateYValue}px)`;
+            } else {
+              element.style.transform = `translateY(${translateYValue}px)`;
+            }
+            console.log('fromIndex', translateYValue);
+          } else if (translateIndices.includes(index)) {
+            const translateYValue = fromIndex < toIndex ? -elements[index - 1].offsetHeight : elements[index + 1].offsetHeight;
+            if (direction === 'up') {
+              element.style.transform = `translateY(-${translateYValue}px)`;
+            } else {
+              element.style.transform = `translateY(${translateYValue}px)`;
+            }
+            console.log('translateIndices', translateYValue);
+          } else {
+            console.log('else');
+            element.style.transform = `translateY(0)`;
+          }
+        }); */
+
+/*  elements.forEach((element, index) => {
+   if (index === fromIndex) {
+     const translateYValue = fromIndex < toIndex ? translateY : -translateY;
+     if (direction === 'up') {
+       element.style.transform = `translateY(-${translateYValue}px)`;
+     } else {
+       element.style.transform = `translateY(${translateYValue}px)`;
+     }
+   } else if (translateIndices.includes(index)) {
+     const translateYValue = fromIndex < toIndex ? -elements[index - 1].offsetHeight : elements[index + 1].offsetHeight;
+     if (direction === 'up') {
+       element.style.transform = `translateY(-${translateYValue}px)`;
+     } else {
+       element.style.transform = `translateY(${translateYValue}px)`;
+     }
+   } else if (index === toIndex) {
+     element.style.transform = `translateY(0)`;
+   } else {
+     element.style.transform = `translateY(0)`;
+   }
+ }); */
+
+/* const newElements = elements.map((element, index) => {
+  if (index === fromIndex) {
+    const translateYValue = fromIndex < toIndex ? translateY : -translateY;
+    //element.style.transform = `translateY(${translateYValue}px)`;
+    return { id: element.id, translateYValue }
+  } else if (translateIndices.includes(index)) {
+    const translateYValue = fromIndex < toIndex ? -elements[index - 1].offsetHeight : elements[index + 1].offsetHeight;
+    return { id: element.id, translateYValue }
+    //element.style.transform = `translateY(${translateYValue}px)`;
+  } else {
+    //element.style.transform = `translateY(0)`;
+    return { id: element.id, translateYValue: 0 }
+  }
+  //return element;
+  return { id: element.id, translateYValue: null }
+});
+
+console.log('CALCULATE', newElements); 
+}*/
+/* if (parentElement.contains(dragElement)) {
+
+  if (ref.parentNode !== parentElement) {
+    ref.parentNode = parentElement;
+  }
+
+  if (dragElement && dropElement) {
+    const dragIndex = Array.from(parentElement.children).indexOf(dragElement);
+    const dropIndex = Array.from(parentElement.children).indexOf(dropElement);
+
+    const dragRect = dragElement.getBoundingClientRect();
+    const dragHeight = Math.round(dragRect.height);
+    const dropRect = dropElement.getBoundingClientRect();
+    const dropHeight = Math.round(dropRect.height);
+
+    if (dragHeight > dropHeight) {
+      //
+    } else if (dragHeight < dropHeight) {
+      //
+    } else {
+      //
+    }
+
+    const index = dragIndex - dropIndex;
+    const tranlateY = index * dragHeight;
+
+    let translateDrag = tranlateY;
+    let translateDrop = 0;
+
+    ref.translate.y = tranlateY;
+    ref.direction = direction;
+
+    if (index > 0) {
+      translateDrag = direction === 'up' ? -tranlateY : -tranlateY + dragHeight;
+      translateDrop = direction === 'up' ? dropHeight : 0;
+    }
+
+    if (index < 0) {
+      translateDrag = direction === 'down' ? -tranlateY : -tranlateY - dragHeight;
+      translateDrop = direction === 'down' ? -dropHeight : 0;
+    }
+
+    dragElement.style.transform = `translate(0px, ${translateDrag}px)`;
+    dropElement.style.transform = `translate(0px, ${translateDrop}px)`;
+  }
+} else {
+  if (ref.parentNode) {
+    Array.from(ref.parentNode.children).forEach(childElement => {
+      childElement.removeAttribute('style');
+    });
+  }
+
+  if (ref.parentNode !== parentElement) {
+    ref.parentNode = parentElement;
+  }
+
+  ref.parentNode = dropElement.parentNode;
+
+  if (dragElement && dropElement) {
+    parentElement.insertBefore(dragElement, dropElement);
+  }
+} */
+
 
 /*
 export const useSortable = ({ item, ctx, siblings = [] }: Params) => {

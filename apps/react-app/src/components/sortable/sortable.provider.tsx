@@ -13,6 +13,7 @@ export interface SortableRef {
   drop: DropRef;
   doms: DomRef;
   parentNode: Node["parentNode"] | null;
+  dropElement: HTMLElement | null;
   touched: Record<string, number>;
   nested: (number | string)[];
   offset: string | null;
@@ -38,6 +39,7 @@ export const defaultRef = {
   drop: null,
   doms: {},
   parentNode: null,
+  dropElement: null,
   touched: {},
   nested: [],
   offset: null,
