@@ -99,7 +99,7 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
       const currentParent = dragRef.current;
       const hasDragElement = Array.from(currentParent.children).some(element => element.id == dragItem.id);
   
-      if (!hasDragElement && dragElement) {
+      if (!hasDragElement) {
         if (position === 'on-top') {
           currentParent.prepend(dragElement);
         } else {
@@ -121,13 +121,25 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
   
     const dropElement = dragRef.current;
     const parentElement = dropElement.parentNode;
-  
+
     if (!parentElement) return;
-  
+     
     const elements = Array.from(parentElement.children) as HTMLElement[];
+    const hasDragElement = elements.some(element => element.id == dragItem.id);
   
-    if (!dragElement) return;
-  
+    if(!hasDragElement) {
+      if (position === 'on-top') {
+        parentElement.insertBefore(dragElement, dropElement);
+      } else {
+        if (parentElement.lastChild === dropElement) {
+          parentElement.appendChild(dragElement);
+        } else {
+          parentElement.insertBefore(dragElement, dropElement.nextSibling);
+        }
+      }
+      console.log('hasDragElement');
+    }
+
     const fromIndex = elements.indexOf(dragElement);
     const toIndex = elements.indexOf(dropElement);
     const translateYDrop = elements[fromIndex]?.offsetHeight || 0;
