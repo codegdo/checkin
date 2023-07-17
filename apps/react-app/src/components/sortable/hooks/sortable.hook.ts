@@ -88,12 +88,12 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
     ref.offset = position;
   
     const itemToList = `${dragItem.group}-${item.group}` === 'field-list';
-    const listToField = `${dragItem.group}-${item.group}` === 'list-field';
+    const listToItem = `${dragItem.group}-${item.group}` === 'list-field';
     const dragElement = ref.doms[`${dragItem.id}`];
   
     if (!dragElement) return;
   
-    if (listToField) return;
+    if (listToItem) return;
   
     if (itemToList) {
       const currentParent = dragRef.current;
