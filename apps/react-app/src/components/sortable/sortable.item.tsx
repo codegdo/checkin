@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { classNames } from "../../utils";
 import { useSortable } from "./hooks";
 import { SortableContextValue } from "./sortable.provider";
@@ -8,7 +9,7 @@ type SortableItemProps = ExtendedField & {
 };
 
 const renderItem = (item: Field) => {
-  switch (item.group) {
+  switch (item.name) {
     default:
       return item.id == '2' ? <>{`item-${item.id}`}<br /> hello<br /> there</> : item.id == '3' ? <>{`item-${item.id}`}<br /> hello</> : <>{`item-${item.id}`}</>
   }
@@ -20,6 +21,7 @@ function SortableItem({ ctx, siblings, ...item }: SortableItemProps) {
     'is-over': isOver,
     'is-dragging': isDragging
   });
+
   drag(drop(ref));
 
   return (

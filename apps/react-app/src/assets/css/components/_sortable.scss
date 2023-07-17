@@ -1,5 +1,14 @@
-.sortable-list {
+.sortable-area {
+  display: flex;
+  flex-direction: row !important;
+  gap: 1rem;
+}
+.sortable-holder {
   padding: 1rem;
+  border: 1px dashed #ddd;
+  transition: all 0.3s ease-out;
+}
+.sortable-list {
   background-color: #f8f8f8;
   display: flex;
   flex-direction: column;

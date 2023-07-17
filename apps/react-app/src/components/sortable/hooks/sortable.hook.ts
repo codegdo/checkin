@@ -29,7 +29,80 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
   const { ref } = ctx;
   const { id, group } = item;
   const dragRef = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   const directionRef = useRef<XYDirection>(defaultDirection);
+
+  const handleItemToList = (dragElement: HTMLElement, position: string) => {
+    const currentParent = dragRef.current;
+    if (!currentParent || !currentParent.classList.contains('sortable-holder')) return;
+    const hasDragElement = Array.from(currentParent.children).some(element => element.id === dragItem.id);
+
+    if (!hasDragElement) {
+      if (position === 'on-top') {
+        currentParent.prepend(dragElement);
+      } else {
+        currentParent.appendChild(dragElement);
+      }
+
+      animateTransition(dragElement, position === 'on-top' ? -100 : 100, 0);
+
+      if (ref.parentNode) {
+        Array.from(ref.parentNode.children).forEach(childElement => {
+          childElement.removeAttribute('style');
+        });
+      }
+    }
+
+    ref.parentNode = currentParent;
+  };
+
+  const handleInsertDragElement = (dragElement: HTMLElement, dropElement: HTMLElement, parentElement: HTMLElement, position: string) => {
+    if (position === 'on-top') {
+      parentElement.insertBefore(dragElement, dropElement);
+    } else {
+      parentElement.insertBefore(dragElement, dropElement.nextSibling);
+    }
+
+    animateTransition(dragElement, position === 'on-top' ? -100 : 100, 0);
+
+    if (ref.parentNode) {
+      Array.from(ref.parentNode.children).forEach(childElement => {
+        childElement.removeAttribute('style');
+      });
+    }
+
+    ref.parentNode = parentElement;
+  };
+
+  const handleTranslateDown = (elements: HTMLElement[], dragElement: HTMLElement, translateYDrop: number, translateYDrag: number) => {
+    elements.forEach(element => {
+      element.style.transform = `translateY(-${translateYDrop}px)`;
+    });
+    dragElement.style.transform = `translateY(${translateYDrag}px)`;
+  };
+
+  const handleTranslateUp = (elements: HTMLElement[], toIndex: number, dragElement: HTMLElement, translateYDrag: number) => {
+    elements.slice(toIndex).filter(element => element.style.transform !== '').forEach(element => {
+      const translateYDragValue = translateYDrag - element.offsetHeight;
+      if (translateYDragValue === 0) {
+        dragElement.removeAttribute('style');
+      } else {
+        dragElement.style.transform = `translateY(${translateYDragValue}px)`;
+      }
+      element.removeAttribute('style');
+    });
+  };
+
+  const animateTransition = (element: HTMLElement, translateYStart: number, translateYEnd: number) => {
+    element.style.opacity = '0';
+    element.style.transform = `translateY(${translateYStart}%)`;
+
+    setTimeout(() => {
+      element.style.opacity = '1';
+      element.style.transform = `translateY(${translateYEnd}%)`;
+    }, 0);
+  };
+
 
   const handleDragStart = useCallback(() => {
     if (id === 'sortable-area') return false;
@@ -45,116 +118,140 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
 
   const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
     if (!monitor.isOver({ shallow: true })) return;
-  
+
     if (!dragRef.current || dragItem.id === item.id) {
       sortableHelper.resetDrop(ref);
       return;
     }
-  
+
     const { drop, cordinate } = ref;
-  
+
     if (drop?.id !== item.id) {
       sortableHelper.setDrop(ref, item);
     }
-  
+
     const clientOffset = monitor.getClientOffset();
     const sameCoordinates = cordinate.x === clientOffset?.x && cordinate.y === clientOffset?.y;
-  
+
     if (!clientOffset || !ref.canDrop || sameCoordinates) return;
-  
+
     cordinate.x = clientOffset.x;
     cordinate.y = clientOffset.y;
-  
+
     const clientRect = dragRef.current.getBoundingClientRect();
     const clientInnerSize = sortableHelper.getClientInnerSize(dragRef.current);
     const clientDisplay = sortableHelper.getClientDisplay(dragRef.current);
-  
+
     const { verticalOffset, horizontalOffset } = sortableHelper.getOffset(clientRect, clientOffset, clientInnerSize);
     const { verticalDirection, horizontalDirection } = sortableHelper.getDirection(clientOffset, directionRef);
-  
+
     let position = `on-${verticalOffset}`;
     let direction = verticalDirection;
-  
+
     if (clientDisplay === 'row') {
       position = `on-${horizontalOffset}`;
       direction = horizontalDirection;
     }
-  
+
     if (!direction || direction === 'no-movement') {
       direction = position === 'on-top' ? 'down' : 'up';
     }
-  
+
     if (ref.offset === position) return;
     ref.offset = position;
-  
-    const itemToList = `${dragItem.group}-${item.group}` === 'field-list';
-    const listToItem = `${dragItem.group}-${item.group}` === 'list-field';
-    const dragElement = ref.doms[`${dragItem.id}`];
-  
+
+    const listToArea = `${dragItem.group}-${item.group}` === 'list-area';
+    const listToList = `${dragItem.group}-${item.group}` === 'list-list';
+    const itemToList = `${dragItem.group}-${item.group}` === 'item-list';
+    const listToItem = `${dragItem.group}-${item.group}` === 'list-item';
+
+    const dragElement = ref.doms[String(dragItem.id)];
+
     if (!dragElement) return;
-  
-    if (listToItem) return;
-  
+
+    if (listToArea || listToList || listToItem) return;
+
     if (itemToList) {
       const currentParent = dragRef.current;
+      if (!currentParent.classList.contains('sortable-holder')) return;
       const hasDragElement = Array.from(currentParent.children).some(element => element.id == dragItem.id);
-  
+
       if (!hasDragElement) {
         if (position === 'on-top') {
           currentParent.prepend(dragElement);
         } else {
           currentParent.appendChild(dragElement);
         }
-  
+
+        // Animate the transition
+        dragElement.style.opacity = '0';
+        dragElement.style.transform = position === 'on-top' ? 'translateY(-100%)' : 'translateY(100%)';
+
+        setTimeout(() => {
+          dragElement.style.opacity = '1';
+          dragElement.style.transform = 'translateY(0)';
+        }, 0);
+
         if (ref.parentNode) {
           Array.from(ref.parentNode.children).forEach(childElement => {
             childElement.removeAttribute('style');
           });
         }
-  
-        dragElement.removeAttribute('style');
       }
-  
+
       ref.parentNode = currentParent;
       return;
     }
-  
+
     const dropElement = dragRef.current;
     const parentElement = dropElement.parentNode;
 
     if (!parentElement) return;
-     
+
     const elements = Array.from(parentElement.children) as HTMLElement[];
     const hasDragElement = elements.some(element => element.id == dragItem.id);
-  
-    if(!hasDragElement) {
+
+    if (!hasDragElement) {
       if (position === 'on-top') {
         parentElement.insertBefore(dragElement, dropElement);
       } else {
-        if (parentElement.lastChild === dropElement) {
-          parentElement.appendChild(dragElement);
-        } else {
-          parentElement.insertBefore(dragElement, dropElement.nextSibling);
-        }
+        parentElement.insertBefore(dragElement, dropElement.nextSibling);
       }
-      console.log('hasDragElement');
+
+      // Animate the transition
+      dragElement.style.opacity = '0';
+      dragElement.style.transform = position === 'on-top' ? 'translateY(-100%)' : 'translateY(100%)';
+
+      setTimeout(() => {
+        dragElement.style.opacity = '1';
+        dragElement.style.transform = 'translateY(0)';
+      }, 0);
+
+      if (ref.parentNode) {
+        Array.from(ref.parentNode.children).forEach(childElement => {
+          childElement.removeAttribute('style');
+        });
+      }
+
+      ref.parentNode = parentElement;
+      return;
     }
 
     const fromIndex = elements.indexOf(dragElement);
     const toIndex = elements.indexOf(dropElement);
     const translateYDrop = elements[fromIndex]?.offsetHeight || 0;
     let translateYDrag = 0;
-  
+
     const translateElements = fromIndex < toIndex
       ? elements.slice(fromIndex + 1, toIndex + 1)
       : elements.slice(toIndex, fromIndex);
-  
+
     translateElements.forEach(element => {
       fromIndex < toIndex
         ? translateYDrag += element.offsetHeight
         : translateYDrag -= element.offsetHeight;
     });
-  
+
     if (fromIndex < toIndex) {
       if (direction === 'down') {
         translateElements.forEach(element => {
@@ -190,12 +287,11 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
         });
       }
     }
-  
   }, [item]);
-  
 
 
-  const [{ isDragging }, drag] = useDrag(() => ({
+
+  const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: group,
     item,
     canDrag: handleDragStart,
@@ -206,7 +302,7 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
   }), [item]);
 
   const [{ isOver }, drop] = useDrop(() => ({
-    accept: ['list', 'field'],
+    accept: ['list', 'item'],
     canDrop: () => ref.canDrop,
     hover: handleDragOver,
     collect: (monitor) => ({
@@ -228,12 +324,201 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
 
   return {
     ref: dragRef,
+    previewRef,
     drag,
     drop,
+    preview,
     isOver,
     isDragging
   }
 }
+
+/*
+const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
+    if (!monitor.isOver({ shallow: true })) return;
+
+    if (!dragRef.current || dragItem.id === item.id) {
+      sortableHelper.resetDrop(ref);
+      return;
+    }
+
+    const { drop, cordinate } = ref;
+
+    if (drop?.id !== item.id) {
+      sortableHelper.setDrop(ref, item);
+    }
+
+    const clientOffset = monitor.getClientOffset();
+    const sameCoordinates = cordinate.x === clientOffset?.x && cordinate.y === clientOffset?.y;
+
+    if (!clientOffset || !ref.canDrop || sameCoordinates) return;
+
+    cordinate.x = clientOffset.x;
+    cordinate.y = clientOffset.y;
+
+    const clientRect = dragRef.current.getBoundingClientRect();
+    const clientInnerSize = sortableHelper.getClientInnerSize(dragRef.current);
+    const clientDisplay = sortableHelper.getClientDisplay(dragRef.current);
+
+    const { verticalOffset, horizontalOffset } = sortableHelper.getOffset(clientRect, clientOffset, clientInnerSize);
+    const { verticalDirection, horizontalDirection } = sortableHelper.getDirection(clientOffset, directionRef);
+
+    let position = `on-${verticalOffset}`;
+    let direction = verticalDirection;
+
+    if (clientDisplay === 'row') {
+      position = `on-${horizontalOffset}`;
+      direction = horizontalDirection;
+    }
+
+    if (!direction || direction === 'no-movement') {
+      direction = position === 'on-top' ? 'down' : 'up';
+    }
+
+    if (ref.offset === position) return;
+    ref.offset = position;
+
+    const listToArea = `${dragItem.group}-${item.group}` === 'list-area';
+    const listToList = `${dragItem.group}-${item.group}` === 'list-list';
+    const itemToList = `${dragItem.group}-${item.group}` === 'item-list';
+    const listToItem = `${dragItem.group}-${item.group}` === 'list-item';
+
+    const dragElement = ref.doms[`${dragItem.id}`];
+
+    if (!dragElement) return;
+
+    if (listToArea) return;
+
+    if (listToList) return;
+
+    if (listToItem) return;
+
+    if (itemToList) {
+      const currentParent = dragRef.current;
+      if (!currentParent.classList.contains('sortable-holder')) return;
+      const hasDragElement = Array.from(currentParent.children).some(element => element.id == dragItem.id);
+
+      if (!hasDragElement) {
+        console.log('itemToList', currentParent);
+        if (position === 'on-top') {
+          currentParent.prepend(dragElement);
+          // Animate the transition
+          // dragElement.style.opacity = '0';
+          // dragElement.style.transform = 'translateY(100%)';
+
+          // setTimeout(() => {
+          //   dragElement.style.opacity = '1';
+          //   dragElement.style.transform = 'translateY(0)';
+          // }, 0);
+        } else {
+          currentParent.appendChild(dragElement);
+
+          // Animate the transition
+          // dragElement.style.opacity = '0';
+          // dragElement.style.transform = 'translateY(-100%)';
+
+          // setTimeout(() => {
+          //   dragElement.style.opacity = '1';
+          //   dragElement.style.transform = 'translateY(0)';
+          // }, 0);
+        }
+
+        if (ref.parentNode) {
+          Array.from(ref.parentNode.children).forEach(childElement => {
+            childElement.removeAttribute('style');
+          });
+        }
+        dragElement.removeAttribute('style');
+      }
+
+      ref.parentNode = currentParent;
+      return;
+    }
+
+    const dropElement = dragRef.current;
+    const parentElement = (itemToList ? dropElement : dropElement.parentNode) as HTMLElement;
+
+    if (!parentElement || !parentElement.classList.contains('sortable-holder')) return;
+
+    const elements = Array.from(parentElement.children) as HTMLElement[];
+    const hasDragElement = elements.some(element => element.id == dragItem.id);
+
+    if (!hasDragElement) {
+      if (position === 'on-top') {
+        parentElement.insertBefore(dragElement, dropElement);
+      } else {
+        if (parentElement.lastChild === dropElement) {
+          parentElement.appendChild(dragElement);
+        } else {
+          parentElement.insertBefore(dragElement, dropElement.nextSibling);
+        }
+      }
+
+      if (ref.parentNode) {
+        Array.from(ref.parentNode.children).forEach(childElement => {
+          childElement.removeAttribute('style');
+        });
+      }
+
+      dragElement.removeAttribute('style');
+      ref.parentNode = parentElement;
+      console.log('hasDragElement');
+      return;
+    }
+
+    const fromIndex = elements.indexOf(dragElement);
+    const toIndex = elements.indexOf(dropElement);
+    const translateYDrop = elements[fromIndex]?.offsetHeight || 0;
+    let translateYDrag = 0;
+
+    const translateElements = fromIndex < toIndex
+      ? elements.slice(fromIndex + 1, toIndex + 1)
+      : elements.slice(toIndex, fromIndex);
+
+    translateElements.forEach(element => {
+      fromIndex < toIndex
+        ? translateYDrag += element.offsetHeight
+        : translateYDrag -= element.offsetHeight;
+    });
+
+    if (fromIndex < toIndex) {
+      if (direction === 'down') {
+        translateElements.forEach(element => {
+          element.style.transform = `translateY(-${translateYDrop}px)`;
+        });
+        dragElement.style.transform = `translateY(${translateYDrag}px)`;
+      } else {
+        elements.slice(toIndex).filter(element => element.style.transform !== '').forEach(element => {
+          const translateYDragValue = translateYDrag - element.offsetHeight;
+          if (translateYDragValue === 0) {
+            dragElement.removeAttribute('style');
+          } else {
+            dragElement.style.transform = `translateY(${translateYDragValue}px)`;
+          }
+          element.removeAttribute('style');
+        });
+      }
+    } else {
+      if (direction === 'up') {
+        translateElements.forEach(element => {
+          element.style.transform = `translateY(${translateYDrop}px)`;
+        });
+        dragElement.style.transform = `translateY(${translateYDrag}px)`;
+      } else {
+        elements.slice(0, toIndex + 1).filter(element => element.style.transform !== '').forEach(element => {
+          const translateYDragValue = translateYDrag + element.offsetHeight;
+          if (translateYDragValue === 0) {
+            dragElement.removeAttribute('style');
+          } else {
+            dragElement.style.transform = `translateY(${translateYDragValue}px)`;
+          }
+          element.removeAttribute('style');
+        });
+      }
+    }
+
+  }, [item]);
+*/
 
 /*
 const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {

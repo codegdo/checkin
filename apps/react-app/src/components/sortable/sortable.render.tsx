@@ -30,7 +30,7 @@ const render = ({ data, ctx }: RenderProps) => {
                   {render({ data: _data, ctx })}
                 </SortableList>
               );
-            case 'field':
+            case 'item':
               return <SortableItem key={item.id} {...item} ctx={ctx} siblings={siblings} />
             default:
               return null;
