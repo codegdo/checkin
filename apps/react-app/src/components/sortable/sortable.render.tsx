@@ -1,5 +1,6 @@
 import { useWrapperContext } from "../../hooks";
 import { sortableHelper } from "./helpers";
+import SortableArea from "./sortable.area";
 import SortableItem from "./sortable.item";
 import SortableList from "./sortable.list";
 import SortableContext, { SortableContextValue } from "./sortable.provider";
@@ -24,6 +25,11 @@ const render = ({ data, ctx }: RenderProps) => {
 
           switch (group) {
             case 'area':
+              return (
+                <SortableArea key={item.id} {...item} ctx={ctx} siblings={siblings}>
+                  {render({ data: _data, ctx })}
+                </SortableArea>
+              );
             case 'list':
               return (
                 <SortableList key={item.id} {...item} ctx={ctx} siblings={siblings}>

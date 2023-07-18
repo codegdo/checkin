@@ -17,3 +17,4 @@ export interface ElementInnerSize {
   innerWidth: number;
   innerHeight: number;
 }
+

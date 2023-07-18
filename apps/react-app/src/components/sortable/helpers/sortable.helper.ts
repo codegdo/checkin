@@ -65,6 +65,13 @@ class SortableHelper {
     return 'column';
   }
 
+  getTotalHeightWithMargin(element: HTMLElement): number {
+    const computedStyle = window.getComputedStyle(element);
+    const marginTop = parseInt(computedStyle.marginTop);
+    const marginBottom = parseInt(computedStyle.marginBottom);
+    return element.offsetHeight + marginTop + marginBottom;
+  }
+
   getClientInnerSize(element: HTMLElement) {
     let innerWidth = 0;
     let innerHeight = 0;

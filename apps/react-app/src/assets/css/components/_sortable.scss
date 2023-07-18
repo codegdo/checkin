@@ -1,14 +1,17 @@
 .sortable-area {
   display: flex;
-  flex-direction: row !important;
+  flex-direction: row;
   gap: 1rem;
 }
-.sortable-holder {
-  padding: 1rem;
-  border: 1px dashed #ddd;
+.sortable-column {
   transition: all 0.3s ease-out;
 }
+.sortable-title {
+  padding: 0.5rem 1rem;
+  background-color: #f8f8f8;
+}
 .sortable-list {
+  padding: 1rem;
   background-color: #f8f8f8;
   display: flex;
   flex-direction: column;
@@ -18,6 +21,7 @@
 }
 .sortable-item {
   padding: 1rem;
+  margin-bottom: 5px;
   box-sizing: border-box;
   border: 1px solid #eee;
   background-color: #fff;

@@ -4,13 +4,13 @@ import { ExtendedField } from "./types";
 import { useSortable } from "./hooks";
 import { classNames } from "../../utils";
 
-type SortableHolderProps = PropsWithChildren<ExtendedField & {
+type SortableAreaProps = PropsWithChildren<ExtendedField & {
   ctx: SortableContextValue;
 }>;
 
-function SortableHolder({ ctx, siblings, children, ...item }: SortableHolderProps) {
+function SortableArea({ ctx, siblings, children, ...item }: SortableAreaProps) {
   const { ref, isOver, drop } = useSortable({ ctx, item, siblings });
-  const className = classNames('sortable-list', {
+  const className = classNames('sortable-area', {
     'is-over': isOver
   });
 
@@ -21,4 +21,4 @@ function SortableHolder({ ctx, siblings, children, ...item }: SortableHolderProp
   </div>)
 }
 
-export default SortableHolder;
+export default SortableArea;

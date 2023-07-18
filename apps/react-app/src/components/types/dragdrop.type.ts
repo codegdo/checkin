@@ -63,7 +63,7 @@ export interface DndState {
   isSelecting: boolean;
 }
 
-export interface DndAction<T = any> {
+export interface DndAction<T = unknown> {
   type: string | DndActionType;
   payload: T;
 }

@@ -12,30 +12,18 @@ type SortableListProps = PropsWithChildren<ExtendedField & {
 function SortableList(props: SortableListProps) {
   const { ctx, siblings, children, ...item } = props;
   const { ref, previewRef, isOver, drag, drop, preview } = useSortable({ ctx, item, siblings });
-  const className = classNames({
-    'sortable-area': item.group == 'area',
-    'sortable-list': item.group !== 'area',
+  const className = classNames('sortable-column', {
     'is-over': isOver
   });
-
-  //drag(ref);
-  //drop(preview(previewRef));
 
   useEffect(() => {
     drag(ref);
     drop(preview(previewRef));
   }, []);
 
-  //drag(drop(ref));
-  //drag(ref);
-  //drop(preview(previewRef));
-
   return (<div ref={previewRef} className={className}>
-    {item.group !== 'area' && <div ref={ref}>List</div>}
-    {item.group !== 'area'
-      ? <SortableHolder {...props}>{children}</SortableHolder>
-      : children
-    }
+    <div ref={ref} className="sortable-title">List</div>
+    <SortableHolder {...props}>{children}</SortableHolder>
   </div>)
 }
 
