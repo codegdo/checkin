@@ -32,10 +32,10 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
   const previewRef = useRef<HTMLDivElement>(null);
   const directionRef = useRef<XYDirection>(defaultDirection);
 
-  const handleItemToList = (dragElement: HTMLElement, position: string) => {
+  const handleItemToList = (dragElement: HTMLElement, dragItem:Field, position: string) => {
     const currentParent = dragRef.current;
     if (!currentParent || !currentParent.classList.contains('sortable-holder')) return;
-    const hasDragElement = Array.from(currentParent.children).some(element => element.id === dragItem.id);
+    const hasDragElement = Array.from(currentParent.children).some(element => element.id == dragItem.id);
 
     if (!hasDragElement) {
       if (position === 'on-top') {
@@ -56,7 +56,7 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
     ref.parentNode = currentParent;
   };
 
-  const handleInsertDragElement = (dragElement: HTMLElement, dropElement: HTMLElement, parentElement: HTMLElement, position: string) => {
+  const handleInsertDragElement = (dragElement: HTMLElement, dropElement: HTMLElement, parentElement: ParentNode, position: string) => {
     if (position === 'on-top') {
       parentElement.insertBefore(dragElement, dropElement);
     } else {
@@ -74,16 +74,35 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
     ref.parentNode = parentElement;
   };
 
-  const handleTranslateDown = (elements: HTMLElement[], dragElement: HTMLElement, translateYDrop: number, translateYDrag: number) => {
+  const handleTranslateDownFromTop = (elements: HTMLElement[], dragElement: HTMLElement, translateYDrop: number, translateYDrag: number) => {
     elements.forEach(element => {
       element.style.transform = `translateY(-${translateYDrop}px)`;
     });
     dragElement.style.transform = `translateY(${translateYDrag}px)`;
   };
 
-  const handleTranslateUp = (elements: HTMLElement[], toIndex: number, dragElement: HTMLElement, translateYDrag: number) => {
+  const handleTranslateUpFromTop = (elements: HTMLElement[], toIndex: number, dragElement: HTMLElement, translateYDrag: number) => {
     elements.slice(toIndex).filter(element => element.style.transform !== '').forEach(element => {
       const translateYDragValue = translateYDrag - element.offsetHeight;
+      if (translateYDragValue === 0) {
+        dragElement.removeAttribute('style');
+      } else {
+        dragElement.style.transform = `translateY(${translateYDragValue}px)`;
+      }
+      element.removeAttribute('style');
+    });
+  };
+
+  const handleTranslateUpFromBottom = (elements: HTMLElement[], dragElement: HTMLElement, translateYDrop: number, translateYDrag: number) => {
+    elements.forEach(element => {
+      element.style.transform = `translateY(${translateYDrop}px)`;
+    });
+    dragElement.style.transform = `translateY(${translateYDrag}px)`;
+  };
+
+  const handleTranslateDownFromBottom = (elements: HTMLElement[], toIndex: number, dragElement: HTMLElement, translateYDrag: number) => {
+    elements.slice(0, toIndex + 1).filter(element => element.style.transform !== '').forEach(element => {
+      const translateYDragValue = translateYDrag + element.offsetHeight;
       if (translateYDragValue === 0) {
         dragElement.removeAttribute('style');
       } else {
@@ -172,34 +191,7 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
     if (listToArea || listToList || listToItem) return;
 
     if (itemToList) {
-      const currentParent = dragRef.current;
-      if (!currentParent.classList.contains('sortable-holder')) return;
-      const hasDragElement = Array.from(currentParent.children).some(element => element.id == dragItem.id);
-
-      if (!hasDragElement) {
-        if (position === 'on-top') {
-          currentParent.prepend(dragElement);
-        } else {
-          currentParent.appendChild(dragElement);
-        }
-
-        // Animate the transition
-        dragElement.style.opacity = '0';
-        dragElement.style.transform = position === 'on-top' ? 'translateY(-100%)' : 'translateY(100%)';
-
-        setTimeout(() => {
-          dragElement.style.opacity = '1';
-          dragElement.style.transform = 'translateY(0)';
-        }, 0);
-
-        if (ref.parentNode) {
-          Array.from(ref.parentNode.children).forEach(childElement => {
-            childElement.removeAttribute('style');
-          });
-        }
-      }
-
-      ref.parentNode = currentParent;
+      handleItemToList(dragElement, dragItem, position);
       return;
     }
 
@@ -212,28 +204,7 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
     const hasDragElement = elements.some(element => element.id == dragItem.id);
 
     if (!hasDragElement) {
-      if (position === 'on-top') {
-        parentElement.insertBefore(dragElement, dropElement);
-      } else {
-        parentElement.insertBefore(dragElement, dropElement.nextSibling);
-      }
-
-      // Animate the transition
-      dragElement.style.opacity = '0';
-      dragElement.style.transform = position === 'on-top' ? 'translateY(-100%)' : 'translateY(100%)';
-
-      setTimeout(() => {
-        dragElement.style.opacity = '1';
-        dragElement.style.transform = 'translateY(0)';
-      }, 0);
-
-      if (ref.parentNode) {
-        Array.from(ref.parentNode.children).forEach(childElement => {
-          childElement.removeAttribute('style');
-        });
-      }
-
-      ref.parentNode = parentElement;
+      handleInsertDragElement(dragElement, dropElement, parentElement, position);
       return;
     }
 
@@ -254,42 +225,18 @@ export const useSortable = ({ item, ctx, siblings = [] }: Params) => {
 
     if (fromIndex < toIndex) {
       if (direction === 'down') {
-        translateElements.forEach(element => {
-          element.style.transform = `translateY(-${translateYDrop}px)`;
-        });
-        dragElement.style.transform = `translateY(${translateYDrag}px)`;
+        handleTranslateDownFromTop(translateElements, dragElement, translateYDrop, translateYDrag);
       } else {
-        elements.slice(toIndex).filter(element => element.style.transform !== '').forEach(element => {
-          const translateYDragValue = translateYDrag - element.offsetHeight;
-          if (translateYDragValue === 0) {
-            dragElement.removeAttribute('style');
-          } else {
-            dragElement.style.transform = `translateY(${translateYDragValue}px)`;
-          }
-          element.removeAttribute('style');
-        });
+        handleTranslateUpFromTop(elements, toIndex, dragElement, translateYDrag);
       }
     } else {
       if (direction === 'up') {
-        translateElements.forEach(element => {
-          element.style.transform = `translateY(${translateYDrop}px)`;
-        });
-        dragElement.style.transform = `translateY(${translateYDrag}px)`;
+        handleTranslateUpFromBottom(translateElements, dragElement, translateYDrop, translateYDrag);
       } else {
-        elements.slice(0, toIndex + 1).filter(element => element.style.transform !== '').forEach(element => {
-          const translateYDragValue = translateYDrag + element.offsetHeight;
-          if (translateYDragValue === 0) {
-            dragElement.removeAttribute('style');
-          } else {
-            dragElement.style.transform = `translateY(${translateYDragValue}px)`;
-          }
-          element.removeAttribute('style');
-        });
+        handleTranslateDownFromBottom(elements, toIndex, dragElement, translateYDrag);
       }
     }
   }, [item]);
-
-
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: group,
