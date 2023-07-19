@@ -27,37 +27,38 @@ const defaultDirection = {
 };
 
 export const useSortable = ({ item, ctx }: Params) => {
-  const { ref, state, dispatch } = ctx;
+  const { dnd, state, dispatch } = ctx;
   const { id, group } = item;
-  const dragRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const directionRef = useRef<XYDirection>(defaultDirection);
 
-  const handleItemToList = useCallback((dragElement: HTMLElement, dragItem: Field, position: string) => {
-    const currentParent = dragRef.current;
-    if (!currentParent || !currentParent.classList.contains('sortable-list')) return;
-    const hasDragElement = Array.from(currentParent.children).some(element => element.id == dragItem.id);
+  const handleAppendItemToList = useCallback((dragElement: HTMLElement, parentElement: HTMLElement, dragItem: Field, position: string) => {
+
+    if (!parentElement || !parentElement.classList.contains('sortable-list')) return;
+    const hasDragElement = Array.from(parentElement.children).some(element => element.id == dragItem.id);
 
     if (!hasDragElement) {
       if (position === 'on-top') {
-        currentParent.prepend(dragElement);
+        parentElement.prepend(dragElement);
       } else {
-        currentParent.appendChild(dragElement);
+        parentElement.appendChild(dragElement);
       }
 
       animateTransition(dragElement, position === 'on-top' ? -100 : 100, 0);
 
-      if (ref.parentNode) {
-        Array.from(ref.parentNode.children).forEach(childElement => {
+      if (dnd.parentNode) {
+        Array.from(dnd.parentNode.children).forEach(childElement => {
           childElement.removeAttribute('style');
         });
       }
+
+      dnd.parentNode = parentElement;
     }
 
-    ref.parentNode = currentParent;
-  }, [ref]);
+  }, [dnd]);
 
-  const handleInsertDragElement = useCallback((dragElement: HTMLElement, dropElement: HTMLElement, parentElement: ParentNode, position: string) => {
+  const handleInsertItemToList = useCallback((dragElement: HTMLElement, dropElement: HTMLElement, parentElement: ParentNode, position: string) => {
     if (position === 'on-top') {
       parentElement.insertBefore(dragElement, dropElement);
     } else {
@@ -66,14 +67,14 @@ export const useSortable = ({ item, ctx }: Params) => {
 
     animateTransition(dragElement, position === 'on-top' ? -100 : 100, 0);
 
-    if (ref.parentNode) {
-      Array.from(ref.parentNode.children).forEach(childElement => {
+    if (dnd.parentNode) {
+      Array.from(dnd.parentNode.children).forEach(childElement => {
         childElement.removeAttribute('style');
       });
     }
 
-    ref.parentNode = parentElement;
-  }, [ref]);
+    dnd.parentNode = parentElement;
+  }, [dnd]);
 
   const handleTranslateDownFromTop = (elements: HTMLElement[], dragElement: HTMLElement, translateYDrop: number, translateYDrag: number) => {
     elements.forEach(element => {
@@ -112,7 +113,7 @@ export const useSortable = ({ item, ctx }: Params) => {
 
       const translateYDragValue = translateYDrag + sortableHelper.getTotalHeightWithMargin(element);
 
-      if (translateYDragValue <= 0) {
+      if (translateYDragValue === 0) {
         dragElement.removeAttribute('style');
       } else {
         dragElement.style.transform = `translateY(${translateYDragValue}px)`;
@@ -142,30 +143,30 @@ export const useSortable = ({ item, ctx }: Params) => {
   const handleDragEnd = useCallback((dragItem: Field, monitor: DragSourceMonitor<Field>) => {
 
     if (monitor.didDrop()) {
-      const { drop, offset } = ref;
+      const { dropItem, offset } = dnd;
 
       dispatch({
         type: SortableActionType.MOVE_ITEM,
         payload: {
           dragItem: dragItem,
-          dropItem: drop,
+          dropItem,
           offset
         }
       });
     }
 
-    if (dragRef.current) {
-      dragRef.current.style.opacity = '';
+    if (ref.current) {
+      ref.current.style.opacity = '';
     }
 
-    console.log('dragEnd', ref, dragRef.current);
-  }, [dispatch, ref]);
+    console.log('dragEnd', dnd, ref.current);
+  }, [dispatch, dnd]);
 
   const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
     if (!monitor.isOver({ shallow: true })) return;
 
-    if (!dragRef.current || dragItem.id == item.id) {
-      sortableHelper.resetDrop(ref);
+    if (!ref.current || dragItem.id == item.id) {
+      sortableHelper.resetDrop(dnd);
       return;
     }
 
@@ -174,100 +175,93 @@ export const useSortable = ({ item, ctx }: Params) => {
     const listToItem = `${dragItem.group}-${item.group}` === 'list-item';
     const itemToArea = `${dragItem.group}-${item.group}` === 'item-area';
     const itemToList = `${dragItem.group}-${item.group}` === 'item-list';
+    const itemToItem = `${dragItem.group}-${item.group}` === 'item-item';
 
-    if (listToArea || listToItem || itemToArea) return;
+    if (listToArea || listToItem || itemToArea || itemToList) return;
 
-    const { drop, cordinate } = ref;
+    const { dropItem, cordinate } = dnd;
 
-    if (drop?.id !== item.id) {
-      sortableHelper.setDrop(ref, item);
+    if (dropItem?.id !== item.id) {
+      sortableHelper.setDrop(dnd, item);
     }
 
     const clientOffset = monitor.getClientOffset();
     const sameCoordinates = cordinate.x === clientOffset?.x && cordinate.y === clientOffset?.y;
 
-    if (!clientOffset || !ref.canDrop || sameCoordinates) return;
+    if (!clientOffset || sameCoordinates) return;
 
     cordinate.x = clientOffset.x;
     cordinate.y = clientOffset.y;
 
-    const clientRect = dragRef.current.getBoundingClientRect();
-    const clientInnerSize = sortableHelper.getClientInnerSize(dragRef.current);
-    const clientDisplay = sortableHelper.getClientDisplay(dragRef.current);
+    const dragElement = dnd.elements[String(dragItem.id)];
+    const dropElement = previewRef.current || ref.current;
+    const parentElement = dropElement?.parentNode;
 
-    const { verticalOffset, horizontalOffset } = sortableHelper.getOffset(clientRect, clientOffset, clientInnerSize);
-    const { verticalDirection, horizontalDirection } = sortableHelper.getDirection(clientOffset, directionRef);
+    if (!dragElement || !dropElement || !parentElement) return;
 
-    let position = `on-${verticalOffset}`;
-    let direction = verticalDirection;
+    const clientRect = dropElement.getBoundingClientRect();
+    //const clientInnerSize = item.group === 'list' ? undefined : sortableHelper.getClientInnerSize(dropElement);
+    //const clientDisplay = sortableHelper.getClientDisplay(dropElement);
+    const currentDisplay = item.group === 'list' ? 'row' : 'column';
+    const currentOffset = sortableHelper.getOffset(clientRect, clientOffset);
+    const currentDirection = sortableHelper.getDirection(clientOffset, directionRef);
+    const { offset, direction } = sortableHelper.getCurrentOffsetWithDirection(currentOffset, currentDirection, currentDisplay);
 
-    if (clientDisplay === 'row') {
-      position = `on-${horizontalOffset}`;
-      direction = horizontalDirection;
-    }
-
-    if (!direction || direction === 'no-movement') {
-      direction = position === 'on-top' ? 'down' : 'up';
-    }
-
-    if (ref.offset === position) return;
-    ref.offset = position;
-
-    const dropElement = dragRef.current;
-    const parentElement = dropElement.parentNode;
-    const dragElement = ref.doms[String(dragItem.id)];
-
-    if (!parentElement || !dragElement) return;
+    if (dnd.offset === offset) return;
+    dnd.offset = offset;
+    dnd.direction = direction;
 
     if (listToList) {
-      console.log('listToList', position, clientDisplay, previewRef.current?.parentNode);
+      console.log('listToList', dragElement, dropElement);
       return;
     }
 
     if (itemToList) {
-      handleItemToList(dragElement, dragItem, position);
-      return;
+      //handleAppendItemToList(dragElement, dropElement, dragItem, offset);
+      //return;
     }
 
-    const elements = Array.from(parentElement.children) as HTMLElement[];
-    const hasDragElement = elements.some(element => element.id == dragItem.id);
+    if (itemToItem) {
+      const elements = Array.from(parentElement.children) as HTMLElement[];
+      const hasDragElement = elements.some(element => element.id == dragItem.id);
 
-    if (!hasDragElement) {
-      handleInsertDragElement(dragElement, dropElement, parentElement, position);
-      return;
-    }
-
-    const fromIndex = elements.indexOf(dragElement);
-    const toIndex = elements.indexOf(dropElement);
-    const translateYDrop = sortableHelper.getTotalHeightWithMargin(elements[fromIndex]) || 0;
-    let translateYDrag = 0;
-
-    const translateElements = fromIndex < toIndex
-      ? elements.slice(fromIndex + 1, toIndex + 1)
-      : elements.slice(toIndex, fromIndex);
-
-    translateElements.forEach(element => {
-      const tranlateY = sortableHelper.getTotalHeightWithMargin(element);
-
-      fromIndex < toIndex
-        ? translateYDrag += tranlateY
-        : translateYDrag -= tranlateY;
-    });
-
-    if (fromIndex < toIndex) {
-      if (direction === 'down') {
-        handleTranslateDownFromTop(translateElements, dragElement, translateYDrop, translateYDrag);
-      } else {
-        handleTranslateUpFromTop(elements, toIndex, dragElement, translateYDrag);
+      if (!hasDragElement) {
+        handleInsertItemToList(dragElement, dropElement, parentElement, offset);
+        return;
       }
-    } else {
-      if (direction === 'up') {
-        handleTranslateUpFromBottom(translateElements, dragElement, translateYDrop, translateYDrag);
+
+      const fromIndex = elements.indexOf(dragElement);
+      const toIndex = elements.indexOf(dropElement);
+      const translateYDrop = sortableHelper.getTotalHeightWithMargin(elements[fromIndex]) || 0;
+      let translateYDrag = 0;
+
+      const translateElements = fromIndex < toIndex
+        ? elements.slice(fromIndex + 1, toIndex + 1)
+        : elements.slice(toIndex, fromIndex);
+
+      translateElements.forEach(element => {
+        const tranlateY = sortableHelper.getTotalHeightWithMargin(element);
+
+        fromIndex < toIndex
+          ? translateYDrag += tranlateY
+          : translateYDrag -= tranlateY;
+      });
+
+      if (fromIndex < toIndex) {
+        if (direction === 'down') {
+          handleTranslateDownFromTop(translateElements, dragElement, translateYDrop, translateYDrag);
+        } else {
+          handleTranslateUpFromTop(elements, toIndex, dragElement, translateYDrag);
+        }
       } else {
-        handleTranslateDownFromBottom(elements, toIndex, dragElement, translateYDrag);
+        if (direction === 'up') {
+          handleTranslateUpFromBottom(translateElements, dragElement, translateYDrop, translateYDrag);
+        } else {
+          handleTranslateDownFromBottom(elements, toIndex, dragElement, translateYDrag);
+        }
       }
     }
-  }, [handleInsertDragElement, handleItemToList, item, ref]);
+  }, [handleAppendItemToList, handleInsertItemToList, item, dnd]);
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: group,
@@ -281,7 +275,7 @@ export const useSortable = ({ item, ctx }: Params) => {
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ['list', 'item'],
-    canDrop: () => ref.canDrop,
+    canDrop: () => dnd.canDrop,
     hover: handleDragOver,
     collect: (monitor) => ({
       isOver: monitor.isOver({ shallow: true })
@@ -295,18 +289,18 @@ export const useSortable = ({ item, ctx }: Params) => {
   }, [isOver, directionRef]);
 
   useEffect(() => {
-    if (dragRef.current && dragRef.current.hasAttribute('style')) {
-      dragRef.current.removeAttribute('style');
+    if (ref.current && ref.current.hasAttribute('style')) {
+      ref.current.removeAttribute('style');
     }
   }, [state]);
 
   useEffect(() => {
-    ref.doms[`${id}`] = dragRef.current;
+    dnd.elements[`${id}`] = previewRef.current || ref.current;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
-    ref: dragRef,
+    ref,
     previewRef,
     drag,
     drop,

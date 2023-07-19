@@ -2,16 +2,16 @@ import React, { Dispatch } from "react";
 import { SortableAction } from "./reducers";
 import { Field } from "./types";
 
-type DropRef = Partial<Field> | null;
-type DomRef = Record<string, HTMLDivElement | null>;
+type DropItem = Partial<Field> | null;
+type ElementList = Record<string, HTMLDivElement | null>;
 
 export interface SortableState {
   data: Field[]
 }
 
-export interface SortableRef {
-  drop: DropRef;
-  doms: DomRef;
+export interface DndRef {
+  dropItem: DropItem;
+  elements: ElementList;
   parentNode: Node["parentNode"] | null;
   dropElement: HTMLElement | null;
   touched: Record<string, number>;
@@ -28,16 +28,16 @@ export interface SortableRef {
 export interface SortableContextValue {
   state: SortableState;
   dispatch: Dispatch<SortableAction>;
-  ref: SortableRef;
+  dnd: DndRef;
 }
 
 export const defaultState = {
   data: []
 }
 
-export const defaultRef = {
-  drop: null,
-  doms: {},
+export const dndRef = {
+  dropItem: null,
+  elements: {},
   parentNode: null,
   dropElement: null,
   touched: {},
@@ -54,7 +54,7 @@ export const defaultRef = {
 const SortableContext = React.createContext<SortableContextValue>({
   state: defaultState,
   dispatch: () => console.log('dispatch'),
-  ref: defaultRef,
+  dnd: dndRef,
 });
 
 export const SortableProvider = SortableContext.Provider;

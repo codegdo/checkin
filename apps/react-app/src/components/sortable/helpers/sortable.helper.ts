@@ -2,21 +2,38 @@ import { XYCoord } from "react-dnd";
 import { cloneObject, mapToParent } from "../../../utils";
 import { ElementInnerSize, Field } from "../types";
 import { XYDirection } from "../hooks";
-import { SortableRef } from "../sortable.provider";
+import { DndRef } from "../sortable.provider";
+
+interface OffsetAndDirection {
+  clientRect: DOMRect;
+  clientOffset: XYCoord;
+  clientInnerSize?: ElementInnerSize;
+}
+
+interface CurrentOffset {
+  verticalOffset: string;
+  horizontalOffset: string;
+}
+
+interface CurrentDirection {
+  verticalDirection: string | undefined;
+  horizontalDirection: string | undefined;
+}
 
 class SortableHelper {
-  resetDrop(ref: SortableRef) {
-    if (ref.canDrop) {
-      ref.drop = null;
-      ref.offset = null;
-      ref.canDrop = false;
+  resetDrop(dnd: DndRef) {
+    if (dnd.canDrop) {
+      dnd.dropItem = null;
+      dnd.offset = null;
+      dnd.direction = null;
+      dnd.canDrop = false;
       console.log('reset-drop');
     }
   }
 
-  setDrop(ref: SortableRef, item: Field) {
-    ref.drop = item;
-    ref.canDrop = true;
+  setDrop(dnd: DndRef, item: Field) {
+    dnd.dropItem = item;
+    dnd.canDrop = true;
     console.log('set-drop');
   }
 
@@ -208,6 +225,31 @@ class SortableHelper {
     const horizontalOffset = this.getOffsetX(clientX, centerX, innerWidth);
 
     return { verticalOffset, horizontalOffset };
+  }
+
+  getCurrentOffsetWithDirection(currentOffset: CurrentOffset, currentDirection: CurrentDirection, currentDisplay: string) {
+    const { horizontalOffset, verticalOffset } = currentOffset;
+    const { horizontalDirection, verticalDirection } = currentDirection;
+    let offset = `on-${verticalOffset}`;
+    let direction = verticalDirection;
+
+    if (currentDisplay === 'row') {
+      offset = `on-${horizontalOffset}`;
+      direction = horizontalDirection;
+    }
+
+    if (!direction || direction === 'no-movement') {
+      if (currentDisplay === 'row') {
+        direction = offset === 'on-left' ? 'right' : 'left';
+      } else {
+        direction = offset === 'on-top' ? 'down' : 'up';
+      }
+    }
+
+    return {
+      offset,
+      direction
+    }
   }
 
   setTranslateX(doms: Record<string, HTMLDivElement>, ids: string[], translateX: number) {

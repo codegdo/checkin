@@ -18,7 +18,7 @@ export enum SortableActionType {
   MOVE_ITEM = 'MOVE_ITEM'
 }
 
-export interface SortableAction<T = unknown> {
+export interface SortableAction<T = ActionPayload> {
   type: string | SortableActionType;
   payload: T;
 }
@@ -38,7 +38,7 @@ export const sortableReducer = (state: SortableState, { type, payload }: Sortabl
       const draggedItems = data.splice(2, 1);
       const remainingItems = data;
 
-      console.log(remainingItems);
+      console.log(draggedItems, remainingItems);
 
       return { ...state, data: remainingItems };
       //return state;
