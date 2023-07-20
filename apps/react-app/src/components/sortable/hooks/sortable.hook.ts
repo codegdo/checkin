@@ -265,7 +265,7 @@ export const useSortable = ({ item, ctx }: Params) => {
       const fromIndex = elements.indexOf(dragElement);
       const toIndex = elements.indexOf(dropElement);
 
-      const translateXDrop = sortableHelper.getTotalWidthWithMargin(elements[fromIndex]) || 0;
+      const translateXDrop = sortableHelper.getTotalWidthWithMargin(elements[fromIndex]) + 16 || 0;
       let translateXDrag = 0;
 
       const translateElements = fromIndex < toIndex
@@ -273,7 +273,7 @@ export const useSortable = ({ item, ctx }: Params) => {
         : elements.slice(toIndex, fromIndex);
 
       translateElements.forEach(element => {
-        const translateX = sortableHelper.getTotalWidthWithMargin(element);
+        const translateX = sortableHelper.getTotalWidthWithMargin(element) + 16;
 
         fromIndex < toIndex
           ? translateXDrag += translateX
@@ -294,7 +294,7 @@ export const useSortable = ({ item, ctx }: Params) => {
         }
       }
 
-      console.log('listToList', translateXDrop, translateXDrag);
+      console.log('listToList', translateXDrop, translateXDrag, direction);
       return;
     }
 
