@@ -56,6 +56,24 @@ const data = [
     parentId: 5,
     position: 5,
   },
+  {
+    id: '7',
+    name: 'list',
+    type: 'div',
+    group: 'list',
+    data: [],
+    parentId: null,
+    position: 6
+  },
+  {
+    id: 8,
+    name: 'item',
+    type: 'text',
+    group: 'item',
+    data: null,
+    parentId: 7,
+    position: 7,
+  },
 ];
 
 function Dashboard() {

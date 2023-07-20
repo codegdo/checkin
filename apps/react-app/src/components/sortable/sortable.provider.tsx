@@ -2,7 +2,6 @@ import React, { Dispatch } from "react";
 import { SortableAction } from "./reducers";
 import { Field } from "./types";
 
-type DropItem = Partial<Field> | null;
 type ElementList = Record<string, HTMLDivElement | null>;
 
 export interface SortableState {
@@ -10,19 +9,15 @@ export interface SortableState {
 }
 
 export interface DndRef {
-  dropItem: DropItem;
+  dropItem: Field | null;
   elements: ElementList;
   parentNode: Node["parentNode"] | null;
-  dropElement: HTMLElement | null;
-  touched: Record<string, number>;
-  nested: (number | string)[];
+
   offset: string | null;
   direction: string | null;
+
   cordinate: { x: number, y: number };
-  translate: { x: number, y: number };
   canDrop: boolean;
-  hasChild: boolean;
-  isTransitioning: boolean;
 }
 
 export interface SortableContextValue {
@@ -39,16 +34,10 @@ export const dndRef = {
   dropItem: null,
   elements: {},
   parentNode: null,
-  dropElement: null,
-  touched: {},
-  nested: [],
   offset: null,
   direction: null,
   cordinate: { x: 0, y: 0 },
-  translate: { x: 0, y: 0 },
-  canDrop: true,
-  hasChild: true,
-  isTransitioning: false
+  canDrop: true
 }
 
 const SortableContext = React.createContext<SortableContextValue>({

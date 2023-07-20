@@ -7,8 +7,8 @@ interface InitialDataPayload {
 
 interface MoveItemPayload {
   dragItem: Field;
-  dropItem: Field;
-  offset: string;
+  dropItem: Field | null;
+  offset: string | null;
 }
 
 type ActionPayload = InitialDataPayload | MoveItemPayload;

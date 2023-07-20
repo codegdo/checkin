@@ -89,6 +89,13 @@ class SortableHelper {
     return element.offsetHeight + marginTop + marginBottom;
   }
 
+  getTotalWidthWithMargin(element: HTMLElement): number {
+    const computedStyle = window.getComputedStyle(element);
+    const marginLeft = parseInt(computedStyle.marginLeft);
+    const marginRight = parseInt(computedStyle.marginRight);
+    return element.offsetWidth + marginLeft + marginRight;
+  }
+
   getClientInnerSize(element: HTMLElement) {
     let innerWidth = 0;
     let innerHeight = 0;

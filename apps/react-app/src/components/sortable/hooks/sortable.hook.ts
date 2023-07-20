@@ -124,6 +124,54 @@ export const useSortable = ({ item, ctx }: Params) => {
     });
   };
 
+  const handleTranslateRightFromLeft = (elements: HTMLElement[], dragElement: HTMLElement, translateXDrop: number, translateXDrag: number) => {
+    elements.forEach(element => {
+      element.style.transform = `translateX(-${translateXDrop}px)`;
+    });
+    dragElement.style.transform = `translateX(${translateXDrag}px)`;
+  };
+
+  const handleTranslateLeftFromLeft = (elements: HTMLElement[], toIndex: number, dragElement: HTMLElement, translateXDrag: number) => {
+    console.log('handleTranslateLeftFromLeft', elements.slice(toIndex));
+
+    elements.slice(toIndex).filter(element => element.style.transform !== '').forEach(element => {
+      const translateXDragValue = translateXDrag - sortableHelper.getTotalWidthWithMargin(element);
+      if (translateXDragValue === 0) {
+        dragElement.removeAttribute('style');
+
+      } else {
+        dragElement.style.transform = `translateX(${translateXDragValue}px)`;
+      }
+
+      //element.style.transform = `translateY(${-translateYDragValue}px)`;
+      element.removeAttribute('style');
+    });
+  };
+
+  const handleTranslateLeftFromRight = (elements: HTMLElement[], dragElement: HTMLElement, translateXDrop: number, translateXDrag: number) => {
+    elements.forEach(element => {
+      element.style.transform = `translateX(${translateXDrop}px)`;
+    });
+    dragElement.style.transform = `translateX(${translateXDrag}px)`;
+  };
+
+  const handleTranslateRightFromRight = (elements: HTMLElement[], toIndex: number, dragElement: HTMLElement, translateXDrag: number) => {
+    console.log('handleTranslateRightFromRight', elements.slice(0, toIndex + 1));
+    elements.slice(0, toIndex + 1).filter(element => element.style.transform !== '').forEach(element => {
+
+      const translateXDragValue = translateXDrag + sortableHelper.getTotalWidthWithMargin(element);
+
+      if (translateXDragValue === 0) {
+        dragElement.removeAttribute('style');
+      } else {
+        dragElement.style.transform = `translateX(${translateXDragValue}px)`;
+      }
+
+      //element.style.transform = `translateY(${-translateYDragValue}px)`;
+      element.removeAttribute('style');
+    });
+  };
+
   const animateTransition = (element: HTMLElement, translateYStart: number, translateYEnd: number) => {
     element.style.opacity = '0';
     element.style.transform = `translateY(${translateYStart}%)`;
@@ -153,6 +201,7 @@ export const useSortable = ({ item, ctx }: Params) => {
           offset
         }
       });
+
     }
 
     if (ref.current) {
@@ -207,18 +256,46 @@ export const useSortable = ({ item, ctx }: Params) => {
     const currentDirection = sortableHelper.getDirection(clientOffset, directionRef);
     const { offset, direction } = sortableHelper.getCurrentOffsetWithDirection(currentOffset, currentDirection, currentDisplay);
 
-    if (dnd.offset === offset) return;
+    if (dnd.offset === offset && dragElement.parentNode === parentElement) return;
     dnd.offset = offset;
     dnd.direction = direction;
 
-    if (listToList) {
-      console.log('listToList', dragElement, dropElement);
-      return;
-    }
+    if (listToList && dragElement.parentNode === parentElement) {
+      const elements = Array.from(parentElement.children) as HTMLElement[];
+      const fromIndex = elements.indexOf(dragElement);
+      const toIndex = elements.indexOf(dropElement);
 
-    if (itemToList) {
-      //handleAppendItemToList(dragElement, dropElement, dragItem, offset);
-      //return;
+      const translateXDrop = sortableHelper.getTotalWidthWithMargin(elements[fromIndex]) || 0;
+      let translateXDrag = 0;
+
+      const translateElements = fromIndex < toIndex
+        ? elements.slice(fromIndex + 1, toIndex + 1)
+        : elements.slice(toIndex, fromIndex);
+
+      translateElements.forEach(element => {
+        const translateX = sortableHelper.getTotalWidthWithMargin(element);
+
+        fromIndex < toIndex
+          ? translateXDrag += translateX
+          : translateXDrag -= translateX;
+      });
+
+      if (fromIndex < toIndex) {
+        if (direction === 'right') {
+          handleTranslateRightFromLeft(translateElements, dragElement, translateXDrop, translateXDrag);
+        } else {
+          handleTranslateLeftFromLeft(elements, toIndex, dragElement, translateXDrag);
+        }
+      } else {
+        if (direction === 'left') {
+          handleTranslateLeftFromRight(translateElements, dragElement, translateXDrop, translateXDrag);
+        } else {
+          handleTranslateRightFromRight(elements, toIndex, dragElement, translateXDrag);
+        }
+      }
+
+      console.log('listToList', translateXDrop, translateXDrag);
+      return;
     }
 
     if (itemToItem) {
@@ -226,6 +303,7 @@ export const useSortable = ({ item, ctx }: Params) => {
       const hasDragElement = elements.some(element => element.id == dragItem.id);
 
       if (!hasDragElement) {
+        dnd.parentNode = dragElement.parentNode;
         handleInsertItemToList(dragElement, dropElement, parentElement, offset);
         return;
       }
@@ -240,11 +318,11 @@ export const useSortable = ({ item, ctx }: Params) => {
         : elements.slice(toIndex, fromIndex);
 
       translateElements.forEach(element => {
-        const tranlateY = sortableHelper.getTotalHeightWithMargin(element);
+        const translateY = sortableHelper.getTotalHeightWithMargin(element);
 
         fromIndex < toIndex
-          ? translateYDrag += tranlateY
-          : translateYDrag -= tranlateY;
+          ? translateYDrag += translateY
+          : translateYDrag -= translateY;
       });
 
       if (fromIndex < toIndex) {
@@ -261,7 +339,7 @@ export const useSortable = ({ item, ctx }: Params) => {
         }
       }
     }
-  }, [handleAppendItemToList, handleInsertItemToList, item, dnd]);
+  }, [handleInsertItemToList, item, dnd]);
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: group,
