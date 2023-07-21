@@ -82,21 +82,21 @@ class SortableHelper {
     return 'column';
   }
 
-  getTotalHeightWithMargin(element: HTMLElement): number {
+  getElementHeightWithMargin(element: HTMLElement): number {
     const computedStyle = window.getComputedStyle(element);
     const marginTop = parseInt(computedStyle.marginTop);
     const marginBottom = parseInt(computedStyle.marginBottom);
     return element.offsetHeight + marginTop + marginBottom;
   }
 
-  getTotalWidthWithMargin(element: HTMLElement): number {
+  getElementWidthWithMargin(element: HTMLElement): number {
     const computedStyle = window.getComputedStyle(element);
     const marginLeft = parseInt(computedStyle.marginLeft);
     const marginRight = parseInt(computedStyle.marginRight);
     return element.offsetWidth + marginLeft + marginRight;
   }
 
-  getClientInnerSize(element: HTMLElement) {
+  getElementInnerSize(element: HTMLElement) {
     let innerWidth = 0;
     let innerHeight = 0;
 
@@ -243,14 +243,6 @@ class SortableHelper {
     if (currentDisplay === 'row') {
       offset = `on-${horizontalOffset}`;
       direction = horizontalDirection;
-    }
-
-    if (!direction || direction === 'no-movement') {
-      if (currentDisplay === 'row') {
-        direction = offset === 'on-left' ? 'right' : 'left';
-      } else {
-        direction = offset === 'on-top' ? 'down' : 'up';
-      }
     }
 
     return {

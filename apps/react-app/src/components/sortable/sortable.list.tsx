@@ -11,9 +11,10 @@ type SortableListProps = PropsWithChildren<ExtendedField & {
 
 function SortableList(props: SortableListProps) {
   const { ctx, siblings, children, ...item } = props;
-  const { ref, previewRef, isOver, drag, drop, preview } = useSortable({ ctx, item, siblings });
+  const { ref, previewRef, isDragging, isOver, drag, drop, preview } = useSortable({ ctx, item, siblings });
   const className = classNames('sortable-column', {
-    'is-over': isOver
+    'is-dragging': isDragging,
+    'is-over': isOver,
   });
 
   useEffect(() => {
@@ -23,7 +24,7 @@ function SortableList(props: SortableListProps) {
 
   return (<div ref={previewRef} className={className}>
     <div ref={ref} className="sortable-title">List</div>
-    <SortableHolder {...props}>{children}</SortableHolder>
+    <SortableHolder {...props} group="holder">{children}</SortableHolder>
   </div>)
 }
 
