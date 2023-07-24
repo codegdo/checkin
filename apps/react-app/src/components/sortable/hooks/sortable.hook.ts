@@ -34,7 +34,7 @@ export const useSortable = ({ item, ctx }: Params) => {
   const directionRef = useRef<XYDirection>(defaultDirection);
 
 
-  const handleAppendToHolder = useCallback((dragElement: HTMLElement, parentElement: HTMLElement, offset: string) => {
+  const appendToHolder = useCallback((dragElement: HTMLElement, parentElement: HTMLElement, offset: string) => {
     const hasDragElement = Array.from(parentElement.children).includes(dragElement);
 
     if (hasDragElement) return;
@@ -57,7 +57,7 @@ export const useSortable = ({ item, ctx }: Params) => {
 
   }, [dnd]);
 
-  const handleInsertItemToList = useCallback((dragElement: HTMLElement, dropElement: HTMLElement, parentElement: ParentNode, offset: string) => {
+  const insertItemToList = useCallback((dragElement: HTMLElement, dropElement: HTMLElement, parentElement: ParentNode, offset: string) => {
     const targetElement = offset === 'on-top' ? dropElement : dropElement.nextSibling;
 
     parentElement.insertBefore(dragElement, targetElement);
@@ -83,7 +83,7 @@ export const useSortable = ({ item, ctx }: Params) => {
     }, 0);
   };
 
-  const handleTranslateHorizontal = (
+  const translateHorizontal = (
     dragElement: HTMLElement,
     dropElement: HTMLElement,
     parentElement: ParentNode,
@@ -161,7 +161,7 @@ export const useSortable = ({ item, ctx }: Params) => {
     }
   }
 
-  const handleTranslateVertical = (
+  const translateVertical = (
     dragElement: HTMLElement,
     dropElement: HTMLElement,
     parentElement: ParentNode,
@@ -329,13 +329,13 @@ export const useSortable = ({ item, ctx }: Params) => {
       const toIndex = elements.indexOf(dropElement);
 
       if (fromIndex < toIndex && direction === 'right') {
-        handleTranslateHorizontal(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.LEFT_TO_RIGHT);
+        translateHorizontal(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.LEFT_TO_RIGHT);
       } else if (fromIndex < toIndex && direction === 'left') {
-        handleTranslateHorizontal(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.BACK_TO_LEFT);
+        translateHorizontal(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.BACK_TO_LEFT);
       } else if (fromIndex > toIndex && direction === 'left') {
-        handleTranslateHorizontal(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.RIGHT_TO_LEFT);
+        translateHorizontal(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.RIGHT_TO_LEFT);
       } else if (fromIndex > toIndex && direction === 'right') {
-        handleTranslateHorizontal(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.BACK_TO_RIGHT);
+        translateHorizontal(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.BACK_TO_RIGHT);
       }
 
       console.log('listToList');
@@ -343,7 +343,7 @@ export const useSortable = ({ item, ctx }: Params) => {
     }
 
     if ((dragGroup === 'item' && dropGroup === 'holder')) {
-      handleAppendToHolder(dragElement, dropElement, offset);
+      appendToHolder(dragElement, dropElement, offset);
       console.log('itemToHolder');
       return;
     }
@@ -357,24 +357,24 @@ export const useSortable = ({ item, ctx }: Params) => {
 
       if (!hasDragElement) {
         dnd.parentNode = dragElement.parentNode;
-        handleInsertItemToList(dragElement, dropElement, parentElement, offset);
+        insertItemToList(dragElement, dropElement, parentElement, offset);
         return;
       }
 
       if (fromIndex < toIndex && direction === 'down') {
-        handleTranslateVertical(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.TOP_TO_BOTTOM);
+        translateVertical(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.TOP_TO_BOTTOM);
       } else if (fromIndex < toIndex && direction === 'up') {
-        handleTranslateVertical(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.BACK_TO_TOP);
+        translateVertical(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.BACK_TO_TOP);
       } else if (fromIndex > toIndex && direction === 'up') {
-        handleTranslateVertical(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.BOTTOM_TO_TOP);
+        translateVertical(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.BOTTOM_TO_TOP);
       } else if (fromIndex > toIndex && direction === 'down') {
-        handleTranslateVertical(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.BACK_TO_BOTTOM);
+        translateVertical(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.BACK_TO_BOTTOM);
       }
 
       console.log('itemToItem');
       return;
     }
-  }, [item, dnd, handleAppendToHolder, handleInsertItemToList]);
+  }, [item, dnd, appendToHolder, insertItemToList]);
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: group,
