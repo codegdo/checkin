@@ -33,7 +33,6 @@ export const useSortable = ({ item, ctx }: Params) => {
   const previewRef = useRef<HTMLDivElement>(null);
   const directionRef = useRef<XYDirection>(defaultDirection);
 
-
   const appendToHolder = useCallback((dragElement: HTMLElement, parentElement: HTMLElement, offset: string) => {
     const hasDragElement = Array.from(parentElement.children).includes(dragElement);
 
@@ -97,8 +96,8 @@ export const useSortable = ({ item, ctx }: Params) => {
     const translateX = sortableHelper.getElementWidthWithMargin(dragElement) + gap || 0;
 
     let translateDragging = 0;
-
     let translatingElements;
+
     if (fromIndex < toIndex) {
       translatingElements = elements.slice(fromIndex + 1, toIndex + 1);
       translatingElements.forEach(element => {
@@ -113,46 +112,68 @@ export const useSortable = ({ item, ctx }: Params) => {
       });
     }
 
-    console.log(gap, translateX, translateDragging);
-
     switch (direction) {
       case MoveDirection.LEFT_TO_RIGHT: {
-        translatingElements.forEach(element => {
-          element.style.transform = `translateX(-${translateX}px)`;
-        });
-        dragElement.style.transform = `translateX(${translateDragging}px)`;
+        if (!dropElement.hasAttribute('style')) {
+          translatingElements.forEach(element => {
+            element.style.transform = `translateX(-${translateX}px)`;
+          });
+          dragElement.style.transform = `translateX(${translateDragging}px)`;
+        }
         break;
       }
       case MoveDirection.BACK_TO_LEFT: {
-        translatingElements.filter(elements => elements === dropElement).forEach(element => {
-          const translateXElement = translateDragging - sortableHelper.getElementWidthWithMargin(element) - gap;
-          if (translateXElement === 0) {
-            dragElement.removeAttribute('style');
-          } else {
-            dragElement.style.transform = `translateX(${translateXElement}px)`;
+        translatingElements.find(element => {
+          if (element === dropElement) {
+            const translateXElement = translateDragging - sortableHelper.getElementWidthWithMargin(element) - gap;
+            if (translateXElement === 0) {
+              if (parentElement) {
+                Array.from(parentElement.children).forEach(childElement => {
+                  if (childElement.hasAttribute('style')) {
+                    childElement.removeAttribute('style');
+                  }
+                });
+              }
+              dragElement.removeAttribute('style');
+            } else {
+              if (element.hasAttribute('style')) {
+                dragElement.style.transform = `translateX(${translateXElement}px)`;
+              }
+            }
+            element.removeAttribute('style');
           }
-
-          element.removeAttribute('style');
         });
         break;
       }
       case MoveDirection.RIGHT_TO_LEFT: {
-        translatingElements.forEach(element => {
-          element.style.transform = `translateX(${translateX}px)`;
-        });
-        dragElement.style.transform = `translateX(${translateDragging}px)`;
+        if (!dropElement.hasAttribute('style')) {
+          translatingElements.forEach(element => {
+            element.style.transform = `translateX(${translateX}px)`;
+          });
+          dragElement.style.transform = `translateX(${translateDragging}px)`;
+        }
         break;
       }
       case MoveDirection.BACK_TO_RIGHT: {
-        translatingElements.filter(elements => elements === dropElement).forEach(element => {
-          const translateXElement = translateDragging + sortableHelper.getElementWidthWithMargin(element) + gap;
-          if (translateXElement === 0) {
-            dragElement.removeAttribute('style');
-          } else {
-            dragElement.style.transform = `translateX(${translateXElement}px)`;
+        translatingElements.find(element => {
+          if (element === dropElement) {
+            const translateXElement = translateDragging + sortableHelper.getElementWidthWithMargin(element) + gap;
+            if (translateXElement === 0) {
+              if (parentElement) {
+                Array.from(parentElement.children).forEach(childElement => {
+                  if (childElement.hasAttribute('style')) {
+                    childElement.removeAttribute('style');
+                  }
+                });
+              }
+              dragElement.removeAttribute('style');
+            } else {
+              if (element.hasAttribute('style')) {
+                dragElement.style.transform = `translateX(${translateXElement}px)`;
+              }
+            }
+            element.removeAttribute('style');
           }
-
-          element.removeAttribute('style');
         });
         break;
       }
@@ -173,63 +194,90 @@ export const useSortable = ({ item, ctx }: Params) => {
     const computedStyle = window.getComputedStyle(parentElement as HTMLElement);
     const gap = parseInt(computedStyle.gap) || 0;
     const translateY = sortableHelper.getElementHeightWithMargin(dragElement) + gap || 0;
-    let translateDragging = 0;
 
+    let translateDragging = 0;
     let translatingElements;
+
     if (fromIndex < toIndex) {
       translatingElements = elements.slice(fromIndex + 1, toIndex + 1);
       translatingElements.forEach(element => {
-        const translateXElement = sortableHelper.getElementWidthWithMargin(element) + gap || 0;
+        const translateXElement = sortableHelper.getElementHeightWithMargin(element) + gap || 0;
         translateDragging += translateXElement;
       });
     } else {
       translatingElements = elements.slice(toIndex, fromIndex);
       translatingElements.forEach(element => {
-        const translateXElement = sortableHelper.getElementWidthWithMargin(element) + gap || 0;
+        const translateXElement = sortableHelper.getElementHeightWithMargin(element) + gap || 0;
         translateDragging -= translateXElement;
       });
     }
 
-    console.log(gap, translateY, translateDragging);
-
     switch (direction) {
       case MoveDirection.TOP_TO_BOTTOM: {
-        translatingElements.forEach(element => {
-          element.style.transform = `translateY(-${translateY}px)`;
-        });
-        dragElement.style.transform = `translateY(${translateDragging}px)`;
+        if (!dropElement.hasAttribute('style')) {
+          translatingElements.forEach(element => {
+            element.style.transform = `translateY(-${translateY}px)`;
+          });
+          dragElement.style.transform = `translateY(${translateDragging}px)`;
+        }
         break;
       }
       case MoveDirection.BACK_TO_TOP: {
-        translatingElements.filter(elements => elements === dropElement).forEach(element => {
-          const translateYElement = translateDragging - sortableHelper.getElementHeightWithMargin(element) - gap;
-          if (translateYElement === 0) {
-            dragElement.removeAttribute('style');
-          } else {
-            dragElement.style.transform = `translateY(${translateYElement}px)`;
-          }
+        translatingElements.find(element => {
+          if (element === dropElement) {
+            const translateYElement = translateDragging - sortableHelper.getElementHeightWithMargin(element) - gap;
 
-          element.removeAttribute('style');
+            if (translateYElement === 0) {
+              if (parentElement) {
+                Array.from(parentElement.children).forEach(childElement => {
+                  if (childElement.hasAttribute('style')) {
+                    childElement.removeAttribute('style');
+                  }
+                });
+              }
+              dragElement.removeAttribute('style');
+            } else {
+              if (element.hasAttribute('style')) {
+                dragElement.style.transform = `translateY(${translateYElement}px)`;
+              }
+            }
+
+            element.removeAttribute('style');
+          }
         });
         break;
       }
       case MoveDirection.BOTTOM_TO_TOP: {
-        translatingElements.forEach(element => {
-          element.style.transform = `translateY(${translateY}px)`;
-        });
-        dragElement.style.transform = `translateY(${translateDragging}px)`;
+        if (!dropElement.hasAttribute('style')) {
+          translatingElements.forEach(element => {
+            element.style.transform = `translateY(${translateY}px)`;
+          });
+          dragElement.style.transform = `translateY(${translateDragging}px)`;
+        }
         break;
       }
       case MoveDirection.BACK_TO_BOTTOM: {
-        translatingElements.filter(elements => elements === dropElement).forEach(element => {
-          const translateYElement = translateDragging + sortableHelper.getElementHeightWithMargin(element) + gap;
-          if (translateYElement === 0) {
-            dragElement.removeAttribute('style');
-          } else {
-            dragElement.style.transform = `translateY(${translateYElement}px)`;
-          }
+        translatingElements.find(element => {
+          if (element === dropElement) {
+            const translateYElement = translateDragging + sortableHelper.getElementHeightWithMargin(element) + gap;
 
-          element.removeAttribute('style');
+            if (translateYElement === 0) {
+              if (parentElement) {
+                Array.from(parentElement.children).forEach(childElement => {
+                  if (childElement.hasAttribute('style')) {
+                    childElement.removeAttribute('style');
+                  }
+                });
+              }
+              dragElement.removeAttribute('style');
+            } else {
+              if (element.hasAttribute('style')) {
+                dragElement.style.transform = `translateY(${translateYElement}px)`;
+              }
+            }
+
+            element.removeAttribute('style');
+          }
         });
         break;
       }
@@ -275,6 +323,12 @@ export const useSortable = ({ item, ctx }: Params) => {
       return;
     }
 
+    const dragElement = dnd.elements[String(dragItem.id)];
+    let dropElement = previewRef.current || ref.current;
+    let parentElement = dropElement?.parentNode;
+
+    if (!dragElement || !dropElement || !parentElement) return;
+
     const dragGroup = dragItem.group;
     const dropGroup = item.group;
 
@@ -282,6 +336,12 @@ export const useSortable = ({ item, ctx }: Params) => {
     if (dragGroup === 'list' && dropGroup === 'item') return;
     if (dragGroup === 'item' && dropGroup === 'area') return;
     if (dragGroup === 'item' && dropGroup === 'list') return;
+
+    if (dragGroup === 'item' && dropGroup === 'holder') {
+      const hasDragElement = Array.from(dropElement.children).includes(dragElement);
+
+      if (hasDragElement) return;
+    }
 
     const { dropItem, cordinate } = dnd;
 
@@ -296,12 +356,6 @@ export const useSortable = ({ item, ctx }: Params) => {
 
     cordinate.x = clientOffset.x;
     cordinate.y = clientOffset.y;
-
-    const dragElement = dnd.elements[String(dragItem.id)];
-    let dropElement = previewRef.current || ref.current;
-    let parentElement = dropElement?.parentNode;
-
-    if (!dragElement || !dropElement || !parentElement) return;
 
     const clientRect = dropElement.getBoundingClientRect();
     //const clientInnerSize = item.group === 'list' ? undefined : sortableHelper.getClientInnerSize(dropElement);
@@ -330,12 +384,18 @@ export const useSortable = ({ item, ctx }: Params) => {
 
       if (fromIndex < toIndex && direction === 'right') {
         translateHorizontal(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.LEFT_TO_RIGHT);
+        console.log(direction, MoveDirection.LEFT_TO_RIGHT)
       } else if (fromIndex < toIndex && direction === 'left') {
         translateHorizontal(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.BACK_TO_LEFT);
+        console.log(direction, MoveDirection.BACK_TO_LEFT)
       } else if (fromIndex > toIndex && direction === 'left') {
         translateHorizontal(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.RIGHT_TO_LEFT);
+        console.log(direction, MoveDirection.RIGHT_TO_LEFT)
       } else if (fromIndex > toIndex && direction === 'right') {
         translateHorizontal(dragElement, dropElement, parentElement, elements, fromIndex, toIndex, MoveDirection.BACK_TO_RIGHT);
+        console.log(direction, MoveDirection.BACK_TO_RIGHT)
+      } else {
+        console.log(direction)
       }
 
       console.log('listToList');

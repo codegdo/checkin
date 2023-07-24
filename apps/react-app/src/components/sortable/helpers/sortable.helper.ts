@@ -37,6 +37,17 @@ class SortableHelper {
     console.log('set-drop');
   }
 
+  hasTranslate(element: HTMLElement): boolean {
+    const computedStyle = getComputedStyle(element);
+    const transform = computedStyle.transform;
+
+    if (transform) {
+      return true;
+    }
+
+    return false;
+  }
+
   sameCoordinates(coord1: XYCoord | null, coord2: XYCoord | null) {
     return coord1 && coord2 && coord1.x === coord2.x && coord1.y === coord2.y;
   }
