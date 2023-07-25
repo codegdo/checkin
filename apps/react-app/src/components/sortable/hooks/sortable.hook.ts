@@ -46,14 +46,15 @@ export const useSortable = ({ item, ctx }: Params) => {
 
     animateTransition(dragElement, offset === 'on-top' ? -100 : 100, 0);
 
+    // cleanup old parent node
     if (dnd.parentNode) {
       Array.from(dnd.parentNode.children).forEach(childElement => {
         childElement.removeAttribute('style');
       });
     }
 
+    // assign new parent node
     dnd.parentNode = parentElement;
-
   }, [dnd]);
 
   const insertItemToList = useCallback((dragElement: HTMLElement, dropElement: HTMLElement, parentElement: ParentNode, offset: string) => {
@@ -63,12 +64,14 @@ export const useSortable = ({ item, ctx }: Params) => {
 
     animateTransition(dragElement, offset === 'on-top' ? -100 : 100, 0);
 
+    // cleanup old parent node
     if (dnd.parentNode) {
       Array.from(dnd.parentNode.children).forEach(childElement => {
         childElement.removeAttribute('style');
       });
     }
 
+    // assign new parent node
     dnd.parentNode = parentElement;
   }, [dnd]);
 
