@@ -1,5 +1,6 @@
 
-function ItemGrid(props: any) {
+function FormField(props: any) {
+
   return (
     <>
       {
@@ -9,4 +10,4 @@ function ItemGrid(props: any) {
   )
 }
 
-export default ItemGrid;
+export default FormField;

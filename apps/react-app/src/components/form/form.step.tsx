@@ -1,5 +1,5 @@
 
-function ItemMenu() {
+function FormStep() {
 
   return (
     <>
@@ -8,4 +8,4 @@ function ItemMenu() {
   )
 }
 
-export default ItemMenu;
+export default FormStep;

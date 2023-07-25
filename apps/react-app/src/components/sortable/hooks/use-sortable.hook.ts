@@ -316,7 +316,7 @@ export const useSortable = ({ item, ctx }: Params) => {
     }
 
     console.log('dragEnd', dnd, ref.current);
-  }, [dispatch, dnd]);
+  }, [dnd, dispatch]);
 
   const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
     if (!monitor.isOver({ shallow: true })) return;

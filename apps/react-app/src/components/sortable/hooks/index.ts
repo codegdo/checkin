@@ -1,1 +1,1 @@
-export * from './sortable.hook';
+export * from './use-sortable.hook';

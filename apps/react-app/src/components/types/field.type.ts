@@ -13,12 +13,13 @@ export enum ElementType {
   DIV = 'div',
 }
 
-export enum DataType {
+export enum GroupType {
   AREA = 'area',
   SECTION = 'section',
-  COLUMN = 'column',
   BLOCK = 'block',
-  PLACEHOLDER = 'placeholder',
+  HOLDER = 'holder',
+  LIST = 'list',
+  ITEM = 'item',
   ELEMENT = 'element',
   FIELD = 'field',
   GROUP = 'group',
@@ -29,19 +30,8 @@ interface ElementField {
   id: number | string;
   name: string;
   type: string | ElementType | FieldType;
-  dataType: string | DataType;
-  
-  data?: (ElementField | FormField)[] | null;
-  value?: string | null;
-  parentId?: number | string | null;
-  position?: number | null;
-}
+  group: string | GroupType;
 
-interface Item {
-  id: number | string;
-  name: string;
-  group: string | DataType;
-  type: string | ElementType | FieldType;
   data?: (ElementField | FormField)[] | null;
   value?: string | null;
   parentId?: number | string | null;
@@ -54,6 +44,8 @@ interface FormField extends ElementField {
 }
 
 export type Field = ElementField | FormField;
+
+
 
 export type ExtendedField = Field & {
   selected?: boolean;

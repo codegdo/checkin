@@ -1,5 +1,5 @@
 
-function ItemPlaceholder(props: any) {
+function FormElement(props: any) {
   return (
     <>
       {
@@ -9,4 +9,4 @@ function ItemPlaceholder(props: any) {
   )
 }
 
-export default ItemPlaceholder;
+export default FormElement;

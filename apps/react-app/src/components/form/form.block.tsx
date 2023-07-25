@@ -1,5 +1,5 @@
 
-function ItemBlock(props: any) {
+function FormBlock(props: any) {
 
   return (
     <>
@@ -10,4 +10,4 @@ function ItemBlock(props: any) {
   )
 }
 
-export default ItemBlock;
+export default FormBlock;

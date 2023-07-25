@@ -4,45 +4,45 @@ import React from 'react';
 
 //import FormContext from './form.provider';
 
-import ItemBlock from './item.block';
-import ItemField from './item.field';
-import ItemElement from './item.element';
-import ItemPlaceholder from './item.placeholder';
-import ItemGrid from './item.grid';
-import ItemGroup from './item.group';
+import FormBlock from './form.block';
+import FormField from './form.field';
+import FormElement from './form.element';
+import FormHolder from './form.holder';
+import FormGrid from './form.grid';
+import FormGroup from './form.group';
 
 
 function FormRender({ data = [] }: { data: any[] }) {
   //const _context = useWrapperContext(FormContext);
 
-  const renderItems = (items: any[]): React.ReactNode[] => {
+  const render = (items: any[]): React.ReactNode[] => {
     return items.map(item => {
-      const { dataType, children } = item;
+      const { group, children } = item;
 
-      switch (dataType) {
+      switch (group) {
         case 'block':
           return (
-            <ItemBlock key={item.id}>{renderItems(children)}</ItemBlock>
+            <FormBlock key={item.id}>{render(children)}</FormBlock>
           );
-        case 'placcholder':
+        case 'holder':
           return (
-            <ItemPlaceholder key={item.id}>{renderItems(children)}</ItemPlaceholder>
+            <FormHolder key={item.id}>{render(children)}</FormHolder>
           );
         case 'grid':
           return (
-            <ItemGrid key={item.id}>{renderItems(children)}</ItemGrid>
+            <FormGrid key={item.id}>{render(children)}</FormGrid>
           );
         case 'group':
           return (
-            <ItemGroup key={item.id}>{renderItems(children)}</ItemGroup>
+            <FormGroup key={item.id}>{render(children)}</FormGroup>
           );
         case 'field':
           return (
-            <ItemField key={item.id}></ItemField>
+            <FormField key={item.id}></FormField>
           );
         case 'element':
           return (
-            <ItemElement key={item.id}></ItemElement>
+            <FormElement key={item.id}></FormElement>
           );
         default:
           break;
@@ -51,7 +51,7 @@ function FormRender({ data = [] }: { data: any[] }) {
       if (children && children.length > 0) {
         return (
           <div key={item.id}>
-            {renderItems(children)}
+            {render(children)}
           </div>
         );
       }
@@ -62,7 +62,7 @@ function FormRender({ data = [] }: { data: any[] }) {
 
   return (
     <>
-      {renderItems(data)}
+      {render(data)}
     </>
   );
 }

@@ -1,5 +1,5 @@
 
-function ItemGroup(props: any) {
+function FormSection(props: any) {
 
   return (
     <>
@@ -10,4 +10,4 @@ function ItemGroup(props: any) {
   )
 }
 
-export default ItemGroup;
+export default FormSection;

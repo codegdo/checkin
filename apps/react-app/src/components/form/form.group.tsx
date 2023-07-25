@@ -1,5 +1,6 @@
 
-function ItemElement(props: any) {
+function FormGroup(props: any) {
+
   return (
     <>
       {
@@ -9,4 +10,4 @@ function ItemElement(props: any) {
   )
 }
 
-export default ItemElement;
+export default FormGroup;

@@ -4,7 +4,7 @@
   gap: 1rem;
 }
 .sortable-column {
-  transition: all 0.3s ease-out;
+  transition: transform 0.3s ease;
 }
 .sortable-title {
   padding: 0.5rem 1rem;
@@ -17,7 +17,7 @@
   flex-direction: column;
   user-select: none;
   overflow: hidden;
-  transition: all 0.3s ease-out;
+  transition: transform 0.3s ease;
 }
 .sortable-item {
   padding: 1rem;
@@ -27,7 +27,7 @@
   background-color: #fff;
   min-height: 40px;
   display: flex;
-  transition: all 0.3s ease-out;
+  transition: transform 0.3s ease;
   //transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
 }
 
