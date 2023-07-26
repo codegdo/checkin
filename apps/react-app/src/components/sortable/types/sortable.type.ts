@@ -1,17 +1,8 @@
-export interface Field {
-  id?: number | string | null;
-  name: string;
-  group: string;
-  type: string;
-  data?: Field[] | null;
-  parentId?: string | number | null;
-  position?: number;
-}
+import { Field } from "@/types";
 
-export interface ExtendedField extends Field {
+export type SortableField = Field & {
   siblings?: string[]
 }
-
 
 export interface ElementInnerSize {
   innerWidth: number;

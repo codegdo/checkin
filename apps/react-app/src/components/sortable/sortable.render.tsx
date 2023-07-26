@@ -1,13 +1,14 @@
-import { useWrapperContext } from "../../hooks";
+import { useWrapperContext } from "@/hooks";
 import { sortableHelper } from "./helpers";
+import { SortableField } from "./types";
+
 import SortableArea from "./sortable.area";
 import SortableItem from "./sortable.item";
 import SortableList from "./sortable.list";
 import SortableContext, { SortableContextValue } from "./sortable.provider";
-import { ExtendedField } from "./types";
 
 interface RenderProps {
-  data: ExtendedField[] | null;
+  data?: SortableField[] | null;
   ctx: SortableContextValue;
 }
 

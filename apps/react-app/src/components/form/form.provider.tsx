@@ -1,21 +1,18 @@
-import React, { Dispatch } from 'react';
-import { FormAction } from './reducers/form.reducer';
-
-interface FormState {
-  isSubmit: boolean;
-}
-
-interface FormData {
-  values: Record<string, string>;
-}
+import React from 'react';
+import { FormErrors, FormValues } from './hooks/use-form.hook';
+import { FormFieldType } from './types';
 
 export interface FormContextValue {
-  state: FormState;
-  dispatch: Dispatch<FormAction>;
-  form: FormData;
+  values: FormValues;
+  errors: FormErrors;
+  data: FormFieldType[];
 }
 
-const FormContext = React.createContext({});
+const FormContext = React.createContext<FormContextValue>({
+  values: {},
+  errors: {},
+  data: []
+});
 
 export const FormProvider = FormContext.Provider;
 export default FormContext;

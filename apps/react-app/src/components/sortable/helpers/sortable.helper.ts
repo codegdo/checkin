@@ -1,6 +1,6 @@
 import { XYCoord } from "react-dnd";
-import { cloneObject, mapToParent } from "../../../utils";
-import { ElementInnerSize, Field } from "../types";
+import { cloneObject, mapToParent } from "@/utils";
+import { ElementInnerSize, SortableField } from "../types";
 import { XYDirection } from "../hooks";
 import { DndRef } from "../sortable.provider";
 
@@ -31,7 +31,7 @@ class SortableHelper {
     }
   }
 
-  setDrop(dnd: DndRef, item: Field) {
+  setDrop(dnd: DndRef, item: SortableField) {
     dnd.dropItem = item;
     dnd.canDrop = true;
     console.log('set-drop');
@@ -280,12 +280,12 @@ class SortableHelper {
     });
   }
 
-  renderData(data: Field[]) {
+  renderData(data: SortableField[]) {
     const cloneData = cloneObject(data);
-    const list: Field[] = [];
+    const list: SortableField[] = [];
 
-    cloneData.forEach((item: Field) => {
-      return mapToParent(list, item, (item: Field) => (item.group === 'list'));
+    cloneData.forEach((item: SortableField) => {
+      return mapToParent(list, item, (item: SortableField) => (item.group === 'list'));
     });
 
     return [{

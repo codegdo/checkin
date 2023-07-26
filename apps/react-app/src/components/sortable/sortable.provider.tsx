@@ -1,15 +1,16 @@
 import React, { Dispatch } from "react";
+
 import { SortableAction } from "./reducers";
-import { Field } from "./types";
+import { SortableField } from "./types";
 
 type ElementList = Record<string, HTMLDivElement | null>;
 
 export interface SortableState {
-  data: Field[]
+  data: SortableField[]
 }
 
 export interface DndRef {
-  dropItem: Field | null;
+  dropItem: SortableField | null;
   elements: ElementList;
   parentNode: Node["parentNode"] | null;
 

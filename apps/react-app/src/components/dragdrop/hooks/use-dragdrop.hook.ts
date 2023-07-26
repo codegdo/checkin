@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { utils } from '@libs/shared-code';
 
-import { DataType, Field, DndContextValue, DndActionType, RestrictedDataType } from "../../types";
+import { Field, DndContextValue, DndActionType, RestrictedDataType, GroupType } from "../../types";
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 
@@ -19,7 +19,7 @@ interface XYDirection {
 }
 
 export function useDragDrop({ item, ctx, draggable = true }: Params) {
-  const { id, dataType } = item;
+  const { id, group } = item;
   const { dndRef, dispatch } = ctx;
   const dragRef = useRef<HTMLDivElement>(null);
 
@@ -122,15 +122,15 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
   const checkCanDrop = useCallback((dragItem: Field): boolean => {
     const itemData = dragItem.data || [];
     const restrictedDataTypes = Object.values(RestrictedDataType);
-    const condition = (field: Field) => (field.dataType === DataType.BLOCK || field.dataType === DataType.SECTION);
+    const condition = (field: Field) => (field.group === GroupType.BLOCK || field.group === GroupType.SECTION);
     const nestedItemIds = utils.countItems(itemData, condition);
-    const keyDataType = `${dragItem.dataType}_${dataType}`;
+    const keyDataType = `${dragItem.group}_${group}`;
 
     const hasNestedItems = nestedItemIds.includes(`${id}`);
     const isRestrictedDataTypes = restrictedDataTypes.includes(keyDataType as RestrictedDataType);
 
     return !hasNestedItems && !isRestrictedDataTypes;
-  }, [id, dataType]);
+  }, [id, group]);
 
   const hoverItem = useCallback(
     (currentRef: HTMLDivElement, monitor: DropTargetMonitor<Field>) => {
@@ -253,7 +253,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
   );
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
-    type: dataType,
+    type: group,
     item,
     canDrag: handleDragStart,
     end: handleDragEnd,
@@ -263,7 +263,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
   }), [item]);
 
   const [{ isOver }, drop] = useDrop(() => ({
-    accept: Object.values(DataType),
+    accept: Object.values(GroupType),
     canDrop: () => dndRef.canDrop,
     hover: handleDragOver,
     collect: (monitor) => ({

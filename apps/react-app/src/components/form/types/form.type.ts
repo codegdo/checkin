@@ -1,3 +1,3 @@
-import { Field } from "../../types";
+import { Field } from "@/types";
 
-export type FormField = Field;
+export type FormFieldType = Field;

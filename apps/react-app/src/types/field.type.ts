@@ -9,10 +9,6 @@ export enum FieldType {
   BUTTON = 'button',
 }
 
-export enum ElementType {
-  DIV = 'div',
-}
-
 export enum GroupType {
   AREA = 'area',
   SECTION = 'section',
@@ -29,7 +25,7 @@ export enum GroupType {
 interface ElementField {
   id: number | string;
   name: string;
-  type: string | FieldType;
+  type: JSX.ElementType | FieldType;
   group: string | GroupType;
 
   data?: (ElementField | FormField)[] | null;
@@ -43,12 +39,4 @@ interface FormField extends ElementField {
   description?: string;
 }
 
-export type Field = ElementField & Partial<FormField>;
-
-
-
-export type ExtendedField = Field & {
-  selected?: boolean;
-}
-
-export type DragField = Partial<Field>
+export type Field = ElementField | FormField;

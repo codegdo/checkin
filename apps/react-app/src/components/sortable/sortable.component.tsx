@@ -6,10 +6,10 @@ import { TouchBackend } from "react-dnd-touch-backend";
 import { SortableProvider, dndRef, defaultState } from "./sortable.provider";
 import { SortableActionType, sortableReducer } from "./reducers";
 import SortableRender from "./sortable.render";
-import { Field } from "./types";
+import { SortableField } from "./types";
 
 interface SortableProps {
-  data: Field[];
+  data: SortableField[];
 }
 export function Sortable({ data = [] }: SortableProps) {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
