@@ -1,9 +1,17 @@
-
 import { PropsWithChildren } from 'react';
+
+import { useForm } from './hooks';
+import { FieldType } from './types';
+
 import { FormProvider } from './form.provider';
-import FormRender from './form.render';
-import { useForm } from './hooks/use-form.hook';
-import { FormFieldType } from './types';
+import { FormRender } from './form.render';
+import { FormSection } from './form.section';
+import { FormBlock } from './form.block';
+import { FormField } from './form.field';
+import { FormButton } from './form.button';
+import { FormTitle } from './form.title';
+import { FormGrid } from './form.grid';
+import { FormGroup } from './form.group';
 
 interface FormOptions {
   mapKey?: string;
@@ -11,26 +19,43 @@ interface FormOptions {
   animation?: 'slide';
 }
 
+interface FormExtendProps {
+  Title?: typeof FormTitle;
+  Section?: typeof FormSection;
+  Block?: typeof FormBlock;
+  Field?: typeof FormField;
+  Group?: typeof FormGroup;
+  Grid?: typeof FormGrid;
+  Button?: typeof FormButton;
+}
+
 export interface FormProps extends PropsWithChildren {
   title?: string;
   description?: string;
   className?: string;
-  data?: FormFieldType[];
+  data?: FieldType[];
 
   status?: string | undefined;
   options?: FormOptions;
-  onCallback?: (data: string) => void;
+  onClick?: (data: string) => void;
 }
 
-function Form({ children, ...props }: FormProps) {
-  const ctx = useForm(props);
+
+export function Form({ data = [], children }: FormProps & FormExtendProps) {
+  const { values, errors } = useForm();
   return (
     <form onSubmit={(e) => e.preventDefault()}>
-      <FormProvider value={{ ...ctx }}>
+      <FormProvider value={{ data, values, errors }}>
         {children || <FormRender />}
       </FormProvider>
     </form>
   )
 }
 
-export default Form;
+Form.Title = FormTitle;
+Form.Section = FormSection;
+Form.Block = FormBlock;
+Form.Field = FormField;
+Form.Group = FormGroup;
+Form.Grid = FormGrid;
+Form.Button = FormButton;

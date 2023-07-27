@@ -1,5 +1,8 @@
+import { useWrapperContext } from "@/hooks";
+import FormContext from "./form.provider";
 
-function FormGrid(props: any) {
+export function FormGrid(props: any) {
+  const { data } = useWrapperContext(FormContext);
   return (
     <>
       {
@@ -8,5 +11,3 @@ function FormGrid(props: any) {
     </>
   )
 }
-
-export default FormGrid;

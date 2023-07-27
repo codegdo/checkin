@@ -1,4 +1,4 @@
-export enum FieldType {
+export enum ComponentType {
   TEXT = 'text',
   NUMBER = 'number',
   PASSWORD = 'password',
@@ -7,6 +7,12 @@ export enum FieldType {
   CHECKBOX = 'checkbox',
   RADIO = 'radio',
   BUTTON = 'button',
+  SELECT = 'select',
+  INPUT = 'input',
+  DATE_PICKER = 'date-picker',
+  TOAST = 'toast',
+  MODAL = 'modal',
+  TABS = 'tabs',
 }
 
 export enum GroupType {
@@ -25,11 +31,13 @@ export enum GroupType {
 interface ElementField {
   id: number | string;
   name: string;
-  type: JSX.ElementType | FieldType;
-  group: string | GroupType;
+
+  type: JSX.ElementType | ComponentType;
+  group?: string | GroupType;
 
   data?: (ElementField | FormField)[] | null;
   value?: string | null;
+
   parentId?: number | string | null;
   position?: number | null;
 }

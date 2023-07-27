@@ -1,6 +1,13 @@
 import React from 'react';
-import { FormErrors, FormValues } from './hooks/use-form.hook';
 import { FormFieldType } from './types';
+
+export interface FormValues {
+  [key: string]: string;
+}
+
+export interface FormErrors {
+  [key: string]: string;
+}
 
 export interface FormContextValue {
   values: FormValues;

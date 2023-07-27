@@ -1,6 +1,8 @@
+import { useWrapperContext } from "@/hooks";
+import FormContext from "./form.provider";
 
-function FormGroup(props: any) {
-
+export function FormGroup(props: any) {
+  const { data } = useWrapperContext(FormContext);
   return (
     <>
       {
@@ -9,5 +11,3 @@ function FormGroup(props: any) {
     </>
   )
 }
-
-export default FormGroup;

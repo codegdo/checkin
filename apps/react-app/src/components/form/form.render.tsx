@@ -1,14 +1,14 @@
 import { useWrapperContext } from '@/hooks';
 
-import FormBlock from './form.block';
-import FormField from './form.field';
-import FormElement from './form.element';
-import FormHolder from './form.holder';
-import FormGrid from './form.grid';
-import FormGroup from './form.group';
+import { FormBlock } from './form.block';
+import { FormField } from './form.field';
+import { FormElement } from './form.element';
+import { FormGrid } from './form.grid';
+import { FormGroup } from './form.group';
 
 import FormContext from './form.provider';
 import { FormFieldType } from './types';
+import { FormSection } from './form.section';
 
 interface RenderProps {
   data?: FormFieldType[] | null;
@@ -22,13 +22,13 @@ const render = ({ data }: RenderProps) => {
     const { id, group, data } = field;
 
     switch (group) {
+      case 'section':
+        return (
+          <FormSection key={id}>{render({ data })}</FormSection>
+        );
       case 'block':
         return (
           <FormBlock key={id}>{render({ data })}</FormBlock>
-        );
-      case 'holder':
-        return (
-          <FormHolder key={id}></FormHolder>
         );
       case 'grid':
         return (
@@ -53,10 +53,8 @@ const render = ({ data }: RenderProps) => {
   });
 };
 
-function FormRender() {
+export function FormRender() {
   const { data } = useWrapperContext(FormContext);
 
   return (<>{render({ data })}</>);
 }
-
-export default FormRender;

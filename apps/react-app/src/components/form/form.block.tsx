@@ -1,5 +1,5 @@
 
-function FormBlock(props: any) {
+export function FormBlock(props: any) {
 
   return (
     <>
@@ -9,5 +9,3 @@ function FormBlock(props: any) {
     </>
   )
 }
-
-export default FormBlock;

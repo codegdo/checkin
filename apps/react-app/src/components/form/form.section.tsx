@@ -1,13 +1,10 @@
+import { PropsWithChildren } from "react";
 
-function FormSection(props: any) {
+interface FormSectionProps extends PropsWithChildren { }
+
+export function FormSection({ children }: FormSectionProps) {
 
   return (
-    <>
-      {
-        props.children
-      }
-    </>
+    <>{children}</>
   )
 }
-
-export default FormSection;

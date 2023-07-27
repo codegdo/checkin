@@ -1,5 +1,5 @@
 
-function FormHolder(props: any) {
+export function FormHolder(props: any) {
   return (
     <>
       {
@@ -8,5 +8,3 @@ function FormHolder(props: any) {
     </>
   )
 }
-
-export default FormHolder;

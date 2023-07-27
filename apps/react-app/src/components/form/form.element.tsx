@@ -1,5 +1,5 @@
 
-function FormElement(props: any) {
+export function FormElement(props: any) {
   return (
     <>
       {
@@ -8,5 +8,3 @@ function FormElement(props: any) {
     </>
   )
 }
-
-export default FormElement;

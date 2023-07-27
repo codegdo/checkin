@@ -1,5 +1,5 @@
 
-function FormSteps() {
+export function FormSteps() {
 
   return (
     <>
@@ -7,5 +7,3 @@ function FormSteps() {
     </>
   )
 }
-
-export default FormSteps;
