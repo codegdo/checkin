@@ -1,11 +1,21 @@
-import { useRef } from "react";
+import { useCallback, useRef } from "react";
 
-export function useForm() {
+interface UseFormParams {
+  onCallback?: (name: string) => void;
+}
+
+export function useForm({ onCallback }: UseFormParams) {
   const formRef = useRef({});
   const errorRef = useRef({});
 
+  const handleClick = useCallback((name: string) => {
+    console.log(name);
+    onCallback && onCallback('click');
+  }, [onCallback]);
+
   return {
     values: formRef.current,
-    errors: errorRef.current
+    errors: errorRef.current,
+    handleClick
   }
 }

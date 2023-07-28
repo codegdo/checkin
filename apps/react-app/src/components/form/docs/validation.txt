@@ -1,0 +1,196 @@
+interface Field {
+  fieldName: string;
+  comparison: 'equals' | 'contains' | 'startsWith' | 'endsWith';
+  caseSensitivity: boolean;
+  value: string;
+  and?: Field[];
+  or?: Field[];
+}
+
+function checkFieldCondition(field: Field, data: Record<string, any>): boolean {
+  const fieldValue = data[field.fieldName];
+  const valueToCompare = field.caseSensitivity ? field.value : field.value.toLowerCase();
+
+  switch (field.comparison) {
+    case 'equals':
+      return field.caseSensitivity
+        ? fieldValue === valueToCompare
+        : fieldValue.toLowerCase() === valueToCompare;
+    case 'contains':
+      return field.caseSensitivity
+        ? fieldValue.includes(valueToCompare)
+        : fieldValue.toLowerCase().includes(valueToCompare);
+    case 'startsWith':
+      return field.caseSensitivity
+        ? fieldValue.startsWith(valueToCompare)
+        : fieldValue.toLowerCase().startsWith(valueToCompare);
+    case 'endsWith':
+      return field.caseSensitivity
+        ? fieldValue.endsWith(valueToCompare)
+        : fieldValue.toLowerCase().endsWith(valueToCompare);
+    default:
+      return false; // Invalid comparison type
+  }
+}
+
+function checkConditions(fields: Field[], data: Record<string, any>): boolean {
+  if (!fields || fields.length === 0) {
+    return true; // No conditions, so it's considered true
+  }
+
+  const andResults = fields.filter((field) => field.and).map((field) => checkConditions(field.and!, data));
+  const orResults = fields.filter((field) => field.or).map((field) => checkConditions(field.or!, data));
+
+  const andCondition = fields.filter((field) => !field.and).every((field) => checkFieldCondition(field, data));
+  const orCondition = fields.filter((field) => !field.or).some((field) => checkFieldCondition(field, data));
+
+  return andResults.every((result) => result) && orResults.some((result) => result) && andCondition && orCondition;
+}
+
+
+// Sample data
+const formData = {
+  name: 'John Doe',
+  age: 30,
+  email: 'john.doe@example.com',
+};
+
+// Sample conditions
+const conditions: Field[] = [
+  {
+    fieldName: 'name',
+    comparison: 'contains',
+    caseSensitivity: false,
+    value: 'john',
+  },
+  {
+    fieldName: 'age',
+    comparison: 'equals',
+    caseSensitivity: true,
+    value: '30',
+  },
+  {
+    and: [
+      {
+        fieldName: 'email',
+        comparison: 'endsWith',
+        caseSensitivity: true,
+        value: 'example.com',
+      },
+      {
+        fieldName: 'email',
+        comparison: 'contains',
+        caseSensitivity: false,
+        value: 'john',
+      },
+    ],
+  },
+];
+
+const result = checkConditions(conditions, formData);
+console.log(result); // Output: true
+
+
+interface Field {
+  fieldName: string;
+  value: number;
+  operator: 'add' | 'subtract' | 'multiply' | 'divide';
+}
+
+function calculateField(field: Field, data: Record<string, number>): number | null {
+  const fieldValue = data[field.fieldName];
+
+  switch (field.operator) {
+    case 'add':
+      return fieldValue + field.value;
+    case 'subtract':
+      return fieldValue - field.value;
+    case 'multiply':
+      return fieldValue * field.value;
+    case 'divide':
+      if (field.value === 0) {
+        console.warn('Warning: Division by zero is not allowed.');
+        return null;
+      }
+      return fieldValue / field.value;
+    default:
+      console.warn('Warning: Invalid operator.');
+      return null;
+  }
+}
+
+
+// Sample data
+const formData = {
+  quantity: 5,
+  price: 10,
+};
+
+// Sample fields with calculations
+const fields: Field[] = [
+  {
+    fieldName: 'quantity',
+    value: 2,
+    operator: 'multiply',
+  },
+  {
+    fieldName: 'price',
+    value: 3,
+    operator: 'add',
+  },
+  {
+    fieldName: 'price',
+    value: 0,
+    operator: 'divide', // Division by zero should log a warning
+  },
+];
+
+fields.forEach((field) => {
+  const result = calculateField(field, formData);
+  console.log(`Result for ${field.fieldName} calculation: ${result}`);
+});
+
+interface Field {
+  fieldName: string;
+  formName: string;
+  url: string;
+}
+
+async function requestFieldData(field: Field): Promise<any> {
+  const formData = new FormData();
+  formData.append('fieldName', field.fieldName);
+
+  try {
+    const response = await fetch(field.url, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error('Request failed');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error making request:', error);
+    throw error;
+  }
+}
+
+
+const field: Field = {
+  fieldName: 'username',
+  formName: 'loginForm',
+  url: 'https://example.com/api/get-field-data',
+};
+
+requestFieldData(field)
+  .then((data) => {
+    console.log('Received data:', data);
+    // Perform actions with the received data
+  })
+  .catch((error) => {
+    // Handle error
+  });
+

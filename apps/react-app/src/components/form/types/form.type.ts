@@ -1,6 +1,6 @@
-import { NormalizeField } from "@/types";
+import { NormalizeField } from "@/types"
 
-export interface Field extends NormalizeField {};
+export interface Field extends NormalizeField { }
 
 export type ButtonType = {
   submit: string;
@@ -8,4 +8,4 @@ export type ButtonType = {
   reset: string;
   next: string;
   previous: string;
-};
+}

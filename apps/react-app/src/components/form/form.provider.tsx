@@ -10,15 +10,17 @@ export interface FormErrors {
 }
 
 export interface FormContextValue {
+  data: Field[];
   values: FormValues;
   errors: FormErrors;
-  data: Field[];
+  handleClick: (name: string) => void;
 }
 
 const FormContext = React.createContext<FormContextValue>({
+  data: [],
   values: {},
   errors: {},
-  data: []
+  handleClick: () => console.log('click')
 });
 
 export const FormProvider = FormContext.Provider;

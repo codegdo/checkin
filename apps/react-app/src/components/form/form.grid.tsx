@@ -1,13 +1,13 @@
 import { useWrapperContext } from "@/hooks";
+import { Field } from "./types";
+
 import FormContext from "./form.provider";
 
-export function FormGrid(props: any) {
-  const { data } = useWrapperContext(FormContext);
+interface GridProps extends Field { }
+
+export function FormGrid(props: GridProps) {
+  const ctx = useWrapperContext(FormContext);
   return (
-    <>
-      {
-        props.children
-      }
-    </>
+    <div>Grid</div>
   )
 }

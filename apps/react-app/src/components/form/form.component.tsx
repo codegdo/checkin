@@ -39,15 +39,15 @@ export interface FormProps extends PropsWithChildren {
 
   status?: string | undefined;
   options?: FormOptions;
-  onClick?: (data: string) => void;
+  onCallback?: (data: string) => void;
 }
 
 
-export function Form({ data = [], children }: FormProps & FormExtendProps) {
-  const { values, errors } = useForm();
+export function Form({ data = [], onCallback, children }: FormProps & FormExtendProps) {
+  const { values, errors, handleClick } = useForm({ onCallback });
   return (
     <form onSubmit={(e) => e.preventDefault()}>
-      <FormProvider value={{ data, values, errors }}>
+      <FormProvider value={{ data, values, errors, handleClick }}>
         {children || <FormRender />}
       </FormProvider>
     </form>

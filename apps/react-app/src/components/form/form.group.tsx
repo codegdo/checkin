@@ -1,13 +1,12 @@
 import { useWrapperContext } from "@/hooks";
 import FormContext from "./form.provider";
+import { Field } from "./types";
 
-export function FormGroup(props: any) {
-  const { data } = useWrapperContext(FormContext);
+interface GroupProps extends Field { }
+
+export function FormGroup(props: GroupProps) {
+  const ctx = useWrapperContext(FormContext);
   return (
-    <>
-      {
-        props.children
-      }
-    </>
+    <div>Group</div>
   )
 }
