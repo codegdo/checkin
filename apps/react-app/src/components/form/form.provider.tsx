@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormFieldType } from './types';
+import { Field } from './types';
 
 export interface FormValues {
   [key: string]: string;
@@ -12,7 +12,7 @@ export interface FormErrors {
 export interface FormContextValue {
   values: FormValues;
   errors: FormErrors;
-  data: FormFieldType[];
+  data: Field[];
 }
 
 const FormContext = React.createContext<FormContextValue>({

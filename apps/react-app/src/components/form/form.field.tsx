@@ -1,9 +1,9 @@
 import { useWrapperContext } from "@/hooks";
 import FormContext from "./form.provider";
-import { FieldType } from "./types";
+import { Field } from "./types";
 import { useEffect } from "react";
 
-type FieldProps = FieldType;
+interface FieldProps extends Field {};
 
 export function FormField({ name, value = '' }: FieldProps) {
   const { values } = useWrapperContext(FormContext);

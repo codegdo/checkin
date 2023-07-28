@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 
 import { useForm } from './hooks';
-import { FieldType } from './types';
+import { Field } from './types';
 
 import { FormProvider } from './form.provider';
 import { FormRender } from './form.render';
@@ -12,6 +12,7 @@ import { FormButton } from './form.button';
 import { FormTitle } from './form.title';
 import { FormGrid } from './form.grid';
 import { FormGroup } from './form.group';
+import { FormElement } from './form.element';
 
 interface FormOptions {
   mapKey?: string;
@@ -24,6 +25,7 @@ interface FormExtendProps {
   Section?: typeof FormSection;
   Block?: typeof FormBlock;
   Field?: typeof FormField;
+  Element?: typeof FormElement;
   Group?: typeof FormGroup;
   Grid?: typeof FormGrid;
   Button?: typeof FormButton;
@@ -33,7 +35,7 @@ export interface FormProps extends PropsWithChildren {
   title?: string;
   description?: string;
   className?: string;
-  data?: FieldType[];
+  data?: Field[];
 
   status?: string | undefined;
   options?: FormOptions;
@@ -56,6 +58,7 @@ Form.Title = FormTitle;
 Form.Section = FormSection;
 Form.Block = FormBlock;
 Form.Field = FormField;
+Form.Element = FormElement;
 Form.Group = FormGroup;
 Form.Grid = FormGrid;
 Form.Button = FormButton;

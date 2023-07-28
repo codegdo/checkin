@@ -1,6 +1,6 @@
 import { FormContextValue } from "../form.provider";
-import { FieldType } from "../types";
+import { Field } from "../types";
 
-export const useField = (ctx: FormContextValue, field: FieldType) => {
+export const useField = (ctx: FormContextValue, field: Field) => {
 
 }

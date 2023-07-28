@@ -7,11 +7,11 @@ import { FormGrid } from './form.grid';
 import { FormGroup } from './form.group';
 
 import FormContext from './form.provider';
-import { FormFieldType } from './types';
+import { Field } from './types';
 import { FormSection } from './form.section';
 
 interface RenderProps {
-  data?: FormFieldType[] | null;
+  data?: Field[] | null;
 }
 
 const render = ({ data }: RenderProps) => {
