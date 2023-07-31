@@ -59,6 +59,7 @@ interface Validation {
 
 interface Condition {
   id: string | number;
+  fieldId: string | number;
   comparison: 'equals' | 'contains' | 'startsWith' | 'endsWith';
   caseSensitivity: boolean;
   value: string;
@@ -68,8 +69,13 @@ interface Condition {
 
 interface Calculation {
   id: string | number;
+  fieldId: string | number;
   value: number;
   operator: 'add' | 'subtract' | 'multiply' | 'divide';
+}
+
+interface Setting {
+
 }
 
 interface FormField extends ElementField {
@@ -77,13 +83,25 @@ interface FormField extends ElementField {
   description?: string;
   text?: string;
 
+  validation?: Validation;
+  calculation?: Calculation[];
+  visibility?: {
+    conditions: Condition[],
+    actions: {
+      hidden: boolean;
+      readonly: boolean;
+    }
+  };
+
+  setting?: Setting;
+
   isRequire?: boolean;
+
   isReadonly?: boolean;
   isHidden?: boolean;
 
-  validation?: Validation;
-  condition?: Condition[];
-  calculation?: Calculation[];
+  isInternal?: boolean;
+  isExternal?: boolean;
 
   //isNew?: boolean;
   //isReview?: boolean;

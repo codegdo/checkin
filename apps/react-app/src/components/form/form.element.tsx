@@ -1,18 +1,18 @@
-import { useWrapperContext } from "@/hooks";
-import { CustomFieldProps, Field } from "./types";
-import FormContext from "./form.provider";
 import { ReactNode } from "react";
+import { useWrapperContext } from "@/hooks";
+import { CustomElementProps, Field } from "./types";
+import FormContext from "./form.provider";
 
 interface ElementProps extends Field {
-  children?: ((props: CustomFieldProps) => ReactNode) | ReactNode;
+  children?: ((props: CustomElementProps) => ReactNode) | ReactNode;
 }
 
-export function FormElement({children, ...props}: ElementProps) {
+export function FormElement({ children, ...props }: ElementProps) {
   const { handleClick } = useWrapperContext(FormContext);
 
   // Check if props.children is a function before calling it
-  const childElement = typeof children === 'function' ? children?.({...props, handleClick}) : children;
+  const childElement = typeof children === 'function' ? children?.({ ...props, handleClick }) : children;
 
 
-  return (<div onClick={() => handleClick('click')}>{childElement}</div>)
+  return (<div>{childElement}</div>)
 }

@@ -7,6 +7,7 @@ interface UseFormParams {
 export function useForm({ onCallback }: UseFormParams) {
   const formRef = useRef({});
   const errorRef = useRef({});
+  const eventRef = useRef({});
 
   const handleClick = useCallback((name: string) => {
     console.log(name);
@@ -16,6 +17,7 @@ export function useForm({ onCallback }: UseFormParams) {
   return {
     values: formRef.current,
     errors: errorRef.current,
+    events: eventRef.current,
     handleClick
   }
 }
