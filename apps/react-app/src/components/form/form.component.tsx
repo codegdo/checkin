@@ -8,8 +8,6 @@ import { FormRender } from './form.render';
 import { FormSection } from './form.section';
 import { FormBlock } from './form.block';
 import { FormField } from './form.field';
-import { FormButton } from './form.button';
-import { FormTitle } from './form.title';
 import { FormGrid } from './form.grid';
 import { FormGroup } from './form.group';
 import { FormElement } from './form.element';
@@ -21,14 +19,12 @@ interface FormOptions {
 }
 
 interface FormExtendProps {
-  Title?: typeof FormTitle;
   Section?: typeof FormSection;
   Block?: typeof FormBlock;
   Field?: typeof FormField;
   Element?: typeof FormElement;
   Group?: typeof FormGroup;
   Grid?: typeof FormGrid;
-  Button?: typeof FormButton;
 }
 
 export interface FormProps extends PropsWithChildren {
@@ -46,7 +42,7 @@ export interface FormProps extends PropsWithChildren {
 export function Form({ data = [], onCallback, children }: FormProps & FormExtendProps) {
   const { values, errors, handleClick } = useForm({ onCallback });
   return (
-    <form onSubmit={(e) => e.preventDefault()}>
+    <form onSubmit={e => e.preventDefault()}>
       <FormProvider value={{ data, values, errors, handleClick }}>
         {children || <FormRender />}
       </FormProvider>
@@ -54,11 +50,9 @@ export function Form({ data = [], onCallback, children }: FormProps & FormExtend
   )
 }
 
-Form.Title = FormTitle;
 Form.Section = FormSection;
 Form.Block = FormBlock;
 Form.Field = FormField;
 Form.Element = FormElement;
 Form.Group = FormGroup;
 Form.Grid = FormGrid;
-Form.Button = FormButton;
