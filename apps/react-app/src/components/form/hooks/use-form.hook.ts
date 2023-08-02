@@ -1,14 +1,23 @@
 import { useCallback, useRef } from "react";
-import { FormValues } from "../types";
-import { objSchema } from '../helpers';
+import { FormErrors, FormEvents, FormValues } from "../types";
+import { ObjectSchema, ValidationError, formHelper, objSchema } from '../helpers';
 
 interface UseFormParams {
   redirect?: string;
   onSubmit?: (data: FormValues) => void;
 }
 
+interface FormRef {
+  values: FormValues;
+  errors: FormErrors;
+  events: FormEvents;
+  vars: object;
+  schema: ObjectSchema;
+
+}
+
 export function useForm({ onSubmit }: UseFormParams) {
-  const {current} = useRef({
+  const { current } = useRef<FormRef>({
     values: {},
     errors: {},
     events: {},
@@ -17,15 +26,28 @@ export function useForm({ onSubmit }: UseFormParams) {
   });
 
   const handleClick = useCallback(async (name: string) => {
-    console.log(name, current);
-    onSubmit && onSubmit(current.values);
-  }, [onSubmit]);
+    try {
+      await current.schema.validate(current.values, { abortEarly: false });
+      onSubmit && onSubmit(current.values);
+    } catch (validationError: unknown) {
+      const errorArray = validationError as ValidationError;
+      current.errors = formHelper.errorsWithFieldNames(errorArray);
+
+      for (const fieldName in current.errors) {
+        if (current.events[fieldName]) {
+          current.events[fieldName]?.error(true);
+        }
+      }
+    }
+    console.log(current);
+  }, []);
 
   return {
     values: current.values,
     errors: current.errors,
     events: current.events,
     vars: current.vars,
+    schema: current.schema,
     validation: current,
     handleClick
   }

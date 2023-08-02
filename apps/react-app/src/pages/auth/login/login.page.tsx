@@ -11,10 +11,11 @@ function Login() {
       <Form.Field type='text' name='username' />
       <Form.Field type='password' name='password'>
         {
-          ({ name, currentValue, handleChange }: CustomFieldProps) => {
+          ({ name, currentValue, error, handleChange }: CustomFieldProps) => {
             return <div>
               <label htmlFor={name}>{name}</label>
               <input name={name} value={currentValue} onChange={handleChange} />
+              {error && <p>error</p>}
             </div>
           }
         }

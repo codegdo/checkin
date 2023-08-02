@@ -7,7 +7,10 @@ export interface FormContextValue {
   values: FormValues;
   errors: FormErrors;
   events: FormEvents;
-  validation: {schema: ObjectSchema};
+  schema: ObjectSchema;
+  validation: {
+    schema: ObjectSchema;
+  };
   status: string | null | undefined;
   handleClick: (name: string) => void;
 }
@@ -17,7 +20,10 @@ const FormContext = React.createContext<FormContextValue>({
   values: {},
   errors: {},
   events: {},
-  validation: {schema:objSchema},
+  schema: objSchema,
+  validation: {
+    schema: objSchema,
+  },
   status: null,
   handleClick: () => console.log('click')
 });

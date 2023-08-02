@@ -4,6 +4,7 @@ export interface Field extends NormalizeField { }
 
 export interface CustomFieldProps extends Field {
   currentValue: string;
+  error: boolean;
   handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -30,6 +31,7 @@ export interface FormErrors {
 export interface FormEvents {
   [key: string]: {
     update: (value: string) => void;
+    error: React.Dispatch<React.SetStateAction<boolean>>
   };
 }
 
