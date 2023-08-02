@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { FormContextValue } from "../form.provider";
 import { Field } from "../types";
+import { formHelper } from "../helpers";
 
 export const useField = (ctx: FormContextValue, field: Field) => {
-  const { values, events } = ctx;
+  const { values, events, validation } = ctx;
   const { name, value } = field;
 
   const [currentValue, setCurrentValue] = useState(value ?? '');
@@ -23,6 +24,7 @@ export const useField = (ctx: FormContextValue, field: Field) => {
     events[name] = {
       update: handleUpdate,
     };
+    validation.schema = validation.schema.shape({ [name]: formHelper.fieldSchema() });
   }, []);
 
   return {

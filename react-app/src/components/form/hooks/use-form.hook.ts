@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { validationHelper, ObjectSchema } from '../../../helpers';
+import { validationHelper, ObjectSchema, schema } from '../../../helpers';
 import { Element, FormOptions } from '../form.type';
 import { formHelper } from "../helpers/form.helper";
 
-export const schema = validationHelper.objectSchema();
+//export const schema = validationHelper.objectSchema();
 
 interface UseFormOptions {
   data?: Element[];
@@ -97,6 +97,7 @@ export const useForm = ({ data, options, onCallback }: UseFormOptions = {}) => {
   }, [steps.length, stepIndex]);
 
   const onClick = useCallback(async (actionType: string) => {
+    console.log(validationRef.current);
     switch (actionType) {
       case 'submit':
         setIsSubmit(true);

@@ -1,8 +1,8 @@
 import React, { PropsWithChildren, useEffect } from 'react';
 
-import { validationHelper, ObjectSchema, util } from '../../helpers';
+import { validationHelper, ObjectSchema, schema, util } from '../../helpers';
 import { Element } from './form.type';
-import { schema, useForm } from './hooks/use-form.hook';
+import { useForm } from './hooks/use-form.hook';
 import { FormRender } from './form.render';
 
 interface FormOptions {

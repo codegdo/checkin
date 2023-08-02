@@ -1,5 +1,6 @@
 import { useCallback, useRef } from "react";
 import { FormValues } from "../types";
+import { objSchema } from '../helpers';
 
 interface UseFormParams {
   redirect?: string;
@@ -7,19 +8,25 @@ interface UseFormParams {
 }
 
 export function useForm({ onSubmit }: UseFormParams) {
-  const valuesRef = useRef({});
-  const errorsRef = useRef({});
-  const eventsRef = useRef({});
+  const {current} = useRef({
+    values: {},
+    errors: {},
+    events: {},
+    vars: {},
+    schema: objSchema
+  });
 
-  const handleClick = useCallback((name: string) => {
-    console.log(name);
-    onSubmit && onSubmit(valuesRef.current);
-  }, []);
+  const handleClick = useCallback(async (name: string) => {
+    console.log(name, current);
+    onSubmit && onSubmit(current.values);
+  }, [onSubmit]);
 
   return {
-    values: valuesRef.current,
-    errors: errorsRef.current,
-    events: eventsRef.current,
+    values: current.values,
+    errors: current.errors,
+    events: current.events,
+    vars: current.vars,
+    validation: current,
     handleClick
   }
 }

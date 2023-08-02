@@ -13,6 +13,5 @@ export function FormElement({ children, ...props }: ElementProps) {
   // Check if props.children is a function before calling it
   const childElement = typeof children === 'function' ? children?.({ ...props, handleClick }) : children;
 
-
   return (<div>{childElement}</div>)
 }

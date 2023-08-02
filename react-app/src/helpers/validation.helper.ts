@@ -99,6 +99,7 @@ class ValidationHelper {
 }
 
 export const validationHelper = new ValidationHelper();
+export const schema = validationHelper.objectSchema();
 
 /*
   joi.required().messages({
