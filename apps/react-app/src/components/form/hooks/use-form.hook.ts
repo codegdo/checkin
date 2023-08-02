@@ -1,23 +1,25 @@
 import { useCallback, useRef } from "react";
+import { FormValues } from "../types";
 
 interface UseFormParams {
-  onCallback?: (name: string) => void;
+  redirect?: string;
+  onSubmit?: (data: FormValues) => void;
 }
 
-export function useForm({ onCallback }: UseFormParams) {
-  const formRef = useRef({});
-  const errorRef = useRef({});
-  const eventRef = useRef({});
+export function useForm({ onSubmit }: UseFormParams) {
+  const valuesRef = useRef({});
+  const errorsRef = useRef({});
+  const eventsRef = useRef({});
 
   const handleClick = useCallback((name: string) => {
     console.log(name);
-    onCallback && onCallback('click');
-  }, [onCallback]);
+    onSubmit && onSubmit(valuesRef.current);
+  }, []);
 
   return {
-    values: formRef.current,
-    errors: errorRef.current,
-    events: eventRef.current,
+    values: valuesRef.current,
+    errors: errorsRef.current,
+    events: eventsRef.current,
     handleClick
   }
 }

@@ -1,16 +1,17 @@
-import { CustomElementProps, CustomFieldProps, Form } from "@/components";
+import { CustomElementProps, CustomFieldProps, Form, FormData } from "@/components";
 
 function Login() {
-  return <Form>
+
+  const handleSubmit = (data: FormData) => {
+    console.log(data);
+  }
+
+  return <Form onSubmit={handleSubmit}>
     <Form.Section>
       <Form.Field type='text' name='username' />
       <Form.Field type='password' name='password'>
         {
           ({ name, currentValue, handleChange }: CustomFieldProps) => {
-
-            //events['username']?.update(currentValue);
-            //handleCallback && handleCallback({ name: 'username', value: currentValue });
-
             return <div>
               <label htmlFor={name}>{name}</label>
               <input name={name} value={currentValue} onChange={handleChange} />
@@ -20,8 +21,8 @@ function Login() {
       </Form.Field>
       <Form.Element type='button' name='submit'>
         {
-          ({ handleClick }: CustomElementProps) => {
-            return <button type='button' onClick={() => handleClick && handleClick('custom')}>Custom Button</button>
+          ({ name, handleClick }: CustomElementProps) => {
+            return <button type='button' onClick={() => handleClick && handleClick(name)}>Custom Button</button>
           }
         }
       </Form.Element>

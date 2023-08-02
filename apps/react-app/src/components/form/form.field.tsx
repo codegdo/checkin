@@ -1,9 +1,10 @@
-import { ReactNode, useCallback, useEffect, useState } from "react";
+import { ReactNode } from "react";
 
 import { useWrapperContext } from "@/hooks";
 
 import FormContext from "./form.provider";
 import { CustomFieldProps, Field } from "./types";
+import { useField } from "./hooks/use-field.hook";
 
 
 interface FieldProps extends Field {
@@ -11,44 +12,11 @@ interface FieldProps extends Field {
 }
 
 export function FormField({ children, ...props }: FieldProps) {
-  const { values, events } = useWrapperContext(FormContext);
-  const { name, value = '' } = props;
-
-  const [currentValue, setCurrentValue] = useState(value || '');
-  const [callback, setCallback] = useState<{ name: string, value: string } | null>(null);
-
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    values[name] = e.target.value;
-    setCurrentValue(e.target.value);
-  }, [name, values]);
-
-  const handleUpdate = useCallback((param: string) => {
-    values[name] = param;
-    setCurrentValue(param);
-  }, [name, values]);
-
-  const handleCallback = (param: { name: string, value: string }) => {
-    setCallback(param);
-  }
-
-  useEffect(() => {
-    values[name] = String(value);
-    events[name] = {
-      update: handleUpdate,
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log(values);
-    events['username']?.update(currentValue);
-  }, [currentValue, values, events]);
-
-  useEffect(() => {
-    console.log('callback', callback);
-  }, [callback]);
-
-  // Check if props.children is a function before calling it
-  const childElement = typeof children === 'function' ? children?.({ ...props, currentValue, events, handleChange, handleUpdate, handleCallback }) : children;
+  const ctx = useWrapperContext(FormContext);
+  const { currentValue, handleChange } = useField(ctx, props)
+  const { name } = props;
+  //
+  const childElement = typeof children === 'function' ? children?.({ ...props, currentValue, handleChange }) : children;
 
   return (
     <>

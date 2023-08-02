@@ -4,10 +4,7 @@ export interface Field extends NormalizeField { }
 
 export interface CustomFieldProps extends Field {
   currentValue: string;
-  events: FormEvents;
   handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleUpdate?: (param: string) => void;
-  handleCallback?: (param: { name: string, value: string }) => void;
 }
 
 export interface CustomElementProps extends Field {
@@ -35,3 +32,5 @@ export interface FormEvents {
     update: (value: string) => void;
   };
 }
+
+export interface FormData extends FormValues { }

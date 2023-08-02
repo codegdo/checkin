@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 
 import { useForm } from './hooks';
-import { Field } from './types';
+import { Field, FormValues } from './types';
 
 import { FormProvider } from './form.provider';
 import { FormRender } from './form.render';
@@ -33,17 +33,18 @@ export interface FormProps extends PropsWithChildren {
   className?: string;
   data?: Field[];
 
-  status?: string | undefined;
+  status?: string;
+  redirect?: string;
   options?: FormOptions;
-  onCallback?: (data: string) => void;
+  onSubmit?: (data: FormValues) => void;
 }
 
 
-export function Form({ data = [], onCallback, children }: FormProps & FormExtendProps) {
-  const { values, errors, events, handleClick } = useForm({ onCallback });
+export function Form({ data = [], children, status, redirect, onSubmit }: FormProps & FormExtendProps) {
+  const { values, errors, events, handleClick } = useForm({ redirect, onSubmit });
   return (
     <form onSubmit={e => e.preventDefault()}>
-      <FormProvider value={{ data, values, errors, events, handleClick }}>
+      <FormProvider value={{ data, values, errors, events, status, handleClick }}>
         {children || <FormRender />}
       </FormProvider>
     </form>

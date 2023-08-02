@@ -51,8 +51,8 @@ interface ElementField {
 }
 
 interface Validation {
-  max?: number;
-  min?: number;
+  maxLength?: number;
+  minLength?: number;
   length?: number;
   pattern?: string;
 }
@@ -67,15 +67,19 @@ interface Condition {
   or?: Condition[];
 }
 
-interface Calculation {
+interface Operator {
   id: string | number;
   fieldId: string | number;
   value: number;
   operator: 'add' | 'subtract' | 'multiply' | 'divide';
 }
 
-interface Setting {
-
+interface Option {
+  css: [],
+  setting: {
+    isReadonly: boolean;
+    isShow: boolean;
+  }
 }
 
 interface FormField extends ElementField {
@@ -84,7 +88,9 @@ interface FormField extends ElementField {
   text?: string;
 
   validation?: Validation;
-  calculation?: Calculation[];
+  calculation?: {
+    operators: Operator[]
+  },
   visibility?: {
     conditions: Condition[],
     actions: {
@@ -92,8 +98,7 @@ interface FormField extends ElementField {
       readonly: boolean;
     }
   };
-
-  setting?: Setting;
+  option?: Option;
 
   isRequire?: boolean;
 
@@ -101,7 +106,7 @@ interface FormField extends ElementField {
   isHidden?: boolean;
 
   isInternal?: boolean;
-  isExternal?: boolean;
+
 
   //isNew?: boolean;
   //isReview?: boolean;
