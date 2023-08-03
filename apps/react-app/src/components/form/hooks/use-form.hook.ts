@@ -35,7 +35,7 @@ export function useForm({ onSubmit }: UseFormParams) {
 
       for (const fieldName in current.errors) {
         if (current.events[fieldName]) {
-          current.events[fieldName]?.error(true);
+          current.events[fieldName].error(true);
         }
       }
     }

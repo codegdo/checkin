@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FormContextValue } from "../form.provider";
 import { Field } from "../types";
 import { formHelper } from "../helpers";
@@ -9,14 +9,20 @@ export const useField = (ctx: FormContextValue, field: Field) => {
 
   const [currentValue, setCurrentValue] = useState(value ?? '');
   const [error, setError] = useState(false);
+  let {current: fieldSchema} = useRef(schema);
 
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    //const fieldSchema = schema.shape({ [name]: formHelper.fieldSchema() });
-
-    //console.log(fieldSchema);
     values[name] = val;
     setCurrentValue(val);
+
+    try {
+      await fieldSchema.validate(values);
+      setError(false);
+    } catch(validateError) {
+      setError(true);
+    }
+    
   }, [name, values]);
 
   const handleUpdate = useCallback((value: string) => {
@@ -30,6 +36,7 @@ export const useField = (ctx: FormContextValue, field: Field) => {
       update: handleUpdate,
       error: setError
     };
+    fieldSchema = fieldSchema.shape({ [name]: formHelper.fieldSchema() });
     validation.schema = validation.schema.shape({ [name]: formHelper.fieldSchema() });
   }, []);
 
