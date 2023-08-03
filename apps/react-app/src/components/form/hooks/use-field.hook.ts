@@ -4,7 +4,7 @@ import { Field } from "../types";
 import { formHelper } from "../helpers";
 
 export const useField = (ctx: FormContextValue, field: Field) => {
-  const { values, errors, events, schema, validation } = ctx;
+  const { values, errors, events, schema, form } = ctx;
   const { name, value } = field;
 
   const [currentValue, setCurrentValue] = useState(value ?? '');
@@ -32,7 +32,7 @@ export const useField = (ctx: FormContextValue, field: Field) => {
     };
 
     current.schema = current.schema.shape({ [name]: formHelper.fieldValidation() });
-    validation.schema = validation.schema.shape({ [name]: formHelper.fieldValidation() });
+    form.schema = form.schema.shape({ [name]: formHelper.fieldValidation() });
   }, []);
 
   useEffect(() => {

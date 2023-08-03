@@ -1,6 +1,8 @@
 import * as yup from 'yup';
 import { ObjectSchema, ValidationError, AnyObject } from 'yup';
 
+export type ObjectSchemaExtend = ObjectSchema<object, AnyObject, object, "">
+
 class FormHelper {
     validation: typeof yup;
 
@@ -31,5 +33,5 @@ class FormHelper {
 
 export const formHelper = new FormHelper(yup);
 export const objSchema = formHelper.objSchema;
-export { ObjectSchema, ValidationError };
+export { ValidationError };
 export type { AnyObject };

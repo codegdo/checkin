@@ -194,3 +194,200 @@ requestFieldData(field)
     // Handle error
   });
 
+
+
+
+
+
+
+  ============================
+
+
+
+type ValidatorFunction = (value: any) => boolean;
+type UpdateFunction = (inputObject: any) => void;
+
+interface Condition {
+  fieldName: string;
+  comparison: string;
+  value: any;
+  caseSensitive?: boolean;
+}
+
+interface ValidationSchema {
+  [key: string]: ValidationHelper;
+}
+
+class ValidationHelper {
+  private fieldName: string;
+  private validators: ValidatorFunction[] = [];
+  private customMessages: string[] = [];
+  private conditions: Condition[] = [];
+  private updateFunction: UpdateFunction | null = null;
+
+  constructor(fieldName: string) {
+    this.fieldName = fieldName;
+  }
+
+  required(errorMessage: string = 'This field is required.'): ValidationHelper {
+    this.validators.push((value) => value !== undefined && value !== null && value !== '');
+    this.customMessages.push(errorMessage);
+    return this;
+  }
+
+  string(errorMessage: string = 'Please provide a valid string.'): ValidationHelper {
+    this.validators.push((value) => typeof value === 'string');
+    this.customMessages.push(errorMessage);
+    return this;
+  }
+
+  email(errorMessage: string = 'Please provide a valid email address.'): ValidationHelper {
+    // Simple email pattern for demonstration purposes.
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    this.validators.push((value) => typeof value === 'string' && emailPattern.test(value));
+    this.customMessages.push(errorMessage);
+    return this;
+  }
+
+  tel(errorMessage: string = 'Please provide a valid telephone number.'): ValidationHelper {
+    // Simple telephone number pattern for demonstration purposes.
+    const telPattern = /^\d{10}$/;
+    this.validators.push((value) => typeof value === 'string' && telPattern.test(value));
+    this.customMessages.push(errorMessage);
+    return this;
+  }
+
+  date(errorMessage: string = 'Please provide a valid date.'): ValidationHelper {
+    this.validators.push((value) => value instanceof Date && !isNaN(value.getTime()));
+    this.customMessages.push(errorMessage);
+    return this;
+  }
+
+  pattern(pattern: RegExp, errorMessage: string): ValidationHelper {
+    this.validators.push((value) => typeof value === 'string' && pattern.test(value));
+    this.customMessages.push(errorMessage);
+    return this;
+  }
+
+  when(conditions: Condition[]): ValidationHelper {
+    this.conditions = conditions;
+    return this;
+  }
+
+  update(updateFunction: UpdateFunction): ValidationHelper {
+    this.updateFunction = updateFunction;
+    return this;
+  }
+
+  validate(value: any, inputObject: any): string | null {
+    if (this.conditions.length > 0) {
+      for (const condition of this.conditions) {
+        const { fieldName, comparison, value: conditionValue, caseSensitive = true } = condition;
+        const fieldValue = inputObject[fieldName];
+        const areValuesEqual = caseSensitive
+          ? fieldValue === conditionValue
+          : String(fieldValue).toLowerCase() === String(conditionValue).toLowerCase();
+
+        switch (comparison) {
+          case 'eq':
+            if (!areValuesEqual) return null;
+            break;
+          case 'neq':
+            if (areValuesEqual) return null;
+            break;
+          case 'gt':
+            if (!(fieldValue > conditionValue)) return null;
+            break;
+          case 'lt':
+            if (!(fieldValue < conditionValue)) return null;
+            break;
+          case 'gte':
+            if (!(fieldValue >= conditionValue)) return null;
+            break;
+          case 'lte':
+            if (!(fieldValue <= conditionValue)) return null;
+            break;
+          default:
+            return null;
+        }
+      }
+    }
+
+    if (this.updateFunction) {
+      this.updateFunction(inputObject);
+    }
+
+    for (let i = 0; i < this.validators.length; i++) {
+      if (!this.validators[i](value)) {
+        return this.customMessages[i];
+      }
+    }
+
+    return null;
+  }
+}
+
+const schema: ValidationSchema = {
+  name: new ValidationHelper('name').string('Please provide a valid name.').required('Name is required.'),
+  email: new ValidationHelper('email')
+  .required('Email is required.')
+    .email('Invalid email format.')
+    
+    .update((inputObject) => {
+      inputObject.email = 'john@example.com'; // Update email field to a default value if the condition is met.
+    }),
+  phone: new ValidationHelper('phone')
+    .tel('Invalid phone number format.')
+    .required('Phone number is required.')
+    .when([{ fieldName: 'name', comparison: 'neq', value: 'Alice' }])
+    .update((inputObject) => {
+      inputObject.phone = '1234567890'; // Update phone field to a default value if the condition is met.
+    }),
+  birthDate: new ValidationHelper('birthDate').date('Invalid date format.').required('Birth date is required.'),
+  customPattern: new ValidationHelper('customPattern')
+    .pattern(/^[A-Za-z]+$/, 'Invalid pattern format.')
+    .required('Custom pattern field is required.')
+    .when([{ fieldName: 'name', comparison: 'eq', value: 'Bob', caseSensitive: false }])
+    .update((inputObject) => {
+      inputObject.customPattern = 'ABC'; // Update customPattern field to a default value if the condition is met.
+    }),
+};
+
+const inputObject = {
+  name: 'John',
+  email: 'john@example.com',
+  phone: '1234567890',
+  birthDate: new Date('1990-01-01'),
+  customPattern: 'ABC',
+};
+
+function validate(input: any, schema: ValidationSchema): string[] {
+  const errors: string[] = [];
+
+  for (const key in schema) {
+    if (input.hasOwnProperty(key)) {
+      const validationError = schema[key].validate(input[key], input);
+      if (validationError) {
+        errors.push(validationError);
+      }
+    } else {
+      errors.push(`Field '${key}' is missing.`);
+    }
+  }
+
+  return errors;
+}
+
+// Example usage
+
+  const errors = validate(inputObject, schema);
+  if (errors.length === 0) {
+    console.log('Object is valid.');
+  } else {
+    console.error('Validation failed.');
+    console.log(errors);
+  }
+
+
+
+

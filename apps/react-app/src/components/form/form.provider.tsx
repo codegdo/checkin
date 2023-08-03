@@ -1,15 +1,15 @@
 import React from 'react';
 import { Field, FormErrors, FormEvents, FormValues } from './types';
-import { AnyObject, ObjectSchema, objSchema } from './helpers';
+import { ObjectSchemaExtend, objSchema } from './helpers';
 
 export interface FormContextValue {
   data: Field[];
   values: FormValues;
   errors: FormErrors;
   events: FormEvents;
-  schema: ObjectSchema<object, AnyObject, object, "">;
-  validation: {
-    schema: ObjectSchema<object, AnyObject, object, "">;
+  schema: ObjectSchemaExtend;
+  form: {
+    schema: ObjectSchemaExtend;
   };
   status: string | null | undefined;
   handleClick: (name: string) => void;
@@ -21,7 +21,7 @@ const FormContext = React.createContext<FormContextValue>({
   errors: {},
   events: {},
   schema: objSchema,
-  validation: {
+  form: {
     schema: objSchema,
   },
   status: null,
