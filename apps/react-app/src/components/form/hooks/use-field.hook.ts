@@ -4,41 +4,46 @@ import { Field } from "../types";
 import { formHelper } from "../helpers";
 
 export const useField = (ctx: FormContextValue, field: Field) => {
-  const { values, events, schema, validation } = ctx;
+  const { values, errors, events, schema, validation } = ctx;
   const { name, value } = field;
 
   const [currentValue, setCurrentValue] = useState(value ?? '');
   const [error, setError] = useState(false);
-  let {current: fieldSchema} = useRef(schema);
+  const { current } = useRef({ schema });
 
   const handleChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    values[name] = val;
-    setCurrentValue(val);
+
+    setCurrentValue(e.target.value);
 
     try {
-      await fieldSchema.validate(values);
+      await current.schema.validate(values);
       setError(false);
-    } catch(validateError) {
+    } catch (validateError) {
+      errors[name] = 'error';
       setError(true);
     }
-    
-  }, [name, values]);
 
-  const handleUpdate = useCallback((value: string) => {
-    values[name] = value;
-    setCurrentValue(value);
-  }, [name, values]);
+  }, [current.schema, errors, name, values]);
 
   useEffect(() => {
-    values[name] = value ?? '';
     events[name] = {
-      update: handleUpdate,
+      update: setCurrentValue,
       error: setError
     };
-    fieldSchema = fieldSchema.shape({ [name]: formHelper.fieldSchema() });
-    validation.schema = validation.schema.shape({ [name]: formHelper.fieldSchema() });
+
+    current.schema = current.schema.shape({ [name]: formHelper.fieldValidation() });
+    validation.schema = validation.schema.shape({ [name]: formHelper.fieldValidation() });
   }, []);
+
+  useEffect(() => {
+    values[name] = currentValue;
+  }, [currentValue, name, values]);
+
+  useEffect(() => {
+    if (!error) {
+      delete errors[name];
+    }
+  }, [error, errors, name]);
 
   return {
     currentValue,

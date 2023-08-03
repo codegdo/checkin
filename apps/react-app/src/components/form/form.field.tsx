@@ -24,7 +24,7 @@ export function FormField({ children, ...props }: FieldProps) {
         childElement || <div>
           <label htmlFor={name}>{name}</label>
           <input name={name} value={currentValue} onChange={handleChange} />
-          {error && <p>Has error.</p>}
+          {error && <p>{ctx.errors[name] || 'error'}</p>}
         </div>
       }
     </>

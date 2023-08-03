@@ -1,15 +1,15 @@
 import React from 'react';
 import { Field, FormErrors, FormEvents, FormValues } from './types';
-import { ObjectSchema, objSchema } from './helpers';
+import { AnyObject, ObjectSchema, objSchema } from './helpers';
 
 export interface FormContextValue {
   data: Field[];
   values: FormValues;
   errors: FormErrors;
   events: FormEvents;
-  schema: ObjectSchema;
+  schema: ObjectSchema<object, AnyObject, object, "">;
   validation: {
-    schema: ObjectSchema;
+    schema: ObjectSchema<object, AnyObject, object, "">;
   };
   status: string | null | undefined;
   handleClick: (name: string) => void;

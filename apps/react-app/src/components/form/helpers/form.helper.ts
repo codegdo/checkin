@@ -1,14 +1,11 @@
-import * as Yup from 'yup';
-
-export type ObjectSchema = Yup.ObjectSchema<Yup.AnyObject, object>;
-
-export type ValidationError = Yup.ValidationError;
+import * as yup from 'yup';
+import { ObjectSchema, ValidationError, AnyObject } from 'yup';
 
 class FormHelper {
-    validation: typeof Yup;
+    validation: typeof yup;
 
-    constructor(yup: typeof Yup) {
-        this.validation = yup;
+    constructor(validation: typeof yup) {
+        this.validation = validation;
     }
 
     errorsWithFieldNames(validationError: ValidationError) {
@@ -23,14 +20,16 @@ class FormHelper {
         }, {});
     }
 
-    fieldSchema() {
+    fieldValidation() {
         return this.validation.string().required();
     }
 
-    get schema() {
+    get objSchema() {
         return this.validation.object();
     }
 }
 
-export const formHelper = new FormHelper(Yup);
-export const objSchema = formHelper.schema;
+export const formHelper = new FormHelper(yup);
+export const objSchema = formHelper.objSchema;
+export { ObjectSchema, ValidationError };
+export type { AnyObject };
