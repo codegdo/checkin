@@ -1,5 +1,20 @@
 import { CustomElementProps, CustomFieldProps, Form, FormData } from "@/components";
 
+const visibility = [{
+  id: 1,
+  title: 'test',
+  rules: [
+    {
+      id: 2,
+      fieldId: 'username',
+      comparison: 'contains',
+      caseSensitivity: false,
+      value: 'john',
+    }
+  ],
+  action: {}
+}];
+
 function Login() {
 
   const handleSubmit = (data: FormData) => {
@@ -8,7 +23,9 @@ function Login() {
 
   return <Form onSubmit={handleSubmit}>
     <Form.Section>
-      <Form.Field type='text' name='username' />
+      <Form.Field type='email' name='email' isRequire={true} />
+      <Form.Field type='text' name='username' isRequire={true} validation={{ length: 5 }} visibility={visibility} />
+      <Form.Field type='number' name='age' isRequire={true} validation={{ min: 5 }} />
       <Form.Field type='password' name='password'>
         {
           ({ name, currentValue, error, handleChange }: CustomFieldProps) => {

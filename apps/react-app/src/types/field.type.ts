@@ -50,14 +50,14 @@ interface ElementField {
   position?: number | null;
 }
 
-interface Validation {
-  maxLength?: number;
-  minLength?: number;
+interface ValidationOptions {
+  min?: number;
+  max?: number;
   length?: number;
-  pattern?: string;
+  pattern?: RegExp;
 }
 
-interface Condition {
+export interface Condition {
   id: string | number;
   fieldId: string | number;
   comparison: 'equals' | 'contains' | 'startsWith' | 'endsWith';
@@ -74,6 +74,17 @@ interface Operator {
   operator: 'add' | 'subtract' | 'multiply' | 'divide';
 }
 
+interface Visibility {
+  id: number;
+  title?: string;
+  description?: string;
+  rules?: Condition[],
+  actions?: {
+    hidden: boolean;
+    readonly: boolean;
+  }
+}
+
 interface Option {
   css: [],
   setting: {
@@ -87,17 +98,14 @@ interface FormField extends ElementField {
   description?: string;
   text?: string;
 
-  validation?: Validation;
+  validation?: ValidationOptions;
+
   calculation?: {
     operators: Operator[]
   },
-  visibility?: {
-    conditions: Condition[],
-    actions: {
-      hidden: boolean;
-      readonly: boolean;
-    }
-  };
+
+  visibility?: Visibility[];
+
   option?: Option;
 
   isRequire?: boolean;

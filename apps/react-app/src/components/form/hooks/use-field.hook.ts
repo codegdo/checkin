@@ -12,11 +12,16 @@ export const useField = (ctx: FormContextValue, field: Field) => {
   const { current } = useRef({ schema });
 
   const handleChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setCurrentValue(newValue);
 
-    setCurrentValue(e.target.value);
+    // Create a new object with the updated field value for validation
+    const updatedValues = { ...values, [name]: newValue };
+
+    console.log(updatedValues);
 
     try {
-      await current.schema.validate(values);
+      await current.schema.validate(updatedValues);
       setError(false);
     } catch (validateError) {
       errors[name] = 'error';
@@ -31,8 +36,8 @@ export const useField = (ctx: FormContextValue, field: Field) => {
       error: setError
     };
 
-    current.schema = current.schema.shape({ [name]: formHelper.fieldValidation() });
-    form.schema = form.schema.shape({ [name]: formHelper.fieldValidation() });
+    current.schema = current.schema.shape({ [name]: formHelper.fieldValidation(field, events, values) });
+    form.schema = form.schema.shape({ [name]: formHelper.fieldValidation(field, events, values) });
   }, []);
 
   useEffect(() => {

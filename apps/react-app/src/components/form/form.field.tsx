@@ -14,7 +14,7 @@ interface FieldProps extends Field {
 export function FormField({ children, ...props }: FieldProps) {
   const ctx = useWrapperContext(FormContext);
   const { currentValue, error, handleChange } = useField(ctx, props)
-  const { name } = props;
+  const { name, type } = props;
   //
   const childElement = typeof children === 'function' ? children?.({ ...props, currentValue, error, handleChange }) : children;
 
@@ -23,7 +23,7 @@ export function FormField({ children, ...props }: FieldProps) {
       {
         childElement || <div>
           <label htmlFor={name}>{name}</label>
-          <input name={name} value={currentValue} onChange={handleChange} />
+          <input type={type} name={name} value={currentValue} onChange={handleChange} />
           {error && <p>{ctx.errors[name] || 'error'}</p>}
         </div>
       }
