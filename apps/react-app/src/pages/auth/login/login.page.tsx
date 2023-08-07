@@ -23,10 +23,11 @@ const visibility = [
       },
     ],
     effect: {
-      isDisable: false,
+      isDisabled: false,
       isReadonly: true,
-      isVisible: false,
-    }
+      isHidden: false,
+    },
+    fields: ['age'],
   },
   {
     id: 2,
@@ -34,27 +35,35 @@ const visibility = [
     rules: [
       {
         id: 1,
-        fieldId: 'username',
+        fieldId: 'email',
         caseSensitivity: false,
-        comparison: 'contains',
+        comparison: 'equals',
+        value: 'john@gmail.com',
         operator: 'and',
-        value: 'john',
       },
       {
         id: 2,
+        fieldId: 'username',
+        caseSensitivity: false,
+        comparison: 'contains',
+        value: 'john',
+        operator: 'and',
+      },
+      {
+        id: 3,
         fieldId: 'age',
         caseSensitivity: false,
         comparison: 'equals',
-        operator: 'or',
         value: '30',
+        operator: 'or',
       },
     ],
     effect: {
-      isVisible: false,
+      isDisabled: false,
       isReadonly: true,
+      isHidden: false,
     },
     fields: ['age'],
-    errorMessage: '',
   },
   // Add more visibility rules here
 ];

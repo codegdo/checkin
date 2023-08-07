@@ -66,12 +66,12 @@ export interface Condition {
   value: string;
 }
 
-export interface VisibilityRule {
+export interface FieldRule {
   id: string | number;
   title: string;
   description?: string;
-  rules: Condition[];
-  effect: {
+  conditions: Condition[];
+  status: {
     isDisable: boolean;
     isReadonly: boolean;
     isHidden: boolean;
@@ -79,7 +79,7 @@ export interface VisibilityRule {
   fields: string[];
 }
 
-export interface ValidateRule {
+export interface FieldValidation {
   id: string | number;
   title: string;
   description?: string;
@@ -96,10 +96,10 @@ export interface Operator {
 
 interface Option {
   css: [],
-  setting: {
-    isReadonly: boolean;
-    isHidden: boolean;
-  }
+  min: number;
+  max: number;
+  length: number;
+  pattern: string;
 }
 
 interface FormField extends ElementField {
@@ -112,18 +112,26 @@ interface FormField extends ElementField {
   calculation?: {
     operators: Operator[]
   },
+
   variable?: [];
-  visibility?: VisibilityRule[];
+
+  customValidation?: FieldValidation[],
+  customRules?: FieldRule[];
 
   option?: Option;
+
+  min: number;
+  max: number;
+  length: number;
+  pattern: string;
 
   isRequire?: boolean;
 
   isReadonly?: boolean;
+  isDisabled?: boolean;
   isHidden?: boolean;
 
   isInternal?: boolean;
-
 
   //isNew?: boolean;
   //isReview?: boolean;
