@@ -60,36 +60,45 @@ interface ValidationOptions {
 export interface Condition {
   id: string | number;
   fieldId: string | number;
-  comparison: 'equals' | 'contains' | 'startsWith' | 'endsWith';
   caseSensitivity: boolean;
+  comparison: 'equals' | 'contains' | 'startsWith' | 'endsWith';
+  operator: 'and' | 'or';
   value: string;
-  and?: Condition[];
-  or?: Condition[];
 }
 
-interface Operator {
+export interface VisibilityRule {
+  id: string | number;
+  title: string;
+  description?: string;
+  rules: Condition[];
+  effect: {
+    isDisable: boolean;
+    isReadonly: boolean;
+    isHidden: boolean;
+  };
+  fields: string[];
+}
+
+export interface ValidateRule {
+  id: string | number;
+  title: string;
+  description?: string;
+  rules: Condition[];
+  errorMessage: string;
+}
+
+export interface Operator {
   id: string | number;
   fieldId: string | number;
   value: number;
   operator: 'add' | 'subtract' | 'multiply' | 'divide';
 }
 
-interface Visibility {
-  id: number;
-  title?: string;
-  description?: string;
-  rules?: Condition[],
-  actions?: {
-    hidden: boolean;
-    readonly: boolean;
-  }
-}
-
 interface Option {
   css: [],
   setting: {
     isReadonly: boolean;
-    isShow: boolean;
+    isHidden: boolean;
   }
 }
 
@@ -103,8 +112,8 @@ interface FormField extends ElementField {
   calculation?: {
     operators: Operator[]
   },
-
-  visibility?: Visibility[];
+  variable?: [];
+  visibility?: VisibilityRule[];
 
   option?: Option;
 

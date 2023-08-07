@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { ObjectSchema, ValidationError, AnyObject } from 'yup';
 import { Field, FormEvents, FormValues } from '../types';
-import { Condition } from '@/types';
+import { Condition, VisibilityRule } from '@/types';
 
 export type ObjectSchemaExtend = ObjectSchema<object, AnyObject, object, "">
 
@@ -91,10 +91,10 @@ class FormHelper {
     if (visibility.length > 0) {
       validate = validate.test('visibility', 'visibility', (value, schema) => {
 
-        for (const visibilityRules of visibility) {
-          const { rules } = visibilityRules;
-          const isMatchCondition = this.checkConditions(rules, values);
-          console.log('isMatchCondition', isMatchCondition, rules);
+        for (const visibilityRule of visibility) {
+          const { isVisible, isReadonly } = this.checkConditions(visibilityRule, values);
+          console.log(`Visibility for ${visibilityRule.title}:`, isVisible);
+          console.log(`Readonly for ${visibilityRule.title}:`, isReadonly);
         }
 
         return true; // Return true for non-conditional cases
@@ -107,7 +107,7 @@ class FormHelper {
   checkFieldCondition(condition: Condition, data: Record<string, string>): boolean {
     const conditionValue = data[condition.fieldId];
     const valueToCompare = condition.caseSensitivity ? condition.value : condition.value.toLowerCase();
-
+    console.log('checkFieldCondition',condition, data, conditionValue, valueToCompare);
     switch (condition.comparison) {
       case 'equals':
         return condition.caseSensitivity
@@ -130,23 +130,56 @@ class FormHelper {
     }
   }
 
-  checkConditions(conditions: Condition[], data: Record<string, string>): boolean {
-    if (!conditions || conditions.length === 0) {
-      return true; // No conditions, so it's considered true
+  checkConditions(visibilityRule: VisibilityRule, data: Record<string, string>): { isVisible: boolean; isReadonly: boolean } {
+    const operations: (boolean | 'and' | 'or')[] = [];
+
+  for (const condition of visibilityRule.rules) {
+    const operator = condition.operator;
+    const result = this.checkFieldCondition(condition, data);
+    operations.push(result, operator);
+  }
+
+  console.log('operations', operations);
+
+  let isVisible = visibilityRule.effect.isVisible;
+  let isReadonly = visibilityRule.effect.isReadonly;
+
+  // Process the operations array to compute final visibility and readonly status
+  for (let i = 0; i < operations.length; i += 2) {
+    const result = operations[i] as boolean;
+    const operator = operations[i + 1] as 'and' | 'or';
+
+    if (operator === 'and' && !result) {
+      isVisible = false;
+      isReadonly = false;
+      break;
     }
 
-    const andResults = conditions.every((condition) => {
-      if (condition.and) {
-        return this.checkConditions(condition.and, data);
-      } else if (condition.or) {
-        return this.checkConditions(condition.or, data);
-      } else {
-        return this.checkFieldCondition(condition, data);
-      }
-    });
-
-    return andResults;
+    if (operator === 'or' && result) {
+      isVisible = true;
+      isReadonly = false;
+      break;
+    }
   }
+
+  let finalResult = operations[0] as boolean;
+
+  for (let i = 1; i < operations.length; i += 2) {
+    const result = operations[i] as boolean;
+    const operator = operations[i + 1] as 'and' | 'or';
+
+    if (operator === 'and') {
+      finalResult = finalResult && result;
+    } else if (operator === 'or') {
+      finalResult = finalResult || result;
+    }
+  }
+
+  console.log('finalResult', finalResult);
+
+  return { isVisible, isReadonly };
+  }
+  
 
 
   isValidEmail(email: string | null | undefined) {

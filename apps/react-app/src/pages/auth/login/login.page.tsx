@@ -1,19 +1,63 @@
 import { CustomElementProps, CustomFieldProps, Form, FormData } from "@/components";
 
-const visibility = [{
-  id: 1,
-  title: 'test',
-  rules: [
-    {
-      id: 2,
-      fieldId: 'username',
-      comparison: 'contains',
-      caseSensitivity: false,
-      value: 'john',
+const visibility = [
+  {
+    id: 1,
+    title: 'test1',
+    rules: [
+      {
+        id: 1,
+        fieldId: 'username',
+        caseSensitivity: false,
+        comparison: 'contains',
+        operator: 'and',
+        value: 'john',
+      },
+      {
+        id: 2,
+        fieldId: 'age',
+        caseSensitivity: false,
+        comparison: 'equals',
+        operator: 'or',
+        value: '30',
+      },
+    ],
+    effect: {
+      isDisable: false,
+      isReadonly: true,
+      isVisible: false,
     }
-  ],
-  action: {}
-}];
+  },
+  {
+    id: 2,
+    title: 'test2',
+    rules: [
+      {
+        id: 1,
+        fieldId: 'username',
+        caseSensitivity: false,
+        comparison: 'contains',
+        operator: 'and',
+        value: 'john',
+      },
+      {
+        id: 2,
+        fieldId: 'age',
+        caseSensitivity: false,
+        comparison: 'equals',
+        operator: 'or',
+        value: '30',
+      },
+    ],
+    effect: {
+      isVisible: false,
+      isReadonly: true,
+    },
+    fields: ['age'],
+    errorMessage: '',
+  },
+  // Add more visibility rules here
+];
 
 function Login() {
 
