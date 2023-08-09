@@ -66,12 +66,12 @@ export interface Condition {
   value: string;
 }
 
-export interface FieldRule {
+export interface FieldAccessibility {
   id: string | number;
   title: string;
   description?: string;
   conditions: Condition[];
-  status: {
+  display: {
     isDisable: boolean;
     isReadonly: boolean;
     isHidden: boolean;
@@ -83,7 +83,7 @@ export interface FieldValidation {
   id: string | number;
   title: string;
   description?: string;
-  rules: Condition[];
+  conditions: Condition[];
   errorMessage: string;
 }
 
@@ -105,33 +105,25 @@ interface Option {
 interface FormField extends ElementField {
   label?: string;
   description?: string;
+  placeholder?: string;
   text?: string;
 
-  validation?: ValidationOptions;
-
-  calculation?: {
-    operators: Operator[]
-  },
-
-  variable?: [];
-
-  customValidation?: FieldValidation[],
-  customRules?: FieldRule[];
+  validation?: FieldValidation[],
+  accessibility?: FieldAccessibility[];
 
   option?: Option;
 
-  min: number;
-  max: number;
-  length: number;
+  minValue: number;
+  maxValue: number;
+  maxLength: number;
   pattern: string;
 
-  isRequire?: boolean;
-
-  isReadonly?: boolean;
+  isRequired?: boolean;
   isDisabled?: boolean;
+  isReadOnly?: boolean;
   isHidden?: boolean;
 
-  isInternal?: boolean;
+  //isInternal?: boolean;
 
   //isNew?: boolean;
   //isReview?: boolean;

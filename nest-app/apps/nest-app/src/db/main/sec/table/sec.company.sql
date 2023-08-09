@@ -19,3 +19,4 @@ CREATE TABLE main_sec.company (
   FOREIGN KEY (contact_id) REFERENCES main_org.contact(id)
 );
 
+

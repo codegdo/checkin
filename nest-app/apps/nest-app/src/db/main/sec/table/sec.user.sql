@@ -7,7 +7,7 @@ CREATE TABLE main_sec.user (
   group_id INT,
   role_id INT,
   company_id INT,
-  is_reset_required BOOLEAN DEFAULT FALSE,
+  is_require_reset BOOLEAN DEFAULT FALSE,
   is_active BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
