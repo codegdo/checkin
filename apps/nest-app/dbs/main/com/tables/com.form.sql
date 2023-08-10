@@ -20,18 +20,9 @@ CREATE TABLE main_com.form (
 );
 
 
--- Create a trigger function to update updated_at timestamp
-CREATE OR REPLACE FUNCTION update_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = CURRENT_TIMESTAMP;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
 -- Create a trigger that fires on UPDATE and calls the function
 CREATE TRIGGER form_update_trigger
-BEFORE UPDATE ON main_org.form
+BEFORE UPDATE ON main_com.form
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at();
 

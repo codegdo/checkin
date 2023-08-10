@@ -1,7 +1,7 @@
 CREATE TABLE main_dbo.view_action (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
-  action_group VARCHAR(20) NOT NULL CHECK (action_group IN ('list', 'read', 'write')),
+  action_group VARCHAR(20) NOT NULL CHECK (action_group IN ('list', 'read', 'write', 'delete')),
   view_id INT,
 
   is_active BOOLEAN DEFAULT TRUE NOT NULL,
