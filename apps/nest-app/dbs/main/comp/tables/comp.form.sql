@@ -1,5 +1,5 @@
 -- FORM
-CREATE TABLE main_com.form (
+CREATE TABLE main_comp.form (
   id SERIAL PRIMARY KEY,
 
   label VARCHAR(255),
@@ -19,12 +19,11 @@ CREATE TABLE main_com.form (
   FOREIGN KEY (form_type_id) REFERENCES main_dbo.form_type(id)
 );
 
-
 -- Create a trigger that fires on UPDATE and calls the function
 CREATE TRIGGER form_update_trigger
-BEFORE UPDATE ON main_com.form
+BEFORE UPDATE ON main_comp.form
 FOR EACH ROW
-EXECUTE FUNCTION update_updated_at();
+EXECUTE FUNCTION fn_updated_at();
 
-INSERT INTO main_com.form(form_type_id, company_id, label, description, is_active, is_published) VALUES
+INSERT INTO main_comp.form(form_type_id, company_id, label, description, is_active, is_published) VALUES
 ('1',null,'Signup','New user signup','1','1');

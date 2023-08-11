@@ -1,5 +1,5 @@
 -- FIELD
-CREATE TABLE main_com.field (
+CREATE TABLE main_comp.field (
   id SERIAL PRIMARY KEY,
 
   name VARCHAR(50) NOT NULL,
@@ -12,8 +12,10 @@ CREATE TABLE main_com.field (
 
   length INT,
 
-  mapping VARCHAR(100) NOT NULL,
-  lookup VARCHAR(100) NOT NULL,
+  mapping VARCHAR(100),
+  lookup VARCHAR(100),
+
+  map_to_parent VARCHAR(10),
 
   parent_id INT,
   object_id INT,
@@ -21,6 +23,7 @@ CREATE TABLE main_com.field (
   
   has_dependent BOOLEAN NOT NULL DEFAULT FALSE,
   is_dependent BOOLEAN NOT NULL DEFAULT FALSE,
+
   is_key BOOLEAN NOT NULL DEFAULT FALSE,
   is_new BOOLEAN NOT NULL DEFAULT TRUE,
   is_renew BOOLEAN NOT NULL DEFAULT TRUE,
@@ -39,9 +42,9 @@ CREATE TABLE main_com.field (
 
 -- Create a trigger that fires on UPDATE and calls the function
 CREATE TRIGGER field_update_trigger
-BEFORE UPDATE ON main_com.field
+BEFORE UPDATE ON main_comp.field
 FOR EACH ROW
-EXECUTE FUNCTION update_updated_at();
+EXECUTE FUNCTION fn_updated_at();
 
-INSERT INTO main_com.form(form_type_id, company_id, label, description, is_active, is_published) VALUES
+INSERT INTO main_comp.form(form_type_id, company_id, label, description, is_active, is_published) VALUES
 ('1',null,'Signup','New user signup','1','1');

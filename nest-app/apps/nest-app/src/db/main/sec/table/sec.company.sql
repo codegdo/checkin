@@ -7,6 +7,7 @@ CREATE TABLE main_sec.company (
   postal_code VARCHAR(20),
   phone_number VARCHAR(20),
   website VARCHAR(100),
+  
   business_type_id INT,
   is_active BOOLEAN DEFAULT FALSE,
 

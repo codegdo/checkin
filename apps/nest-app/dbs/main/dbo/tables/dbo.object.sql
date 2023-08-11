@@ -12,10 +12,10 @@ CREATE TABLE main_dbo.object (
 );
 
 INSERT INTO main_dbo.object(id, name, is_external, is_internal, is_extendable, is_active) VALUES
-(1,'account','1','1','0','1'),
-(2,'company','1','1','0','1'),
-(3,'contact','1','1','0','1'),
-(4,'user','1','1','0','1'),
+(1,'company','1','1','0','1'),
+(2,'contact','1','1','0','1'),
+(3,'user','1','1','0','1'),
+(4,'account','1','1','0','1'),
 (5,'group','1','1','0','1'),
 (6,'role','1','1','0','1'),
 (7,'policy','1','1','0','1'),
