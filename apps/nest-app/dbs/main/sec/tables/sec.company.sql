@@ -4,10 +4,9 @@ CREATE TABLE main_sec.company (
   description VARCHAR(255),
   logo_url VARCHAR(255),
 
-  address VARCHAR(255),
-  territory_id INT,
-  city VARCHAR(50),
-  zip_code VARCHAR(10),
+  billing_address_id INT,
+  shipping_address_id INT,
+
   phone VARCHAR(20),
   website VARCHAR(100),
 
@@ -22,7 +21,9 @@ CREATE TABLE main_sec.company (
   created_by VARCHAR(50) DEFAULT CURRENT_USER,
   updated_by VARCHAR(50),
 
-  FOREIGN KEY (business_type_id) REFERENCES main_dbo.business_type(id)
+  FOREIGN KEY (business_type_id) REFERENCES main_dbo.business_type(id),
+  FOREIGN KEY (billing_address_id) REFERENCES main_sec.address(id) ON DELETE SET NULL,
+  FOREIGN KEY (shipping_address_id) REFERENCES main_sec.address(id) ON DELETE SET NULL
 );
 
 -- Create a trigger that fires on UPDATE and calls the function
