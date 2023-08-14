@@ -3,7 +3,7 @@ CREATE TABLE main_dbo.industry (
   name VARCHAR(50) NOT NULL,
   description TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  created_by VARCHAR(45) DEFAULT CURRENT_USER
+  created_by VARCHAR(50) DEFAULT CURRENT_USER
 );
 
 INSERT INTO main_dbo.industry (name, description)

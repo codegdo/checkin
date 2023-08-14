@@ -3,10 +3,10 @@ CREATE TABLE main_dbo.business_type (
   id SERIAL PRIMARY KEY,
   category VARCHAR(100) NOT NULL,
   description VARCHAR(255),
-  industry_id INT REFERENCES industry(id),
+  industry_id INT REFERENCES main_dbo.industry(id),
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  created_by VARCHAR(45) DEFAULT CURRENT_USER
+  created_by VARCHAR(50) DEFAULT CURRENT_USER
 );
 
 -- Insert business_type categories with descriptions
