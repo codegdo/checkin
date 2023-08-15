@@ -14,7 +14,7 @@ CREATE TABLE main_sec.company (
   locations_count INT,
   business_type_id INT,
 
-  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  is_active BOOLEAN DEFAULT TRUE,
   
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

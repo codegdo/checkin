@@ -1,5 +1,5 @@
--- FORM
-CREATE TABLE main_comp.form (
+-- Create the 'form' table
+CREATE TABLE main_com.form (
   id SERIAL PRIMARY KEY,
 
   label VARCHAR(255),
@@ -21,9 +21,9 @@ CREATE TABLE main_comp.form (
 
 -- Create a trigger that fires on UPDATE and calls the function
 CREATE TRIGGER form_update_trigger
-BEFORE UPDATE ON main_comp.form
+BEFORE UPDATE ON main_com.form
 FOR EACH ROW
 EXECUTE FUNCTION fn_updated_at();
 
-INSERT INTO main_comp.form(form_type_id, company_id, label, description, is_active, is_published) VALUES
+INSERT INTO main_com.form(form_type_id, company_id, label, description, is_active, is_published) VALUES
 ('1',null,'Signup','New user signup','1','1');
