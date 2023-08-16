@@ -5,7 +5,6 @@ CREATE TABLE main_sec.user (
   password VARCHAR(100) NOT NULL,
   passcode NUMERIC(4),
   group_id INT,
-  role_id INT,
   company_id INT,
   is_require_reset BOOLEAN DEFAULT FALSE,
   is_active BOOLEAN DEFAULT FALSE,

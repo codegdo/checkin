@@ -10,8 +10,7 @@ CREATE TABLE main_sec.account (
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (company_id) REFERENCES main_sec.company(id),
-  FOREIGN KEY (owner_id) REFERENCES main_sec.user(id)
+  FOREIGN KEY (company_id) REFERENCES main_sec.company(id)
 );
 
 -- Create a trigger to generate and assign a random account id
