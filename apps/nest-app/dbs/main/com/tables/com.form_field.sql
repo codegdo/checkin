@@ -4,7 +4,7 @@ CREATE TABLE main_com.form_field (
   field_id INT NOT NULL,
 
   label VARCHAR(100),
-  description VARCHAR(255),
+  description TEXT,
   hint VARCHAR(255),
   placeholder VARCHAR(100),
 
@@ -24,13 +24,13 @@ CREATE TABLE main_com.form_field (
   updated_by VARCHAR(50),
 
   PRIMARY KEY(form_id, field_id),
-  FOREIGN KEY(form_id) REFERENCES org.form(id),
-  FOREIGN KEY(field_id) REFERENCES org.field(id)
+  FOREIGN KEY(form_id) REFERENCES main_com.form(id),
+  FOREIGN KEY(field_id) REFERENCES main_com.field(id)
 );
 
 
 -- Create a trigger that fires on UPDATE and calls the function
-CREATE TRIGGER form_update_trigger
+CREATE TRIGGER form_field_update_trigger
 BEFORE UPDATE ON main_com.form_field
 FOR EACH ROW
 EXECUTE FUNCTION fn_updated_at();
