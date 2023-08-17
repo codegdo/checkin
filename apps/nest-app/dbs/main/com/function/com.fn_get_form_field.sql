@@ -32,7 +32,7 @@ BEGIN
     main_com.form f
     JOIN main_com.form_field ff ON f.id = ff.form_id
   WHERE
-    ft.id = p_form_id;
+    f.id = p_form_id;
 
   RETURN QUERY
   SELECT * FROM temp_form_field;

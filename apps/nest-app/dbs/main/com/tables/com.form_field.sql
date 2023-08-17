@@ -10,6 +10,14 @@ CREATE TABLE main_com.form_field (
 
   default_value VARCHAR(255),
 
+  min INT,
+  max INT,
+  pattern VARCHAR(255),
+
+  accessibility JSON,
+  validation JSON,
+  translation JSON,
+
   position INT DEFAULT 0,
   map_to_parent VARCHAR(10),
 
@@ -34,3 +42,14 @@ CREATE TRIGGER form_field_update_trigger
 BEFORE UPDATE ON main_com.form_field
 FOR EACH ROW
 EXECUTE FUNCTION fn_updated_at();
+
+
+INSERT INTO main_com.form_field (form_id, field_id, label, is_required) VALUES
+(1,1,'Company Name','{"es":{}}','1'),
+(1,21,'Username','{"es":{}}','1'),
+(1,22,'Password','{"es":{}}','1'),
+(1,26,'Full Name','{"es":{}}','1'),
+(1,27,'First Name','{"es":{}}','1'),
+(1,28,'Last Name','{"es":{}}','1'),
+(1,29,'Email','{"es":{}}','1'),
+(1,30,'Phone','{"es":{}}','1');

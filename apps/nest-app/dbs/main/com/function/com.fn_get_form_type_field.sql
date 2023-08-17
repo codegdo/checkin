@@ -1,10 +1,18 @@
-CREATE OR REPLACE FUNCTION main_com.fn_get_field(p_form_type_id INT)
+CREATE OR REPLACE FUNCTION main_com.fn_get_form_type_field(p_form_type_id INT)
 RETURNS TABLE (
-  row_num BIGINT,
   field_id INT,
   field_name VARCHAR,
   field_label VARCHAR,
   field_description TEXT,
+  field_hint VARCHAR,
+  field_placeholder VARCHAR,
+  field_default_value VARCHAR,
+  field_min INT,
+  field_max INT,
+  field_pattern VARCHAR,
+  field_accessibility JSON,
+  field_validation JSON,
+  field_translation JSON,
   field_type VARCHAR,
   field_data_type VARCHAR,
   field_mapping VARCHAR,
@@ -12,24 +20,31 @@ RETURNS TABLE (
   field_default_required BOOLEAN,
   field_is_required BOOLEAN
 ) AS $$
-DECLARE
-  var_id INT;
-  var_lookup VARCHAR;
-  var_is_dependent BOOLEAN;
-  var_row_max INT;
-  var_row_min INT := 1;
-  var_lookup_data JSONB;
-
 BEGIN
 
-  DROP TABLE IF EXISTS temp_field CASCADE;
-  CREATE TEMP TABLE temp_field AS
+  DROP TABLE IF EXISTS temp_form_type_field CASCADE;
+  CREATE TEMP TABLE temp_form_type_field AS
   SELECT
-    row_number() OVER () AS row_num,
     f.id field_id,
     f.name field_name,
-    ff.label field_label,
+    COALESCE(ff.label,
+      CASE
+        WHEN f.name ~ E'^[a-z]' THEN
+          fn_camel_case_split(f.name)
+        ELSE
+          f.name
+      END
+    ) AS field_label,
     ff.description field_description,
+    ff.hint field_hint,
+    ff.placeholder field_placeholder,
+    ff.default_value field_default_value,
+    ff.min field_min,
+    ff.max field_max,
+    ff.pattern field_pattern,
+    ff.accessibility field_accessibility,
+    ff.validation field_validation,
+    ff.translation field_translation,
     f.type field_type,
     f.data_type field_data_type,
     f.mapping field_mapping,
@@ -46,9 +61,9 @@ BEGIN
     ft.id = p_form_type_id;
 
   RETURN QUERY
-  SELECT * FROM temp_field;
+  SELECT * FROM temp_form_type_field;
 
 END;
 $$ LANGUAGE plpgsql;
 
-select * from main_com.fn_get_field(1);
+select * from main_com.fn_get_form_type_field(1);
