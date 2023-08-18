@@ -45,11 +45,12 @@ EXECUTE FUNCTION fn_updated_at();
 
 
 INSERT INTO main_com.form_field (form_id, field_id, label, is_required) VALUES
-(1,1,'Company Name','{"es":{}}','1'),
-(1,21,'Username','{"es":{}}','1'),
-(1,22,'Password','{"es":{}}','1'),
-(1,26,'Full Name','{"es":{}}','1'),
-(1,27,'First Name','{"es":{}}','1'),
-(1,28,'Last Name','{"es":{}}','1'),
-(1,29,'Email','{"es":{}}','1'),
-(1,30,'Phone','{"es":{}}','1');
+(1,1,'Company Name','1'),
+(1,20,'Business Type','1'),
+(1,21,'Username','1'),
+(1,22,'Password','1'),
+(1,26,'Name','1'),
+(1,27,'First Name','1'),
+(1,28,'Last Name','1'),
+(1,29,'Email','1'),
+(1,30,'Phone','1');

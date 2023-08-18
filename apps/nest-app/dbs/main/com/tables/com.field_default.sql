@@ -12,7 +12,7 @@ CREATE TABLE main_com.field_default (
   FOREIGN KEY(field_id) REFERENCES main_com.field(id)
 );
 
-INSERT INTO main_com.field_default (form_type_id, object_id, company_id, default_required) VALUES
+INSERT INTO main_com.field_default (form_type_id, field_id, company_id, default_required) VALUES
 (1,1,null,'1'),
 (1,21,null,'1'),
 (1,22,null,'1'),
