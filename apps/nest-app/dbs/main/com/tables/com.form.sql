@@ -2,10 +2,12 @@
 CREATE TABLE main_com.form (
   id SERIAL PRIMARY KEY,
 
-  label VARCHAR(255),
-  description VARCHAR(255),
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
 
-  form_type_id INT,
+  data jsonb DEFAULT '[]',
+
+  form_type_id INT NOT NULL,
   company_id INT,
 
   is_active BOOLEAN DEFAULT TRUE,
@@ -25,5 +27,5 @@ BEFORE UPDATE ON main_com.form
 FOR EACH ROW
 EXECUTE FUNCTION fn_updated_at();
 
-INSERT INTO main_com.form(form_type_id, company_id, label, description, is_active, is_published) VALUES
+INSERT INTO main_com.form(form_type_id, company_id, title, description, is_active, is_published) VALUES
 ('1',null,'Signup','New user signup','1','1');

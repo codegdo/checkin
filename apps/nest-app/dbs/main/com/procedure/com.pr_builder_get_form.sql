@@ -1,46 +1,3 @@
-field_id AS id,
-field_name AS name,
-field_type AS type,
-field_data_type AS dataType,
-field_label AS label,
-field_description AS description,
-field_hint AS hint,
-field_placeholder AS placeholder,
-length,
-min,
-max,
-pattern,
-accessibility,
-validation,
-translation,
-lookup,
-mapping,
-position,
-mapTopParent,
-defaultValue,
-defaultRequired,
-isRequired
-"field_id": 3,
-        "field_max": null,
-        "field_min": null,
-        "field_hint": null,
-        "field_name": "companyLogoUrl",
-        "field_type": "text",
-        "field_label": "Logo Url",
-        "field_lookup": "null",
-        "field_mapping": "main_sec.company.logo_url",
-        "field_pattern": null,
-        "field_position": null,
-        "field_data_type": "field",
-        "field_validation": null,
-        "field_description": null,
-        "field_is_required": false,
-        "field_placeholder": null,
-        "field_translation": ,
-        "field_accessibility": null,
-        "field_default_value": null,
-        "field_map_to_parent": null,
-        "field_default_required": false
 CREATE OR REPLACE PROCEDURE main_com.pr_builder_get_form(
   IN input_form_id INT,
   OUT data json
@@ -50,34 +7,59 @@ BEGIN
   -- Fetch form data
   WITH form AS (
     SELECT *
-    FROM main_com.form
-    WHERE id = input_form_id
+    FROM main_com.fn_get_form(input_form_id::VARCHAR)
   ), form_type_field AS (
     -- Fetch form_type_field data
-    SELECT *
+    SELECT
+    field_id "id",
+    field_name "name",
+    field_type "type",
+    field_data_type "dataType",
+    field_title "title",
+    field_description "description",
+    field_hint "hint",
+    field_placeholder "placeholder",
+    field_length "length",
+    field_min "min",
+    field_max "max",
+    field_pattern "pattern",
+    field_accessibility "accessibility",
+    field_validation "validation",
+    field_translation "translation",
+    field_lookup "lookup",
+    field_mapping "mapping",
+    field_position "position",
+    field_map_to_parent "mapTopParent",
+    field_default_value "defaultValue",
+    field_default_required "defaultRequired",
+    field_is_required "isRequired",
+    field_is_disabled "isDisabled",
+    field_is_hidden "isHidden",
+    field_is_readonly "isReadonly"
     FROM main_com.fn_get_form_type_field((SELECT form_type_id FROM form))
   ), form_field AS (
     -- Fetch form_field data
     SELECT *
     FROM form_type_field AS ftf
-    JOIN main_com.form_field AS ff ON ftf.field_id = ff.field_id
+    JOIN main_com.form_field AS ff ON ftf.id = ff.field_id
     WHERE ff.form_id = input_form_id
   )
   SELECT json_agg(form_data)::jsonb
   INTO data
   FROM (
-    SELECT 
-    id,
-    label,
-    description,
+    SELECT
+    form_id "id",
+    form_title "title",
+    form_description "description",
+    form_data "data",
     (
       SELECT json_agg(ftf.*)
       FROM form_type_field AS ftf
-    ) AS fields,
+    ) "fields",
     (
       SELECT json_agg(ff.*)
       FROM form_field AS ff
-    ) AS "formFields"
+    ) "formFields"
     FROM form
   ) form_data;
 END;

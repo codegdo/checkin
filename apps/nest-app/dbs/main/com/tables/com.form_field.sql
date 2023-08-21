@@ -3,7 +3,7 @@ CREATE TABLE main_com.form_field (
   form_id INT NOT NULL,
   field_id INT NOT NULL,
 
-  label VARCHAR(100),
+  title VARCHAR(255),
   description TEXT,
   hint VARCHAR(255),
   placeholder VARCHAR(100),
@@ -44,7 +44,7 @@ FOR EACH ROW
 EXECUTE FUNCTION fn_updated_at();
 
 
-INSERT INTO main_com.form_field (form_id, field_id, label, is_required) VALUES
+INSERT INTO main_com.form_field (form_id, field_id, title, is_required) VALUES
 (1,1,'Company Name','1'),
 (1,20,'Business Type','1'),
 (1,21,'Username','1'),
