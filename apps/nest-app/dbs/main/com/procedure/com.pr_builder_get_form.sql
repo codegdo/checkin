@@ -23,7 +23,10 @@ BEGIN
   SELECT json_agg(form_data)::jsonb
   INTO data
   FROM (
-    SELECT *,
+    SELECT 
+    id,
+    label,
+    description,
     (
       SELECT json_agg(ftf.*)
       FROM form_type_field AS ftf
@@ -31,7 +34,7 @@ BEGIN
     (
       SELECT json_agg(ff.*)
       FROM form_field AS ff
-    ) AS form_fields
+    ) AS "formFields"
     FROM form
   ) form_data;
 END;
