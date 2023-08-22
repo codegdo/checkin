@@ -9,6 +9,8 @@ RETURNS TABLE (
   field_description TEXT,
   field_hint VARCHAR,
   field_placeholder VARCHAR,
+  field_data JSON,
+  field_value VARCHAR,
   field_default_value VARCHAR,
   field_min INT,
   field_max INT,
@@ -20,6 +22,8 @@ RETURNS TABLE (
   field_map_to_parent VARCHAR,
   field_mapping VARCHAR,
   field_lookup VARCHAR,
+  field_is_dependent BOOLEAN,
+  field_has_dependent BOOLEAN,
   field_default_required BOOLEAN,
   field_is_required BOOLEAN,
   field_is_disabled BOOLEAN,
@@ -30,9 +34,9 @@ DECLARE
   var_id INT;
   var_lookup VARCHAR;
   var_is_dependent BOOLEAN;
+  var_lookup_data JSONB;
   var_row_max INT;
   var_row_min INT := 1;
-  var_lookup_data JSONB;
 
 BEGIN
 
@@ -55,6 +59,8 @@ BEGIN
     ff.description field_description,
     ff.hint field_hint,
     ff.placeholder field_placeholder,
+    fld.data field_data,
+    fld.value field_value,
     ff.default_value field_default_value,
     ff.min field_min,
     ff.max field_max,
@@ -66,6 +72,8 @@ BEGIN
     ff.map_to_parent field_map_to_parent,
     fld.mapping field_mapping,
     fld.lookup field_lookup,
+    fld.is_dependent field_is_dependent,
+    fld.has_dependent field_has_dependent,
     COALESCE(fd.default_required, false) AS field_default_required,
     COALESCE(ff.is_required OR COALESCE(fd.default_required, false), false) AS field_is_required,
     ff.is_disabled field_is_disabled,
@@ -77,6 +85,43 @@ BEGIN
     LEFT JOIN main_com.field_default fd ON fld.id = fd.field_id
   WHERE
     ff.form_id = input_form_id;
+
+  DROP TABLE IF EXISTS temp_lookup CASCADE;
+  CREATE TEMP TABLE temp_lookup AS
+  SELECT
+    row_number() OVER () AS row_num,
+    tff.field_id,
+    tff.field_lookup,
+    tff.field_is_dependent
+    --tff.value
+  FROM temp_form_field tff
+  WHERE tff.field_lookup <> 'null';
+
+  SELECT max(tl.row_num)
+  INTO var_row_max
+  FROM temp_lookup tl;
+
+  WHILE var_row_max >= var_row_min
+  LOOP
+
+    WITH tl AS (
+    SELECT *
+    FROM temp_lookup tl
+    WHERE tl.row_num = var_row_min
+    ), lookup_value AS (
+      SELECT * from fn_lookup_value((SELECT tl.field_lookup FROM tl)::TEXT)
+    )
+    UPDATE temp_form_field tff
+    SET field_data = (SELECT json_agg(lv.*) FROM lookup_value lv)::json
+    FROM tl
+    WHERE tff.field_id = tl.field_id;
+
+    RAISE NOTICE 'ROWMAX: %', var_row_max;
+
+    var_row_min := var_row_min + 1;
+  END LOOP;
+
+  --RAISE NOTICE 'LOOKUP: %', (SELECT json_agg(tl.*) FROM temp_lookup tl)::json;
 
   RETURN QUERY
   SELECT * FROM temp_form_field;
