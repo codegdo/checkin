@@ -39,10 +39,35 @@ BEGIN
     FROM main_com.fn_get_form_type_field((SELECT form_type_id FROM form))
   ), form_field AS (
     -- Fetch form_field data
-    SELECT *
+    SELECT 
+    field_id "id",
+    field_name "name",
+    field_type "type",
+    field_data_type "dataType",
+    field_title "title",
+    field_description "description",
+    field_hint "hint",
+    field_placeholder "placeholder",
+    field_length "length",
+    field_min "min",
+    field_max "max",
+    field_pattern "pattern",
+    field_accessibility "accessibility",
+    field_validation "validation",
+    field_translation "translation",
+    field_lookup "lookup",
+    field_mapping "mapping",
+    field_position "position",
+    field_map_to_parent "mapTopParent",
+    field_default_value "defaultValue",
+    field_default_required "defaultRequired",
+    field_is_required "isRequired",
+    field_is_disabled "isDisabled",
+    field_is_hidden "isHidden",
+    field_is_readonly "isReadonly"
     FROM form_type_field AS ftf
     JOIN main_com.form_field AS ff ON ftf.id = ff.field_id
-    WHERE ff.form_id = input_form_id
+    WHERE ff.form_id = (SELECT form_id FROM form)
   )
   SELECT json_agg(form_data)::jsonb
   INTO data

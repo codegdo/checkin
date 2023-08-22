@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION main_com.fn_get_form(input_form_id INT)
+CREATE OR REPLACE FUNCTION main_com.fn_get_form(input_form_id VARCHAR)
 RETURNS TABLE (
   form_id INT,
   form_type_id INT,

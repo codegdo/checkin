@@ -1,11 +1,11 @@
-CREATE OR REPLACE FUNCTION main_com.fn_get_form_field(p_form_id INT)
+CREATE OR REPLACE FUNCTION main_com.fn_get_form_field(input_form_id INT)
 RETURNS TABLE (
   row_num BIGINT,
   field_id INT,
   field_type VARCHAR,
   field_data_type VARCHAR,
   field_name VARCHAR,
-  field_label VARCHAR,
+  field_title VARCHAR,
   field_description TEXT,
   field_hint VARCHAR,
   field_placeholder VARCHAR,
@@ -21,7 +21,10 @@ RETURNS TABLE (
   field_mapping VARCHAR,
   field_lookup VARCHAR,
   field_default_required BOOLEAN,
-  field_is_required BOOLEAN
+  field_is_required BOOLEAN,
+  field_is_disabled BOOLEAN,
+  field_is_hidden BOOLEAN,
+  field_is_readonly BOOLEAN
 ) AS $$
 DECLARE
   var_id INT;
@@ -41,14 +44,14 @@ BEGIN
     fld.type field_type,
     fld.data_type field_data_type,
     fld.name field_name,
-    COALESCE(ff.label,
+    COALESCE(ff.title,
       CASE
         WHEN fld.name ~ E'^[a-z]' THEN
           fn_camel_case_split(fld.name)
         ELSE
           fld.name
       END
-    ) AS field_label,
+    ) AS field_title,
     ff.description field_description,
     ff.hint field_hint,
     ff.placeholder field_placeholder,
@@ -64,14 +67,16 @@ BEGIN
     fld.mapping field_mapping,
     fld.lookup field_lookup,
     COALESCE(fd.default_required, false) AS field_default_required,
-    COALESCE(ff.is_required OR COALESCE(fd.default_required, false), false) AS field_is_required
+    COALESCE(ff.is_required OR COALESCE(fd.default_required, false), false) AS field_is_required,
+    ff.is_disabled field_is_disabled,
+    ff.is_hidden field_is_hidden,
+    ff.is_readonly field_is_readonly
   FROM
-    main_com.form f
-    JOIN main_com.form_field ff ON f.id = ff.form_id
+    main_com.form_field ff
     LEFT JOIN main_com.field fld ON ff.field_id = fld.id
     LEFT JOIN main_com.field_default fd ON fld.id = fd.field_id
   WHERE
-    f.id = p_form_id;
+    ff.form_id = input_form_id;
 
   RETURN QUERY
   SELECT * FROM temp_form_field;

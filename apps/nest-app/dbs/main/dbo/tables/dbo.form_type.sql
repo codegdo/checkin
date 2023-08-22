@@ -8,5 +8,5 @@ CREATE TABLE main_dbo.form_type (
   created_by VARCHAR(50) DEFAULT CURRENT_USER
 );
 
-INSERT INTO main_dbo.form_type (id, name, label) VALUES
+INSERT INTO main_dbo.form_type (id, name, title) VALUES
 (1,'auth_signup','User Signup');
