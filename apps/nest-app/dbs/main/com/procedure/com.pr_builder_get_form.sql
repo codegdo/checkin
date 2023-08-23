@@ -15,22 +15,28 @@ BEGIN
     field_name "name",
     field_type "type",
     field_data_type "dataType",
+
     field_title "title",
     field_description "description",
-    field_hint "hint",
-    field_placeholder "placeholder",
     field_length "length",
-    field_min "min",
-    field_max "max",
-    field_pattern "pattern",
+    
+    field_data "data",
+    --field_data_value "dataValue",
+    field_default_value "defaultValue",
+    field_value "value",
+
     field_accessibility "accessibility",
     field_validation "validation",
     field_translation "translation",
+    field_options "options",
+
     field_lookup "lookup",
     field_mapping "mapping",
+
     field_position "position",
     field_map_to_parent "mapTopParent",
-    field_default_value "defaultValue",
+    field_parent_id "parentId",
+
     field_default_required "defaultRequired",
     field_is_required "isRequired",
     field_is_disabled "isDisabled",
@@ -44,22 +50,27 @@ BEGIN
     ftf."name",
     ftf."type",
     ftf."dataType",
+
     ftf."title",
     ftf."description",
-    ftf."hint",
-    ftf."placeholder",
     ftf."length",
-    ftf."min",
-    ftf."max",
-    ftf."pattern",
+
+    ftf."data",
+    ftf."defaultValue",
+    ftf."value",
+
     ftf."accessibility",
     ftf."validation",
     ftf."translation",
+    ftf."options",
+
     ftf."lookup",
     ftf."mapping",
+
     ftf."position",
     ftf."mapTopParent",
-    ftf."defaultValue",
+    ftf."parentId",
+
     ftf."defaultRequired",
     ftf."isRequired",
     ftf."isDisabled",
@@ -84,7 +95,7 @@ BEGIN
     (
       SELECT json_agg(ff.*)
       FROM form_field AS ff
-    ) "formFields"
+    ) "fieldData"
     FROM form
   ) form_data;
 END;

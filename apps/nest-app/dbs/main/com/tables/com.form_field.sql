@@ -5,20 +5,15 @@ CREATE TABLE main_com.form_field (
 
   title VARCHAR(255),
   description TEXT,
-  hint VARCHAR(255),
-  placeholder VARCHAR(100),
 
   default_value VARCHAR(255),
-
-  min INT,
-  max INT,
-  pattern VARCHAR(255),
 
   accessibility JSON,
   validation JSON,
   translation JSON,
+  options JSON,
 
-  position INT DEFAULT 0,
+  position INT,
   map_to_parent VARCHAR(10),
 
   is_required BOOLEAN DEFAULT FALSE,
@@ -44,13 +39,13 @@ FOR EACH ROW
 EXECUTE FUNCTION fn_updated_at();
 
 
-INSERT INTO main_com.form_field (form_id, field_id, title, is_required) VALUES
-(1,1,'Company Name','1'),
-(1,20,'Business Type','1'),
-(1,21,'Username','1'),
-(1,22,'Password','1'),
-(1,26,'Name','1'),
-(1,27,'First Name','1'),
-(1,28,'Last Name','1'),
-(1,29,'Email','1'),
-(1,30,'Phone','1');
+INSERT INTO main_com.form_field (form_id, field_id, title, translation, options, is_required) VALUES
+(1,1,'Company Name','{"es":{"companyName":{"title":"Nombre"}},"vn":{"companyName":{"title":"Tên"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,20,'Business Type','{"es":{"companyBusinessType":{"title":"Tipo de negocio"}},"vn":{"companyBusinessType":{"title":"Phân loại doanh nghiệp"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,21,'Username','{"es":{"userUsername":{"title":"Nombre de usuario"}},"vn":{"userUsername":{"title":"Tên đăng nhập"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,22,'Password','{"es":{"userPassword":{"title":"Contraseña"}},"vn":{"userPassword":{"title":"Mật khẩu"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,26,'Full Name','{"es":{"contactFullName":{"title":"Nombre completo"}},"vn":{"contactFullName":{"title":"Họ và tên"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,27,'First Name','{"es":{"contactFirstName":{"title":"Primer nombre"}},"vn":{"contactFirstName":{"title":"Tên"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,28,'Last Name','{"es":{"contactLastName":{"title":"Apellido paterno"}},"vn":{"contactLastName":{"title":"Họ"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,29,'Email','{"es":{"contactEmail":{"title":"Email"}},"vn":{"contactEmail":{"title":"Email"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,30,'Phone','{"es":{"contactPhone":{"title":"Teléfono"}},"vn":{"contactPhone":{"title":"Số điện thoại"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1');

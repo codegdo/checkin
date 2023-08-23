@@ -6,7 +6,7 @@ const data = [
     id: '1',
     name: 'block',
     type: 'div',
-    group: 'block',
+    dataType: 'block',
     data: [],
     parentId: null,
     position: 0
@@ -15,7 +15,7 @@ const data = [
     id: 2,
     name: 'field',
     type: 'text',
-    group: 'field',
+    dataType: 'field',
     data: null,
     parentId: 1,
     position: 1,
@@ -24,7 +24,7 @@ const data = [
     id: 3,
     name: 'field',
     type: 'text',
-    group: 'field',
+    dataType: 'field',
     data: null,
     parentId: null,
     position: 2
@@ -33,7 +33,7 @@ const data = [
     id: '4',
     name: 'block',
     type: 'div',
-    group: 'block',
+    dataType: 'block',
     data: [],
     parentId: null,
     position: 3
@@ -42,7 +42,7 @@ const data = [
     id: 5,
     name: 'field',
     type: 'text',
-    group: 'field',
+    dataType: 'field',
     data: null,
     parentId: 4,
     position: 4,
@@ -54,14 +54,14 @@ const dragFields = [
     id: '',
     name: 'section',
     type: 'section',
-    group: 'section',
+    dataType: 'section',
     data: []
   },
   {
     id: '',
     name: 'block',
     type: 'div',
-    group: 'block',
+    dataType: 'block',
     data: []
   },
   //
@@ -69,14 +69,14 @@ const dragFields = [
     id: 5,
     name: 'field',
     type: 'text',
-    group: 'field',
+    dataType: 'field',
     data: []
   },
   {
     id: 6,
     name: 'field',
     type: 'text',
-    group: 'field',
+    dataType: 'field',
     data: []
   },
 
@@ -85,7 +85,7 @@ const dragFields = [
 
 function Index() {
   return <div>
-    <DragDrop data={data} dragFields={dragFields} />
+    HOME
   </div>
 }
 

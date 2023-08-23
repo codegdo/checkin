@@ -20,6 +20,7 @@ CREATE TABLE main_com.field (
   company_id INT,
 
   default_translation JSON,
+  default_options JSON DEFAULT '{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}',
   
   has_dependent BOOLEAN NOT NULL DEFAULT FALSE,
   is_dependent BOOLEAN NOT NULL DEFAULT FALSE,
@@ -76,8 +77,8 @@ INSERT INTO main_com.field (name, type, data_type, length, mapping, lookup, defa
 ('userRole','select','field',50,'main_sec.user.group_id','checkin.main_sec.group.name.id','{"es":{"userRole":{"title":"Rol"}},"vn":{"userRole":{"title":"Vai trò"}}}',null,2,null),
 
 ('contactFullName','component','group',0,'null','null','{"es":{"contactFullName":{"title":"Nombre completo"}},"vn":{"contactFullName":{"title":"Họ và tên"}}}',null,3,null),
-('contactFirstName','text','field',50,'main_sec.contact.first_name','null','{"es":{"contactFirstName":{"title":"Primer nombre"}},"vn":{"contactFirstName":{"title":"Tên"}}}',null,3,null),
-('contactLastName','text','field',50,'main_sec.contact.last_name','null','{"es":{"contactLastName":{"title":"Apellido paterno"}},"vn":{"contactLastName":{"title":"Họ"}}}',null,3,null),
+('contactFirstName','text','field',50,'main_sec.contact.first_name','null','{"es":{"contactFirstName":{"title":"Primer nombre"}},"vn":{"contactFirstName":{"title":"Tên"}}}',26,3,null),
+('contactLastName','text','field',50,'main_sec.contact.last_name','null','{"es":{"contactLastName":{"title":"Apellido paterno"}},"vn":{"contactLastName":{"title":"Họ"}}}',26,3,null),
 ('contactEmail','email','field',100,'main_sec.contact.email','null','{"es":{"contactEmail":{"title":"Email"}},"vn":{"contactEmail":{"title":"Email"}}}',null,3,null),
 ('contactPhone','text','field',20,'main_sec.contact.phone','null','{"es":{"contactPhone":{"title":"Teléfono"}},"vn":{"contactPhone":{"title":"Số điện thoại"}}}',null,3,null),
 ('contactStreetAddress','text','field',255,'main_sec.contact.address_id:main_sec.address.street_address','null','{"es":{"contactStreetAddress":{"title":"Dirección de la calle"}},"vn":{"contactStreetAddress":{"title":"Địa chỉ đường"}}}',null,3,null),

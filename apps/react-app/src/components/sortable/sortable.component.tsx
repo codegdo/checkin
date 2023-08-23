@@ -11,6 +11,7 @@ import { SortableField } from "./types";
 interface SortableProps {
   data: SortableField[];
 }
+
 export function Sortable({ data = [] }: SortableProps) {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
   const { current: dnd } = useRef(dndRef);

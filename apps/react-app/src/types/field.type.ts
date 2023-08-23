@@ -23,7 +23,7 @@ export type ElementType = {
   h5: string;
 }
 
-export type GroupType = {
+export type DataType = {
   area: string;
   section: string;
   block: string;
@@ -33,28 +33,6 @@ export type GroupType = {
   field: string;
   group: string;
   grid: string;
-}
-
-interface ElementField {
-  id?: number | string;
-  name: string;
-
-  type: keyof FieldType | keyof ElementType;
-  group?: keyof GroupType;
-
-  data?: (ElementField | FormField)[] | null;
-  value?: string | null;
-
-  parentId?: number | string | null;
-  childId?: number | string | null;
-  position?: number | null;
-}
-
-interface ValidationOptions {
-  min?: number;
-  max?: number;
-  length?: number;
-  pattern?: RegExp;
 }
 
 export interface Condition {
@@ -87,6 +65,18 @@ export interface FieldValidation {
   errorMessage: string;
 }
 
+interface Translations {
+  title: string;
+  description: string;
+  hint: string;
+  placeholder: string;
+}
+
+export interface FieldTranslation {
+  es: Record<string, Translations>;
+  vn: Record<string, Translations>;
+}
+
 export interface Operator {
   id: string | number;
   fieldId: string | number;
@@ -94,45 +84,48 @@ export interface Operator {
   operator: 'add' | 'subtract' | 'multiply' | 'divide';
 }
 
-interface Option {
-  css: [],
+interface Options {
+  css: [];
+  attributes: [];
+  className: string;
+}
+
+interface ElementField {
+  id?: number | string;
+  name: string;
+
+  type: keyof FieldType | keyof ElementType;
+  dataType?: keyof DataType;
+
+  data?: (ElementField | FormField)[] | null;
+  value?: string | null;
+
+  mapToParent?: number | string | null;
+  mapToChild?: number | string | null;
+  position?: number | null;
+}
+
+interface FormField extends ElementField {
+  title?: string;
+  description?: string;
+  placeholder?: string;
+  hint?: string;
+
+  validation?: FieldValidation[],
+  accessibility?: FieldAccessibility[];
+  translation?: FieldTranslation[];
+
+  options?: Options;
+
   min: number;
   max: number;
   length: number;
   pattern: string;
-}
-
-interface FormField extends ElementField {
-  label?: string;
-  description?: string;
-  placeholder?: string;
-  text?: string;
-
-  validation?: FieldValidation[],
-  accessibility?: FieldAccessibility[];
-
-  option?: Option;
-
-  minValue: number;
-  maxValue: number;
-  maxLength: number;
-  pattern: string;
 
   isRequired?: boolean;
   isDisabled?: boolean;
-  isReadOnly?: boolean;
+  isReadonly?: boolean;
   isHidden?: boolean;
-
-  //isInternal?: boolean;
-
-  //isNew?: boolean;
-  //isReview?: boolean;
-
-  //isDependent?: boolean;
-  //hasDependent?: boolean;
-
-  //isConfig?: boolean;
-  //isUnique?: boolean;
 }
 
 export interface NormalizeField extends ElementField, FormField { }
