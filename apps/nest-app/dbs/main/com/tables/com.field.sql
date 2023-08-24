@@ -8,6 +8,7 @@ CREATE TABLE main_com.field (
   data_type VARCHAR(20) NOT NULL,
   
   data JSON,
+  data_value JSON,
   value VARCHAR(100),
 
   length INT,
