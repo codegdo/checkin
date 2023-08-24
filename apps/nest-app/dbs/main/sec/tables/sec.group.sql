@@ -2,7 +2,7 @@
 CREATE TABLE main_sec.group (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100),
-  description VARCHAR(255),
+  description TEXT,
   group_level INT DEFAULT 1,
   group_type_id INT NOT NULL,
   company_id INT,

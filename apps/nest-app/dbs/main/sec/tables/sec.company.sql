@@ -1,7 +1,7 @@
 CREATE TABLE main_sec.company (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
-  description VARCHAR(255),
+  description TEXT,
   logo_url VARCHAR(255),
 
   billing_address_id INT,

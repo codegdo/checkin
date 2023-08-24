@@ -21,6 +21,15 @@ BEGIN
       'column', parts[4],
       'column_id', parts[5]
     );
+  ELSIF array_length(parts, 1) = 6 THEN
+    RETURN json_build_object(
+      'database', parts[1],
+      'schema', parts[2],
+      'table', parts[3],
+      'column', parts[4],
+      'column_id', parts[5],
+      'column_filter', parts[6]
+    );
   ELSE
     RAISE EXCEPTION 'Invalid input format';
   END IF;
