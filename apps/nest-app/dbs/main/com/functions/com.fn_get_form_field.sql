@@ -6,7 +6,7 @@ RETURNS TABLE (
   field_data_type VARCHAR,
   field_name VARCHAR,
   field_title VARCHAR,
-  field_description TEXT,
+  field_description VARCHAR,
   field_data JSON,
   field_data_value JSON,
   field_value VARCHAR,
@@ -70,13 +70,13 @@ BEGIN
     fld.parent_id field_parent_id,
     fld.mapping field_mapping,
     fld.lookup field_lookup,
-    fld.is_dependent field_is_dependent,
-    fld.has_dependent field_has_dependent,
+    COALESCE(fld.is_dependent, false) AS field_is_dependent,
+    COALESCE(fld.has_dependent, false) AS field_has_dependent,
     COALESCE(fd.default_required, false) AS field_default_required,
     COALESCE(ff.is_required OR COALESCE(fd.default_required, false), false) AS field_is_required,
-    ff.is_disabled field_is_disabled,
-    ff.is_hidden field_is_hidden,
-    ff.is_readonly field_is_readonly
+    COALESCE(ff.is_disabled, false) AS field_is_disabled,
+    COALESCE(ff.is_hidden, false) AS field_is_hidden,
+    COALESCE(ff.is_readonly, false) AS field_is_readonly
   FROM
     main_com.form_field ff
     LEFT JOIN main_com.field fld ON ff.field_id = fld.id
@@ -129,5 +129,3 @@ END;
 $$ LANGUAGE plpgsql;
 
 select * from main_com.fn_get_form_field(1);
-
-select * from main_dbo.object;

@@ -1,5 +1,5 @@
 CREATE TABLE main_dbo.object (
-  id INT PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
 
   is_internal BOOLEAN DEFAULT TRUE,
@@ -14,19 +14,20 @@ CREATE TABLE main_dbo.object (
   created_by VARCHAR(50) DEFAULT CURRENT_USER
 );
 
-INSERT INTO main_dbo.object(id, name, is_internal, is_external, is_extendable, is_editable, is_auditable, is_active) VALUES
-(1,'company','1','1','0','0','0','1'),
-(2,'user','1','1','0','0','0','1'),
-(3,'contact','1','1','0','0','0','1'),
-(4,'account','1','1','0','0','0','1'),
-(5,'workspace','1','1','0','0','0','1'),
-(6,'group','1','1','0','0','0','1'),
-(7,'role','1','1','0','0','0','1'),
-(8,'policy','1','1','0','0','0','1'),
-(9,'permission','1','1','0','0','0','1'),
+INSERT INTO main_dbo.object(name, is_internal, is_external, is_extendable, is_editable, is_auditable, is_active) VALUES
+('user','1','1','0','0','0','1'),
+('company','1','1','0','0','0','1'),
+('contact','1','1','0','0','0','1'),
+('account','1','1','0','0','0','1'),
+('workspace','1','1','0','0','0','1'),
 
-(10,'customer','1','1','0','0','0','1'),
-(11,'customer_group','1','1','0','0','0','1');
+('group','1','1','0','0','0','1'),
+('role','1','1','0','0','0','1'),
+('policy','1','1','0','0','0','1'),
+('permission','1','1','0','0','0','1'),
+
+('customer','1','1','0','0','0','1'),
+('customer_group','1','1','0','0','0','1');
 
 
 --id INTEGER GENERATED ALWAYS AS IDENTITY NOT NULL,

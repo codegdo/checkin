@@ -5,7 +5,7 @@ RETURNS TABLE (
   field_data_type VARCHAR,
   field_name VARCHAR,
   field_title VARCHAR,
-  field_description TEXT,
+  field_description VARCHAR,
   field_data JSON,
   field_data_value JSON,
   field_value VARCHAR,
@@ -20,6 +20,8 @@ RETURNS TABLE (
   field_parent_id INT,
   field_mapping VARCHAR,
   field_lookup VARCHAR,
+  field_is_dependent BOOLEAN,
+  field_has_dependent BOOLEAN,
   field_default_required BOOLEAN,
   field_is_required BOOLEAN,
   field_is_disabled BOOLEAN,
@@ -58,11 +60,13 @@ BEGIN
     fld.parent_id field_parent_id,
     fld.mapping field_mapping,
     fld.lookup field_lookup,
+    COALESCE(fld.is_dependent, false) AS field_is_dependent,
+    COALESCE(fld.has_dependent, false) AS field_has_dependent,
     COALESCE(fd.default_required, false) AS field_default_required,
     COALESCE(ff.is_required OR COALESCE(fd.default_required, false), false) AS field_is_required,
-    ff.is_disabled field_is_disabled,
-    ff.is_hidden field_is_hidden,
-    ff.is_readonly field_is_readonly
+    COALESCE(ff.is_disabled, false) AS field_is_disabled,
+    COALESCE(ff.is_hidden, false) AS field_is_hidden,
+    COALESCE(ff.is_readonly, false) AS field_is_readonly
   FROM
     main_dbo.form_type ft
     JOIN main_dbo.form_type_object fto ON ft.id = fto.form_type_id

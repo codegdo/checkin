@@ -1,37 +1,47 @@
 interface InputItem {
   id: number;
   name: string;
-  dataType: string;
-  data: any;
+  dataType?: string;
+  data?: any;
   parentId: number | null;
 }
 
 interface OutputItem {
   id: number;
   name: string;
-  dataType: string;
-  data: any;
+  dataType?: string;
+  data?: any;
   parentId: number | null;
 }
 
 function restructureArray(inputArray: InputItem[]): OutputItem[] {
-  const idToObject: Record<number, OutputItem> = {};
+  const idToObject: { [id: number]: OutputItem } = {};
 
   // First pass: Create objects and organize them by id
   inputArray.forEach(item => {
     const { id, ...rest } = item;
     if (!idToObject[id]) {
-      idToObject[id] = { id, ...rest, data: null };
+      idToObject[id] = { id, ...rest, data: [] };
     }
     idToObject[id].data = rest.data;
   });
 
-  // Second pass: Organize objects into a flat structure
+  // Second pass: Organize objects into a hierarchical structure
   const result: OutputItem[] = [];
+
   inputArray.forEach(item => {
-    const { id } = item;
-    if (idToObject[id]) {
-      result.push(idToObject[id]);
+    const { id, parentId } = item;
+    if (parentId === null || idToObject[parentId]) {
+      if (parentId === null || parentId === id) {
+        result.push(idToObject[id]);
+      } else {
+        if (!idToObject[parentId].data) {
+          idToObject[parentId].data = [];
+        }
+        idToObject[parentId].data.push(idToObject[id]);
+      }
+    } else {
+      result.push(item); // Add items with missing parentId as-is
     }
   });
 

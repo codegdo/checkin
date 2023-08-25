@@ -6,7 +6,7 @@ CREATE TABLE main_dbo.language (
   region VARCHAR(50),
   is_active BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  created_by VARCHAR(50) DEFAULT CURRENT_USER
 );
 
 INSERT INTO main_dbo.language (name, code, native_name, region, is_active)

@@ -1,3 +1,5 @@
+-- This function performs a dynamic SQL lookup and returns key-value pairs.
+
 CREATE OR REPLACE FUNCTION fn_lookup_value(
   input_string TEXT,
   input_login_id INT DEFAULT 0
@@ -24,9 +26,11 @@ BEGIN
   lookup_column_filter := lookup_info->>'column_filter';
 
   -- Get user company_id from fn_get_user
-  SELECT user_company_id
-  INTO var_company_id
-  FROM main_sec.fn_get_user(input_login_id);
+  IF input_login_id IS NOT NULL THEN
+    SELECT user_company_id
+    INTO var_company_id
+    FROM main_sec.fn_get_user(input_login_id);
+  END IF;
 
   -- Construct the dynamic SQL query
   sql_string := 'SELECT DISTINCT ';
@@ -55,7 +59,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 
--- SELECT * from fn_lookup_value('checkin.main_com.form.title.id.company_id', 1);
+-- SELECT * FROM fn_lookup_value('checkin.main_com.form.title.id.company_id', 1);
 
 
 /* CREATE OR REPLACE FUNCTION fn_lookup_value(

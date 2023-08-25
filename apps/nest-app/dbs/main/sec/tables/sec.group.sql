@@ -10,7 +10,7 @@ CREATE TABLE main_sec.group (
   is_active BOOLEAN DEFAULT TRUE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
   created_by VARCHAR(50) DEFAULT CURRENT_USER,
   updated_by VARCHAR(50),
 

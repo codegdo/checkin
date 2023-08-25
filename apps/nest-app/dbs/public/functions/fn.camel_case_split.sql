@@ -1,4 +1,5 @@
 -- Create a utility function to split camel-case words
+
 CREATE OR REPLACE FUNCTION fn_camel_case_split(input_string VARCHAR)
 RETURNS VARCHAR AS $$
 DECLARE
@@ -17,3 +18,5 @@ BEGIN
   END;
 END;
 $$ LANGUAGE plpgsql;
+
+--SELECT fn_camel_case_split('companyStreetAddress');

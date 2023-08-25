@@ -3,9 +3,10 @@ CREATE TABLE main_com.form (
   id SERIAL PRIMARY KEY,
 
   title VARCHAR(255) NOT NULL,
-  description TEXT,
+  description VARCHAR(255),
 
-  data jsonb DEFAULT '[]',
+  data JSONB DEFAULT '[]',
+  translation JSONB,
 
   form_type_id INT NOT NULL,
   company_id INT,
@@ -14,7 +15,7 @@ CREATE TABLE main_com.form (
   is_published BOOLEAN DEFAULT TRUE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
   created_by VARCHAR(50) DEFAULT CURRENT_USER,
   updated_by VARCHAR(50),
 

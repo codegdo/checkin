@@ -4,8 +4,9 @@ RETURNS TABLE (
   form_type_id INT,
   form_name VARCHAR,
   form_title VARCHAR,
-  form_description TEXT,
-  form_data jsonb,
+  form_description VARCHAR,
+  form_data JSONB,
+  form_translation JSONB,
   form_is_active BOOLEAN,
   form_is_published BOOLEAN
 ) AS $$
@@ -19,6 +20,7 @@ BEGIN
   f.title form_title,
   f.description form_description,
   f.data form_data,
+  COALESCE(f.translation, ft.default_translation) AS form_translation,
   f.is_active form_is_active,
   f.is_published form_is_published
   FROM main_com.form f

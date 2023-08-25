@@ -16,14 +16,7 @@ VALUES
   ('Restaurant', 'A business that provides food and beverage services to customers.', 9);
 
 
-
-
-
-
-
-
-
-
+/*
 -- Insert business_type categories with descriptions
 INSERT INTO main_dbo.business_type (category, description)
 VALUES
@@ -48,3 +41,4 @@ VALUES
   ('Government', 'Administration and management of public affairs.'),
   ('Professional Services', 'Offering specialized services to clients.')
   ;
+*/
