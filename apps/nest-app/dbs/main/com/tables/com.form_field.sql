@@ -40,19 +40,19 @@ EXECUTE FUNCTION fn_updated_at();
 
 
 INSERT INTO main_com.form_field (form_id, field_id, title, translation, options, is_required) VALUES
-(1,26,'Full Name','{"es":{"contactFullName":{"title":"Nombre completo"}},"vn":{"contactFullName":{"title":"Họ và tên"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
-(1,27,'First Name','{"es":{"contactFirstName":{"title":"Primer nombre"}},"vn":{"contactFirstName":{"title":"Tên"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
-(1,28,'Last Name','{"es":{"contactLastName":{"title":"Apellido paterno"}},"vn":{"contactLastName":{"title":"Họ"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
-(1,29,'Email','{"es":{"contactEmail":{"title":"Email"}},"vn":{"contactEmail":{"title":"Email"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,27,'Full Name','{"es":{"contactFullName":{"title":"Nombre completo"}},"vn":{"contactFullName":{"title":"Họ và tên"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,28,'First Name','{"es":{"contactFirstName":{"title":"Primer nombre"}},"vn":{"contactFirstName":{"title":"Tên"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,29,'Last Name','{"es":{"contactLastName":{"title":"Apellido paterno"}},"vn":{"contactLastName":{"title":"Họ"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,30,'Email','{"es":{"contactEmail":{"title":"Email"}},"vn":{"contactEmail":{"title":"Email"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
 (1,1,'Username','{"es":{"userUsername":{"title":"Nombre de usuario"}},"vn":{"userUsername":{"title":"Tên đăng nhập"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
 (1,2,'Password','{"es":{"userPassword":{"title":"Contraseña"}},"vn":{"userPassword":{"title":"Mật khẩu"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
 (1,6,'Company Name','{"es":{"companyName":{"title":"Nombre"}},"vn":{"companyName":{"title":"Tên"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
-(1,20,'Business Type','{"es":{"companyBusinessType":{"title":"Tipo de negocio"}},"vn":{"companyBusinessType":{"title":"Phân loại doanh nghiệp"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
-(1,38,'Location Name','{"es":{"companyBusinessType":{"title":"Nombre de la ubicación"}},"vn":{"companyBusinessType":{"title":"Tên địa điểm"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
-(1,40,'Location Address','{"es":{"companyBusinessType":{"title":"Dirección de la ubicación"}},"vn":{"companyBusinessType":{"title":"Địa chỉ địa điểm"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
-(1,41,'Street Address','{"es":{"companyBusinessType":{"title":"Dirección de la calle"}},"vn":{"companyBusinessType":{"title":"Địa chỉ đường"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
-(1,42,'Country','{"es":{"companyBusinessType":{"title":"País"}},"vn":{"companyBusinessType":{"title":"Quốc gia"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
-(1,43,'State','{"es":{"companyBusinessType":{"title":"Estado"}},"vn":{"companyBusinessType":{"title":"Tiểu bang"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
-(1,44,'City','{"es":{"companyBusinessType":{"title":"Ciudad"}},"vn":{"companyBusinessType":{"title":"Thành phố"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
-(1,45,'Potal Code','{"es":{"companyBusinessType":{"title":"Código postal"}},"vn":{"companyBusinessType":{"title":"Mã bưu điện"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
-(1,30,'Phone','{"es":{"contactPhone":{"title":"Teléfono"}},"vn":{"contactPhone":{"title":"Số điện thoại"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1');
+(1,26,'Business Type','{"es":{"companyBusinessType":{"title":"Tipo de negocio"}},"vn":{"companyBusinessType":{"title":"Phân loại doanh nghiệp"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,39,'Location Name','{"es":{"companyBusinessType":{"title":"Nombre de la ubicación"}},"vn":{"companyBusinessType":{"title":"Tên địa điểm"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,41,'Location Address','{"es":{"companyBusinessType":{"title":"Dirección de la ubicación"}},"vn":{"companyBusinessType":{"title":"Địa chỉ địa điểm"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,42,'Street Address','{"es":{"companyBusinessType":{"title":"Dirección de la calle"}},"vn":{"companyBusinessType":{"title":"Địa chỉ đường"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,43,'Country','{"es":{"companyBusinessType":{"title":"País"}},"vn":{"companyBusinessType":{"title":"Quốc gia"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,44,'State','{"es":{"companyBusinessType":{"title":"Estado"}},"vn":{"companyBusinessType":{"title":"Tiểu bang"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,45,'City','{"es":{"companyBusinessType":{"title":"Ciudad"}},"vn":{"companyBusinessType":{"title":"Thành phố"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,46,'Potal Code','{"es":{"companyBusinessType":{"title":"Código postal"}},"vn":{"companyBusinessType":{"title":"Mã bưu điện"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
+(1,31,'Phone','{"es":{"contactPhone":{"title":"Teléfono"}},"vn":{"contactPhone":{"title":"Số điện thoại"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1');
