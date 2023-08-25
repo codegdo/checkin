@@ -93,7 +93,8 @@ BEGIN
     tff.field_is_dependent
     --tff.value
   FROM temp_form_field tff
-  WHERE tff.field_lookup <> 'null';
+  WHERE tff.field_lookup <> 'null' 
+  AND tff.field_is_dependent IS NOT TRUE;
 
   SELECT max(tl.row_num)
   INTO var_row_max
@@ -128,3 +129,5 @@ END;
 $$ LANGUAGE plpgsql;
 
 select * from main_com.fn_get_form_field(1);
+
+select * from main_dbo.object;
