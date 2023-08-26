@@ -1,5 +1,4 @@
 -- This function splits an input string into parts using '.' as a delimiter and constructs a JSON object.
-
 CREATE OR REPLACE FUNCTION fn_split_lookup_string_to_json(input_string TEXT)
 RETURNS JSON
 AS $$

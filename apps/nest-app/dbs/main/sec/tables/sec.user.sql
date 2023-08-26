@@ -1,4 +1,4 @@
--- USER
+-- Create the 'main_sec.user' table
 CREATE TABLE main_sec.user (
   id SERIAL PRIMARY KEY,
   username VARCHAR(30) UNIQUE NOT NULL,

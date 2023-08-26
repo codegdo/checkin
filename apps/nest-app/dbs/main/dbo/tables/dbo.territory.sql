@@ -1,4 +1,4 @@
---TERRITORY
+-- Create the 'main_dbo.territory' table
 CREATE TABLE main_dbo.territory (
   id SERIAL PRIMARY KEY,
   country VARCHAR(100),
@@ -11,6 +11,7 @@ CREATE TABLE main_dbo.territory (
   created_by VARCHAR(50) DEFAULT CURRENT_USER
 );
 
+-- Insert data into the 'territory' table
 INSERT INTO main_dbo.territory (country, country_code, state, state_code, region, continent)
 VALUES
   ('United States', 'USA', 'Alabama', 'AL', 'South', 'North America'),
@@ -66,7 +67,7 @@ VALUES
   ('United States', 'USA', '--', '--', '--', 'North America')
   ;
 
-
+/*
 -- US
 insert
 into territory (id, country, country_code, state, state_code, region)
@@ -199,3 +200,4 @@ VALUES
 ('61', 'Angola', 'AGO', 'Bengo', 'BGO', 'Africa'),
 ('62', 'Angola', 'AGO', 'Bengo', 'BGO', 'Africa'),
 ('63', 'Angola', 'AGO', 'Bengo', 'BGO', 'Africa');
+*/

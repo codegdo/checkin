@@ -1,4 +1,4 @@
--- Create the 'form' table
+-- Create the 'main_com.form' table
 CREATE TABLE main_com.form (
   id SERIAL PRIMARY KEY,
 
@@ -28,5 +28,6 @@ BEFORE UPDATE ON main_com.form
 FOR EACH ROW
 EXECUTE FUNCTION fn_updated_at();
 
+-- Insert data into the 'form' table
 INSERT INTO main_com.form(form_type_id, company_id, title, description, is_active, is_published) VALUES
 ('1',null,'Signup','New user signup','1','1');

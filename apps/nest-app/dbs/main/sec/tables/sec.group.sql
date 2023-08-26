@@ -23,9 +23,7 @@ BEFORE UPDATE ON main_sec.group
 FOR EACH ROW
 EXECUTE FUNCTION fn_updated_at();
 
-
---
-
+-- Insert data into the 'group_type' table
 INSERT
 INTO main_sec.group (name, group_level, group_type_id, is_owner, is_active)
 VALUES

@@ -1,3 +1,4 @@
+-- Create the 'main_dbo.language' table
 CREATE TABLE main_dbo.language (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
@@ -9,6 +10,7 @@ CREATE TABLE main_dbo.language (
   created_by VARCHAR(50) DEFAULT CURRENT_USER
 );
 
+-- Insert data into the 'language' table
 INSERT INTO main_dbo.language (name, code, native_name, region, is_active)
 VALUES
   ('English', 'en', 'English', 'United States', true),

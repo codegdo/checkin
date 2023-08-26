@@ -1,3 +1,4 @@
+-- Create the 'main_dbo.object' table
 CREATE TABLE main_dbo.object (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
@@ -14,6 +15,7 @@ CREATE TABLE main_dbo.object (
   created_by VARCHAR(50) DEFAULT CURRENT_USER
 );
 
+-- Insert data into the 'object' table
 INSERT INTO main_dbo.object(name, is_internal, is_external, is_extendable, is_editable, is_auditable, is_active) VALUES
 ('user','1','1','0','0','0','1'),
 ('company','1','1','0','0','0','1'),

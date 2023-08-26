@@ -1,5 +1,4 @@
 -- This function performs a dynamic SQL lookup and returns key-value pairs.
-
 CREATE OR REPLACE FUNCTION fn_lookup_value(
   input_string TEXT,
   input_login_id INT DEFAULT 0

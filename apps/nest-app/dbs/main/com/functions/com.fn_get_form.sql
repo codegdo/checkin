@@ -14,15 +14,15 @@ BEGIN
 
   RETURN QUERY
   SELECT
-  f.id form_id,
-  f.form_type_id,
-  ft.name form_name,
-  f.title form_title,
-  f.description form_description,
-  f.data form_data,
-  COALESCE(f.translation, ft.default_translation) AS form_translation,
-  f.is_active form_is_active,
-  f.is_published form_is_published
+    f.id form_id,
+    f.form_type_id,
+    ft.name form_name,
+    f.title form_title,
+    f.description form_description,
+    f.data form_data,
+    COALESCE(f.translation, ft.default_translation) AS form_translation,
+    f.is_active form_is_active,
+    f.is_published form_is_published
   FROM main_com.form f
   LEFT JOIN main_dbo.form_type ft ON f.form_type_id = ft.id
   WHERE (
@@ -39,4 +39,4 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select * from main_com.fn_get_form('auth_signup')
+SELECT * FROM main_com.fn_get_form('auth_signup');

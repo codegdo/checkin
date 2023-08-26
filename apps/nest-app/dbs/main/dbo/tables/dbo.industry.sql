@@ -1,3 +1,4 @@
+-- Create the 'main_dbo.industry' table
 CREATE TABLE main_dbo.industry (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
@@ -6,6 +7,7 @@ CREATE TABLE main_dbo.industry (
   created_by VARCHAR(50) DEFAULT CURRENT_USER
 );
 
+-- Insert data into the 'industry' table
 INSERT INTO main_dbo.industry (name, description)
 VALUES
   ('Agriculture and Farming', 'Cultivation of crops and raising of animals for food, fiber, medicinal plants, and other products.'),

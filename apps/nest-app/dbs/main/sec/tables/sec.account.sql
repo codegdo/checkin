@@ -21,8 +21,3 @@ BEFORE UPDATE ON main_sec.account
 FOR EACH ROW
 EXECUTE FUNCTION fn_updated_at();
 
--- Create a trigger that fires before inserting a new row
-CREATE TRIGGER before_insert_generate_account_id
-BEFORE INSERT ON main_sec.account
-FOR EACH ROW
-EXECUTE FUNCTION main_sec.fn_generate_account_id();

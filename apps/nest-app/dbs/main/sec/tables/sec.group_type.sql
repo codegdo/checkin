@@ -2,7 +2,7 @@
 CREATE TABLE main_sec.group_type (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL UNIQUE,
-  description TEXT,
+  description VARCHAR(255),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   created_by VARCHAR(50) DEFAULT CURRENT_USER
 );

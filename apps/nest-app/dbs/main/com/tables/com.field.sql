@@ -1,4 +1,4 @@
--- Create the 'field' table
+-- Create the 'main_com.field' table
 CREATE TABLE main_com.field (
   id SERIAL PRIMARY KEY,
 
@@ -49,6 +49,7 @@ BEFORE UPDATE ON main_com.field
 FOR EACH ROW
 EXECUTE FUNCTION fn_updated_at();
 
+-- Insert data into the 'field' table
 INSERT INTO main_com.field (name, type, data_type, length, mapping, lookup, default_translation, parent_id, object_id, company_id, is_key, is_dependent, has_dependent) VALUES
 ('userUsername','text','field',30,'checkin.main_sec.user.username','null','{"es":{"userUsername":{"title":"Nombre de usuario"}},"vn":{"userUsername":{"title":"Tên đăng nhập"}}}',null,1,null,'0','0','0'),
 ('userPassword','password','field',100,'checkin.main_sec.user.password','null','{"es":{"userPassword":{"title":"Contraseña"}},"vn":{"userPassword":{"title":"Mật khẩu"}}}',null,1,null,'0','0','0'),

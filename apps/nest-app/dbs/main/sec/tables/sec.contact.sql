@@ -1,3 +1,4 @@
+-- Create the 'main_sec.contact' table
 CREATE TABLE main_sec.contact (
   id SERIAL PRIMARY KEY,
   first_name VARCHAR(50),

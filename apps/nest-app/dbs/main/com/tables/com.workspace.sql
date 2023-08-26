@@ -1,3 +1,4 @@
+-- Create the 'main_com.workspace' table
 CREATE TABLE main_com.workspace (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,

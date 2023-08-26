@@ -108,7 +108,7 @@ BEGIN
     FROM temp_lookup tl
     WHERE tl.row_num = var_row_min
     ), lookup_value AS (
-      SELECT * from fn_lookup_value((SELECT tl.field_lookup FROM tl)::TEXT)
+      SELECT * FROM fn_lookup_value((SELECT tl.field_lookup FROM tl)::TEXT)
     )
     UPDATE temp_form_field tff
     SET field_data = (SELECT json_agg(lv.*) FROM lookup_value lv)::json
@@ -128,4 +128,4 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-select * from main_com.fn_get_form_field(1);
+SELECT * FROM main_com.fn_get_form_field(1);

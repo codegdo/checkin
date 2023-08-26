@@ -1,5 +1,4 @@
 -- This function generates a random string of a specified length with an optional prefix.
-
 CREATE OR REPLACE FUNCTION fn_generate_random_string(length INT, prefix VARCHAR DEFAULT NULL)
 RETURNS VARCHAR AS $$
 DECLARE

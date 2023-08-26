@@ -1,4 +1,4 @@
--- Create the 'form_field' table
+-- Create the 'main_com.form_field' table
 CREATE TABLE main_com.form_field (
   form_id INT NOT NULL,
   field_id INT NOT NULL,
@@ -31,14 +31,13 @@ CREATE TABLE main_com.form_field (
   FOREIGN KEY(field_id) REFERENCES main_com.field(id)
 );
 
-
 -- Create a trigger that fires on UPDATE and calls the function
 CREATE TRIGGER form_field_update_trigger
 BEFORE UPDATE ON main_com.form_field
 FOR EACH ROW
 EXECUTE FUNCTION fn_updated_at();
 
-
+-- Insert data into the 'form_field' table
 INSERT INTO main_com.form_field (form_id, field_id, title, translation, options, is_required) VALUES
 (1,27,'Full Name','{"es":{"contactFullName":{"title":"Nombre completo"}},"vn":{"contactFullName":{"title":"Họ và tên"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),
 (1,28,'First Name','{"es":{"contactFirstName":{"title":"Primer nombre"}},"vn":{"contactFirstName":{"title":"Tên"}}}','{"className":null,"min":null,"max":null,"pattern":null,"hint":null,"placeholder":null}','1'),

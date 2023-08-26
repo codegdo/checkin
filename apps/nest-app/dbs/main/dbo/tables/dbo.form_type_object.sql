@@ -1,3 +1,4 @@
+-- Create the 'main_dbo.form_type_object' table
 CREATE TABLE main_dbo.form_type_object (
   form_type_id INT NOT NULL,
   object_id INT NOT NULL,
@@ -11,6 +12,7 @@ CREATE TABLE main_dbo.form_type_object (
   FOREIGN KEY(object_id) REFERENCES main_dbo.object(id)
 );
 
+-- Insert data into the 'form_type_object' table
 INSERT INTO main_dbo.form_type_object (form_type_id, object_id, company_id) VALUES
 (1,1,null),
 (1,2,null),

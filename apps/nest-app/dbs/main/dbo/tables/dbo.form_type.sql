@@ -1,3 +1,4 @@
+-- Create the 'main_dbo.form_type' table
 CREATE TABLE main_dbo.form_type (
   id INT PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
@@ -10,5 +11,6 @@ CREATE TABLE main_dbo.form_type (
   created_by VARCHAR(50) DEFAULT CURRENT_USER
 );
 
+-- Insert data into the 'form_type' table
 INSERT INTO main_dbo.form_type (id, name, title) VALUES
 (1,'auth_signup','User Signup');
