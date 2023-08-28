@@ -1,10 +1,15 @@
+ -- Install ubuntu to run linix command
  https://developer.redis.com/create/windows/
- 
+
+-- Download tool redis manager
+ Another Redis Desktop Manager
+
+ -- Cli start/stop redis
  sudo service redis-server restart
  sudo service redis-server stop
-
 
  https://stackoverflow.com/questions/68912168/how-to-use-redis-as-a-store-for-express-session-nestjs
  https://dnlytras.com/snippets/redis-session
  https://dev.to/nestjs/setting-up-sessions-with-nestjs-passport-and-redis-210
  https://blog.bitsrc.io/authentication-work-flow-using-express-session-and-passportjs-4291231285a5
+ 

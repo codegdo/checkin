@@ -23,8 +23,8 @@ import { ConfigModule, ConfigService } from '../config/config.module';
         max: 10,
         min: 2,
       }),
-      dataSourceFactory: async (options) => (new DataSource(options).initialize()),
-      
+      dataSourceFactory: async (options) =>
+        new DataSource(options).initialize(),
     }),
   ],
 })

@@ -1,4 +1,4 @@
-# Project setup monorepo
+# Nest project setup monorepo
 --
 ## Install @nestjs/cli
   npm install -g @nestjs/cli
@@ -13,5 +13,7 @@
   nest g module config -p common
 ## Install packages for connect to database
   npm install @nestjs/config pg typeorm
+## Install redis
+  npm install @nestjs/cache-manager redis
 ## Install session
   npm intall nestjs-session express-session
