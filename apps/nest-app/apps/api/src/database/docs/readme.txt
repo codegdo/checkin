@@ -1,4 +1,4 @@
-## Database initial setup
+## Database setup steps
 
 ## public
   fn.camel_case_split

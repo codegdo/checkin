@@ -1,24 +1,34 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { MigrationService } from './migration.service';
-
-import * as path from 'path';
 
 @Controller()
 export class MigrationController {
   constructor(private readonly migrationService: MigrationService) { }
 
-  @Get('up')
-  async executeSqlFile() {
-    const filePath = path.join(
-      __dirname,
-      '../../../',
-      'dbs/public/triggers',
-      'fn.updated_at.sql',
-    );
+  @Get('db-initial-setup')
+  async dbInitialSetup() {
+    const files = [
+      {
+        database: 'db_checkin',
+        schema: 'public',
+        type: 'funtions',
+        name: 'fn_camel_case_split',
+        execSequence: 1,
+        path: 'database/public/functions/fn_camel_case_split.sql',
+      },
+      {
+        database: 'db_checkin',
+        schema: 'public',
+        type: 'triggers',
+        name: 'fn_updated_at',
+        execSequence: 2,
+        fileType: 'sql',
+        path: 'database/public/triggers/fn_updated_at.sql',
+      },
+    ];
 
-    console.log(path.join(__dirname));
+    await this.migrationService.executeSqlFiles(files);
 
-    //await this.migrationService.executeSqlFile(filePath);
     return 'SQL executed successfully';
   }
 }

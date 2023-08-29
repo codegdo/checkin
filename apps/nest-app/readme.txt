@@ -17,3 +17,7 @@
   npm install @nestjs/cache-manager redis
 ## Install session
   npm intall nestjs-session express-session
+## Generate manager microservice
+  nest g apps [manager]
+## Install 
+  npm install @nestjs/microservices

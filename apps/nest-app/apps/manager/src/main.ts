@@ -1,17 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { WorkerModule } from './worker.module';
+import { ManagerModule } from './manager.module';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(WorkerModule);
+  const app = await NestFactory.create(ManagerModule);
   const configService = app.get(ConfigService);
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
     options: {
       host: '0.0.0.0',
-      port: configService.get('WORKER_PORT'),
+      port: configService.get('MANAGER_PORT'),
     },
   });
 
@@ -19,4 +19,3 @@ async function bootstrap() {
 }
 
 bootstrap();
-

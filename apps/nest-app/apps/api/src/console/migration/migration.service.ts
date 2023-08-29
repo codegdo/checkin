@@ -1,21 +1,26 @@
 import { Injectable } from '@nestjs/common';
+import { DataSource } from 'typeorm';
 import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class MigrationService {
+  constructor(private dataSource: DataSource) { }
 
-  async executeSqlFile(filePath: string): Promise<void> {
-    //const queryRunner = this.connection.createQueryRunner();
-    //await queryRunner.connect();
+  async executeSqlFiles(files: any[]): Promise<void> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
 
     try {
-      const sql = await this.readFile(filePath);
-      console.log(sql);
-      //await queryRunner.query(sql);
+      for (const file of files) {
+        const migrationFilePath = path.join(__dirname, '../../', file.path);
+        const sql = await this.readFile(migrationFilePath);
+        await queryRunner.query(sql);
+      }
     } catch (error) {
       throw error;
     } finally {
-      //await queryRunner.release();
+      await queryRunner.release();
     }
   }
 

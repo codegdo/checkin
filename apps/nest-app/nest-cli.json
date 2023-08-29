@@ -5,7 +5,14 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/api/tsconfig.app.json"
+    "tsConfigPath": "apps/api/tsconfig.app.json",
+    "assets": [
+      {
+        "include": "database/**",
+        "outDir": "dist"
+      }
+    ],
+    "watchAssets": true
   },
   "projects": {
     "common": {
@@ -33,6 +40,15 @@
       "sourceRoot": "apps/worker/src",
       "compilerOptions": {
         "tsConfigPath": "apps/worker/tsconfig.app.json"
+      }
+    },
+    "manager": {
+      "type": "application",
+      "root": "apps/manager",
+      "entryFile": "main",
+      "sourceRoot": "apps/manager/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/manager/tsconfig.app.json"
       }
     }
   },

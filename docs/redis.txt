@@ -1,4 +1,4 @@
- -- Install ubuntu to run linix command
+ -- Install ubuntu to run linux command
  https://developer.redis.com/create/windows/
 
 -- Download tool redis manager
