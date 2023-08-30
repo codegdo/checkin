@@ -48,7 +48,14 @@
       "entryFile": "main",
       "sourceRoot": "apps/manager/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/manager/tsconfig.app.json"
+        "tsConfigPath": "apps/manager/tsconfig.app.json",
+        "assets": [
+          {
+            "include": "database/**",
+            "outDir": "dist"
+          }
+        ],
+        "watchAssets": true
       }
     }
   },

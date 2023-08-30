@@ -1,11 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { DataSource } from 'typeorm';
+import { MANAGER_SERVICE } from '@app/common';
 
 @Injectable()
 export class MigrationService {
-  constructor(private dataSource: DataSource) { }
+  constructor(
+    private dataSource: DataSource,
+
+    @Inject(MANAGER_SERVICE)
+    private readonly migrationService: ClientProxy
+  ) { }
 
   async executeSqlFiles(files: any[]): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
