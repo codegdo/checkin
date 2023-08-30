@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 
 import { MigrationModule } from './migration/migration.module';
+import { SetupModule } from './setup/setup.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { MigrationModule } from './migration/migration.module';
           },
         ],
       },
-    ])
+    ]),
+    SetupModule
   ]
 })
 export class ConsoleModule { }
