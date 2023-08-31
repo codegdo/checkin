@@ -1,5 +1,5 @@
 -- Create the 'main_com.field_default' table
-CREATE TABLE main_com.field_default (
+CREATE TABLE IF NOT EXISTS main_com.field_default (
   form_type_id INT NOT NULL,
   field_id INT NOT NULL,
   company_id INT,

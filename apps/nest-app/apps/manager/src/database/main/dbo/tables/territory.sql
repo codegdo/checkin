@@ -1,5 +1,5 @@
 -- Create the 'main_dbo.territory' table
-CREATE TABLE main_dbo.territory (
+CREATE TABLE IF NOT EXISTS main_dbo.territory (
   id SERIAL PRIMARY KEY,
   country VARCHAR(100),
   country_code VARCHAR(3),

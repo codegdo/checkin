@@ -1,5 +1,5 @@
 -- Create the 'main_dbo.form_type_object' table
-CREATE TABLE main_dbo.form_type_object (
+CREATE TABLE IF NOT EXISTS main_dbo.form_type_object (
   form_type_id INT NOT NULL,
   object_id INT NOT NULL,
   company_id INT,

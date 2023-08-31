@@ -1,5 +1,5 @@
 -- Create the 'main_com.form' table
-CREATE TABLE main_com.form (
+CREATE TABLE IF NOT EXISTS main_com.form (
   id SERIAL PRIMARY KEY,
 
   title VARCHAR(255) NOT NULL,

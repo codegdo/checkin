@@ -1,5 +1,5 @@
 -- Create the 'main_sec.contact' table
-CREATE TABLE main_sec.contact (
+CREATE TABLE IF NOT EXISTS main_sec.contact (
   id SERIAL PRIMARY KEY,
   first_name VARCHAR(50),
   last_name VARCHAR(50),

@@ -1,5 +1,5 @@
 -- Create the 'main_sec.group' table
-CREATE TABLE main_sec.group (
+CREATE TABLE IF NOT EXISTS main_sec.group (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100),
   description TEXT,

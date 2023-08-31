@@ -1,5 +1,5 @@
 -- Create the 'group_type' table
-CREATE TABLE main_sec.group_type (
+CREATE TABLE IF NOT EXISTS main_sec.group_type (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL UNIQUE,
   description VARCHAR(255),

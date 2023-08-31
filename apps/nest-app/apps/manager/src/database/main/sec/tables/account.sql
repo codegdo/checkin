@@ -1,5 +1,5 @@
 -- Create the 'main_sec.account' table
-CREATE TABLE main_sec.account (
+CREATE TABLE IF NOT EXISTS main_sec.account (
   id SERIAL PRIMARY KEY,
   account_id VARCHAR(10) UNIQUE,
   account_type VARCHAR(15) CHECK (account_type IN ('trial', 'basic', 'premium', 'enterprise')),

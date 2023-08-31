@@ -1,5 +1,5 @@
 -- Create the 'main_dbo.form_type' table
-CREATE TABLE main_dbo.form_type (
+CREATE TABLE IF NOT EXISTS main_dbo.form_type (
   id INT PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   title VARCHAR(255) NOT NULL,

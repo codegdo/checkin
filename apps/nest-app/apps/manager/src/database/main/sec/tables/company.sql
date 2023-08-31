@@ -1,5 +1,5 @@
 -- Create the 'main_sec.company' table
-CREATE TABLE main_sec.company (
+CREATE TABLE IF NOT EXISTS main_sec.company (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   description VARCHAR(255),

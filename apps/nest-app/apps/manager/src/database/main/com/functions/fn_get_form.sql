@@ -39,4 +39,4 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT * FROM main_com.fn_get_form('auth_signup');
+--SELECT * FROM main_com.fn_get_form('auth_signup');

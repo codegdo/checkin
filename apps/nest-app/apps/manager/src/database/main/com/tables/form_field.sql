@@ -1,5 +1,5 @@
 -- Create the 'main_com.form_field' table
-CREATE TABLE main_com.form_field (
+CREATE TABLE IF NOT EXISTS main_com.form_field (
   form_id INT NOT NULL,
   field_id INT NOT NULL,
 

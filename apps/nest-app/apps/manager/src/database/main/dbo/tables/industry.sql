@@ -1,5 +1,5 @@
 -- Create the 'main_dbo.industry' table
-CREATE TABLE main_dbo.industry (
+CREATE TABLE IF NOT EXISTS main_dbo.industry (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   description VARCHAR(255),

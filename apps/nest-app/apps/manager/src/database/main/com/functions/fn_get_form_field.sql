@@ -128,4 +128,4 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT * FROM main_com.fn_get_form_field(1);
+--SELECT * FROM main_com.fn_get_form_field(1);

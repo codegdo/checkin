@@ -1,5 +1,5 @@
 -- Create the 'main_dbo.language' table
-CREATE TABLE main_dbo.language (
+CREATE TABLE IF NOT EXISTS main_dbo.language (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   code VARCHAR(10) NOT NULL,

@@ -1,5 +1,5 @@
 -- Create the 'main_sec.address' table
-CREATE TABLE main_sec.address (
+CREATE TABLE IF NOT EXISTS main_sec.address (
   id SERIAL PRIMARY KEY,
   street_address VARCHAR(255),
   territory_id INT,

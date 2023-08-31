@@ -1,5 +1,5 @@
 -- Create the 'main_dbo.business_type' table
-CREATE TABLE main_dbo.business_type (
+CREATE TABLE IF NOT EXISTS main_dbo.business_type (
   id SERIAL PRIMARY KEY,
   category VARCHAR(100) NOT NULL,
   description TEXT,

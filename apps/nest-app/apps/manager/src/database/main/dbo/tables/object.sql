@@ -1,5 +1,5 @@
 -- Create the 'main_dbo.object' table
-CREATE TABLE main_dbo.object (
+CREATE TABLE IF NOT EXISTS main_dbo.object (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
 

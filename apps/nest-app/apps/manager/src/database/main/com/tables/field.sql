@@ -1,5 +1,5 @@
 -- Create the 'main_com.field' table
-CREATE TABLE main_com.field (
+CREATE TABLE IF NOT EXISTS main_com.field (
   id SERIAL PRIMARY KEY,
 
   name VARCHAR(50) NOT NULL,

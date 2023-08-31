@@ -101,7 +101,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CALL main_com.pr_builder_get_form('1', null);
+--CALL main_com.pr_builder_get_form('1', null);
 
 
 
