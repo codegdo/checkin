@@ -7,6 +7,7 @@ import { DatabaseService } from './database.service';
 
 @Module({
   imports: [
+    ConfigModule,
     ClientsModule.registerAsync([
       {
         name: MANAGER_SERVICE,

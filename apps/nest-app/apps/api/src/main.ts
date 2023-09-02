@@ -12,7 +12,7 @@ async function bootstrap() {
   });
 
   const configService = app.get(ConfigService);
-  const port = configService.get('PORT');
+  const port = configService.get<number>('API_PORT');
 
   app.enableVersioning({
     type: VersioningType.URI,
@@ -21,7 +21,7 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: configService.get('CLIENT_URL'),
+    origin: configService.get<string>('CLIENT_URL'),
     credentials: true,
     allowedHeaders: [
       'Content-Type',

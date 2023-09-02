@@ -6,9 +6,13 @@ import { MigrationService } from './migration.service';
 export class MigrationController {
   constructor(private readonly migrationService: MigrationService) { }
 
-  @EventPattern('db_seeding')
-  async migrationUp(payload) {
-    console.log('SEEDDING', payload);
-    return this.migrationService.runSeeding();
+  @EventPattern('db_seed_schemas')
+  async seedSchemas(payload) {
+    return this.migrationService.seedSchemas();
+  }
+
+  @EventPattern('db_drop_schemas')
+  async dropSchemas(payload) {
+    return this.migrationService.dropSchemas();
   }
 }
