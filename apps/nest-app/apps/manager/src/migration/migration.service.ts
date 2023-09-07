@@ -1,18 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Injectable()
 export class MigrationService {
-  private schemaNames = ['main_dbo', 'main_log', 'main_sec', 'main_com', 'main_sys', 'synonyms', 'views'];
-  constructor(private dataSource: DataSource) {}
+  private schemaNames = [
+    'main_dbo',
+    'main_log',
+    'main_sec',
+    'main_com',
+    'main_sys',
+    'synonyms',
+    'views',
+  ];
 
-  async seedSchemas(): Promise<{message: string}> {
-    
+  private migrationFiles = [
+    'migration.sql',
+    'migration_script.sql',
+    'migration_rollback.sql',
+    'migration_dependency.sql',
+    'migration_tag.sql',
+    'migration_metadata.sql',
+  ];
+
+  constructor(private dataSource: DataSource) { }
+
+  async seedSchemas(): Promise<{ message: string }> {
     let rollbackRequired = false;
 
     try {
       await this.createSchemas(this.schemaNames);
-      return { message: 'Schemas created successfully.'};
+      return { message: 'Schemas created successfully.' };
     } catch (error) {
       console.error('Schemas failed:', error);
       rollbackRequired = true;
@@ -24,19 +43,53 @@ export class MigrationService {
     }
   }
 
-  async dropSchemas(): Promise<{message: string}> {
+  async dropSchemas(): Promise<{ message: string }> {
     let rollbackRequired = false;
 
     try {
       await this.dropExistingSchemas();
-      return { message: 'Schemas dropped successfully.'};
+      return { message: 'Schemas dropped successfully.' };
     } catch (error) {
       console.error('Schema drop failed:', error);
       rollbackRequired = true;
     } finally {
       if (rollbackRequired) {
         await this.rollback();
-        console.log('Schema drop rolled back successfully.') ;
+        console.log('Schema drop rolled back successfully.');
+      }
+    }
+  }
+
+  async seedMigrations(): Promise<{ message: string }> {
+    let rollbackRequired = false;
+
+    try {
+      await this.createSchemas(this.schemaNames);
+      return { message: 'Schemas created successfully.' };
+    } catch (error) {
+      console.error('Schemas failed:', error);
+      rollbackRequired = true;
+    } finally {
+      if (rollbackRequired) {
+        await this.rollback();
+        console.log('Schemas created failed.');
+      }
+    }
+  }
+
+  async dropMigrations(): Promise<{ message: string }> {
+    let rollbackRequired = false;
+
+    try {
+      await this.dropExistingSchemas();
+      return { message: 'Schemas dropped successfully.' };
+    } catch (error) {
+      console.error('Schema drop failed:', error);
+      rollbackRequired = true;
+    } finally {
+      if (rollbackRequired) {
+        await this.rollback();
+        console.log('Schema drop rolled back successfully.');
       }
     }
   }
@@ -85,6 +138,32 @@ export class MigrationService {
     console.log(`Schema "${schemaName}" created successfully.`);
   }
 
+  private async createMigrations(schemaNames: string[]): Promise<void> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+
+    try {
+      for (const schemaName of schemaNames) {
+        if (!(await this.schemaExists(queryRunner, schemaName))) {
+          await this.createSchema(queryRunner, schemaName);
+        } else {
+          console.log(`Schema "${schemaName}" already exists.`);
+        }
+      }
+    } catch (error) {
+      console.error('Error creating schemas:', error);
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  private async createMigration(queryRunner, schemaName: string): Promise<void> {
+    const sql = `CREATE SCHEMA ${schemaName};`;
+    await queryRunner.query(sql);
+    console.log(`Schema "${schemaName}" created successfully.`);
+  }
+
   private async dropExistingSchemas(): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -111,13 +190,16 @@ export class MigrationService {
     console.log(`Schema "${schemaName}" dropped successfully.`);
   }
 
-  private async schemaExists(queryRunner, schemaName: string): Promise<boolean> {
+  private async schemaExists(
+    queryRunner,
+    schemaName: string,
+  ): Promise<boolean> {
     const schemaExistsQuery = `SELECT schema_name FROM information_schema.schemata WHERE schema_name = '${schemaName}';`;
     const schemaExistsResult = await queryRunner.query(schemaExistsQuery);
     return schemaExistsResult.length > 0;
   }
 
-  private async createTables(): Promise<void> {
+  private async createTables(files: any[]): Promise<void> {
     let rollbackData = null;
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -125,32 +207,11 @@ export class MigrationService {
     try {
       await queryRunner.startTransaction();
 
-      // Create the migration_script table
-      await queryRunner.query(`
-        CREATE TABLE IF NOT EXISTS main_dbo.migration_script (
-          id SERIAL PRIMARY KEY,
-          script_name VARCHAR(255) NOT NULL
-        );
-      `);
-
-      // Create the migration_rollback table
-      await queryRunner.query(`
-        CREATE TABLE IF NOT EXISTS main_dbo.migration_rollback (
-          id SERIAL PRIMARY KEY,
-          rollback_name VARCHAR(255) NOT NULL
-        );
-      `);
-
-      // Create the migration_dependency table
-      await queryRunner.query(`
-        CREATE TABLE IF NOT EXISTS main_dbo.migration_dependency (
-          id SERIAL PRIMARY KEY,
-          script_id INT,
-          rollback_id INT,
-          FOREIGN KEY (script_id) REFERENCES main_dbo.migration_script (id),
-          FOREIGN KEY (rollback_id) REFERENCES main_dbo.migration_rollback (id)
-        );
-      `);
+      for (const file of files) {
+        const migrationFilePath = path.join(__dirname, '../../', file.path);
+        const sql = await this.readFile(migrationFilePath);
+        await queryRunner.query(sql);
+      }
 
       await queryRunner.commitTransaction();
       console.log('Tables created successfully.');
@@ -195,6 +256,10 @@ export class MigrationService {
     }
   }
 
+  private async readFile(filePath: string): Promise<string> {
+    return fs.promises.readFile(filePath, 'utf8');
+  }
+
   private async rollback(): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -215,7 +280,6 @@ export class MigrationService {
     }
   }
 }
-
 
 /*
 import { Injectable } from '@nestjs/common';

@@ -15,4 +15,19 @@ export class MigrationController {
   async dropSchemas(payload) {
     return this.migrationService.dropSchemas();
   }
+
+  @EventPattern('db_seed_migrations')
+  async seedMigrations(payload) {
+    return this.migrationService.seedSchemas();
+  }
+
+  @EventPattern('db_run_migrations')
+  async runMigrations(payload) {
+    return this.migrationService.seedSchemas();
+  }
+
+  @EventPattern('db_drop_migrations')
+  async dropMigrations(payload) {
+    return this.migrationService.dropSchemas();
+  }
 }
