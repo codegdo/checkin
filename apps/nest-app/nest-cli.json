@@ -5,14 +5,7 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/api/tsconfig.app.json",
-    "assets": [
-      {
-        "include": "database/**",
-        "outDir": "dist"
-      }
-    ],
-    "watchAssets": true
+    "tsConfigPath": "apps/api/tsconfig.app.json"
   },
   "projects": {
     "common": {
@@ -51,7 +44,7 @@
         "tsConfigPath": "apps/manager/tsconfig.app.json",
         "assets": [
           {
-            "include": "database/**",
+            "include": "scripts/**",
             "outDir": "dist"
           }
         ],
