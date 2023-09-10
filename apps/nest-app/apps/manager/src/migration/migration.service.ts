@@ -28,7 +28,7 @@ export class MigrationService {
       return { message: 'Schemas created successfully.' };
     } catch (error) {
       console.error('Schemas failed:', error);
-      throw new Error('Schemas creation failed.'); // Rethrow the error for handling elsewhere if needed
+      throw new Error('Schemas creation failed.');
     }
   }
 
@@ -38,11 +38,63 @@ export class MigrationService {
       return { message: 'Schemas dropped successfully.' };
     } catch (error) {
       console.error('Schema drop failed:', error);
-      throw new Error('Schemas drop failed.'); // Rethrow the error for handling elsewhere if needed
+      throw new Error('Schemas drop failed.');
     }
   }
 
-  async getMigrationById(migrationId: number): Promise<void> {
+  async seedMigrations(): Promise<{ message: string }> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+
+    try {
+      await this.runMigrationFiles(
+        queryRunner,
+        this.migrationFiles,
+        this.migrationRollbacks,
+      );
+      return { message: 'Migrations created successfully.' };
+    } catch (error) {
+      console.error('Error creating migrations:', error);
+      throw new Error('Migrations creation failed.');
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async dropMigrations(): Promise<{ message: string }> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+
+    try {
+      await this.runMigrationFiles(
+        queryRunner,
+        this.migrationFiles,
+        this.migrationRollbacks,
+      );
+      return { message: 'Migrations created successfully.' };
+    } catch (error) {
+      console.error('Error creating migrations:', error);
+      throw new Error('Migrations creation failed.');
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async runMigrations(migrationId: number): Promise<void> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+
+    try {
+      // Implement your logic here
+    } catch (error) {
+      console.error('Error getting migration:', error);
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  async rollbackMigrations(migrationId: number): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
@@ -69,14 +121,9 @@ export class MigrationService {
         }
       }
 
-      await this.runMigrationFiles(
-        queryRunner,
-        this.migrationFiles,
-        this.migrationRollbacks,
-      );
     } catch (error) {
       console.error('Error creating schemas:', error);
-      throw new Error('Schema creation failed.'); // Rethrow the error for handling elsewhere if needed
+      throw new Error('Schema creation failed.');
     } finally {
       await queryRunner.release();
     }
@@ -105,7 +152,7 @@ export class MigrationService {
       }
     } catch (error) {
       console.error('Error dropping schemas:', error);
-      throw new Error('Schema drop failed.'); // Rethrow the error for handling elsewhere if needed
+      throw new Error('Schema drop failed.');
     } finally {
       await queryRunner.release();
     }
@@ -118,6 +165,26 @@ export class MigrationService {
     const sql = `DROP SCHEMA IF EXISTS ${schemaName} CASCADE;`;
     await queryRunner.query(sql);
     console.log(`Schema "${schemaName}" dropped successfully.`);
+  }
+
+  private async dropMigration(): Promise<void> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+
+    try {
+      for (const schemaName of this.schemaNames) {
+        if (await this.schemaExists(queryRunner, schemaName)) {
+          await this.dropSchema(queryRunner, schemaName);
+        } else {
+          console.log(`Schema "${schemaName}" does not exist.`);
+        }
+      }
+    } catch (error) {
+      console.error('Error dropping schemas:', error);
+      throw new Error('Schema drop failed.');
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   private async schemaExists(

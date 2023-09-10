@@ -13,10 +13,9 @@ export class DatabaseService {
   ) { }
 
   async seedSchemas(): Promise<Observable<{ message: string }>> {
-    console.log(this.configService.get<boolean>('DB_DROP_ACTION_IS_ENABLED'));
     try {
       return this.migrationService
-        .send('db_seed_schemas', {})
+        .send('init_seed_schemas', {})
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.error(error);
@@ -37,7 +36,7 @@ export class DatabaseService {
 
     try {
       return this.migrationService
-        .send('db_drop_schemas', {})
+        .send('init_drop_schemas', {})
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.log(error);
@@ -48,7 +47,7 @@ export class DatabaseService {
   async seedMigrations(): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('db_seed_migrations', {})
+        .send('init_seed_migrations', {})
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.error(error);
@@ -59,7 +58,29 @@ export class DatabaseService {
   async dropMigrations(): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('db_drop_migrations', {})
+        .send('init_drop_migrations', {})
+        .pipe(map((response: { message: string }) => response));
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  }
+
+  async runMigrations(): Promise<Observable<{ message: string }>> {
+    try {
+      return this.migrationService
+        .send('db_run_migrations', {})
+        .pipe(map((response: { message: string }) => response));
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
+  async rollbackMigrations(): Promise<Observable<{ message: string }>> {
+    try {
+      return this.migrationService
+        .send('db_rollback_migrations', {})
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.log(error);

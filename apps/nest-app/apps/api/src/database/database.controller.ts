@@ -5,16 +5,6 @@ import { DatabaseService } from './database.service';
 export class DatabaseController {
   constructor(private readonly databaseService: DatabaseService) { }
 
-  @Get('migrations')
-  async getAllMigrations() {
-    return 'SQL executed successfully';
-  }
-
-  @Get('migration:id')
-  async getMigrationById() {
-    return 'SQL executed successfully';
-  }
-
   @Get('seed-schemas')
   async seedSchemas() {
     return this.databaseService.seedSchemas();
@@ -30,8 +20,28 @@ export class DatabaseController {
     return this.databaseService.seedMigrations();
   }
 
-  @Get('drop-migratons')
+  @Get('drop-migrations')
   async dropMigrations() {
     return this.databaseService.dropMigrations();
+  }
+
+  @Get('migrations')
+  async getAllMigrations() {
+    return 'SQL executed successfully';
+  }
+
+  @Get('migration:id')
+  async getMigrationById() {
+    return 'SQL executed successfully';
+  }
+
+  @Get('run-migrations')
+  async runMigrations() {
+    return this.databaseService.runMigrations();
+  }
+
+  @Get('rollback-migrations')
+  async rollbackMigrations() {
+    return this.databaseService.rollbackMigrations();
   }
 }
