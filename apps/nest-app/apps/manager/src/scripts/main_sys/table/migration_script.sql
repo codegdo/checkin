@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS main_sys.migration_script (
 
     database VARCHAR(50) NOT NULL,
     schema VARCHAR(50) NOT NULL,
-    object_type VARCHAR(50) NOT NULL CHECK (object_type IN ('table', 'function', 'trigger', 'procedure', 'synonym', 'view')),
+    object_type VARCHAR(50) NOT NULL CHECK (object_type IN ('table', 'function', 'trigger', 'procedure', 'synonym', 'view', 'rollback')),
 
     script_type VARCHAR(10) NOT NULL DEFAULT 'sql' CHECK (script_type IN ('sql')),
     script_path VARCHAR(255) NOT NULL,

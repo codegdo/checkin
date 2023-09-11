@@ -3,7 +3,7 @@ import { DataSource, QueryRunner } from 'typeorm';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-import { migrationData, rollbackData } from './migration.data';
+import { migrationData as migrationSource } from './migration.data';
 
 @Injectable()
 export class MigrationService {
@@ -17,8 +17,7 @@ export class MigrationService {
     'main_vw',
   ];
 
-  private migrationFiles = migrationData;
-  private migrationRollbacks = rollbackData;
+  private migrationData = migrationSource;
 
   constructor(private dataSource: DataSource) { }
 
@@ -47,10 +46,10 @@ export class MigrationService {
     await queryRunner.connect();
 
     try {
-      await this.runMigrationFiles(
+      await this.runMigration(
         queryRunner,
-        this.migrationFiles,
-        this.migrationRollbacks,
+        this.migrationData.migrationFiles,
+        this.migrationData.rollbackFiles,
       );
       return { message: 'Migrations created successfully.' };
     } catch (error) {
@@ -66,15 +65,14 @@ export class MigrationService {
     await queryRunner.connect();
 
     try {
-      await this.runMigrationFiles(
+      await this.rollbackMigration(
         queryRunner,
-        this.migrationFiles,
-        this.migrationRollbacks,
+        this.migrationData.rollbackFiles,
       );
-      return { message: 'Migrations created successfully.' };
+      return { message: 'Migrations drop successfully.' };
     } catch (error) {
-      console.error('Error creating migrations:', error);
-      throw new Error('Migrations creation failed.');
+      console.error('Error drop migrations:', error);
+      throw new Error('Migrations drop failed.');
     } finally {
       await queryRunner.release();
     }
@@ -167,26 +165,6 @@ export class MigrationService {
     console.log(`Schema "${schemaName}" dropped successfully.`);
   }
 
-  private async dropMigration(): Promise<void> {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-
-    try {
-      for (const schemaName of this.schemaNames) {
-        if (await this.schemaExists(queryRunner, schemaName)) {
-          await this.dropSchema(queryRunner, schemaName);
-        } else {
-          console.log(`Schema "${schemaName}" does not exist.`);
-        }
-      }
-    } catch (error) {
-      console.error('Error dropping schemas:', error);
-      throw new Error('Schema drop failed.');
-    } finally {
-      await queryRunner.release();
-    }
-  }
-
   private async schemaExists(
     queryRunner: QueryRunner,
     schemaName: string,
@@ -196,7 +174,15 @@ export class MigrationService {
     return schemaExistsResult.length > 0;
   }
 
-  private async runMigrationFiles(
+  private async readFile(filePath: string): Promise<string> {
+    try {
+      return await fs.readFile(filePath, 'utf8');
+    } catch (error) {
+      throw new Error(`Error reading file: ${error.message}`);
+    }
+  }
+
+  private async runMigration(
     queryRunner: QueryRunner,
     files: any[],
     rollbacks: any[],
@@ -221,28 +207,25 @@ export class MigrationService {
       await queryRunner.rollbackTransaction();
     } finally {
       if (rollbackRequired) {
-        await this.rollback(queryRunner, rollbacks);
+        await this.rollbackMigration(queryRunner, rollbacks);
         console.log('Migration rolled back successfully.');
       }
     }
   }
 
-  private async readFile(filePath: string): Promise<string> {
-    try {
-      return await fs.readFile(filePath, 'utf8');
-    } catch (error) {
-      throw new Error(`Error reading file: ${error.message}`);
-    }
-  }
-
-  private async rollback(
+  private async rollbackMigration(
     queryRunner: QueryRunner,
     files: any[],
   ): Promise<void> {
     try {
       await queryRunner.startTransaction();
 
-      // Implement rollback logic here
+      for (const file of files) {
+        const filePath = path.join(__dirname, '../../', file.scriptPath);
+        const script = await this.readFile(filePath);
+        await queryRunner.query(script);
+        console.log(`Executed script: ${file.name}`);
+      }
 
       await queryRunner.commitTransaction();
       console.log('Rollback completed successfully.');

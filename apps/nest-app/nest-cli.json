@@ -46,6 +46,10 @@
           {
             "include": "scripts/**",
             "outDir": "dist"
+          },
+          {
+            "include": "rollbacks/**",
+            "outDir": "dist"
           }
         ],
         "watchAssets": true
