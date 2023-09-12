@@ -209,6 +209,7 @@ export class MigrationService {
       if (rollbackRequired) {
         await this.rollbackMigration(queryRunner, rollbacks);
         console.log('Migration rolled back successfully.');
+        throw new Error('Migration failed.');
       }
     }
   }

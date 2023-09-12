@@ -70,7 +70,7 @@ export const migrationData = {
       name: 'migration',
       scriptType: 'sql',
       scriptOrder: '0',
-      scriptPath: 'rollbacks/do_drop_migrations.sql',
+      scriptPath: 'rollbacks/00000_rb_migrations.sql',
     },
   ],
 };
