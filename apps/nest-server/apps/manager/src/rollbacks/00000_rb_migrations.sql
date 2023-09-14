@@ -6,7 +6,8 @@ DECLARE
     'main_sys.migration_script', 
     'main_sys.migration_rollback', 
     'main_sys.migration_dependency', 
-    'main_sys.migration'];
+    'main_sys.migration',
+    'main_sys.migration_category'];
   table_name TEXT;
 BEGIN
   -- Loop through the list of table names

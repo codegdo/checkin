@@ -11,7 +11,7 @@ export const migrationData = {
       scriptPath: 'scripts/main_sys/table/migration_category.sql',
     },
     {
-      id: 1,
+      id: 2,
       database: 'db_checkin',
       schema: 'main_sys',
       objectType: 'table',
@@ -21,7 +21,7 @@ export const migrationData = {
       scriptPath: 'scripts/main_sys/table/migration.sql',
     },
     {
-      id: 2,
+      id: 3,
       database: 'db_checkin',
       schema: 'main_sys',
       objectType: 'table',
@@ -31,7 +31,7 @@ export const migrationData = {
       scriptPath: 'scripts/main_sys/table/migration_rollback.sql',
     },
     {
-      id: 3,
+      id: 4,
       database: 'db_checkin',
       schema: 'main_sys',
       objectType: 'table',
@@ -41,7 +41,7 @@ export const migrationData = {
       scriptPath: 'scripts/main_sys/table/migration_script.sql',
     },
     {
-      id: 4,
+      id: 5,
       database: 'db_checkin',
       schema: 'main_sys',
       objectType: 'table',
@@ -51,7 +51,7 @@ export const migrationData = {
       scriptPath: 'scripts/main_sys/table/migration_dependency.sql',
     },
     {
-      id: 5,
+      id: 6,
       database: 'db_checkin',
       schema: 'main_sys',
       objectType: 'table',
@@ -61,7 +61,7 @@ export const migrationData = {
       scriptPath: 'scripts/main_sys/table/migration_tag.sql',
     },
     {
-      id: 6,
+      id: 7,
       database: 'db_checkin',
       schema: 'main_sys',
       objectType: 'table',

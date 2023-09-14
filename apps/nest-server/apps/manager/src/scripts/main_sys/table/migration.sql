@@ -30,5 +30,5 @@ CREATE TABLE IF NOT EXISTS main_sys.migration (
   FOREIGN KEY (category_id) REFERENCES main_sys.migration_category (id) ON DELETE CASCADE
 );
 
-INSERT INTO main_sys.migration (name, description, execution_order, app_version, category_id) VALUES
-('Initial Setup Public Functions','Initial setup public functions for the application.',0,1,1);
+INSERT INTO main_sys.migration (name, description, execution_order, app_version, migration_category_id) VALUES
+('Setup Public Functions','Setup public functions for the application.',0,1,1);
