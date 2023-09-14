@@ -21,13 +21,15 @@ CREATE TABLE IF NOT EXISTS main_sys.migration (
   checksum VARCHAR(64),
   environment VARCHAR(50),
 
-  category_id INT,
+  is_enabled BOOLEAN DEFAULT TRUE,
+
+  migration_category_id INT,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
   created_by VARCHAR(50) DEFAULT CURRENT_USER,
   updated_by VARCHAR(50),
-  FOREIGN KEY (category_id) REFERENCES main_sys.migration_category (id) ON DELETE CASCADE
+  FOREIGN KEY (migration_category_id) REFERENCES main_sys.migration_category (id) ON DELETE CASCADE
 );
 
 INSERT INTO main_sys.migration (name, description, execution_order, app_version, migration_category_id) VALUES

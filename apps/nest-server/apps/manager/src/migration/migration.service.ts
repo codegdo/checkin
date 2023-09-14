@@ -3,7 +3,7 @@ import { DataSource, QueryRunner } from 'typeorm';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-import { migrationData as migrationSource } from './migration.data';
+import { initialSetupMigrations } from './initial-setup-migrations';
 
 @Injectable()
 export class MigrationService {
@@ -17,7 +17,7 @@ export class MigrationService {
     'main_vw',
   ];
 
-  private migrationData = migrationSource;
+  private initialMigrations = initialSetupMigrations;
 
   constructor(private dataSource: DataSource) { }
 
@@ -46,11 +46,9 @@ export class MigrationService {
     await queryRunner.connect();
 
     try {
-      await this.runMigration(
-        queryRunner,
-        this.migrationData.migrationFiles,
-        this.migrationData.rollbackFiles,
-      );
+      for (const migration of this.initialMigrations) {
+        await this.runMigration(queryRunner, migration.migrationFiles);
+      }
       return { message: 'Migrations created successfully.' };
     } catch (error) {
       console.error('Error creating migrations:', error);
@@ -65,10 +63,10 @@ export class MigrationService {
     await queryRunner.connect();
 
     try {
-      await this.rollbackMigration(
-        queryRunner,
-        this.migrationData.rollbackFiles,
-      );
+      for (const migration of this.initialMigrations) {
+        await this.rollbackMigration(queryRunner, migration.rollbackFiles);
+      }
+
       return { message: 'Migrations drop successfully.' };
     } catch (error) {
       console.error('Error drop migrations:', error);
@@ -118,7 +116,6 @@ export class MigrationService {
           console.log(`Schema "${schemaName}" already exists.`);
         }
       }
-
     } catch (error) {
       console.error('Error creating schemas:', error);
       throw new Error('Schema creation failed.');
@@ -185,10 +182,7 @@ export class MigrationService {
   private async runMigration(
     queryRunner: QueryRunner,
     files: any[],
-    rollbacks: any[],
   ): Promise<void> {
-    let rollbackRequired = false;
-
     try {
       await queryRunner.startTransaction();
 
@@ -202,15 +196,9 @@ export class MigrationService {
       await queryRunner.commitTransaction();
       console.log('Migration completed successfully.');
     } catch (error) {
-      console.error('Migration failed:', error);
-      rollbackRequired = true;
       await queryRunner.rollbackTransaction();
-    } finally {
-      if (rollbackRequired) {
-        await this.rollbackMigration(queryRunner, rollbacks);
-        console.log('Migration rolled back successfully.');
-        throw new Error('Migration failed.');
-      }
+      console.error('Migration failed:', error);
+      throw new Error('Migration failed.');
     }
   }
 

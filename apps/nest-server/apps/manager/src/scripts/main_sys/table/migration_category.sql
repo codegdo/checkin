@@ -11,37 +11,15 @@ CREATE TABLE IF NOT EXISTS main_sys.migration_category (
 );
 
 INSERT INTO main_sys.migration_category (name, description) VALUES
-('System Configuration', 'Basic system configuration for a new installation.'),
-('User Roles', 'Defining user roles and permissions for the system.'),
-('Database Initialization', 'Creating and configuring the main database.'),
-('Email Integration', 'Setting up email notifications and communication.'),
-('Security Policies', 'Establishing security policies and access controls.'),
-('Backup and Recovery', 'Configuring backup and recovery procedures.'),
-('Server Configuration', 'Configuration settings for server hardware and software.'),
-('Integration with Third-Party Services', 'Setting up connections to external services and APIs.'),
-('Customization and Theming', 'Customizing the user interface and applying themes.'),
-('User Onboarding', 'Creating and managing user accounts during initial setup.'),
-('Data Import and Migration', 'Importing initial data and performing necessary migrations.'),
-('Testing and Validation', 'Performing initial testing and validation procedures.'),
-('Payment Gateway Integration', 'Setting up payment processing and gateways.'),
-('Content Configuration', 'Configuring content management and publishing settings.'),
-('Notification Preferences', 'Defining user notification preferences and channels.'),
-('Workflow Automation', 'Automating business processes and workflows.'),
-('Analytics Setup', 'Configuring analytics and reporting tools for data analysis.'),
-('Localization Settings', 'Adapting the system for different languages and regions.'),
-('API Key Configuration', 'Configuring API keys and access permissions.'),
-('User Training and Documentation', 'Providing training materials and documentation for users.'),
-('Billing and Subscription Setup', 'Setting up billing and subscription management.'),
-('Inventory Management', 'Configuring inventory tracking and management.'),
-('System Monitoring and Alerts', 'Setting up monitoring and alerting tools for system health.'),
-('Data Privacy and Compliance', 'Ensuring data privacy and compliance with regulations.'),
-('Authentication Settings', 'Configuring authentication methods and security settings.'),
-('Email Configuration', 'Configuring email servers and communication settings.'),
-('Scalability Planning', 'Planning for system scalability and resource allocation.'),
-('User Access Control', 'Defining user access controls and permissions.'),
-('Logging and Auditing', 'Setting up logging and auditing mechanisms for tracking system activities.'),
-('API Endpoint Configuration', 'Configuring API endpoints and routing for data access.'),
-('User Preferences', 'Allowing users to customize their preferences and settings.'),
-('Error Handling Setup', 'Defining error handling and reporting procedures.'),
-('System Configuration Setup', 'General system configuration.'),
-('Reporting and Dashboard Setup', 'Configuration related to reporting and dashboard creation.');
+('Database Initialization', 'Creating and configuring the main database.');
+
+/*
+SysAdmin
+DBAdmin
+SecurityAdmin
+BackupAdmin
+AdminUser
+QAEngineer
+UIAdmin
+IntergrationAdmin
+*/

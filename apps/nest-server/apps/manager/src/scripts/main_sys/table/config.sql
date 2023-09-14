@@ -1,18 +1,23 @@
 -- System Configuration Table
 CREATE TABLE main_sys.config (
-    id SERIAL PRIMARY KEY,
-    config_name VARCHAR(255) UNIQUE NOT NULL,
-    config_value TEXT,
-    data_type VARCHAR(50),
-    description TEXT,
-    display_name VARCHAR(255),
-    default_value TEXT,
-    category VARCHAR(255),
-    is_enabled BOOLEAN DEFAULT true
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) UNIQUE NOT NULL,
+  value TEXT,
+  data_type VARCHAR(50),
+  description TEXT,
+  display_name VARCHAR(255),
+  default_value TEXT,
+  category VARCHAR(255),
+  is_enabled BOOLEAN DEFAULT TRUE,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  created_by VARCHAR(50) DEFAULT CURRENT_USER,
+  updated_by VARCHAR(50)
 );
 
-INSERT INTO system_config (config_name, config_value, data_type, description)
-VALUES
-    ('app_name', 'MyApp', 'string', 'Name of the application'),
-    ('max_users', '100', 'integer', 'Maximum number of users allowed'),
-    ('enable_feature_x', 'true', 'boolean', 'Enable or disable Feature X');
+
+-- Insert data into the main_sys.config table
+INSERT INTO main_sys.config (name, display_name, value, default_value, data_type, description, category, is_enabled) VALUES
+('ENABLE_DROP_DB_SYSTEM_CONFIG','Enable Drop DB System Config','TRUE','TRUE','boolean','Enable or disable drop database system configuration','System Configuration',TRUE);
+

@@ -10,17 +10,18 @@ BEGIN
     ms.script_path,
     ms.script_order
   FROM main_sys.migration m
+  LEFT JOIN main_sys.migration_category mc ON m.migration_category_id = mc.id
   LEFT JOIN main_sys.migration_script ms ON m.id = ms.migration_id
   WHERE (
     CASE
       WHEN (input_migration_id ~ '^\d+$') THEN
         m.id = CAST(input_migration_id AS INT)
       ELSE
-        m.name = input_migration_id
+        mc.name = input_migration_id
     END
   );
 
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT * FROM main_sys.fn_get_migration('1');
+-- SELECT * FROM main_sys.fn_get_migration('1');
