@@ -11,6 +11,26 @@ export const initialSetupMigrations = [
         scriptOrder: '0',
         scriptPath: 'scripts/main_sys/table/config.sql',
       },
+      {
+        id: 200,
+        database: 'db_checkin',
+        schema: 'main_sys',
+        objectType: 'function',
+        name: 'config',
+        scriptType: 'sql',
+        scriptOrder: '200',
+        scriptPath: 'scripts/main_sys/function/fn_get_config_key.sql',
+      },
+      {
+        id: 201,
+        database: 'db_checkin',
+        schema: 'main_sys',
+        objectType: 'function',
+        name: 'config',
+        scriptType: 'sql',
+        scriptOrder: '201',
+        scriptPath: 'scripts/main_sys/function/fn_check_config_key_boolean.sql',
+      },
     ],
     rollbackFiles: [
       {

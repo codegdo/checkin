@@ -18,5 +18,25 @@ CREATE TABLE IF NOT EXISTS main_sys.migration_rollback (
     FOREIGN KEY (migration_id) REFERENCES main_sys.migration (id) ON DELETE CASCADE
 );
 
-INSERT INTO main_sys.migration_rollback (migration_id) VALUES
-(1);
+
+DO $$
+DECLARE
+  setup_public_functions_id INT;
+BEGIN
+  -- Find the ID of the 'Setup Public Functions' migration
+  SELECT id INTO setup_public_functions_id
+  FROM main_sys.migration
+  WHERE name = 'Setup Public Functions';
+
+  -- Check if the migration with the name 'Setup Public Functions' exists
+  IF setup_public_functions_id IS NOT NULL THEN
+    -- Insert rolback 'Setup Public Functions'
+    INSERT INTO main_sys.migration_rollback (migration_id) VALUES
+    (setup_public_functions_id);
+
+  ELSE
+    -- Handle the case where the migration does not exist
+    RAISE NOTICE 'Migration with name ''Setup Public Functions'' not found.';
+  END IF;
+END;
+$$;

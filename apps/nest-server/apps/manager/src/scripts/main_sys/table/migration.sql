@@ -1,7 +1,7 @@
 -- Create a table to track migration history
 CREATE TABLE IF NOT EXISTS main_sys.migration (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
+  name VARCHAR(255) UNIQUE NOT NULL,
   description TEXT,
 
   status VARCHAR(50) DEFAULT 'Pending' CHECK (status IN ('Pending', 'InProgress', 'Completed', 'Failed')),
@@ -32,5 +32,23 @@ CREATE TABLE IF NOT EXISTS main_sys.migration (
   FOREIGN KEY (migration_category_id) REFERENCES main_sys.migration_category (id) ON DELETE CASCADE
 );
 
-INSERT INTO main_sys.migration (name, description, execution_order, app_version, migration_category_id) VALUES
-('Setup Public Functions','Setup public functions for the application.',0,1,1);
+DO $$
+DECLARE
+  database_initialization_id INT;
+BEGIN
+  -- Find the ID of the 'Database Initialization' migration category
+  SELECT id INTO database_initialization_id
+  FROM main_sys.migration_category
+  WHERE name = 'Database Initialization';
+
+  -- Check if the migration category with the name 'Database Initialization' exists
+  IF database_initialization_id IS NOT NULL THEN
+    -- Insert migration 'Setup Public Functions'
+    INSERT INTO main_sys.migration (migration_category_id, name, description, execution_order, app_version) VALUES
+    (database_initialization_id,'Setup Public Functions','Setup public functions for the application.',0,1);
+  ELSE
+    -- Handle the case where the migration does not exist
+    RAISE NOTICE 'Migration Category with name ''Database Initialization'' not found.';
+  END IF;
+END;
+$$;
