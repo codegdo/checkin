@@ -1,6 +1,7 @@
 export const initialSetupMigrations = [
   {
     migrationFiles: [
+      // TABLES
       {
         id: 1,
         database: 'db_checkin',
@@ -11,25 +12,26 @@ export const initialSetupMigrations = [
         scriptOrder: '0',
         scriptPath: 'scripts/main_sys/table/config.sql',
       },
+      // FUNCTIONS
       {
-        id: 200,
+        id: 100,
         database: 'db_checkin',
         schema: 'main_sys',
         objectType: 'function',
         name: 'config',
         scriptType: 'sql',
         scriptOrder: '200',
-        scriptPath: 'scripts/main_sys/function/fn_get_config_key.sql',
+        scriptPath: 'scripts/main_sys/function/fn_get_config_by_key.sql',
       },
       {
-        id: 201,
+        id: 101,
         database: 'db_checkin',
         schema: 'main_sys',
         objectType: 'function',
         name: 'config',
         scriptType: 'sql',
-        scriptOrder: '201',
-        scriptPath: 'scripts/main_sys/function/fn_check_config_key_boolean.sql',
+        scriptOrder: '101',
+        scriptPath: 'scripts/main_sys/function/fn_is_config_key_boolean.sql',
       },
     ],
     rollbackFiles: [
@@ -47,6 +49,7 @@ export const initialSetupMigrations = [
   },
   {
     migrationFiles: [
+      // TABLES
       {
         id: 1,
         database: 'db_checkin',
@@ -116,6 +119,57 @@ export const initialSetupMigrations = [
         scriptType: 'sql',
         scriptOrder: '6',
         scriptPath: 'scripts/main_sys/table/migration_metadata.sql',
+      },
+      // FUNCTIONS
+      {
+        id: 100,
+        database: 'db_checkin',
+        schema: 'main_sys',
+        objectType: 'function',
+        name: 'fn_get_migration_all',
+        scriptType: 'sql',
+        scriptOrder: '100',
+        scriptPath: 'scripts/main_sys/function/fn_get_migration_all.sql',
+      },
+      {
+        id: 101,
+        database: 'db_checkin',
+        schema: 'main_sys',
+        objectType: 'function',
+        name: 'fn_get_migration_by_category',
+        scriptType: 'sql',
+        scriptOrder: '101',
+        scriptPath: 'scripts/main_sys/function/fn_get_migration_by_category.sql',
+      },
+      {
+        id: 102,
+        database: 'db_checkin',
+        schema: 'main_sys',
+        objectType: 'function',
+        name: 'fn_get_migration_by_id',
+        scriptType: 'sql',
+        scriptOrder: '102',
+        scriptPath: 'scripts/main_sys/function/fn_get_migration_by_id.sql',
+      },
+      {
+        id: 103,
+        database: 'db_checkin',
+        schema: 'main_sys',
+        objectType: 'function',
+        name: 'fn_get_migration_next',
+        scriptType: 'sql',
+        scriptOrder: '103',
+        scriptPath: 'scripts/main_sys/function/fn_get_migration_next.sql',
+      },
+      {
+        id: 104,
+        database: 'db_checkin',
+        schema: 'main_sys',
+        objectType: 'function',
+        name: 'fn_get_migration_previous',
+        scriptType: 'sql',
+        scriptOrder: '104',
+        scriptPath: 'scripts/main_sys/function/fn_get_migration_previous.sql',
       },
     ],
     rollbackFiles: [

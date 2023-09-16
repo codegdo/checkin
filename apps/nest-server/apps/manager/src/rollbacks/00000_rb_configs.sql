@@ -1,8 +1,8 @@
 DO $$ 
 DECLARE
   function_names TEXT[] := ARRAY[
-    'main_sys.fn_get_config_key',
-    'main_sys.fn_check_config_key_boolean'
+    'main_sys.fn_get_config_by_key',
+    'main_sys.fn_is_config_key_boolean'
   ]::TEXT[];
   function_name TEXT;
 

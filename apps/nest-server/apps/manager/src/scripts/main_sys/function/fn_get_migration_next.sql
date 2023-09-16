@@ -1,5 +1,5 @@
 -- Create a stored function to return the next migration record
-CREATE OR REPLACE FUNCTION main_sys.fn_get_next_migration()
+CREATE OR REPLACE FUNCTION main_sys.fn_get_migration_next()
 RETURNS main_sys.migration AS $$
 DECLARE
   last_migration main_sys.migration;

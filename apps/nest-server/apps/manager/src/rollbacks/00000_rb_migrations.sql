@@ -1,6 +1,12 @@
 DO $$ 
 DECLARE
-  function_names TEXT[] := ARRAY[]::TEXT[];
+  function_names TEXT[] := ARRAY[
+    'main_sys.fn_get_migration_all',
+    'main_sys.fn_get_migration_by_category',
+    'main_sys.fn_get_migration_by_id',
+    'main_sys.fn_get_migration_next',
+    'main_sys.fn_get_migration_previous'
+  ]::TEXT[];
   function_name TEXT;
 
   table_names TEXT[] := ARRAY[

@@ -1,5 +1,5 @@
 -- Create a stored function to return the previous migration record
-CREATE OR REPLACE FUNCTION main_sys.fn_get_previous_migration()
+CREATE OR REPLACE FUNCTION main_sys.fn_get_migration_previous()
 RETURNS main_sys.migration AS $$
 DECLARE
   last_migration main_sys.migration;
