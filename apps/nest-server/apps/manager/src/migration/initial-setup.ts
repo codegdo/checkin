@@ -1,4 +1,4 @@
-export const initialSetupMigrations = [
+export const initialSetup = [
   {
     migrationFiles: [
       // TABLES
@@ -43,7 +43,7 @@ export const initialSetupMigrations = [
         name: '00000_rb_configs',
         scriptType: 'sql',
         scriptOrder: '0',
-        scriptPath: 'rollbacks/00000_rb_configs.sql',
+        scriptPath: 'rollbacks/00000_rb_initial_setup_configs.sql',
       },
     ],
   },
@@ -181,7 +181,7 @@ export const initialSetupMigrations = [
         name: '00000_rb_migrations',
         scriptType: 'sql',
         scriptOrder: '0',
-        scriptPath: 'rollbacks/00000_rb_migrations.sql',
+        scriptPath: 'rollbacks/00000_rb_initial_setup_migrations.sql',
       },
     ],
   },

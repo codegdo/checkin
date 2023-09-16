@@ -3,7 +3,7 @@ import { DataSource, QueryRunner } from 'typeorm';
 import * as fs from 'fs/promises';
 import * as path from 'path';
 
-import { initialSetupMigrations } from './initial-setup-migrations';
+import { initialSetup } from './initial-setup';
 
 @Injectable()
 export class MigrationService {
@@ -17,7 +17,7 @@ export class MigrationService {
     'main_vw',
   ];
 
-  private initialMigrations = initialSetupMigrations;
+  private initialMigrations = initialSetup;
 
   constructor(private dataSource: DataSource) { }
 
