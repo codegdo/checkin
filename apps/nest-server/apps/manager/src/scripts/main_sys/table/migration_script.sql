@@ -39,7 +39,7 @@ BEGIN
     (setup_public_functions_id,null,'fn_generate_random_string','Add public function fn_generate_random_string','db_checkin','public','function','sql','scripts/public/function/fn_generate_random_string.sql',1),
     (setup_public_functions_id,null,'fn_split_lookup_string_to_json','Add public function fn_split_lookup_string_to_json','db_checkin','public','function','sql','scripts/public/function/fn_split_lookup_string_to_json.sql',2),
     (setup_public_functions_id,null,'fn_updated_at','Add public function fn_updated_at','db_checkin','public','function','sql','scripts/public/function/fn_updated_at.sql',3),
-    (null,setup_public_functions_id,'rb_initial_setup_public_functions','Rollback initial setup public functions','db_checkin','*','rollback','sql','rollbacks/00001_rb_initial_setup_public_functions.sql',0);
+    (null,setup_public_functions_id,'00001_rb_database_initialization_setup_public_funtions','Rollback database initializatio setup public functions','db_checkin','*','rollback','sql','rollbacks/00001_rb_initial_setup_public_functions.sql',0);
 
   ELSE
     -- Handle the case where the migration does not exist

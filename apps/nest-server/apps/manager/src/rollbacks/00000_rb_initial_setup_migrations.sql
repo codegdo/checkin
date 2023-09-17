@@ -16,7 +16,8 @@ DECLARE
     'main_sys.migration_rollback', 
     'main_sys.migration_dependency', 
     'main_sys.migration',
-    'main_sys.migration_category'];
+    'main_sys.migration_category'
+  ]::TEXT[];
   table_name TEXT;
 BEGIN
   -- Functions
