@@ -19,14 +19,14 @@ export class DatabaseController {
     return this.databaseService.dropSchemas();
   }
 
-  @Get('seed-migrations')
+  @Get('seed-initial-setup')
   async seedMigrations() {
-    return this.databaseService.seedMigrations();
+    return this.databaseService.seedInitialSetup();
   }
 
-  @Get('drop-migrations')
+  @Get('drop-initial-setup')
   async dropMigrations() {
-    return this.databaseService.dropMigrations();
+    return this.databaseService.dropInitialSetup();
   }
 
   @Get('migrations')

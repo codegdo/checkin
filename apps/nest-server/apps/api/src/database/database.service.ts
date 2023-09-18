@@ -15,7 +15,7 @@ export class DatabaseService {
   async seedSchemas(): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('init_seed_schemas', {})
+        .send('db_seed_schemas', {})
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.error(error);
@@ -36,7 +36,7 @@ export class DatabaseService {
 
     try {
       return this.migrationService
-        .send('init_drop_schemas', {})
+        .send('db_drop_schemas', {})
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.log(error);
@@ -44,10 +44,10 @@ export class DatabaseService {
     }
   }
 
-  async seedMigrations(): Promise<Observable<{ message: string }>> {
+  async seedInitialSetup(): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('init_seed_migrations', {})
+        .send('db_seed_initial_setup', {})
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.error(error);
@@ -55,10 +55,10 @@ export class DatabaseService {
     }
   }
 
-  async dropMigrations(): Promise<Observable<{ message: string }>> {
+  async dropInitialSetup(): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('init_drop_migrations', {})
+        .send('db_drop_initial_setup', {})
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.log(error);
@@ -77,10 +77,12 @@ export class DatabaseService {
     }
   }
 
-  async rollbackMigrationById(id:number): Promise<Observable<{ message: string }>> {
+  async rollbackMigrationById(
+    id: number,
+  ): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('db_rollback_migration_by_id', {id})
+        .send('db_rollback_migration_by_id', id)
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.log(error);

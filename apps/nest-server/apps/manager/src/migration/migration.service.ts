@@ -41,13 +41,13 @@ export class MigrationService {
     }
   }
 
-  async seedMigrations(): Promise<{ message: string }> {
+  async seedIntialSetup(): Promise<{ message: string }> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
     try {
       for (const migration of this.initialMigrations) {
-        await this.runMigration(queryRunner, migration.migrationFiles);
+        await this.runMigration(queryRunner, migration.migrationScripts);
       }
       return { message: 'Migrations created successfully.' };
     } catch (error) {
@@ -58,13 +58,13 @@ export class MigrationService {
     }
   }
 
-  async dropMigrations(): Promise<{ message: string }> {
+  async dropIntialSetup(): Promise<{ message: string }> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
     try {
       for (const migration of this.initialMigrations) {
-        await this.rollbackMigration(queryRunner, migration.rollbackFiles);
+        await this.rollbackMigration(queryRunner, migration.rollbackScripts);
       }
 
       return { message: 'Migrations drop successfully.' };
@@ -76,16 +76,23 @@ export class MigrationService {
     }
   }
 
-  async runMigrationById(migrationId: number): Promise<{ message: string }>  {
+  async runMigrationById(migrationId: number): Promise<{ message: string }> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
     try {
-      const result = await queryRunner.manager.query(`SELECT * FROM main_sys.fn_get_migration_scripts_next($1)`, [migrationId]);
-      
-      if (result) {
+      // Call the stored procedure to retrieve migration scripts
+      const [storedProcResult] = await queryRunner.manager.query(
+        `CALL main_sys.pr_migration_get_scripts($1, $2)`,
+        [migrationId, null],
+      );
+
+      // Extract the migration scripts from the stored procedure result
+      const { migrationScripts } = storedProcResult?.result;
+
+      if (migrationScripts) {
         // Handle the result as needed
-        console.log('Migration scripts:', result);
+        await this.runMigration(queryRunner, migrationScripts);
         return { message: 'Run migration successfully.' };
       } else {
         // Handle the case where no result is returned
@@ -100,7 +107,9 @@ export class MigrationService {
     }
   }
 
-  async rollbackMigrationById(migrationId: number): Promise<{ message: string }> {
+  async rollbackMigrationById(
+    migrationId: number,
+  ): Promise<{ message: string }> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
@@ -193,21 +202,32 @@ export class MigrationService {
 
   private async runMigration(
     queryRunner: QueryRunner,
-    files: any[],
+    migrationScripts: any[],
   ): Promise<void> {
     try {
+      // Start a database transaction
       await queryRunner.startTransaction();
 
-      for (const file of files) {
-        const filePath = path.join(__dirname, '../../', file.scriptPath);
-        const script = await this.readFile(filePath);
-        await queryRunner.query(script);
-        console.log(`Executed script: ${file.name}`);
+      for (const script of migrationScripts) {
+        const scriptFilePath = path.join(
+          __dirname,
+          '../../',
+          script.scriptPath,
+        );
+        const scriptContent = await this.readFile(scriptFilePath);
+
+        // Execute the migration script
+        await queryRunner.query(scriptContent);
+
+        // Log the successful execution of the script
+        console.log(`Executed migration script: ${script.name}`);
       }
 
+      // Commit the transaction if all scripts executed successfully
       await queryRunner.commitTransaction();
       console.log('Migration completed successfully.');
     } catch (error) {
+      // Rollback the transaction if any script fails
       await queryRunner.rollbackTransaction();
       console.error('Migration failed:', error);
       throw new Error('Migration failed.');
@@ -216,21 +236,32 @@ export class MigrationService {
 
   private async rollbackMigration(
     queryRunner: QueryRunner,
-    files: any[],
+    rollbackScripts: any[],
   ): Promise<void> {
     try {
+      // Start a database transaction for rollback
       await queryRunner.startTransaction();
 
-      for (const file of files) {
-        const filePath = path.join(__dirname, '../../', file.scriptPath);
-        const script = await this.readFile(filePath);
-        await queryRunner.query(script);
-        console.log(`Executed script: ${file.name}`);
+      for (const script of rollbackScripts) {
+        const scriptFilePath = path.join(
+          __dirname,
+          '../../',
+          script.scriptPath,
+        );
+        const scriptContent = await this.readFile(scriptFilePath);
+
+        // Execute the rollback script
+        await queryRunner.query(scriptContent);
+
+        // Log the successful execution of the rollback script
+        console.log(`Executed rollback script: ${script.name}`);
       }
 
+      // Commit the transaction if all rollback scripts executed successfully
       await queryRunner.commitTransaction();
       console.log('Rollback completed successfully.');
     } catch (error) {
+      // Rollback the transaction and handle errors
       console.error('Error during rollback:', error);
       await queryRunner.rollbackTransaction();
       throw error;

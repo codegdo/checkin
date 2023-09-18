@@ -1,5 +1,14 @@
 CREATE OR REPLACE FUNCTION main_sys.fn_get_migration_scripts_next(input_migration_id INT)
-RETURNS SETOF main_sys.migration_script AS $$
+RETURNS TABLE (
+  id INT,
+  database VARCHAR,
+  schema VARCHAR,
+  "objectType" VARCHAR,
+  name VARCHAR,
+  "scriptType" VARCHAR,
+  "scriptPath" VARCHAR,
+  "scriptOrder" INT
+) AS $$
 DECLARE
   last_migration main_sys.migration;
   next_migration main_sys.migration;
@@ -30,14 +39,23 @@ BEGIN
   IF next_migration.id = input_migration_id THEN
     -- Select all migration scripts for the provided migration_id
     RETURN QUERY
-    SELECT ms.*
+    SELECT 
+      ms.id,
+      ms.database,
+      ms.schema,
+      ms.object_type,
+      ms.name,
+      ms.script_type,
+      ms.script_path,
+      ms.script_order
     FROM main_sys.migration_script ms
     WHERE ms.migration_id = input_migration_id;
   ELSE
     -- Handle the case where a migration with the provided migration_id is not the next one
-    -- RAISE EXCEPTION 'Provided migration_id does not match the next migration: %', migration_id;
-    RETURN;
+    RETURN QUERY SELECT NULL::INT, NULL::VARCHAR, NULL::VARCHAR, NULL::VARCHAR, NULL::VARCHAR, NULL::VARCHAR, NULL::VARCHAR, NULL::INT;
   END IF;
-
 END;
 $$ LANGUAGE plpgsql;
+
+
+-- SELECT * FROM main_sys.fn_get_migration_scripts_next(1);

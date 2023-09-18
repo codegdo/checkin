@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS main_sys.migration_script (
 DO $$
 DECLARE
   setup_public_functions_id INT;
+  rollback_setup_public_functions_id INT;
 BEGIN
   -- Find the ID of the 'Setup Public Functions' migration
   SELECT id INTO setup_public_functions_id
@@ -33,13 +34,19 @@ BEGIN
 
   -- Check if the migration with the name 'Setup Public Functions' exists
   IF setup_public_functions_id IS NOT NULL THEN
+
+    -- Find the ID of the 'Rollback Setup Public Functions' migration
+    SELECT id INTO rollback_setup_public_functions_id
+    FROM main_sys.migration_rollback mr
+    WHERE mr.id = setup_public_functions_id;
+
     -- Insert rolback 'Setup Public Functions'
     INSERT INTO main_sys.migration_script (migration_id, migration_rollback_id, name, description, database, schema, object_type, script_type, script_path, script_order) VALUES
     (setup_public_functions_id,null,'fn_camel_case_split','Add public function fn_camel_case_split','db_checkin','public','function','sql','scripts/public/function/fn_camel_case_split.sql',0),
     (setup_public_functions_id,null,'fn_generate_random_string','Add public function fn_generate_random_string','db_checkin','public','function','sql','scripts/public/function/fn_generate_random_string.sql',1),
     (setup_public_functions_id,null,'fn_split_lookup_string_to_json','Add public function fn_split_lookup_string_to_json','db_checkin','public','function','sql','scripts/public/function/fn_split_lookup_string_to_json.sql',2),
-    (setup_public_functions_id,null,'fn_updated_at','Add public function fn_updated_at','db_checkin','public','function','sql','scripts/public/function/fn_updated_at.sql',3),
-    (null,setup_public_functions_id,'00001_rb_database_initialization_setup_public_funtions','Rollback database initializatio setup public functions','db_checkin','*','rollback','sql','rollbacks/00001_rb_initial_setup_public_functions.sql',0);
+    (setup_public_functions_id,null,'fn_updated_at','Add public function fn_updated_at','db_checkin','public','trigger','sql','scripts/public/trigger/fn_updated_at.sql',3),
+    (null,rollback_setup_public_functions_id,'00001_rb_database_initialization_setup_public_funtions','Rollback database initializatio setup public functions','db_checkin','*','rollback','sql','rollbacks/00001_rb_initial_setup_public_functions.sql',0);
 
   ELSE
     -- Handle the case where the migration does not exist

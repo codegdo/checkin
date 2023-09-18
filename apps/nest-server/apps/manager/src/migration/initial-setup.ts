@@ -1,6 +1,53 @@
 export const initialSetup = [
   {
-    migrationFiles: [
+    migrationScripts: [
+      // FUNCTIONS
+      {
+        id: 100,
+        database: 'db_checkin',
+        schema: 'main_sys',
+        objectType: 'function',
+        name: 'fn_drop_functions',
+        scriptType: 'sql',
+        scriptOrder: '100',
+        scriptPath: 'scripts/public/function/_fn_drop_functions.sql',
+      },
+      {
+        id: 101,
+        database: 'db_checkin',
+        schema: 'main_sys',
+        objectType: 'function',
+        name: 'fn_drop_procedures',
+        scriptType: 'sql',
+        scriptOrder: '101',
+        scriptPath: 'scripts/public/function/_fn_drop_procedures.sql',
+      },
+      {
+        id: 101,
+        database: 'db_checkin',
+        schema: 'main_sys',
+        objectType: 'function',
+        name: 'fn_drop_tables',
+        scriptType: 'sql',
+        scriptOrder: '102',
+        scriptPath: 'scripts/public/function/_fn_drop_tables.sql',
+      },
+    ],
+    rollbackScripts: [
+      {
+        id: 1,
+        database: 'db_checkin',
+        schema: '*',
+        objectType: 'rollback',
+        name: '00000_rb_initial_setup_funtions',
+        scriptType: 'sql',
+        scriptOrder: '0',
+        scriptPath: 'rollbacks/00000_rb_initial_setup_functions.sql',
+      },
+    ],
+  },
+  {
+    migrationScripts: [
       // TABLES
       {
         id: 1,
@@ -18,7 +65,7 @@ export const initialSetup = [
         database: 'db_checkin',
         schema: 'main_sys',
         objectType: 'function',
-        name: 'config',
+        name: 'fn_get_config_by_key',
         scriptType: 'sql',
         scriptOrder: '200',
         scriptPath: 'scripts/main_sys/function/fn_get_config_by_key.sql',
@@ -28,13 +75,13 @@ export const initialSetup = [
         database: 'db_checkin',
         schema: 'main_sys',
         objectType: 'function',
-        name: 'config',
+        name: 'fn_is_config_key_boolean',
         scriptType: 'sql',
         scriptOrder: '101',
         scriptPath: 'scripts/main_sys/function/fn_is_config_key_boolean.sql',
       },
     ],
-    rollbackFiles: [
+    rollbackScripts: [
       {
         id: 1,
         database: 'db_checkin',
@@ -48,7 +95,7 @@ export const initialSetup = [
     ],
   },
   {
-    migrationFiles: [
+    migrationScripts: [
       // TABLES
       {
         id: 1,
@@ -139,7 +186,8 @@ export const initialSetup = [
         name: 'fn_get_migration_by_category',
         scriptType: 'sql',
         scriptOrder: '101',
-        scriptPath: 'scripts/main_sys/function/fn_get_migration_by_category.sql',
+        scriptPath:
+          'scripts/main_sys/function/fn_get_migration_by_category.sql',
       },
       {
         id: 102,
@@ -171,8 +219,41 @@ export const initialSetup = [
         scriptOrder: '104',
         scriptPath: 'scripts/main_sys/function/fn_get_migration_previous.sql',
       },
+      {
+        id: 105,
+        database: 'db_checkin',
+        schema: 'main_sys',
+        objectType: 'function',
+        name: 'fn_get_migration_rollbacks_next',
+        scriptType: 'sql',
+        scriptOrder: '104',
+        scriptPath:
+          'scripts/main_sys/function/fn_get_migration_rollbacks_next.sql',
+      },
+      {
+        id: 106,
+        database: 'db_checkin',
+        schema: 'main_sys',
+        objectType: 'function',
+        name: 'fn_get_migration_scripts_next',
+        scriptType: 'sql',
+        scriptOrder: '104',
+        scriptPath:
+          'scripts/main_sys/function/fn_get_migration_scripts_next.sql',
+      },
+      // PROCEDURES
+      {
+        id: 200,
+        database: 'db_checkin',
+        schema: 'main_sys',
+        objectType: 'function',
+        name: 'fn_get_migration_scripts_next',
+        scriptType: 'sql',
+        scriptOrder: '104',
+        scriptPath: 'scripts/main_sys/procedure/pr_migration_get_scripts.sql',
+      },
     ],
-    rollbackFiles: [
+    rollbackScripts: [
       {
         id: 1,
         database: 'db_checkin',

@@ -6,24 +6,24 @@ import { MigrationService } from './migration.service';
 export class MigrationController {
   constructor(private readonly migrationService: MigrationService) { }
 
-  @EventPattern('init_seed_schemas')
+  @EventPattern('db_seed_schemas')
   async seedSchemas() {
     return this.migrationService.seedSchemas();
   }
 
-  @EventPattern('init_drop_schemas')
+  @EventPattern('db_drop_schemas')
   async dropSchemas() {
     return this.migrationService.dropSchemas();
   }
 
-  @EventPattern('init_seed_migrations')
-  async seedMigrations() {
-    return this.migrationService.seedMigrations();
+  @EventPattern('db_seed_initial_setup')
+  async seedIntialSetup() {
+    return this.migrationService.seedIntialSetup();
   }
 
-  @EventPattern('init_drop_migrations')
-  async dropMigrations() {
-    return this.migrationService.dropMigrations();
+  @EventPattern('db_drop_initial_setup')
+  async dropIntialSetup() {
+    return this.migrationService.dropIntialSetup();
   }
 
   @EventPattern('db_run_migration_by_id')
