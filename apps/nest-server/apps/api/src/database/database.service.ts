@@ -66,10 +66,10 @@ export class DatabaseService {
     }
   }
 
-  async runMigrations(): Promise<Observable<{ message: string }>> {
+  async runMigrationById(id: number): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('db_run_migrations', {})
+        .send('db_run_migration_by_id', id)
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.error(error);
@@ -77,10 +77,10 @@ export class DatabaseService {
     }
   }
 
-  async rollbackMigrations(): Promise<Observable<{ message: string }>> {
+  async rollbackMigrationById(id:number): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('db_rollback_migrations', {})
+        .send('db_rollback_migration_by_id', {id})
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.log(error);

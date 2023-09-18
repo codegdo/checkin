@@ -76,12 +76,22 @@ export class MigrationService {
     }
   }
 
-  async runMigrations(migrationId: number): Promise<void> {
+  async runMigrationById(migrationId: number): Promise<{ message: string }>  {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
     try {
-      // Implement your logic here
+      const result = await queryRunner.manager.query(`SELECT * FROM main_sys.fn_get_migration_scripts_next($1)`, [migrationId]);
+      
+      if (result) {
+        // Handle the result as needed
+        console.log('Migration scripts:', result);
+        return { message: 'Run migration successfully.' };
+      } else {
+        // Handle the case where no result is returned
+        console.log('No migration scripts found.');
+        return { message: 'No migration scripts found.' };
+      }
     } catch (error) {
       console.error('Error getting migration:', error);
       throw error;
@@ -90,12 +100,14 @@ export class MigrationService {
     }
   }
 
-  async rollbackMigrations(migrationId: number): Promise<void> {
+  async rollbackMigrationById(migrationId: number): Promise<{ message: string }> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
     try {
       // Implement your logic here
+      console.log('rollbackMigrationById:', migrationId);
+      return { message: 'Rollback migration successfully.' };
     } catch (error) {
       console.error('Error getting migration:', error);
       throw error;

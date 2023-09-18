@@ -1,5 +1,9 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { DatabaseService } from './database.service';
+
+export class RunMigrationDto {
+  readonly id: number;
+}
 
 @Controller('database')
 export class DatabaseController {
@@ -30,18 +34,18 @@ export class DatabaseController {
     return 'SQL executed successfully';
   }
 
-  @Get('migration:id')
+  @Get('migrations/:id')
   async getMigrationById() {
     return 'SQL executed successfully';
   }
 
-  @Get('run-migrations')
-  async runMigrations() {
-    return this.databaseService.runMigrations();
+  @Get('run-migration/:id')
+  async runMigrationById(@Param('id') id: number) {
+    return this.databaseService.runMigrationById(id);
   }
 
-  @Get('rollback-migrations')
-  async rollbackMigrations() {
-    return this.databaseService.rollbackMigrations();
+  @Get('rollback-migration/:id')
+  async rollbackMigrationById(@Param('id') id: number) {
+    return this.databaseService.rollbackMigrationById(id);
   }
 }

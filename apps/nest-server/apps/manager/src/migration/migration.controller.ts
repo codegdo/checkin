@@ -26,13 +26,13 @@ export class MigrationController {
     return this.migrationService.dropMigrations();
   }
 
-  @EventPattern('db_run_migrations')
-  async runMigrations(migrationId) {
-    return this.migrationService.runMigrations(migrationId);
+  @EventPattern('db_run_migration_by_id')
+  async runMigrationById(migrationId) {
+    return this.migrationService.runMigrationById(migrationId);
   }
 
-  @EventPattern('db_rollback_migrations')
-  async rollbackMigrations(migrationId) {
-    return this.migrationService.rollbackMigrations(migrationId);
+  @EventPattern('db_rollback_migration_by_id')
+  async rollbackMigrationById(migrationId) {
+    return this.migrationService.rollbackMigrationById(migrationId);
   }
 }
