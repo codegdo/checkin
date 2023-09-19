@@ -5,6 +5,23 @@ import * as path from 'path';
 
 import { initialSetup } from './initial-setup';
 
+interface Payload {
+  data?: { [key: string]: any };
+  userId: string;
+}
+
+interface MigrationStatusPayload {
+  status: string;
+  migrationId: number;
+}
+
+interface MigrationCompletePayload {
+  migrationId: number;
+  startedAt: Date;
+  completedAt: Date;
+  duration: number;
+}
+
 @Injectable()
 export class MigrationService {
   private schemaNames = [
@@ -21,7 +38,7 @@ export class MigrationService {
 
   constructor(private dataSource: DataSource) { }
 
-  async seedSchemas(): Promise<{ message: string }> {
+  async seedSchemas(payload: Payload): Promise<{ message: string }> {
     try {
       await this.createSchemas(this.schemaNames);
       return { message: 'Schemas created successfully.' };
@@ -31,7 +48,7 @@ export class MigrationService {
     }
   }
 
-  async dropSchemas(): Promise<{ message: string }> {
+  async dropSchemas(payload: Payload): Promise<{ message: string }> {
     try {
       await this.dropExistingSchemas();
       return { message: 'Schemas dropped successfully.' };
@@ -41,7 +58,7 @@ export class MigrationService {
     }
   }
 
-  async seedIntialSetup(): Promise<{ message: string }> {
+  async seedIntialSetup(payload: Payload): Promise<{ message: string }> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
@@ -58,7 +75,7 @@ export class MigrationService {
     }
   }
 
-  async dropIntialSetup(): Promise<{ message: string }> {
+  async dropIntialSetup(payload: Payload): Promise<{ message: string }> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
@@ -76,7 +93,11 @@ export class MigrationService {
     }
   }
 
-  async runMigrationById(migrationId: number): Promise<{ message: string }> {
+  async runMigrationById({
+    data,
+    userId,
+  }: Payload): Promise<{ message: string }> {
+    const { migrationId } = data;
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
@@ -91,7 +112,18 @@ export class MigrationService {
       const { migrationScripts } = storedProcResult?.result;
 
       if (migrationScripts) {
-       
+        const migrationStatusPayload: MigrationStatusPayload = {
+          migrationId,
+          status: 'InProgress',
+        };
+
+        // Update status
+        await this.executeMigrationStatus(
+          queryRunner,
+          migrationStatusPayload,
+          userId,
+        );
+
         // Calculate startedAt
         const startedAt = new Date();
 
@@ -100,14 +132,23 @@ export class MigrationService {
 
         // Calculate completedAt
         const completedAt = new Date();
-        
+
         // Calculate duration in milliseconds
         const duration = completedAt.getTime() - startedAt.getTime();
 
-        console.log(duration);
+        const migrationCompletePayload: MigrationCompletePayload = {
+          migrationId,
+          startedAt,
+          completedAt,
+          duration,
+        };
 
         // Update migration table with the new values
-        await this.updateMigration(queryRunner, migrationId, startedAt, completedAt, duration);
+        await this.executeMigrationComplete(
+          queryRunner,
+          migrationCompletePayload,
+          userId,
+        );
 
         return { message: 'Run migration successfully.' };
       } else {
@@ -123,9 +164,11 @@ export class MigrationService {
     }
   }
 
-  async rollbackMigrationById(
-    migrationId: number,
-  ): Promise<{ message: string }> {
+  async rollbackMigrationById({
+    data,
+    userId,
+  }: Payload): Promise<{ message: string }> {
+    const { migrationId } = data;
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
 
@@ -216,14 +259,25 @@ export class MigrationService {
     }
   }
 
-  private async updateMigration(queryRunner: QueryRunner, migrationId: number, startedAt: Date, completedAt: Date, duration: number): Promise<void> {
-    const entityManager = queryRunner.manager;
-  
-    await entityManager.query(
-      `UPDATE main_sys.migration
-       SET started_at = $1, completed_at = $2, duration = $3, is_executed = TRUE
-       WHERE id = $4`,
-      [startedAt, completedAt, duration, migrationId],
+  private async executeMigrationStatus(
+    queryRunner: QueryRunner,
+    payload: MigrationStatusPayload,
+    updatedBy: string,
+  ): Promise<void> {
+    await queryRunner.manager.query(
+      `CALL main_sys.pr_migration_update_status($1, $2)`,
+      [payload, updatedBy],
+    );
+  }
+
+  private async executeMigrationComplete(
+    queryRunner: QueryRunner,
+    payload: MigrationCompletePayload,
+    updatedBy: string,
+  ): Promise<void> {
+    await queryRunner.manager.query(
+      `CALL main_sys.pr_migration_update_complete($1, $2)`,
+      [payload, updatedBy],
     );
   }
 

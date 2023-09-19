@@ -7,32 +7,33 @@ export class MigrationController {
   constructor(private readonly migrationService: MigrationService) { }
 
   @EventPattern('db_seed_schemas')
-  async seedSchemas() {
-    return this.migrationService.seedSchemas();
+  async seedSchemas(payload) {
+    return this.migrationService.seedSchemas(payload);
   }
 
   @EventPattern('db_drop_schemas')
-  async dropSchemas() {
-    return this.migrationService.dropSchemas();
+  async dropSchemas(payload) {
+    return this.migrationService.dropSchemas(payload);
   }
 
   @EventPattern('db_seed_initial_setup')
-  async seedIntialSetup() {
-    return this.migrationService.seedIntialSetup();
+  async seedIntialSetup(payload) {
+    return this.migrationService.seedIntialSetup(payload);
   }
 
   @EventPattern('db_drop_initial_setup')
-  async dropIntialSetup() {
-    return this.migrationService.dropIntialSetup();
+  async dropIntialSetup(payload) {
+    return this.migrationService.dropIntialSetup(payload);
   }
 
   @EventPattern('db_run_migration_by_id')
-  async runMigrationById(migrationId) {
-    return this.migrationService.runMigrationById(migrationId);
+  async runMigrationById(payload) {
+    console.log(payload);
+    return this.migrationService.runMigrationById(payload);
   }
 
   @EventPattern('db_rollback_migration_by_id')
-  async rollbackMigrationById(migrationId) {
-    return this.migrationService.rollbackMigrationById(migrationId);
+  async rollbackMigrationById(payload) {
+    return this.migrationService.rollbackMigrationById(payload);
   }
 }

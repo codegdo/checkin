@@ -15,7 +15,7 @@ export class DatabaseService {
   async seedSchemas(): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('db_seed_schemas', {})
+        .send('db_seed_schemas', { userId: 'sysadmin' })
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.error(error);
@@ -36,7 +36,7 @@ export class DatabaseService {
 
     try {
       return this.migrationService
-        .send('db_drop_schemas', {})
+        .send('db_drop_schemas', { userId: 'sysadmin' })
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.log(error);
@@ -47,7 +47,7 @@ export class DatabaseService {
   async seedInitialSetup(): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('db_seed_initial_setup', {})
+        .send('db_seed_initial_setup', { userId: 'sysadmin' })
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.error(error);
@@ -58,7 +58,7 @@ export class DatabaseService {
   async dropInitialSetup(): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('db_drop_initial_setup', {})
+        .send('db_drop_initial_setup', { userId: 'sysadmin' })
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.log(error);
@@ -69,7 +69,10 @@ export class DatabaseService {
   async runMigrationById(id: number): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('db_run_migration_by_id', id)
+        .send('db_run_migration_by_id', {
+          data: { migrationId: id },
+          userId: 'sysadmin',
+        })
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.error(error);
@@ -82,7 +85,10 @@ export class DatabaseService {
   ): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('db_rollback_migration_by_id', id)
+        .send('db_rollback_migration_by_id', {
+          data: { migrationId: id },
+          userId: 'sysadmin',
+        })
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.log(error);

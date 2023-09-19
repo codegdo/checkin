@@ -1,8 +1,7 @@
 /*
   Author: Giang Do
   Date: 09/18/2023
-  Description: 
-    -This stored procedure retrieves the migration and rollback scripts for a given migration ID and returns them as a JSON object.
+  Description: This stored procedure retrieves the migration and rollback scripts for a given migration ID and returns them as a JSON object.
 
   @param {INT} migration_id
   @param {JSON} result
@@ -30,6 +29,7 @@ BEGIN
         (SELECT json_agg(rollback_data) FROM main_sys.fn_get_migration_rollbacks_next(migration_id) AS rollback_data),
         '[]'
     ) INTO rollback_scripts;
+
   ELSE
     -- Set rollback_scripts to an empty JSON array if migration_scripts do not exist
     rollback_scripts := '[]'::JSON;
