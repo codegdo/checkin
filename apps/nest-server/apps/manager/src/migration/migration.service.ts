@@ -91,8 +91,24 @@ export class MigrationService {
       const { migrationScripts } = storedProcResult?.result;
 
       if (migrationScripts) {
-        // Handle the result as needed
+       
+        // Calculate startedAt
+        const startedAt = new Date();
+
+        // Run migration
         await this.runMigration(queryRunner, migrationScripts);
+
+        // Calculate completedAt
+        const completedAt = new Date();
+        
+        // Calculate duration in milliseconds
+        const duration = completedAt.getTime() - startedAt.getTime();
+
+        console.log(duration);
+
+        // Update migration table with the new values
+        await this.updateMigration(queryRunner, migrationId, startedAt, completedAt, duration);
+
         return { message: 'Run migration successfully.' };
       } else {
         // Handle the case where no result is returned
@@ -198,6 +214,17 @@ export class MigrationService {
     } catch (error) {
       throw new Error(`Error reading file: ${error.message}`);
     }
+  }
+
+  private async updateMigration(queryRunner: QueryRunner, migrationId: number, startedAt: Date, completedAt: Date, duration: number): Promise<void> {
+    const entityManager = queryRunner.manager;
+  
+    await entityManager.query(
+      `UPDATE main_sys.migration
+       SET started_at = $1, completed_at = $2, duration = $3, is_executed = TRUE
+       WHERE id = $4`,
+      [startedAt, completedAt, duration, migrationId],
+    );
   }
 
   private async runMigration(
