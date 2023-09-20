@@ -6,4 +6,4 @@ import { MigrationService } from './migration.service';
   controllers: [MigrationController],
   providers: [MigrationService]
 })
-export class MigrationModule { }
+export class MigrationModule {}

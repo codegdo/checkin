@@ -2,15 +2,14 @@ import { Module } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 
 import { MigrationModule } from './migration/migration.module';
-import { SetupModule } from './setup/setup.module';
 
 @Module({
   imports: [
     MigrationModule,
     RouterModule.register([
       {
-        path: 'console',
-        module: ConsoleModule,
+        path: 'manage',
+        module: ManageModule,
         children: [
           {
             path: 'migrations',
@@ -18,8 +17,7 @@ import { SetupModule } from './setup/setup.module';
           },
         ],
       },
-    ]),
-    SetupModule
+    ])
   ]
 })
-export class ConsoleModule { }
+export class ManageModule { }

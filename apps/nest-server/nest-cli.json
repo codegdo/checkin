@@ -44,6 +44,10 @@
         "tsConfigPath": "apps/manager/tsconfig.app.json",
         "assets": [
           {
+            "include": "db_checkin/**",
+            "outDir": "dist"
+          },
+          {
             "include": "scripts/**",
             "outDir": "dist"
           },

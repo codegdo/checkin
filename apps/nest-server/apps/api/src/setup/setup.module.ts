@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-
 import { ConfigModule, ConfigService, MANAGER_SERVICE } from '@app/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { MigrationController } from './migration.controller';
-import { MigrationService } from './migration.service';
+import { SetupController } from './setup.controller';
+import { SetupService } from './setup.service';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature(),
+    ConfigModule,
     ClientsModule.registerAsync([
       {
         name: MANAGER_SERVICE,
@@ -24,8 +23,9 @@ import { MigrationService } from './migration.service';
         }),
       },
     ]),
+    DatabaseModule,
   ],
-  controllers: [MigrationController],
-  providers: [MigrationService],
+  controllers: [SetupController],
+  providers: [SetupService],
 })
-export class MigrationModule { }
+export class SetupModule { }
