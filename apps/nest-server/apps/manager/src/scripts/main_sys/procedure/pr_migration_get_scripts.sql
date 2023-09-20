@@ -18,18 +18,30 @@ DECLARE
 BEGIN
   -- Retrieve migration scripts and handle potential empty result with COALESCE
   SELECT COALESCE(
-      (SELECT json_agg(migration_data) FROM main_sys.fn_get_migration_scripts_next(migration_id) AS migration_data),
-      '[]'
+    (
+      SELECT json_agg(json_build_object(
+        'id', migration_data.id,
+        'databaseName', migration_data.database_name,
+        'schemaName', migration_data.schema_name,
+        'objectType', migration_data.object_type,
+        'name', migration_data.name,
+        'scriptType', migration_data.script_type,
+        'scriptPath', migration_data.script_path,
+        'scriptOrder', migration_data.script_order
+      ))
+      FROM main_sys.fn_get_migration_scripts_for_execution_next(migration_id) AS migration_data
+    ), '[]'
   ) INTO migration_scripts;
 
   -- Check if migration_scripts exist
   IF migration_scripts IS NOT NULL THEN
     -- Retrieve rollback scripts using the migration script ID
     SELECT COALESCE(
-        (SELECT json_agg(rollback_data) FROM main_sys.fn_get_migration_rollbacks_next(migration_id) AS rollback_data),
-        '[]'
+      (
+        SELECT json_agg(rollback_data) 
+        FROM main_sys.fn_get_migration_rollbacks_for_execution_next(migration_id) AS rollback_data
+      ), '[]'
     ) INTO rollback_scripts;
-
   ELSE
     -- Set rollback_scripts to an empty JSON array if migration_scripts do not exist
     rollback_scripts := '[]'::JSON;

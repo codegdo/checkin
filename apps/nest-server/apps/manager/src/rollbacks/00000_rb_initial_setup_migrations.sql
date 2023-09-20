@@ -6,8 +6,8 @@ DECLARE
     'main_sys.fn_get_migration_by_id',
     'main_sys.fn_get_migration_next',
     'main_sys.fn_get_migration_previous',
-    'main_sys.fn_get_migration_rollbacks_next',
-    'main_sys.fn_get_migration_scripts_next'
+    'main_sys.fn_get_migration_rollbacks_for_execution_next',
+    'main_sys.fn_get_migration_scripts_for_execution_next'
   ]::TEXT[];
   function_name TEXT;
 

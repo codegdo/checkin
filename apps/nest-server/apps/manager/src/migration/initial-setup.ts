@@ -224,22 +224,22 @@ export const initialSetup = [
         database: 'db_checkin',
         schema: 'main_sys',
         objectType: 'function',
-        name: 'fn_get_migration_rollbacks_next',
+        name: 'fn_get_migration_rollbacks_for_execution_next',
         scriptType: 'sql',
-        scriptOrder: '104',
+        scriptOrder: '105',
         scriptPath:
-          'scripts/main_sys/function/fn_get_migration_rollbacks_next.sql',
+          'scripts/main_sys/function/fn_get_migration_rollbacks_for_execution_next.sql',
       },
       {
         id: 106,
         database: 'db_checkin',
         schema: 'main_sys',
         objectType: 'function',
-        name: 'fn_get_migration_scripts_next',
+        name: 'fn_get_migration_scripts_for_execution_next',
         scriptType: 'sql',
-        scriptOrder: '104',
+        scriptOrder: '106',
         scriptPath:
-          'scripts/main_sys/function/fn_get_migration_scripts_next.sql',
+          'scripts/main_sys/function/fn_get_migration_scripts_for_execution_next.sql',
       },
       // PROCEDURES
       {
