@@ -7,13 +7,13 @@ export class SetupController {
   constructor(private readonly setupService: SetupService) { }
 
   @EventPattern('db_seed_schemas')
-  async seedSchemas(payload) {
-    //return this.setupService.seedSchemas(payload);
+  async seedSchemas() {
+    return this.setupService.seedSchemas();
   }
 
   @EventPattern('db_drop_schemas')
-  async dropSchemas(payload) {
-    //return this.setupService.dropSchemas(payload);
+  async dropSchemas() {
+    //return this.setupService.dropSchemas();
   }
 
   @EventPattern('db_seed_initial_setup')

@@ -1,8 +1,15 @@
-import { schemas, publicFunctionsAndPlugins } from "./data";
+import {
+  schemas,
+  publicFunctionsAndPlugins,
+  configTablesAndFunctions,
+  migrationTablesAndFunctions,
+} from './data';
 
-export const initialSetupDatabase = {
+export const initializationData = {
   schemas,
   migrations: [
-    publicFunctionsAndPlugins
-  ]
-}
+    publicFunctionsAndPlugins,
+    configTablesAndFunctions,
+    migrationTablesAndFunctions,
+  ],
+};

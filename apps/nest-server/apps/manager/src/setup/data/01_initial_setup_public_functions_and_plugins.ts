@@ -41,7 +41,8 @@ export const publicFunctionsAndPlugins = {
       name: '00001_rb_public_functions_and_plugins',
       scriptType: 'sql',
       scriptOrder: '0',
-      scriptPath: 'db_checkin/rollback-scripts/initial-setup/00001_rb_public_functions_and_plugins.sql',
+      scriptPath:
+        'db_checkin/rollback-scripts/01_rb_initial_setup_public_functions_and_plugins.sql',
     },
   ],
-}
+};

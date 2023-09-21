@@ -88,7 +88,8 @@ export const migrationTablesAndFunctions = {
       category: 'Initial Setup',
       scriptType: 'sql',
       scriptOrder: '100',
-      scriptPath: 'db_checkin/scripts/main_sys/function/fn_get_migration_all.sql',
+      scriptPath:
+        'db_checkin/scripts/main_sys/function/fn_get_migration_all.sql',
     },
     {
       id: 101,
@@ -111,7 +112,8 @@ export const migrationTablesAndFunctions = {
       category: 'Initial Setup',
       scriptType: 'sql',
       scriptOrder: '102',
-      scriptPath: 'db_checkin/scripts/main_sys/function/fn_get_migration_by_id.sql',
+      scriptPath:
+        'db_checkin/scripts/main_sys/function/fn_get_migration_by_id.sql',
     },
     {
       id: 103,
@@ -122,7 +124,8 @@ export const migrationTablesAndFunctions = {
       category: 'Initial Setup',
       scriptType: 'sql',
       scriptOrder: '103',
-      scriptPath: 'db_checkin/scripts/main_sys/function/fn_get_migration_next.sql',
+      scriptPath:
+        'db_checkin/scripts/main_sys/function/fn_get_migration_next.sql',
     },
     {
       id: 104,
@@ -133,7 +136,8 @@ export const migrationTablesAndFunctions = {
       category: 'Initial Setup',
       scriptType: 'sql',
       scriptOrder: '104',
-      scriptPath: 'db_checkin/scripts/main_sys/function/fn_get_migration_previous.sql',
+      scriptPath:
+        'db_checkin/scripts/main_sys/function/fn_get_migration_previous.sql',
     },
     {
       id: 105,
@@ -169,7 +173,8 @@ export const migrationTablesAndFunctions = {
       category: 'Initial Setup',
       scriptType: 'sql',
       scriptOrder: '200',
-      scriptPath: 'db_checkin/scripts/main_sys/procedure/pr_migration_get_scripts.sql',
+      scriptPath:
+        'db_checkin/scripts/main_sys/procedure/pr_migration_get_scripts.sql',
     },
     {
       id: 201,
@@ -180,7 +185,8 @@ export const migrationTablesAndFunctions = {
       category: 'Initial Setup',
       scriptType: 'sql',
       scriptOrder: '201',
-      scriptPath: 'db_checkin/scripts/main_sys/procedure/pr_migration_update_status.sql',
+      scriptPath:
+        'db_checkin/scripts/main_sys/procedure/pr_migration_update_status.sql',
     },
     {
       id: 202,
@@ -205,7 +211,8 @@ export const migrationTablesAndFunctions = {
       category: 'Initial Setup',
       scriptType: 'sql',
       scriptOrder: '0',
-      scriptPath: 'db_checkin/rollback-scripts/initial-setup/00003_rb_migration_tables_and_funtions.sql',
+      scriptPath:
+        'db_checkin/rollback-scripts/03_rb_initial_setup_migration_tables_and_funtions.sql',
     },
   ],
-}
+};

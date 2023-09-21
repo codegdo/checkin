@@ -22,7 +22,8 @@ export const configTablesAndFunctions = {
       category: 'Initial Setup',
       scriptType: 'sql',
       scriptOrder: '100',
-      scriptPath: 'db_checkin/scripts/main_sys/function/fn_get_config_by_key.sql',
+      scriptPath:
+        'db_checkin/scripts/main_sys/function/fn_get_config_by_key.sql',
     },
     {
       id: 101,
@@ -33,7 +34,8 @@ export const configTablesAndFunctions = {
       category: 'Initial Setup',
       scriptType: 'sql',
       scriptOrder: '101',
-      scriptPath: 'db_checkin/scripts/main_sys/function/fn_is_config_key_boolean.sql',
+      scriptPath:
+        'db_checkin/scripts/main_sys/function/fn_is_config_key_boolean.sql',
     },
   ],
   rollbackScripts: [
@@ -46,7 +48,8 @@ export const configTablesAndFunctions = {
       category: 'Initial Setup',
       scriptType: 'sql',
       scriptOrder: '0',
-      scriptPath: 'db_checkin/rollback-scripts/initial-setup/00002_rb_config_tables_and_functions.sql',
+      scriptPath:
+        'db_checkin/rollback-scripts/02_rb_initial_setup_config_tables_and_functions.sql',
     },
   ],
-}
+};

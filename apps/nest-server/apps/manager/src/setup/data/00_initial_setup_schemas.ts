@@ -6,4 +6,4 @@ export const schemas = [
   'main_syn',
   'main_sys',
   'main_vw',
-]
+];
