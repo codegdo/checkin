@@ -6,6 +6,11 @@ import { SetupService } from './setup.service';
 export class SetupController {
   constructor(private readonly setupService: SetupService) { }
 
+  @EventPattern('db_seed_global_functions')
+  async seedGlobalFunctions() {
+    return this.setupService.seedGlobalFunctions();
+  }
+
   @EventPattern('db_seed_schemas')
   async seedSchemas() {
     return this.setupService.seedSchemas();
@@ -13,16 +18,16 @@ export class SetupController {
 
   @EventPattern('db_drop_schemas')
   async dropSchemas() {
-    //return this.setupService.dropSchemas();
+    return this.setupService.dropSchemas();
   }
 
   @EventPattern('db_seed_initial_setup')
-  async seedIntialSetup(payload) {
-    //return this.setupService.seedIntialSetup(payload);
+  async seedIntialSetup() {
+    return this.setupService.seedInitialSetup();
   }
 
   @EventPattern('db_drop_initial_setup')
-  async dropIntialSetup(payload) {
-    //return this.setupService.dropIntialSetup(payload);
+  async dropIntialSetup() {
+    return this.setupService.dropInitialSetup();
   }
 }

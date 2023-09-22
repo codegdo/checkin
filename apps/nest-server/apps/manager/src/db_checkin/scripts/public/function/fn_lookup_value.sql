@@ -1,7 +1,7 @@
 -- This function performs a dynamic SQL lookup and returns key-value pairs.
 CREATE OR REPLACE FUNCTION fn_lookup_value(
-  input_string TEXT,
-  input_login_id INT DEFAULT 0
+  input_text TEXT,
+  login_id INT DEFAULT 0
 )
 RETURNS TABLE (key TEXT, value TEXT)
 AS $$
@@ -12,11 +12,11 @@ DECLARE
   lookup_column TEXT;
   lookup_column_id TEXT;
   lookup_column_filter TEXT;
-  var_company_id INT;
-  sql_string TEXT;
+  company_id INT;
+  sql_query TEXT;
 BEGIN
   -- Extract values from the JSON object
-  lookup_info := fn_split_lookup_string_to_json(input_string);
+  lookup_info := fn_split_lookup_string_to_json(input_text);
 
   lookup_schema := lookup_info->>'schema';
   lookup_table := lookup_info->>'table';
@@ -24,36 +24,42 @@ BEGIN
   lookup_column_id := lookup_info->>'column_id';
   lookup_column_filter := lookup_info->>'column_filter';
 
-  -- Get user company_id from fn_get_user
-  IF input_login_id IS NOT NULL THEN
-    SELECT user_company_id
-    INTO var_company_id
-    FROM main_sec.fn_get_user(input_login_id);
+  -- Check if main_sec.fn_get_user exists
+  IF EXISTS (SELECT 1 FROM pg_proc WHERE proname = 'fn_get_user' AND pronamespace = (SELECT oid FROM pg_namespace WHERE nspname = 'main_sec')) THEN
+    -- Construct the dynamic SQL query to get user_company_id
+    sql_query := 'SELECT user_company_id INTO var_company_id FROM main_sec.fn_get_user($1)';
+
+    -- Execute the dynamic SQL query with input_login_id as a parameter
+    EXECUTE sql_query USING login_id;
+  ELSE
+    -- Print the SQL string to the server log for debugging
+    RAISE NOTICE 'Generated SQL String: % %', sql_query, company_id;
+    --RAISE EXCEPTION 'Function main_sec.fn_get_user does not exist';
   END IF;
 
-  -- Construct the dynamic SQL query
-  sql_string := 'SELECT DISTINCT ';
+  -- Construct the dynamic SQL query for the main lookup
+  sql_query := 'SELECT DISTINCT ';
 
   -- Use COALESCE to handle lookup_column_id and lookup_column
-  sql_string := sql_string || COALESCE(quote_ident(lookup_column_id), quote_ident(lookup_column)) || '::TEXT AS key, ';
-  sql_string := sql_string || quote_ident(lookup_column) || '::TEXT AS value ';
+  sql_query := sql_query || COALESCE(quote_ident(lookup_column_id), quote_ident(lookup_column)) || '::TEXT AS key, ';
+  sql_query := sql_query || quote_ident(lookup_column) || '::TEXT AS value ';
 
-  sql_string := sql_string || 'FROM ' || quote_ident(lookup_schema) || '.' || quote_ident(lookup_table);
+  sql_query := sql_query || 'FROM ' || quote_ident(lookup_schema) || '.' || quote_ident(lookup_table);
 
   IF lookup_column_filter IS NOT NULL THEN
-    -- Check if lookup_column_filter is 'company_id', if yes, use var_company_id
+    -- Check if lookup_column_filter is 'company_id', if yes, use company_id
     IF lookup_column_filter = 'company_id' THEN
-      sql_string := sql_string || ' WHERE ';
-      sql_string := sql_string || quote_ident(lookup_column_filter) || ' = ' || COALESCE(var_company_id, 0);
+      sql_query := sql_query || ' WHERE ';
+      sql_query := sql_query || quote_ident(lookup_column_filter) || ' = ' || COALESCE(company_id, 0);
     ELSE
       RAISE EXCEPTION 'Unsupported column_filter: %', lookup_column_filter;
     END IF;
   END IF;
 
   -- Print the SQL string to the server log for debugging
-  RAISE NOTICE 'Generated SQL String: % %', sql_string, var_company_id;
+  RAISE NOTICE 'Generated SQL String: % %', sql_query, company_id;
 
-  RETURN QUERY EXECUTE sql_string;
+  RETURN QUERY EXECUTE sql_query;
 END;
 $$ LANGUAGE plpgsql;
 

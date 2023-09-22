@@ -1,5 +1,5 @@
 export const migrationTablesAndFunctions = {
-  migrationScripts: [
+  scripts: [
     // TABLES
     {
       id: 1,
@@ -207,7 +207,7 @@ export const migrationTablesAndFunctions = {
       databaseName: 'db_checkin',
       schemaName: '*',
       objectType: 'rollback',
-      name: '00003_rb_migration_tables_and_funtions',
+      name: '03_rb_initial_setup_migration_tables_and_funtions',
       category: 'Initial Setup',
       scriptType: 'sql',
       scriptOrder: '0',
