@@ -5,6 +5,11 @@ import { SetupService } from './setup.service';
 export class SetupController {
   constructor(private readonly setupService: SetupService) { }
 
+  @Get('database/seed-global-functions')
+  async seedGlobalFuntions() {
+    return this.setupService.seedGlobalFunctions();
+  }
+  
   @Get('database/seed-schemas')
   async seedSchemas() {
     return this.setupService.seedSchemas();

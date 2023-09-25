@@ -4,7 +4,6 @@ import { ConfigModule, ConfigService, MANAGER_SERVICE } from '@app/common';
 
 import { SetupController } from './setup.controller';
 import { SetupService } from './setup.service';
-import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -22,8 +21,7 @@ import { DatabaseModule } from './database/database.module';
           },
         }),
       },
-    ]),
-    DatabaseModule,
+    ])
   ],
   controllers: [SetupController],
   providers: [SetupService],

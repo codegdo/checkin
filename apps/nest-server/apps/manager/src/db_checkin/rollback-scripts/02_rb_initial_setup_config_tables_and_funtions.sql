@@ -1,8 +1,8 @@
 DO $$ 
 DECLARE
   function_names TEXT[] := ARRAY[
-    'main_sys.fn_get_config_by_key',
-    'main_sys.fn_is_config_key_boolean'
+    'sys.fn_get_config_by_key',
+    'sys.fn_is_config_key_boolean'
   ]::TEXT[];
   function_name TEXT;
 
@@ -10,7 +10,7 @@ DECLARE
   procedure_name TEXT;
 
   table_names TEXT[] := ARRAY[
-    'main_sys.config'
+    'sys.config'
   ]::TEXT[];
   table_name TEXT;
 BEGIN

@@ -8,7 +8,8 @@ export class MigrationController {
 
   @EventPattern('db_seed_schemas')
   async seedSchemas(payload) {
-    return this.migrationService.seedSchemas(payload);
+    console.log('MIGRATION');
+    //return this.migrationService.seedSchemas(payload);
   }
 
   @EventPattern('db_drop_schemas')

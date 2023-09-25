@@ -52,18 +52,9 @@ export class SetupService {
     try {
       await queryRunner.connect();
 
-      for (const schemaName of schemas) {
-        if (!(await this.schemaExists(queryRunner, schemaName))) {
-          //const sql = `CREATE SCHEMA ${schemaName};`;
-          //await queryRunner.query(sql);
-          await queryRunner.manager.query(`SELECT _fn_create_schema($1)`, [
-            schemaName,
-          ]);
-          console.log(`Schema "${schemaName}" created successfully.`);
-        } else {
-          console.log(`Schema "${schemaName}" already exists.`);
-        }
-      }
+      await queryRunner.manager.query(`SELECT _fn_create_schemas($1)`, [
+        schemas?.main,
+      ]);
 
       return { message: 'Schemas created successfully.' };
     } catch (error) {
@@ -81,18 +72,10 @@ export class SetupService {
     try {
       await queryRunner.connect();
 
-      for (const schemaName of schemas) {
-        if (await this.schemaExists(queryRunner, schemaName)) {
-          //const sql = `DROP SCHEMA IF EXISTS ${schemaName} CASCADE;`;
-          //await queryRunner.query(sql);
-          await queryRunner.manager.query(`SELECT _fn_drop_schema($1)`, [
-            schemaName,
-          ]);
-          console.log(`Schema "${schemaName}" dropped successfully.`);
-        } else {
-          console.log(`Schema "${schemaName}" does not exist.`);
-        }
-      }
+      await queryRunner.manager.query(`SELECT _fn_drop_schemas($1)`, [
+        schemas?.main,
+      ]);
+
       return { message: 'Schemas dropped successfully.' };
     } catch (error) {
       console.error('Error dropping schemas:', error);
@@ -148,11 +131,14 @@ export class SetupService {
   ): Promise<boolean> {
     //const schemaExistsQuery = `SELECT schema_name FROM information_schema.schemata WHERE schema_name = '${schemaName}';`;
     //const schemaExistsResult = await queryRunner.query(schemaExistsQuery);
-    const schemaExistsResult = await queryRunner.manager.query(
-      `SELECT _fn_get_schema_by_name($1)`,
+    //return schemaExistsResult.length > 0;
+    const schemaExistsResult = await queryRunner.query(
+      `SELECT _fn_get_schema_by_name($1) AS schema_name_exists`,
       [schemaName],
     );
-    return schemaExistsResult.length > 0;
+
+    // Check if the result contains a row with 'schema_name_exists' as true
+    return schemaExistsResult[0]?.schema_name_exists === true;
   }
 
   private async executeScript(

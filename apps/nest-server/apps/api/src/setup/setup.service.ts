@@ -1,4 +1,4 @@
-import { ConfigService, MANAGER_SERVICE } from '@app/common';
+import { ConfigService, MANAGER_SERVICE, MANAGER_SERVICE_DROP_INITIAL_SETUP, MANAGER_SERVICE_DROP_SCHEMAS, MANAGER_SERVICE_SEED_GLOBAL_FUNTIONS, MANAGER_SERVICE_SEED_INITIAL_SETUP, MANAGER_SERVICE_SEED_SCHEMAS } from '@app/common';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Observable, map } from 'rxjs';
@@ -12,10 +12,21 @@ export class SetupService {
     private readonly migrationService: ClientProxy,
   ) { }
 
+  async seedGlobalFunctions(): Promise<Observable<{ message: string }>> {
+    try {
+      return this.migrationService
+        .send(MANAGER_SERVICE_SEED_GLOBAL_FUNTIONS, { userId: 'sysadmin' })
+        .pipe(map((response: { message: string }) => response));
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   async seedSchemas(): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('db_seed_schemas', { userId: 'sysadmin' })
+        .send(MANAGER_SERVICE_SEED_SCHEMAS, { userId: 'sysadmin' })
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.error(error);
@@ -36,7 +47,7 @@ export class SetupService {
 
     try {
       return this.migrationService
-        .send('db_drop_schemas', { userId: 'sysadmin' })
+        .send(MANAGER_SERVICE_DROP_SCHEMAS, { userId: 'sysadmin' })
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.log(error);
@@ -47,7 +58,7 @@ export class SetupService {
   async seedInitialSetup(): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('db_seed_initial_setup', { userId: 'sysadmin' })
+        .send(MANAGER_SERVICE_SEED_INITIAL_SETUP, { userId: 'sysadmin' })
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.error(error);
@@ -58,7 +69,7 @@ export class SetupService {
   async dropInitialSetup(): Promise<Observable<{ message: string }>> {
     try {
       return this.migrationService
-        .send('db_drop_initial_setup', { userId: 'sysadmin' })
+        .send(MANAGER_SERVICE_DROP_INITIAL_SETUP, { userId: 'sysadmin' })
         .pipe(map((response: { message: string }) => response));
     } catch (error) {
       console.log(error);

@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION _get_schema_by_name(schemaName text)
+CREATE OR REPLACE FUNCTION _fn_get_schema_by_name(schemaName text)
 RETURNS text AS $$
 BEGIN
   RETURN (
