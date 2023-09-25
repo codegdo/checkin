@@ -7,7 +7,7 @@ DECLARE
 BEGIN
   FOREACH schema_name IN ARRAY schema_names
   LOOP
-    EXECUTE 'CREATE SCHEMA IF NOT EXISTS ' || quote_ident(schema_name);
+    EXECUTE 'CREATE SCHEMA IF NOT EXISTS ' || schema_name;
 
     IF NOT FOUND THEN
       RAISE NOTICE 'Error create schema %', schema_name;

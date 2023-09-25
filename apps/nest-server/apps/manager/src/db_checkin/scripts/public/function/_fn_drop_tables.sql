@@ -7,11 +7,14 @@ DECLARE
 BEGIN
   FOREACH table_name IN ARRAY table_names
   LOOP
-    EXECUTE 'DROP TABLE IF EXISTS ' || quote_ident(table_name);
-
-    IF NOT FOUND THEN
-      RAISE NOTICE 'Error dropping table %', table_name;
-    END IF;
+    -- Use a BEGIN ... EXCEPTION block to handle exceptions when dropping tables.
+    BEGIN
+      EXECUTE 'DROP TABLE IF EXISTS ' || table_name;
+      RAISE NOTICE 'Dropped table: %', table_name;
+    EXCEPTION
+      WHEN others THEN
+        RAISE NOTICE 'Error dropping table %: %', table_name, SQLERRM;
+    END;
   END LOOP;
 END;
 $$ LANGUAGE plpgsql;

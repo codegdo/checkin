@@ -1,14 +1,14 @@
 import {
-  schemas,
-  globalFunctions,
+  initialFunctions,
+  initialSchemas,
   publicFunctionsAndPlugins,
   configTablesAndFunctions,
   migrationTablesAndFunctions,
 } from './data';
 
 export const initializationData = {
-  globalFunctions: [globalFunctions],
-  schemas,
+  initialFunctions: [initialFunctions],
+  initialSchemas,
   migrations: [
     publicFunctionsAndPlugins,
     configTablesAndFunctions,

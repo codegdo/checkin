@@ -25,14 +25,14 @@ interface Script {
 export class SetupService {
   constructor(private dataSource: DataSource) { }
 
-  async seedGlobalFunctions(): Promise<{ message: string }> {
-    const { globalFunctions } = initializationData;
+  async seedInitialFunctions(): Promise<{ message: string }> {
+    const { initialFunctions } = initializationData;
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
       await queryRunner.connect();
 
-      for (const runningScript of globalFunctions) {
+      for (const runningScript of initialFunctions) {
         await this.executeScript(queryRunner, runningScript.scripts);
       }
 
@@ -45,15 +45,35 @@ export class SetupService {
     }
   }
 
-  async seedSchemas(): Promise<{ message: string }> {
-    const { schemas } = initializationData;
+  async dropInitialFunctions(): Promise<{ message: string }> {
+    const { initialFunctions } = initializationData;
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    try {
+      await queryRunner.connect();
+
+      for (const runningScript of initialFunctions) {
+        await this.executeScript(queryRunner, runningScript.rollbackScripts);
+      }
+
+      return { message: 'Initial functions have been successfully dropped.' };
+    } catch (error) {
+      console.error('Failed to drop initial functions:', error);
+      throw new Error('Failed to drop initial functions.');
+    } finally {
+      await queryRunner.release(); // Release the query runner regardless of success or failure
+    }
+  }
+
+  async seedInitialSchemas(): Promise<{ message: string }> {
+    const { initialSchemas } = initializationData;
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
       await queryRunner.connect();
 
       await queryRunner.manager.query(`SELECT _fn_create_schemas($1)`, [
-        schemas?.main,
+        initialSchemas.main,
       ]);
 
       return { message: 'Schemas created successfully.' };
@@ -65,15 +85,15 @@ export class SetupService {
     }
   }
 
-  async dropSchemas(): Promise<{ message: string }> {
-    const { schemas } = initializationData;
+  async dropInitialSchemas(): Promise<{ message: string }> {
+    const { initialSchemas } = initializationData;
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
       await queryRunner.connect();
 
       await queryRunner.manager.query(`SELECT _fn_drop_schemas($1)`, [
-        schemas?.main,
+        initialSchemas.main,
       ]);
 
       return { message: 'Schemas dropped successfully.' };
@@ -92,8 +112,8 @@ export class SetupService {
     try {
       await queryRunner.connect();
 
-      for (const migrationScript of migrations) {
-        await this.executeScript(queryRunner, migrationScript.scripts);
+      for (const migration of migrations) {
+        await this.executeScript(queryRunner, migration.scripts);
       }
 
       return { message: 'Initial setup have been successfully seeded.' };
@@ -112,8 +132,8 @@ export class SetupService {
     try {
       await queryRunner.connect();
 
-      for (const migrationScript of migrations) {
-        await this.executeScript(queryRunner, migrationScript.rollbackScripts);
+      for (const migration of migrations) {
+        await this.executeScript(queryRunner, migration.rollbackScripts);
       }
 
       return { message: 'Initial setup have been successfully dropped.' };

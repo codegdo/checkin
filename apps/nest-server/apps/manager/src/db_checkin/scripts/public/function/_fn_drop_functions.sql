@@ -7,11 +7,14 @@ DECLARE
 BEGIN
   FOREACH function_name IN ARRAY function_names
   LOOP
-    EXECUTE 'DROP FUNCTION IF EXISTS ' || quote_ident(function_name);
-
-    IF NOT FOUND THEN
-      RAISE NOTICE 'Error dropping function %', function_name;
-    END IF;
+    -- Use a BEGIN ... EXCEPTION block to handle exceptions when dropping functions.
+    BEGIN
+      EXECUTE 'DROP FUNCTION IF EXISTS ' || function_name;
+      RAISE NOTICE 'Dropped function: %', function_name;
+    EXCEPTION
+      WHEN others THEN
+        RAISE NOTICE 'Error dropping function %: %', function_name, SQLERRM;
+    END;
   END LOOP;
 END;
 $$ LANGUAGE plpgsql;

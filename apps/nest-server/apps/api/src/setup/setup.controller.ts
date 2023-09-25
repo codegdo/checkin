@@ -5,28 +5,33 @@ import { SetupService } from './setup.service';
 export class SetupController {
   constructor(private readonly setupService: SetupService) { }
 
-  @Get('database/seed-global-functions')
-  async seedGlobalFuntions() {
-    return this.setupService.seedGlobalFunctions();
-  }
-  
-  @Get('database/seed-schemas')
-  async seedSchemas() {
-    return this.setupService.seedSchemas();
+  @Get('database/seed-initial-functions')
+  async seedInitialFunctions() {
+    return this.setupService.seedInitialFunctions();
   }
 
-  @Get('database/drop-schemas')
-  async dropSchemas() {
-    return this.setupService.dropSchemas();
+  @Get('database/drop-initial-functions')
+  async dropInitialFunctions() {
+    return this.setupService.dropInitialFunctions();
+  }
+
+  @Get('database/seed-initial-schemas')
+  async seedInitialSchemas() {
+    return this.setupService.seedInitialSchemas();
+  }
+
+  @Get('database/drop-initial-schemas')
+  async dropInitialSchemas() {
+    return this.setupService.dropInitialSchemas();
   }
 
   @Get('database/seed-initial-setup')
-  async seedMigrations() {
+  async seedInitialSetup() {
     return this.setupService.seedInitialSetup();
   }
 
   @Get('database/drop-initial-setup')
-  async dropMigrations() {
+  async dropInitialSetup() {
     return this.setupService.dropInitialSetup();
   }
 

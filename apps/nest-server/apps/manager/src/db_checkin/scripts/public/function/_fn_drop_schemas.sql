@@ -7,11 +7,14 @@ DECLARE
 BEGIN
   FOREACH schema_name IN ARRAY schema_names
   LOOP
-    EXECUTE 'DROP SCHEMA IF EXISTS ' || quote_ident(schema_name);
-
-    IF NOT FOUND THEN
-      RAISE NOTICE 'Error dropping schema %', schema_name;
-    END IF;
+    -- Use a BEGIN ... EXCEPTION block to handle exceptions when dropping schemas.
+    BEGIN
+      EXECUTE 'DROP SCHEMA IF EXISTS ' || schema_name;
+      RAISE NOTICE 'Dropped schema: %', schema_name;
+    EXCEPTION
+      WHEN others THEN
+        RAISE NOTICE 'Error dropping schema %: %', schema_name, SQLERRM;
+    END;
   END LOOP;
 END;
 $$ LANGUAGE plpgsql;
