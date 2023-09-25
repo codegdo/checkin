@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE pr_required_drop_functions(
+CREATE OR REPLACE PROCEDURE pr_drop_functions(
   function_names TEXT[] DEFAULT '{}'
 )
 AS $$

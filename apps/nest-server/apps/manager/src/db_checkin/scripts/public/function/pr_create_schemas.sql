@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE pr_required_create_schemas(
+CREATE OR REPLACE PROCEDURE pr_create_schemas(
   schema_names TEXT[] DEFAULT '{}'
 )
 AS $$
