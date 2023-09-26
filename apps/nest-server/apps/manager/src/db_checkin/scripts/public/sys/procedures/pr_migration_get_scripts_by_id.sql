@@ -6,14 +6,14 @@
   @param {INT} migration_id
   @param {JSON} result
  */
-CREATE OR REPLACE PROCEDURE pr_migration_get_scripts(
-  IN migration_id INT,
+CREATE OR REPLACE PROCEDURE pr_migration_get_scripts_by_id(
+  IN migrationId INT,
   OUT result JSON
 )
 LANGUAGE plpgsql
 AS $$
 DECLARE
-  migration_scripts JSON;
+  scripts JSON;
   rollback_scripts JSON;
 BEGIN
   -- Retrieve migration scripts and handle potential empty result with COALESCE
@@ -25,21 +25,22 @@ BEGIN
         'schemaName', migration_data.schema_name,
         'objectType', migration_data.object_type,
         'name', migration_data.name,
+        'category', migration_data.category,
         'scriptType', migration_data.script_type,
         'scriptPath', migration_data.script_path,
         'scriptOrder', migration_data.script_order
       ))
-      FROM fn_get_migration_scripts_for_execution_next(migration_id) AS migration_data
+      FROM fn_get_migration_scripts_for_execution_next(migrationId) AS migration_data
     ), '[]'
-  ) INTO migration_scripts;
+  ) INTO scripts;
 
   -- Check if migration_scripts exist
-  IF migration_scripts IS NOT NULL THEN
+  IF scripts IS NOT NULL THEN
     -- Retrieve rollback scripts using the migration script ID
     SELECT COALESCE(
       (
         SELECT json_agg(rollback_data) 
-        FROM fn_get_migration_rollbacks_for_execution_next(migration_id) AS rollback_data
+        FROM fn_get_migration_rollbacks_for_execution_next(migrationId) AS rollback_data
       ), '[]'
     ) INTO rollback_scripts;
   ELSE
@@ -48,9 +49,9 @@ BEGIN
   END IF;
 
   -- Construct the final JSON result object
-  result := jsonb_build_object('migrationScripts', migration_scripts, 'rollbackScripts', rollback_scripts);
+  result := jsonb_build_object('scripts', scripts, 'rollbackScripts', rollback_scripts);
 END;
 $$;
 
 -- Example usage:
--- CALL pr_migration_get_scripts(1, null);
+-- CALL pr_migration_get_scripts_by_id(1, null);

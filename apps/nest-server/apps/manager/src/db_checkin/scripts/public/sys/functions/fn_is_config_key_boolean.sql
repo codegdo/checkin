@@ -1,9 +1,9 @@
 -- Create a function to validate a configuration key as boolean and allow actions
 CREATE OR REPLACE FUNCTION fn_is_config_key_boolean(
-  key_name VARCHAR,
-  expected_value VARCHAR DEFAULT '',
+  configName VARCHAR,
+  expectedValue VARCHAR DEFAULT '',
   operation VARCHAR DEFAULT '=',
-  case_sensitive BOOLEAN DEFAULT true) RETURNS BOOLEAN AS $$
+  caseSensitive BOOLEAN DEFAULT true) RETURNS BOOLEAN AS $$
 DECLARE
   key_data_type VARCHAR;
   key_value TEXT;
@@ -17,7 +17,7 @@ BEGIN
     key_data_type,
     key_value
   FROM config
-  WHERE name = key_name;
+  WHERE name = configName;
 
   -- Check if the key exists and has a boolean or integer data type
   IF key_data_type = 'boolean' THEN
@@ -41,17 +41,17 @@ BEGIN
 
     -- Perform the specified integer comparison operation
     IF operation = '=' THEN
-      RETURN (key_integer = expected_value::INTEGER);
+      RETURN (key_integer = expectedValue::INTEGER);
     ELSEIF operation = '!=' THEN
-      RETURN (key_integer != expected_value::INTEGER);
+      RETURN (key_integer != expectedValue::INTEGER);
     ELSEIF operation = '<' THEN
-      RETURN (key_integer < expected_value::INTEGER);
+      RETURN (key_integer < expectedValue::INTEGER);
     ELSEIF operation = '>' THEN
-      RETURN (key_integer > expected_value::INTEGER);
+      RETURN (key_integer > expectedValue::INTEGER);
     ELSEIF operation = '<=' THEN
-      RETURN (key_integer <= expected_value::INTEGER);
+      RETURN (key_integer <= expectedValue::INTEGER);
     ELSEIF operation = '>=' THEN
-      RETURN (key_integer >= expected_value::INTEGER);
+      RETURN (key_integer >= expectedValue::INTEGER);
     ELSE
       -- Handle unsupported comparison operations for integer
       -- RAISE EXCEPTION 'Unsupported operation for integer data type: %', operation;
@@ -59,14 +59,14 @@ BEGIN
 
   ELSIF key_data_type = 'string' THEN
     -- Perform string comparison with or without case sensitivity
-    IF case_sensitive THEN
-      IF key_value = expected_value THEN
+    IF caseSensitive THEN
+      IF key_value = expectedValue THEN
         RETURN true;
       ELSE
         RETURN false;
       END IF;
     ELSE
-      IF LOWER(key_value) = expected_value THEN
+      IF LOWER(key_value) = expectedValue THEN
         RETURN true;
       ELSE
         RETURN false;

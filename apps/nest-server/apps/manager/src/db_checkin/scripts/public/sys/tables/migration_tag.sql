@@ -6,27 +6,23 @@ CREATE TABLE IF NOT EXISTS migration_tag (
     FOREIGN KEY (migration_id) REFERENCES migration (id) ON DELETE CASCADE
 );
 
-
 DO $$
 DECLARE
-  setup_public_functions_id INT;
+  common_tables_and_functions INT;
 BEGIN
-  -- Find the ID of the 'Setup Public Functions' migration
-  SELECT id INTO setup_public_functions_id
-  FROM migration
-  WHERE name = 'Setup Public Functions';
+  -- Find the ID of the 'Common Tables and Functions' migration
+  SELECT id INTO common_tables_and_functions FROM migration WHERE name = 'Common Tables and Functions';
 
-  -- Check if the migration with the name 'Setup Public Functions' exists
-  IF setup_public_functions_id IS NOT NULL THEN
-    -- Insert custom metadata for the 'Setup Public Functions' migration
-    INSERT INTO migration_tag (migration_id, name)
-    VALUES
-      (setup_public_functions_id, 'Functionality'),
-      (setup_public_functions_id, 'Setup'),
-      (setup_public_functions_id, 'Database');
+  -- Check if the 'migration_tag' table has no records
+  IF NOT EXISTS (SELECT 1 FROM migration_tag) THEN
+    -- Insert data into the 'migration_tag' table
+    INSERT INTO migration_tag (migration_id, name) VALUES
+    (common_tables_and_functions,'Setup'),
+    (common_tables_and_functions,'Database');
   ELSE
-    -- Handle the case where the migration does not exist
-    RAISE NOTICE 'Migration with name ''Setup Public Functions'' not found.';
+    -- The 'migration_tag' table has records
+    RAISE NOTICE 'The migration_tag table is not empty.';
   END IF;
+
 END;
 $$;

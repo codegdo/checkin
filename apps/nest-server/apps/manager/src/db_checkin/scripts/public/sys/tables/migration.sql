@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS migration (
   is_executed BOOLEAN NOT NULL DEFAULT FALSE,
   has_dependent BOOLEAN DEFAULT FALSE,
 
-  app_version INT,
+  app_version VARCHAR(50),
   build_version VARCHAR(50),
   commit_hash VARCHAR(40),
   checksum VARCHAR(64),
@@ -34,21 +34,19 @@ CREATE TABLE IF NOT EXISTS migration (
 
 DO $$
 DECLARE
-  database_initialization_id INT;
+  database_initialization INT;
 BEGIN
   -- Find the ID of the 'Database Initialization' migration category
-  SELECT id INTO database_initialization_id
-  FROM migration_category
-  WHERE name = 'Database Initialization';
+  SELECT id INTO database_initialization FROM migration_category WHERE name = 'Database Initialization';
 
-  -- Check if the migration category with the name 'Database Initialization' exists
-  IF database_initialization_id IS NOT NULL THEN
-    -- Insert migration 'Setup Public Functions'
+  -- Check if the 'migration' table has no records
+  IF NOT EXISTS (SELECT 1 FROM migration) THEN
+    -- Insert data into the 'migration' table
     INSERT INTO migration (migration_category_id, name, description, execution_order, app_version) VALUES
-    (database_initialization_id,'Setup Public Functions','Setup public functions for the application.',0,1);
+    (database_initialization,'Common Tables and Functions','Initializes common tables and functions in the database.',0,'1.0.0');
   ELSE
-    -- Handle the case where the migration does not exist
-    RAISE NOTICE 'Migration Category with name ''Database Initialization'' not found.';
+    -- The 'migration' table has records
+    RAISE NOTICE 'The migration table is not empty.';
   END IF;
 END;
 $$;

@@ -1,5 +1,5 @@
 -- Create a stored function to return the last migration execution rollback
-CREATE OR REPLACE FUNCTION fn_get_migration_rollbacks_for_execution_next(input_migration_id INT)
+CREATE OR REPLACE FUNCTION fn_get_migration_rollbacks_for_execution_next(migrationId INT)
 RETURNS TABLE (
   id INT,
   database_name VARCHAR,
@@ -22,14 +22,14 @@ BEGIN
   LIMIT 1;
 
   -- If no migrations have been executed yet or the provided migration_id is not the next one
-  IF last_migration_executed IS NULL OR last_migration_executed.id <> input_migration_id THEN
+  IF last_migration_executed IS NULL OR last_migration_executed.id <> migrationId THEN
     RETURN;
   ELSE
     -- Find the corresponding migration rollback record
     SELECT mr.id 
     INTO rollback_id
     FROM migration_rollback mr
-    WHERE mr.migration_id = input_migration_id;
+    WHERE mr.migration_id = migrationId;
 
     -- Select all migration scripts for the provided migration_id
     RETURN QUERY

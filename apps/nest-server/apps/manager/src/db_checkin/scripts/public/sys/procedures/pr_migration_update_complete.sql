@@ -9,7 +9,7 @@
  */
 CREATE OR REPLACE PROCEDURE pr_migration_update_complete(
   IN payload JSON,
-  IN updated_user VARCHAR
+  IN updatedBy VARCHAR
 )
 LANGUAGE plpgsql
 AS $$
@@ -51,7 +51,7 @@ BEGIN
     duration = migration_duration,
     is_executed = TRUE,
     updated_at = NOW(),
-    updated_by = updated_user
+    updated_by = updatedBy
   WHERE
     id = migration_id;
 

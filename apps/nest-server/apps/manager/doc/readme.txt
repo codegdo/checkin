@@ -8,20 +8,20 @@
 
 ## main_dbo
   
-  industry
-  business_type
   language
   territory
   
   object
+
   form_type
   form_type_object
 
 ## main_sec
   group_type
   group
-  address
+
   user
+  company_type
   company
   contact
   account
@@ -30,10 +30,8 @@
   fn_get_user
   fn_generate_account_id
 
-## public
-  fn_lookup_value
 
-## main_com
+## org
   workspace 
   form
   field

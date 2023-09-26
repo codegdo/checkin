@@ -1,10 +1,11 @@
-CREATE OR REPLACE FUNCTION fn_get_migration_scripts_for_execution_next(input_migration_id INT)
+CREATE OR REPLACE FUNCTION fn_get_migration_scripts_for_execution_next(migrationId INT)
 RETURNS TABLE (
   id INT,
   database_name VARCHAR,
   schema_name VARCHAR,
   object_type VARCHAR,
   name VARCHAR,
+  category VARCHAR,
   script_type VARCHAR,
   script_path VARCHAR,
   script_order INT
@@ -36,7 +37,7 @@ BEGIN
   END IF;
 
   -- Check if the next_migration has the same migration_id as the provided one
-  IF next_migration.id = input_migration_id THEN
+  IF next_migration.id = migrationId THEN
     -- Select all migration scripts for the provided migration_id
     RETURN QUERY
     SELECT 
@@ -45,11 +46,14 @@ BEGIN
       ms.schema_name,
       ms.object_type,
       ms.name,
+      mc.name AS "category",
       ms.script_type,
       ms.script_path,
       ms.script_order
     FROM migration_script ms
-    WHERE ms.migration_id = input_migration_id;
+    LEFT JOIN migration m on m.id = ms.migration_id
+    LEFT JOIN migration_category mc on mc.id = m.migration_category_id
+    WHERE ms.migration_id = migrationId;
   ELSE
     -- Handle the case where a migration with the provided migration_id is not the next one
     RETURN;

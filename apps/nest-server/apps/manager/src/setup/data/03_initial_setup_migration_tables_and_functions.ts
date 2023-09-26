@@ -166,12 +166,12 @@ export const migrationTablesAndFunctions = {
       databaseName: 'db_checkin',
       schemaName: 'public',
       objectType: 'procedure',
-      name: 'pr_migration_get_scripts',
+      name: 'pr_migration_get_scripts_by_id',
       category: 'Initial Setup',
       scriptType: 'sql',
       scriptOrder: '200',
       scriptPath:
-        'db_checkin/scripts/public/sys/procedures/pr_migration_get_scripts.sql',
+        'db_checkin/scripts/public/sys/procedures/pr_migration_get_scripts_by_id.sql',
     },
     {
       id: 201,

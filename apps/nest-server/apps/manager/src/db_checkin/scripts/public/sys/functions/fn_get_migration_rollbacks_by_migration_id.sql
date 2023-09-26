@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION fn_get_migration_rollbacks_by_migration_id(input_migration_id INT)
+CREATE OR REPLACE FUNCTION fn_get_migration_rollbacks_by_migration_id(migrationId INT)
 RETURNS TABLE (
   id INT,
   database_name VARCHAR,
@@ -16,7 +16,7 @@ BEGIN
     SELECT mr.id 
     INTO rollback_id
     FROM migration_rollback mr
-    WHERE mr.migration_id = input_migration_id;
+    WHERE mr.migration_id = migrationId;
 
     -- Select all migration scripts for the provided migration_id
     RETURN QUERY

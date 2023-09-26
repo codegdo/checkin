@@ -1,3 +1,19 @@
+-- Roles help you manage permissions
+-- Groups help you manage objects and subjects
+
+
+
+/*
+_sysAdmin
+DBAdmin
+SecurityAdmin
+BackupAdmin
+AdminUser
+QAEngineer
+UIAdmin
+IntergrationAdmin
+*/
+
 /*
 AppAdmin
 SysAdmin

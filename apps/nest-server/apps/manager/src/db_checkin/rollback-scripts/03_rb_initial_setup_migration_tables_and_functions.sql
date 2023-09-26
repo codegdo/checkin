@@ -12,7 +12,7 @@ DECLARE
   function_name TEXT;
 
   procedure_names TEXT[] := ARRAY[
-    'pr_migration_get_scripts',
+    'pr_migration_get_scripts_by_id',
     'pr_migration_update_status',
     'pr_migration_update_complete'
   ]::TEXT[];

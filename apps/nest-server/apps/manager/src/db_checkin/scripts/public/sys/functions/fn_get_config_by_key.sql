@@ -1,5 +1,5 @@
 -- Create a function to check a configuration key's existence, data type, and value
-CREATE OR REPLACE FUNCTION fn_get_config_by_key(input_key VARCHAR)
+CREATE OR REPLACE FUNCTION fn_get_config_by_key(configName VARCHAR)
 RETURNS TABLE (
   key_exists BOOLEAN,
   key_data_type VARCHAR,
@@ -12,7 +12,7 @@ BEGIN
   key_value := null;
 
   -- Check if the key exists
-  IF EXISTS (SELECT 1 FROM config WHERE name = input_key) THEN
+  IF EXISTS (SELECT 1 FROM config WHERE name = configName) THEN
     -- Retrieve configuration information if the key exists
     SELECT
       true,
@@ -23,10 +23,10 @@ BEGIN
       key_data_type,
       key_value
     FROM config c
-    WHERE c.name = input_key;
+    WHERE c.name = configName;
   ELSE
     -- Handle the case where the key does not exist
-    RAISE NOTICE 'Key % not found', input_key;
+    RAISE NOTICE 'Key % not found', configName;
   END IF;
 
   -- Return the result

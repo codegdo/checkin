@@ -8,7 +8,7 @@
  */
 CREATE OR REPLACE PROCEDURE pr_migration_update_status(
   IN payload JSON,
-  IN updated_user VARCHAR
+  IN updatedBy VARCHAR
 )
 LANGUAGE plpgsql
 AS $$
@@ -36,7 +36,7 @@ BEGIN
   UPDATE migration
   SET
     status = migration_status,
-    updated_by = updated_user
+    updated_by = updatedBy
   WHERE
     id = migration_id;
 

@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION fn_get_migration_by_category(category_name VARCHAR)
+CREATE OR REPLACE FUNCTION fn_get_migration_by_category(categoryName VARCHAR)
 RETURNS TABLE (
   id INT,
   name VARCHAR,
@@ -19,7 +19,7 @@ BEGIN
     m.status
   FROM migration m
   LEFT JOIN migration_category mc ON m.migration_category_id = mc.id
-  WHERE mc.name = category_name;
+  WHERE mc.name = categoryName;
 
 END;
 $$ LANGUAGE plpgsql;

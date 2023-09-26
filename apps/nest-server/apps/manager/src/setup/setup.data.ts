@@ -1,7 +1,7 @@
 import {
   initialFunctions,
   initialSchemas,
-  publicFunctionsAndPlugins,
+  utilFunctionsAndPlugins,
   configTablesAndFunctions,
   migrationTablesAndFunctions,
 } from './data';
@@ -10,7 +10,7 @@ export const initializationData = {
   initialFunctions: [initialFunctions],
   initialSchemas,
   migrations: [
-    publicFunctionsAndPlugins,
+    utilFunctionsAndPlugins,
     configTablesAndFunctions,
     migrationTablesAndFunctions,
   ],

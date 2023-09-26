@@ -9,24 +9,22 @@ CREATE TABLE IF NOT EXISTS migration_metadata (
 
 DO $$
 DECLARE
-  setup_public_functions_id INT;
+  common_tables_and_functions INT;
 BEGIN
-  -- Find the ID of the 'Setup Public Functions' migration
-  SELECT id INTO setup_public_functions_id
-  FROM migration
-  WHERE name = 'Setup Public Functions';
+  -- Find the ID of the 'Common Tables and Functions' migration
+  SELECT id INTO common_tables_and_functions FROM migration WHERE name = 'Common Tables and Functions';
 
-  -- Check if the migration with the name 'Setup Public Functions' exists
-  IF setup_public_functions_id IS NOT NULL THEN
-    -- Insert custom metadata for the 'Setup Public Functions' migration
-    INSERT INTO migration_metadata (migration_id, key, value)
-    VALUES
-      (setup_public_functions_id, 'Author', 'John Doe'),
-      (setup_public_functions_id, 'Version', '1.0.0'),
-      (setup_public_functions_id, 'Description', 'Initial setup of public functions');
+  -- Check if the 'migration_metadata' table has no records
+  IF NOT EXISTS (SELECT 1 FROM migration_metadata) THEN
+    -- Insert data into the 'migration_metadata' table
+    INSERT INTO migration_metadata (migration_id, key, value) VALUES
+    (common_tables_and_functions,'Author','John Doe'),
+    (common_tables_and_functions,'Version','1.0.0'),
+    (common_tables_and_functions,'Description','Initial setup of common tables and functions.');
   ELSE
-    -- Handle the case where the migration does not exist
-    RAISE EXCEPTION 'Migration with name ''Setup Public Functions'' not found.';
+    -- The 'migration_metadata' table has records
+    RAISE NOTICE 'The migration_metadata table is not empty.';
   END IF;
+
 END;
 $$;

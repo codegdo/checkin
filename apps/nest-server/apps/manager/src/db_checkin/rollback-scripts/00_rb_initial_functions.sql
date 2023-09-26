@@ -1,7 +1,11 @@
 DO $$
 DECLARE
   function_names TEXT[] := ARRAY[
-    'fn_get_schema_by_name'
+    'fn_get_function_by_name',
+    'fn_get_procedure_by_name',
+    'fn_get_schema_by_name',
+    'fn_get_table_by_name',
+    'fn_get_trigger_by_name'
   ]::TEXT[];
   function_name TEXT;
 
