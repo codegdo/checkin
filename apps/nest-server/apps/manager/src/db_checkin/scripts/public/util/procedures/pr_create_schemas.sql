@@ -1,11 +1,11 @@
 CREATE OR REPLACE PROCEDURE pr_create_schemas(
-  schema_names TEXT[] DEFAULT '{}'
+  schemaNames TEXT[] DEFAULT '{}'
 )
 AS $$
 DECLARE
   schema_name TEXT;
 BEGIN
-  FOREACH schema_name IN ARRAY schema_names
+  FOREACH schema_name IN ARRAY schemaNames
   LOOP
     EXECUTE 'CREATE SCHEMA IF NOT EXISTS ' || schema_name;
 

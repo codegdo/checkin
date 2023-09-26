@@ -15,11 +15,11 @@ DECLARE
   table_name TEXT;
 BEGIN
   -- Functions
-  PERFORM _fn_drop_functions(function_names);
+  CALL pr_drop_functions(function_names);
 
   -- Procedures
-  PERFORM _fn_drop_procedures(procedure_names);
+  CALL pr_drop_procedures(procedure_names);
 
   -- Tables
-  PERFORM _fn_drop_tables(table_names);
+  CALL pr_drop_tables(table_names);
 END $$;

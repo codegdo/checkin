@@ -1,17 +1,24 @@
 DO $$
 DECLARE
   function_names TEXT[] := ARRAY[
-    '_fn_create_schemas',
-    --'_fn_drop_functions',
-    '_fn_drop_procedures',
-    '_fn_drop_schemas',
-    '_fn_drop_tables',
-    --'._fn_execute_script'
+    'fn_get_schema_by_name'
   ]::TEXT[];
   function_name TEXT;
 
+  procedure_names TEXT[] := ARRAY[
+    'pr_create_schemas',
+    'pr_drop_functions',
+    'pr_drop_procedures',
+    'pr_drop_schemas',
+    'pr_drop_tables'
+  ]::TEXT[];
+  procedure_name TEXT;
+
 BEGIN
   -- Functions
-  PERFORM _fn_drop_functions(function_names);
+  CALL pr_required_drop_functions(function_names);
+
+  -- Procedures
+  CALL pr_required_drop_procedures(procedure_names);
 
 END $$;

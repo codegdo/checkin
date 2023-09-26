@@ -1,7 +1,7 @@
 -- This function performs a dynamic SQL lookup and returns key-value pairs.
 CREATE OR REPLACE FUNCTION fn_lookup_value(
-  input_text TEXT,
-  login_id INT DEFAULT 0
+  lookupValue TEXT,
+  loginId INT DEFAULT 0
 )
 RETURNS TABLE (key TEXT, value TEXT)
 AS $$
@@ -16,7 +16,7 @@ DECLARE
   sql_query TEXT;
 BEGIN
   -- Extract values from the JSON object
-  lookup_info := fn_split_lookup_string_to_json(input_text);
+  lookup_info := fn_lookup_value_split_to_json(lookupValue);
 
   lookup_schema := lookup_info->>'schema';
   lookup_table := lookup_info->>'table';
@@ -29,8 +29,8 @@ BEGIN
     -- Construct the dynamic SQL query to get user_company_id
     sql_query := 'SELECT user_company_id INTO var_company_id FROM main_sec.fn_get_user($1)';
 
-    -- Execute the dynamic SQL query with input_login_id as a parameter
-    EXECUTE sql_query USING login_id;
+    -- Execute the dynamic SQL query with input_loginId as a parameter
+    EXECUTE sql_query USING loginId;
   ELSE
     -- Print the SQL string to the server log for debugging
     RAISE NOTICE 'Generated SQL String: % %', sql_query, company_id;

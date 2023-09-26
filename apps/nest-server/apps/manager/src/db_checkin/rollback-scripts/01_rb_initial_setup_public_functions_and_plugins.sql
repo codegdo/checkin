@@ -5,6 +5,6 @@ DECLARE
 
 BEGIN
   -- Functions
-  PERFORM _fn_drop_functions(function_names);
+  CALL pr_drop_functions(function_names);
 
 END $$;

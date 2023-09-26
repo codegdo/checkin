@@ -1,5 +1,5 @@
 -- System Configuration Table
-CREATE TABLE IF NOT EXISTS sys_config (
+CREATE TABLE IF NOT EXISTS config (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255) UNIQUE NOT NULL,
   value TEXT,
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS sys_config (
   updated_by VARCHAR(50)
 );
 
--- Insert data into the sys_config table
-INSERT INTO sys_config (name, display_name, value, default_value, data_type, description, category, is_enabled) VALUES
+-- Insert data into the config table
+INSERT INTO config (name, display_name, value, default_value, data_type, description, category, is_enabled) VALUES
 ('ENABLE_DROP_DB__sysTEM_CONFIG','Enable Drop DB _system Config','TRUE','FALSE','boolean','Enable or disable drop database _system configuration','_system Configuration',TRUE);
 

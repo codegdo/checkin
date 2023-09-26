@@ -72,7 +72,7 @@ export class SetupService {
     try {
       await queryRunner.connect();
 
-      await queryRunner.manager.query(`SELECT _fn_create_schemas($1)`, [
+      await queryRunner.manager.query(`CALL pr_create_schemas($1)`, [
         initialSchemas.main,
       ]);
 
@@ -92,7 +92,7 @@ export class SetupService {
     try {
       await queryRunner.connect();
 
-      await queryRunner.manager.query(`SELECT _fn_drop_schemas($1)`, [
+      await queryRunner.manager.query(`CALL pr_drop_schemas($1)`, [
         initialSchemas.main,
       ]);
 
@@ -153,7 +153,7 @@ export class SetupService {
     //const schemaExistsResult = await queryRunner.query(schemaExistsQuery);
     //return schemaExistsResult.length > 0;
     const schemaExistsResult = await queryRunner.query(
-      `SELECT _fn_get_schema_by_name($1) AS schema_name_exists`,
+      `SELECT fn_get_schema_by_name($1) AS schema_name_exists`,
       [schemaName],
     );
 
@@ -179,7 +179,7 @@ export class SetupService {
 
         // Execute the script
         //await queryRunner.query(scriptContent);
-        await queryRunner.manager.query(`SELECT _fn_execute_script($1)`, [
+        await queryRunner.manager.query(`CALL pr_required_run_script($1)`, [
           scriptContent,
         ]);
 

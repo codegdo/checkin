@@ -1,11 +1,11 @@
 CREATE OR REPLACE PROCEDURE pr_drop_tables(
-  table_names TEXT[] DEFAULT '{}'
+  tableNames TEXT[] DEFAULT '{}'
 )
 AS $$
 DECLARE
   table_name TEXT;
 BEGIN
-  FOREACH table_name IN ARRAY table_names
+  FOREACH table_name IN ARRAY tableNames
   LOOP
     -- Use a BEGIN ... EXCEPTION block to handle exceptions when dropping tables.
     BEGIN

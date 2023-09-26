@@ -1,11 +1,11 @@
-CREATE OR REPLACE PROCEDURE pr_drop_functions(
-  function_names TEXT[] DEFAULT '{}'
+CREATE OR REPLACE PROCEDURE pr_required_drop_functions(
+  functionNames TEXT[] DEFAULT '{}'
 )
 AS $$
 DECLARE
   function_name TEXT;
 BEGIN
-  FOREACH function_name IN ARRAY function_names
+  FOREACH function_name IN ARRAY functionNames
   LOOP
     -- Use a BEGIN ... EXCEPTION block to handle exceptions when dropping functions.
     BEGIN

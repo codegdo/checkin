@@ -1,12 +1,12 @@
 -- This function splits an input string into parts using '.' as a delimiter and constructs a JSON object.
-CREATE OR REPLACE FUNCTION fn_split_lookup_string_to_json(input_string TEXT)
+CREATE OR REPLACE FUNCTION fn_lookup_value_split_to_json(lookupValue TEXT)
 RETURNS JSON
 AS $$
 DECLARE
   parts TEXT[];
 BEGIN
-  -- Split the input_string into parts using '.'
-  parts := string_to_array(input_string, '.');
+  -- Split the lookupValue into parts using '.'
+  parts := string_to_array(lookupValue, '.');
 
   -- Check the number of parts and construct a JSON object accordingly
   IF array_length(parts, 1) = 4 THEN
@@ -44,4 +44,4 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-SELECT fn_split_lookup_string_to_json('checkin.main_dbo.business_type.category'); -- Returns JSON object
+--SELECT fn_lookup_value_split_to_json('db_checkin.public.business_type.category'); -- Returns JSON object
