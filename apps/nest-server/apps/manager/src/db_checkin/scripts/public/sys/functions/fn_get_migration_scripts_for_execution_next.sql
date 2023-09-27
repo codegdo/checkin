@@ -6,9 +6,11 @@ RETURNS TABLE (
   object_type VARCHAR,
   name VARCHAR,
   category VARCHAR,
+  migration VARCHAR,
   script_type VARCHAR,
   script_path VARCHAR,
-  script_order INT
+  script_order INT,
+  is_required BOOLEAN
 ) AS $$
 DECLARE
   last_migration migration;
@@ -47,9 +49,11 @@ BEGIN
       ms.object_type,
       ms.name,
       mc.name AS "category",
+      m.name AS "migration",
       ms.script_type,
       ms.script_path,
-      ms.script_order
+      ms.script_order,
+      m.is_required
     FROM migration_script ms
     LEFT JOIN migration m on m.id = ms.migration_id
     LEFT JOIN migration_category mc on mc.id = m.migration_category_id

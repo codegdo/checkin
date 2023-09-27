@@ -24,11 +24,13 @@ BEGIN
         'databaseName', migration_data.database_name,
         'schemaName', migration_data.schema_name,
         'objectType', migration_data.object_type,
-        'name', migration_data.name,
         'category', migration_data.category,
+        'migration', migration_data.migration,
+        'scriptName', migration_data.name,
         'scriptType', migration_data.script_type,
         'scriptPath', migration_data.script_path,
-        'scriptOrder', migration_data.script_order
+        'scriptOrder', migration_data.script_order,
+        'isRequired', migration_data.is_required
       ))
       FROM fn_get_migration_scripts_for_execution_next(migrationId) AS migration_data
     ), '[]'

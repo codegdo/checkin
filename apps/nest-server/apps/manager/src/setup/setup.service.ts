@@ -15,7 +15,9 @@ interface Script {
   databaseName: string;
   schemaName: string;
   objectType: string;
-  name: string;
+  category: string;
+  migration: string;
+  scriptName: string;
   scriptType: string;
   scriptOrder: string;
   scriptPath: string;
@@ -184,7 +186,7 @@ export class SetupService {
         ]);
 
         // Log the successful execution of the script
-        console.log(`Executed script: ${script.name}`);
+        console.log(`Executed script: ${script.scriptName}`);
       }
 
       // Commit the transaction if all scripts executed successfully
