@@ -11,7 +11,7 @@ export const configTablesAndFunctions = {
       scriptName: 'config',
       scriptType: 'sql',
       scriptOrder: '0',
-      scriptPath: 'db_checkin/scripts/public/sys/tables/config.sql',
+      scriptPath: 'db_checkin/public/sys/tables/config.sql',
     },
     // FUNCTIONS
     {
@@ -24,8 +24,7 @@ export const configTablesAndFunctions = {
       scriptName: 'fn_get_config_by_key',
       scriptType: 'sql',
       scriptOrder: '100',
-      scriptPath:
-        'db_checkin/scripts/public/sys/functions/fn_get_config_by_key.sql',
+      scriptPath: 'db_checkin/public/sys/functions/fn_get_config_by_key.sql',
     },
     {
       id: 101,
@@ -38,7 +37,7 @@ export const configTablesAndFunctions = {
       scriptType: 'sql',
       scriptOrder: '101',
       scriptPath:
-        'db_checkin/scripts/public/sys/functions/fn_is_config_key_boolean.sql',
+        'db_checkin/public/sys/functions/fn_is_config_key_boolean.sql',
     },
   ],
   rollbackScripts: [

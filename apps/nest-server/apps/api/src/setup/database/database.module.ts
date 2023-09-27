@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService, MANAGER_SERVICE } from '@app/common';
-
 import { DatabaseController } from './database.controller';
 import { DatabaseService } from './database.service';
 

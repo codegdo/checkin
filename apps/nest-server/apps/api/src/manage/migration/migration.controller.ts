@@ -1,14 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 
 @Controller()
 export class MigrationController {
   @Get('runs/:id')
-  async runMigrationById() {
+  async runMigrationById(@Param('id') id: number) {
     return 'runMigrationById';
   }
 
   @Get('rollbacks/:id')
-  async rollbackMigrationById() {
+  async rollbackMigrationById(@Param('id') id: number) {
     return 'rollbackMigrationById';
   }
 }

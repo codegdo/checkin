@@ -11,7 +11,7 @@ export const migrationTablesAndFunctions = {
       scriptName: 'migration_category',
       scriptType: 'sql',
       scriptOrder: '1',
-      scriptPath: 'db_checkin/scripts/public/sys/tables/migration_category.sql',
+      scriptPath: 'db_checkin/public/sys/tables/migration_category.sql',
     },
     {
       id: 2,
@@ -23,7 +23,7 @@ export const migrationTablesAndFunctions = {
       scriptName: 'migration',
       scriptType: 'sql',
       scriptOrder: '2',
-      scriptPath: 'db_checkin/scripts/public/sys/tables/migration.sql',
+      scriptPath: 'db_checkin/public/sys/tables/migration.sql',
     },
     {
       id: 3,
@@ -35,7 +35,7 @@ export const migrationTablesAndFunctions = {
       scriptName: 'migration_rollback',
       scriptType: 'sql',
       scriptOrder: '3',
-      scriptPath: 'db_checkin/scripts/public/sys/tables/migration_rollback.sql',
+      scriptPath: 'db_checkin/public/sys/tables/migration_rollback.sql',
     },
     {
       id: 4,
@@ -47,7 +47,7 @@ export const migrationTablesAndFunctions = {
       scriptName: 'migration_script',
       scriptType: 'sql',
       scriptOrder: '4',
-      scriptPath: 'db_checkin/scripts/public/sys/tables/migration_script.sql',
+      scriptPath: 'db_checkin/public/sys/tables/migration_script.sql',
     },
     {
       id: 5,
@@ -59,7 +59,7 @@ export const migrationTablesAndFunctions = {
       scriptName: 'migration_dependency',
       scriptType: 'sql',
       scriptOrder: '5',
-      scriptPath: 'db_checkin/scripts/public/sys/tables/migration_dependency.sql',
+      scriptPath: 'db_checkin/public/sys/tables/migration_dependency.sql',
     },
     {
       id: 6,
@@ -71,7 +71,7 @@ export const migrationTablesAndFunctions = {
       scriptName: 'migration_tag',
       scriptType: 'sql',
       scriptOrder: '6',
-      scriptPath: 'db_checkin/scripts/public/sys/tables/migration_tag.sql',
+      scriptPath: 'db_checkin/public/sys/tables/migration_tag.sql',
     },
     {
       id: 7,
@@ -83,7 +83,7 @@ export const migrationTablesAndFunctions = {
       scriptName: 'migration_metadata',
       scriptType: 'sql',
       scriptOrder: '7',
-      scriptPath: 'db_checkin/scripts/public/sys/tables/migration_metadata.sql',
+      scriptPath: 'db_checkin/public/sys/tables/migration_metadata.sql',
     },
     // FUNCTIONS
     {
@@ -96,7 +96,7 @@ export const migrationTablesAndFunctions = {
       scriptName: 'fn_get_migration_all',
       scriptType: 'sql',
       scriptOrder: '100',
-      scriptPath: 'db_checkin/scripts/public/sys/functions/fn_get_migration_all.sql',
+      scriptPath: 'db_checkin/public/sys/functions/fn_get_migration_all.sql',
     },
     {
       id: 101,
@@ -109,7 +109,7 @@ export const migrationTablesAndFunctions = {
       scriptType: 'sql',
       scriptOrder: '101',
       scriptPath:
-        'db_checkin/scripts/public/sys/functions/fn_get_migration_by_category.sql',
+        'db_checkin/public/sys/functions/fn_get_migration_by_category.sql',
     },
     {
       id: 102,
@@ -121,7 +121,7 @@ export const migrationTablesAndFunctions = {
       scriptName: 'fn_get_migration_by_id',
       scriptType: 'sql',
       scriptOrder: '102',
-      scriptPath: 'db_checkin/scripts/public/sys/functions/fn_get_migration_by_id.sql',
+      scriptPath: 'db_checkin/public/sys/functions/fn_get_migration_by_id.sql',
     },
     {
       id: 103,
@@ -133,7 +133,7 @@ export const migrationTablesAndFunctions = {
       scriptName: 'fn_get_migration_next',
       scriptType: 'sql',
       scriptOrder: '103',
-      scriptPath: 'db_checkin/scripts/public/sys/functions/fn_get_migration_next.sql',
+      scriptPath: 'db_checkin/public/sys/functions/fn_get_migration_next.sql',
     },
     {
       id: 104,
@@ -146,7 +146,7 @@ export const migrationTablesAndFunctions = {
       scriptType: 'sql',
       scriptOrder: '104',
       scriptPath:
-        'db_checkin/scripts/public/sys/functions/fn_get_migration_previous.sql',
+        'db_checkin/public/sys/functions/fn_get_migration_previous.sql',
     },
     {
       id: 105,
@@ -159,7 +159,7 @@ export const migrationTablesAndFunctions = {
       scriptType: 'sql',
       scriptOrder: '105',
       scriptPath:
-        'db_checkin/scripts/public/sys/functions/fn_get_migration_rollbacks_for_execution_next.sql',
+        'db_checkin/public/sys/functions/fn_get_migration_rollbacks_for_execution_next.sql',
     },
     {
       id: 106,
@@ -172,7 +172,7 @@ export const migrationTablesAndFunctions = {
       scriptType: 'sql',
       scriptOrder: '106',
       scriptPath:
-        'db_checkin/scripts/public/sys/functions/fn_get_migration_scripts_for_execution_next.sql',
+        'db_checkin/public/sys/functions/fn_get_migration_scripts_for_execution_next.sql',
     },
     // PROCEDURES
     {
@@ -186,7 +186,7 @@ export const migrationTablesAndFunctions = {
       scriptType: 'sql',
       scriptOrder: '200',
       scriptPath:
-        'db_checkin/scripts/public/sys/procedures/pr_migration_get_scripts_by_id.sql',
+        'db_checkin/public/sys/procedures/pr_migration_get_scripts_by_id.sql',
     },
     {
       id: 201,
@@ -199,7 +199,7 @@ export const migrationTablesAndFunctions = {
       scriptType: 'sql',
       scriptOrder: '201',
       scriptPath:
-        'db_checkin/scripts/public/sys/procedures/pr_migration_update_status.sql',
+        'db_checkin/public/sys/procedures/pr_migration_update_status.sql',
     },
     {
       id: 202,
@@ -212,7 +212,7 @@ export const migrationTablesAndFunctions = {
       scriptType: 'sql',
       scriptOrder: '202',
       scriptPath:
-        'db_checkin/scripts/public/sys/procedures/pr_migration_update_complete.sql',
+        'db_checkin/public/sys/procedures/pr_migration_update_complete.sql',
     },
   ],
   rollbackScripts: [

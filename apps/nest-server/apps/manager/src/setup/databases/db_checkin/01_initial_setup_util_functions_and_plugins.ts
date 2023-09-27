@@ -11,8 +11,7 @@ export const utilFunctionsAndPlugins = {
       scriptName: 'fn_camel_case_split',
       scriptType: 'sql',
       scriptOrder: '100',
-      scriptPath:
-        'db_checkin/scripts/public/util/functions/fn_camel_case_split.sql',
+      scriptPath: 'db_checkin/public/util/functions/fn_camel_case_split.sql',
     },
     {
       id: 101,
@@ -25,7 +24,7 @@ export const utilFunctionsAndPlugins = {
       scriptType: 'sql',
       scriptOrder: '101',
       scriptPath:
-        'db_checkin/scripts/public/util/functions/fn_generate_random_string.sql',
+        'db_checkin/public/util/functions/fn_generate_random_string.sql',
     },
     {
       id: 102,
@@ -38,7 +37,7 @@ export const utilFunctionsAndPlugins = {
       scriptType: 'sql',
       scriptOrder: '102',
       scriptPath:
-        'db_checkin/scripts/public/util/functions/fn_lookup_value_split_to_json.sql',
+        'db_checkin/public/util/functions/fn_lookup_value_split_to_json.sql',
     },
     {
       id: 103,
@@ -50,8 +49,7 @@ export const utilFunctionsAndPlugins = {
       scriptName: 'fn_lookup_value',
       scriptType: 'sql',
       scriptOrder: '103',
-      scriptPath:
-        'db_checkin/scripts/public/util/functions/fn_lookup_value.sql',
+      scriptPath: 'db_checkin/public/util/functions/fn_lookup_value.sql',
     },
   ],
   rollbackScripts: [

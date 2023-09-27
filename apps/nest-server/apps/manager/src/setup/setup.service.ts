@@ -1,41 +1,72 @@
-import * as fs from 'fs/promises';
-import * as path from 'path';
 import { Injectable } from '@nestjs/common';
-import { DataSource, QueryRunner } from 'typeorm';
+import { DataSource } from 'typeorm';
 
-import { initializationData } from './setup.data';
+import { databases } from './setup.database';
+import { UtilService } from '../util/util.service';
 
-interface Payload {
-  data?: { [key: string]: any };
+interface DatabaseOperationPayload {
+  data: {
+    databaseName: string;
+    operation: string;
+  };
   userId: string;
 }
 
-interface Script {
-  id: number;
-  databaseName: string;
-  schemaName: string;
-  objectType: string;
-  category: string;
-  migration: string;
-  scriptName: string;
-  scriptType: string;
-  scriptOrder: string;
-  scriptPath: string;
+enum DatabaseOperation {
+  SEED_INITIAL_FUNCTIONS = 'seed-initial-functions',
+  DROP_INITIAL_FUNCTIONS = 'drop-initial-functions',
+  SEED_INITIAL_SCHEMAS = 'seed-initial-schemas',
+  DROP_INITIAL_SCHEMAS = 'drop-initial-schemas',
+  SEED_INITIAL_SETUP = 'seed-initial-setup',
+  DROP_INITIAL_SETUP = 'drop-initial-setup',
 }
 
 @Injectable()
 export class SetupService {
-  constructor(private dataSource: DataSource) { }
+  constructor(
+    private dataSource: DataSource,
+    private utilService: UtilService,
+  ) { }
 
-  async seedInitialFunctions(): Promise<{ message: string }> {
-    const { initialFunctions } = initializationData;
+  async performDatabaseOperation({
+    data,
+    userId,
+  }: DatabaseOperationPayload): Promise<{ message: string }> {
+    const { databaseName, operation } = data;
+
+    switch (operation) {
+      case DatabaseOperation.SEED_INITIAL_FUNCTIONS:
+        return this.seedInitialFunctions(databaseName);
+      case DatabaseOperation.DROP_INITIAL_FUNCTIONS:
+        return this.dropInitialFunctions(databaseName);
+      case DatabaseOperation.SEED_INITIAL_SCHEMAS:
+        return this.seedInitialSchemas(databaseName);
+      case DatabaseOperation.DROP_INITIAL_SCHEMAS:
+        return this.dropInitialSchemas(databaseName);
+      case DatabaseOperation.SEED_INITIAL_SETUP:
+        return this.seedInitialSetup(databaseName);
+      case DatabaseOperation.DROP_INITIAL_SETUP:
+        return this.dropInitialSetup(databaseName);
+      default:
+        return { message: 'Not found perform database operation.' };
+    }
+  }
+
+  private async seedInitialFunctions(
+    databaseName: string,
+  ): Promise<{ message: string }> {
+    const { initialFunctions } = databases[databaseName];
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
       await queryRunner.connect();
 
       for (const runningScript of initialFunctions) {
-        await this.executeScript(queryRunner, runningScript.scripts);
+        //await this.executeScript(queryRunner, runningScript.scripts);
+        await this.utilService.executeScript(
+          queryRunner,
+          runningScript.scripts,
+        );
       }
 
       return { message: 'Global functions have been successfully seeded.' };
@@ -47,15 +78,21 @@ export class SetupService {
     }
   }
 
-  async dropInitialFunctions(): Promise<{ message: string }> {
-    const { initialFunctions } = initializationData;
+  private async dropInitialFunctions(
+    databaseName: string,
+  ): Promise<{ message: string }> {
+    const { initialFunctions } = databases[databaseName];
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
       await queryRunner.connect();
 
       for (const runningScript of initialFunctions) {
-        await this.executeScript(queryRunner, runningScript.rollbackScripts);
+        //await this.executeScript(queryRunner, runningScript.rollbackScripts);
+        await this.utilService.executeScript(
+          queryRunner,
+          runningScript.rollbackScripts,
+        );
       }
 
       return { message: 'Initial functions have been successfully dropped.' };
@@ -67,8 +104,10 @@ export class SetupService {
     }
   }
 
-  async seedInitialSchemas(): Promise<{ message: string }> {
-    const { initialSchemas } = initializationData;
+  private async seedInitialSchemas(
+    databaseName: string,
+  ): Promise<{ message: string }> {
+    const { initialSchemas } = databases[databaseName];
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
@@ -87,8 +126,10 @@ export class SetupService {
     }
   }
 
-  async dropInitialSchemas(): Promise<{ message: string }> {
-    const { initialSchemas } = initializationData;
+  private async dropInitialSchemas(
+    databaseName: string,
+  ): Promise<{ message: string }> {
+    const { initialSchemas } = databases[databaseName];
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
@@ -107,15 +148,18 @@ export class SetupService {
     }
   }
 
-  async seedInitialSetup(): Promise<{ message: string }> {
-    const { migrations } = initializationData;
+  private async seedInitialSetup(
+    databaseName: string,
+  ): Promise<{ message: string }> {
+    const { migrations } = databases[databaseName];
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
       await queryRunner.connect();
 
       for (const migration of migrations) {
-        await this.executeScript(queryRunner, migration.scripts);
+        //await this.executeScript(queryRunner, migration.scripts);
+        await this.utilService.executeScript(queryRunner, migration.scripts);
       }
 
       return { message: 'Initial setup have been successfully seeded.' };
@@ -127,15 +171,21 @@ export class SetupService {
     }
   }
 
-  async dropInitialSetup(): Promise<{ message: string }> {
-    const { migrations } = initializationData;
+  private async dropInitialSetup(
+    databaseName: string,
+  ): Promise<{ message: string }> {
+    const { migrations } = databases[databaseName];
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
       await queryRunner.connect();
 
       for (const migration of migrations) {
-        await this.executeScript(queryRunner, migration.rollbackScripts);
+        //await this.executeScript(queryRunner, migration.rollbackScripts);
+        await this.utilService.executeScript(
+          queryRunner,
+          migration.rollbackScripts,
+        );
       }
 
       return { message: 'Initial setup have been successfully dropped.' };
@@ -147,7 +197,7 @@ export class SetupService {
     }
   }
 
-  private async schemaExists(
+  /* private async schemaExists(
     queryRunner: QueryRunner,
     schemaName: string,
   ): Promise<boolean> {
@@ -206,5 +256,5 @@ export class SetupService {
     } catch (error) {
       throw new Error(`Error reading file: ${error.message}`);
     }
-  }
+  } */
 }

@@ -12,7 +12,7 @@ export const initialFunctions = {
       scriptType: 'sql',
       scriptOrder: '100',
       scriptPath:
-        'db_checkin/scripts/public/init/functions/fn_get_function_by_name.sql',
+        'db_checkin/public/init/functions/fn_get_function_by_name.sql',
     },
     {
       id: 101,
@@ -25,7 +25,7 @@ export const initialFunctions = {
       scriptType: 'sql',
       scriptOrder: '101',
       scriptPath:
-        'db_checkin/scripts/public/init/functions/fn_get_procedure_by_name.sql',
+        'db_checkin/public/init/functions/fn_get_procedure_by_name.sql',
     },
     {
       id: 102,
@@ -37,8 +37,7 @@ export const initialFunctions = {
       scriptName: 'fn_get_schema_by_name',
       scriptType: 'sql',
       scriptOrder: '102',
-      scriptPath:
-        'db_checkin/scripts/public/init/functions/fn_get_schema_by_name.sql',
+      scriptPath: 'db_checkin/public/init/functions/fn_get_schema_by_name.sql',
     },
     {
       id: 103,
@@ -50,8 +49,7 @@ export const initialFunctions = {
       scriptName: 'fn_get_table_by_name',
       scriptType: 'sql',
       scriptOrder: '103',
-      scriptPath:
-        'db_checkin/scripts/public/init/functions/fn_get_table_by_name.sql',
+      scriptPath: 'db_checkin/public/init/functions/fn_get_table_by_name.sql',
     },
     {
       id: 104,
@@ -63,8 +61,7 @@ export const initialFunctions = {
       scriptName: 'fn_get_trigger_by_name',
       scriptType: 'sql',
       scriptOrder: '104',
-      scriptPath:
-        'db_checkin/scripts/public/init/functions/fn_get_trigger_by_name.sql',
+      scriptPath: 'db_checkin/public/init/functions/fn_get_trigger_by_name.sql',
     },
     // PROCEDURE
     {
@@ -77,7 +74,7 @@ export const initialFunctions = {
       scriptName: 'pr_drop_schemas',
       scriptType: 'sql',
       scriptOrder: '200',
-      scriptPath: 'db_checkin/scripts/public/init/procedures/pr_drop_schemas.sql',
+      scriptPath: 'db_checkin/public/init/procedures/pr_drop_schemas.sql',
     },
     {
       id: 201,
@@ -89,7 +86,7 @@ export const initialFunctions = {
       scriptName: 'pr_drop_functions',
       scriptType: 'sql',
       scriptOrder: '201',
-      scriptPath: 'db_checkin/scripts/public/init/procedures/pr_drop_functions.sql',
+      scriptPath: 'db_checkin/public/init/procedures/pr_drop_functions.sql',
     },
     {
       id: 202,
@@ -101,7 +98,7 @@ export const initialFunctions = {
       scriptName: 'pr_drop_procedures',
       scriptType: 'sql',
       scriptOrder: '202',
-      scriptPath: 'db_checkin/scripts/public/init/procedures/pr_drop_procedures.sql',
+      scriptPath: 'db_checkin/public/init/procedures/pr_drop_procedures.sql',
     },
     {
       id: 203,
@@ -113,7 +110,7 @@ export const initialFunctions = {
       scriptName: 'pr_drop_tables',
       scriptType: 'sql',
       scriptOrder: '203',
-      scriptPath: 'db_checkin/scripts/public/init/procedures/pr_drop_tables.sql',
+      scriptPath: 'db_checkin/public/init/procedures/pr_drop_tables.sql',
     },
     {
       id: 204,
@@ -125,7 +122,7 @@ export const initialFunctions = {
       scriptName: 'pr_create_schema',
       scriptType: 'sql',
       scriptOrder: '204',
-      scriptPath: 'db_checkin/scripts/public/init/procedures/pr_create_schemas.sql',
+      scriptPath: 'db_checkin/public/init/procedures/pr_create_schemas.sql',
     },
   ],
   rollbackScripts: [
