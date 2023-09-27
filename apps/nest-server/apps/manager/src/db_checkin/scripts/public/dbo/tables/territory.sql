@@ -1,19 +1,18 @@
+-- Create the 'territory' table
+CREATE TABLE IF NOT EXISTS territory (
+  id SERIAL PRIMARY KEY,
+  country VARCHAR(100),
+  country_code VARCHAR(3),
+  state VARCHAR(100),
+  state_code VARCHAR(5),
+  region VARCHAR(100),
+  continent VARCHAR(50),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  created_by VARCHAR(50) DEFAULT CURRENT_USER
+);
+
 DO $$
 BEGIN
-  
-  -- Create the 'territory' table
-  CREATE TABLE IF NOT EXISTS territory (
-    id SERIAL PRIMARY KEY,
-    country VARCHAR(100),
-    country_code VARCHAR(3),
-    state VARCHAR(100),
-    state_code VARCHAR(5),
-    region VARCHAR(100),
-    continent VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created_by VARCHAR(50) DEFAULT CURRENT_USER
-  );
-
   -- Check if the territory table has no records
   IF (SELECT COUNT(*) FROM territory) = 0 THEN
     -- Insert data into the 'territory' table

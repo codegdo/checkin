@@ -1,9 +1,9 @@
 -- Create a table to store migration tags
 CREATE TABLE IF NOT EXISTS migration_tag (
-    id SERIAL PRIMARY KEY,
-    migration_id INT,
-    name VARCHAR(50) NOT NULL,
-    FOREIGN KEY (migration_id) REFERENCES migration (id) ON DELETE CASCADE
+  id SERIAL PRIMARY KEY,
+  migration_id INT,
+  name VARCHAR(50) NOT NULL,
+  FOREIGN KEY (migration_id) REFERENCES migration (id) ON DELETE CASCADE
 );
 
 DO $$

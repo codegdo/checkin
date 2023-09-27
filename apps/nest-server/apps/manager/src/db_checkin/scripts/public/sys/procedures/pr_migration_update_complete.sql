@@ -5,7 +5,7 @@
   execution details and inserts an audit record into the migration_audit table.
 
   @param {JSON} payload - JSON payload containing migration execution information.
-  @param {VARCHAR} updated_by - The user or entity updating the migration.
+  @param {VARCHAR} updatedBy - The user or entity updating the migration.
  */
 CREATE OR REPLACE PROCEDURE pr_migration_update_complete(
   IN payload JSON,

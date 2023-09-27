@@ -3,7 +3,7 @@
   Date: 09/18/2023
   Description: This stored procedure retrieves the migration and rollback scripts for a given migration ID and returns them as a JSON object.
 
-  @param {INT} migration_id
+  @param {INT} migrationId
   @param {JSON} result
  */
 CREATE OR REPLACE PROCEDURE pr_migration_get_scripts_by_id(
