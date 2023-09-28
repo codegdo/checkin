@@ -1,3 +1,4 @@
+MAC
 # psql cli does not work with - Oh My ZSH
 # locate psql | grep /bin - to get locate /Applications/Postgres.app/Contents/Versions/15/bin/psql
 # touch ~/.zshrc - if file is not exist
@@ -15,3 +16,31 @@
 # \du - list all users and press q for quit
 
 https://phoenixnap.com/kb/postgres-create-user
+
+PC 
+# edit the system enviroment variables - Path add ;C:\Program Files\PostgreSQL\16\bin;C:\Program Files\PostgreSQL\13\lib
+
+
+checkin_localhost
+  db_app
+  db_pos
+  db_backup
+  db_crm
+
+checkin_dev
+  db_app
+  db_pos
+  db_backup
+  db_crm
+
+checkin_demo
+  db_app
+  db_pos
+  db_backup
+  db_crm
+
+checkin_prod
+  db_app
+  db_pos
+  db_backup
+  db_crm

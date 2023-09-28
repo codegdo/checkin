@@ -36,9 +36,9 @@ BEGIN
   IF NOT EXISTS (SELECT 1 FROM migration_script) THEN
     -- Insert data into the 'migration_script' table
     INSERT INTO migration_script (migration_id, migration_rollback_id, name, description, database_name, schema_name, object_type, script_type, script_path, script_order) VALUES
-    (common_tables_and_functions,null,'language','Add common table language.','db_checkin','public','table','running','db_checkin/public/dbo/functions/language.sql',0),
-    (common_tables_and_functions,null,'territory','Add common table territory.','db_checkin','public','table','running','db_checkin/public/dbo/functions/territory.sql',1),
-    (null,rollback_common_tables_and_functions,'rb_common_tables_and_functions','Rollback common tables and functions.','db_checkin','public','function','rollback','db_checkin/rollback-scripts/00001_rb_common_tables_and_functions.sql',0);
+    (common_tables_and_functions,null,'language','Add common table language.','db_app','public','table','running','db_app/public/dbo/functions/language.sql',0),
+    (common_tables_and_functions,null,'territory','Add common table territory.','db_app','public','table','running','db_app/public/dbo/functions/territory.sql',1),
+    (null,rollback_common_tables_and_functions,'rb_common_tables_and_functions','Rollback common tables and functions.','db_app','public','function','rollback','db_app/rollback-scripts/00001_rb_common_tables_and_functions.sql',0);
   ELSE
     -- The 'migration_script' table has records
     RAISE NOTICE 'The migration table is not empty.';

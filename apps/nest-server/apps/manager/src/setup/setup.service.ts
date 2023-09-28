@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
-import { databases } from './setup.database';
+import { databases } from './setup.data';
 import { UtilService } from '../util/util.service';
 
 interface DatabaseOperationPayload {

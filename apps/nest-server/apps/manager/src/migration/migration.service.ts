@@ -37,9 +37,10 @@ export class MigrationService {
 
   async performMigrationOperation({
     data,
+    operation,
     userId,
   }: MigrationOperationPayload): Promise<{ message: string }> {
-    const { migrationId, operation } = data;
+    const { migrationId } = data;
 
     switch (operation) {
       case MigrationOperation.RUN:
@@ -122,10 +123,7 @@ export class MigrationService {
     }
   }
 
-  async rollbackMigrationById({
-    data,
-    userId,
-  }): Promise<{ message: string }> {
+  async rollbackMigrationById({ data, userId }): Promise<{ message: string }> {
     const { migrationId } = data;
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();

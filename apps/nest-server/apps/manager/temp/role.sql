@@ -26,7 +26,7 @@ UIAdmin
 IntergrationAdmin
 
 
-group
+group and role
 app_admin
 sys_admin
 db_admin
@@ -35,7 +35,7 @@ dev_admin
 qa_admin
 ui_admin
 
-app_manager
+api_manager
 sys_manager
 db_manager
 sec_manager
@@ -43,7 +43,9 @@ dev_manager
 qa_manager
 ui_manager
 
-app_user
+api_worker
+
+api_user
 sys_user
 db_user
 sec_user
@@ -51,12 +53,19 @@ dev_user
 qa_user
 ui_user
 
-access = acc
+db_admin_role
+db_dev_role
+db_sec_role
+db_sys_role
+db_qa_role
+db_ui_role
 
-acc_db_gdo -> db_admin
-acc_dev_gdo -> dev_admin
+db_admin -> db_admin_role
 
-acc_app_checkin -> app_admin
+api_user -> api_user_role
+api_worker -> api_worker_role
+api_manager -> api_manager_role | db_admin_role
+
 
 */
 

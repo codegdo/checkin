@@ -9,6 +9,6 @@ export class MigrationController {
 
   @EventPattern(MANAGER_SERVICE_MIGRATION_OPERATION)
   async performMigrationOperation(payload) {
-    return this.setupService.performMigrationOperation(payload);
+    return this.migrationService.performMigrationOperation(payload);
   }
 }

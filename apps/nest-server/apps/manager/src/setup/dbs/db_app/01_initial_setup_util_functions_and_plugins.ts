@@ -3,7 +3,7 @@ export const utilFunctionsAndPlugins = {
     // FUNCTIONS
     {
       id: 100,
-      databaseName: 'db_checkin',
+      databaseName: 'db_app',
       schemaName: 'public',
       objectType: 'function',
       category: 'Initial Setup',
@@ -11,11 +11,11 @@ export const utilFunctionsAndPlugins = {
       scriptName: 'fn_camel_case_split',
       scriptType: 'sql',
       scriptOrder: '100',
-      scriptPath: 'db_checkin/public/util/functions/fn_camel_case_split.sql',
+      scriptPath: 'db_app/public/util/functions/fn_camel_case_split.sql',
     },
     {
       id: 101,
-      databaseName: 'db_checkin',
+      databaseName: 'db_app',
       schemaName: 'public',
       objectType: 'function',
       category: 'Initial Setup',
@@ -23,12 +23,11 @@ export const utilFunctionsAndPlugins = {
       scriptName: 'fn_generate_random_string',
       scriptType: 'sql',
       scriptOrder: '101',
-      scriptPath:
-        'db_checkin/public/util/functions/fn_generate_random_string.sql',
+      scriptPath: 'db_app/public/util/functions/fn_generate_random_string.sql',
     },
     {
       id: 102,
-      databaseName: 'db_checkin',
+      databaseName: 'db_app',
       schemaName: 'public',
       objectType: 'function',
       category: 'Initial Setup',
@@ -37,11 +36,11 @@ export const utilFunctionsAndPlugins = {
       scriptType: 'sql',
       scriptOrder: '102',
       scriptPath:
-        'db_checkin/public/util/functions/fn_lookup_value_split_to_json.sql',
+        'db_app/public/util/functions/fn_lookup_value_split_to_json.sql',
     },
     {
       id: 103,
-      databaseName: 'db_checkin',
+      databaseName: 'db_app',
       schemaName: 'public',
       objectType: 'function',
       category: 'Initial Setup',
@@ -49,13 +48,13 @@ export const utilFunctionsAndPlugins = {
       scriptName: 'fn_lookup_value',
       scriptType: 'sql',
       scriptOrder: '103',
-      scriptPath: 'db_checkin/public/util/functions/fn_lookup_value.sql',
+      scriptPath: 'db_app/public/util/functions/fn_lookup_value.sql',
     },
   ],
   rollbackScripts: [
     {
       id: 1,
-      databaseName: 'db_checkin',
+      databaseName: 'db_app',
       schemaName: '*',
       objectType: 'rollback',
       category: 'Initial Setup',
@@ -64,7 +63,7 @@ export const utilFunctionsAndPlugins = {
       scriptType: 'sql',
       scriptOrder: '0',
       scriptPath:
-        'db_checkin/rollback-scripts/01_rb_initial_setup_util_functions_and_plugins.sql',
+        'db_app/rollback-scripts/01_rb_initial_setup_util_functions_and_plugins.sql',
     },
   ],
 };
