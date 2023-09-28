@@ -43,9 +43,9 @@ export class MigrationService {
 
     switch (operation) {
       case MigrationOperation.RUN:
-        return this.runMigrationById(databaseName);
+        return this.runMigrationById(data);
       case MigrationOperation.ROLLBACK:
-        return this.rollbackMigrationById(databaseName);
+        return this.rollbackMigrationById(data);
       default:
         return { message: 'Not found perform migration operation.' };
     }
@@ -125,7 +125,7 @@ export class MigrationService {
   async rollbackMigrationById({
     data,
     userId,
-  }: Payload): Promise<{ message: string }> {
+  }): Promise<{ message: string }> {
     const { migrationId } = data;
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();

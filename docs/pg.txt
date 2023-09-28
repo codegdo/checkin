@@ -1,0 +1,17 @@
+# psql cli does not work with - Oh My ZSH
+# locate psql | grep /bin - to get locate /Applications/Postgres.app/Contents/Versions/15/bin/psql
+# touch ~/.zshrc - if file is not exist
+# open ~/.zshrc - to edit file
+# add to .zshrc - export PATH=/Applications/Postgres.app/Contents/Versions/15/bin:$PATH
+
+# psql -d db_checkin -U gdo -W noP@ssw0rd - login to your db with username and password
+- db_checkin=# - cli
+# CREATE USER <name>; - create user with no password
+# ALTER USER <name> WITH PASSWORD '<password>'; - set user with password
+# CREATE USER <name> WITH PASSWORD '<password>'; - create user with password
+
+# GRANT ALL ON PROCEDURE <procedure_name> TO <role>; - grant permission
+
+# \du - list all users and press q for quit
+
+https://phoenixnap.com/kb/postgres-create-user

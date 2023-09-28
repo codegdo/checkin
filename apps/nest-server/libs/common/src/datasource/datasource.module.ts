@@ -2,6 +2,7 @@ import { Module, DynamicModule } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '../config/config.module';
 import { DataSource } from 'typeorm';
+import * as checkinEntities from '../models/db_checkin';
 
 @Module({})
 export class DataSourceModule {
@@ -39,7 +40,7 @@ export class DataSourceModule {
               port: configService.get('POSTGRES_PORT'),
               database: configService.get('POSTGRES_DB_CHECKIN'),
               name: 'default',
-              entities: [],
+              entities: [...Object.values(checkinEntities)],
               autoLoadEntities: true,
               synchronize: false,
               logging: true,

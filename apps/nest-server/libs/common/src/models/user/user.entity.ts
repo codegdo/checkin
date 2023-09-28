@@ -8,7 +8,7 @@ import {
   BaseEntity,
 } from 'typeorm';
 
-@Entity({ database: 'db_checkin', schema: 'main_sec', name: 'user' })
+@Entity({ database: 'db_checkin', schema: 'public', name: 'user' })
 @Unique(['username'])
 @Unique(['passcode'])
 export class User extends BaseEntity {
