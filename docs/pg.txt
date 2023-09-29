@@ -5,7 +5,7 @@ MAC
 # open ~/.zshrc - to edit file
 # add to .zshrc - export PATH=/Applications/Postgres.app/Contents/Versions/15/bin:$PATH
 
-# psql -d db_checkin -U gdo -W noP@ssw0rd - login to your db with username and password
+# psql -d db_app -U postgres -W noP@ssw0rd - login to your db with username and password
 - db_checkin=# - cli
 # CREATE USER <name>; - create user with no password
 # ALTER USER <name> WITH PASSWORD '<password>'; - set user with password

@@ -9,6 +9,7 @@ export class SetupController {
 
   @EventPattern(MANAGER_SERVICE_DATABASE_OPERATION)
   async performDatabaseOperation(payload) {
+    console.log(payload);
     return this.setupService.performDatabaseOperation(payload);
   }
 }
