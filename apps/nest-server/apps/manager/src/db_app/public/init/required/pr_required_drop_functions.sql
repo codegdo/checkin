@@ -2,19 +2,27 @@ CREATE OR REPLACE PROCEDURE pr_required_drop_functions(
   functionNames TEXT[] DEFAULT '{}'
 )
 AS $$
-DECLARE
-  function_name TEXT;
 BEGIN
-  FOREACH function_name IN ARRAY functionNames
-  LOOP
-    -- Use a BEGIN ... EXCEPTION block to handle exceptions when dropping functions.
-    BEGIN
-      EXECUTE 'DROP FUNCTION IF EXISTS ' || function_name;
-      RAISE NOTICE 'Dropped function: %', function_name;
-    EXCEPTION
-      WHEN others THEN
-        RAISE NOTICE 'Error dropping function %: %', function_name, SQLERRM;
-    END;
-  END LOOP;
+  -- Check if the caller has the EXECUTE privilege on the functions
+  IF NOT has_function_privilege(current_user, 'fn_required_drop_functions(text[])', 'EXECUTE') THEN
+    RAISE EXCEPTION 'User does not have EXECUTE privilege on functions fn_required_drop_functions';
+  END IF;
+
+  -- Execute the function
+  PERFORM fn_required_drop_functions(functionNames);
 END;
 $$ LANGUAGE plpgsql;
+
+/* CREATE OR REPLACE PROCEDURE pr_required_drop_functions(
+  functionNames TEXT[] DEFAULT '{}'
+)
+AS $$
+BEGIN
+  -- Check if the caller has the EXECUTE privilege on the functions
+  IF NOT has_function_privilege(current_user, 'pr_required_drop_functions(text)', 'EXECUTE') THEN
+    RAISE EXCEPTION 'User does not have EXECUTE privilege on functions pr_required_drop_functions';
+  END IF;
+
+  EXECUTE 'PERFORM fn_required_drop_functions($1)' USING functionNames;
+END;
+$$ LANGUAGE plpgsql; */

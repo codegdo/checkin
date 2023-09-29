@@ -231,4 +231,4 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- SELECT * FROM retrieve_privileges('api_manager_user');
+-- SELECT * FROM pg_get_granted_privileges_by_user('api_manager_user');
