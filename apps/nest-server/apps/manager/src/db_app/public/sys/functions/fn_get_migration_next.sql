@@ -42,4 +42,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+REVOKE EXECUTE ON FUNCTION fn_get_next_migration() FROM public;
+
 -- SELECT * FROM fn_get_next_migration();

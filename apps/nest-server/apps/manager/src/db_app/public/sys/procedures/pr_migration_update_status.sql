@@ -8,9 +8,8 @@
  */
 CREATE OR REPLACE PROCEDURE pr_migration_update_status(
   IN payload JSON,
-  IN updatedBy VARCHAR
+  IN updatedBy TEXT
 )
-SECURITY DEFINER LANGUAGE plpgsql
 AS $$
 DECLARE
   migration_id INT;
@@ -41,5 +40,7 @@ BEGIN
     id = migration_id;
 
 END;
-$$;
+$$ SECURITY DEFINER LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON PROCEDURE pr_migration_update_status(json, text) FROM public;
 

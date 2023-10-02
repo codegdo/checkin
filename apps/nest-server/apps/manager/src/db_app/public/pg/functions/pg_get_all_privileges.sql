@@ -229,3 +229,5 @@ BEGIN
   WHERE acl_base.grantor_oid <> acl_base.grantee_oid;
 END;
 $$ LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON FUNCTION pg_get_all_privileges() FROM public;

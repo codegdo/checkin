@@ -34,4 +34,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+REVOKE EXECUTE ON FUNCTION fn_get_migration_rollbacks_by_migration_id(integer) FROM public;
+
 -- SELECT * FROM fn_get_migration_rollbacks_by_migration_id(1);

@@ -13,4 +13,6 @@ BEGIN
   -- Execute the function
   PERFORM fn_required_drop_procedures(procedureNames);
 END;
-$$ LANGUAGE plpgsql;
+$$ SECURITY DEFINER LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON PROCEDURE pr_drop_procedures(text[]) FROM public;

@@ -11,19 +11,6 @@ BEGIN
   -- Execute the function
   PERFORM fn_required_drop_procedures(procedureNames);
 END;
-$$ LANGUAGE plpgsql;
+$$ SECURITY DEFINER LANGUAGE plpgsql;
 
-/* CREATE OR REPLACE PROCEDURE pr_required_drop_procedures(
-  procedureNames TEXT[] DEFAULT '{}'
-)
-AS $$
-BEGIN
-  -- Check if the caller has the EXECUTE privilege on the procedure
-  IF NOT has_function_privilege(current_user, 'pr_required_drop_procedures(text)', 'EXECUTE') THEN
-    RAISE EXCEPTION 'User does not have EXECUTE privilege on procedure pr_required_drop_procedures';
-  END IF;
-
-  EXECUTE 'PERFORM fn_required_drop_procedures($1)' USING procedureNames;
-
-END;
-$$ LANGUAGE plpgsql; */
+REVOKE EXECUTE ON PROCEDURE pr_required_drop_procedures(text[]) FROM public;

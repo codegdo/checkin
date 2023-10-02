@@ -63,4 +63,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+REVOKE EXECUTE ON FUNCTION fn_lookup_value(text, integer) FROM public;
+
 -- SELECT * FROM fn_lookup_value('checkin.main_com.form.title.id.company_id', 1);

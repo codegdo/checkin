@@ -18,3 +18,5 @@ EXCEPTION
     RAISE EXCEPTION 'Script execution failed: %', SQLERRM;
 END;
 $$ LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON FUNCTION fn_required_execute_script(text) FROM public;

@@ -17,4 +17,6 @@ BEGIN
     END;
   END LOOP;
 END;
-$$ LANGUAGE plpgsql;
+$$ SECURITY DEFINER LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON PROCEDURE pr_drop_schemas(text[]) FROM public;

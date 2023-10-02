@@ -1,8 +1,8 @@
 -- Create a utility function to split camel-case words
-CREATE OR REPLACE FUNCTION fn_camel_case_split(inputString VARCHAR)
-RETURNS VARCHAR AS $$
+CREATE OR REPLACE FUNCTION fn_camel_case_split(inputString TEXT)
+RETURNS TEXT AS $$
 DECLARE
-  result VARCHAR;
+  result TEXT;
 BEGIN
   BEGIN
     result := regexp_replace(substring(inputString from E'^[a-z]+(.+)$'), E'([a-z])([A-Z])', E'\\1 \\2', 'g');
@@ -17,5 +17,7 @@ BEGIN
   END;
 END;
 $$ LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON FUNCTION fn_camel_case_split(text) FROM public;
 
 --SELECT fn_camel_case_split('companyStreetAddress');

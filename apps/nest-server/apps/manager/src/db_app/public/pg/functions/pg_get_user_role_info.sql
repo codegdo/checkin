@@ -25,3 +25,5 @@ BEGIN
     RETURN result;
 END;
 $$ LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON FUNCTION pg_get_user_role_info(text) FROM public;

@@ -19,3 +19,5 @@ BEGIN
   );
 END;
 $$ LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON FUNCTION fn_get_function_by_name(text) FROM public;

@@ -24,3 +24,5 @@ BEGIN
   );
 END;
 $$ LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON FUNCTION fn_get_table_by_name(text) FROM public;

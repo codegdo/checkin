@@ -43,5 +43,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+REVOKE EXECUTE ON FUNCTION fn_lookup_value_split_to_json(text) FROM public;
 
 --SELECT fn_lookup_value_split_to_json('db_checkin.public.business_type.category'); -- Returns JSON object

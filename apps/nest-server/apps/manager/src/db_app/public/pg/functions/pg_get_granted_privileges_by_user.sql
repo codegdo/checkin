@@ -231,4 +231,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+REVOKE EXECUTE ON FUNCTION pg_get_granted_privileges_by_user(text) FROM public;
+
 -- SELECT * FROM pg_get_granted_privileges_by_user('api_manager_user');

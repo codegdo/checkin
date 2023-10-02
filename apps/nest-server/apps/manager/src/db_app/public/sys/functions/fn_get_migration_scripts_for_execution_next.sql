@@ -65,5 +65,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+REVOKE EXECUTE ON FUNCTION fn_get_migration_scripts_for_execution_next(integer) FROM public;
 
 -- SELECT * FROM fn_get_migration_scripts_for_execution_next(1);

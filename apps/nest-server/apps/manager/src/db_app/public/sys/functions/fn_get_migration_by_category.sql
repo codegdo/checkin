@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION fn_get_migration_by_category(categoryName VARCHAR)
+CREATE OR REPLACE FUNCTION fn_get_migration_by_category(categoryName TEXT)
 RETURNS TABLE (
   id INT,
   name VARCHAR,
@@ -23,5 +23,7 @@ BEGIN
 
 END;
 $$ LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON FUNCTION fn_get_migration_by_category(text) FROM public;
 
 -- SELECT * FROM fn_get_migration_by_category('Data Initialization');

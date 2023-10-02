@@ -1,5 +1,5 @@
 -- Create a function to check a configuration key's existence, data type, and value
-CREATE OR REPLACE FUNCTION fn_get_config_by_key(configName VARCHAR)
+CREATE OR REPLACE FUNCTION fn_get_config_by_key(configName TEXT)
 RETURNS TABLE (
   key_exists BOOLEAN,
   key_data_type VARCHAR,
@@ -34,4 +34,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+REVOKE EXECUTE ON FUNCTION fn_get_config_by_key(text) FROM public;
+
 -- SELECT * FROM fn_get_config_key('ENABLE_DROP_DB__sysTEM_CONFIG');
+

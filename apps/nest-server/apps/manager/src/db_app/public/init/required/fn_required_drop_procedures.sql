@@ -18,3 +18,5 @@ BEGIN
   END LOOP;
 END;
 $$ LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON FUNCTION fn_required_drop_procedures(text[]) FROM public;

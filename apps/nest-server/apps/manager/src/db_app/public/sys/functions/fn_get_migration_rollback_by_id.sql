@@ -13,4 +13,6 @@ BEGIN
     -- Return the rollback_id
     RETURN rollback_id;
 END;
-$$ SECURITY DEFINER LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON FUNCTION get_rollback_id(integer) FROM public;

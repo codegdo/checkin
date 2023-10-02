@@ -9,9 +9,8 @@
  */
 CREATE OR REPLACE PROCEDURE pr_migration_update_complete(
   IN payload JSON,
-  IN updatedBy VARCHAR
+  IN updatedBy TEXT
 )
-SECURITY DEFINER LANGUAGE plpgsql
 AS $$
 DECLARE
   migration_id INT;
@@ -59,5 +58,7 @@ BEGIN
   -- INSERT INTO migration_audit (migration_id, updated_at, updated_by)
   -- VALUES (migration_id, NOW(), updated_by);
 END;
-$$;
+$$ SECURITY DEFINER LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON PROCEDURE pr_migration_update_complete(json, text) FROM public;
 

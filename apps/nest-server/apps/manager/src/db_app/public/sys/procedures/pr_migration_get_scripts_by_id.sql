@@ -10,7 +10,6 @@ CREATE OR REPLACE PROCEDURE pr_migration_get_scripts_by_id(
   IN migrationId INT,
   OUT result JSON
 )
-SECURITY DEFINER LANGUAGE plpgsql
 AS $$
 DECLARE
   scripts JSON;
@@ -59,7 +58,9 @@ BEGIN
   -- Construct the final JSON result object
   result := jsonb_build_object('scripts', scripts, 'rollbackScripts', rollback_scripts);
 END;
-$$;
+$$ SECURITY DEFINER LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON PROCEDURE pr_migration_get_scripts_by_id(integer, out json) FROM public;
 
 -- Example usage:
 -- CALL pr_migration_get_scripts_by_id(1, null);

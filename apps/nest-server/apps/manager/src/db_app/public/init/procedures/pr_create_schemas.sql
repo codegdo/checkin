@@ -14,4 +14,6 @@ BEGIN
     END IF;
   END LOOP;
 END;
-$$ LANGUAGE plpgsql;
+$$ SECURITY DEFINER LANGUAGE plpgsql;
+
+REVOKE EXECUTE ON PROCEDURE pr_create_schemas(text[]) FROM public;

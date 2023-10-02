@@ -33,4 +33,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+REVOKE EXECUTE ON FUNCTION fn_get_previous_migration() FROM public;
+
 -- SELECT * FROM fn_get_previous_migration();

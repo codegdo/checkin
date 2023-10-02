@@ -25,9 +25,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+REVOKE EXECUTE ON FUNCTION fn_generate_random_string(integer, varchar) FROM public;
+
 -- Example 1: Generate a random string of length 8 without a prefix
-SELECT fn_generate_random_string(8);
+--SELECT fn_generate_random_string(8);
 
 -- Example 2: Generate a random string of length 10 with a prefix
-SELECT fn_generate_random_string(10, 'ID-');
+--SELECT fn_generate_random_string(10, 'ID-');
 

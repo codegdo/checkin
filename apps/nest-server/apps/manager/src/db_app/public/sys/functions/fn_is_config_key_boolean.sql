@@ -1,7 +1,7 @@
 -- Create a function to validate a configuration key as boolean and allow actions
 CREATE OR REPLACE FUNCTION fn_is_config_key_boolean(
-  configName VARCHAR,
-  expectedValue VARCHAR DEFAULT '',
+  configName TEXT,
+  expectedValue TEXT DEFAULT '',
   operation VARCHAR DEFAULT '=',
   caseSensitive BOOLEAN DEFAULT true) RETURNS BOOLEAN AS $$
 DECLARE
@@ -82,6 +82,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+REVOKE EXECUTE ON FUNCTION fn_is_config_key_boolean(text, text, varchar, boolean) FROM public;
 
 /*
 DO $$

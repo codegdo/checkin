@@ -24,4 +24,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+REVOKE EXECUTE ON FUNCTION fn_get_migration_all() FROM public;
+
 -- SELECT * FROM fn_get_migration_all();
