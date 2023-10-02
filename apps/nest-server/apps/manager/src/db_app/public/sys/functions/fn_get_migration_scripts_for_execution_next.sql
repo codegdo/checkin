@@ -11,7 +11,7 @@ RETURNS TABLE (
   script_path VARCHAR,
   script_order INT,
   is_required BOOLEAN
-) AS $$
+) SECURITY DEFINER AS $$
 DECLARE
   last_migration migration;
   next_migration migration;

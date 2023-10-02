@@ -7,12 +7,13 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  BaseEntity,
 } from 'typeorm';
 import { MigrationCategory } from '../migration-category/migration-category.entity';
   
 @Entity()
 @Check(`"status" IN ('Pending', 'InProgress', 'Completed', 'Failed')`)
-export class Migration {
+export class Migration extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

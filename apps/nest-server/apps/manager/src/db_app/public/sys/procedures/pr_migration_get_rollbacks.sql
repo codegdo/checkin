@@ -10,7 +10,7 @@ CREATE OR REPLACE PROCEDURE pr_migration_get_rollbacks(
   IN migrationId INT,
   OUT result JSON
 )
-LANGUAGE plpgsql
+SECURITY DEFINER LANGUAGE plpgsql
 AS $$
 DECLARE
   rollback_scripts JSON;

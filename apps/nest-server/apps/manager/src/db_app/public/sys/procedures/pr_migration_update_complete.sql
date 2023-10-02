@@ -11,7 +11,7 @@ CREATE OR REPLACE PROCEDURE pr_migration_update_complete(
   IN payload JSON,
   IN updatedBy VARCHAR
 )
-LANGUAGE plpgsql
+SECURITY DEFINER LANGUAGE plpgsql
 AS $$
 DECLARE
   migration_id INT;

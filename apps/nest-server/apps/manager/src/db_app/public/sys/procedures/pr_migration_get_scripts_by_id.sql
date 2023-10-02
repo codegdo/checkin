@@ -10,12 +10,18 @@ CREATE OR REPLACE PROCEDURE pr_migration_get_scripts_by_id(
   IN migrationId INT,
   OUT result JSON
 )
-LANGUAGE plpgsql
+SECURITY DEFINER LANGUAGE plpgsql
 AS $$
 DECLARE
   scripts JSON;
   rollback_scripts JSON;
 BEGIN
+  -- Check if the caller has the EXECUTE privilege on the functions
+  -- no OUT json arguement when check procedure function
+  IF NOT has_function_privilege(current_user, 'pr_migration_get_scripts_by_id(int)', 'EXECUTE') THEN
+    RAISE EXCEPTION 'User does not have EXECUTE privilege on functions pr_migration_get_scripts_by_id';
+  END IF;
+
   -- Retrieve migration scripts and handle potential empty result with COALESCE
   SELECT COALESCE(
     (

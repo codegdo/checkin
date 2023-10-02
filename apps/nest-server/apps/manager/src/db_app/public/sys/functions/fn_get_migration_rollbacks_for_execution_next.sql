@@ -9,7 +9,7 @@ RETURNS TABLE (
   script_type VARCHAR,
   script_path VARCHAR,
   script_order INT
-) AS $$
+) SECURITY DEFINER AS $$
 DECLARE
   last_migration_executed migration;
   rollback_id INT;
