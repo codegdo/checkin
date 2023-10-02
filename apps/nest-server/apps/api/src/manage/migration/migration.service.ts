@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Observable, map } from 'rxjs';
@@ -19,19 +19,29 @@ export class MigrationService {
   ) { }
 
   async getMigrationById(id: number): Promise<void> {
-   
-   //const test = await this.migrationRepository.findOne({where: {id}});
+    try {
+      const [result] = await this.migrationRepository.manager.query(
+        `CALL pr_migration_get_scripts_by_id($1, $2)`,
+        [id, null],
+      );
+      console.log(result);
+    } catch (error) {
+      console.error('ERRRRRR', error);
+      throw new UnauthorizedException();
+    }
+  }
 
-  /*  const [result] = await this.migrationRepository.manager.query(
-    `CALL pr_migration_get_scripts_by_id($1, $2)`,
-    [id, null],
-  ); */
-
-  //const [found]= await this.migrationRepository.manager.query(`CALL pr_get_migration_data(null);`); 
-  const [found]= await this.migrationRepository.manager.query(`SELECT * FROM get_my_table_data();`); 
-  //const [found]= await this.migrationRepository.manager.query(`SELECT * FROM migration;`);
-
-   console.log(found);
+  async getScriptsByMigrationId(id: number): Promise<void> {
+    try {
+      const [result] = await this.migrationRepository.manager.query(
+        `CALL pr_migration_get_scripts_by_id($1, $2)`,
+        [id, null],
+      );
+      console.log(result);
+    } catch (error) {
+      console.error('ERRRRRR', error);
+      throw new UnauthorizedException();
+    }
   }
 
   async runMigrationById(id: number): Promise<Observable<{ message: string }>> {

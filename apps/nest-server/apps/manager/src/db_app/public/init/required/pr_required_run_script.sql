@@ -38,4 +38,4 @@ EXCEPTION
 END;
 $$ SECURITY DEFINER LANGUAGE plpgsql;
 
-REVOKE EXECUTE ON PROCEDURE pr_required_run_script(text, text, integer) FROM public;
+REVOKE EXECUTE ON PROCEDURE pr_required_run_script(text, text, int) FROM public;

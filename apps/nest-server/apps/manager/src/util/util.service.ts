@@ -52,8 +52,7 @@ export class UtilService {
     } catch (error) {
       // Rollback the transaction if any script fails
       await queryRunner.rollbackTransaction();
-      console.error('Script execution failed:', error);
-      throw new Error('Script execution failed.');
+      throw error;
     }
   }
 

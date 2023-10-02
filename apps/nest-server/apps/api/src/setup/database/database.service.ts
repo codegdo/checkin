@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 
 import {
   ConfigService,
@@ -21,9 +21,9 @@ export class DatabaseService {
     databaseName: string,
     operation: string,
   ): Promise<Observable<{ message: string }>> {
-
     const isDropActionEnabled =
-      this.configService.get<string>('DATABASE_OPERATION_IS_ENABLED') === 'true';
+      this.configService.get<string>('DATABASE_OPERATION_IS_ENABLED') ===
+      'true';
 
     if (!isDropActionEnabled) {
       return new Observable((observer) => {
@@ -32,19 +32,22 @@ export class DatabaseService {
       });
     }
 
-    try {
-      return this.managerService
-        .send(MANAGER_SERVICE_DATABASE_OPERATION, {
-          data: {
-            databaseName,
-            operation,
-          },
-          userId: 'sysadmin',
-        })
-        .pipe(map((response: { message: string }) => response));
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
+    return this.managerService
+      .send(MANAGER_SERVICE_DATABASE_OPERATION, {
+        data: {
+          databaseName,
+          operation,
+        },
+        userId: 'sysadmin',
+      })
+      .pipe(
+        map((response: { message: string }) => response),
+        catchError((error) => {
+          console.error('An error occurred:', error);
+          return throwError(
+            () => new Error('An error occurred. Please try again later.'),
+          );
+        }),
+      );
   }
 }

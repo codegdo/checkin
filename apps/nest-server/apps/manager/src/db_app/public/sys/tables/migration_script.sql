@@ -17,7 +17,10 @@ CREATE TABLE IF NOT EXISTS migration_script (
   script_order INT DEFAULT 0,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  created_by VARCHAR(255),
+  created_by VARCHAR(50) DEFAULT CASE
+    WHEN SESSION_USER IS NOT NULL THEN SESSION_USER
+    ELSE CURRENT_USER
+  END,
   FOREIGN KEY (migration_id) REFERENCES migration (id) ON DELETE CASCADE,
   FOREIGN KEY (migration_rollback_id) REFERENCES migration_rollback (id) ON DELETE SET NULL
 );

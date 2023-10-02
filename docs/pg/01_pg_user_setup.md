@@ -3,29 +3,35 @@
 Follow these detailed steps to set up a user hierarchy for your PostgreSQL database:
 
 1. **Create a Superuser "db_admin":**
+
    - Create a user named "db_admin."
    - Assign the superuser role to "db_admin" with login privileges.
    - Assign the "create role" privilege to "db_admin."
    - Update the "db_admin" user with a secure password:
-     ```sql
+
+     -- SQL Query:
      ALTER USER db_admin PASSWORD 'noP@ssw0rd';
-     ```
+     --
 
 2. **Sign in with "db_admin":**
+
    - Use the "db_admin" role to create additional users.
    - Utilize the "db_admin" role to perform initialization tasks for the database.
 
 3. **Create API Users:**
+
    - Create three users for your API application: "api_app," "api_worker," and "api_manager."
    - Ensure that these users have the ability to log in.
    - Update the users with a secure password:
-     ```sql
+
+     -- SQL Query:
      ALTER USER api_app PASSWORD 'password';
      ALTER USER api_worker PASSWORD 'password';
      ALTER USER api_manager PASSWORD 'password';
-     ```
+     --
 
 4. **Set User Hierarchy:**
+
    - Establish the following user hierarchy:
 
      - **"db_owner"**: The highest-level user with complete control over the PostgreSQL server and all databases. This user is responsible for managing user roles and assigning privileges.
@@ -39,6 +45,7 @@ Follow these detailed steps to set up a user hierarchy for your PostgreSQL datab
      - **"api_manager"**: An API manager user with higher-level access. This user can perform administrative tasks related to the API, such as managing API users and configurations.
 
 5. **Grant Specific Permissions:**
+
    - Grant specific permissions to the API users, allowing them to call stored procedures and functions.
 
 6. **Initialize the "db_app" Database:**
