@@ -25,7 +25,6 @@ BEGIN
 END;
 $$ SECURITY DEFINER LANGUAGE plpgsql;
 
-
 DO $$
 BEGIN
   -- Revoke EXECUTE permission from 'public' role
@@ -49,7 +48,6 @@ BEGIN
     RAISE NOTICE 'The role ''api_manager'' does not exist.';
   END IF;
 END $$;
-
 
 -- Example usage:
 -- CALL pr_migration_get_rollbacks(1, null);

@@ -13,113 +13,113 @@ RETURNS TABLE (
 BEGIN
   RETURN QUERY
   WITH rol AS (
-      SELECT oid,
-          rolname::text AS role_name
-      FROM pg_authid
-      UNION
-      SELECT 0::oid AS oid,
-          'public'::text
+    SELECT oid,
+      rolname::text AS role_name
+    FROM pg_authid
+    UNION
+    SELECT 0::oid AS oid,
+      'public'::text
   ),
   schemas AS (
-      SELECT oid AS schema_oid,
-          n.nspname::text AS schema_name,
-          n.nspowner AS owner_oid,
-          'schema'::text AS object_type,
-          coalesce(n.nspacl, acldefault('n'::"char", n.nspowner)) AS acl
-      FROM pg_catalog.pg_namespace n
-      WHERE n.nspname !~ '^pg_'
-          AND n.nspname <> 'information_schema'
+    SELECT oid AS schema_oid,
+      n.nspname::text AS schema_name,
+      n.nspowner AS owner_oid,
+      'schema'::text AS object_type,
+      coalesce(n.nspacl, acldefault('n'::"char", n.nspowner)) AS acl
+    FROM pg_catalog.pg_namespace n
+    WHERE n.nspname !~ '^pg_'
+      AND n.nspname <> 'information_schema'
   ),
   classes AS (
-      SELECT schemas.schema_oid,
-          schemas.schema_name AS object_schema,
-          c.oid,
-          c.relname::text AS object_name,
-          c.relowner AS owner_oid,
-          CASE
-              WHEN c.relkind = 'r' THEN 'table'
-              WHEN c.relkind = 'v' THEN 'view'
-              WHEN c.relkind = 'm' THEN 'materialized view'
-              WHEN c.relkind = 'c' THEN 'type'
-              WHEN c.relkind = 'i' THEN 'index'
-              WHEN c.relkind = 'S' THEN 'sequence'
-              WHEN c.relkind = 's' THEN 'special'
-              WHEN c.relkind = 't' THEN 'TOAST table'
-              WHEN c.relkind = 'f' THEN 'foreign table'
-              WHEN c.relkind = 'p' THEN 'partitioned table'
-              WHEN c.relkind = 'I' THEN 'partitioned index'
-              ELSE c.relkind::text
-          END AS object_type,
-          CASE
-              WHEN c.relkind = 'S' THEN coalesce(c.relacl, acldefault('s'::"char", c.relowner))
-              ELSE coalesce(c.relacl, acldefault('r'::"char", c.relowner))
-          END AS acl
-      FROM pg_class c
-      JOIN schemas
-          ON (schemas.schema_oid = c.relnamespace)
-      WHERE c.relkind IN ('r', 'v', 'm', 'S', 'f', 'p')
+    SELECT schemas.schema_oid,
+      schemas.schema_name AS object_schema,
+      c.oid,
+      c.relname::text AS object_name,
+      c.relowner AS owner_oid,
+      CASE
+        WHEN c.relkind = 'r' THEN 'table'
+        WHEN c.relkind = 'v' THEN 'view'
+        WHEN c.relkind = 'm' THEN 'materialized view'
+        WHEN c.relkind = 'c' THEN 'type'
+        WHEN c.relkind = 'i' THEN 'index'
+        WHEN c.relkind = 'S' THEN 'sequence'
+        WHEN c.relkind = 's' THEN 'special'
+        WHEN c.relkind = 't' THEN 'TOAST table'
+        WHEN c.relkind = 'f' THEN 'foreign table'
+        WHEN c.relkind = 'p' THEN 'partitioned table'
+        WHEN c.relkind = 'I' THEN 'partitioned index'
+        ELSE c.relkind::text
+      END AS object_type,
+      CASE
+        WHEN c.relkind = 'S' THEN coalesce(c.relacl, acldefault('s'::"char", c.relowner))
+        ELSE coalesce(c.relacl, acldefault('r'::"char", c.relowner))
+      END AS acl
+    FROM pg_class c
+    JOIN schemas
+      ON (schemas.schema_oid = c.relnamespace)
+    WHERE c.relkind IN ('r', 'v', 'm', 'S', 'f', 'p')
   ),
   cols AS (
-      SELECT c.object_schema,
-          null::integer AS oid,
-          c.object_name || '.' || a.attname::text AS object_name,
-          'column' AS object_type,
-          c.owner_oid,
-          coalesce(a.attacl, acldefault('c'::"char", c.owner_oid)) AS acl
-      FROM pg_attribute a
-      JOIN classes c
-          ON (a.attrelid = c.oid)
-      WHERE a.attnum > 0
-          AND NOT a.attisdropped
+    SELECT c.object_schema,
+      null::integer AS oid,
+      c.object_name || '.' || a.attname::text AS object_name,
+      'column' AS object_type,
+      c.owner_oid,
+      coalesce(a.attacl, acldefault('c'::"char", c.owner_oid)) AS acl
+    FROM pg_attribute a
+    JOIN classes c
+      ON (a.attrelid = c.oid)
+    WHERE a.attnum > 0
+      AND NOT a.attisdropped
   ),
   procs AS (
-      SELECT schemas.schema_oid,
-          schemas.schema_name AS object_schema,
-          p.oid,
-          p.proname::text AS object_name,
-          p.proowner AS owner_oid,
-          CASE p.prokind
-              WHEN 'a' THEN 'aggregate'
-              WHEN 'w' THEN 'window'
-              WHEN 'p' THEN 'procedure'
-              ELSE 'function'
-          END AS object_type,
-          pg_catalog.pg_get_function_arguments(p.oid) AS calling_arguments,
-          coalesce(p.proacl, acldefault('f'::"char", p.proowner)) AS acl
-      FROM pg_proc p
-      JOIN schemas
-          ON (schemas.schema_oid = p.pronamespace)
+    SELECT schemas.schema_oid,
+      schemas.schema_name AS object_schema,
+      p.oid,
+      p.proname::text AS object_name,
+      p.proowner AS owner_oid,
+      CASE p.prokind
+        WHEN 'a' THEN 'aggregate'
+        WHEN 'w' THEN 'window'
+        WHEN 'p' THEN 'procedure'
+        ELSE 'function'
+      END AS object_type,
+      pg_catalog.pg_get_function_arguments(p.oid) AS calling_arguments,
+      coalesce(p.proacl, acldefault('f'::"char", p.proowner)) AS acl
+    FROM pg_proc p
+    JOIN schemas
+      ON (schemas.schema_oid = p.pronamespace)
   ),
   udts AS (
       SELECT schemas.schema_oid,
-          schemas.schema_name AS object_schema,
-          t.oid,
-          t.typname::text AS object_name,
-          t.typowner AS owner_oid,
-          CASE t.typtype
-              WHEN 'b' THEN 'base type'
-              WHEN 'c' THEN 'composite type'
-              WHEN 'd' THEN 'domain'
-              WHEN 'e' THEN 'enum type'
-              WHEN 't' THEN 'pseudo-type'
-              WHEN 'r' THEN 'range type'
-              WHEN 'm' THEN 'multirange'
-              ELSE t.typtype::text
-          END AS object_type,
-          coalesce(t.typacl, acldefault('T'::"char", t.typowner)) AS acl
+        schemas.schema_name AS object_schema,
+        t.oid,
+        t.typname::text AS object_name,
+        t.typowner AS owner_oid,
+        CASE t.typtype
+          WHEN 'b' THEN 'base type'
+          WHEN 'c' THEN 'composite type'
+          WHEN 'd' THEN 'domain'
+          WHEN 'e' THEN 'enum type'
+          WHEN 't' THEN 'pseudo-type'
+          WHEN 'r' THEN 'range type'
+          WHEN 'm' THEN 'multirange'
+          ELSE t.typtype::text
+        END AS object_type,
+        coalesce(t.typacl, acldefault('T'::"char", t.typowner)) AS acl
       FROM pg_type t
       JOIN schemas
-          ON (schemas.schema_oid = t.typnamespace)
+        ON (schemas.schema_oid = t.typnamespace)
       WHERE (t.typrelid = 0
-              OR (SELECT c.relkind = 'c'
-                      FROM pg_catalog.pg_class c
-                      WHERE c.oid = t.typrelid))
-          AND NOT EXISTS (
-              SELECT 1
-              FROM pg_catalog.pg_type el
-              WHERE el.oid = t.typelem
-                  AND el.typarray = t.oid
-          )
+        OR (SELECT c.relkind = 'c'
+          FROM pg_catalog.pg_class c
+          WHERE c.oid = t.typrelid))
+        AND NOT EXISTS (
+          SELECT 1
+          FROM pg_catalog.pg_type el
+          WHERE el.oid = t.typelem
+            AND el.typarray = t.oid
+      )
   ),
   fdws AS (
     SELECT null::oid AS schema_oid,
@@ -221,11 +221,11 @@ BEGIN
     acl_base.is_grantable
   FROM acl_base
   JOIN rol AS rol_owner
-      ON (rol_owner.oid = acl_base.owner_oid)
+    ON (rol_owner.oid = acl_base.owner_oid)
   JOIN rol AS rol_grantor
-      ON (rol_grantor.oid = acl_base.grantor_oid)
+    ON (rol_grantor.oid = acl_base.grantor_oid)
   JOIN rol AS rol_grantee
-      ON (rol_grantee.oid = acl_base.grantee_oid)
+    ON (rol_grantee.oid = acl_base.grantee_oid)
   WHERE acl_base.grantor_oid <> acl_base.grantee_oid;
 END;
 $$ LANGUAGE plpgsql;

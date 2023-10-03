@@ -11,7 +11,7 @@ BEGIN
   END IF;
 
   -- Execute the script
-  EXECUTE scriptContent;
+  EXECUTE quote_literal(scriptContent);
   RAISE NOTICE 'Script execution completed successfully.';
 EXCEPTION
   WHEN OTHERS THEN

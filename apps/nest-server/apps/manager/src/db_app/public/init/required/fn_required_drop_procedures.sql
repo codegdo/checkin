@@ -9,7 +9,7 @@ BEGIN
   LOOP
     -- Use a BEGIN ... EXCEPTION block to handle exceptions when dropping procedures.
     BEGIN
-      EXECUTE 'DROP PROCEDURE ' || procedure_name; -- IF EXISTS does not apply for procedure
+      EXECUTE 'DROP PROCEDURE ' || quote_literal(procedure_name); -- IF EXISTS does not apply for procedure
       RAISE NOTICE 'Dropped procedure: %', procedure_name;
     EXCEPTION
       WHEN others THEN

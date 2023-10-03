@@ -1,8 +1,8 @@
 ### Setting Up Roles in PostgreSQL
 
-#### Step 1: Login with `db_owner` and Create `db_admin_role`
+#### Step 1: Login with `db_superuser` and Create `db_admin_role`
 
-1. Log in to your PostgreSQL database with a user having superuser privileges, such as `db_owner`.
+1. Log in to your PostgreSQL database with a user having superuser privileges, such as `db_superuser`.
 2. Create a new role called `db_admin_role` using SQL:
 
    ```sql
@@ -11,10 +11,10 @@
 
 #### Step 2: Grant `CREATE ROLE` Privilege
 
-3. While still logged in as `db_owner`, grant the `CREATE ROLE` privilege to `db_admin_role`. This will allow the role to create other roles:
+3. While still logged in as `db_superuser`, grant the `CREATE ROLE` privilege to `db_admin_role`. This will allow the role to create other roles:
 
    ```sql
-   GRANT CREATE ROLE TO db_admin_role;
+   ALTER USER db_test CREATEROLE;
    ```
 
 #### Step 3: Grant Permissions for Schemas, Tables, and Functions
