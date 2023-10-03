@@ -20,28 +20,28 @@
 7. Grant the "superuser" role to the "db_owner" user.
 8. Ensure the "Can log in" option is enabled for this user.
 
--- SQL Query:
+````sql
 CREATE ROLE db_owner;
 ALTER ROLE db_owner WITH SUPERUSER;
 ALTER ROLE db_owner WITH LOGIN;
---
+
 
 ## Change Password for db_owner
 
 9. Run the following query to change the password for the "db_owner" user:
 
--- SQL Query:
+```sql
 ALTER USER db_owner PASSWORD 'noP@ssw0rd';
---
+
 
 ## Create a New Database
 
 10. Create a new database named "db_app."
 11. Assign the "db_owner" user as the owner of the "db_app" database.
 
--- SQL Query:
+```sql
 CREATE DATABASE db_app WITH OWNER = db_owner;
---
+
 
 ## Set Data Source Properties
 
@@ -53,9 +53,8 @@ CREATE DATABASE db_app WITH OWNER = db_owner;
 
 15. Run the following query to check the current login user:
 
--- SQL Query:
+```sql
 SELECT current_user;
---
 
 Verify that the current user is "db_owner."
 
@@ -71,3 +70,4 @@ Verify that the current user is "db_owner."
 ## Verify Privileges
 
 18. Confirm that the "db_owner" user now has superuser privileges and all necessary privileges for managing the PostgreSQL server and "db_app" database.
+````
