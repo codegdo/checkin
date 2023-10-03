@@ -9,9 +9,9 @@ Follow these detailed steps to set up a user hierarchy for your PostgreSQL datab
    - Assign the "create role" privilege to "db_admin."
    - Update the "db_admin" user with a secure password:
 
-     -- SQL Query:
+     ```sql
      ALTER USER db_admin PASSWORD 'noP@ssw0rd';
-     --
+     ```
 
 2. **Sign in with "db_admin":**
 
@@ -24,11 +24,11 @@ Follow these detailed steps to set up a user hierarchy for your PostgreSQL datab
    - Ensure that these users have the ability to log in.
    - Update the users with a secure password:
 
-     -- SQL Query:
+     ```sql
      ALTER USER api_app PASSWORD 'password';
      ALTER USER api_worker PASSWORD 'password';
      ALTER USER api_manager PASSWORD 'password';
-     --
+     ```
 
 4. **Set User Hierarchy:**
 

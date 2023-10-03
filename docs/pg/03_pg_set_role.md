@@ -5,31 +5,32 @@
 1. Log in to your PostgreSQL database with a user having superuser privileges, such as `db_owner`.
 2. Create a new role called `db_admin_role` using SQL:
 
-   -- SQL Query:
+   ```sql
    CREATE ROLE db_admin_role;
-   --
+   ```
 
 #### Step 2: Grant `CREATE ROLE` Privilege
 
 3. While still logged in as `db_owner`, grant the `CREATE ROLE` privilege to `db_admin_role`. This will allow the role to create other roles:
 
-   -- SQL Query:
+   ```sql
    GRANT CREATE ROLE TO db_admin_role;
-   --
+   ```
 
 #### Step 3: Grant Permissions for Schemas, Tables, and Functions
 
 4. Grant the necessary permissions to `db_admin_role` for creating schemas, tables, and functions. For example, to grant permissions in the `public` schema:
 
 - Grant `CREATE` privilege on the schema:
-  -- SQL Query:
+
+  ```sql
   GRANT CREATE ON SCHEMA public TO db_admin_role;
-  --
+  ```
 
 - Grant `USAGE` privilege on the schema (required for creating functions):
-  -- SQL Query:
+  ```sql
   GRANT USAGE ON SCHEMA public TO db_admin_role;
-  --
+  ```
 
 Additionally, you can grant specific privileges on individual tables and functions as needed.
 
@@ -37,9 +38,9 @@ Additionally, you can grant specific privileges on individual tables and functio
 
 5. Assign the user `db_admin` to the `db_admin_role` group to give them the privileges associated with this role. Use the SQL `ALTER ROLE` command:
 
-   -- SQL Query:
+   ```sql
    ALTER ROLE db_admin SET ROLE TO db_admin_role;
-   --
+   ```
 
 #### Step 5: Use `db_admin` with Granted Privileges
 
