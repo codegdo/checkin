@@ -14,7 +14,7 @@
 3. While still logged in as `db_superuser`, grant the `CREATE ROLE` privilege to `db_admin_role`. This will allow the role to create other roles:
 
    ```sql
-   ALTER USER db_test CREATEROLE;
+   ALTER USER db_admin_role CREATEROLE;
    ```
 
 #### Step 3: Grant Permissions for Schemas, Tables, and Functions
@@ -40,15 +40,16 @@ Additionally, you can grant specific privileges on individual tables and functio
 
    ```sql
    ALTER ROLE db_admin SET ROLE TO db_admin_role;
+   GRANT db_admin_role TO db_admin;
    ```
 
 #### Step 5: Use `db_admin` with Granted Privileges
 
 6. Now, the user `db_admin` can perform administrative tasks with the permissions granted to the `db_admin_role`. Ensure that you connect to the database using the `db_admin` user for administrative tasks.
 
-#### Step 6: Restrict and Limit Superuser Access (Optional)
+#### Step 6: Restrict and Limit Admin Access (Optional)
 
-7. To limit the superuser access of the `db_admin` user, consider revoking the superuser status or restricting it further based on your security requirements.
+7. To limit the admin access of the `db_admin` user, consider revoking the admin status or restricting it further based on your security requirements.
 
 #### Step 7: Use `db_admin` for All Administrator Tasks
 

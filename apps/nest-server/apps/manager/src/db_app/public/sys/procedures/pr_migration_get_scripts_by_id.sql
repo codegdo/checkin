@@ -66,13 +66,13 @@ BEGIN
   -- Revoke EXECUTE permission from 'public' role
   REVOKE EXECUTE ON PROCEDURE pr_migration_get_scripts_by_id(int, out json) FROM public;
 
-  -- Check if 'api_app' role exists
-  IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'api_app') THEN
-    -- If 'api_app' role exists, grant EXECUTE permission
-    GRANT EXECUTE ON PROCEDURE pr_migration_get_scripts_by_id(int, out json) TO api_app;
+  -- Check if 'api_user' role exists
+  IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'api_user') THEN
+    -- If 'api_user' role exists, grant EXECUTE permission
+    GRANT EXECUTE ON PROCEDURE pr_migration_get_scripts_by_id(int, out json) TO api_user;
   ELSE
-    -- If 'api_app' role does not exist, raise a notice
-    RAISE NOTICE 'The role ''api_app'' does not exist.';
+    -- If 'api_user' role does not exist, raise a notice
+    RAISE NOTICE 'The role ''api_user'' does not exist.';
   END IF;
 
   -- Check if 'api_manager' role exists

@@ -7,8 +7,7 @@ export class MigrationController {
 
   @Get(':id')
   async getMigrationById(@Param('id') id: number) {
-    await this.migrationService.getMigrationById(id);
-    return 'getMigrationById';
+    return this.migrationService.getMigrationById(id);
   }
 
   @Get('runs/:id')

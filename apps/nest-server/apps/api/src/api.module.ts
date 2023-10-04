@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { DataSourceModule, SessionModule } from '@app/common';
+import { DataSourceModule, LoggerModule, SessionModule } from '@app/common';
 import { AuthModule } from './auth/auth.module';
 import { SetupModule } from './setup/setup.module';
 import { ManageModule } from './manage/manage.module';
@@ -12,6 +12,7 @@ import { ManageModule } from './manage/manage.module';
     AuthModule,
     SetupModule,
     ManageModule,
+    LoggerModule,
   ],
   controllers: [],
   providers: [],

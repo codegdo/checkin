@@ -18,13 +18,13 @@ export class MigrationService {
     private readonly migrationService: ClientProxy,
   ) { }
 
-  async getMigrationById(id: number): Promise<void> {
+  async getMigrationById(id: number) {
     try {
       const [result] = await this.migrationRepository.manager.query(
         `CALL pr_migration_get_scripts_by_id($1, $2)`,
         [id, null],
       );
-      console.log(result);
+      return result;
     } catch (error) {
       console.error('ERRRRRR', error);
       throw new UnauthorizedException();

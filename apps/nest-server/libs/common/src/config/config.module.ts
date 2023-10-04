@@ -9,5 +9,12 @@ import {
   providers: [ConfigService],
   exports: [ConfigService],
 })
-export class ConfigModule { }
+export class ConfigModule {
+  // static forRoot() {
+  //   // You can configure and load your environment variables here if needed.
+  //   return {
+  //     module: ConfigModule,
+  //   };
+  // }
+}
 export { ConfigService };

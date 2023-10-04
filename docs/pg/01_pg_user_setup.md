@@ -24,12 +24,12 @@ ALTER USER db_admin PASSWORD '<your_custom_password>';
 
 3. **Create API Users:**
 
-- Create three users for your API application: "api_app," "api_worker," and "api_manager."
+- Create three users for your API application: "api_user," "api_worker," and "api_manager."
 - Ensure that these users have the ability to log in.
 - Update the users with a secure password:
 
   ```sql
-  ALTER USER api_app PASSWORD '<your_custom_password>';
+  ALTER USER api_user PASSWORD '<your_custom_password>';
   ALTER USER api_worker PASSWORD '<your_custom_password>';
   ALTER USER api_manager PASSWORD '<your_custom_password>';
   ```
@@ -42,9 +42,9 @@ ALTER USER db_admin PASSWORD '<your_custom_password>';
 
   - **"db_admin"**: An admin user responsible for administrative tasks within the "db_app" database, such as schema management and maintenance.
 
-  - **"api_app"**: An API application user with restricted privileges. This user can interact with the database solely through defined stored procedures and functions.
+  - **"api_user"**: An API application user with restricted privileges. This user can interact with the database solely through defined stored procedures and functions.
 
-  - **"api_worker"**: An API worker user with permissions similar to "api_app." This user can also interact with the database via stored procedures and functions.
+  - **"api_worker"**: An API worker user with permissions similar to "api_user." This user can also interact with the database via stored procedures and functions.
 
   - **"api_manager"**: An API manager user with higher-level access. This user can perform administrative tasks related to the API, such as managing API users and configurations.
 
