@@ -1,6 +1,23 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { CustomLoggerService } from './custom-logger.service';
+import { winstonConfig } from './winston-config';
+
+@Module({
+  imports: [ConfigModule],
+  providers: [CustomLoggerService],
+  exports: [CustomLoggerService],
+})
+export class LoggerModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(winstonConfig).forRoutes('*'); // Apply the Winston configuration as middleware for all routes
+  }
+}
+
+
+/* import { Module } from '@nestjs/common';
 import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
-import pino from 'pino';
+
 import { CustomTypeOrmLogger } from './custom-typeorm.logger';
 import { LoggerService } from './logger.service';
 import { CustomStreamLogger } from './custom-stream.logger';
@@ -8,7 +25,7 @@ import { CustomStreamLogger } from './custom-stream.logger';
 @Module({
   imports: [
     PinoLoggerModule.forRootAsync({
-      useFactory: (loggerService: LoggerService) => ({
+      useFactory: () => ({
         pinoHttp: {
           transport: {
             target: 'pino-pretty',
@@ -16,7 +33,7 @@ import { CustomStreamLogger } from './custom-stream.logger';
               singleLine: true,
             },
           },
-          stream: new CustomStreamLogger(loggerService),
+          autoLogging: false,
         },
       }),
     }),
@@ -24,4 +41,4 @@ import { CustomStreamLogger } from './custom-stream.logger';
   providers: [CustomTypeOrmLogger, LoggerService, CustomStreamLogger], // Add CustomStreamLogger to providers
   exports: [CustomTypeOrmLogger, LoggerService],
 })
-export class LoggerModule { }
+export class LoggerModule { } */

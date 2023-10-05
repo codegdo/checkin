@@ -1,9 +1,16 @@
-import { Module } from '@nestjs/common';
-
-import { DataSourceModule, LoggerModule, SessionModule } from '@app/common';
+import { Logger, Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
+import {
+  ConfigModule,
+  DataSourceModule,
+  LoggerModule,
+  SessionModule,
+} from '@app/common';
 import { AuthModule } from './auth/auth.module';
 import { SetupModule } from './setup/setup.module';
 import { ManageModule } from './manage/manage.module';
+import { CustomLoggerService } from '@app/common/logger/custom-logger.service';
+//import { PinoLoggerMiddleware } from '@app/common/middlewares/pino-logger.middleware';
 
 @Module({
   imports: [
@@ -13,8 +20,19 @@ import { ManageModule } from './manage/manage.module';
     SetupModule,
     ManageModule,
     LoggerModule,
+    HttpModule,
+    ConfigModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: Logger, // Replace the default Logger with your custom Winston logger service
+      useClass: CustomLoggerService,
+    },
+  ],
 })
-export class ApiModule { }
+export class ApiModule {
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer.apply(PinoLoggerMiddleware).forRoutes('*');
+  // }
+}

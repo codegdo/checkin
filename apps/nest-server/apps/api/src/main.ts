@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
-import { Logger } from 'nestjs-pino';
+//import { Logger } from 'nestjs-pino';
 
 import { VersioningType } from '@nestjs/common';
 import { ApiModule } from './api.module';
@@ -16,7 +16,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<number>('API_PORT');
 
-  app.useLogger(app.get(Logger));
+  //app.useLogger(app.get(Logger));
 
   app.enableVersioning({
     type: VersioningType.URI,

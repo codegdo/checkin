@@ -1,6 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { ConfigModule, ConfigService, MANAGER_SERVICE } from '@app/common';
+import {
+  ConfigModule,
+  ConfigService,
+  LoggerModule,
+  MANAGER_SERVICE,
+} from '@app/common';
 import { MigrationController } from './migration.controller';
 import { MigrationService } from './migration.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,6 +13,7 @@ import { MigrationRepository } from '@app/common/models/migration/migration.repo
 
 @Module({
   imports: [
+    LoggerModule,
     ConfigModule,
     TypeOrmModule.forFeature([MigrationRepository]),
     ClientsModule.registerAsync([
@@ -26,6 +32,6 @@ import { MigrationRepository } from '@app/common/models/migration/migration.repo
     ]),
   ],
   controllers: [MigrationController],
-  providers: [MigrationService, MigrationRepository]
+  providers: [MigrationService, MigrationRepository],
 })
 export class MigrationModule { }
