@@ -1,5 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import * as Transport from 'winston-transport';
-import { DataSource } from 'typeorm';
+import { HttpService } from '@nestjs/axios';
+import { AxiosError, AxiosResponse } from 'axios';
+import { map } from 'rxjs';
+import { ClientLoggerService } from './client-logger.service';
 
 export enum LogLevel {
   INFO = 'info',
@@ -7,57 +11,101 @@ export enum LogLevel {
   WARN = 'warn',
 }
 
+@Injectable()
 export class WinstonTransport extends Transport {
-  private error: any = null;
-  private info: any = null;
+  private errorInfo: any = null;
+  private infoLog: any = null;
+  private requestMeta: any = null;
 
-  constructor() {
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly clientService: ClientLoggerService, // Adjust the type if possible
+  ) {
     super();
-  }
-
-  private async insert({ message, stack }: any, { meta: { req } }: any) {
-    // if (!this.dataSource.isConnected) {
-    //   await this.dataSource.connect();
-    // }
-
-    // const { url, headers: { host } } = req;
-    // const errorRepository = this.dataSource.getRepository(ErrorEntity);
-    // const error = new ErrorEntity();
-    // error.message = message;
-    // error.host = host;
-    // error.url = url;
-    // error.stack = stack;
-
-    // await errorRepository.save(error);
-
-    this.info = null;
-    this.error = null;
   }
 
   log(info: any, callback: () => void) {
     setImmediate(() => {
       this.emit('logged', info);
 
-      console.log('AAAA', info);
+      // Store meta data
+      if (info?.meta?.req) {
+        this.requestMeta = info.meta;
+      }
 
+      // Check log level and store info/error data
       if (info.level === LogLevel.INFO) {
-        this.info = info;
+        this.infoLog = info;
       }
 
       if (info.level === LogLevel.ERROR) {
-        this.error = info;
+        this.errorInfo = info;
       }
 
-      // Include the request object in the log message
-      if (info.level === LogLevel.ERROR && this.info) {
-        this.insert({ ...info, req: this.info.meta.req }, this.info);
+      // Check if there is an error and a request (req) object in meta
+      if (
+        info.level === LogLevel.ERROR &&
+        this.infoLog &&
+        this.requestMeta &&
+        this.requestMeta.req
+      ) {
+        const logData = {
+          ...this.errorInfo,
+          meta: this.requestMeta,
+        };
+        this.logRequestToRemoteServer(logData);
       }
 
-      if (info.level === LogLevel.INFO && this.error) {
-        this.insert({ ...info, req: this.error.meta.req }, this.error);
+      // Check if there is an info log with a request (req) object in meta
+      if (
+        info.level === LogLevel.INFO &&
+        this.errorInfo &&
+        this.requestMeta &&
+        this.requestMeta.req
+      ) {
+        const logData = {
+          ...this.infoLog,
+          meta: this.requestMeta,
+        };
+        this.logRequestToRemoteServer(logData);
       }
     });
 
     callback();
+  }
+
+  private async logRequestToRemoteServer(logData: any) {
+    console.log('SEND ERROR LOG AA', logData);
+
+    // Send log data to a remote server using HTTP service.
+    // Customize the URL according to your remote logging endpoint.
+    // const remoteLogEndpoint = 'your-remote-log-endpoint';
+
+    // this.httpService.post(remoteLogEndpoint, logData).subscribe({
+    //   next: (response: AxiosResponse) => {
+    //     // Handle success
+    //   },
+    //   error: (error: AxiosError) => {
+    //     // Handle error
+    //   },
+    // });
+
+    // Use .subscribe() with an observer object
+    await this.clientService.client
+      .send('error-test', {})
+      .pipe(map((response: { message: string }) => response))
+      .subscribe({
+        next: (result) => {
+          console.log('Microservice response:', result);
+        },
+        error: (error) => {
+          console.error('Microservice error:', error);
+        },
+      });
+
+    // Reset stored log data
+    this.infoLog = null;
+    this.errorInfo = null;
+    this.requestMeta = null;
   }
 }

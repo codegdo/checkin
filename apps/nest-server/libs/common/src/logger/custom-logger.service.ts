@@ -1,25 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as winston from 'winston';
 import { logger } from './winston.logger';
-import { IncomingHttpHeaders } from 'http';
-
-interface RequestContextMeta {
-  meta: {
-req: {
-      headers: IncomingHttpHeaders;
-      httpVersion: string;
-      method: string;
-      originalUrl: string;
-      query: QueryString.ParsedQs;
-      url: string;
-  };
-  res: {
-    statusCode: number;
-    responseTime: number;
-  }
-  }
-  
-};
 
 @Injectable()
 export class CustomLoggerService {
@@ -30,23 +11,19 @@ export class CustomLoggerService {
   }
 
   log(message: string, context?: string) {
-    const {meta} = this.getRequestContext();
-    this.logger.info(message, meta);
+    this.logger.info(message);
   }
 
   error(message: string, error: any, context?: string) {
-    const {meta} = this.getRequestContext();
-    meta.error = error; // Include error conditionally
-    this.logger.error(message, meta);
+    this.logger.error(message, error);
   }
 
   warning(message: string, context?: string) {
-    const {meta} = this.getRequestContext();
-    this.logger.warn(message, meta);
+    this.logger.warn(message);
   }
 
-  private getRequestContext(): RequestContext {
-    const context = (global as any).requestContext;
-    return context || { meta: {} };
-  }
+  // private getRequestContext(): RequestContextMeta {
+  //   const context = (global as any).requestContext;
+  //   return context || { meta: {} };
+  // }
 }

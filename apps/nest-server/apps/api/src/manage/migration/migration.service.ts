@@ -5,7 +5,8 @@ import { Observable, map } from 'rxjs';
 
 import { ConfigService, MANAGER_SERVICE } from '@app/common';
 import { MigrationRepository } from '@app/common/models/migration/migration.repository';
-import { CustomLoggerService } from '@app/common/logger/custom-logger.service';
+//import { CustomLoggerService } from '@app/common/logger/custom-logger.service';
+import { LoggerService } from '@app/common/logger/logger.service';
 
 @Injectable()
 export class MigrationService {
@@ -18,13 +19,13 @@ export class MigrationService {
     @Inject(MANAGER_SERVICE)
     private readonly migrationService: ClientProxy,
 
-    private readonly customLoggerService: CustomLoggerService,
+    private readonly loggerService: LoggerService,
   ) { }
 
   async getMigrationById(id: number) {
     try {
 
-      this.customLoggerService.log('This is a log message', 'YourService');
+      this.loggerService.log('This is a log message', 'YourService');
 
       const [result] = await this.migrationRepository.manager.query(
         `CALL pr_migration_get_scripts_by_id($1, $2)`,

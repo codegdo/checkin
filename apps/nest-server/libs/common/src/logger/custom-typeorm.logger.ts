@@ -19,7 +19,7 @@ export class CustomTypeOrmLogger implements Logger {
     parameters?: any[],
     queryRunner?: QueryRunner,
   ) {
-    this.logger.error(`Query Error: ${error}`);
+    this.logger.error(`Query Error: ${error}`, error);
     this.logger.log(`Query: ${query}`);
     if (parameters) {
       this.logger.log(`Parameters: ${JSON.stringify(parameters)}`);
@@ -39,11 +39,11 @@ export class CustomTypeOrmLogger implements Logger {
   }
 
   logSchemaBuild(message: string, queryRunner?: QueryRunner) {
-    this.logger.debug(`Schema Build: ${message}`);
+    this.logger.info(`Schema Build: ${message}`);
   }
 
   logMigration(message: string, queryRunner?: QueryRunner) {
-    this.logger.debug(`Migration: ${message}`);
+    this.logger.info(`Migration: ${message}`);
   }
 
   log(level: 'log' | 'info' | 'warn', message: any, queryRunner?: QueryRunner) {

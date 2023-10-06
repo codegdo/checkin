@@ -12,4 +12,9 @@ export class SetupController {
     console.log(payload);
     return this.setupService.performDatabaseOperation(payload);
   }
+
+  @EventPattern('error-test')
+  async test() {
+    console.log('TEST');
+  }
 }
