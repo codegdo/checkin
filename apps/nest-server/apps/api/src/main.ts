@@ -5,6 +5,8 @@ import { ConfigService } from '@nestjs/config';
 
 import { VersioningType } from '@nestjs/common';
 import { ApiModule } from './api.module';
+import { expressWinstonLogger } from '@app/common/logger/winston.logger';
+
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(ApiModule, {
@@ -17,6 +19,9 @@ async function bootstrap() {
   const port = configService.get<number>('API_PORT');
 
   //app.useLogger(app.get(Logger));
+  
+  // Configure express-winston
+  app.use(expressWinstonLogger);
 
   app.enableVersioning({
     type: VersioningType.URI,

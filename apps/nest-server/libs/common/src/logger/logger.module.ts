@@ -1,18 +1,28 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { CustomLoggerService } from './custom-logger.service';
-import { winstonConfig } from './winston-config';
+import * as winston from 'winston'; // Import winston for creating the logger
 
 @Module({
   imports: [ConfigModule],
-  providers: [CustomLoggerService],
+  providers: [
+    CustomLoggerService,
+    {
+      provide: 'winston', // Provide a token for the winston.Logger instance
+      useValue: winston.createLogger({
+        level: 'info', // Set the log level as needed
+        format: winston.format.json(),
+        transports: [
+          new winston.transports.Console(), // You can configure other transports here
+        ],
+      }),
+    },
+  ],
   exports: [CustomLoggerService],
 })
-export class LoggerModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(winstonConfig).forRoutes('*'); // Apply the Winston configuration as middleware for all routes
-  }
-}
+export class LoggerModule {}
+
+
 
 
 /* import { Module } from '@nestjs/common';

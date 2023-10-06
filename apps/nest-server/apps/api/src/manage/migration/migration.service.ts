@@ -24,7 +24,7 @@ export class MigrationService {
   async getMigrationById(id: number) {
     try {
 
-      this.customLoggerService.logInfo('This is a custom info message.');
+      this.customLoggerService.log('This is a log message', 'YourService');
 
       const [result] = await this.migrationRepository.manager.query(
         `CALL pr_migration_get_scripts_by_id($1, $2)`,

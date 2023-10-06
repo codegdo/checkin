@@ -1,94 +1,52 @@
 import { Injectable } from '@nestjs/common';
 import * as winston from 'winston';
-import { DataSource } from 'typeorm';
-import { ConfigService } from '@nestjs/config';
-import { WinstonTransport } from './winston-transport';
+import { logger } from './winston.logger';
+import { IncomingHttpHeaders } from 'http';
 
-export enum LogLevel {
-  INFO = 'info',
-  ERROR = 'error',
-  WARN = 'warn',
-}
+interface RequestContextMeta {
+  meta: {
+req: {
+      headers: IncomingHttpHeaders;
+      httpVersion: string;
+      method: string;
+      originalUrl: string;
+      query: QueryString.ParsedQs;
+      url: string;
+  };
+  res: {
+    statusCode: number;
+    responseTime: number;
+  }
+  }
+  
+};
 
 @Injectable()
 export class CustomLoggerService {
   private readonly logger: winston.Logger;
 
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly dataSource: DataSource,
-  ) {
-    this.logger = this.createLogger();
+  constructor() {
+    this.logger = logger; // Use the same logger instance
   }
 
-  private createLogger(): winston.Logger {
-    return winston.createLogger({
-      exitOnError: false,
-      transports: [
-        new winston.transports.File({
-          filename: 'error.log',
-          level: LogLevel.ERROR,
-          format: winston.format.json(),
-        }),
-        new winston.transports.Http({
-          level: LogLevel.WARN,
-          format: winston.format.json(),
-        }),
-        new winston.transports.Console({
-          format: winston.format.combine(
-            winston.format.timestamp(),
-            winston.format.ms(),
-            winston.format.colorize(),
-          ),
-        }),
-        new WinstonTransport(this.dataSource),
-      ],
-    });
+  log(message: string, context?: string) {
+    const {meta} = this.getRequestContext();
+    this.logger.info(message, meta);
   }
 
-  logInfo(message: string, context?: string) {
-    this.logger.info(message, { context });
+  error(message: string, error: any, context?: string) {
+    const {meta} = this.getRequestContext();
+    meta.error = error; // Include error conditionally
+    this.logger.error(message, meta);
   }
 
-  logError(message: string, error: any, context?: string) {
-    this.logger.error(message, { error, context });
+  warning(message: string, context?: string) {
+    const {meta} = this.getRequestContext();
+    this.logger.warn(message, meta);
   }
 
-  logWarning(message: string, context?: string) {
-    this.logger.warn(message, { context });
+  private getRequestContext(): RequestContext {
+    const context = (global as any).requestContext;
+    return context || { meta: {} };
   }
 }
-
-
-/* import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { PinoLogger } from 'nestjs-pino';
-
-@Injectable()
-export class CustomLoggerService extends PinoLogger {
-  constructor(private readonly configService: ConfigService) {
-    super({
-      pinoHttp: {
-        transport: {
-          target: 'pino-pretty',
-          options: {
-            singleLine: true,
-          },
-        },
-      },
-    });
-  }
-
-  logInfo(message: string, context?: string) {
-    this.info({ message, context });
-  }
-
-  logError(message: string, error: any, context?: string) {
-    this.error({ message, error, context });
-  }
-
-  logWarning(message: string, context?: string) {
-    this.warn({ message, context });
-  }
-}
- */
