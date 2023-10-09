@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { VersioningType } from '@nestjs/common';
 import { ApiModule } from './api.module';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import logger from '@app/common/logger/winston.logger';
+//import logger from '@app/common/logger/winston.logger';
 //import { expressWinstonLogger, logger } from '@app/common/logger/winston.logger';
 
 
@@ -22,7 +22,7 @@ async function bootstrap() {
 
   //app.useLogger(app.get(Logger));
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
-  
+
   // Configure express-winston
   //app.use(expressWinstonLogger);
   //app.useLogger(logger);

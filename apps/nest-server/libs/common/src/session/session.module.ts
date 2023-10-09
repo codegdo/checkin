@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+
 import {
   NestSessionOptions,
   SessionModule as NestSessionModule,
 } from 'nestjs-session';
-import { ConfigModule, ConfigService } from '../config/config.module';
+import { ConfigModule } from '../config/config.module';
 
 @Module({
   imports: [

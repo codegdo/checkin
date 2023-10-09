@@ -6,10 +6,11 @@ import {
   DataSourceModule,
   SessionModule,
 } from '@app/common';
-import { expressWinstonMiddleware } from '@app/common/middlewares';
+//import { expressWinstonMiddleware } from '@app/common/middlewares';
 import { AuthModule } from './auth/auth.module';
 import { SetupModule } from './setup/setup.module';
 import { ManageModule } from './manage/manage.module';
+import { ExpressWinstonMiddleware } from '@app/common/middlewares';
 
 //import { RequestContextMiddleware } from '@app/common/middlewares/request-context.middleware';
 //import { APP_INTERCEPTOR } from '@nestjs/core';
@@ -23,7 +24,7 @@ import { ManageModule } from './manage/manage.module';
     AuthModule,
     SetupModule,
     ManageModule,
-    // Global
+    // Shared
     LoggerModule,
     ConfigModule,
     ClientModule,
@@ -42,7 +43,7 @@ import { ManageModule } from './manage/manage.module';
 })
 export class ApiModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(expressWinstonMiddleware).forRoutes('*'); // Apply the middleware to all routes
+    consumer.apply(ExpressWinstonMiddleware).forRoutes('*');
   }
   // configure(consumer: MiddlewareConsumer) {
   //   consumer.apply(RequestContextMiddleware).forRoutes('*');

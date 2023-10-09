@@ -1,9 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Observable, catchError, map, throwError } from 'rxjs';
+import { ConfigService } from '@nestjs/config';
 
 import {
-  ConfigService,
   MANAGER_CLIENT,
   MANAGER_SERVICE_DATABASE_OPERATION,
 } from '@app/common';
@@ -13,7 +13,7 @@ export class DatabaseService {
   constructor(
     private readonly configService: ConfigService,
 
-    @Inject(MANAGER_CLIENT) 
+    @Inject(MANAGER_CLIENT)
     private readonly managerClient: ClientProxy,
   ) { }
 

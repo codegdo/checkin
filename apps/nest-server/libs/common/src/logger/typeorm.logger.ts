@@ -5,8 +5,8 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 @Injectable()
 export class TypeOrmLogger implements Logger {
   constructor(
-    @Inject(WINSTON_MODULE_NEST_PROVIDER) 
-    private readonly logger: LoggerService
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) { }
 
   logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner) {

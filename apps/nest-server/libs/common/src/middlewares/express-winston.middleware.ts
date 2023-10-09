@@ -1,9 +1,23 @@
 import * as expressWinston from 'express-winston';
-import logger from '../logger/winston.logger';
+import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
+import { Request, Response, NextFunction } from 'express';
 
-export const expressWinstonMiddleware = expressWinston.logger({
-  winstonInstance: logger,
-  meta: false, // Do not log metadata like headers, query params, etc.
-  msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
-  colorize: true,
-});
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import * as winston from 'winston';
+
+@Injectable()
+export class ExpressWinstonMiddleware implements NestMiddleware {
+  constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: winston.Logger,
+  ) { }
+
+  use(req: Request, res: Response, next: NextFunction) {
+    expressWinston.logger({
+      winstonInstance: this.logger,
+      meta: true, // error get send with meta from winston-transport
+      msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
+      colorize: true,
+    })(req, res, next);
+  }
+}

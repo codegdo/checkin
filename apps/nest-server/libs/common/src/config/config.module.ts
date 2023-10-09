@@ -6,9 +6,14 @@ import {
 
 @Global()
 @Module({
-  imports: [NestConfigModule.forRoot()],
+  imports: [
+    NestConfigModule.forRoot({
+      envFilePath: process.env.NODE_ENV
+        ? `.env.${process.env.NODE_ENV}`
+        : '.env', // Load environment-specific .env file
+    }),
+  ],
   providers: [ConfigService],
   exports: [ConfigService],
 })
-export class ConfigModule {}
-export { ConfigService };
+export class ConfigModule { }
