@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import * as Transport from 'winston-transport';
-import { HttpService } from '@nestjs/axios';
-import { AxiosError, AxiosResponse } from 'axios';
-import { map } from 'rxjs';
-import { ClientLoggerService } from './client-logger.service';
+//import { HttpService } from '@nestjs/axios';
+//import { AxiosError, AxiosResponse } from 'axios';
+//import { map } from 'rxjs';
+//import { ClientLoggerService } from './client-logger.service';
+import { LogEntry } from 'winston';
+import { ClientService } from '../client/client.service';
 
 export enum LogLevel {
   INFO = 'info',
@@ -18,14 +20,18 @@ export class WinstonTransport extends Transport {
   private requestMeta: any = null;
 
   constructor(
-    private readonly httpService: HttpService,
-    private readonly clientService: ClientLoggerService, // Adjust the type if possible
+    //options: Transport.TransportStreamOptions,
+    //private readonly httpService: HttpService,
+    //private readonly clientService: ClientLoggerService,
+    //private readonly clientService: ClientService
   ) {
     super();
   }
 
-  log(info: any, callback: () => void) {
+  // Implement the log method to handle log messages
+  log(info: LogEntry, callback: () => void): any {
     setImmediate(() => {
+      // Emit the 'logged' event
       this.emit('logged', info);
 
       // Store meta data
@@ -71,7 +77,9 @@ export class WinstonTransport extends Transport {
       }
     });
 
-    callback();
+    if (callback) {
+      callback();
+    }
   }
 
   private async logRequestToRemoteServer(logData: any) {
@@ -91,17 +99,17 @@ export class WinstonTransport extends Transport {
     // });
 
     // Use .subscribe() with an observer object
-    await this.clientService.client
-      .send('error-test', {})
-      .pipe(map((response: { message: string }) => response))
-      .subscribe({
-        next: (result) => {
-          console.log('Microservice response:', result);
-        },
-        error: (error) => {
-          console.error('Microservice error:', error);
-        },
-      });
+    // await this.clientService.client
+    //   .send('error-test', {})
+    //   .pipe(map((response: { message: string }) => response))
+    //   .subscribe({
+    //     next: (result) => {
+    //       console.log('Microservice response:', result);
+    //     },
+    //     error: (error) => {
+    //       console.error('Microservice error:', error);
+    //     },
+    //   });
 
     // Reset stored log data
     this.infoLog = null;

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Logger } from 'winston';
-import { logger } from './winston.logger';
+import logger from './winston.logger';
 
 @Injectable()
 export class LoggerService {
@@ -26,10 +26,6 @@ export class LoggerService {
     this.logger.info(message);
   }
 
-  // private getRequestContext(): RequestContextMeta {
-  //   const context = (global as any).requestContext;
-  //   return context || { meta: {} };
-  // }
 }
 
 
@@ -61,4 +57,9 @@ export class LoggerService {
 //   log(message: string) {
 //     super.info({ message });
 //   }
+
+  // private getRequestContext(): RequestContextMeta {
+  //   const context = (global as any).requestContext;
+  //   return context || { meta: {} };
+  // }
 // }

@@ -4,8 +4,7 @@ import { ConfigModule, ConfigService } from '../config/config.module';
 import { DataSource } from 'typeorm';
 import * as appEntities from '../models/db_app';
 
-import { LoggerModule } from '../logger/logger.module';
-import { CustomTypeOrmLogger } from '../logger/custom-typeorm.logger';
+import { TypeOrmLogger } from '../logger/typeorm.logger';
 
 @Module({})
 export class DataSourceModule {
@@ -14,14 +13,12 @@ export class DataSourceModule {
       module: DataSourceModule,
       imports: [
         ConfigModule,
-        LoggerModule,
         TypeOrmModule.forRootAsync({
-          imports: [ConfigModule, LoggerModule],
-          //inject: [ConfigService],
-          inject: [ConfigService, CustomTypeOrmLogger],
+          imports: [ConfigModule],
+          inject: [ConfigService, TypeOrmLogger],
           useFactory: (
             configService: ConfigService,
-            customTypeOrmLogger: CustomTypeOrmLogger,
+            typeOrmLogger: TypeOrmLogger,
           ) => {
             let username = null;
             let password = null;
@@ -51,7 +48,7 @@ export class DataSourceModule {
               entities: [...Object.values(appEntities)],
               autoLoadEntities: true,
               synchronize: false,
-              logger: customTypeOrmLogger,
+              logger: typeOrmLogger,
               //logging: true,
               //max: 10,
               //min: 2,
@@ -65,6 +62,7 @@ export class DataSourceModule {
             new DataSource(options).initialize(),
         }),
       ],
+      providers: [TypeOrmLogger]
     };
   }
 }

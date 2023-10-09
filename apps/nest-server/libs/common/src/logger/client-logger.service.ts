@@ -13,8 +13,6 @@ export class ClientLoggerService {
     const host = this.configService.get<string>('MANAGER_HOST', 'localhost');
     const port = this.configService.get<number>('MANAGER_PORT', 5003);
 
-    console.log(host, port);
-
     // Initialize and export the ClientProxy instance with the configured values
     this.client = ClientProxyFactory.create({
       transport: Transport.TCP,

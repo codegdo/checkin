@@ -1,10 +1,13 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, LoggerService } from '@nestjs/common';
 import { Logger, QueryRunner } from 'typeorm';
-import { LoggerService } from './logger.service';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
-export class CustomTypeOrmLogger implements Logger {
-  constructor(@Inject(LoggerService) private readonly logger: LoggerService) { }
+export class TypeOrmLogger implements Logger {
+  constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER) 
+    private readonly logger: LoggerService
+  ) { }
 
   logQuery(query: string, parameters?: any[], queryRunner?: QueryRunner) {
     this.logger.log(`Query: ${query}`);
@@ -39,20 +42,17 @@ export class CustomTypeOrmLogger implements Logger {
   }
 
   logSchemaBuild(message: string, queryRunner?: QueryRunner) {
-    this.logger.info(`Schema Build: ${message}`);
+    this.logger.log(`Schema Build: ${message}`);
   }
 
   logMigration(message: string, queryRunner?: QueryRunner) {
-    this.logger.info(`Migration: ${message}`);
+    this.logger.log(`Migration: ${message}`);
   }
 
   log(level: 'log' | 'info' | 'warn', message: any, queryRunner?: QueryRunner) {
     switch (level) {
       case 'log':
         this.logger.log(message);
-        break;
-      case 'info':
-        this.logger.info(message);
         break;
       case 'warn':
         this.logger.warn(message);

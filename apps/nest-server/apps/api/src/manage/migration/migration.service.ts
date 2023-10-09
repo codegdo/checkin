@@ -1,31 +1,41 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Inject, Injectable, Logger, LoggerService, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Observable, map } from 'rxjs';
 
-import { ConfigService, MANAGER_SERVICE } from '@app/common';
+import { ConfigService, MANAGER_CLIENT, WORKER_CLIENT } from '@app/common';
 import { MigrationRepository } from '@app/common/models/migration/migration.repository';
 //import { CustomLoggerService } from '@app/common/logger/custom-logger.service';
-import { LoggerService } from '@app/common/logger/logger.service';
+//import { LoggerService } from '@app/common/logger/logger.service';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class MigrationService {
   constructor(
-    private readonly configService: ConfigService,
+    //private readonly configService: ConfigService,
 
     @InjectRepository(MigrationRepository)
     private readonly migrationRepository: MigrationRepository,
 
-    @Inject(MANAGER_SERVICE)
-    private readonly migrationService: ClientProxy,
+    //@Inject(MANAGER_SERVICE)
+    //private readonly clientService: ClientProxy,
+    //@Inject(WORKER_SERVICE) private readonly workerClient: ClientProxy,
 
-    private readonly loggerService: LoggerService,
+    @Inject(MANAGER_CLIENT) 
+    private readonly managerClient: ClientProxy,
+
+    //private readonly loggerService: LoggerService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService
+
   ) { }
 
   async getMigrationById(id: number) {
     try {
 
-      this.loggerService.log('This is a log message', 'YourService');
+      this.logger.log('Calling getHello()', MigrationService.name);
+      this.logger.debug('Calling getHello()', MigrationService.name);
+      this.logger.verbose('Calling getHello()', MigrationService.name);
+      this.logger.warn('Calling getHello()', MigrationService.name);
 
       const [result] = await this.migrationRepository.manager.query(
         `CALL pr_migration_get_scripts_by_id($1, $2)`,
@@ -53,7 +63,7 @@ export class MigrationService {
 
   async runMigrationById(id: number): Promise<Observable<{ message: string }>> {
     try {
-      return this.migrationService
+      return this.managerClient
         .send('db_run_migration_by_id', {
           data: { migrationId: id },
           userId: 'sysadmin',
@@ -69,7 +79,7 @@ export class MigrationService {
     id: number,
   ): Promise<Observable<{ message: string }>> {
     try {
-      return this.migrationService
+      return this.managerClient
         .send('db_rollback_migration_by_id', {
           data: { migrationId: id },
           userId: 'sysadmin',

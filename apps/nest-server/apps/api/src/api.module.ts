@@ -1,15 +1,16 @@
 import { Logger, MiddlewareConsumer, Module } from '@nestjs/common';
-import { HttpModule } from '@nestjs/axios';
 import {
+  ClientModule,
   ConfigModule,
-  DataSourceModule,
   LoggerModule,
+  DataSourceModule,
   SessionModule,
 } from '@app/common';
+import { expressWinstonMiddleware } from '@app/common/middlewares';
 import { AuthModule } from './auth/auth.module';
 import { SetupModule } from './setup/setup.module';
 import { ManageModule } from './manage/manage.module';
-import { CustomLoggerService } from '@app/common/logger/custom-logger.service';
+
 //import { RequestContextMiddleware } from '@app/common/middlewares/request-context.middleware';
 //import { APP_INTERCEPTOR } from '@nestjs/core';
 //import { RequestInterceptor } from '@app/common/interceptors/request.interceptor';
@@ -22,16 +23,17 @@ import { CustomLoggerService } from '@app/common/logger/custom-logger.service';
     AuthModule,
     SetupModule,
     ManageModule,
+    // Global
     LoggerModule,
-    HttpModule,
     ConfigModule,
+    ClientModule,
   ],
   controllers: [],
   providers: [
-    {
-      provide: Logger, // Replace the default Logger with your custom Winston logger service
-      useClass: CustomLoggerService,
-    },
+    // {
+    //   provide: Logger, // Replace the default Logger with your custom Winston logger service
+    //   useClass: LoggerService,
+    // },
     // {
     //   provide: APP_INTERCEPTOR,
     //   useClass: RequestInterceptor,
@@ -39,6 +41,9 @@ import { CustomLoggerService } from '@app/common/logger/custom-logger.service';
   ],
 })
 export class ApiModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(expressWinstonMiddleware).forRoutes('*'); // Apply the middleware to all routes
+  }
   // configure(consumer: MiddlewareConsumer) {
   //   consumer.apply(RequestContextMiddleware).forRoutes('*');
   // }

@@ -4,7 +4,7 @@ import { Observable, catchError, map, throwError } from 'rxjs';
 
 import {
   ConfigService,
-  MANAGER_SERVICE,
+  MANAGER_CLIENT,
   MANAGER_SERVICE_DATABASE_OPERATION,
 } from '@app/common';
 
@@ -13,8 +13,8 @@ export class DatabaseService {
   constructor(
     private readonly configService: ConfigService,
 
-    @Inject(MANAGER_SERVICE)
-    private readonly managerService: ClientProxy,
+    @Inject(MANAGER_CLIENT) 
+    private readonly managerClient: ClientProxy,
   ) { }
 
   async performDatabaseOperation(
@@ -32,7 +32,7 @@ export class DatabaseService {
       });
     }
 
-    return this.managerService
+    return this.managerClient
       .send(MANAGER_SERVICE_DATABASE_OPERATION, {
         data: {
           databaseName,
