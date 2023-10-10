@@ -9,7 +9,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Module({})
 export class DataSourceModule {
-  static register(serviceName?: string): DynamicModule {
+  static register(instanceName?: string): DynamicModule {
     return {
       module: DataSourceModule,
       imports: [
@@ -24,12 +24,12 @@ export class DataSourceModule {
             let username = null;
             let password = null;
 
-            switch (serviceName) {
-              case 'manager':
+            switch (instanceName) {
+              case 'Manager':
                 username = configService.get('POSTGRES_MANAGER_USERNAME');
                 password = configService.get('POSTGRES_MANAGER_PASSWORD');
                 break;
-              case 'worker':
+              case 'Worker':
                 username = configService.get('POSTGRES_WORKER_USERNAME');
                 password = configService.get('POSTGRES_WORKER_PASSWORD');
                 break;
@@ -54,9 +54,6 @@ export class DataSourceModule {
               //max: 10,
               //min: 2,
             };
-
-            console.log(serviceName);
-
             return databaseConfig;
           },
           dataSourceFactory: async (options) =>

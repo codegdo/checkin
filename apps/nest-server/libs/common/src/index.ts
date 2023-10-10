@@ -7,4 +7,5 @@ export * from './datasource/datasource.module';
 export * from './session/session.module';
 
 export * from './constants';
-export * from './prefix/prefix.service';
+export * from './enums';
+

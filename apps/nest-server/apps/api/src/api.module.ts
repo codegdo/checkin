@@ -5,6 +5,7 @@ import {
   LoggerModule,
   DataSourceModule,
   SessionModule,
+  InstanceNameEnum,
 } from '@app/common';
 //import { expressWinstonMiddleware } from '@app/common/middlewares';
 import { AuthModule } from './auth/auth.module';
@@ -19,15 +20,16 @@ import { ExpressWinstonMiddleware } from '@app/common/middlewares';
 
 @Module({
   imports: [
-    DataSourceModule.register('application'),
+    // Shared
+    DataSourceModule.register(InstanceNameEnum.Application),
+    LoggerModule.register(InstanceNameEnum.Application),
+    ConfigModule,
+    ClientModule,
+    //
     SessionModule,
     AuthModule,
     SetupModule,
     ManageModule,
-    // Shared
-    LoggerModule,
-    ConfigModule,
-    ClientModule,
   ],
   controllers: [],
   providers: [

@@ -13,61 +13,65 @@ enum LogLevel {
   WARN = 'warn',
 }
 
+export interface WinstonLoggerOptions {
+  instanceName: string;
+  configService: ConfigService;
+  clientService: ClientService;
+}
+
 @Injectable()
 export class WinstonLogger extends winston.Logger {
-  constructor(
-    private readonly configService: ConfigService,
-    private readonly clientService: ClientService,
-  ) {
-    super({
-      level: 'info',
+  constructor(private readonly options: WinstonLoggerOptions) {
+    super();
+    this.configureLogger();
+  }
+
+  private configureLogger() {
+    this.level = 'info';
+
+    const commonFormat = winston.format.combine(
+      winston.format.timestamp(),
+      winston.format.ms(),
+      nestWinstonModuleUtilities.format.nestLike('MyApp', {
+        colors: true,
+        prettyPrint: true,
+      })
+    );
+
+    this.add(new winston.transports.Console({ format: commonFormat }));
+
+    const lowercaseInstanceName = this.options.instanceName.toLowerCase();
+
+    const logFileOptions = {
+      level: LogLevel.INFO,
+      filename: `logs/${lowercaseInstanceName}-%DATE%.log`,
+      datePattern: 'YYYY-MM-DD',
+      zippedArchive: true,
+      maxSize: '20m',
+      maxFiles: '1m',
       format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.ms(),
-        nestWinstonModuleUtilities.format.nestLike('MyApp', {
-          colors: true,
-          prettyPrint: true,
-        }),
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        winston.format.json()
       ),
-      transports: [
-        new winston.transports.Console({
-          format: winston.format.combine(
-            winston.format.timestamp(),
-            winston.format.ms(),
-            nestWinstonModuleUtilities.format.nestLike('MyApp', {
-              colors: true,
-              prettyPrint: true,
-            }),
-          ),
-        }),
-        // DailyRotateFile transport for application logs (level 'info' and higher)
-        new DailyRotateFile({
-          level: LogLevel.INFO,
-          filename: 'logs/application-%DATE%.log',
-          datePattern: 'YYYY-MM-DD',
-          zippedArchive: true,
-          maxSize: '20m',
-          maxFiles: '1m',
-          format: winston.format.combine(
-            winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-            winston.format.json(),
-          ),
-        }),
-        // DailyRotateFile transport for error logs (level 'error' and higher)
-        new DailyRotateFile({
-          level: LogLevel.ERROR,
-          filename: 'logs/errors-%DATE%.log',
-          datePattern: 'YYYY-MM-DD',
-          zippedArchive: true,
-          maxSize: '20m',
-          maxFiles: '7d',
-          format: winston.format.combine(
-            winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-            winston.format.json(),
-          ),
-        }),
-        new WinstonTransport(clientService),
-      ],
-    });
+    };
+
+    this.add(new DailyRotateFile(logFileOptions));
+
+    const errorLogFileOptions = {
+      level: LogLevel.ERROR,
+      filename: `logs/errors-${lowercaseInstanceName}-%DATE%.log`,
+      datePattern: 'YYYY-MM-DD',
+      zippedArchive: true,
+      maxSize: '20m',
+      maxFiles: '7d',
+      format: winston.format.combine(
+        winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        winston.format.json()
+      ),
+    };
+
+    this.add(new DailyRotateFile(errorLogFileOptions));
+
+    this.add(new WinstonTransport(this.options.clientService));
   }
 }

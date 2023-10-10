@@ -1,25 +1,29 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { DataSourceModule, LoggerModule } from '@app/common';
+import { DataSourceModule, InstanceNameEnum, LoggerModule } from '@app/common';
 import { MigrationModule } from './migration/migration.module';
 import { SetupModule } from './setup/setup.module';
 import { UtilModule } from './util/util.module';
 
 @Module({
   imports: [
-    // GLOBAL
+    // Shared
     ConfigModule.forRoot(),
-    DataSourceModule.register('manager'),
+    DataSourceModule.register(InstanceNameEnum.Manager),
+    LoggerModule.register(InstanceNameEnum.Manager),
     // Events
     MigrationModule,
     SetupModule,
-    // Utils
-    UtilModule,
-    // Shared
-    LoggerModule,
+
+    UtilModule, 
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: 'APP_NAME', // Use a unique token to identify the configuration
+      useValue: 'Manager',
+    },
+  ],
 })
 export class ManagerModule { }
