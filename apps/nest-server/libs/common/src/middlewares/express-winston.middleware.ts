@@ -13,11 +13,24 @@ export class ExpressWinstonMiddleware implements NestMiddleware {
   ) { }
 
   use(req: Request, res: Response, next: NextFunction) {
-    expressWinston.logger({
+    // Configure the logger format and options
+    const winstonOptions: expressWinston.LoggerOptions = {
       winstonInstance: this.logger,
       meta: true, // error get send with meta from winston-transport
+      dynamicMeta: function (req, res) {
+        return {
+          user: 'admin',
+          role: 'admin',
+        };
+      },
       msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
       colorize: true,
-    })(req, res, next);
+    };
+
+    // Create the express-winston logger middleware
+    const loggerMiddleware = expressWinston.logger(winstonOptions);
+
+    // Apply the middleware to log HTTP requests and responses
+    loggerMiddleware(req, res, next);
   }
 }

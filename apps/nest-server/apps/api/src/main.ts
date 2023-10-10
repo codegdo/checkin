@@ -1,31 +1,21 @@
 import { NestFactory } from '@nestjs/core';
-import { NestExpressApplication } from '@nestjs/platform-express';
-import { ConfigService } from '@nestjs/config';
-//import { Logger } from 'nestjs-pino';
-
 import { VersioningType } from '@nestjs/common';
-import { ApiModule } from './api.module';
+import { ConfigService } from '@nestjs/config';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-//import logger from '@app/common/logger/winston.logger';
-//import { expressWinstonLogger, logger } from '@app/common/logger/winston.logger';
 
+import { ApiModule } from './api.module';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(ApiModule, {
     rawBody: true,
     snapshot: true,
-    //bufferLogs: true,
   });
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('API_PORT');
 
-  //app.useLogger(app.get(Logger));
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
-
-  // Configure express-winston
-  //app.use(expressWinstonLogger);
-  //app.useLogger(logger);
 
   app.enableVersioning({
     type: VersioningType.URI,

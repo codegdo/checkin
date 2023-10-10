@@ -8,23 +8,25 @@ import { ClientModule } from '../client/client.module';
 import { WinstonLogger } from './winston.logger';
 import { ConfigService } from '@nestjs/config';
 import { ConfigModule } from '../config/config.module';
-import { PrefixModule } from '../prefix/prefix.module';
 
 @Global()
 @Module({})
-export class LoggerModule { 
+export class LoggerModule {
   static register(instanceName?: string): DynamicModule {
     return {
       module: LoggerModule,
       imports: [
         WinstonModule.forRootAsync({
-          imports: [ClientModule, ConfigModule, PrefixModule],
+          imports: [ClientModule, ConfigModule],
           useFactory: async (
             configService: ConfigService,
             clientService: ClientService,
           ): Promise<WinstonModuleOptions> => {
-            console.log('AAAAAA', instanceName);
-            return new WinstonLogger({instanceName, configService, clientService});
+            return new WinstonLogger({
+              instanceName,
+              configService,
+              clientService,
+            });
           },
           inject: [ConfigService, ClientService],
         }),

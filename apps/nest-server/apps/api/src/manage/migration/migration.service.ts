@@ -9,38 +9,25 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Observable, map } from 'rxjs';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
-import { MANAGER_CLIENT } from '@app/common';
-import { MigrationRepository } from '@app/common/models/migration/migration.repository';
+import { MANAGER_CLIENT, MigrationRepository } from '@app/common';
 
 @Injectable()
 export class MigrationService {
   constructor(
-    //private readonly configService: ConfigService,
-
     @InjectRepository(MigrationRepository)
     private readonly migrationRepository: MigrationRepository,
-
-    //@Inject(MANAGER_SERVICE)
-    //private readonly clientService: ClientProxy,
-    //@Inject(WORKER_SERVICE) private readonly workerClient: ClientProxy,
 
     @Inject(MANAGER_CLIENT)
     private readonly managerClient: ClientProxy,
 
-    //private readonly loggerService: LoggerService,
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly logger: LoggerService,
   ) { }
 
   async getMigrationById(id: number) {
     try {
-      this.logger.log('Calling getHello()', MigrationService.name);
-      this.logger.debug('Calling getHello()', MigrationService.name);
-      this.logger.verbose('Calling getHello()', MigrationService.name);
-      this.logger.warn('Calling getHello()', MigrationService.name);
-
       const [result] = await this.migrationRepository.manager.query(
-        `CALL pr_migration_get_scripts_by_ids($1, $2)`,
+        `CALL pr_migration_get_scripts_by_id($1, $2)`,
         [id, null],
       );
       return result;

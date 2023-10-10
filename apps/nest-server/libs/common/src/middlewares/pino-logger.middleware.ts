@@ -1,33 +1,37 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { HttpService } from '@nestjs/axios';
+//import { HttpService } from '@nestjs/axios';
 import pino from 'pino';
+import pinoHttp from 'pino-http';
 
 @Injectable()
 export class PinoLoggerMiddleware implements NestMiddleware {
-  constructor(private readonly httpService: HttpService) { }
+  private logger: pino.Logger;
+
+  constructor() {
+    // Create a custom logger instance
+    this.logger = pino({
+      level: 'info', // Set the default log level
+      prettifier: require('pino-pretty'),
+      customLevels: {
+        error: 50,
+        warn: 40,
+      },
+    });
+  }
 
   use(req: Request, res: Response, next: NextFunction) {
+    // Create a custom log stream
     const logStream = this.createLogStream(req, res);
 
-    // Create a custom logger and specify the custom log stream
-    const logger = pino(
-      {
-        level: 'info', // Set the default log level
-        prettifier: require('pino-pretty'),
-        customLevels: {
-          error: 50,
-          warn: 40,
-        },
-      },
-      logStream,
-    );
+    // Create pino-http middleware with the custom logger
+    const pinoLogger = pinoHttp({ logger: this.logger });
 
-    const pinoLogger = require('pino-http')({ logger });
+    // Intercept and manipulate logs using the logger instance
+    this.logger.info('Intercepted pino-http log.');
 
-    pinoLogger(req, res);
-
-    next();
+    // Use the pino-http middleware
+    pinoLogger(req, res, next);
   }
 
   private createLogStream(req: Request, res: Response) {
@@ -42,7 +46,7 @@ export class PinoLoggerMiddleware implements NestMiddleware {
         };
 
         // Log data using the pino logger
-        pino().info(logData);
+        this.logger.info(logData);
 
         // Check log level and send log data to a remote server conditionally
         if (chunk.level === 40 || chunk.level === 50) {
@@ -55,13 +59,13 @@ export class PinoLoggerMiddleware implements NestMiddleware {
   private logRequestToRemoteServer(logData: any) {
     // Send log data to a remote server using HTTP service or any other method.
     // Customize this according to your requirements.
-    this.httpService.post('your-remote-log-endpoint', logData).subscribe({
-      next: (response: any) => {
-        // Handle success
-      },
-      error: (error: any) => {
-        // Handle error
-      },
-    });
+    // this.httpService.post('your-remote-log-endpoint', logData).subscribe({
+    //   next: (response: any) => {
+    //     // Handle success
+    //   },
+    //   error: (error: any) => {
+    //     // Handle error
+    //   },
+    // });
   }
 }

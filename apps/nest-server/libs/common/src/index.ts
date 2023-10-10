@@ -6,6 +6,10 @@ export * from './logger/logger.module';
 export * from './datasource/datasource.module';
 export * from './session/session.module';
 
+export * from './models';
+
+export * from './middlewares';
+
 export * from './constants';
 export * from './enums';
 

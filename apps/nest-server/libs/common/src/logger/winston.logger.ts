@@ -29,18 +29,26 @@ export class WinstonLogger extends winston.Logger {
   private configureLogger() {
     this.level = 'info';
 
+    // Read a configuration value to determine whether to silence the logger
+    const isSilent = this.options.configService.get<string>('LOGGER_IS_DISABLED');
+
+    // Set the 'silent' property based on the configuration value
+    this.silent = isSilent === 'true';
+
+    const instanceName = this.options.instanceName;
+
     const commonFormat = winston.format.combine(
       winston.format.timestamp(),
       winston.format.ms(),
-      nestWinstonModuleUtilities.format.nestLike('MyApp', {
+      nestWinstonModuleUtilities.format.nestLike(instanceName, {
         colors: true,
         prettyPrint: true,
-      })
+      }),
     );
 
     this.add(new winston.transports.Console({ format: commonFormat }));
 
-    const lowercaseInstanceName = this.options.instanceName.toLowerCase();
+    const lowercaseInstanceName = instanceName.toLowerCase();
 
     const logFileOptions = {
       level: LogLevel.INFO,
@@ -51,7 +59,7 @@ export class WinstonLogger extends winston.Logger {
       maxFiles: '1m',
       format: winston.format.combine(
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        winston.format.json()
+        winston.format.json(),
       ),
     };
 
@@ -59,14 +67,14 @@ export class WinstonLogger extends winston.Logger {
 
     const errorLogFileOptions = {
       level: LogLevel.ERROR,
-      filename: `logs/errors-${lowercaseInstanceName}-%DATE%.log`,
+      filename: `logs/${lowercaseInstanceName}-errors-%DATE%.log`,
       datePattern: 'YYYY-MM-DD',
       zippedArchive: true,
       maxSize: '20m',
       maxFiles: '7d',
       format: winston.format.combine(
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        winston.format.json()
+        winston.format.json(),
       ),
     };
 
