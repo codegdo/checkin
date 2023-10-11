@@ -1,0 +1,8 @@
+Checkin Service
+---
+Requirements:
+  Customer make a booking, select services and staffs, and view price
+  Staff recieves info about booking, update in real-time, able to accept or denied.
+  Customer checkin, done the services and checkout and pay.
+
+  

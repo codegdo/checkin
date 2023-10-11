@@ -1,7 +1,8 @@
 import { Module, DynamicModule } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { ConfigModule } from '../config/config.module';
 import { DataSource } from 'typeorm';
+
+import { ConfigModule } from '../config/config.module';
 import * as appEntities from '../models/db_app';
 
 import { TypeOrmLogger } from '../logger/typeorm.logger';
@@ -13,7 +14,6 @@ export class DataSourceModule {
     return {
       module: DataSourceModule,
       imports: [
-        ConfigModule,
         TypeOrmModule.forRootAsync({
           imports: [ConfigModule],
           inject: [ConfigService, TypeOrmLogger],

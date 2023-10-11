@@ -27,15 +27,13 @@ export class WinstonLogger extends winston.Logger {
   }
 
   private configureLogger() {
-    this.level = 'info';
-
+    this.exitOnError = false;
     // Read a configuration value to determine whether to silence the logger
-    const isSilent = this.options.configService.get<string>('LOGGER_IS_DISABLED');
-
-    // Set the 'silent' property based on the configuration value
-    this.silent = isSilent === 'true';
+    const isSilent =
+      this.options.configService.get<string>('LOGGER_IS_DISABLED');
 
     const instanceName = this.options.instanceName;
+    const lowercaseInstanceName = instanceName.toLowerCase();
 
     const commonFormat = winston.format.combine(
       winston.format.timestamp(),
@@ -46,9 +44,13 @@ export class WinstonLogger extends winston.Logger {
       }),
     );
 
-    this.add(new winston.transports.Console({ format: commonFormat }));
-
-    const lowercaseInstanceName = instanceName.toLowerCase();
+    this.add(
+      new winston.transports.Console({
+        level: LogLevel.INFO,
+        silent: isSilent === 'true',
+        format: commonFormat,
+      }),
+    );
 
     const logFileOptions = {
       level: LogLevel.INFO,
