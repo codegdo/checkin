@@ -17,8 +17,8 @@ import { ManageModule } from './manage/manage.module';
 @Module({
   imports: [
     // Shared
-    DataSourceModule.register(InstanceNameEnum.Application),
-    LoggerModule.register(InstanceNameEnum.Application),
+    DataSourceModule.register(InstanceNameEnum.Api),
+    LoggerModule.register(InstanceNameEnum.Api),
     ConfigModule,
     ClientModule,
     //

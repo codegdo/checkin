@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { NestExpressApplication } from '@nestjs/platform-express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { ApiModule } from './api.module';
@@ -13,7 +13,7 @@ async function bootstrap() {
   });
 
   const configService = app.get(ConfigService);
-  const port = configService.get<number>('API_PORT');
+  const port = configService.get<number>('API_PORT') || 5000;
 
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
@@ -35,6 +35,6 @@ async function bootstrap() {
     //exposedHeaders: ['Authorization ', 'Expiry', 'X-Refresh-Token'],
   });
 
-  await app.listen(port || 5000);
+  await app.listen(port);
 }
 bootstrap();

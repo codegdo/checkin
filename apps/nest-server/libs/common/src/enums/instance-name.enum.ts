@@ -1,5 +1,5 @@
 export enum InstanceNameEnum {
-    Application = 'Application',
-    Manager = 'Manager',
-    Worker = 'Worker',
-  }
+  Api = 'Api',
+  Manager = 'Manager',
+  Worker = 'Worker',
+}

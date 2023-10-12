@@ -29,8 +29,7 @@ export class WinstonLogger extends winston.Logger {
   private configureLogger() {
     this.exitOnError = false;
     // Read a configuration value to determine whether to silence the logger
-    const isSilent =
-      this.options.configService.get<string>('LOGGER_IS_DISABLED');
+    const isSilent = this.options.configService.get<string>('LOGGER_IS_SILENT');
 
     const instanceName = this.options.instanceName;
     const lowercaseInstanceName = instanceName.toLowerCase();

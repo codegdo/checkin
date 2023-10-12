@@ -1,12 +1,12 @@
 import { Module, DynamicModule } from '@nestjs/common';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { ConfigService } from '@nestjs/config';
 
 import { ConfigModule } from '../config/config.module';
 import * as appEntities from '../models/db_app';
-
 import { TypeOrmLogger } from '../logger/typeorm.logger';
-import { ConfigService } from '@nestjs/config';
+import { InstanceNameEnum } from '../enums';
 
 @Module({})
 export class DataSourceModule {
@@ -23,36 +23,41 @@ export class DataSourceModule {
           ) => {
             let username = null;
             let password = null;
+            let database = null;
 
             switch (instanceName) {
-              case 'Manager':
+              case InstanceNameEnum.Api:
+                username = configService.get('POSTGRES_API_USERNAME');
+                password = configService.get('POSTGRES_API_PASSWORD');
+                database = configService.get('POSTGRES_DB_APP');
+                break;
+              case InstanceNameEnum.Manager:
                 username = configService.get('POSTGRES_MANAGER_USERNAME');
                 password = configService.get('POSTGRES_MANAGER_PASSWORD');
+                database = configService.get('POSTGRES_DB_APP');
                 break;
-              case 'Worker':
+              case InstanceNameEnum.Worker:
                 username = configService.get('POSTGRES_WORKER_USERNAME');
                 password = configService.get('POSTGRES_WORKER_PASSWORD');
+                database = configService.get('POSTGRES_DB_APP');
                 break;
               default:
-                username = configService.get('POSTGRES_APP_USERNAME');
-                password = configService.get('POSTGRES_APP_PASSWORD');
+                username = configService.get('POSTGRES_USERNAME');
+                password = configService.get('POSTGRES_PASSWORD');
+                database = configService.get('POSTGRES_DB');
             }
 
             const databaseConfig: TypeOrmModuleOptions = {
               type: 'postgres',
               host: configService.get('POSTGRES_HOST'),
+              port: configService.get('POSTGRES_PORT'),
               username,
               password,
-              port: configService.get('POSTGRES_PORT'),
-              database: configService.get('POSTGRES_DB_APP'),
-              name: 'default',
-              entities: [...Object.values(appEntities)],
-              autoLoadEntities: true,
+              database,
               synchronize: false,
-              logger: typeOrmLogger,
               //logging: true,
-              //max: 10,
-              //min: 2,
+              logger: typeOrmLogger,
+              entities: [...Object.values(appEntities)],
             };
             return databaseConfig;
           },
