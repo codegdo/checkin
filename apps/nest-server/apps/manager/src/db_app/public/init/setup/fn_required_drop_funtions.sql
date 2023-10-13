@@ -9,7 +9,7 @@ BEGIN
   LOOP
     -- Use a BEGIN ... EXCEPTION block to handle exceptions when dropping functions.
     BEGIN
-      EXECUTE 'DROP FUNCTION IF EXISTS ' || quote_literal(function_name);
+      EXECUTE 'DROP FUNCTION IF EXISTS ' || function_name;
       RAISE NOTICE 'Dropped function: %', function_name;
     EXCEPTION
       WHEN others THEN

@@ -9,8 +9,8 @@ RETURNS TABLE (
 BEGIN
   RETURN QUERY (
     SELECT
-      t.tgnamespace::regnamespace AS schema_name,
-      t.tgrelid::regclass AS table_name,
+      n.nspname AS schema_name,
+      c.relname AS table_name,
       t.tgname AS trigger_name,
       CASE t.tgtype & B'00100000' WHEN B'00100000' THEN 'INSTEAD OF' ELSE 'BEFORE' END AS trigger_timing,
       CASE t.tgtype & B'00001111'
@@ -22,6 +22,8 @@ BEGIN
       END AS trigger_event
     FROM
       pg_catalog.pg_trigger t
+      JOIN pg_catalog.pg_class c ON t.tgrelid = c.oid
+      JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
     WHERE
       t.tgname = triggerName
   );

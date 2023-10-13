@@ -8,12 +8,13 @@ RETURNS TABLE (
 BEGIN
   RETURN QUERY (
     SELECT
-      p.nspname AS schema_name,
+      n.nspname AS schema_name,
       p.proname AS function_name,
       pg_get_function_identity_arguments(p.oid) AS function_arguments,
       pg_typeof(p.prorettype)::regtype AS return_type
     FROM
       pg_proc p
+      JOIN pg_namespace n ON n.oid = p.pronamespace
     WHERE
       p.proname = functionName
   );
