@@ -1,13 +1,23 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Post } from '@nestjs/common';
 import { MigrationService } from './migration.service';
 
 @Controller()
 export class MigrationController {
   constructor(private readonly migrationService: MigrationService) { }
 
-  @Get(':id')
-  async getMigrationById(@Param('id') id: number) {
-    return this.migrationService.getMigrationById(id);
+  @Get()
+  async getAllMigrations() {
+    return this.migrationService.getAllMigrations();
+  }
+
+  @Post()
+  async createNewMigration() {
+    return this.migrationService.createNewMigration();
+  }
+
+  @Get(':id/scripts')
+  async getMigrationScriptsByMigrationId(@Param('id') id: number) {
+    return this.migrationService.getMigrationScriptsByMigrationId(id);
   }
 
   @Get('runs/:id')

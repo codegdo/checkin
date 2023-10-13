@@ -24,7 +24,46 @@ export class MigrationService {
     private readonly logger: LoggerService,
   ) { }
 
+  async getAllMigrations() {
+    try {
+      const [result] = await this.migrationRepository.manager.query(
+        `CALL pr_migration_get_all_migrations($1)`,
+        [null],
+      );
+      return result;
+    } catch (error) {
+      this.logger.error('ERROR', error, MigrationService.name);
+      throw new UnauthorizedException();
+    }
+  }
+
+  async createNewMigration() {
+    try {
+      const [result] = await this.migrationRepository.manager.query(
+        `CALL pr_migration_get_all_migrations($1)`,
+        [null],
+      );
+      return result;
+    } catch (error) {
+      this.logger.error('ERROR', error, MigrationService.name);
+      throw new UnauthorizedException();
+    }
+  }
+
   async getMigrationById(id: number) {
+    try {
+      const [result] = await this.migrationRepository.manager.query(
+        `CALL pr_migration_get_scripts_by_id($1, $2)`,
+        [id, null],
+      );
+      return result;
+    } catch (error) {
+      this.logger.error('ERROR', error, MigrationService.name);
+      throw new UnauthorizedException();
+    }
+  }
+
+  async getMigrationScriptsByMigrationId(id: number) {
     try {
       const [result] = await this.migrationRepository.manager.query(
         `CALL pr_migration_get_scripts_by_id($1, $2)`,

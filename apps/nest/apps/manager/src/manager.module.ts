@@ -16,14 +16,9 @@ import { UtilModule } from './util/util.module';
     MigrationModule,
     SetupModule,
 
-    UtilModule, 
+    UtilModule,
   ],
   controllers: [],
-  providers: [
-    {
-      provide: 'APP_NAME', // Use a unique token to identify the configuration
-      useValue: 'Manager',
-    },
-  ],
+  providers: [],
 })
 export class ManagerModule { }

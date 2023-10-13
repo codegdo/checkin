@@ -13,6 +13,7 @@ export const configTablesAndFunctions = {
       scriptOrder: '0',
       scriptPath: 'db_app/public/sys/tables/config.sql',
     },
+    // TYPES
     // FUNCTIONS
     {
       id: 100,

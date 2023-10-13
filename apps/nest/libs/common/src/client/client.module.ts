@@ -18,11 +18,11 @@ import { ConfigService } from '@nestjs/config';
         name: WORKER_CLIENT,
         imports: [ConfigModule],
         inject: [ConfigService],
-        useFactory: (configSerivce: ConfigService) => ({
+        useFactory: (configService: ConfigService) => ({
           transport: Transport.TCP,
           options: {
-            host: configSerivce.get<string>('WORKER_HOST'),
-            port: configSerivce.get<number>('WORKER_PORT'),
+            host: configService.get<string>('WORKER_HOST'),
+            port: configService.get<number>('WORKER_PORT'),
           },
         }),
       },
@@ -30,11 +30,11 @@ import { ConfigService } from '@nestjs/config';
         name: MANAGER_CLIENT,
         imports: [ConfigModule],
         inject: [ConfigService],
-        useFactory: (configSerivce: ConfigService) => ({
+        useFactory: (configService: ConfigService) => ({
           transport: Transport.TCP,
           options: {
-            host: configSerivce.get<string>('MANAGER_HOST'),
-            port: configSerivce.get<number>('MANAGER_PORT'),
+            host: configService.get<string>('MANAGER_HOST'),
+            port: configService.get<number>('MANAGER_PORT'),
           },
         }),
       },

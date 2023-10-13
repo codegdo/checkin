@@ -14,15 +14,16 @@ DECLARE
     'pr_drop_functions',
     'pr_drop_procedures',
     'pr_drop_schemas',
-    'pr_drop_tables'
+    'pr_drop_tables',
+    'pr_drop_types'
   ]::TEXT[];
   procedure_name TEXT;
 
 BEGIN
   -- Functions
-  CALL pr_required_drop_functions(function_names);
+  CALL pr_system_drop_functions(function_names);
 
   -- Procedures
-  CALL pr_required_drop_procedures(procedure_names);
+  CALL pr_system_drop_procedures(procedure_names);
 
 END $$;

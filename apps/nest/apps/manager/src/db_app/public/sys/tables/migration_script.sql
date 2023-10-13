@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS migration_script (
 
   database_name VARCHAR(50) NOT NULL,
   schema_name VARCHAR(50) NOT NULL,
-  object_type VARCHAR(50) NOT NULL CHECK (object_type IN ('table', 'function', 'trigger', 'procedure', 'synonym', 'view')),
+  object_type VARCHAR(50) NOT NULL CHECK (object_type IN ('table', 'function', 'trigger', 'procedure', 'synonym', 'view', 'type')),
 
   script_type VARCHAR(10) NOT NULL DEFAULT 'running' CHECK (script_type IN ('running', 'rollback')),
   script_path VARCHAR(255) NOT NULL,
