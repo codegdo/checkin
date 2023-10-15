@@ -16,8 +16,8 @@ export class MigrationController {
   }
 
   @Get(':id/scripts')
-  async getMigrationScriptsByMigrationId(@Param('id') id: number) {
-    return this.migrationService.getMigrationScriptsByMigrationId(id);
+  async getScriptsForMigration(@Param('id') id: number) {
+    return this.migrationService.getScriptsForMigration(id);
   }
 
   @Get('runs/:id')

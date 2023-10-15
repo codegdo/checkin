@@ -6,22 +6,27 @@ DECLARE
   type_name TEXT;
 
   function_names TEXT[] := ARRAY[
-    'fn_get_all_privileges',
-    'fn_get_camel_case_split',
-    'fn_get_generate_random_string',
-    'fn_get_granted_privileges_by_user',
-    'fn_get_lookup_value_split_to_json',
-    'fn_get_lookup_value',
-    'fn_get_lookup_value',
-    'fn_get_user_role_info'
+    'util_fn_get_all_privileges',
+    'util_fn_get_camel_case_split',
+    'util_fn_get_function_by_name',
+    'util_fn_get_generate_random_string',
+    'util_fn_get_granted_privileges_by_user',
+    'util_fn_get_lookup_value_split_to_json',
+    'util_fn_get_lookup_value',
+    'util_fn_get_procedure_by_name',
+    'util_fn_get_schema_by_name',
+    'util_fn_get_table_by_name',
+    'util_fn_get_trigger_by_name',
+    'util_fn_get_user_role_info'
   ]::TEXT[];
   function_name TEXT;
 
 BEGIN
-  -- Types
-  CALL pr_drop_types(type_names);
 
   -- Functions
-  CALL pr_drop_functions(function_names);
+  CALL system_pr_drop_functions(function_names);
+
+  -- Types
+  CALL system_pr_drop_types(type_names);
 
 END $$;

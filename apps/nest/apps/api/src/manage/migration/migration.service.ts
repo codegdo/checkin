@@ -53,7 +53,7 @@ export class MigrationService {
   async getMigrationById(id: number) {
     try {
       const [result] = await this.migrationRepository.manager.query(
-        `CALL pr_migration_get_scripts_by_id($1, $2)`,
+        `CALL migration_pr_get_scripts_by_id($1, $2)`,
         [id, null],
       );
       return result;
@@ -63,10 +63,10 @@ export class MigrationService {
     }
   }
 
-  async getMigrationScriptsByMigrationId(id: number) {
+  async getScriptsForMigration(id: number) {
     try {
       const [result] = await this.migrationRepository.manager.query(
-        `CALL pr_migration_get_scripts_by_id($1, $2)`,
+        `CALL migration_pr_get_scripts_for_migration($1, $2)`,
         [id, null],
       );
       return result;

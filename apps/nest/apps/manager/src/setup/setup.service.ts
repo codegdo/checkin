@@ -79,10 +79,10 @@ export class SetupService {
     try {
       await queryRunner.connect();
 
-      for (const runningScript of initialFunctions) {
+      for (const initialFunction of initialFunctions) {
         await this.utilService.executeScript(
           queryRunner,
-          runningScript.scripts,
+          initialFunction.runningScripts,
         );
       }
 
@@ -106,10 +106,10 @@ export class SetupService {
     try {
       await queryRunner.connect();
 
-      for (const runningScript of initialFunctions) {
+      for (const initialFunction of initialFunctions) {
         await this.utilService.executeScript(
           queryRunner,
-          runningScript.rollbackScripts,
+          initialFunction.rollbackScripts,
         );
       }
 
@@ -133,7 +133,7 @@ export class SetupService {
     try {
       await queryRunner.connect();
 
-      await queryRunner.manager.query(`CALL pr_create_schemas($1)`, [
+      await queryRunner.manager.query(`CALL system_pr_create_schemas($1)`, [
         initialSchemas.main,
       ]);
 
@@ -154,7 +154,7 @@ export class SetupService {
     try {
       await queryRunner.connect();
 
-      await queryRunner.manager.query(`CALL pr_drop_schemas($1)`, [
+      await queryRunner.manager.query(`CALL system_pr_drop_schemas($1)`, [
         initialSchemas.main,
       ]);
 
@@ -176,7 +176,7 @@ export class SetupService {
       await queryRunner.connect();
 
       for (const migration of migrations) {
-        await this.utilService.executeScript(queryRunner, migration.scripts);
+        await this.utilService.executeScript(queryRunner, migration.runningScripts);
       }
 
       return {

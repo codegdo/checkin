@@ -38,7 +38,7 @@ export class UtilService {
 
         // Execute the script
         //await queryRunner.query(scriptContent);
-        await queryRunner.manager.query(`CALL pr_system_run_script($1)`, [
+        await queryRunner.manager.query(`CALL _pg_execute_script($1)`, [
           scriptContent,
         ]);
 

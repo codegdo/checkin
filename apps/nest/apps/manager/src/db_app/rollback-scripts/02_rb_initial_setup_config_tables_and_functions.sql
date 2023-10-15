@@ -1,8 +1,8 @@
 DO $$ 
 DECLARE
   function_names TEXT[] := ARRAY[
-    'fn_get_config_by_key',
-    'fn_is_config_key_boolean'
+    'config_fn_get_config_by_key',
+    'config_fn_is_config_key_boolean'
   ]::TEXT[];
   function_name TEXT;
 
@@ -14,12 +14,14 @@ DECLARE
   ]::TEXT[];
   table_name TEXT;
 BEGIN
-  -- Functions
-  CALL pr_drop_functions(function_names);
-
   -- Procedures
-  CALL pr_drop_procedures(procedure_names);
+  CALL system_pr_drop_procedures(procedure_names);
+
+  -- Functions
+  CALL system_pr_drop_functions(function_names);
+
+  -- Types
 
   -- Tables
-  CALL pr_drop_tables(table_names);
+  CALL system_pr_drop_tables(table_names);
 END $$;
