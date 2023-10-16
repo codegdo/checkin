@@ -25,13 +25,17 @@ export class MigrationService {
   ) { }
 
   async getAllMigrations() {
-    console.log('AAA');
     try {
-      const [result] = await this.migrationRepository.manager.query(
-        `CALL migration_pr_get_all_migrations($1)`,
-        [null],
-      );
-      return result;
+      return this.migrationRepository.getAllMigrations();
+    } catch (error) {
+      this.logger.error('ERROR', error, MigrationService.name);
+      throw new UnauthorizedException();
+    }
+  }
+
+  async getMigrationById(id) {
+    try {
+      return this.migrationRepository.getMigrationById(id);
     } catch (error) {
       this.logger.error('ERROR', error, MigrationService.name);
       throw new UnauthorizedException();
@@ -120,3 +124,4 @@ export class MigrationService {
     }
   }
 }
+

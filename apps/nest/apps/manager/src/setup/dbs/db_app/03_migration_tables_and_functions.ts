@@ -197,11 +197,11 @@ export const migrationTablesAndFunctions = {
       id: 1,
       category: 'Initial Setup',
       migration: 'Migration Tables And Functions',
-      scriptName: '03_rb_initial_setup_migration_tables_and_funtions',
+      scriptName: '03_rb_migration_tables_and_funtions',
       scriptType: 'rollback',
       scriptOrder: '0',
       scriptPath:
-        'db_app/rollback-scripts/03_rb_initial_setup_migration_tables_and_functions.sql',
+        'db_app/rollback-scripts/initial_setup/03_rb_migration_tables_and_functions.sql',
     },
   ],
 };

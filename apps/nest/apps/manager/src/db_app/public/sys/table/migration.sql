@@ -47,7 +47,8 @@ BEGIN
   IF NOT EXISTS (SELECT 1 FROM migration) THEN
     -- Insert data into the 'migration' table
     INSERT INTO migration (migration_category_id, name, description, execution_order, app_version, is_required) VALUES
-    (database_initialization,'Common Tables and Functions','Initializes common tables and functions in the database.',0,'1.0.0',TRUE);
+    (database_initialization,'Dbo Tables and Functions','Initializes dbo common tables and functions in the database.',0,'1.0.0',TRUE),
+    (database_initialization,'Sec Tables and Functions','Initializes sec ables and functions in the database.',1,'1.0.0',TRUE);
   ELSE
     -- The 'migration' table has records
     RAISE NOTICE 'The migration table is not empty.';

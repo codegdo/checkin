@@ -23,16 +23,16 @@ CREATE TABLE IF NOT EXISTS migration_rollback (
 
 DO $$
 DECLARE
-  common_tables_and_functions INT;
+  dbo_tables_and_functions INT;
 BEGIN
   -- Find the ID of the 'Common Tables and Functions' migration
-  SELECT id INTO common_tables_and_functions FROM migration WHERE name = 'Common Tables and Functions';
+  SELECT id INTO dbo_tables_and_functions FROM migration WHERE name = 'Common Tables and Functions';
 
   -- Check if the 'migration_rollback' table has no records
   IF NOT EXISTS (SELECT 1 FROM migration_rollback) THEN
     -- Insert data into the 'migration_rollback' table
     INSERT INTO migration_rollback (migration_id) VALUES
-    (common_tables_and_functions);
+    (dbo_tables_and_functions);
   ELSE
     -- The 'migration_rollback' table has records
     RAISE NOTICE 'The migration_rollback table is not empty.';

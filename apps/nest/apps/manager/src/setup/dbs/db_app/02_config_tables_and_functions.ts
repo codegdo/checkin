@@ -36,11 +36,11 @@ export const configTablesAndFunctions = {
       id: 1,
       category: 'Initial Setup',
       migration: 'Config Tables And Functions',
-      scriptName: '02_rb_initial_setup_config_tables_and_functions',
+      scriptName: '02_rb_config_tables_and_functions',
       scriptType: 'rollback',
       scriptOrder: '0',
       scriptPath:
-        'db_app/rollback-scripts/02_rb_initial_setup_config_tables_and_functions.sql',
+        'db_app/rollback-scripts/initial_setup/02_rb_config_tables_and_functions.sql',
     },
   ],
 };

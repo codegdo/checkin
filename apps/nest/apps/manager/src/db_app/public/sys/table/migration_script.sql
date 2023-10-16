@@ -23,21 +23,21 @@ CREATE TABLE IF NOT EXISTS migration_script (
 
 DO $$
 DECLARE
-  common_tables_and_functions INT;
-  rollback_common_tables_and_functions INT;
+  dbo_tables_and_functions INT;
+  rollback_dbo_tables_and_functions INT;
 BEGIN
   -- Find the ID of the 'Common Tables and Functions' migration
-  SELECT id INTO common_tables_and_functions FROM migration WHERE name = 'Common Tables and Functions';
-  -- Find the ID of the 'Rollback Database Common Tables And Functions' migration_rollback
-  SELECT id INTO rollback_common_tables_and_functions FROM migration_rollback mr WHERE mr.id = common_tables_and_functions;
+  SELECT id INTO dbo_tables_and_functions FROM migration WHERE name = 'Dbo Tables and Functions';
+  -- Find the ID of the 'Rollback Database Dbo Tables And Functions' migration_rollback
+  SELECT id INTO rollback_dbo_tables_and_functions FROM migration_rollback mr WHERE mr.id = dbo_tables_and_functions;
 
   -- Check if the 'migration_script' table has no records
   IF NOT EXISTS (SELECT 1 FROM migration_script) THEN
     -- Insert data into the 'migration_script' table
     INSERT INTO migration_script (migration_id, migration_rollback_id, name, description, script_type, script_path, script_order) VALUES
-(common_tables_and_functions,null,'language','Add common table language.','running','db_app/public/dbo/table/language.sql',0),
-(common_tables_and_functions,null,'territory','Add common table territory.','running','db_app/public/dbo/table/territory.sql',1),
-(null,rollback_common_tables_and_functions,'rb_common_tables_and_functions','Rollback common tables and functions.','rollback','db_app/rollback-scripts/00001_rb_common_tables_and_functions.sql',0);
+    (dbo_tables_and_functions,null,'language','Add dbo table language.','running','db_app/public/dbo/table/language.sql',0),
+    (dbo_tables_and_functions,null,'territory','Add dbo table territory.','running','db_app/public/dbo/table/territory.sql',1),
+    (null,rollback_dbo_tables_and_functions,'rb_dbo_tables_and_functions','Rollback dbo tables and functions.','rollback','db_app/rollback-scripts/database_initialization/01_rb_dbo_tables_and_functions.sql',0);
   ELSE
     -- The 'migration_script' table has records
     RAISE NOTICE 'The migration table is not empty.';

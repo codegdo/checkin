@@ -127,11 +127,11 @@ export const utilFunctionsAndPlugins = {
       id: 1,
       category: 'Initial Setup',
       migration: 'Util Functions And Plugins',
-      scriptName: '01_rb_initial_setup_util_functions_and_plugins',
+      scriptName: '01_rb_util_functions_and_plugins',
       scriptType: 'rollback',
       scriptOrder: '0',
       scriptPath:
-        'db_app/rollback-scripts/01_rb_initial_setup_util_functions_and_plugins.sql',
+        'db_app/rollback-scripts/initial_setup/01_rb_util_functions_and_plugins.sql',
     },
   ],
 };
