@@ -25,9 +25,10 @@ export class MigrationService {
   ) { }
 
   async getAllMigrations() {
+    console.log('AAA');
     try {
       const [result] = await this.migrationRepository.manager.query(
-        `CALL pr_migration_get_all_migrations($1)`,
+        `CALL migration_pr_get_all_migrations($1)`,
         [null],
       );
       return result;

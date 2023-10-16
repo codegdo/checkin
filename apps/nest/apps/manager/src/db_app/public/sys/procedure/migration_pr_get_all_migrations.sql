@@ -26,12 +26,12 @@ $$ SECURITY DEFINER LANGUAGE plpgsql;
 DO $$
 BEGIN
   -- Revoke EXECUTE permission from 'public' role
-  REVOKE EXECUTE ON PROCEDURE migration_pr_get_all_migrations(json) FROM public;
+  REVOKE EXECUTE ON PROCEDURE migration_pr_get_all_migrations(out json) FROM public;
 
   -- Check if 'api_manager' role exists
   IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'api_manager') THEN
     -- If 'api_manager' role exists, grant EXECUTE permission
-    GRANT EXECUTE ON PROCEDURE migration_pr_get_all_migrations(json) TO api_manager;
+    GRANT EXECUTE ON PROCEDURE migration_pr_get_all_migrations(out json) TO api_manager;
   ELSE
     -- If 'api_manager' role does not exist, raise a notice
     RAISE NOTICE 'The role ''api_manager'' does not exist.';
