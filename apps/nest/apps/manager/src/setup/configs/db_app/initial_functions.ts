@@ -134,10 +134,10 @@ export const initialFunctions = {
       id: 1,
       category: 'Initial Setup',
       migration: 'Initial Functions',
-      scriptName: '00_rb_initial_functions.sql',
+      scriptName: 'rb_initial_functions.sql',
       scriptType: 'rollback',
       scriptOrder: '0',
-      scriptPath: 'db_app/rollback-scripts/initial_setup/00_rb_initial_functions.sql',
+      scriptPath: 'db_app/rollback-scripts/initial_setup/rb_initial_functions.sql',
     },
   ],
 };

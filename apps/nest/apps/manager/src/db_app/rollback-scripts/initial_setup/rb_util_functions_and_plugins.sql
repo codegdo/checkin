@@ -1,10 +1,5 @@
 DO $$
 DECLARE
-  type_names TEXT[] := ARRAY[
-    'type_user_role_info'
-  ]::TEXT[];
-  type_name TEXT;
-
   function_names TEXT[] := ARRAY[
     'util_fn_get_all_privileges',
     'util_fn_get_camel_case_split',
@@ -21,12 +16,15 @@ DECLARE
   ]::TEXT[];
   function_name TEXT;
 
-BEGIN
+  type_names TEXT[] := ARRAY[
+    'type_user_role_info'
+  ]::TEXT[];
+  type_name TEXT;
 
+BEGIN
   -- Functions
   CALL system_pr_drop_functions(function_names);
 
   -- Types
   CALL system_pr_drop_types(type_names);
-
 END $$;

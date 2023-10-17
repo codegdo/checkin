@@ -64,7 +64,13 @@ export class WinstonLogger extends winston.Logger {
       ),
     };
 
-    this.add(new DailyRotateFile(logFileOptions));
+    const transportLogFile = new DailyRotateFile(logFileOptions);
+
+    transportLogFile.on('rotate', (oldFileName, newFileName) => {
+      console.log(oldFileName, newFileName);
+    });
+
+    this.add(transportLogFile);
 
     const errorLogFileOptions = {
       level: LogLevel.ERROR,
@@ -79,7 +85,13 @@ export class WinstonLogger extends winston.Logger {
       ),
     };
 
-    this.add(new DailyRotateFile(errorLogFileOptions));
+    const transportErrorLogFile = new DailyRotateFile(errorLogFileOptions);
+
+    transportErrorLogFile.on('rotate', (oldFileName, newFileName) => {
+      console.log(oldFileName, newFileName);
+    });
+
+    this.add(transportErrorLogFile);
 
     this.add(new WinstonTransport(this.options.clientService));
   }

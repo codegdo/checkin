@@ -5,6 +5,7 @@ import AuthGuard from "./components/guard/auth.guard";
 import AuthRoute from "./pages/auth/auth.route";
 import HomeRoute from "./pages/home/home.route";
 import AccountRoute from "./pages/account/account.route";
+import ManageRoute from "./pages/manage/manage.route";
 
 const routes = [
   {
@@ -17,6 +18,15 @@ const routes = [
       {
         path: '/account/*',
         element: <AccountRoute />
+      }
+    ]
+  },
+  {
+    element: <AuthGuard />,
+    children: [
+      {
+        path: '/manage/*',
+        element: <ManageRoute />
       }
     ]
   },

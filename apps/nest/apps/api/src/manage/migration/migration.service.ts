@@ -2,6 +2,7 @@ import {
   Inject,
   Injectable,
   LoggerService,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
@@ -35,7 +36,13 @@ export class MigrationService {
 
   async getMigrationById(id) {
     try {
-      return this.migrationRepository.getMigrationById(id);
+      const [found] = await this.migrationRepository.getMigrationById(id);
+
+      if (!found) {
+        throw new NotFoundException(`Migration with ID ${id} not found`);
+      }
+
+      return found;
     } catch (error) {
       this.logger.error('ERROR', error, MigrationService.name);
       throw new UnauthorizedException();

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
-import { databases } from './setup.data';
+import { configs } from './setup.config';
 import { UtilService } from '../util/util.service';
 
 interface DatabaseOperationPayload {
@@ -73,7 +73,7 @@ export class SetupService {
   private async seedInitialFunctions(
     databaseName: string,
   ): Promise<OperationResult> {
-    const { initialFunctions } = databases[databaseName];
+    const { initialFunctions } = configs[databaseName];
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
@@ -100,7 +100,7 @@ export class SetupService {
   private async dropInitialFunctions(
     databaseName: string,
   ): Promise<OperationResult> {
-    const { initialFunctions } = databases[databaseName];
+    const { initialFunctions } = configs[databaseName];
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
@@ -127,7 +127,7 @@ export class SetupService {
   private async seedInitialSchemas(
     databaseName: string,
   ): Promise<OperationResult> {
-    const { initialSchemas } = databases[databaseName];
+    const { initialSchemas } = configs[databaseName];
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
@@ -148,7 +148,7 @@ export class SetupService {
   private async dropInitialSchemas(
     databaseName: string,
   ): Promise<OperationResult> {
-    const { initialSchemas } = databases[databaseName];
+    const { initialSchemas } = configs[databaseName];
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
@@ -169,7 +169,7 @@ export class SetupService {
   private async seedInitialSetup(
     databaseName: string,
   ): Promise<OperationResult> {
-    const { migrations } = databases[databaseName];
+    const { migrations } = configs[databaseName];
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {
@@ -193,7 +193,7 @@ export class SetupService {
   private async dropInitialSetup(
     databaseName: string,
   ): Promise<OperationResult> {
-    const { migrations } = databases[databaseName];
+    const { migrations } = configs[databaseName];
     const queryRunner = this.dataSource.createQueryRunner();
 
     try {

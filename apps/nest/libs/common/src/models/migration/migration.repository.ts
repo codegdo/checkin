@@ -52,7 +52,7 @@ export class MigrationRepository extends Repository<Migration> {
     }
   }
 
-  async getMigrationById(id: number): Promise<GetMigrationDto> {
+  async getMigrationById(id: number): Promise<GetMigrationDto[]> {
     try {
       const [rawData] = await this.manager.query(
         `CALL migration_pr_get_migration_by_id($1, $2)`,
@@ -69,7 +69,7 @@ export class MigrationRepository extends Repository<Migration> {
 
         return migrations;
       } else {
-        return null; // Return an empty array when there are no migrations.
+        return []; // Return an empty array when there are no migrations.
       }
     } catch (error) {
       // Log the specific database-related error
