@@ -69,7 +69,7 @@ export class MigrationRepository extends Repository<Migration> {
 
         return migrations;
       } else {
-        return []; // Return an empty array when there are no migrations.
+        return null; // Return an empty array when there are no migrations.
       }
     } catch (error) {
       // Log the specific database-related error

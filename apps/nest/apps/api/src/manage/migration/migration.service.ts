@@ -55,19 +55,6 @@ export class MigrationService {
     }
   }
 
-  async getMigrationById(id: number) {
-    try {
-      const [result] = await this.migrationRepository.manager.query(
-        `CALL migration_pr_get_scripts_by_id($1, $2)`,
-        [id, null],
-      );
-      return result;
-    } catch (error) {
-      this.logger.error('ERROR', error, MigrationService.name);
-      throw new UnauthorizedException();
-    }
-  }
-
   async getScriptsForMigration(id: number) {
     try {
       const [result] = await this.migrationRepository.manager.query(
