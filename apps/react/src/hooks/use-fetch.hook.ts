@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { http, RequestOptions } from '../helpers';
 import { BASE_URL } from '../app.constant';
 import { stringifyUrl } from '../utils';
@@ -18,8 +18,8 @@ type ResponseFetch<T> = {
   isSuccess: boolean;
   error: Error | undefined;
   data: T | undefined;
-  useMutation: (options?: RequestOptions) => Promise<void>;
-  useQuery: (customBaseUrl?: string) => Promise<void>;
+  mutate: (options?: RequestOptions) => Promise<void>;
+  query: (customBaseUrl?: string) => Promise<void>;
 };
 
 export const useFetch = <T>(
@@ -35,7 +35,7 @@ export const useFetch = <T>(
   const isError = status === FetchStatus.Error;
   const isSuccess = status === FetchStatus.Success;
 
-  const useMutation = useCallback(async (options: RequestOptions = {}) => {
+  const mutate = async (options: RequestOptions = {}) => {
     const baseUrl = options.baseUrl || BASE_URL;
     const strUrl = stringifyUrl(`${baseUrl}${url}`, params);
 
@@ -52,9 +52,9 @@ export const useFetch = <T>(
       setError(error as Error);
       setStatus(FetchStatus.Error);
     }
-  }, [url, params]);
+  };
 
-  const useQuery = useCallback(async (customBaseUrl?: string) => {
+  const query = async (customBaseUrl?: string) => {
     const baseUrl = customBaseUrl || BASE_URL;
     const strUrl = stringifyUrl(`${baseUrl}${url}`, params);
 
@@ -71,7 +71,7 @@ export const useFetch = <T>(
       setError(error as Error);
       setStatus(FetchStatus.Error);
     }
-  }, [url, params]);
+  };
 
   return {
     status,
@@ -81,7 +81,7 @@ export const useFetch = <T>(
     isSuccess,
     error,
     data,
-    useMutation,
-    useQuery,
+    mutate,
+    query,
   };
 };

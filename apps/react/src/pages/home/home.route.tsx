@@ -1,10 +1,10 @@
 import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
 
-import TemplateLoader from "../../components/loader/template.loader";
+import { Template } from "@/components";
 
-const Index = TemplateLoader(lazy(() => import('./home.index')));
-const Dashboard = TemplateLoader(lazy(() => import('./dashboard/dashboard.page')));
+const Index = Template(lazy(() => import('./home.index')));
+const Dashboard = Template(lazy(() => import('./dashboard/dashboard.page')));
 
 function HomeRoute() {
 

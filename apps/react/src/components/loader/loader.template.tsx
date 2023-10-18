@@ -1,7 +1,7 @@
-import { FC, Suspense, useMemo } from 'react';
+import React, { FC, Suspense, useMemo, ReactElement } from 'react';
 import parse, { HTMLReactParserOptions } from 'html-react-parser';
 import DOMPurify from 'dompurify';
-import { Options, TemplateProps } from './types';
+import { Options, TemplateProps } from './template.type';
 
 const html = DOMPurify.sanitize(`
   <div>
@@ -14,9 +14,8 @@ const html = DOMPurify.sanitize(`
   </div>
 `, { ADD_TAGS: ['jsx'] });
 
-function Template(Component: FC<TemplateProps | object>) {
-
-  return function TemplateLoader(props: TemplateProps) {
+export function Template(Component: FC<TemplateProps | object>): FC<TemplateProps> {
+  return (props: TemplateProps): ReactElement => {
     const options = ({ fallback }: Options): HTMLReactParserOptions => {
       return {
         replace: (domNode): false | void | object | Element | null | undefined => {
@@ -36,16 +35,15 @@ function Template(Component: FC<TemplateProps | object>) {
       };
     };
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [template, fallback] = useMemo(() => {
       return [parse(html, options({ fallback: false })), parse(html, options({ fallback: true }))];
     }, []);
 
     return (
-      <Suspense fallback={fallback}>
+      <Suspense fallback={fallback as ReactElement}>
         {template}
       </Suspense>
     );
   };
 }
-
-export default Template;

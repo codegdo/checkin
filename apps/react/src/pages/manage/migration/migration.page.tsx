@@ -1,16 +1,26 @@
-import { useEffect } from "react";
-import { getAllMigrations } from "./migration.api";
+import { Link } from "react-router-dom";
+import { useGetAllMigrations } from "./api";
 
 function Migration() {
-  const api = getAllMigrations();
+  const { isLoading, data } = useGetAllMigrations();
 
-  useEffect(() => {
-    api.useQuery();
-  }, []);
+  if (isLoading) {
+    return <div>loading...</div>
+  }
 
-  console.log(api);
-
-  return <div>Migration</div>;
+  return (
+    <div>
+      <div>
+        <Link to={`./categories`}>Edit Migration Categories</Link>
+        <Link to={`./scripts`}>Edit Migration Scripts</Link>
+      </div>
+      {
+        data?.map((item) => {
+          return <div key={item.id}><Link to={`./${item.id}`}>{item.name}</Link></div>
+        })
+      }
+    </div>
+  );
 }
 
 export default Migration;

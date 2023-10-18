@@ -1,9 +1,9 @@
 import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
 
-import TemplateLoader from "../../components/loader/template.loader";
+import { Template } from "@/components";
 
-const Index = TemplateLoader(lazy(() => import('./account.index')));
+const Index = Template(lazy(() => import('./account.index')));
 
 function AccountRoute() {
 

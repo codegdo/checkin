@@ -1,6 +1,6 @@
 import { lazy } from 'react';
 import { useRoutes } from 'react-router-dom';
-import PartialLoader from "../../components/loader/partial.loader";
+import PartialLoader from "../../components/loader/loader.partial";
 
 const Profile = PartialLoader(lazy(() => import('./profile/profile.page')));
 

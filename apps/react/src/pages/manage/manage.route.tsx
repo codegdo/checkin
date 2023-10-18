@@ -1,21 +1,21 @@
 import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
 
-import TemplateLoader from "../../components/loader/template.loader";
+import { Template } from "@/components";
 
-const Index = TemplateLoader(lazy(() => import('./manage.index')));
-const Migration = TemplateLoader(lazy(() => import('./migration/migration.page')));
+const Index = Template(lazy(() => import('./manage.index')));
+const MigrationRoute = Template(lazy(() => import('./migration/migration.route')));
 
 function ManageRoute() {
 
   const routes = useRoutes([
     {
-      path: '/migrations',
-      element: <Migration route="manage" page="migrations" />
+      path: '/migrations/*',
+      element: <MigrationRoute route="manage" page="migration" />
     },
     {
       path: '/',
-      element: <Index route="manage" page="index" />
+      element: <Index route="manage" />
     },
     {
       path: '*',

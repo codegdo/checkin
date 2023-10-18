@@ -1,6 +1,6 @@
 import React, { ComponentType, lazy } from 'react';
 
-function LazyLoader<T extends ComponentType<object>>(
+export function Lazy<T extends ComponentType<object>>(
   factory: () => Promise<{ default: T }>,
   minLoadTimeMs = 0
 ): React.LazyExoticComponent<T> {
@@ -10,5 +10,3 @@ function LazyLoader<T extends ComponentType<object>>(
     );
   });
 }
-
-export default LazyLoader;
