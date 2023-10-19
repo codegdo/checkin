@@ -3,15 +3,15 @@ import { Outlet, useNavigate } from 'react-router-dom';
 //import { useAuth } from '../../hooks/use-auth.hook';
 
 function AuthGuard(): JSX.Element {
-  const isAuthenticated = true; // useAuth();
+
   const navigate = useNavigate();
+  const isAuthenticated = true; // useAuth();
 
   useEffect(() => {
-    // alert(isAuthenticated);
     if (!isAuthenticated) {
       navigate('/auth/login');
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
 
   return <Outlet />
 }

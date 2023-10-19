@@ -9,8 +9,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Migration } from '../migration/migration.entity';
- 
-  
+
 @Entity()
 @Check(`"status" IN ('NotRolledBack', 'InProgress', 'Completed', 'Failed')`)
 export class MigrationRollback {
