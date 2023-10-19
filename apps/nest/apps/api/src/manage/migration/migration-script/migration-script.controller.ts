@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 
 @Controller()
 export class MigrationScriptController {
-  @Get()
+  @Get('migration-scripts')
   async getAllMigrationScripts() {
     return 'getAllMigrationScripts';
   }

@@ -11,11 +11,11 @@ function HomeRoute() {
   const routes = useRoutes([
     {
       path: '/dashboard',
-      element: <Dashboard route="dahsboard" page="dashboard" />
+      element: <Dashboard module="dahsboard" view="dashboard" />
     },
     {
       path: '/',
-      element: <Index route="home" page="index" />
+      element: <Index module="home" view="index" />
     },
     {
       path: '*',

@@ -1,8 +1,9 @@
 import React, { Suspense } from 'react';
-import { TemplateProps } from './template.type';
+import { ComponentProps } from './loader.type';
 
-export function Partial(Component: React.FC<TemplateProps>) {
-  return (props: TemplateProps) => {
+export function Partial(Component: React.FC<ComponentProps>) {
+  return (props: ComponentProps) => {
+    console.log(props);
     return (
       <Suspense fallback="loading">
         <Component {...props} />

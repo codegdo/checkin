@@ -1,14 +1,14 @@
 import { lazy } from 'react';
 import { useRoutes } from 'react-router-dom';
-import PartialLoader from "../../components/loader/loader.partial";
+import {Partial} from "@/components";
 
-const Profile = PartialLoader(lazy(() => import('./profile/profile.page')));
+const Profile = Partial(lazy(() => import('./profile/profile.page')));
 
 function Index() {
   let routes = useRoutes([
     {
       path: '/profile',
-      element: <Profile route="account" page="profile" />
+      element: <Profile module="account" view="profile" />
     },
     {
       path: '*',

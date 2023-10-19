@@ -17,7 +17,7 @@ function AuthRoute() {
   const routes = useRoutes([
     {
       path: '/*',
-      element: <Index route="auth" page="index" />
+      element: <Index module="auth" view="index" />
     }
   ]);
 

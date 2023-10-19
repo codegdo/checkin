@@ -10,7 +10,7 @@ function AccountRoute() {
   const routes = useRoutes([
     {
       path: '/',
-      element: <Index route="account" page="index" />
+      element: <Index module="account" view="index" />
     },
     {
       path: '*',

@@ -1,7 +1,7 @@
-import React, { FC, Suspense, useMemo, ReactElement } from 'react';
+import { FC, Suspense, useMemo, ReactElement } from 'react';
 import parse, { HTMLReactParserOptions } from 'html-react-parser';
 import DOMPurify from 'dompurify';
-import { Options, TemplateProps } from './template.type';
+import { ComponentProps } from './loader.type';
 
 const html = DOMPurify.sanitize(`
   <div>
@@ -14,9 +14,14 @@ const html = DOMPurify.sanitize(`
   </div>
 `, { ADD_TAGS: ['jsx'] });
 
-export function Template(Component: FC<TemplateProps | object>): FC<TemplateProps> {
-  return (props: TemplateProps): ReactElement => {
-    const options = ({ fallback }: Options): HTMLReactParserOptions => {
+interface ParserOptions {
+  fallback: boolean;
+}
+
+export function Template(Component: FC<ComponentProps | object>): FC<ComponentProps> {
+  return (props: ComponentProps): ReactElement => {
+    console.log(props);
+    const parserOptions = ({ fallback }: ParserOptions): HTMLReactParserOptions => {
       return {
         replace: (domNode): false | void | object | Element | null | undefined => {
           if ('attribs' in domNode) {
@@ -37,7 +42,10 @@ export function Template(Component: FC<TemplateProps | object>): FC<TemplateProp
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [template, fallback] = useMemo(() => {
-      return [parse(html, options({ fallback: false })), parse(html, options({ fallback: true }))];
+      return [
+        parse(html, parserOptions({ fallback: false })), 
+        parse(html, parserOptions({ fallback: true }))
+      ];
     }, []);
 
     return (

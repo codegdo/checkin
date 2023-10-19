@@ -11,11 +11,11 @@ function ManageRoute() {
   const routes = useRoutes([
     {
       path: '/migrations/*',
-      element: <MigrationRoute route="manage" page="migration" />
+      element: <MigrationRoute module="manage" view="migration" />
     },
     {
       path: '/',
-      element: <Index route="manage" />
+      element: <Index module="manage" />
     },
     {
       path: '*',

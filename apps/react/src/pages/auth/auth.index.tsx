@@ -9,15 +9,15 @@ function Index() {
   let routes = useRoutes([
     {
       path: '/',
-      element: <Login route="auth" page="login" />
+      element: <Login module="auth" view="login" />
     },
     {
       path: '/login',
-      element: <Login route="auth" page="login" />
+      element: <Login module="auth" view="login" />
     },
     {
       path: '/signup',
-      element: <Signup route="auth" page="signup" />
+      element: <Signup module="auth" view="signup" />
     },
     {
       path: '*',

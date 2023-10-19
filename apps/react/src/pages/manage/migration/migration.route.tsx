@@ -6,27 +6,27 @@ import { Partial } from "@/components";
 const Migration = Partial(lazy(() => import('./migration.page')));
 const MigrationForm = Partial(lazy(() => import('./migration.form')));
 
-const MigrationCategory = Partial(lazy(() => import('./category/migration-category.page')));
-const MigrationScript = Partial(lazy(() => import('./script/migration-script.page')));
+const MigrationCategory = Partial(lazy(() => import('./migration-category/migration-category.page')));
+const MigrationScript = Partial(lazy(() => import('./migration-script/migration-script.page')));
 
 function MigrationRoute() {
 
   const routes = useRoutes([
     {
-      path: '/categories',
-      element: <MigrationCategory route="manage" page="migration" view="migration_category" />
+      path: '/migration-categories',
+      element: <MigrationCategory module="manage" view="migration" object="migration_category" />
     },
     {
-      path: '/scripts',
-      element: <MigrationScript route="manage" page="migration" view="migration_script" />
+      path: '/migration-scripts',
+      element: <MigrationScript module="manage" view="migration" object="migration_script" />
     },
     {
       path: '/:id',
-      element: <MigrationForm route="manage" page="migration" />
+      element: <MigrationForm module="manage" view="migration" />
     },
     {
       path: '/',
-      element: <Migration route="manage" page="migration" />
+      element: <Migration module="manage" view="migration" />
     },
     {
       path: '*',

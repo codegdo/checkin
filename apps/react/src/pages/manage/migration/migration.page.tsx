@@ -11,8 +11,8 @@ function Migration() {
   return (
     <div>
       <div>
-        <Link to={`./categories`}>Edit Migration Categories</Link>
-        <Link to={`./scripts`}>Edit Migration Scripts</Link>
+        <Link to={`./migration-categories`}>Edit Migration Categories</Link>
+        <Link to={`./migration-scripts`}>Edit Migration Scripts</Link>
       </div>
       {
         data?.map((item) => {
