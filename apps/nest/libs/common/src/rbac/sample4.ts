@@ -45,6 +45,20 @@ function evaluateCondition(condition: { [key: string]: string | string[] | boole
   return true;
 }
 
+function evaluateActions(actions: string | string[], requestActions: string | string[]): boolean {
+  actions = Array.isArray(actions) ? actions : [actions];
+  requestActions = Array.isArray(requestActions) ? requestActions : [requestActions];
+
+  return actions.includes('*') || requestActions.some(action => actions.includes(action));
+}
+
+function evaluateResources(resources: string | string[], requestResource: string | string[]): boolean {
+  resources = Array.isArray(resources) ? resources : [resources];
+  requestResource = Array.isArray(requestResource) ? requestResource : [requestResource];
+
+  return resources.includes('*') || requestResource.some(resource => resources.includes(resource));
+}
+
 function isPolicyAllowed(policy: Policy, requestContext: RequestContext): boolean {
   const statementResults: boolean[] = [];
 
@@ -53,30 +67,16 @@ function isPolicyAllowed(policy: Policy, requestContext: RequestContext): boolea
       const effect = statement.effect;
       const actions = Array.isArray(statement.actions) ? statement.actions : [statement.actions];
       const resources = Array.isArray(statement.resources) ? statement.resources : [statement.resources];
-      const condition = statement.condition || {};
+      const condition = statement.condition;
 
-      const isActionAllowed = (
-        actions.includes('*') || // Allow any action
-        actions.some(action =>
-          Array.isArray(requestContext.actions)
-            ? requestContext.actions.includes(action)
-            : requestContext.actions === action
-        )
-      );
-
-      const isResourceAllowed = (
-        resources.includes('*') || // Allow any resource
-        resources.some(resource =>
-          Array.isArray(requestContext.resources)
-            ? requestContext.resources.includes(resource)
-            : requestContext.resources === resource
-        )
-      );
+      const isActionAllowed = evaluateActions(actions, requestContext.actions);
+      const isResourceAllowed = evaluateResources(resources, requestContext.resources);
 
       if (effect === 'Deny' && isActionAllowed && isResourceAllowed) {
         return false; // Deny access immediately upon encountering a "Deny" statement
       } else if (effect === 'Allow' && isActionAllowed && isResourceAllowed) {
-        if (evaluateCondition(condition, requestContext.condition || {})) {
+        
+        if (condition && evaluateCondition(condition, requestContext.condition || {})) {
           statementResults.push(true);
         }
       }
