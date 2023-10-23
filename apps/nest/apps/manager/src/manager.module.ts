@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { DataSourceModule, InstanceNameEnum, LoggerModule } from '@app/common';
+import { DataSourceModule, InstanceName, LoggerModule } from '@app/common';
 import { MigrationModule } from './migration/migration.module';
 import { SetupModule } from './setup/setup.module';
 import { UtilModule } from './util/util.module';
@@ -10,8 +10,8 @@ import { UtilModule } from './util/util.module';
   imports: [
     // Shared
     ConfigModule.forRoot(),
-    DataSourceModule.register(InstanceNameEnum.Manager),
-    LoggerModule.register(InstanceNameEnum.Manager),
+    DataSourceModule.register(InstanceName.MANAGER),
+    LoggerModule.register(InstanceName.MANAGER),
     // Events
     MigrationModule,
     SetupModule,

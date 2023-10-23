@@ -8,8 +8,9 @@ export * from './session/session.module';
 
 export * from './models';
 
+export * from './decorators';
 export * from './middlewares';
+export * from './guards';
 
 export * from './constants';
 export * from './enums';
-

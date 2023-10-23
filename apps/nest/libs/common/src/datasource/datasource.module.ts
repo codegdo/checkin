@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import { ConfigModule } from '../config/config.module';
 import * as appEntities from '../models/db_app';
 import { TypeOrmLogger } from '../logger/typeorm.logger';
-import { InstanceNameEnum } from '../enums';
+import { InstanceName } from '../enums';
 
 @Module({})
 export class DataSourceModule {
@@ -26,17 +26,17 @@ export class DataSourceModule {
             let database = null;
 
             switch (instanceName) {
-              case InstanceNameEnum.Api:
+              case InstanceName.API:
                 username = configService.get('POSTGRES_API_USERNAME');
                 password = configService.get('POSTGRES_API_PASSWORD');
                 database = configService.get('POSTGRES_DB_APP');
                 break;
-              case InstanceNameEnum.Manager:
+              case InstanceName.MANAGER:
                 username = configService.get('POSTGRES_MANAGER_USERNAME');
                 password = configService.get('POSTGRES_MANAGER_PASSWORD');
                 database = configService.get('POSTGRES_DB_APP');
                 break;
-              case InstanceNameEnum.Worker:
+              case InstanceName.WORKER:
                 username = configService.get('POSTGRES_WORKER_USERNAME');
                 password = configService.get('POSTGRES_WORKER_PASSWORD');
                 database = configService.get('POSTGRES_DB_APP');

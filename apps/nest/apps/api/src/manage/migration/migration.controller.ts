@@ -1,6 +1,8 @@
 import { Controller, Get, Param, Post } from '@nestjs/common';
 import { MigrationService } from './migration.service';
+import { RoleType, Roles } from '@app/common';
 
+@Roles(RoleType.SYSTEM)
 @Controller()
 export class MigrationController {
   constructor(private readonly migrationService: MigrationService) { }

@@ -1,8 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 
-@Controller('migration-category')
+@Controller()
 export class MigrationCategoryController {
-  @Get('migration-categories')
+  @Get()
   async getAllMigrationCategories() {
     return 'getAllMigrationCategories';
   }

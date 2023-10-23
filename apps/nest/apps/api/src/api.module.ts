@@ -7,25 +7,27 @@ import {
   DataSourceModule,
   SessionModule,
   ExpressWinstonMiddleware,
-  InstanceNameEnum,
+  InstanceName,
 } from '@app/common';
 
 import { AuthModule } from './auth/auth.module';
 import { SetupModule } from './setup/setup.module';
 import { ManageModule } from './manage/manage.module';
+import { SecurityModule } from './security/security.module';
 
 @Module({
   imports: [
     // Shared
-    DataSourceModule.register(InstanceNameEnum.Api),
-    LoggerModule.register(InstanceNameEnum.Api),
+    DataSourceModule.register(InstanceName.API),
+    LoggerModule.register(InstanceName.API),
     ConfigModule,
     ClientModule,
-    //
     SessionModule,
+    //
     AuthModule,
-    SetupModule,
     ManageModule,
+    SetupModule,
+    SecurityModule,
   ],
   controllers: [],
   providers: [
