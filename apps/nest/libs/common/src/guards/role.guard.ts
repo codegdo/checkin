@@ -14,10 +14,10 @@ export class RoleGuard implements CanActivate {
       [context.getHandler(), context.getClass()],
     ) ?? [RoleType.EXTERNAL];
 
-    console.log('ROLE_GUARD', requiredRoles);
+    console.log('CHECK ROLE_GUARD', requiredRoles);
 
     // Replace this logic with your actual user role retrieval
-    const userRole = 'internal'; // Example user role, replace with actual role
+    const userRole = 'internal';
 
     // Implement the role-based authorization logic
     switch (userRole) {

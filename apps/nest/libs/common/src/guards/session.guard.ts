@@ -5,7 +5,7 @@ export class SessionGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
 
-    console.log('SESSION_GUARD', request.path);
+    console.log('CHECK SESSION_GUARD', request.path);
 
     return true;
   }
