@@ -1,7 +1,13 @@
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 
-import { AuthGuard, SessionGuard, RoleGuard } from '@app/common';
+import {
+  AuthGuard,
+  SecurityGuard,
+  RoleGuard,
+  PermissionGuard,
+  PolicyChecker,
+} from '@app/common';
 
 @Module({
   imports: [],
@@ -10,8 +16,10 @@ import { AuthGuard, SessionGuard, RoleGuard } from '@app/common';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
-    SessionGuard,
+    SecurityGuard,
     RoleGuard,
+    PermissionGuard,
+    PolicyChecker,
   ],
 })
 export class SecurityModule { }

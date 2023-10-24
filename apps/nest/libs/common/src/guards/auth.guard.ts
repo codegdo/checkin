@@ -1,10 +1,18 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  Injectable,
+  LoggerService,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
 import { AuthType } from '../enums';
-import { AUTH_KEY } from '../decorators/auth.decorator';
-import { SessionGuard } from './session.guard';
+import { AUTH_KEY } from '../constants';
+import { SecurityGuard } from './security.guard';
 import { RoleGuard } from './role.guard';
+import { PermissionGuard } from './permission.guard';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -13,14 +21,18 @@ export class AuthGuard implements CanActivate {
     AuthType,
     CanActivate | CanActivate[]
   > = {
-      [AuthType.BEAR]: [this.sessionGuard, this.roleGuard],
+      [AuthType.BEAR]: [this.securityGuard, this.roleGuard, this.permissionGuard],
       [AuthType.NONE]: { canActivate: () => true },
     };
 
   constructor(
     private readonly reflector: Reflector,
-    private readonly sessionGuard: SessionGuard,
+    private readonly securityGuard: SecurityGuard,
     private readonly roleGuard: RoleGuard,
+    private readonly permissionGuard: PermissionGuard,
+
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -29,7 +41,7 @@ export class AuthGuard implements CanActivate {
       context.getClass(),
     ]) ?? [AuthGuard.defaultAuthType];
 
-    console.log(authTypes);
+    this.logger.log(`AuthType {${authTypes[0]}}`, 'AuthGuard');
 
     const guards = authTypes.flatMap((type) => this.authTypeGuardMap[type]);
 
@@ -40,8 +52,8 @@ export class AuthGuard implements CanActivate {
         if (!canActivate) {
           return false;
         }
-      } catch (err) {
-        console.log();
+      } catch (error) {
+        this.logger.error('ERROR', error);
       }
     }
 
