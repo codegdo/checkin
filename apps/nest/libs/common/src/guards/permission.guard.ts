@@ -1,5 +1,12 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  Injectable,
+  LoggerService,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { PERMISSION_KEY, USER_KEY } from '../constants';
 import { PermissionType } from '../types';
@@ -10,6 +17,9 @@ export class PermissionGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly policyChecker: PolicyChecker,
+
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -36,8 +46,6 @@ export class PermissionGuard implements CanActivate {
       policies,
       requestContextArray,
     );
-
-    console.log('CHECK PERMISSION_GUARD', isAllowed, requestContextArray);
 
     if (!isAllowed) {
       return false;

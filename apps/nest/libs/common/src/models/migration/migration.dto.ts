@@ -1,4 +1,4 @@
-//import { Exclude } from 'class-transformer';
+import { Exclude } from 'class-transformer';
 import { IsBoolean, IsInt, IsNumber, IsString } from 'class-validator';
 
 export class CreateMigrationDto { }

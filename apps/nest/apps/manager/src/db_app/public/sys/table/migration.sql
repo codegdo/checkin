@@ -41,14 +41,14 @@ DECLARE
   database_initialization INT;
 BEGIN
   -- Find the ID of the 'Database Initialization' migration category
-  SELECT id INTO database_initialization FROM migration_category WHERE name = 'Database Initialization';
+  -- SELECT id INTO database_initialization FROM migration_category WHERE name = 'Database Initialization';
 
   -- Check if the 'migration' table has no records
   IF NOT EXISTS (SELECT 1 FROM migration) THEN
     -- Insert data into the 'migration' table
-    INSERT INTO migration (migration_category_id, name, description, execution_order, app_version, is_required) VALUES
-    (database_initialization,'Dbo Tables and Functions','Initializes dbo common tables and functions in the database.',0,'1.0.0',TRUE),
-    (database_initialization,'Sec Tables and Functions','Initializes sec ables and functions in the database.',1,'1.0.0',TRUE);
+    -- INSERT INTO migration (migration_category_id, name, description, execution_order, app_version, is_required) VALUES
+    -- (database_initialization,'Dbo Tables and Functions','Initializes dbo common tables and functions in the database.',0,'1.0.0',TRUE),
+    -- (database_initialization,'Sec Tables and Functions','Initializes sec ables and functions in the database.',1,'1.0.0',TRUE);
   ELSE
     -- The 'migration' table has records
     RAISE NOTICE 'The migration table is not empty.';

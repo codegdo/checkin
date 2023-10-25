@@ -4,9 +4,9 @@ import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 
 import { ConfigModule } from '../config/config.module';
-import * as appEntities from '../models/db_app';
+import * as appEntities from '../../models/db_app';
 import { TypeOrmLogger } from '../logger/typeorm.logger';
-import { InstanceName } from '../enums';
+import { InstanceName } from '../../enums';
 
 @Module({})
 export class DataSourceModule {

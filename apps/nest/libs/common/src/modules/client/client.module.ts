@@ -4,7 +4,7 @@ import {
   Transport,
 } from '@nestjs/microservices';
 
-import { MANAGER_CLIENT, WORKER_CLIENT } from '../constants';
+import { MANAGER_CLIENT, WORKER_CLIENT } from '../../constants';
 import { ConfigModule } from '../config/config.module';
 import { ClientService } from './client.service';
 import { WinstonTransport } from '../logger/winston-transport';

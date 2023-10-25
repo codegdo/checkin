@@ -44,7 +44,7 @@ export class MigrationRepository extends Repository<Migration> {
     } catch (error) {
       // Log the specific database-related error
       this.logger.error(
-        `Database error while fetching migrations: ${error.message}`,
+        `ERROR: ${error.message}`,
         error,
         MigrationRepository.name,
       );

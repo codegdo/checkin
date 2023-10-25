@@ -18,9 +18,9 @@ interface ParserOptions {
   fallback: boolean;
 }
 
-export function Template(Component: FC<ComponentProps | object>): FC<ComponentProps> {
+export function Template(Component: FC<ComponentProps>): FC<ComponentProps> {
   return (props: ComponentProps): ReactElement => {
-    console.log(props);
+    //console.log(props);
     const parserOptions = ({ fallback }: ParserOptions): HTMLReactParserOptions => {
       return {
         replace: (domNode): false | void | object | Element | null | undefined => {
@@ -43,7 +43,7 @@ export function Template(Component: FC<ComponentProps | object>): FC<ComponentPr
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [template, fallback] = useMemo(() => {
       return [
-        parse(html, parserOptions({ fallback: false })), 
+        parse(html, parserOptions({ fallback: false })),
         parse(html, parserOptions({ fallback: true }))
       ];
     }, []);

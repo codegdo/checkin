@@ -5,9 +5,10 @@ import {
   Injectable,
   LoggerService,
 } from '@nestjs/common';
-import { USER_KEY } from '../constants';
-import { Policy } from '../helpers'; // Import the Policy type from your helpers
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+
+import { USER_KEY } from '../constants';
+import { Policy } from '../helpers';
 
 @Injectable()
 export class SecurityGuard implements CanActivate {
@@ -17,8 +18,6 @@ export class SecurityGuard implements CanActivate {
   ) { }
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-
-    this.logger.log(`AuthSecurity {${request.path}}`, 'AuthGuard');
 
     // TODO:
     // Check session and token validity
@@ -41,7 +40,7 @@ export class SecurityGuard implements CanActivate {
     // Assign user information including username, roleType, and policies to the request context
     request[USER_KEY] = {
       username: 'admin',
-      roleType: 'internal',
+      roleType: 'system',
       policies,
     };
 

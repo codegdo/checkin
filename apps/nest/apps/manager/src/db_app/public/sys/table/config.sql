@@ -24,8 +24,8 @@ BEGIN
   -- Check if the config table has no records
   IF (SELECT COUNT(*) FROM config) = 0 THEN
     -- Insert data into the config table
-    INSERT INTO config (name, display_name, value, default_value, data_type, description, category, is_enabled) VALUES
-    ('api_manager_migration_access','Enable Drop DB System Config','TRUE','FALSE','boolean','Allow API Manager to call migrations','Security',TRUE);
+    -- INSERT INTO config (name, display_name, value, default_value, data_type, description, category, is_enabled) VALUES
+    -- ('api_manager_migration_access','Enable Drop DB System Config','TRUE','FALSE','boolean','Allow API Manager to call migrations','Security',TRUE);
   ELSE
     -- The config table has records
     RAISE NOTICE 'The migration table is not empty.';
