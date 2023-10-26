@@ -21,8 +21,8 @@ BEGIN
   -- Check if the 'migration_category' table has no records
   IF (SELECT COUNT(*) FROM migration_category) = 0 THEN
     -- The 'migration_category' table is empty
-    -- INSERT INTO migration_category (name, description) VALUES
-    -- ('Database Initialization', 'Creating and configuring the main database.');
+    INSERT INTO migration_category (name, description) VALUES
+    ('Database Initialization', 'Creating and configuring the main database.');
   ELSE
     -- The 'migration_category' table has records
     RAISE NOTICE 'The migration_category table is not empty.';

@@ -1,4 +1,4 @@
-import { Sortable } from "../../../components";
+import { Sortable } from "@components";
 
 // Example API response
 const data = [
@@ -76,10 +76,10 @@ const data = [
   },
 ];
 
-function Dashboard() {
+function Welcome() {
   return <div>
     <Sortable data={data} />
   </div>
 }
 
-export default Dashboard;
+export default Welcome;

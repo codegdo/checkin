@@ -3,7 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import AuthGuard from "./components/guard/auth.guard";
 import AuthRoute from "./pages/auth/auth.route";
-import HomeRoute from "./pages/home/home.route";
+import DashboardRoute from "./pages/dashboard/dashboard.route";
 import AccountRoute from "./pages/account/account.route";
 import ManageRoute from "./pages/manage/manage.route";
 
@@ -35,7 +35,7 @@ const routes = [
     children: [
       {
         path: '/*',
-        element: <HomeRoute />
+        element: <DashboardRoute />
       }
     ]
   },

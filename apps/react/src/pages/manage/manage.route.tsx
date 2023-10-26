@@ -14,15 +14,15 @@ function ManageRoute() {
   const routes = useRoutes([
     {
       path: '/migrations',
-      element: <MigrationPage module="manage" view="migration" object="migartion:migration_category:migration_script" />
+      element: <MigrationPage module="manage" view="migration" object="migartion" />
     },
     {
       path: '/migration-categories',
-      element: <MigrationCategory module="manage" view="migration" object="migration_category" />
+      element: <MigrationCategory module="manage" view="migration_category" object="migration_category" />
     },
     {
       path: '/migration-scripts',
-      element: <MigrationScript module="manage" view="migration" object="migration_script" />
+      element: <MigrationScript module="manage" view="migration_script" object="migration_script" />
     },
     {
       path: '/',
