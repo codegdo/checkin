@@ -2,10 +2,20 @@ import { Link } from "react-router-dom";
 import { useGetAllMigrations } from "./api";
 
 function Migration() {
-  const { isLoading, data } = useGetAllMigrations();
+  const { status, isLoading, isDelay, isAbort, data, controller } = useGetAllMigrations();
+
+  console.log(status);
 
   if (isLoading) {
     return <div>loading...</div>
+  }
+
+  if (isDelay) {
+    return <div>delayed...</div>
+  }
+
+  if (isAbort) {
+    return <div>wanna to abort... <button onClick={() => { controller.abort() }}>Cancel</button></div>
   }
 
   return (

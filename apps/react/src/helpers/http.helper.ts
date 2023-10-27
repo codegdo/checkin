@@ -7,6 +7,7 @@ export interface RequestOptions {
   params?: Record<string, unknown>;
   withCredentials?: boolean;
   credentials?: RequestCredentials;
+  signal?: AbortSignal
 }
 
 export interface HttpHelperConfig {

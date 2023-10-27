@@ -11,7 +11,17 @@ export class MigrationController {
   @Get()
   @Permissions(MigrationPermission.GET_ALL_MIGRATIONS)
   async getAllMigrations() {
-    return this.migrationService.getAllMigrations();
+    //return this.migrationService.getAllMigrations();
+    const result = await this.migrationService.getAllMigrations();
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          resolve(result);
+        } catch (error) {
+          reject(error);
+        }
+      }, 10000);
+    });
   }
 
   @Get(':id')
