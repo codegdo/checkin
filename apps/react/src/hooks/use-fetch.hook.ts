@@ -107,6 +107,8 @@ export const useFetch = <T>(
   };
 
   const makeRequest = async (strUrl: string, options: RequestOptions) => {
+    setStatus(FetchStatus.Loading);
+
     try {
       const responsePromise = http.request<T>(strUrl, options); // Wrap the http.request in a Promise
       checkDelay(responsePromise);
@@ -120,7 +122,6 @@ export const useFetch = <T>(
     const baseUrl = options.baseUrl || BASE_URL;
     const strUrl = stringifyUrl(`${baseUrl}${url}`, params);
 
-    setStatus(FetchStatus.Loading);
     makeRequest(strUrl, { ...options, signal: ctrlRef.current.signal });
   };
 
@@ -128,7 +129,6 @@ export const useFetch = <T>(
     const baseUrl = customBaseUrl || BASE_URL;
     const strUrl = stringifyUrl(`${baseUrl}${url}`, params);
 
-    setStatus(FetchStatus.Loading);
     makeRequest(strUrl, { signal: ctrlRef.current.signal });
   };
 
