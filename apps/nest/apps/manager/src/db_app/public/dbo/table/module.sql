@@ -20,39 +20,41 @@ CREATE TABLE IF NOT EXISTS module (
 DO $$
 BEGIN
   IF (SELECT COUNT(*) FROM module) = 0 THEN
+
     INSERT INTO module(id, name, parent_id, is_external, is_internal, is_subscription, is_active) VALUES
 
-    (1,'monitor',200,'0','0','0','1'),
-    (2,'request',200,'0','0','0','1'),
-    (3,'log',200,'0','0','0','1'),
-    (4,'database',200,'0','0','0','1'),
-    (5,'client',200,'0','0','0','1'),
-    (19,'sys-setting',210,'0','0','0','1'),
+    (1,'sys',null,null,null,null,'1'),
+    (2,'monitor',1,'0','0','0','1'),
+    (3,'request',1,'0','0','0','1'),
+    (4,'log',1,'0','0','0','1'),
+    (5,'database',1,'0','0','0','1'),
+    (6,'client',1,'0','0','0','1'),
 
-    (20,'iam',201,'0','1','0','1'),
-    (21,'personal',201,'1','1','0','1'),
-    (22,'help',201,'1','1','0','1'),
-    (23,'visitor',201,'1','1','0','1'),
-    (39,'app-setting',210,'0','1','0','1'),
+    (20,'app',null,null,null,null,'1'),
+    (21,'iam',20,'0','1','0','1'),
+    (22,'personal',20,'1','1','0','1'),
+    (23,'help',20,'1','1','0','1'),
+    (24,'visitor',20,'1','1','0','1'),
 
-    (40,'booking',202,'1','1','1','1'),
-    (41,'checkin',202,'1','1','1','1'),
-    (42,'checkout',202,'0','1','1','1'),
-    (43,'report',202,'1','1','1','1'),
-    (59,'pos-setting',210,'0','1','0','1'),
+    (40,'pos',null,null,null,null,'1'),
+    (41,'booking',40,'1','1','1','1'),
+    (42,'checkin',40,'1','1','1','1'),
+    (43,'checkout',40,'0','1','1','1'),
+    (44,'report',40,'1','1','1','1'),
 
-    (50,'customer',203,'0','1','1','1'),
-    (51,'promotion',203,'0','1','1','1'),
-    (52,'referral',203,'0','1','1','1'),
-    (53,'reward',203,'0','1','1','1'),
-    (54,'review',203,'0','1','1','1'),
-    (69,'crm-setting',210,'0','1','0','1'),
+    (60,'crm',null,null,null,null,'1'),
+    (61,'customer',60,'0','1','1','1'),
+    (62,'promotion',60,'0','1','1','1'),
+    (63,'referral',60,'0','1','1','1'),
+    (64,'reward',60,'0','1','1','1'),
+    (65,'review',60,'0','1','1','1'),
 
-    (200,'sys',null,null,null,null,'1'),
-    (201,'app',null,null,null,null,'1'),
-    (202,'pos',null,null,null,null,'1'),
-    (203,'crm',null,null,null,null,'1'),
-    (210,'setting',null,null,null,null,'1');
+    (200,'setting',null,null,null,null,'1'),
+    (201,'sys-setting',200,'0','0','0','1'),
+    (202,'app-setting',200,'0','1','0','1'),
+    (203,'pos-setting',200,'0','1','0','1'),
+    (204,'crm-setting',200,'0','1','0','1');
+    
   ELSE
     RAISE NOTICE 'The module table is not empty.';
   END IF;

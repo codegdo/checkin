@@ -11,91 +11,93 @@ CREATE TABLE IF NOT EXISTS module_view (
 DO $$
 BEGIN
   IF (SELECT COUNT(*) FROM module_view) = 0 THEN
+    
     INSERT INTO module_view(module_id, view_id, company_id) VALUES
 
-    (1,1,null),
+    (2,2,null),
 
-    (2,50,null),
-    (2,51,null),
+    (3,51,null),
+    (3,52,null),
 
-    (3,100,null),
-    (3,101,null),
+    (4,101,null),
+    (4,102,null),
 
-    (4,150,null),
-    (4,151,null),
-    (4,152,null),
-    (4,153,null),
-    (4,154,null),
+    (5,151,null),
+    (5,152,null),
+    (5,153,null),
+    (5,154,null),
+    (5,155,null),
 
-    (5,200,null),
-    (5,201,null),
-    (5,202,null),
-    (5,203,null),
-    (5,204,null),
+    (6,201,null),
+    (6,202,null),
+    (6,203,null),
+    (6,204,null),
+    (6,205,null),
 
-    (19,950,null),
+    (201,951,null),
 
-    (20,1000,null),
-    (20,1001,null),
-    (20,1003,null),
-    (20,1004,null),
+    (21,1001,null),
+    (21,1002,null),
+    (21,1003,null),
+    (21,1004,null),
+    (21,1005,null),
 
-    (21,1050,null),
-    (21,1051,null),
+    (22,1051,null),
+    (22,1052,null),
 
-    (22,1100,null),
-    (22,1101,null),
+    (23,1101,null),
+    (23,1102,null),
 
-    (23,1150,null),
-    (23,1151,null),
+    (24,1151,null),
+    (24,1152,null),
 
-    (39,1950,null),
-    (39,1951,null),
-    (39,1952,null),
-    (39,1953,null),
-    (39,1954,null),
+    (202,1951,null),
+    (202,1952,null),
+    (202,1953,null),
+    (202,1954,null),
+    (202,1955,null),
 
-    (40,2000,null),
-    (40,2001,null),
+    (41,2001,null),
+    (41,2002,null),
 
-    (41,2050,null),
-    (41,2051,null),
+    (42,2051,null),
+    (42,2052,null),
 
-    (42,2100,null),
-    (42,2101,null),
-    (42,2102,null),
+    (43,2101,null),
+    (43,2102,null),
+    (43,2103,null),
 
-    (43,2150,null),
-    (43,2151,null),
-    (43,2152,null),
-    (43,2153,null),
+    (44,2151,null),
+    (44,2152,null),
+    (44,2153,null),
+    (44,2154,null),
 
-    (59,2950,null),
-    (59,2951,null),
-    (59,2952,null),
-    (59,2953,null),
-    (59,2954,null),
+    (203,2951,null),
+    (203,2952,null),
+    (203,2953,null),
+    (203,2954,null),
+    (203,2955,null),
 
-    (50,3000,null),
-    (50,3001,null),
+    (61,3001,null),
+    (61,3002,null),
 
-    (51,3050,null),
-    (51,3051,null),
-    (51,3052,null),
+    (62,3051,null),
+    (62,3052,null),
+    (62,3053,null),
 
-    (52,3100,null),
-    (52,3101,null),
+    (63,3101,null),
+    (63,3102,null),
 
-    (53,3150,null),
-    (53,3151,null),
+    (64,3151,null),
+    (64,3152,null),
 
-    (54,3200,null),
-    (54,3201,null),
-    (54,3202,null),
+    (65,3201,null),
+    (65,3202,null),
+    (65,3203,null),
 
-    (69,3250,null),
-    (69,3251,null),
-    (69,3252,null);
+    (204,3950,null),
+    (204,3951,null),
+    (204,3952,null);
 
   ELSE
     RAISE NOTICE 'The module_view table is not empty.';

@@ -4,7 +4,8 @@ RETURNS TABLE (
   module_group VARCHAR,
   view VARCHAR,
   view_group VARCHAR,
-  object VARCHAR
+  object VARCHAR,
+  object_slug VARCHAR
 ) AS $$
 BEGIN
   RETURN QUERY
@@ -13,7 +14,8 @@ BEGIN
     m2.name,
     v.name,
     v2.name,
-    o.name
+    o.name,
+    o.slug
   FROM
     module m
     INNER JOIN module m2 ON m2.id = m.parent_id
