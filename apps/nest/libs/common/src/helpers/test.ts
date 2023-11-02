@@ -1,4 +1,11 @@
-type ModuleViewObjectData = {
+enum DataType {
+  MODULE = 'module',
+  VIEW = 'view',
+  OBJECT = 'object',
+  FIELD = 'field',
+}
+
+type DataMapping = {
   module: string;
   moduleName?: string;
   moduleGroup: string;
@@ -11,93 +18,87 @@ type ModuleViewObjectData = {
   objectSlug?: string;
 };
 
-enum PermissionType {
-  MODULE = 'module',
-  VIEW = 'view',
-  OBJECT = 'object',
-  FIELD = 'field',
-}
-
-type ModulePermission = {
+type ModuleData = {
   name: string;
   group: string;
-  type: PermissionType.MODULE;
+  type: DataType.MODULE;
 };
 
-type ViewPermission = {
+type ViewData = {
   name: string;
   group: string;
-  type: PermissionType.VIEW;
+  type: DataType.VIEW;
 };
 
-type ObjectPermission = {
+type ObjectData = {
   name: string;
   slug: string;
-  type: PermissionType.OBJECT;
+  type: DataType.OBJECT;
 };
 
-type Model = {
-  modules: Record<string, ModulePermission>;
-  views: Record<string, Record<string, ViewPermission>>;
-  objects: Record<string, Record<string, ObjectPermission>>;
+type DataStructure = {
+  modules: Record<string, ModuleData>;
+  views: Record<string, Record<string, ViewData>>;
+  objects: Record<string, Record<string, ObjectData>>;
 };
 
-function mapDataToPermissions(
-  permissions: Model,
-  data: ModuleViewObjectData,
-): Model {
-  const { modules, views, objects } = permissions;
-  const modulePermission: ModulePermission = {
+function mapDataToDataStructure(
+  model: DataStructure,
+  data: DataMapping,
+): DataStructure {
+  const { modules, views, objects } = model;
+
+  const moduleData: ModuleData = {
     name: data.moduleName || data.module,
     group: data.moduleGroup,
-    type: PermissionType.MODULE,
+    type: DataType.MODULE,
   };
 
-  const viewPermission: ViewPermission = {
+  const viewData: ViewData = {
     name: data.viewName || data.view,
     group: data.viewGroup,
-    type: PermissionType.VIEW,
+    type: DataType.VIEW,
   };
 
-  const objectPermission: ObjectPermission = {
+  const objectData: ObjectData = {
     name: data.object,
     slug: data.objectSlug || data.object,
-    type: PermissionType.OBJECT,
+    type: DataType.OBJECT,
   };
 
   return {
     modules: {
       ...modules,
-      [data.module]: { ...modulePermission },
+      [data.module]: { ...moduleData },
     },
     views: {
       ...views,
       [data.module]: {
         ...views[data.module],
-        [data.view]: { ...viewPermission },
+        [data.view]: { ...viewData },
       },
     },
     objects: {
       ...objects,
       [data.view]: {
         ...objects[data.view],
-        [data.object]: { ...objectPermission },
+        [data.object]: { ...objectData },
       },
     },
   };
 }
 
-function groupModuleViewObjectData(dataList: ModuleViewObjectData[]): Model {
+function dataMapper(dataList: DataMapping[]): DataStructure {
   return dataList.reduce(
-    (permissions, data) => {
-      return mapDataToPermissions(permissions, data);
+    (model, data) => {
+      return mapDataToDataStructure(model, data);
     },
     { modules: {}, views: {}, objects: {} },
   );
 }
 
 // Sample data
-const data: ModuleViewObjectData[] = [
+const data: DataMapping[] = [
   {
     view: 'metrics',
     module: 'monitor',
@@ -357,7 +358,7 @@ const data: ModuleViewObjectData[] = [
 ];
 
 // Call the function to group the data
-const permissions = groupModuleViewObjectData(data);
+const dataStructure = dataMapper(data);
 
 // Output the result
-console.log(JSON.stringify(permissions, null, 2));
+console.log(JSON.stringify(dataStructure, null, 2));

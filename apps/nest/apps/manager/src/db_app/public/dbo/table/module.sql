@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS module (
   id INT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   parent_id INT,
+  sort_order INT,
 
   is_internal BOOLEAN DEFAULT TRUE,
   is_external BOOLEAN DEFAULT FALSE,

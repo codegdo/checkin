@@ -6,21 +6,28 @@ AS $$
 DECLARE
   user_data JSON;
   model_data JSON;
+  menu_sort_order JSON;
 BEGIN
-  -- Get user data if exist
+  -- Get user data if it exists
+
+  -- Set the menu_sort_order JSON variable
+  menu_sort_order := '{"modules": {"monitor": 1}, "views": {}}';
+
+  -- Get user data if it exists
 
   --IF user_data IS NULL THEN
     --RAISE EXCEPTION 'User not found';
   --ELSE
-
     SELECT json_agg(md)::JSON
     INTO model_data
     FROM (
       SELECT
         module,
         module_group AS "moduleGroup",
+        COALESCE(menu_sort_order->'modules'->>module, module_sort_order::text) AS "moduleSortOrder",
         view,
         view_group AS "viewGroup",
+        COALESCE(menu_sort_order->'views'->>view, view_sort_order::text) AS "viewSortOrder",
         object,
         object_slug AS "objectSlug"
       FROM module_fn_get_module_view_object('system')
@@ -31,6 +38,7 @@ BEGIN
   --END IF;
 END;
 $$ SECURITY DEFINER LANGUAGE plpgsql;
+
 
 DO $$
 BEGIN
@@ -47,26 +55,5 @@ BEGIN
   END IF;
 END $$;
 
-
-
-
-CREATE PROCEDURE main_sec.pr_user_login(
-  p_user_id varchar,
-  OUT data json
-)
-AS $$
-DECLARE
-  user_data json;
-BEGIN
-  SELECT json_agg(d)::json ->> 0 
-  INTO data
-  FROM (
-    SELECT *
-    FROM main_sec.fn_get_user_access(p_user_id)
-  ) d;
-END;
-$$ LANGUAGE plpgsql;
-
-
-CALL main_sec.pr_user_login('2', null);
+CALL user_pr_get_login('2', null);
 

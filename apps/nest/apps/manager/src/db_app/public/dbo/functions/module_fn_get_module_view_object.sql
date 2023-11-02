@@ -2,8 +2,10 @@ CREATE FUNCTION module_fn_get_module_view_object(roleType VARCHAR)
 RETURNS TABLE (
   module VARCHAR,
   module_group VARCHAR,
+  module_sort_order INT,
   view VARCHAR,
   view_group VARCHAR,
+  view_sort_order INT,
   object VARCHAR,
   object_slug VARCHAR
 ) AS $$
@@ -12,8 +14,10 @@ BEGIN
   SELECT
     m.name,
     m2.name,
+    m.sort_order,
     v.name,
     v2.name,
+    v.sort_order,
     o.name,
     o.slug
   FROM
