@@ -7,7 +7,8 @@ RETURNS TABLE (
   view_group VARCHAR,
   view_sort_order INT,
   object VARCHAR,
-  object_slug VARCHAR
+  object_slug VARCHAR,
+  object_sort_order INT
 ) AS $$
 BEGIN
   RETURN QUERY
@@ -19,7 +20,8 @@ BEGIN
     v2.name,
     v.sort_order,
     o.name,
-    o.slug
+    o.slug,
+    o.sort_order
   FROM
     module m
     INNER JOIN module m2 ON m2.id = m.parent_id

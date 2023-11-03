@@ -1,4 +1,4 @@
-enum DataType {
+/* enum DataType {
   MODULE = 'module',
   VIEW = 'view',
   OBJECT = 'object',
@@ -362,3 +362,4 @@ const dataStructure = dataMapper(data);
 
 // Output the result
 console.log(JSON.stringify(dataStructure, null, 2));
+ */

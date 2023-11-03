@@ -155,3 +155,41 @@ export class PolicyChecker {
     return verifyResults.every((result) => result);
   }
 }
+
+/*
+// Sample policies with components (module, view, object, field) and conditions
+const samplePolicies: Policy[] = [
+  {
+    version: '2012-10-17',
+    statements: [
+      {
+        effect: 'Allow',
+        actions: '*',
+        resources: '*',
+      },
+      {
+        effect: 'Deny',
+        actions: 'module:Access',
+        resources: 'module:iam',
+      },
+    ],
+  },
+  // Add additional policies
+];
+
+// Define a sample request context
+const requestContexts: RequestContext[] = [
+  {
+    actions: 'module:Access',
+    resources: 'module:home',
+  },
+  {
+    actions: ['view:Read', 'view:Write'],
+    resources: 'view:dashboard',
+  },
+  {
+    actions: 'object:Read',
+    resources: 'object:user',
+  },
+];
+/*

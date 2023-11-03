@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS object (
   id INT PRIMARY KEY,
   name VARCHAR(50) NOT NULL,
   slug VARCHAR(255),
+  sort_order INT,
 
   is_internal BOOLEAN DEFAULT TRUE,
   is_external BOOLEAN DEFAULT FALSE,
@@ -21,33 +22,33 @@ DO $$
 BEGIN
   IF (SELECT COUNT(*) FROM object) = 0 THEN
     
-    INSERT INTO object(id, name, slug, is_internal, is_external, is_extendable, is_editable, is_auditable, is_active) VALUES
+    INSERT INTO object(id, name, slug, sort_order, is_internal, is_external, is_extendable, is_editable, is_auditable, is_active) VALUES
 
-    (2,'metric','metrics','0','0','0','0','0','1'),
+    (2,'metric','metrics',1,'0','0','0','0','0','1'),
 
-    (151,'migration','migrations','0','0','0','0','0','1'),
-    (152,'migration_category','migration-categories','0','0','0','0','0','1'),
-    (153,'migration_script','migration-scripts','0','0','0','0','0','1'),
-    (154,'migration_rolback','migration-rolbacks','0','0','0','0','0','1'),
-    (155,'migration_tag','migration-tags','0','0','0','0','0','1'),
-    (156,'migration_metadata','migration-metadata','0','0','0','0','0','1'),
+    (101,'account','accounts',3,'1','1','0','0','0','1'),
+    (102,'company','companies',4,'1','1','0','0','0','1'),
+    (103,'subscription','subscriptions',5,'1','1','0','0','0','1'),
+    (104,'payment','payments',6,'1','1','0','0','0','1'),
+    (105,'invoice','invoices',7,'1','1','0','0','0','1'),
 
-    (201,'account','accounts','1','1','0','0','0','1'),
-    (202,'company','companies','1','1','0','0','0','1'),
-    (203,'subscription','subscriptions','1','1','0','0','0','1'),
-    (204,'payment','payments','1','1','0','0','0','1'),
-    (205,'invoice','invoices','1','1','0','0','0','1'),
+    (151,'migration','migrations',9,'0','0','0','0','0','1'),
+    (152,'migration_category','migration-categories',10,'0','0','0','0','0','1'),
+    (153,'migration_script','migration-scripts',11,'0','0','0','0','0','1'),
+    (154,'migration_rolback','migration-rolbacks',12,'0','0','0','0','0','1'),
+    (155,'migration_tag','migration-tags',13,'0','0','0','0','0','1'),
+    (156,'migration_metadata','migration-metadata',14,'0','0','0','0','0','1'),
 
-    (951,'config','configs','1','1','0','0','0','1'),
+    (951,'config','configs',16,'1','1','0','0','0','1'),
 
-    (1001,'user','users','1','1','0','0','0','1'),
-    (1002,'group','groups','1','1','0','0','0','1'),
-    (1003,'role','roles','1','1','0','0','0','1'),
-    (1004,'policy','policies','1','1','0','0','0','1'),
-    (1005,'permission','permissions','1','1','0','0','0','1'),
+    (1051,'user','users',18,'1','1','0','0','0','1'),
+    (1052,'group','groups',19,'1','1','0','0','0','1'),
+    (1053,'role','roles',20,'1','1','0','0','0','1'),
+    (1054,'policy','policies',21,'1','1','0','0','0','1'),
+    (1055,'permission','permissions',22,'1','1','0','0','0','1'),
 
-    (1151,'customer','customers','1','1','0','0','0','1'),
-    (1152,'customer_group','customer-groups','1','1','0','0','0','1');
+    (1151,'customer','customers',24,'1','1','0','0','0','1'),
+    (1152,'customer_group','customer-groups',25,'1','1','0','0','0','1');
 
   ELSE
     RAISE NOTICE 'The object table is not empty.';

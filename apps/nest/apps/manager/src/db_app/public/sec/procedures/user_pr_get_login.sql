@@ -11,7 +11,7 @@ BEGIN
   -- Get user data if it exists
 
   -- Set the menu_sort_order JSON variable
-  menu_sort_order := '{"modules": {"monitor": 1}, "views": {}}';
+  menu_sort_order := '{"modules": {"monitor": 1}, "views": {}, "objects": {} }';
 
   -- Get user data if it exists
 
@@ -29,7 +29,8 @@ BEGIN
         view_group AS "viewGroup",
         COALESCE(menu_sort_order->'views'->>view, view_sort_order::text) AS "viewSortOrder",
         object,
-        object_slug AS "objectSlug"
+        object_slug AS "objectSlug",
+        COALESCE(menu_sort_order->'objects'->>object, object_sort_order::text) AS "objectSortOrder"
       FROM module_fn_get_module_view_object('system')
     ) AS md;
 
