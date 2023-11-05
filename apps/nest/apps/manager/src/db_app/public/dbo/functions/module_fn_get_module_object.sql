@@ -1,4 +1,4 @@
-CREATE FUNCTION module_fn_get_module_view_object(roleType VARCHAR)
+CREATE FUNCTION module_fn_get_module_object(roleType VARCHAR)
 RETURNS TABLE (
   module VARCHAR,
   module_group VARCHAR,
@@ -55,4 +55,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT * FROM module_fn_get_module_view_object('system');
+REVOKE EXECUTE ON FUNCTION module_fn_get_module_object(varchar) FROM public;
+
+--SELECT * FROM module_fn_get_module_object('system');

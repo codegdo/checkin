@@ -167,7 +167,7 @@ export const migrationTablesAndFunctions = {
       scriptName: 'rb_migration_tables_and_funtions',
       scriptType: 'rollback',
       scriptPath:
-        'db_app/rollback-scripts/initial_setup/rb_migration_tables_and_functions.sql',
+        'db_app/rollback/initial_setup/rb_migration_tables_and_functions.sql',
     },
   ],
 };

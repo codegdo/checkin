@@ -32,7 +32,7 @@ export const configTablesAndFunctions = {
       scriptName: 'rb_config_tables_and_functions',
       scriptType: 'rollback',
       scriptPath:
-        'db_app/rollback-scripts/initial_setup/rb_config_tables_and_functions.sql',
+        'db_app/rollback/initial_setup/rb_config_tables_and_functions.sql',
     },
   ],
 };

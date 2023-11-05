@@ -169,8 +169,8 @@ const samplePolicies: Policy[] = [
       },
       {
         effect: 'Deny',
-        actions: 'module:Access',
-        resources: 'module:iam',
+        actions: 'database:Access', 
+        resources: 'module:database'
       },
     ],
   },
@@ -179,17 +179,29 @@ const samplePolicies: Policy[] = [
 
 // Define a sample request context
 const requestContexts: RequestContext[] = [
+  { 
+    actions: 'database:Access', 
+    resources: 'module:database' },
   {
-    actions: 'module:Access',
-    resources: 'module:home',
-  },
-  {
-    actions: ['view:Read', 'view:Write'],
-    resources: 'view:dashboard',
+    actions: 'migration:getAllMigrations',
+    resources: 'view:migration'
   },
   {
     actions: 'object:Read',
     resources: 'object:user',
   },
 ];
-/*
+
+requestContextArray [ 'database:migration:getAllMigrations' ]
+convertRequestContextArrayToObject [
+  [
+    { 
+      actions: 'database:Access', 
+      resources: 'module:database' },
+    {
+      actions: 'migration:getAllMigrations',
+      resources: 'view:migration'
+    }
+  ]
+]
+*/

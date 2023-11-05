@@ -11,7 +11,7 @@ BEGIN
   -- Get user data if it exists
 
   -- Set the menu_sort_order JSON variable
-  menu_sort_order := '{"modules": {"monitor": 1}, "views": {}, "objects": {} }';
+  menu_sort_order := '{"modules": {}, "views": {}, "objects": {} }';
 
   -- Get user data if it exists
 
@@ -31,7 +31,7 @@ BEGIN
         object,
         object_slug AS "objectSlug",
         COALESCE(menu_sort_order->'objects'->>object, object_sort_order::text) AS "objectSortOrder"
-      FROM module_fn_get_module_view_object('system')
+      FROM module_fn_get_module_object('system')
     ) AS md;
 
     -- Combine user_data and model_data into the result JSON

@@ -103,7 +103,7 @@ export const utilFunctionsAndPlugins = {
       scriptName: 'rb_util_functions_and_plugins',
       scriptType: 'rollback',
       scriptPath:
-        'db_app/rollback-scripts/initial_setup/rb_util_functions_and_plugins.sql',
+        'db_app/rollback/initial_setup/rb_util_functions_and_plugins.sql',
     },
   ],
 };

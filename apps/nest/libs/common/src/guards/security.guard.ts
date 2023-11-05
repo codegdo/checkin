@@ -33,6 +33,11 @@ export class SecurityGuard implements CanActivate {
             actions: '*',
             resources: '*',
           },
+          {
+            effect: 'Deny',
+            actions: [''],
+            resources: ['view:']
+          }
         ],
       },
     ];

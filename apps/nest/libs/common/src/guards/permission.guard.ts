@@ -41,6 +41,8 @@ export class PermissionGuard implements CanActivate {
 
     const requestContextArray: string[] = requiredPermissions;
 
+    console.log('requestContextArray', requestContextArray);
+
     // Use the PolicyChecker to verify Module and View
     const isAllowed = this.verifyModuleAndViewPermissions(
       policies,
@@ -83,6 +85,8 @@ export class PermissionGuard implements CanActivate {
         },
       ];
     });
+
+    console.log('convertRequestContextArrayToObject', result);
 
     return result;
   }

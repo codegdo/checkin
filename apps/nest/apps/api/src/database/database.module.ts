@@ -12,8 +12,8 @@ import { MigrationScriptModule } from './migration-script/migration-script.modul
     MigrationScriptModule,
     RouterModule.register([
       {
-        path: 'manage',
-        module: ManageModule,
+        path: 'database',
+        module: DatabaseModule,
         children: [
           {
             path: 'migrations',
@@ -32,4 +32,4 @@ import { MigrationScriptModule } from './migration-script/migration-script.modul
     ]),
   ],
 })
-export class ManageModule { }
+export class DatabaseModule { }

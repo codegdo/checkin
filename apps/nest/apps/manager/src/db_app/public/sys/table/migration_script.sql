@@ -24,12 +24,12 @@ CREATE TABLE IF NOT EXISTS migration_script (
 DO $$
 DECLARE
   dbo_tables_and_functions INT;
-  rollback_dbo_tables_and_functions INT;
+  rb_dbo_tables_and_functions INT;
 BEGIN
   -- Find the ID of the 'Common Tables and Functions' migration
   SELECT id INTO dbo_tables_and_functions FROM migration WHERE name = 'Dbo Tables and Functions';
   -- Find the ID of the 'Rollback Database Dbo Tables And Functions' migration_rollback
-  SELECT id INTO rollback_dbo_tables_and_functions FROM migration_rollback mr WHERE mr.id = dbo_tables_and_functions;
+  SELECT id INTO rb_dbo_tables_and_functions FROM migration_rollback mr WHERE mr.id = dbo_tables_and_functions;
 
   -- Check if the 'migration_script' table has no records
   IF NOT EXISTS (SELECT 1 FROM migration_script) THEN
@@ -37,7 +37,7 @@ BEGIN
     INSERT INTO migration_script (migration_id, migration_rollback_id, name, description, script_type, script_path, script_order) VALUES
     (dbo_tables_and_functions,null,'language','Add dbo table language.','running','db_app/public/dbo/table/language.sql',0),
     (dbo_tables_and_functions,null,'territory','Add dbo table territory.','running','db_app/public/dbo/table/territory.sql',1),
-    (null,rollback_dbo_tables_and_functions,'rb_dbo_tables_and_functions','Rollback dbo tables and functions.','rollback','db_app/rollback-scripts/database_initialization/rb_dbo_tables_and_functions.sql',0);
+    (null,rb_dbo_tables_and_functions,'rb_dbo_tables_and_functions','Rollback dbo tables and functions.','rollback','db_app/rollback-scripts/database_initialization/rb_dbo_tables_and_functions.sql',0);
   ELSE
     -- The 'migration_script' table has records
     RAISE NOTICE 'The migration table is not empty.';
