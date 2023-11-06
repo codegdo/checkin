@@ -190,4 +190,10 @@ interface PolicyStatement {
   const policyChecker = new PolicyChecker();
   const isAllowed = policyChecker.verifyPermissions(samplePolicies, requestContexts);
   console.log(`Request is ${isAllowed ? 'allowed' : 'denied'}`);
+
+  /*
+https://policysim.aws.amazon.com/home/index.jsp?#users/gdo
+https://awspolicygen.s3.amazonaws.com/policygen.html
+https://us-east-1.console.aws.amazon.com/iamv2/home?region=us-east-2#/policies
+  */
   

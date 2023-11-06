@@ -6,6 +6,7 @@ import AuthRoute from "./pages/auth/auth.route";
 import DashboardRoute from "./pages/dashboard/dashboard.route";
 import AccountRoute from "./pages/account/account.route";
 import DatabaseRoute from "./pages/database/database.route";
+import IamRoute from "./pages/iam/iam.route";
 
 const routes = [
   {
@@ -18,6 +19,15 @@ const routes = [
       {
         path: '/account/*',
         element: <AccountRoute />
+      }
+    ]
+  },
+  {
+    element: <AuthGuard />,
+    children: [
+      {
+        path: '/iam/*',
+        element: <IamRoute />
       }
     ]
   },
