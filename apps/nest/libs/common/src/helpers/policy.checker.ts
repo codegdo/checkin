@@ -160,7 +160,8 @@ export class PolicyChecker {
 // Sample policies with components (module, view, object, field) and conditions
 const samplePolicies: Policy[] = [
   {
-    version: '2012-10-17',
+    version: '1',
+    permissions: {},
     statements: [
       {
         effect: 'Allow',
@@ -185,11 +186,7 @@ const requestContexts: RequestContext[] = [
   {
     actions: 'migration:getAllMigrations',
     resources: 'view:migration'
-  },
-  {
-    actions: 'object:Read',
-    resources: 'object:user',
-  },
+  }
 ];
 
 requestContextArray [ 'database:migration:getAllMigrations' ]

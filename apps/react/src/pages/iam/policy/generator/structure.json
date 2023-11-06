@@ -1,0 +1,400 @@
+{
+  "modules": [
+    {
+      "name": "monitor",
+      "group": "sys",
+      "type": "module",
+      "sortOrder": "1"
+    },
+    {
+      "name": "client",
+      "group": "sys",
+      "type": "module",
+      "sortOrder": "4"
+    },
+    {
+      "name": "database",
+      "group": "sys",
+      "type": "module",
+      "sortOrder": "5"
+    },
+    {
+      "name": "iam",
+      "group": "app",
+      "type": "module",
+      "sortOrder": "10"
+    },
+    {
+      "name": "visitor",
+      "group": "app",
+      "type": "module",
+      "sortOrder": "12"
+    },
+    {
+      "name": "sys-setting",
+      "group": "setting",
+      "type": "module",
+      "sortOrder": "28"
+    }
+  ],
+  "views": {
+    "monitor": [
+      {
+        "name": "metrics",
+        "group": "sys_monitor",
+        "type": "view",
+        "sortOrder": "2"
+      }
+    ],
+    "client": [
+      {
+        "name": "accounts",
+        "group": "sys_client",
+        "type": "view",
+        "sortOrder": "9"
+      },
+      {
+        "name": "companies",
+        "group": "sys_client",
+        "type": "view",
+        "sortOrder": "10"
+      },
+      {
+        "name": "subscriptions",
+        "group": "sys_client",
+        "type": "view",
+        "sortOrder": "11"
+      },
+      {
+        "name": "payments",
+        "group": "sys_client",
+        "type": "view",
+        "sortOrder": "12"
+      },
+      {
+        "name": "invoices",
+        "group": "sys_client",
+        "type": "view",
+        "sortOrder": "13"
+      }
+    ],
+    "database": [
+      {
+        "name": "migrations",
+        "group": "sys_database",
+        "type": "view",
+        "sortOrder": "16"
+      },
+      {
+        "name": "migration-categories",
+        "group": "sys_database",
+        "type": "view",
+        "sortOrder": "17"
+      },
+      {
+        "name": "migration-scripts",
+        "group": "sys_database",
+        "type": "view",
+        "sortOrder": "18"
+      },
+      {
+        "name": "migration-rollbacks",
+        "group": "sys_database",
+        "type": "view",
+        "sortOrder": "19"
+      },
+      {
+        "name": "migration-tags",
+        "group": "sys_database",
+        "type": "view",
+        "sortOrder": "20"
+      }
+    ],
+    "sys-setting": [
+      {
+        "name": "configs",
+        "group": "sys_setting",
+        "type": "view",
+        "sortOrder": "28"
+      }
+    ],
+    "iam": [
+      {
+        "name": "users",
+        "group": "app_iam",
+        "type": "view",
+        "sortOrder": "35"
+      },
+      {
+        "name": "groups",
+        "group": "app_iam",
+        "type": "view",
+        "sortOrder": "36"
+      },
+      {
+        "name": "roles",
+        "group": "app_iam",
+        "type": "view",
+        "sortOrder": "37"
+      },
+      {
+        "name": "policies",
+        "group": "app_iam",
+        "type": "view",
+        "sortOrder": "38"
+      },
+      {
+        "name": "permissions",
+        "group": "app_iam",
+        "type": "view",
+        "sortOrder": "39"
+      }
+    ],
+    "visitor": [
+      {
+        "name": "customers",
+        "group": "app_visitor",
+        "type": "view",
+        "sortOrder": "46"
+      },
+      {
+        "name": "customer-groups",
+        "group": "app_visitor",
+        "type": "view",
+        "sortOrder": "47"
+      }
+    ]
+  },
+  "objects": {
+    "metrics": [
+      {
+        "name": "metric",
+        "slug": "metrics",
+        "type": "object",
+        "sortOrder": "1"
+      }
+    ],
+    "accounts": [
+      {
+        "name": "account",
+        "slug": "accounts",
+        "type": "object",
+        "sortOrder": "3"
+      },
+      {
+        "name": "company",
+        "slug": "companies",
+        "type": "object",
+        "sortOrder": "4"
+      },
+      {
+        "name": "subscription",
+        "slug": "subscriptions",
+        "type": "object",
+        "sortOrder": "5"
+      },
+      {
+        "name": "payment",
+        "slug": "payments",
+        "type": "object",
+        "sortOrder": "6"
+      },
+      {
+        "name": "invoice",
+        "slug": "invoices",
+        "type": "object",
+        "sortOrder": "7"
+      }
+    ],
+    "companies": [
+      {
+        "name": "company",
+        "slug": "companies",
+        "type": "object",
+        "sortOrder": "4"
+      }
+    ],
+    "subscriptions": [
+      {
+        "name": "subscription",
+        "slug": "subscriptions",
+        "type": "object",
+        "sortOrder": "5"
+      }
+    ],
+    "payments": [
+      {
+        "name": "payment",
+        "slug": "payments",
+        "type": "object",
+        "sortOrder": "6"
+      }
+    ],
+    "invoices": [
+      {
+        "name": "invoice",
+        "slug": "invoices",
+        "type": "object",
+        "sortOrder": "7"
+      }
+    ],
+    "migrations": [
+      {
+        "name": "migration",
+        "slug": "migrations",
+        "type": "object",
+        "sortOrder": "9"
+      },
+      {
+        "name": "migration_category",
+        "slug": "migration-categories",
+        "type": "object",
+        "sortOrder": "10"
+      },
+      {
+        "name": "migration_script",
+        "slug": "migration-scripts",
+        "type": "object",
+        "sortOrder": "11"
+      },
+      {
+        "name": "migration_rolback",
+        "slug": "migration-rolbacks",
+        "type": "object",
+        "sortOrder": "12"
+      },
+      {
+        "name": "migration_tag",
+        "slug": "migration-tags",
+        "type": "object",
+        "sortOrder": "13"
+      },
+      {
+        "name": "migration_metadata",
+        "slug": "migration-metadata",
+        "type": "object",
+        "sortOrder": "14"
+      }
+    ],
+    "migration-categories": [
+      {
+        "name": "migration_category",
+        "slug": "migration-categories",
+        "type": "object",
+        "sortOrder": "10"
+      }
+    ],
+    "migration-scripts": [
+      {
+        "name": "migration_script",
+        "slug": "migration-scripts",
+        "type": "object",
+        "sortOrder": "11"
+      }
+    ],
+    "migration-rollbacks": [
+      {
+        "name": "migration_rolback",
+        "slug": "migration-rolbacks",
+        "type": "object",
+        "sortOrder": "12"
+      }
+    ],
+    "migration-tags": [
+      {
+        "name": "migration_tag",
+        "slug": "migration-tags",
+        "type": "object",
+        "sortOrder": "13"
+      }
+    ],
+    "configs": [
+      {
+        "name": "config",
+        "slug": "configs",
+        "type": "object",
+        "sortOrder": "16"
+      }
+    ],
+    "users": [
+      {
+        "name": "user",
+        "slug": "users",
+        "type": "object",
+        "sortOrder": "18"
+      },
+      {
+        "name": "group",
+        "slug": "groups",
+        "type": "object",
+        "sortOrder": "19"
+      },
+      {
+        "name": "role",
+        "slug": "roles",
+        "type": "object",
+        "sortOrder": "20"
+      },
+      {
+        "name": "policy",
+        "slug": "policies",
+        "type": "object",
+        "sortOrder": "21"
+      },
+      {
+        "name": "permission",
+        "slug": "permissions",
+        "type": "object",
+        "sortOrder": "22"
+      }
+    ],
+    "groups": [
+      {
+        "name": "group",
+        "slug": "groups",
+        "type": "object",
+        "sortOrder": "19"
+      }
+    ],
+    "roles": [
+      {
+        "name": "role",
+        "slug": "roles",
+        "type": "object",
+        "sortOrder": "20"
+      }
+    ],
+    "policies": [
+      {
+        "name": "policy",
+        "slug": "policies",
+        "type": "object",
+        "sortOrder": "21"
+      }
+    ],
+    "permissions": [
+      {
+        "name": "permission",
+        "slug": "permissions",
+        "type": "object",
+        "sortOrder": "22"
+      }
+    ],
+    "customers": [
+      {
+        "name": "customer",
+        "slug": "customers",
+        "type": "object",
+        "sortOrder": "24"
+      }
+    ],
+    "customer-groups": [
+      {
+        "name": "customer_group",
+        "slug": "customer-groups",
+        "type": "object",
+        "sortOrder": "25"
+      }
+    ]
+  }
+}
