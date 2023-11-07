@@ -2,19 +2,19 @@ import { Injectable } from '@nestjs/common';
 
 export interface PolicyStatement {
   effect: 'Allow' | 'Deny';
-  actions: string | string[];
-  resources: string | string[];
+  action: string | string[];
+  resource: string | string[];
   condition?: { [key: string]: string | string[] | boolean };
 }
 
 export interface Policy {
   version: string;
-  statements: PolicyStatement[];
+  statement: PolicyStatement[];
 }
 
 export interface RequestContext {
-  actions: string | string[];
-  resources: string | string[];
+  action: string | string[];
+  resource: string | string[];
   condition?: { [key: string]: string | string[] | boolean };
 }
 
@@ -65,35 +65,35 @@ export class PolicyChecker {
     policy: Policy,
     requestContext: RequestContext,
   ): boolean {
-    if (policy.statements) {
+    if (policy.statement) {
       let isAllowed = false; // Default to denied
 
-      for (const statement of policy.statements) {
+      for (const statement of policy.statement) {
         const effect = statement.effect;
-        const actions = Array.isArray(statement.actions)
-          ? statement.actions
-          : [statement.actions];
-        const resources = Array.isArray(statement.resources)
-          ? statement.resources
-          : [statement.resources];
+        const actions = Array.isArray(statement.action)
+          ? statement.action
+          : [statement.action];
+        const resources = Array.isArray(statement.resource)
+          ? statement.resource
+          : [statement.resource];
         const condition = statement.condition;
 
         const isActionAllowed =
           actions.includes('*') ||
           actions.some((action) =>
-            Array.isArray(requestContext.actions)
-              ? requestContext.actions.some((reqAction) =>
+            Array.isArray(requestContext.action)
+              ? requestContext.action.some((reqAction) =>
                 this.matchesWildcard(reqAction, action),
               )
-              : this.matchesWildcard(requestContext.actions, action),
+              : this.matchesWildcard(requestContext.action, action),
           );
 
         const isResourceAllowed =
           resources.includes('*') ||
           resources.some((resource) =>
-            (Array.isArray(requestContext.resources)
-              ? requestContext.resources
-              : [requestContext.resources]
+            (Array.isArray(requestContext.resource)
+              ? requestContext.resource
+              : [requestContext.resource]
             ).includes(resource),
           );
 
@@ -161,17 +161,19 @@ export class PolicyChecker {
 const samplePolicies: Policy[] = [
   {
     version: '1',
-    permissions: {},
-    statements: [
+    permission: {},
+    statement: [
       {
+        id: 1,
         effect: 'Allow',
-        actions: '*',
-        resources: '*',
+        action: '*',
+        resource: '*',
       },
       {
+        id: 2,
         effect: 'Deny',
-        actions: 'database:Access', 
-        resources: 'module:database'
+        action: 'database:Access', 
+        resource: 'module:database'
       },
     ],
   },
@@ -181,11 +183,11 @@ const samplePolicies: Policy[] = [
 // Define a sample request context
 const requestContexts: RequestContext[] = [
   { 
-    actions: 'database:Access', 
-    resources: 'module:database' },
+    action: 'database:Access', 
+    resource: 'module:database' },
   {
-    actions: 'migration:getAllMigrations',
-    resources: 'view:migration'
+    action: 'migration:getAllMigrations',
+    resource: 'view:migration'
   }
 ];
 
@@ -194,10 +196,10 @@ convertRequestContextArrayToObject [
   [
     { 
       actions: 'database:Access', 
-      resources: 'module:database' },
+      resource: 'module:database' },
     {
       actions: 'migration:getAllMigrations',
-      resources: 'view:migration'
+      resource: 'view:migration'
     }
   ]
 ]
