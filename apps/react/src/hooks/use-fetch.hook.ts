@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { http, HttpResponse, RequestOptions } from '../helpers';
-import { BASE_URL } from '../app.constant';
+import { API_URL } from '../app.constant';
 import { stringifyUrl } from '../utils';
 
 enum FetchStatus {
@@ -119,14 +119,14 @@ export const useFetch = <T>(
   };
 
   const mutate = async (options: RequestOptions = {}): Promise<void> => {
-    const baseUrl = options.baseUrl || BASE_URL;
+    const baseUrl = options.baseUrl || API_URL;
     const strUrl = stringifyUrl(`${baseUrl}${url}`, params);
 
     makeRequest(strUrl, { ...options, signal: ctrlRef.current.signal });
   };
 
   const query = async (customBaseUrl?: string): Promise<void> => {
-    const baseUrl = customBaseUrl || BASE_URL;
+    const baseUrl = customBaseUrl || API_URL;
     const strUrl = stringifyUrl(`${baseUrl}${url}`, params);
 
     makeRequest(strUrl, { signal: ctrlRef.current.signal });

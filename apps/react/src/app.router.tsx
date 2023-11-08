@@ -5,7 +5,7 @@ import AuthGuard from "./components/guard/auth.guard";
 import AuthRoute from "./pages/auth/auth.route";
 import DashboardRoute from "./pages/dashboard/dashboard.route";
 import AccountRoute from "./pages/account/account.route";
-import DatabaseRoute from "./pages/database/database.route";
+import ManageRoute from "./pages/manage/manage.route";
 import IamRoute from "./pages/iam/iam.route";
 
 const routes = [
@@ -35,8 +35,8 @@ const routes = [
     element: <AuthGuard />,
     children: [
       {
-        path: '/database/*',
-        element: <DatabaseRoute />
+        path: '/manage/*',
+        element: <ManageRoute />
       }
     ]
   },

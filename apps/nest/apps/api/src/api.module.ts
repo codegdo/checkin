@@ -12,7 +12,7 @@ import {
 
 import { AuthModule } from './auth/auth.module';
 import { SetupModule } from './setup/setup.module';
-import { DatabaseModule } from './database/database.module';
+import { ManageModule } from './manage/manage.module';
 import { SecurityModule } from './security/security.module';
 
 @Module({
@@ -25,7 +25,7 @@ import { SecurityModule } from './security/security.module';
     SessionModule,
     //
     AuthModule,
-    DatabaseModule,
+    ManageModule,
     SetupModule,
     SecurityModule,
   ],

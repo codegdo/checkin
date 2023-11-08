@@ -27,17 +27,17 @@ export class SecurityGuard implements CanActivate {
     const policies: Policy[] = [
       {
         version: '1.0',
-        statements: [
+        statement: [
           {
             effect: 'Allow',
-            actions: '*',
-            resources: '*',
+            action: '*',
+            resource: '*',
           },
           {
             effect: 'Deny',
-            actions: [''],
-            resources: ['view:']
-          }
+            action: [''],
+            resource: ['view:'],
+          },
         ],
       },
     ];

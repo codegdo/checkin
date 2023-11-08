@@ -2,9 +2,11 @@ CREATE TABLE IF NOT EXISTS policy (
   id serial PRIMARY KEY,
   name VARCHAR(255),
   data JSONB DEFAULT '{"version": "1.0", "permission": {}, "statement": []}',
-  is_active BOOLEAN DEFAULT TRUE,
+  
   role_type_id INT NOT NULL,
   company_id INT,
+
+  is_active BOOLEAN DEFAULT TRUE,
 
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,

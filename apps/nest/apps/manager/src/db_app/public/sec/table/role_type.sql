@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS role_type (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50) NOT NULL UNIQUE,
   description VARCHAR(255),
+
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   created_by VARCHAR(50) DEFAULT CASE
     WHEN SESSION_USER IS NOT NULL THEN SESSION_USER
@@ -17,9 +18,9 @@ BEGIN
    -- Insert data into the 'group_type' table
     INSERT INTO role_type (name, description)
     VALUES
-      ('internal', 'Internal group - Internal access only'),
-      ('external', 'External group - External access only'),
-      ('system', 'System group - System-wide access');
+      ('Internal', 'Trusted insiders who are employees of the organization'),
+      ('External', 'External stakeholders, including customers, partners, and vendors.'),
+      ('System', 'Automated or system-level accounts for software and processes.');
   ELSE
     -- The role_type table has records
     RAISE NOTICE 'The role_type table is not empty.';

@@ -6,8 +6,8 @@ import { Partial } from "@/components";
 const Migration = Partial(lazy(() => import('./migration.page')));
 const MigrationForm = Partial(lazy(() => import('./migration.form')));
 
-const MigrationCategory = Partial(lazy(() => import('../migration-category/migration-category.page')));
-const MigrationScript = Partial(lazy(() => import('../migration-script/migration-script.page')));
+const MigrationCategory = Partial(lazy(() => import('./migration-category/migration-category.page')));
+const MigrationScript = Partial(lazy(() => import('./migration-script/migration-script.page')));
 
 function MigrationRoute() {
 

@@ -76,12 +76,12 @@ export class PermissionGuard implements CanActivate {
 
       return [
         {
-          actions: `${module}:Access`,
-          resources: `module:${module}`,
+          action: `${module}:*`,
+          resource: `module:${module}`,
         },
         {
-          actions: `${view}:${action}`,
-          resources: `view:${view}`,
+          action: `${view}:${action}`,
+          resource: `view:${view}`,
         },
       ];
     });

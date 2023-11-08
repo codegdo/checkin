@@ -6,8 +6,8 @@ import { Partial } from "@/components";
 const Policy = Partial(lazy(() => import('./policy.page')));
 const PolicyForm = Partial(lazy(() => import('./policy.form')));
 
-const PolicyGenerator = Partial(lazy(() => import('./generator/generator.page')));
-const PolicySimulator = Partial(lazy(() => import('./simulator/simulator.page')));
+const PolicyGenerator = Partial(lazy(() => import('./policy-generator/policy-generator.page')));
+const PolicySimulator = Partial(lazy(() => import('./policy-simulator/policy-simulator.page')));
 
 function PolicyRoute() {
 

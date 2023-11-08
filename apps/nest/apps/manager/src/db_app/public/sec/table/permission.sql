@@ -1,0 +1,20 @@
+CREATE TABLE IF NOT EXISTS permission (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255),
+  access_level_id INT,
+  view_id INT,
+  company_id INT,
+
+  is_active BOOLEAN DEFAULT TRUE,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  created_by VARCHAR(50) DEFAULT CASE
+    WHEN SESSION_USER IS NOT NULL THEN SESSION_USER
+    ELSE CURRENT_USER
+  END,
+  updated_by VARCHAR(50),
+
+  FOREIGN KEY (access_level_id) REFERENCES access_level(id) ON DELETE SET NULL,
+  FOREIGN KEY (view_id) REFERENCES view(id) ON DELETE SET NULL
+);
