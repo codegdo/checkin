@@ -1,4 +1,4 @@
-CREATE FUNCTION module_fn_get_module_object(roleType VARCHAR)
+CREATE FUNCTION module_fn_get_module_view_object(roleType VARCHAR)
 RETURNS TABLE (
   module VARCHAR,
   module_group VARCHAR,
@@ -8,7 +8,8 @@ RETURNS TABLE (
   view_sort_order INT,
   object VARCHAR,
   object_slug VARCHAR,
-  object_sort_order INT
+  object_sort_order INT,
+  action VARCHAR
 ) AS $$
 BEGIN
   RETURN QUERY
@@ -21,7 +22,8 @@ BEGIN
     v.sort_order,
     o.name,
     o.slug,
-    o.sort_order
+    o.sort_order,
+    p.name
   FROM
     module m
     INNER JOIN module m2 ON m2.id = m.parent_id
@@ -30,6 +32,7 @@ BEGIN
     INNER JOIN view v2 ON v2.id = v.parent_id
     JOIN view_object vo ON v.id = vo.view_id
     JOIN object o ON vo.object_id = o.id
+    LEFT JOIN permission p ON p.view_id = v.id
   WHERE (
     CASE
       WHEN roleType = 'internal'
@@ -55,6 +58,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-REVOKE EXECUTE ON FUNCTION module_fn_get_module_object(varchar) FROM public;
+REVOKE EXECUTE ON FUNCTION module_fn_get_module_view_object(varchar) FROM public;
 
---SELECT * FROM module_fn_get_module_object('system');
+--SELECT * FROM module_fn_get_module_view_object('system');
