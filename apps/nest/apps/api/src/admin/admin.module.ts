@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 
 import { MigrationModule } from './migration/migration.module';
+import { SetupModule } from '../setup/setup.module';
 
 @Module({
   imports: [
@@ -9,16 +10,20 @@ import { MigrationModule } from './migration/migration.module';
 
     RouterModule.register([
       {
-        path: 'manage',
-        module: ManageModule,
+        path: 'admin',
+        module: AdminModule,
         children: [
           {
             path: 'migrations',
             module: MigrationModule,
+          },
+          {
+            path: 'setups',
+            module: SetupModule,
           }
         ],
       },
     ]),
   ],
 })
-export class ManageModule { }
+export class AdminModule { }

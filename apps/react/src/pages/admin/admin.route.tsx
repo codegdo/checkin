@@ -3,19 +3,19 @@ import { useRoutes } from "react-router-dom";
 
 import { Template } from "@/components";
 
-const Index = Template(lazy(() => import('./manage.index')));
+const Index = Template(lazy(() => import('./admin.index')));
 const MigrationRoute = Template(lazy(() => import('./migration/migration.route')));
 
-function ManageRoute() {
+function AdminRoute() {
 
   const routes = useRoutes([
     {
       path: '/migrations/*',
-      element: <MigrationRoute module="manage" view="migration" />
+      element: <MigrationRoute module="admin" view="migrations" />
     },
     {
       path: '/',
-      element: <Index module="manage" />
+      element: <Index module="admin" />
     },
     {
       path: '*',
@@ -26,4 +26,4 @@ function ManageRoute() {
   return routes;
 }
 
-export default ManageRoute;
+export default AdminRoute;

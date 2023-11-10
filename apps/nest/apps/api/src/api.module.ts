@@ -11,8 +11,7 @@ import {
 } from '@app/common';
 
 import { AuthModule } from './auth/auth.module';
-import { SetupModule } from './setup/setup.module';
-import { ManageModule } from './manage/manage.module';
+import { AdminModule } from './admin/admin.module';
 import { SecurityModule } from './security/security.module';
 
 @Module({
@@ -25,8 +24,7 @@ import { SecurityModule } from './security/security.module';
     SessionModule,
     //
     AuthModule,
-    ManageModule,
-    SetupModule,
+    AdminModule,
     SecurityModule,
   ],
   controllers: [],

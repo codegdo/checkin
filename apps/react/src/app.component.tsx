@@ -5,6 +5,7 @@ import { router } from './app.router';
 function App() {
 
   console.log(utils.strRandom());
+
   return <><RouterProvider router={router} /></>
 }
 

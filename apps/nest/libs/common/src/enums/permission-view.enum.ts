@@ -1,19 +1,19 @@
 export enum MigrationPermission {
   // migration
-  ASSIGN_SCRIPTS_FOR_MIGRATION = 'database:migrations:assignScriptsToMigration',
-  GET_ALL_MIGRATIONS = 'database:migrations:getAllMigrations',
-  GET_MIGRATION_BY_ID = 'database:migrations:getMigrationById',
-  GET_SCRIPTS_FOR_MIGRATION = 'database:migrations:getScriptsForMigration',
-  GET_ROLLBACKS_FOR_MIGRATION = 'database:migrations:getRollbacksForMigration',
-  CREATE_NEW_MIGRATION = 'database:migrations:createNewMigration',
-  MIGRATION_RUN_BY_ID = 'database:migrations:migrationRunById',
-  MIGRATION_ROLLBACK_BY_ID = 'database:migrations:migrationRollbackById',
+  ASSIGN_SCRIPTS_FOR_MIGRATION = 'admin:migrations:assignScriptsToMigration',
+  GET_ALL_MIGRATIONS = 'admin:migrations:getAllMigrations',
+  GET_MIGRATION_BY_ID = 'admin:migrations:getMigrationById',
+  GET_SCRIPTS_FOR_MIGRATION = 'admin:migrations:getScriptsForMigration',
+  GET_ROLLBACKS_FOR_MIGRATION = 'admin:migrations:getRollbacksForMigration',
+  CREATE_NEW_MIGRATION = 'admin:migrations:createNewMigration',
+  MIGRATION_RUN_BY_ID = 'admin:migrations:migrationRunById',
+  MIGRATION_ROLLBACK_BY_ID = 'admin:migrations:migrationRollbackById',
   // migration_category
-  GET_ALL_MIGRATION_CATEGORIES = 'database:migrations:getAllMigrationCategories',
-  GET_MIGRATION_CATEGORY_BY_ID = 'database:migrations:getMigrationCategoryById',
-  CREATE_NEW_MIGRATION_CATEGORY = 'database:migrations:createNewMigrationCategory',
+  GET_ALL_MIGRATION_CATEGORIES = 'admin:migrations:getAllMigrationCategories',
+  GET_MIGRATION_CATEGORY_BY_ID = 'admin:migrations:getMigrationCategoryById',
+  CREATE_NEW_MIGRATION_CATEGORY = 'admin:migrations:createNewMigrationCategory',
   // migration_script
-  GET_ALL_MIGRATION_SCRIPTS = 'database:migrations:getAllMigrationScripts',
-  GET_MIGRATION_SCRIPT_BY_ID = 'database:migrations:getMigrationScriptById',
-  CREATE_NEW_MIGRATION_SCRIPT = 'database:migrations:createNewMigrationScript',
+  GET_ALL_MIGRATION_SCRIPTS = 'admin:migrations:getAllMigrationScripts',
+  GET_MIGRATION_SCRIPT_BY_ID = 'admin:migrations:getMigrationScriptById',
+  CREATE_NEW_MIGRATION_SCRIPT = 'admin:migrations:createNewMigrationScript',
 }

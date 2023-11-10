@@ -11,7 +11,7 @@ interface Migration {
 }
 
 export const useGetAllMigrations = (params?: Record<string, string | number>) => {
-  const api = useFetch<Migration[]>('/manage/migrations', { ...params });
+  const api = useFetch<Migration[]>('/admin/migrations', { ...params });
 
   useEffect(() => {
     api.query();

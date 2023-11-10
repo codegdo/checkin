@@ -14,19 +14,19 @@ function MigrationRoute() {
   const routes = useRoutes([
     {
       path: '/migration-categories',
-      element: <MigrationCategory module="manage" view="migration" object="migration_category" />
+      element: <MigrationCategory module="admin" view="migrations" />
     },
     {
       path: '/migration-scripts',
-      element: <MigrationScript module="manage" view="migration" object="migration_script" />
+      element: <MigrationScript module="admin" view="migrations" />
     },
     {
       path: '/:id',
-      element: <MigrationForm module="manage" view="migration" />
+      element: <MigrationForm module="admin" view="migrations" />
     },
     {
       path: '/',
-      element: <Migration module="manage" view="migration" />
+      element: <Migration module="admin" view="migrations" />
     },
     {
       path: '*',

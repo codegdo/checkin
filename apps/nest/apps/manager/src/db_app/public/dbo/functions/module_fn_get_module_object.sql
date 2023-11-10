@@ -19,10 +19,10 @@ BEGIN
     m.sort_order,
     v.name,
     v2.name,
-    v.sort_order,
+    mv.sort_order,
     o.name,
     o.slug,
-    o.sort_order,
+    vo.sort_order,
     p.name
   FROM
     module m

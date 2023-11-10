@@ -12,6 +12,7 @@ export default defineConfig({
       '@Helpers': path.resolve(__dirname, './src/helpers'),
       '@Hooks': path.resolve(__dirname, './src/hooks'),
       '@Utils': path.resolve(__dirname, './src/utils'),
+      '@Constants': path.resolve(__dirname, './src/constants'),
     },
   },
   server: {

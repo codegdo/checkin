@@ -5,7 +5,7 @@ import AuthGuard from "./components/guard/auth.guard";
 import AuthRoute from "./pages/auth/auth.route";
 import DashboardRoute from "./pages/dashboard/dashboard.route";
 import AccountRoute from "./pages/account/account.route";
-import ManageRoute from "./pages/manage/manage.route";
+import AdminRoute from "./pages/admin/admin.route";
 import IamRoute from "./pages/iam/iam.route";
 
 const routes = [
@@ -19,36 +19,21 @@ const routes = [
       {
         path: '/account/*',
         element: <AccountRoute />
-      }
-    ]
-  },
-  {
-    element: <AuthGuard />,
-    children: [
+      },
       {
         path: '/iam/*',
         element: <IamRoute />
-      }
-    ]
-  },
-  {
-    element: <AuthGuard />,
-    children: [
+      },
       {
-        path: '/manage/*',
-        element: <ManageRoute />
-      }
-    ]
-  },
-  {
-    element: <AuthGuard />,
-    children: [
+        path: '/admin/*',
+        element: <AdminRoute />
+      },
       {
         path: '/*',
         element: <DashboardRoute />
       }
     ]
-  },
+  }
 ];
 
 export const router = createBrowserRouter(routes);

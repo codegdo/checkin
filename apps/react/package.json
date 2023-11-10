@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@libs/shared-code": "file:../../libs/code",
+    "@reduxjs/toolkit": "^1.9.7",
     "dompurify": "^3.0.6",
     "html-react-parser": "^5.0.6",
     "react": "^18.2.0",

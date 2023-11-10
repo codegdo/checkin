@@ -20,7 +20,7 @@ interface ParserOptions {
 
 export function Template(Component: FC<ComponentProps>): FC<ComponentProps> {
   return (props: ComponentProps): ReactElement => {
-    //console.log(props);
+    console.log(props);
     const parserOptions = ({ fallback }: ParserOptions): HTMLReactParserOptions => {
       return {
         replace: (domNode): false | void | object | Element | null | undefined => {
