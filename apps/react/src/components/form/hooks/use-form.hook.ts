@@ -1,6 +1,7 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { FormErrors, FormEvents, FormValues } from "../types";
 import { ObjectSchemaExtend, ValidationError, formHelper, objSchema } from '../helpers';
+import { error } from "console";
 
 interface UseFormParams {
   redirect?: string;
@@ -39,7 +40,7 @@ export function useForm({ onSubmit }: UseFormParams) {
         }
       }
     }
-    console.log(current);
+    //console.log(current);
   }, []);
 
   return {

@@ -34,10 +34,10 @@ class FormHelper {
   }
 
   validationNumber(field: Field, events: FormEvents, values: FormValues) {
-    const { name, isRequire, validation = {}, visibility = [] } = field;
+    const { name, isRequired, validation = {}, visibility = [] } = field;
     let validate = this.validation.number();
 
-    if (isRequire) {
+    if (isRequired) {
       validate = validate.required();
 
       if (validation.max !== undefined) {
@@ -61,10 +61,10 @@ class FormHelper {
   }
 
   validationString(field: Field, events: FormEvents, values: FormValues) {
-    const { type, isRequire, validation = {}, visibility = [] } = field;
+    const { type, isRequired, validation = {}, visibility = [] } = field;
     let validate = this.validation.string();
 
-    if (isRequire) {
+    if (isRequired) {
       validate = validate.required();
 
       if (validation.max !== undefined) {

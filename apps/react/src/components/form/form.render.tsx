@@ -19,9 +19,9 @@ const render = ({ data }: RenderProps) => {
   if (data == null) return null;
 
   return data.map((item, i) => {
-    const { group, data } = item;
+    const { dataType, data } = item;
 
-    switch (group) {
+    switch (dataType) {
       case 'section':
         return (
           <FormSection key={i}>{render({ data })}</FormSection>

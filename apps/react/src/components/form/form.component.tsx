@@ -39,7 +39,6 @@ export interface FormProps extends PropsWithChildren {
   onSubmit?: (data: FormValues) => void;
 }
 
-
 export function Form({ data = [], children, status, redirect, onSubmit }: FormProps & FormExtendProps) {
   const { values, errors, events, schema, form, handleClick } = useForm({ redirect, onSubmit });
   return (

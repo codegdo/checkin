@@ -1,5 +1,5 @@
 import { UtilsInterface, utils } from '@libs/shared-code';
-import { GroupType, Field } from '../../types';
+import { DataType, Field } from '../../types';
 import { XYCoord } from 'react-dnd';
 
 interface FindDropPositionParams {
@@ -20,14 +20,14 @@ class DragDropHelper {
     const list: Field[] = [];
 
     cloneData.forEach((item: Field) => {
-      return utils.mapToParent(list, item, (item: Field) => (item.group == GroupType.SECTION || item.group == GroupType.BLOCK));
+      return utils.mapToParent(list, item, (item: Field) => (item.dataType == DataType.SECTION || item.dataType == DataType.BLOCK));
     });
 
     return [{
       id: 'dropArea',
       name: 'area',
       type: 'div',
-      dataType: GroupType.AREA,
+      dataType: DataType.AREA,
       parentId: null,
       data: [...list]
     }];

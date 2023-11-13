@@ -7,13 +7,12 @@ import { DragDropProvider, defaultDndRef, initialState } from './dragdrop.provid
 import DropRender from './drop.render';
 import DragRender from './drag.render';
 import DragPreview from './drag.preview';
-import { Field } from '../types';
 import { dndReducer } from './reducers';
-import { DndActionType } from '../types';
+import { DndActionType, DragDropField } from './types';
 
 interface DragDropProps {
-  data: Field[];
-  dragFields?: Field[];
+  data: DragDropField[];
+  dragFields?: DragDropField[];
 }
 
 export function DragDrop({ data = [], dragFields = [] }: DragDropProps) {

@@ -1,23 +1,24 @@
 import { AnyAction, createReducer } from '@reduxjs/toolkit';
 
 import {
-  updateCurrent,
-  logoutCurrent
-} from './current.action';
-import { CurrentState } from './current.type';
+  updateStatus,
+  logoutStatus
+} from './status.action';
+import { StatusState } from './status.type';
 import { AppStatus } from '@/constants';
 
-export const initialCurrent: CurrentState = {
-  status: AppStatus.UNAUTHENTICATED,
+export const initialStatus: StatusState = {
+  clientId: null,
+  current: AppStatus.UNAUTHENTICATED,
 };
 
-export const currentReducer = createReducer(initialCurrent, (builder) => {
+export const statusReducer = createReducer(initialStatus, (builder) => {
   builder
-    .addCase(updateCurrent.type, (state, action: AnyAction) => {
+    .addCase(updateStatus.type, (state, action: AnyAction) => {
       return { ...state, ...action.payload };
     })
-    .addCase(logoutCurrent.type, () => {
-      return initialCurrent;
+    .addCase(logoutStatus.type, () => {
+      return initialStatus;
     });
 });
 

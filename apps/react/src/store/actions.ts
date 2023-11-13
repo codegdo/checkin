@@ -1,3 +1,3 @@
 //export * from './session/session.action';
-export * from './current/current.action';
+export * from './status/status.action';
 export * from './user/user.action';

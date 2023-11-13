@@ -13,7 +13,7 @@ export enum ElementType {
   DIV = 'div',
 }
 
-export enum GroupType {
+export enum DataType {
   AREA = 'area',
   SECTION = 'section',
   BLOCK = 'block',
@@ -30,7 +30,7 @@ interface ElementField {
   id: number | string;
   name: string;
   type: string | FieldType;
-  group: string | GroupType;
+  dataType: string | DataType;
 
   data?: (ElementField | FormField)[] | null;
   value?: string | null;
@@ -39,7 +39,7 @@ interface ElementField {
 }
 
 interface FormField extends ElementField {
-  label?: string;
+  title?: string;
   description?: string;
 }
 

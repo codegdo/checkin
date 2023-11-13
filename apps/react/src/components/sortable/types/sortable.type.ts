@@ -1,4 +1,4 @@
-import { Field } from "@/types";
+import { Field } from "../../types";
 
 export type SortableField = Field & {
   siblings?: string[]

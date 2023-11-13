@@ -76,9 +76,27 @@ function Login() {
 
   return <Form onSubmit={handleSubmit}>
     <Form.Section>
-      <Form.Field type='email' name='email' isRequire={true} />
-      <Form.Field type='text' name='username' isRequire={true} validation={{ length: 5 }} visibility={visibility} />
-      <Form.Field type='number' name='age' isRequire={true} validation={{ min: 5 }} />
+      <Form.Field type='text' name='username' isRequired={true}/>
+      <Form.Field type='password' name='password' isRequired={true}/>
+      <Form.Element type='button' name='submit'>
+        {
+          ({ name, handleClick }: CustomElementProps) => {
+            return <button type='button' onClick={() => handleClick && handleClick(name)}>Custom Button</button>
+          }
+        }
+      </Form.Element>
+    </Form.Section>
+  </Form>;
+}
+
+export default Login;
+
+/*
+<Form onSubmit={handleSubmit}>
+    <Form.Section>
+      <Form.Field type='email' name='email' isRequired={true} />
+      <Form.Field type='text' name='username' isRequired={true} validation={{ length: 5 }} visibility={visibility} />
+      <Form.Field type='number' name='age' isRequired={true} validation={{ min: 5 }} />
       <Form.Field type='password' name='password'>
         {
           ({ name, currentValue, error, handleChange }: CustomFieldProps) => {
@@ -98,9 +116,7 @@ function Login() {
         }
       </Form.Element>
     </Form.Section>
-  </Form>;
-}
-
-export default Login;
+  </Form>
+*/
 
 
