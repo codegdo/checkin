@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { ObjectSchema, ValidationError, AnyObject } from 'yup';
-import { Field, FormEvents, FormValues } from '../types';
-import { Condition, VisibilityRule } from '@/types';
+import { FormField, FormEvent, FormValue, } from '../types';
+import { FieldCondition, FieldAccessibility } from '@/components/types';
 
 export type ObjectSchemaExtend = ObjectSchema<object, AnyObject, object, "">
 
@@ -24,7 +24,7 @@ class FormHelper {
     }, {});
   }
 
-  fieldValidation(field: Field, events: FormEvents, values: FormValues) {
+  fieldValidation(field: FormField, events: FormEvent, values: FormValue) {
     switch (field.type) {
       case 'number':
         return this.validationNumber(field, events, values);
@@ -33,23 +33,23 @@ class FormHelper {
     }
   }
 
-  validationNumber(field: Field, events: FormEvents, values: FormValues) {
-    const { name, isRequired, validation = {}, visibility = [] } = field;
+  validationNumber(field: FormField, events: FormEvent, values: FormValue) {
+    const { name, isRequired, validation = [], accessibility = [] } = field;
     let validate = this.validation.number();
 
     if (isRequired) {
       validate = validate.required();
 
-      if (validation.max !== undefined) {
-        validate = validate.max(validation.max, `Maximum ${validation.max} allowed.`);
-      }
+      // if (validation.max !== undefined) {
+      //   validate = validate.max(validation.max, `Maximum ${validation.max} allowed.`);
+      // }
 
-      if (validation.min !== undefined) {
-        validate = validate.min(validation.min, `Minimum ${validation.min} required.`);
-      }
+      // if (validation.min !== undefined) {
+      //   validate = validate.min(validation.min, `Minimum ${validation.min} required.`);
+      // }
     }
 
-    if (visibility.length > 0) {
+    if (accessibility.length > 0) {
       validate = validate.test('visibility', 'visibility test', (value, schema) => {
 
         events['username'].update('test');
@@ -60,38 +60,38 @@ class FormHelper {
     return validate;
   }
 
-  validationString(field: Field, events: FormEvents, values: FormValues) {
-    const { type, isRequired, validation = {}, visibility = [] } = field;
+  validationString(field: FormField, events: FormEvent, values: FormValue) {
+    const { type, isRequired, validation = [], accessibility = [] } = field;
     let validate = this.validation.string();
 
     if (isRequired) {
       validate = validate.required();
 
-      if (validation.max !== undefined) {
-        validate = validate.max(validation.max, `Maximum ${validation.max} characters allowed.`);
-      }
+      // if (validation.max !== undefined) {
+      //   validate = validate.max(validation.max, `Maximum ${validation.max} characters allowed.`);
+      // }
 
-      if (validation.min !== undefined) {
-        validate = validate.min(validation.min, `Minimum ${validation.min} characters required.`);
-      }
+      // if (validation.min !== undefined) {
+      //   validate = validate.min(validation.min, `Minimum ${validation.min} characters required.`);
+      // }
 
-      if (validation.length !== undefined) {
-        validate = validate.length(validation.length, `String must be exactly ${validation.length} characters`);
-      }
+      // if (validation.length !== undefined) {
+      //   validate = validate.length(validation.length, `String must be exactly ${validation.length} characters`);
+      // }
 
-      if (validation.pattern !== undefined) {
-        validate = validate.matches(validation.pattern, 'Invalid format.');
-      }
+      // if (validation.pattern !== undefined) {
+      //   validate = validate.matches(validation.pattern, 'Invalid format.');
+      // }
     }
 
     if (type == 'email') {
       validate = validate.email().test("is-valid", (message) => `${message.path} is invalid`, (value) => this.isValidEmail(value))
     }
 
-    if (visibility.length > 0) {
+    if (accessibility.length > 0) {
       validate = validate.test('visibility', 'visibility', (value, schema) => {
 
-        for (const visibilityRule of visibility) {
+        for (const visibilityRule of accessibility) {
           const visibility = this.checkConditions(visibilityRule, values);
           console.log(`Visibility for ${visibilityRule.title}:`, visibility);
         }
@@ -103,7 +103,7 @@ class FormHelper {
     return validate;
   }
 
-  checkFieldCondition(condition: Condition, data: Record<string, string>): boolean {
+  checkFieldCondition(condition: FieldCondition, data: Record<string, string>): boolean {
     const conditionValue = data[condition.fieldId];
     const valueToCompare = condition.caseSensitivity ? condition.value : condition.value.toLowerCase();
     //console.log('checkFieldCondition', condition, data, conditionValue, valueToCompare);
@@ -129,10 +129,10 @@ class FormHelper {
     }
   }
 
-  checkConditions(visibilityRule: VisibilityRule, data: Record<string, string>): boolean {
+  checkConditions(visibilityRule: FieldAccessibility, data: Record<string, string>): boolean {
     const operations: (boolean | 'and' | 'or')[] = [];
 
-    for (const condition of visibilityRule.rules) {
+    for (const condition of visibilityRule.conditions) {
       const operator = condition.operator;
       const result = this.checkFieldCondition(condition, data);
       operations.push(result, operator);

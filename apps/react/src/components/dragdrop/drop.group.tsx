@@ -1,9 +1,9 @@
 
 import DropMenu from './drop.menu';
 import Dropditor from './drop.editor';
-import { Field } from '../types';
+import { DndField } from './types';
 
-type DropGroupProps = Field & {
+type DropGroupProps = DndField & {
   ctx: string;
 };
 

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FormContextValue } from "../form.provider";
-import { Field } from "../types";
+import { FormField } from "../types";
 import { formHelper } from "../helpers";
 
-export const useField = (ctx: FormContextValue, field: Field) => {
+export const useField = (ctx: FormContextValue, field: FormField) => {
   const { values, errors, events, schema, form } = ctx;
   const { name, value } = field;
 

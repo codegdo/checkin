@@ -1,19 +1,21 @@
 import { utils } from "@libs/shared-code";
-import { ExtendedField, Field, DndAction, DndActionType, DndState, DataType } from "../../types";
+import { DataType } from "@/components/types";
+
+import { DndField, DndAction, DndActionType, DndState } from "../types";
 import { defaultStatus } from "../dragdrop.provider";
 import { dndHelper } from "../helpers";
 
 interface InitialItemsPayload {
-  data: Field[]
+  data: DndField[]
 }
 
 interface SelectItemPayload {
-  item: ExtendedField;
+  item: DndField;
 }
 
 interface MoveItemsPayload {
-  dragItem: Field;
-  dropItem: Field;
+  dragItem: DndField;
+  dropItem: DndField;
   offset: string;
 }
 
@@ -55,12 +57,12 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
       const { dragItem, dropItem, offset } = action.payload as MoveItemsPayload;
 
       const {
-        group: dragDataType
+        dataType: dragDataType
       } = dragItem || {};
 
       const {
         id: dropId,
-        group: dropDataType,
+        dataType: dropDataType,
         data: dropData,
         parentId: dropParentId,
         position: dropPosition
@@ -79,7 +81,7 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
       };
 
       const hasChildren = dragDataType === DataType.BLOCK || dragDataType === DataType.SECTION;
-      const condition = (item: Field) => (item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION);
+      const condition = (item: DndField) => (item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION);
 
       const dropIds = hasChildren ? utils.countItems(dropData || [], condition) : [];
       const dropCount = dropIds.length;
@@ -137,7 +139,7 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
       const offsetPosition = dndHelper.findDropPosition({ dragIndex, dropIndex, offset });
 
       const hasChildren = dragDataType === DataType.BLOCK || dragDataType === DataType.SECTION;
-      const condition = (item: Field) => (item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION);
+      const condition = (item: DndField) => (item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION);
 
       const dragIds = hasChildren ? utils.countItems(dragData || [], condition) : [];
       const dropIds = hasChildren ? utils.countItems(dropData || [], condition) : [];

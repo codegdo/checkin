@@ -1,23 +1,23 @@
-import { useCallback, useEffect, useRef } from "react";
-import { FormErrors, FormEvents, FormValues } from "../types";
+import { useCallback, useRef } from "react";
+import { FormError, FormEvent, FormValue } from "../types";
 import { ObjectSchemaExtend, ValidationError, formHelper, objSchema } from '../helpers';
-import { error } from "console";
 
 interface UseFormParams {
   redirect?: string;
-  onSubmit?: (data: FormValues) => void;
+  onSubmit?: (data: FormValue) => void;
+  onCallback?: (name: string) => void;
 }
 
 interface FormRef {
-  values: FormValues;
-  errors: FormErrors;
-  events: FormEvents;
+  values: FormValue;
+  errors: FormError;
+  events: FormEvent;
   vars: object;
   schema: ObjectSchemaExtend;
 
 }
 
-export function useForm({ onSubmit }: UseFormParams) {
+export function useForm({ onSubmit, onCallback }: UseFormParams) {
   const { current } = useRef<FormRef>({
     values: {},
     errors: {},
@@ -27,21 +27,26 @@ export function useForm({ onSubmit }: UseFormParams) {
   });
 
   const handleClick = useCallback(async (name: string) => {
-    try {
-      await current.schema.validate(current.values, { abortEarly: false });
-      onSubmit && onSubmit(current.values);
-    } catch (validationError: unknown) {
-      const errorArray = validationError as ValidationError;
-      current.errors = formHelper.errorsWithFieldNames(errorArray);
 
-      for (const fieldName in current.errors) {
-        if (current.events[fieldName]) {
-          current.events[fieldName].error(true);
+    if (name === 'submit') {
+      try {
+        await current.schema.validate(current.values, { abortEarly: false });
+        onSubmit && onSubmit(current.values);
+      } catch (validationError: unknown) {
+        const errorArray = validationError as ValidationError;
+        current.errors = formHelper.errorsWithFieldNames(errorArray);
+
+        for (const fieldName in current.errors) {
+          if (current.events[fieldName]) {
+            current.events[fieldName].error(true);
+          }
         }
       }
+    } else {
+      onCallback && onCallback(name);
     }
-    //console.log(current);
-  }, []);
+
+  }, [current, onSubmit, onCallback]);
 
   return {
     values: current.values,

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+
 
 import DropArea from './drop.area';
 import DropSection from './drop.section';
@@ -10,15 +10,15 @@ import DropGrid from './drop.grid';
 import DropGroup from './drop.group';
 import DragDropContext from './dragdrop.provider';
 import { dndHelper } from './helpers';
-import { DndContextValue, Field } from '../types';
+import { DndContextValue, DndField } from './types';
 import { useWrapperContext } from '../../hooks';
 
 interface RenderProps {
-  items: Field[];
+  items: DndField[];
   ctx: DndContextValue;
 }
 
-const render = ({ items, ctx }:RenderProps) => {
+const render = ({ items, ctx }: RenderProps) => {
   return (
     <>
       {items.map((item) => {
@@ -48,7 +48,7 @@ const render = ({ items, ctx }:RenderProps) => {
           case 'placeholder':
             return data && (
               <DropPlaceholder key={item.id} {...item} ctx={''}>
-                {render({ items: data, ctx})}
+                {render({ items: data, ctx })}
               </DropPlaceholder>
             );
           case 'grid':

@@ -1,9 +1,9 @@
 import { useWrapperContext } from "@/hooks";
-import { Field } from "./types";
+import { FormField } from "./types";
 
 import FormContext from "./form.provider";
 
-interface GridProps extends Field { }
+interface GridProps extends FormField { }
 
 export function FormGrid(props: GridProps) {
   const ctx = useWrapperContext(FormContext);

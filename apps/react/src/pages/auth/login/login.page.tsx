@@ -1,5 +1,35 @@
-import { CustomElementProps, CustomFieldProps, Form, FormData } from "@/components";
+import { CustomElementProps, Form, FormValue } from "@/components";
 
+function Login() {
+
+  const handleCallback = (name: string) => {
+    console.log(name);
+  }
+
+  const handleSubmit = (data: FormValue) => {
+    console.log(data);
+  }
+
+  return (
+    <Form onSubmit={handleSubmit} onCallback={handleCallback}>
+      <Form.Section>
+        <Form.Field type='text' name='username' isRequired={true} />
+        <Form.Field type='password' name='password' isRequired={true} />
+        <Form.Element type='button' name='submit'>
+          {
+            ({ name, handleClick }: CustomElementProps) => {
+              return <button type='button' onClick={() => handleClick && handleClick(name)}>Login</button>
+            }
+          }
+        </Form.Element>
+      </Form.Section>
+    </Form>
+  );
+}
+
+export default Login;
+
+/*
 const visibility = [
   {
     id: 1,
@@ -67,31 +97,6 @@ const visibility = [
   },
   // Add more visibility rules here
 ];
-
-function Login() {
-
-  const handleSubmit = (data: FormData) => {
-    console.log(data);
-  }
-
-  return <Form onSubmit={handleSubmit}>
-    <Form.Section>
-      <Form.Field type='text' name='username' isRequired={true}/>
-      <Form.Field type='password' name='password' isRequired={true}/>
-      <Form.Element type='button' name='submit'>
-        {
-          ({ name, handleClick }: CustomElementProps) => {
-            return <button type='button' onClick={() => handleClick && handleClick(name)}>Custom Button</button>
-          }
-        }
-      </Form.Element>
-    </Form.Section>
-  </Form>;
-}
-
-export default Login;
-
-/*
 <Form onSubmit={handleSubmit}>
     <Form.Section>
       <Form.Field type='email' name='email' isRequired={true} />

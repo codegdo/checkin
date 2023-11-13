@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
-import { Field } from '../types';
+import { DndField } from './types';
 
-type DropPlaceholderProps = PropsWithChildren<Field & {
+type DropPlaceholderProps = PropsWithChildren<DndField & {
   ctx: string;
 }>;
 

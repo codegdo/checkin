@@ -1,9 +1,12 @@
 import { utils } from "@libs/shared-code";
-import { DataType, DndContextValue, Field } from "../types";
+import { DataType } from "../types";
+
+import { DndContextValue, DndField } from "./types";
 import { useDragDrop } from './hooks';
 import { dndHelper } from "./helpers";
 
-type DragItemProps = Field & {
+
+type DragItemProps = DndField & {
   ctx: DndContextValue;
 };
 function DragItem({ ctx, ...item }: DragItemProps) {

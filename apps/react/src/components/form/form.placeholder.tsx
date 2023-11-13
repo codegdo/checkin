@@ -1,5 +1,5 @@
 
-export function FormHolder(props: any) {
+export function FormPlaceholder(props: any) {
   return (
     <>
       {

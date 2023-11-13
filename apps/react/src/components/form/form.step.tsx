@@ -1,5 +1,5 @@
 
-export function FormSteps() {
+export function FormStep() {
 
   return (
     <>

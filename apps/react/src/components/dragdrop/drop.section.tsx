@@ -3,10 +3,10 @@ import { utils } from '@libs/shared-code';
 
 import ItemMenu from './drop.menu';
 import ItemEditor from './drop.editor';
-import { Field, DndContextValue } from '../types';
+import { DndField, DndContextValue } from './types';
 import { useDragDrop, useDragDropSelect } from './hooks';
 
-type DropSectionProps = PropsWithChildren<Field & {
+type DropSectionProps = PropsWithChildren<DndField & {
   ctx: DndContextValue;
 }>;
 

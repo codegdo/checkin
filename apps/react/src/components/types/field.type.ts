@@ -26,29 +26,87 @@ export enum DataType {
   GRID = 'grid',
 }
 
-interface ElementField {
-  id: number | string;
-  name: string;
-  type: string | FieldType;
-  dataType: string | DataType;
+export interface FieldCondition {
+  id: string | number;
+  fieldId: string | number;
+  caseSensitivity: boolean;
+  comparison: 'equals' | 'contains' | 'startsWith' | 'endsWith';
+  operator: 'and' | 'or';
+  value: string;
+}
 
-  data?: (ElementField | FormField)[] | null;
+export interface FieldAccessibility {
+  id: string | number;
+  title: string;
+  description?: string;
+  conditions: FieldCondition[];
+  display: {
+    isDisable: boolean;
+    isReadonly: boolean;
+    isHidden: boolean;
+  };
+  fields: string[];
+}
+
+export interface FieldValidation {
+  id: string | number;
+  title: string;
+  description?: string;
+  conditions: FieldCondition[];
+  errorMessage: string;
+}
+
+interface Translations {
+  title: string;
+  description: string;
+  hint: string;
+  placeholder: string;
+}
+
+interface FieldOptions {
+  css: [];
+  attributes: [];
+  className: string;
+}
+
+export interface FieldTranslation {
+  es: Record<string, Translations>;
+  vn: Record<string, Translations>;
+}
+
+interface Element {
+  id?: number | string;
+  name: string;
+  type: string | ElementType | FieldType;
+  dataType?: string | DataType;
+
+  data?: (Element | Field)[] | null;
   value?: string | null;
+
   parentId?: number | string | null;
+  placeholderId?: number | string | null;
   position?: number | null;
 }
 
-interface FormField extends ElementField {
+export interface Field extends Element {
   title?: string;
   description?: string;
+  hint?: string;
+  placeholder?: string;
+
+  validation?: FieldValidation[],
+  accessibility?: FieldAccessibility[];
+  translation?: FieldTranslation[];
+
+  options?: FieldOptions;
+
+  min?: number;
+  max?: number;
+  length?: number;
+  pattern?: string;
+
+  isRequired?: boolean;
+  isDisabled?: boolean;
+  isReadonly?: boolean;
+  isHidden?: boolean;
 }
-
-export type Field = ElementField & Partial<FormField>;
-
-
-
-export type ExtendedField = Field & {
-  selected?: boolean;
-}
-
-export type DragField = Partial<Field>

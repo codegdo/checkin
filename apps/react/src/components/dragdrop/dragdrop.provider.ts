@@ -1,5 +1,5 @@
 import React from 'react';
-import { DndContextValue } from '../types';
+import { DndContextValue } from './types';
 
 export const defaultStatus = {
   isSelecting: false,

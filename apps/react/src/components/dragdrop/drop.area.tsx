@@ -1,10 +1,10 @@
 import { PropsWithChildren, useRef } from 'react';
 
-import { Field, DndActionType, DndContextValue } from '../types';
+import { DndField, DndActionType, DndContextValue } from './types';
 import { useDragDrop } from './hooks';
 import { utils } from '@libs/shared-code';
 
-type DropAreaProps = PropsWithChildren<Field & {
+type DropAreaProps = PropsWithChildren<DndField & {
   ctx: DndContextValue;
 }>;
 

@@ -1,6 +1,6 @@
-import { NormalizeField } from "@/types"
+import { Field } from "@/components/types";
 
-export interface Field extends NormalizeField { }
+export interface FormField extends Field { }
 
 export interface CustomFieldProps extends Field {
   currentValue: string;
@@ -12,6 +12,8 @@ export interface CustomElementProps extends Field {
   handleClick?: (param: string) => void
 }
 
+export type FormFieldArray = Field[];
+
 export type ButtonType = {
   submit: string;
   cancel: string;
@@ -20,19 +22,17 @@ export type ButtonType = {
   previous: string;
 }
 
-export interface FormValues {
+export interface FormValue {
   [key: string]: string;
 }
 
-export interface FormErrors {
+export interface FormError {
   [key: string]: string;
 }
 
-export interface FormEvents {
+export interface FormEvent {
   [key: string]: {
     update: (value: string) => void;
     error: React.Dispatch<React.SetStateAction<boolean>>
   };
 }
-
-export interface FormData extends FormValues { }

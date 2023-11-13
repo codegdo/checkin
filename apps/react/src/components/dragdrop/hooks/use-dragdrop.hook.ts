@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef } from "react";
 import { utils } from '@libs/shared-code';
 
-import { Field, DndContextValue, DndActionType, RestrictedDataType, DataType } from "../../types";
+import { DndField, DndContextValue, DndActionType, RestrictedDataType } from "../types";
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 
 interface Params {
-  item: Field;
+  item: DndField;
   ctx: DndContextValue,
   draggable?: boolean
 }

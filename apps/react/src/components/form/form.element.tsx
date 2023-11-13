@@ -1,9 +1,9 @@
 import { ReactNode } from "react";
 import { useWrapperContext } from "@/hooks";
-import { CustomElementProps, Field } from "./types";
+import { CustomElementProps, FormField } from "./types";
 import FormContext from "./form.provider";
 
-interface ElementProps extends Field {
+interface ElementProps extends FormField {
   children?: ((props: CustomElementProps) => ReactNode) | ReactNode;
 }
 

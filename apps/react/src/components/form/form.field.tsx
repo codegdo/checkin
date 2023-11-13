@@ -3,8 +3,8 @@ import { ReactNode } from "react";
 import { useWrapperContext } from "@/hooks";
 
 import FormContext from "./form.provider";
-import { CustomFieldProps, Field } from "./types";
-import { useField } from "./hooks/use-field.hook";
+import { CustomFieldProps, FormField as Field } from "./types";
+import { useField } from "./hooks";
 
 
 interface FieldProps extends Field {

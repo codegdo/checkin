@@ -6,7 +6,7 @@ const Login = Partial(lazy(() => import('./login/login.page')));
 const Signup = Partial(lazy(() => import('./signup/signup.page')));
 
 function Index() {
-  let routes = useRoutes([
+  const routes = useRoutes([
     {
       path: '/',
       element: <Login module="auth" view="login" />
@@ -26,6 +26,6 @@ function Index() {
   ]);
 
   return <>{routes}</>
-};
+}
 
 export default Index;

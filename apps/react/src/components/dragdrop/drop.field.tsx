@@ -2,10 +2,10 @@ import { utils } from '@libs/shared-code';
 
 import DropMenu from './drop.menu';
 import DropEditor from './drop.editor';
-import { Field, DndContextValue } from '../types';
+import { DndField, DndContextValue } from './types';
 import { useDragDrop, useDragDropSelect } from './hooks';
 
-type DropFieldProps = Field & {
+type DropFieldProps = DndField & {
   ctx: DndContextValue;
 };
 

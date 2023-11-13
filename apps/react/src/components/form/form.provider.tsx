@@ -1,12 +1,12 @@
 import React from 'react';
-import { Field, FormErrors, FormEvents, FormValues } from './types';
+import { FormFieldArray, FormError, FormEvent, FormValue } from './types';
 import { ObjectSchemaExtend, objSchema } from './helpers';
 
 export interface FormContextValue {
-  data: Field[];
-  values: FormValues;
-  errors: FormErrors;
-  events: FormEvents;
+  data: FormFieldArray;
+  values: FormValue;
+  errors: FormError;
+  events: FormEvent;
   schema: ObjectSchemaExtend;
   form: {
     schema: ObjectSchemaExtend;

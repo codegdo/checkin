@@ -1,5 +1,5 @@
 import { Dispatch } from "react";
-import { ExtendedField, Field } from "../../types";
+import { Field } from "../../types";
 
 export enum DndActionType {
   INITIAL_ITEMS = 'INITIAL_ITEMS',
@@ -57,8 +57,8 @@ export interface DndContextValue {
 }
 
 export interface DndState {
-  data: Field[];
-  item: ExtendedField | null;
+  data: DndField[];
+  item: DndField | null;
   isEditing: boolean;
   isSelecting: boolean;
 }
@@ -68,4 +68,9 @@ export interface DndAction<T = unknown> {
   payload: T;
 }
 
-export type DragDropField = Field;
+export interface DndField extends Field {
+  selected?: boolean;
+}
+
+export type DndData = Field[];
+

@@ -3,10 +3,10 @@ import { useWrapperContext } from '../../hooks';
 import DragDropContext from './dragdrop.provider';
 
 import DragItem from './drag.item';
-import { Field } from '../types';
+import { DndField } from './types';
 
 interface DragRenderProps {
-  data?: Field[];
+  data?: DndField[];
 }
 
 function DragRender({ data = [] }: DragRenderProps) {
