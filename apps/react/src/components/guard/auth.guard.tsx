@@ -1,17 +1,17 @@
+import { AppState } from '@/store/reducers';
 import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
-//import { useAuth } from '../../hooks/use-auth.hook';
 
 function AuthGuard(): JSX.Element {
-
+  const { isLoggedIn } = useSelector((state: AppState) => state.status);
   const navigate = useNavigate();
-  const isAuthenticated = true; // useAuth();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isLoggedIn) {
       navigate('/auth/login');
     }
-  }, [isAuthenticated, navigate]);
+  }, [isLoggedIn, navigate]);
 
   return <Outlet />
 }

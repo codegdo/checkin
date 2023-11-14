@@ -3,7 +3,7 @@ import { useLoginApi } from "./api";
 
 function Login() {
 
-  const {mutation} = useLoginApi();
+  const { status, data, mutation } = useLoginApi();
 
   const handleCallback = (name: string) => {
     console.log(name);

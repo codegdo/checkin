@@ -10,6 +10,7 @@ import { AppStatus } from '@/constants';
 export const initialStatus: StatusState = {
   clientId: null,
   current: AppStatus.UNAUTHENTICATED,
+  isLoggedIn: false
 };
 
 export const statusReducer = createReducer(initialStatus, (builder) => {

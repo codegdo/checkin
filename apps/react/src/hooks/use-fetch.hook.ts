@@ -75,14 +75,15 @@ export const useFetch = <T>(
         timeoutPromise,
       ]);
 
-      console.log('raceResponses', raceResponse);
+      console.log('raceResponse', raceResponse);
 
       if (raceResponse === 'DELAY') {
-        checkDelay(responsePromise, delayCount + 1);
         if (delayCount < maxDelayCount) {
           setStatus(FetchStatus.Delay);
+          checkDelay(responsePromise, delayCount + 1);
         } else {
           setStatus(FetchStatus.Abort);
+          throw new Error(`Request failed with status: ${raceResponse}`);
         }
       } else {
         const httpResponse = raceResponse as HttpResponse<T>;
@@ -97,6 +98,7 @@ export const useFetch = <T>(
         clearTimeoutIdRef();
       }
     } catch (error) {
+      console.log('ERROR', error);
       if (error?.name === 'AbortError') {
         setStatus(FetchStatus.Cancel);
       } else {
@@ -106,16 +108,12 @@ export const useFetch = <T>(
     }
   };
 
+
   const makeRequest = async (strUrl: string, options: RequestOptions) => {
     setStatus(FetchStatus.Loading);
 
-    try {
-      const responsePromise = http.request<T>(strUrl, options); // Wrap the http.request in a Promise
-      checkDelay(responsePromise);
-    } catch (error) {
-      setError(error as Error);
-      setStatus(FetchStatus.Error);
-    }
+    const responsePromise = http.request<T>(strUrl, options); // Wrap the http.request in a Promise
+    checkDelay(responsePromise);
   };
 
   const mutation = async (options: RequestOptions = {}): Promise<void> => {

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 //import { AppState } from '../store/reducers';
 
 export const useAuth = (): boolean => {
-  //const { appStatus } = useSelector((state: AppState) => state.current);
+  //const { appStatus } = useSelector((state: AppState) => state.status);
   const [isAuth, setAuth] = useState(false);
 
   // useEffect(() => {
