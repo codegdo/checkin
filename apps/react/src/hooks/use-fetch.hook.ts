@@ -23,7 +23,7 @@ type ResponseFetch<T> = {
   isAbort: boolean;
   error: Error | undefined;
   data: T | undefined;
-  mutate: (options?: RequestOptions) => Promise<void>;
+  mutation: (options?: RequestOptions) => Promise<void>;
   query: (customBaseUrl?: string) => Promise<void>;
   controller: AbortController;
 };
@@ -118,7 +118,7 @@ export const useFetch = <T>(
     }
   };
 
-  const mutate = async (options: RequestOptions = {}): Promise<void> => {
+  const mutation = async (options: RequestOptions = {}): Promise<void> => {
     const baseUrl = options.baseUrl || API_URL;
     const strUrl = stringifyUrl(`${baseUrl}${url}`, params);
 
@@ -142,7 +142,7 @@ export const useFetch = <T>(
     isAbort,
     error,
     data,
-    mutate,
+    mutation,
     query,
     controller: ctrlRef.current,
   };
