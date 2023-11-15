@@ -1,17 +1,27 @@
+import { useAction } from '@/hooks';
 import { AppState } from '@/store/reducers';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 function AuthGuard(): JSX.Element {
-  const { isLoggedIn } = useSelector((state: AppState) => state.status);
+  const { status, user } = useSelector((state: AppState) => state);
+  const { updateStatus } = useAction();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!status.isLoggedIn) {
       navigate('/auth/login');
+      //updateStatus({ isLoggedIn: true, current: AppStatus.ACTIVE });
     }
-  }, [isLoggedIn, navigate]);
+  }, [status, navigate]);
+
+  useEffect(() => {
+    if (user) {
+      console.log(user);
+      //updateStatus({ isLoggedIn: true, current: AppStatus.ACTIVE });
+    }
+  }, [user]);
 
   return <Outlet />
 }
