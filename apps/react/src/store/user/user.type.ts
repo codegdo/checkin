@@ -5,8 +5,8 @@ export interface UserData {
   emailAddress?: string;
   phoneNumber?: string;
   username?: string;
-  accessLevel?: string;
-  groupLevel?: number;
+  role?: string;
+  roleType?: string;
   companyId?: number;
   isOwner?: boolean;
   isActive?: boolean;

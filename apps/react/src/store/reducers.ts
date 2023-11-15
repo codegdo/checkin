@@ -1,33 +1,34 @@
-import { AnyAction, combineReducers, Reducer } from 'redux';
+import { AnyAction, combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
-import { PersistPartial } from 'redux-persist/es/persistReducer';
 import storage from 'redux-persist/lib/storage';
+//import { encryptTransform } from 'redux-persist-transform-encrypt';
 
 import { initialStatus, statusReducer } from './status/status.reducer';
 import { initialTheme, themeReducer } from './theme/theme.reducer';
 import { initialUser, userReducer } from './user/user.reducer';
+import userEncryptionTransform from './user/user.encrypt';
 
+// Define the root reducer type
 export type AppState = ReturnType<typeof appReducer>;
-type RootReducer = ReturnType<typeof rootReducer>;
 
+// Combine individual reducers
 export const appReducer = combineReducers({
   status: statusReducer,
   user: userReducer,
   theme: themeReducer,
 });
 
+// Root reducer with reset functionality
 const rootReducer = (
   state: AppState | undefined,
   action: AnyAction
 ): AppState => {
-  // reset store
+  // Reset store on logout
   if (action.type === 'status/LOGOUT') {
     void storage.removeItem('persist:root');
-
     state = {
       ...state,
       status: initialStatus,
-      //session: initialSession,
       user: initialUser,
       theme: initialTheme,
     };
@@ -35,7 +36,13 @@ const rootReducer = (
   return appReducer(state, action);
 };
 
-export const persistedReducer: Reducer<
-  RootReducer & PersistPartial,
-  AnyAction
-> = persistReducer({ key: 'root', storage }, rootReducer);
+// Configure persistence with whitelist and encryption transform
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['status', 'user', 'theme'],
+  transforms: [userEncryptionTransform],
+};
+
+// Create the persisted reducer
+export const persistedReducer = persistReducer(persistConfig, rootReducer);

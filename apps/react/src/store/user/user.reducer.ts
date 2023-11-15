@@ -9,13 +9,14 @@ import {
 import { UserData } from './user.type';
 
 export const initialUser: UserData = {};
+type UserAction = { type: string; payload: Partial<UserData> };
 
 export const userReducer = createReducer(initialUser, (builder) => {
   builder
-    .addCase(getUser.type, (state, action: AnyAction) => {
+    .addCase(getUser.type, (state, action: UserAction) => {
       return { ...state, ...action.payload };
     })
-    .addCase(updateUser.type, (state, action: AnyAction) => {
+    .addCase(updateUser.type, (state, action: UserAction) => {
       return { ...state, ...action.payload };
     })
     .addCase(deleteUser.type, () => {
