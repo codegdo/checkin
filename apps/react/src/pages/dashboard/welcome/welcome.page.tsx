@@ -1,4 +1,4 @@
-import { Sortable } from "@components";
+import { Sortable } from "@/components";
 
 // Example API response
 const data = [

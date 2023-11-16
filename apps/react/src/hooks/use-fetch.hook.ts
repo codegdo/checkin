@@ -99,10 +99,11 @@ export const useFetch = <T>(
       }
     } catch (error) {
       console.log('ERROR', error);
-      if (error?.name === 'AbortError') {
+      const err = error as Error;
+      if (err?.name === 'AbortError') {
         setStatus(FetchStatus.Cancel);
       } else {
-        setError(error as Error);
+        setError(err);
         setStatus(FetchStatus.Error);
       }
     }

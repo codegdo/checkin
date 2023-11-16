@@ -1,13 +1,13 @@
 import { SortableState } from "../sortable.provider";
-import { Field } from "../types";
+import { DndField } from "../types";
 
 interface InitialDataPayload {
-  data: Field[]
+  data: DndField[]
 }
 
 interface MoveItemPayload {
-  dragItem: Field;
-  dropItem: Field | null;
+  dragItem: DndField;
+  dropItem: DndField | null;
   offset: string | null;
 }
 

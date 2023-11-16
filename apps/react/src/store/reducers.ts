@@ -1,12 +1,11 @@
 import { AnyAction, combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-//import { encryptTransform } from 'redux-persist-transform-encrypt';
 
 import { initialSession, sessionReducer } from './session/session.reducer';
+import encryptedSession from './session/session.encrypt';
 import { initialTheme, themeReducer } from './theme/theme.reducer';
 import { initialUser, userReducer } from './user/user.reducer';
-import encryptionTransforms from './transforms';
 
 // Define the root reducer type
 export type AppState = ReturnType<typeof appReducer>;
@@ -41,7 +40,7 @@ const persistConfig = {
   key: 'root',
   storage,
   whitelist: ['session', 'user', 'theme'],
-  transforms: [encryptionTransforms],
+  transforms: [encryptedSession],
 };
 
 // Create the persisted reducer

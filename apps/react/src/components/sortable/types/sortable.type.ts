@@ -1,5 +1,7 @@
 import { Field } from "../../types";
 
+export type DndField = Field;
+
 export type SortableField = Field & {
   siblings?: string[]
 }

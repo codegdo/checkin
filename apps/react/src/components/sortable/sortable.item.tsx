@@ -1,14 +1,13 @@
-import { useEffect } from "react";
 import { classNames } from "../../utils";
 import { useSortable } from "./hooks";
 import { SortableContextValue } from "./sortable.provider";
-import { ExtendedField, Field } from "./types";
+import { SortableField, DndField } from "./types";
 
-type SortableItemProps = ExtendedField & {
+type SortableItemProps = SortableField & {
   ctx: SortableContextValue;
 };
 
-const renderItem = (item: Field) => {
+const renderItem = (item: DndField) => {
   switch (item.name) {
     default:
       return item.id == '2' ? <>{`item-${item.id}`}<br /> hello<br /> there</> : item.id == '3' ? <>{`item-${item.id}`}<br /> hello</> : <>{`item-${item.id}`}</>

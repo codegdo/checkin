@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef } from "react";
 import { SortableContextValue } from "../sortable.provider";
-import { Field, MoveDirection } from "../types";
+import { DndField, MoveDirection } from "../types";
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { sortableHelper } from "../helpers";
 import { SortableActionType } from "../reducers";
 //import { filterArrayRangeExclusingStart } from "../../../utils";
 
 interface Params {
-  item: Field;
+  item: DndField;
   ctx: SortableContextValue;
   siblings?: string[];
 }
@@ -28,7 +28,7 @@ const defaultDirection = {
 
 export const useSortable = ({ item, ctx }: Params) => {
   const { dnd, state, dispatch } = ctx;
-  const { id, group } = item;
+  const { id, dataType } = item;
   const ref = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const directionRef = useRef<XYDirection>(defaultDirection);
@@ -295,7 +295,7 @@ export const useSortable = ({ item, ctx }: Params) => {
     return true;
   }, []);
 
-  const handleDragEnd = useCallback((dragItem: Field, monitor: DragSourceMonitor<Field>) => {
+  const handleDragEnd = useCallback((dragItem: DndField, monitor: DragSourceMonitor<DndField>) => {
 
     if (monitor.didDrop()) {
       const { dropItem, offset } = dnd;
@@ -318,7 +318,7 @@ export const useSortable = ({ item, ctx }: Params) => {
     console.log('dragEnd', dnd, ref.current);
   }, [dnd, dispatch]);
 
-  const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
+  const handleDragOver = useCallback((dragItem: DndField, monitor: DropTargetMonitor<DndField>) => {
     if (!monitor.isOver({ shallow: true })) return;
 
     if (!ref.current || dragItem.id == item.id) {
@@ -332,15 +332,15 @@ export const useSortable = ({ item, ctx }: Params) => {
 
     if (!dragElement || !dropElement || !parentElement) return;
 
-    const dragGroup = dragItem.group;
-    const dropGroup = item.group;
+    const dragDataType = dragItem.dataType;
+    const dropDataType = item.dataType;
 
-    if (dragGroup === 'list' && dropGroup === 'area') return;
-    if (dragGroup === 'list' && dropGroup === 'item') return;
-    if (dragGroup === 'item' && dropGroup === 'area') return;
-    if (dragGroup === 'item' && dropGroup === 'list') return;
+    if (dragDataType === 'list' && dropDataType === 'area') return;
+    if (dragDataType === 'list' && dropDataType === 'item') return;
+    if (dragDataType === 'item' && dropDataType === 'area') return;
+    if (dragDataType === 'item' && dropDataType === 'list') return;
 
-    if (dragGroup === 'item' && dropGroup === 'holder') {
+    if (dragDataType === 'item' && dropDataType === 'holder') {
       const hasDragElement = Array.from(dropElement.children).includes(dragElement);
 
       if (hasDragElement) return;
@@ -363,7 +363,7 @@ export const useSortable = ({ item, ctx }: Params) => {
     const clientRect = dropElement.getBoundingClientRect();
     //const clientInnerSize = item.group === 'list' ? undefined : sortableHelper.getClientInnerSize(dropElement);
     //const clientDisplay = sortableHelper.getClientDisplay(dropElement);
-    const currentDisplay = (dragGroup === 'list' && dropGroup === 'list') || (dragGroup === 'list' && dropGroup === 'holder') ? 'row' : 'column';
+    const currentDisplay = (dragDataType === 'list' && dropDataType === 'list') || (dragDataType === 'list' && dropDataType === 'holder') ? 'row' : 'column';
     const currentOffset = sortableHelper.getOffset(clientRect, clientOffset);
     const currentDirection = sortableHelper.getDirection(clientOffset, directionRef);
     const { offset, direction } = sortableHelper.getCurrentOffsetWithDirection(currentOffset, currentDirection, currentDisplay);
@@ -372,9 +372,9 @@ export const useSortable = ({ item, ctx }: Params) => {
     dnd.offset = offset;
     dnd.direction = direction || '';
 
-    if ((dragGroup === 'list' && dropGroup === 'list') || (dragGroup === 'list' && dropGroup === 'holder')) {
+    if ((dragDataType === 'list' && dropDataType === 'list') || (dragDataType === 'list' && dropDataType === 'holder')) {
 
-      if ((dragGroup === 'list' && dropGroup === 'holder')) {
+      if ((dragDataType === 'list' && dropDataType === 'holder')) {
         dropElement = dropElement.parentNode as HTMLDivElement;
         parentElement = dropElement?.parentNode;
 
@@ -405,13 +405,13 @@ export const useSortable = ({ item, ctx }: Params) => {
       return;
     }
 
-    if ((dragGroup === 'item' && dropGroup === 'holder')) {
+    if ((dragDataType === 'item' && dropDataType === 'holder')) {
       appendToHolder(dragElement, dropElement, offset);
       console.log('itemToHolder');
       return;
     }
 
-    if ((dragGroup === 'item' && dropGroup === 'item')) {
+    if ((dragDataType === 'item' && dropDataType === 'item')) {
       const elements = Array.from(parentElement.children) as HTMLElement[];
       const fromIndex = elements.indexOf(dragElement);
       const toIndex = elements.indexOf(dropElement);
@@ -440,7 +440,7 @@ export const useSortable = ({ item, ctx }: Params) => {
   }, [item, dnd, appendToHolder, insertItemToList]);
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
-    type: group,
+    type: `${dataType}`,
     item,
     canDrag: handleDragStart,
     end: handleDragEnd,

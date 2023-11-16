@@ -1,5 +1,6 @@
 import { Dispatch } from "react";
 import { Field } from "../../types";
+import { ActionPayload } from "../reducers";
 
 export enum DndActionType {
   INITIAL_ITEMS = 'INITIAL_ITEMS',
@@ -36,13 +37,13 @@ export enum RestrictedDataType {
   COLUMN_ELEMENT = 'column_element',
 }
 
-type DropRef = Partial<Field> | null;
+export type DropRef = Partial<Field> | null;
 type DomRef = Record<string, HTMLDivElement | null>;
 
 interface DndRef {
   drop: DropRef;
   domList: DomRef;
-  touchItems: (string | number)[];
+  touchItems: (string | number | undefined)[];
   nestedItems: string[];
   clientX: number;
   clientY: number;
@@ -52,7 +53,7 @@ interface DndRef {
 
 export interface DndContextValue {
   state: DndState;
-  dispatch: Dispatch<DndAction>;
+  dispatch: Dispatch<DndAction<ActionPayload>>;
   dndRef: DndRef;
 }
 

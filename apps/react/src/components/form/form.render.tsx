@@ -1,5 +1,5 @@
 import { useWrapperContext } from '@/hooks';
-import { Field } from './types';
+import { FormField as Field } from './types';
 
 import { FormBlock } from './form.block';
 import { FormField } from './form.field';

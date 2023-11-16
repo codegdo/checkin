@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect } from 'react';
+import { PropsWithChildren } from 'react';
 import { utils } from '@libs/shared-code';
 
 import DropMenu from './drop.menu';

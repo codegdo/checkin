@@ -34,7 +34,7 @@ class FormHelper {
   }
 
   validationNumber(field: FormField, events: FormEvent, values: FormValue) {
-    const { name, isRequired, validation = [], accessibility = [] } = field;
+    const { isRequired, accessibility = [] } = field;
     let validate = this.validation.number();
 
     if (isRequired) {
@@ -60,8 +60,8 @@ class FormHelper {
     return validate;
   }
 
-  validationString(field: FormField, events: FormEvent, values: FormValue) {
-    const { type, isRequired, validation = [], accessibility = [] } = field;
+  validationString(field: FormField, _events: FormEvent, values: FormValue) {
+    const { type, isRequired, accessibility = [] } = field;
     let validate = this.validation.string();
 
     if (isRequired) {
@@ -89,7 +89,8 @@ class FormHelper {
     }
 
     if (accessibility.length > 0) {
-      validate = validate.test('visibility', 'visibility', (value, schema) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      validate = validate.test('visibility', 'visibility', (_value, _schema) => {
 
         for (const visibilityRule of accessibility) {
           const visibility = this.checkConditions(visibilityRule, values);
@@ -164,7 +165,7 @@ class FormHelper {
     if (!email) {
       return true;
     }
-    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const emailRegex = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/;
     return emailRegex.test(email);
   }
 

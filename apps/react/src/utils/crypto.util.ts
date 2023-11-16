@@ -1,19 +1,45 @@
-import Aes from 'crypto-js/aes';
-import Utf8 from 'crypto-js/enc-utf8';
-
-const secretKey = 'your-super-secret-key';
-
-export function encryptData<T>(data: T) {
-  return Aes.encrypt(JSON.stringify(data), secretKey).toString();
+export function encrypt(plaintext: string, key: string): string {
+  let encrypted = '';
+  for (let i = 0; i < plaintext.length; i++) {
+    let charCode = plaintext.charCodeAt(i);
+    charCode ^= key.charCodeAt(i % key.length);
+    encrypted += String.fromCharCode(charCode);
+  }
+  return btoa(encrypted); // Encode in Base64
 }
 
-export function decryptData(encryptedData: string) {
-  const decrypted = Aes.decrypt(encryptedData, secretKey).toString(Utf8);
-  return JSON.parse(decrypted);
+export function decrypt(ciphertext: string, key: string, match: string): string {
+  let decrypted = '';
+  try {
+    ciphertext = atob(ciphertext); // Decode from Base64
+  } catch (error) {
+    throw new Error('Invalid Base64 ciphertext');
+  }
+  for (let i = 0; i < ciphertext.length; i++) {
+    let charCode = ciphertext.charCodeAt(i);
+    charCode ^= key.charCodeAt(i % key.length);
+    decrypted += String.fromCharCode(charCode);
+  }
+  // Check if the decrypted text has a specific prefix to verify the key
+  if (!decrypted.startsWith(match)) {
+    throw new Error('Incorrect key or invalid ciphertext');
+  }
+  return decrypted;
 }
 
+/*
+// Usage
+const secretKey = 'YourSecretKey';
+const originalText = '{username: "gdo"}';
+const encryptedText = encrypt(originalText, secretKey);
+const decryptedText = decrypt(encryptedText, 'IncorrectKeyForDemonstration', '{username');
 
-/*const options = { algorithm: 'AES-GCM' };
+console.log('Original Text:', originalText);
+console.log('Encrypted Text:', encryptedText);
+console.log('Decrypted Text:', decryptedText);
+
+
+const options = { algorithm: 'AES-GCM' };
 
 export async function generateKey(): Promise<{ key: ArrayBuffer; iv: Uint8Array }> {
   const key = await window.crypto.subtle.generateKey(
@@ -62,7 +88,7 @@ export async function deriveKeyFromSecret(secretKey: string, salt: Uint8Array): 
   );
 }
 
-export async function encrypt(data: any, keyObj: { key: ArrayBuffer; iv: Uint8Array }, secretKey: string): Promise<string> {
+export async function encrypt(data: unknown, keyObj: { key: ArrayBuffer; iv: Uint8Array }, secretKey: string): Promise<string> {
   try {
     const encoder = new TextEncoder();
     const dataBuffer = encoder.encode(JSON.stringify(data));
@@ -82,12 +108,13 @@ export async function encrypt(data: any, keyObj: { key: ArrayBuffer; iv: Uint8Ar
     const base64String = btoa(String.fromCharCode(...encryptedArray));
     return base64String;
   } catch (error) {
-    console.error('Encryption Error:', error.message);
-    throw error; // Rethrow the error to handle it elsewhere
+    const err = error as Error;
+    console.error('Encryption Error:', err.message);
+    throw err; // Rethrow the error to handle it elsewhere
   }
 }
 
-export async function decrypt(encrypted: string, keyObj: { key: ArrayBuffer; iv: Uint8Array }, secretKey: string): Promise<any> {
+export async function decrypt(encrypted: string, keyObj: { key: ArrayBuffer; iv: Uint8Array }, secretKey: string) {
   try {
     const decoder = new TextDecoder();
     const encryptedArray = new Uint8Array(Array.from(atob(encrypted), c => c.charCodeAt(0)));
@@ -103,8 +130,9 @@ export async function decrypt(encrypted: string, keyObj: { key: ArrayBuffer; iv:
 
     return JSON.parse(decoder.decode(decryptedBuffer));
   } catch (error) {
-    console.error('Decryption Error:', error.message);
-    throw error; // Rethrow the error to handle it elsewhere
+    const err = error as Error;
+    console.error('Encryption Error:', err.message);
+    throw err; // Rethrow the error to handle it elsewhere
   }
 }
 */

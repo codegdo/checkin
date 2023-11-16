@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef } from "react";
-import { utils } from '@libs/shared-code';
 
 import { DndField, DndContextValue, DndActionType, RestrictedDataType } from "../types";
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
+import { DataType } from "@/components/types";
+import { countItems } from "@/utils";
 
 interface Params {
   item: DndField;
@@ -11,12 +12,12 @@ interface Params {
   draggable?: boolean
 }
 
-interface XYDirection {
-  x: number | null;
-  currentX: number | null;
-  y: number | null;
-  currentY: number | null;
-}
+// interface XYDirection {
+//   x: number | null;
+//   currentX: number | null;
+//   y: number | null;
+//   currentY: number | null;
+// }
 
 export function useDragDrop({ item, ctx, draggable = true }: Params) {
   const { id, dataType } = item;
@@ -43,17 +44,17 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
     return { width, height };
   }
 
-  const getOffsetX = (
-    clientX: number,
-    centerX: number,
-    width = 0
-  ): 'left' | 'right' | 'middle' => {
-    return clientX <= centerX - width
-      ? 'left'
-      : clientX >= centerX + width
-        ? 'right'
-        : 'middle';
-  }
+  // const getOffsetX = (
+  //   clientX: number,
+  //   centerX: number,
+  //   width = 0
+  // ): 'left' | 'right' | 'middle' => {
+  //   return clientX <= centerX - width
+  //     ? 'left'
+  //     : clientX >= centerX + width
+  //       ? 'right'
+  //       : 'middle';
+  // }
 
   const getOffsetY = (
     clientY: number,
@@ -119,11 +120,11 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
     );
   }
 
-  const checkCanDrop = useCallback((dragItem: Field): boolean => {
+  const checkCanDrop = useCallback((dragItem: DndField): boolean => {
     const itemData = dragItem.data || [];
     const restrictedDataTypes = Object.values(RestrictedDataType);
-    const condition = (field: Field) => (field.dataType === DataType.BLOCK || field.dataType === DataType.SECTION);
-    const nestedItemIds = utils.countItems(itemData, condition);
+    const condition = (field: DndField) => (field.dataType === DataType.BLOCK || field.dataType === DataType.SECTION);
+    const nestedItemIds = countItems(itemData, condition);
     const keyDataType = `${dragItem.dataType}_${dataType}`;
 
     const hasNestedItems = nestedItemIds.includes(`${id}`);
@@ -133,7 +134,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
   }, [id, dataType]);
 
   const hoverItem = useCallback(
-    (currentRef: HTMLDivElement, monitor: DropTargetMonitor<Field>) => {
+    (currentRef: HTMLDivElement, monitor: DropTargetMonitor<DndField>) => {
       const clientOffset = monitor.getClientOffset();
       const initialClientOffset = monitor.getInitialClientOffset();
 
@@ -146,14 +147,15 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
 
       const clientRect = currentRef.getBoundingClientRect();
       const centerY = (clientRect.bottom - clientRect.top) / 2;
-      const centerX = (clientRect.right - clientRect.left) / 2;
+      //const centerX = (clientRect.right - clientRect.left) / 2;
       const clientY = clientOffset.y - clientRect.top;
-      const clientX = clientOffset.x - clientRect.left;
+      //const clientX = clientOffset.x - clientRect.left;
 
-      const { width, height } = calculateElementSize(currentRef);
+      const { height } = calculateElementSize(currentRef);
 
       const verticalOffset = getOffsetY(clientY, centerY, height);
-      const horizontalOffset = getOffsetX(clientX, centerX, width);
+
+      //const horizontalOffset = getOffsetX(clientX, centerX, width);
 
       const offset = `on-${verticalOffset}`;
 
@@ -189,7 +191,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
   );
 
   const handleDragOver = useCallback(
-    (dragItem: Field, monitor: DropTargetMonitor<Field>) => {
+    (dragItem: DndField, monitor: DropTargetMonitor<DndField>) => {
       if (monitor.isOver({ shallow: true })) {
 
         if (!dragRef.current) return;
@@ -230,7 +232,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
   );
 
   const handleDragEnd = useCallback(
-    (dragItem: Field, monitor: DragSourceMonitor<Field>) => {
+    (dragItem: DndField, monitor: DragSourceMonitor<DndField>) => {
       const { drop, offset, canDrop } = dndRef;
       if (monitor.didDrop() && canDrop) {
         //console.log('dragItem', dragItem);
@@ -253,7 +255,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
   );
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
-    type: dataType,
+    type: `${dataType}`,
     item,
     canDrag: handleDragStart,
     end: handleDragEnd,

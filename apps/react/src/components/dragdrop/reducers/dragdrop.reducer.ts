@@ -1,9 +1,9 @@
-import { utils } from "@libs/shared-code";
 import { DataType } from "@/components/types";
 
-import { DndField, DndAction, DndActionType, DndState } from "../types";
+import { DndField, DndAction, DndActionType, DndState, DropRef } from "../types";
 import { defaultStatus } from "../dragdrop.provider";
 import { dndHelper } from "../helpers";
+import { countItems } from "@/utils";
 
 interface InitialItemsPayload {
   data: DndField[]
@@ -15,11 +15,11 @@ interface SelectItemPayload {
 
 interface MoveItemsPayload {
   dragItem: DndField;
-  dropItem: DndField;
+  dropItem: DropRef;
   offset: string;
 }
 
-type ActionPayload = InitialItemsPayload | SelectItemPayload | MoveItemsPayload | null;
+export type ActionPayload = InitialItemsPayload | SelectItemPayload | MoveItemsPayload | null;
 
 export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): DndState => {
   switch (action.type) {
@@ -83,7 +83,7 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
       const hasChildren = dragDataType === DataType.BLOCK || dragDataType === DataType.SECTION;
       const condition = (item: DndField) => (item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION);
 
-      const dropIds = hasChildren ? utils.countItems(dropData || [], condition) : [];
+      const dropIds = hasChildren ? countItems(dropData || [], condition) : [];
       const dropCount = dropIds.length;
 
       let dropIndex = dropPosition ?? 0;
@@ -141,8 +141,8 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
       const hasChildren = dragDataType === DataType.BLOCK || dragDataType === DataType.SECTION;
       const condition = (item: DndField) => (item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION);
 
-      const dragIds = hasChildren ? utils.countItems(dragData || [], condition) : [];
-      const dropIds = hasChildren ? utils.countItems(dropData || [], condition) : [];
+      const dragIds = hasChildren ? countItems(dragData || [], condition) : [];
+      const dropIds = hasChildren ? countItems(dropData || [], condition) : [];
 
       const dragCount = dragIds.length + 1;
       const dropCount = dropIds.length;

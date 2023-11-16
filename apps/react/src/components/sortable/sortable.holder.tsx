@@ -1,10 +1,10 @@
 import { PropsWithChildren } from "react";
 import { SortableContextValue } from "./sortable.provider";
-import { ExtendedField } from "./types";
+import { SortableField } from "./types";
 import { useSortable } from "./hooks";
 import { classNames } from "../../utils";
 
-type SortableHolderProps = PropsWithChildren<ExtendedField & {
+type SortableHolderProps = PropsWithChildren<SortableField & {
   ctx: SortableContextValue;
 }>;
 

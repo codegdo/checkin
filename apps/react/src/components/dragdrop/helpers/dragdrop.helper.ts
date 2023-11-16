@@ -1,6 +1,6 @@
-import { UtilsInterface, utils } from '@libs/shared-code';
 import { DataType, Field } from '../../types';
 import { XYCoord } from 'react-dnd';
+import { cloneObject, mapToParent, randomString } from '@/utils';
 
 interface FindDropPositionParams {
   dragIndex: number;
@@ -9,18 +9,13 @@ interface FindDropPositionParams {
 }
 
 class DragDropHelper {
-  private utils: UtilsInterface;
-
-  constructor(utils: UtilsInterface) {
-    this.utils = utils;
-  }
 
   normalizeData(data: Field[]) {
-    const cloneData = utils.objClone(data);
+    const cloneData = cloneObject(data);
     const list: Field[] = [];
 
     cloneData.forEach((item: Field) => {
-      return utils.mapToParent(list, item, (item: Field) => (item.dataType == DataType.SECTION || item.dataType == DataType.BLOCK));
+      return mapToParent(list, item, (item: Field) => (item.dataType == DataType.SECTION || item.dataType == DataType.BLOCK));
     });
 
     return [{
@@ -42,7 +37,7 @@ class DragDropHelper {
   }
 
   generateNewId() {
-    return utils.strRandom();
+    return randomString();
   }
 
   formatKebabCase(str: string) {
@@ -112,4 +107,4 @@ class DragDropHelper {
 
 }
 
-export const dndHelper = new DragDropHelper(utils);
+export const dndHelper = new DragDropHelper();

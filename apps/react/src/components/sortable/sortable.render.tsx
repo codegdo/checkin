@@ -22,9 +22,9 @@ const render = ({ data, ctx }: RenderProps) => {
     <>
       {
         data.map(item => {
-          const { group, data: _data = [] } = item;
+          const { dataType, data: _data = [] } = item;
 
-          switch (group) {
+          switch (dataType) {
             case 'area':
               return (
                 <SortableArea key={item.id} {...item} ctx={ctx} siblings={siblings}>

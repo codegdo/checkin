@@ -1,11 +1,11 @@
 import { PropsWithChildren, useEffect } from "react";
 import { SortableContextValue } from "./sortable.provider";
-import { ExtendedField } from "./types";
+import { SortableField } from "./types";
 import { useSortable } from "./hooks";
 import { classNames } from "../../utils";
 import SortableHolder from "./sortable.holder";
 
-type SortableListProps = PropsWithChildren<ExtendedField & {
+type SortableListProps = PropsWithChildren<SortableField & {
   ctx: SortableContextValue;
 }>;
 
@@ -24,7 +24,7 @@ function SortableList(props: SortableListProps) {
 
   return (<div ref={previewRef} className={className}>
     <div ref={ref} className="sortable-title">List</div>
-    <SortableHolder {...props} group="holder">{children}</SortableHolder>
+    <SortableHolder {...props} dataType="holder">{children}</SortableHolder>
   </div>)
 }
 

@@ -4,11 +4,11 @@ import { ElementInnerSize, SortableField } from "../types";
 import { XYDirection } from "../hooks";
 import { DndRef } from "../sortable.provider";
 
-interface OffsetAndDirection {
-  clientRect: DOMRect;
-  clientOffset: XYCoord;
-  clientInnerSize?: ElementInnerSize;
-}
+// interface OffsetAndDirection {
+//   clientRect: DOMRect;
+//   clientOffset: XYCoord;
+//   clientInnerSize?: ElementInnerSize;
+// }
 
 interface CurrentOffset {
   verticalOffset: string;
@@ -285,14 +285,14 @@ class SortableHelper {
     const list: SortableField[] = [];
 
     cloneData.forEach((item: SortableField) => {
-      return mapToParent(list, item, (item: SortableField) => (item.group === 'list'));
+      return mapToParent(list, item, (item: SortableField) => (item.dataType === 'list'));
     });
 
     return [{
       id: 'sortable-area',
       name: 'area',
       type: 'div',
-      group: 'area',
+      dataType: 'area',
       parentId: null,
       data: [...list]
     }];
