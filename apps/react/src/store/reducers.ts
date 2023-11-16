@@ -3,17 +3,17 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 //import { encryptTransform } from 'redux-persist-transform-encrypt';
 
-import { initialStatus, statusReducer } from './status/status.reducer';
+import { initialSession, sessionReducer } from './session/session.reducer';
 import { initialTheme, themeReducer } from './theme/theme.reducer';
 import { initialUser, userReducer } from './user/user.reducer';
-import userEncryptionTransform from './user/user.encrypt';
+import encryptionTransforms from './transforms';
 
 // Define the root reducer type
 export type AppState = ReturnType<typeof appReducer>;
 
 // Combine individual reducers
 export const appReducer = combineReducers({
-  status: statusReducer,
+  session: sessionReducer,
   user: userReducer,
   theme: themeReducer,
 });
@@ -24,11 +24,11 @@ const rootReducer = (
   action: AnyAction
 ): AppState => {
   // Reset store on logout
-  if (action.type === 'status/LOGOUT') {
+  if (action.type === 'session/LOGOUT') {
     void storage.removeItem('persist:root');
     state = {
       ...state,
-      status: initialStatus,
+      session: initialSession,
       user: initialUser,
       theme: initialTheme,
     };
@@ -40,8 +40,8 @@ const rootReducer = (
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['status', 'user', 'theme'],
-  transforms: [userEncryptionTransform],
+  whitelist: ['session', 'user', 'theme'],
+  transforms: [encryptionTransforms],
 };
 
 // Create the persisted reducer

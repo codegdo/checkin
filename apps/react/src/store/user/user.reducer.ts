@@ -1,4 +1,4 @@
-import { AnyAction, createReducer } from '@reduxjs/toolkit';
+import { AnyAction, PayloadAction, createReducer } from '@reduxjs/toolkit';
 
 import {
   getUser,
@@ -9,14 +9,14 @@ import {
 import { UserData } from './user.type';
 
 export const initialUser: UserData = {};
-type UserAction = { type: string; payload: Partial<UserData> };
+type Action = PayloadAction<Partial<UserData>>;
 
 export const userReducer = createReducer(initialUser, (builder) => {
   builder
-    .addCase(getUser.type, (state, action: UserAction) => {
+    .addCase(getUser.type, (state, action: Action) => {
       return { ...state, ...action.payload };
     })
-    .addCase(updateUser.type, (state, action: UserAction) => {
+    .addCase(updateUser.type, (state, action: Action) => {
       return { ...state, ...action.payload };
     })
     .addCase(deleteUser.type, () => {

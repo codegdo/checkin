@@ -26,6 +26,18 @@ export class AuthController {
 
   @Post('login')
   postLoginForm(@Body() loginUserDto: LoginUserDto) {
-    return loginUserDto;
+    return {
+      id: '1',
+      firstName: 'giang',
+      lastName: 'do',
+      email: 'giangd@gmail.com',
+      phone: '8583571474',
+      username: 'gdo',
+      role: 'owner',
+      roleType: 'Internal',
+      companyId: 1,
+      isOwner: true,
+      isActive: true,
+    };
   }
 }

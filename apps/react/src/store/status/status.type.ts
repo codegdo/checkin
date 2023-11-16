@@ -5,4 +5,5 @@ export interface StatusState {
   clientId: number | null;
   current: AppStatus;
   isLoggedIn: boolean;
+  userType: string | null;
 }

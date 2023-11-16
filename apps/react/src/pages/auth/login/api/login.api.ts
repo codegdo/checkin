@@ -1,27 +1,35 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { AppStatus } from "@/constants";
 import { useAction, useFetch } from "@/hooks";
-import { AppState } from "@/store/reducers";
 import { UserData } from "@/store/types";
 
 export const useLoginApi = () => {
-  const { updateStatus, updateUser } = useAction();
+  const { updateSession, updateUser } = useAction();
   const { status, isSuccess, data, mutation } = useFetch<UserData>('/auth/login');
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isSuccess && data) {
-      updateUser(data);
+    const handleLoginSuccess = () => {
+      if (isSuccess && data) {
+        const {companyId, roleType, isOwner, ...user} = data;
+        updateUser(user);
 
-      if (data.isActive) {
-        updateStatus({ current: AppStatus.AUTHENTICATED, isLoggedIn: true });
-        navigate('/');
+        if (user.isActive && roleType) {
+          updateSession({
+            clientId: companyId,
+            status: AppStatus.AUTHENTICATED,
+            isLoggedIn: true,
+            userType: roleType
+          });
+          navigate('/');
+        }
       }
-    }
-  }, [data, isSuccess, navigate, updateStatus, updateUser]);
+    };
+
+    handleLoginSuccess();
+  }, [data, isSuccess, navigate, updateSession, updateUser]);
 
   return { status, data, mutation };
 };

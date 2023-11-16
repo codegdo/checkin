@@ -1,13 +1,12 @@
 import { createTransform } from 'redux-persist';
-import { UserData } from './user.type';
 import Aes from 'crypto-js/aes.js';
 import Utf8 from 'crypto-js/enc-utf8';
 
 const secretKey = 'your-super-secret-key';
 
-const userEncryptionTransform = createTransform<UserData, string>(
+const encryptionTransforms = createTransform<any, string>(
   (inboundState, key) => {
-    if (key === 'status' || key === 'user') {
+    if (key === 'session') {
       const encrypted = Aes.encrypt(JSON.stringify(inboundState), secretKey).toString();
       return encrypted;
     }
@@ -15,7 +14,7 @@ const userEncryptionTransform = createTransform<UserData, string>(
     return inboundState;
   },
   (outboundState, key) => {
-    if (key === 'status' || key === 'user' && typeof outboundState === 'string') {
+    if (key === 'session' && typeof outboundState === 'string') {
       const decrypted = Aes.decrypt(outboundState, secretKey).toString(Utf8);
       return JSON.parse(decrypted);
     }
@@ -24,4 +23,4 @@ const userEncryptionTransform = createTransform<UserData, string>(
   }
 );
 
-export default userEncryptionTransform;
+export default encryptionTransforms;

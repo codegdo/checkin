@@ -5,14 +5,14 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { AppState } from '@/store/reducers';
 
 function AuthGuard(): JSX.Element {
-  const status = useSelector((state: AppState) => state.status);
+  const session = useSelector((state: AppState) => state.session);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!status.isLoggedIn) {
+    if (!session.isLoggedIn) {
       navigate('/auth/login');
     }
-  }, [status, navigate]);
+  }, [session, navigate]);
 
   return <Outlet />
 }
