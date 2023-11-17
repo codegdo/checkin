@@ -1,10 +1,10 @@
 import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
 
-import { Template } from "@/components";
+import { LoaderTemplate } from "@/components";
 
-const Index = Template(lazy(() => import('./account.index')));
-const Profile = Template(lazy(() => import('./profile/profile.page')));
+const Index = LoaderTemplate(lazy(() => import('./account.index')));
+const Profile = LoaderTemplate(lazy(() => import('./profile/profile.page')));
 
 function AccountRoute() {
 

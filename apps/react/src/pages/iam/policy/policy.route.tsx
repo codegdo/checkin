@@ -1,13 +1,13 @@
 import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
 
-import { Partial } from "@/components";
+import { LoaderPartial } from "@/components";
 
-const Policy = Partial(lazy(() => import('./policy.page')));
-const PolicyForm = Partial(lazy(() => import('./policy.form')));
+const Policy = LoaderPartial(lazy(() => import('./policy.page')));
+const PolicyForm = LoaderPartial(lazy(() => import('./policy.form')));
 
-const PolicyGenerator = Partial(lazy(() => import('./policy-generator/policy-generator.page')));
-const PolicySimulator = Partial(lazy(() => import('./policy-simulator/policy-simulator.page')));
+const PolicyGenerator = LoaderPartial(lazy(() => import('./policy-generator/policy-generator.page')));
+const PolicySimulator = LoaderPartial(lazy(() => import('./policy-simulator/policy-simulator.page')));
 
 function PolicyRoute() {
 

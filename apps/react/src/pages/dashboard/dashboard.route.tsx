@@ -1,9 +1,9 @@
 import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
 
-import { Template } from "@/components";
+import { LoaderTemplate } from "@/components";
 
-const Index = Template(lazy(() => import('./dashboard.index')));
+const Index = LoaderTemplate(lazy(() => import('./dashboard.index')));
 
 function DashboardRoute() {
 

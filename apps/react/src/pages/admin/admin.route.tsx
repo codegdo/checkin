@@ -1,10 +1,10 @@
 import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
 
-import { Template } from "@/components";
+import { LoaderTemplate } from "@/components";
 
-const Index = Template(lazy(() => import('./admin.index')));
-const MigrationRoute = Template(lazy(() => import('./migration/migration.route')));
+const Index = LoaderTemplate(lazy(() => import('./admin.index')));
+const MigrationRoute = LoaderTemplate(lazy(() => import('./migration/migration.route')));
 
 function AdminRoute() {
 

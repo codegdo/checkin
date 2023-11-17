@@ -3,9 +3,13 @@ import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 import { initialSession, sessionReducer } from './session/session.reducer';
-import encryptedSession from './session/session.encrypt';
 import { initialTheme, themeReducer } from './theme/theme.reducer';
 import { initialUser, userReducer } from './user/user.reducer';
+import { initialModel, modelReducer } from './model/model.reducer';
+
+import encryptedSession from './session/session.encrypt';
+import encryptedModel from './model/model.encrypt';
+import encryptedUser from './user/user.encrypt';
 
 // Define the root reducer type
 export type AppState = ReturnType<typeof appReducer>;
@@ -13,6 +17,7 @@ export type AppState = ReturnType<typeof appReducer>;
 // Combine individual reducers
 export const appReducer = combineReducers({
   session: sessionReducer,
+  model: modelReducer,
   user: userReducer,
   theme: themeReducer,
 });
@@ -28,6 +33,7 @@ const rootReducer = (
     state = {
       ...state,
       session: initialSession,
+      model: initialModel,
       user: initialUser,
       theme: initialTheme,
     };
@@ -39,8 +45,8 @@ const rootReducer = (
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['session', 'user', 'theme'],
-  transforms: [encryptedSession],
+  whitelist: ['session', 'model', 'user', 'theme'],
+  transforms: [encryptedSession, encryptedModel, encryptedUser],
 };
 
 // Create the persisted reducer

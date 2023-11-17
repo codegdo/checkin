@@ -18,9 +18,10 @@ interface ParserOptions {
   fallback: boolean;
 }
 
-export function Template(Component: FC<ComponentProps>): FC<ComponentProps> {
+export function LoaderTemplate(Component: FC<ComponentProps>): FC<ComponentProps> {
   return (props: ComponentProps): ReactElement => {
     console.log(props);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const parserOptions = ({ fallback }: ParserOptions): HTMLReactParserOptions => {
       return {
         replace: (domNode): false | void | object | Element | null | undefined => {
@@ -46,7 +47,7 @@ export function Template(Component: FC<ComponentProps>): FC<ComponentProps> {
         parse(html, parserOptions({ fallback: false })),
         parse(html, parserOptions({ fallback: true }))
       ];
-    }, []);
+    }, [parserOptions]);
 
     return (
       <Suspense fallback={fallback as ReactElement}>

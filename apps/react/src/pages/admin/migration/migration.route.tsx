@@ -1,13 +1,13 @@
 import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
 
-import { Partial } from "@/components";
+import { LoaderPartial } from "@/components";
 
-const Migration = Partial(lazy(() => import('./migration.page')));
-const MigrationForm = Partial(lazy(() => import('./migration.form')));
+const Migration = LoaderPartial(lazy(() => import('./migration.page')));
+const MigrationForm = LoaderPartial(lazy(() => import('./migration.form')));
 
-const MigrationCategory = Partial(lazy(() => import('./migration-category/migration-category.page')));
-const MigrationScript = Partial(lazy(() => import('./migration-script/migration-script.page')));
+const MigrationCategory = LoaderPartial(lazy(() => import('./migration-category/migration-category.page')));
+const MigrationScript = LoaderPartial(lazy(() => import('./migration-script/migration-script.page')));
 
 function MigrationRoute() {
 

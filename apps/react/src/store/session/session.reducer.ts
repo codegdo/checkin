@@ -6,17 +6,16 @@ import {
   deleteSession,
   refreshSessionAsync,
 } from './session.action';
-import { SessionState } from './session.type';
+import { SessionData } from './session.type';
 
-export const initialSession: SessionState = {
-  appId: null,
+export const initialSession: SessionData = {
+  accountId: null,
   clientId: null,
   status: AppStatus.UNAUTHENTICATED,
-  userType: null,
-  isLoggedIn: false,
+  auth: false,
 };
 
-type Action = PayloadAction<Partial<SessionState>>;
+type Action = PayloadAction<Partial<SessionData>>;
 
 export const sessionReducer = createReducer(initialSession, (builder) => {
   builder

@@ -1,10 +1,10 @@
 import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
 
-import { Template } from "@/components";
+import { LoaderTemplate } from "@/components";
 
-const Index = Template(lazy(() => import('./iam.index')));
-const PolicyRoute = Template(lazy(() => import('./policy/policy.route')));
+const Index = LoaderTemplate(lazy(() => import('./iam.index')));
+const PolicyRoute = LoaderTemplate(lazy(() => import('./policy/policy.route')));
 
 function IamRoute() {
 

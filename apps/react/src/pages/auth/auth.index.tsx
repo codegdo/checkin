@@ -1,9 +1,9 @@
 import { lazy } from 'react';
 import { useRoutes } from 'react-router-dom';
-import { Partial } from "@/components";
+import { LoaderPartial } from "@/components";
 
-const Login = Partial(lazy(() => import('./login/login.page')));
-const Signup = Partial(lazy(() => import('./signup/signup.page')));
+const Login = LoaderPartial(lazy(() => import('./login/login.page')));
+const Signup = LoaderPartial(lazy(() => import('./signup/signup.page')));
 
 function Index() {
   const routes = useRoutes([
