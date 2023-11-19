@@ -47,7 +47,11 @@ const rootReducer = (
     state = {
       ...state,
       session: {...state?.session, ...session},
-      model: {...state?.model, ...model},
+      model: {
+        ...state?.model, 
+        app: { ...(state?.model?.app || {}), ...(model?.app || {}) },
+        sys: { ...(state?.model?.sys || {}), ...(model?.sys || {}) },
+        ...model},
       company: {...state?.company, ...company},
       user: {...state?.user, ...user},
       theme: {

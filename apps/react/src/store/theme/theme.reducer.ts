@@ -4,18 +4,10 @@ import { getThemeAsync, updateTheme } from "./theme.action";
 import { ThemeData } from './theme.type';
 
 export const initialTheme: ThemeData = {
-  system: {
-    base: `<div></div>`
-  },
-  internal: {
-    base: `<div></div>`
-  },
-  external: {
-    base: `<div></div>`
-  },
-  public: {
-    base: `<div></div>`
-  }
+  system: {},
+  internal: {},
+  external: {},
+  public: {}
 };
 
 type Action = PayloadAction<Partial<ThemeData>>;

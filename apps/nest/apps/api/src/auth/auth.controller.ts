@@ -28,22 +28,22 @@ export class AuthController {
   postLoginForm(@Body() loginUserDto: LoginUserDto) {
     return {
       company: {
-        id: 1,
-        isActive: false
+        id: null,
+        isActive: null
       },
       user: {
         firstName: 'giang',
         lastName: 'do',
         username: 'gdo',
         role: 'owner',
-        roleType: 'Internal',
+        roleType: 'System',
         //companyId: null,
         //companyIsActive: null,
         isOwner: false,
         isActive: true,
       },
       model: {
-        app: {
+        sys: {
           modules: [
             {
               name: 'admin',
