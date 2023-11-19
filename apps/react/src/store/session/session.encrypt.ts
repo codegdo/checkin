@@ -13,7 +13,7 @@ const encryptedSession = createTransform(
   },
   (outboundState, key) => {
     if (key === 'session' && typeof outboundState === 'string') {
-      const decrypted = decrypt(outboundState, ENCRYPT_KEY, '{"accountId":');
+      const decrypted = decrypt(outboundState, ENCRYPT_KEY, '{"status":');
       return JSON.parse(decrypted);
     }
 

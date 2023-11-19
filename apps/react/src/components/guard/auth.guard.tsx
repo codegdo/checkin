@@ -9,7 +9,7 @@ function AuthGuard(): JSX.Element {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!session.auth) {
+    if (!session.isAuth) {
       navigate('/auth/login');
     }
   }, [session, navigate]);

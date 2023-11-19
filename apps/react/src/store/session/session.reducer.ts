@@ -3,16 +3,16 @@ import { AppStatus } from '@/constants';
 import {
   getSession,
   updateSession,
-  deleteSession,
+  logoutSession,
   refreshSessionAsync,
 } from './session.action';
 import { SessionData } from './session.type';
 
 export const initialSession: SessionData = {
-  accountId: null,
-  clientId: null,
   status: AppStatus.UNAUTHENTICATED,
-  auth: false,
+  accessType: null,
+  clientId: null,
+  isAuth: false,
 };
 
 type Action = PayloadAction<Partial<SessionData>>;
@@ -25,7 +25,7 @@ export const sessionReducer = createReducer(initialSession, (builder) => {
     .addCase(updateSession.type, (state, action: Action) => {
       return { ...state, ...action.payload };
     })
-    .addCase(deleteSession.type, () => {
+    .addCase(logoutSession.type, () => {
       return initialSession;
     })
     .addCase(refreshSessionAsync.fulfilled, (state, action: AnyAction) => {

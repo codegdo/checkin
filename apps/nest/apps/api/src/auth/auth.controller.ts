@@ -27,21 +27,23 @@ export class AuthController {
   @Post('login')
   postLoginForm(@Body() loginUserDto: LoginUserDto) {
     return {
+      company: {
+        id: 1,
+        isActive: false
+      },
       user: {
-        id: '1',
         firstName: 'giang',
         lastName: 'do',
-        email: 'giangd@gmail.com',
-        phone: '8583571474',
         username: 'gdo',
         role: 'owner',
-        roleType: 'System',
-        companyId: 1,
+        roleType: 'Internal',
+        //companyId: null,
+        //companyIsActive: null,
         isOwner: false,
         isActive: true,
       },
       model: {
-        sys: {
+        app: {
           modules: [
             {
               name: 'admin',
@@ -131,7 +133,6 @@ export class AuthController {
             ],
           },
         },
-        app: {},
       },
     };
   }
