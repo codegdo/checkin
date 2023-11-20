@@ -4,7 +4,7 @@ import parse, { HTMLReactParserOptions } from 'html-react-parser';
 import { useSelector } from 'react-redux';
 import { AppState } from '@/store/reducers';
 import { AttributeIds } from './type';
-import { TypeLayout, useLayout } from './hooks/use-layout.hook';
+import { LayoutType, useLayout } from './hooks/use-layout.hook';
 
 export interface TemplateProps {
   module: string;
@@ -24,7 +24,7 @@ interface TemplateLayoutProps {
 export function TemplateLayout({ templateProps, Component }: TemplateLayoutProps) {
   const {accessType} = useSelector((state: AppState) => state.session);
   const theme = useSelector((state: AppState) => state.theme);
-  const themeType = accessType as TypeLayout;
+  const themeType = accessType as LayoutType;
 
   const template = useLayout(themeType, templateProps, theme);
 

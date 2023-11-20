@@ -7,7 +7,7 @@ import { baseInternal } from './internal/base';
 import { baseExternal } from './external/base';
 import { basePublic } from './public/base';
 
-export type TypeLayout = ThemeType;
+export type LayoutType = ThemeType;
 
 const themeDefault: ThemeLayout = {
   system: {
@@ -24,15 +24,15 @@ const themeDefault: ThemeLayout = {
   },
 };
 
-export const useLayout = (type: TypeLayout, route:TemplateProps , theme: Partial<ThemeLayout> = {}) => {
+export const useLayout = (type: LayoutType, route:TemplateProps , theme: Partial<ThemeLayout> = {}) => {
   const baseTemplate = theme[type]?.base || themeDefault[type]?.base;
   const {module, view } = route;
 
-  const custom = `${module}_${view}`;
+  const viewType = `${module}_${view}`;
 
-  console.log(custom);
+  const customTemplate = theme[type]?.[viewType] || themeDefault[type]?.[viewType];
 
-  const template = baseTemplate || '';
+  const template = customTemplate || baseTemplate || '';
 
   return DOMPurify.sanitize(template);
 };

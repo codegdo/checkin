@@ -1,23 +1,29 @@
 import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
 
-//import Index from "./auth.index";
 import { LoaderTemplate } from "@/components";
-//import PartialLoader from "../../components/loader/partial.loader";
 
-const Index = LoaderTemplate(lazy(() => import('./auth.index')));
-//const Login = PartialLoader(lazy(() => import('./login/login.page')));
-// const Logout = Partial(lazy(() => import('./logout/logout.page')));
-// const Signup = Partial(lazy(() => import('./signup/signup.page')));
-// const Verify = Partial(lazy(() => import('./verify/verify.page')));
-// const Setup = Partial(lazy(() => import('./setup/setup.page')));
+const Login = LoaderTemplate(lazy(() => import('./login/login.page')));
+const Signup = LoaderTemplate(lazy(() => import('./signup/signup.page')));
 
 function AuthRoute() {
 
   const routes = useRoutes([
     {
-      path: '/*',
-      element: <Index module="auth" view="index" />
+      path: '/',
+      element: <Login module="auth" view="login" />
+    },
+    {
+      path: '/login',
+      element: <Login module="auth" view="login" />
+    },
+    {
+      path: '/signup',
+      element: <Signup module="auth" view="signup" />
+    },
+    {
+      path: '*',
+      element: <div>not found auth.index</div>
     }
   ]);
 
