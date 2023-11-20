@@ -10,7 +10,7 @@ import { SessionData } from './session.type';
 
 export const initialSession: SessionData = {
   status: AppStatus.UNAUTHENTICATED,
-  accessType: null,
+  accessType: 'public',
   clientId: null,
   isAuth: false,
 };

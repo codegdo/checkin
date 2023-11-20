@@ -1,6 +1,10 @@
 import { FC, Suspense, useMemo, ReactElement } from 'react';
 import parse, { HTMLReactParserOptions } from 'html-react-parser';
-import DOMPurify from 'dompurify';
+
+import { useSelector } from 'react-redux';
+import { AppState } from '@/store/reducers';
+import { AttributeIds } from './type';
+import { TypeLayout, useLayout } from './hooks/use-layout.hook';
 
 export interface TemplateProps {
   module: string;
@@ -17,18 +21,14 @@ interface TemplateLayoutProps {
   Component: FC<TemplateProps>;
 }
 
-const html = DOMPurify.sanitize(`
-  <div>
-    <header>
-      <jsx id="jsx_nav"></jsx>
-    </header>
-    <main>
-      <jsx id="jsx_main"></jsx>
-    </main>
-  </div>
-`, { ADD_TAGS: ['jsx'] });
-
 export function TemplateLayout({ templateProps, Component }: TemplateLayoutProps) {
+  const {accessType} = useSelector((state: AppState) => state.session);
+  const theme = useSelector((state: AppState) => state.theme);
+  const themeType = accessType as TypeLayout;
+
+  const template = useLayout(themeType, templateProps, theme);
+
+  console.log('TEMPLATE', template);
 
   const getParserOptions = ({ fallback }: ParserOptions): HTMLReactParserOptions => {
     return {
@@ -37,9 +37,9 @@ export function TemplateLayout({ templateProps, Component }: TemplateLayoutProps
           const { attribs } = domNode;
 
           switch (attribs.id) {
-            case 'jsx_main':
+            case AttributeIds.MAIN:
               return fallback ? <div>loading</div> : <Component {...templateProps} />;
-            case 'jsx_nav':
+            case AttributeIds.NAV:
               return <div>NAV</div>;
             default:
               return null;
@@ -49,16 +49,16 @@ export function TemplateLayout({ templateProps, Component }: TemplateLayoutProps
     };
   };
 
-  const [template, fallback] = useMemo(() => {
+  const [content, fallback] = useMemo(() => {
     return [
-      parse(html, getParserOptions({ fallback: false })),
-      parse(html, getParserOptions({ fallback: true }))
+      parse(template, getParserOptions({ fallback: false })),
+      parse(template, getParserOptions({ fallback: true }))
     ];
   }, []);
 
   return (
     <Suspense fallback={fallback as ReactElement}>
-      {template}
+      {content}
     </Suspense>
   );
 }
