@@ -1,4 +1,4 @@
-export const baseSystem = `
+export const systemBase = `
 <div>
   system-base
   <header>

@@ -7,8 +7,8 @@
 
 export type ThemeType = 'system' | 'internal' | 'external' | 'public';
 
-export type ThemeLayout = {
+export type ThemeTemplate = {
   [Key in ThemeType]: Record<string, string>;
 };
 
-export type ThemeData = Partial<ThemeLayout>;
+export type ThemeData = Partial<ThemeTemplate>;

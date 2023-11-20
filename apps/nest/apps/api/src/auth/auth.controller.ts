@@ -29,7 +29,7 @@ export class AuthController {
     return {
       company: {
         id: null,
-        isActive: null
+        isActive: null,
       },
       user: {
         firstName: 'giang',
@@ -134,6 +134,7 @@ export class AuthController {
           },
         },
       },
+      theme: {},
     };
   }
 }

@@ -5,6 +5,7 @@ import { LoaderTemplate } from "@/components";
 
 const Login = LoaderTemplate(lazy(() => import('./login/login.page')));
 const Signup = LoaderTemplate(lazy(() => import('./signup/signup.page')));
+const NotFound = LoaderTemplate(lazy(() => import('../notfound/notfound.page')));
 
 function AuthRoute() {
 
@@ -23,7 +24,7 @@ function AuthRoute() {
     },
     {
       path: '*',
-      element: <div>not found auth.index</div>
+      element: <NotFound module="auth" view="notfound" />
     }
   ]);
 

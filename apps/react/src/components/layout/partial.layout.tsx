@@ -1,14 +1,12 @@
 import { FC, Suspense } from 'react';
-import { TemplateProps } from './template.layout';
+import { ComponentProps } from './type';
 
-export interface PartialProps extends TemplateProps {}
-
-interface PartialLayoutProps {
-  partialProps: PartialProps;
-  Component: FC<PartialProps>;
+interface PartialProps {
+  partialProps: ComponentProps;
+  Component: FC<ComponentProps>;
 }
 
-export function PartialLayout({ partialProps, Component }: PartialLayoutProps) {
+export function Partial({ partialProps, Component }: PartialProps) {
   return (
     <Suspense fallback="loading">
       <Component {...partialProps} />

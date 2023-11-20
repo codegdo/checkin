@@ -1,1 +1,1 @@
-export * from './use-layout.hook';
+export * from './use-template.hook';

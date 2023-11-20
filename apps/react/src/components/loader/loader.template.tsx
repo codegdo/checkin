@@ -1,7 +1,9 @@
 import { FC } from 'react';
-import { TemplateLayout, TemplateProps } from '../layout/template.layout';
+import { Template, ComponentProps } from '../layout';
 
-export const LoaderTemplate = (Component: FC<TemplateProps>) => (props: TemplateProps) => (
-  <TemplateLayout templateProps={props} Component={Component} />
-);
+export const LoaderTemplate = (Component: FC<ComponentProps>) => {
+  return function Loader(props: ComponentProps) {
+    return <Template templateProps={props} Component={Component} />
+  }
+};
 

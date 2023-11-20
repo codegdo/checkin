@@ -1,4 +1,4 @@
-export const baseExternal = `
+export const externalBase = `
 <div>
   external-base
   <header>

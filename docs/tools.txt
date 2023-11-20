@@ -2,6 +2,7 @@ monaco editor
 https://miro.com
 https://figma.com
 https://drawsql.app
+https://app.eraser.io
 https://app.diagrams.net/ (draw.io)
 
 https://bundlephobia.com/

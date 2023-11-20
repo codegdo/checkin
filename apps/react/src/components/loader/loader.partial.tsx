@@ -1,6 +1,8 @@
 import { FC } from 'react';
-import { PartialLayout, PartialProps } from '../layout/partial.layout';
+import { Partial, ComponentProps } from '../layout';
 
-export const LoaderPartial = (Component: FC<PartialProps>) => (props: PartialProps) => (
-  <PartialLayout partialProps={props} Component={Component} />
-);
+export const LoaderPartial = (Component: FC<ComponentProps>) => {
+  return function Loader(props: ComponentProps) {
+    return <Partial partialProps={props} Component={Component} />
+  }
+}

@@ -3,30 +3,25 @@ import parse, { HTMLReactParserOptions } from 'html-react-parser';
 
 import { useSelector } from 'react-redux';
 import { AppState } from '@/store/reducers';
-import { AttributeIds } from './type';
-import { LayoutType, useLayout } from './hooks/use-layout.hook';
-
-export interface TemplateProps {
-  module: string;
-  view?: string;
-  object?: string;
-}
+import { AttributeIds, ComponentProps } from './type';
+import { TemplateType, useTemplate } from './hooks/use-template.hook';
+import { ButtonLogout } from '../button/button.logout';
 
 interface ParserOptions {
   fallback: boolean;
 }
 
-interface TemplateLayoutProps {
-  templateProps: TemplateProps;
-  Component: FC<TemplateProps>;
+interface TemplateProps {
+  templateProps: ComponentProps;
+  Component: FC<ComponentProps>;
 }
 
-export function TemplateLayout({ templateProps, Component }: TemplateLayoutProps) {
-  const {accessType} = useSelector((state: AppState) => state.session);
+export function Template({ templateProps, Component }: TemplateProps) {
+  const { accessType } = useSelector((state: AppState) => state.session);
   const theme = useSelector((state: AppState) => state.theme);
-  const themeType = accessType as LayoutType;
+  const themeType = accessType as TemplateType;
 
-  const template = useLayout(themeType, templateProps, theme);
+  const template = useTemplate(themeType, templateProps, theme);
 
   console.log('TEMPLATE', template);
 
@@ -40,7 +35,7 @@ export function TemplateLayout({ templateProps, Component }: TemplateLayoutProps
             case AttributeIds.MAIN:
               return fallback ? <div>loading</div> : <Component {...templateProps} />;
             case AttributeIds.NAV:
-              return <div>NAV</div>;
+              return <div>NAV <ButtonLogout /></div>;
             default:
               return null;
           }

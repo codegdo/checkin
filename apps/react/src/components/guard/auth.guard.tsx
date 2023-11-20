@@ -1,18 +1,20 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { AppState } from '@/store/reducers';
 
 function AuthGuard(): JSX.Element {
   const session = useSelector((state: AppState) => state.session);
+  const { pathname } = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (!session.isAuth) {
-      navigate('/auth/login');
+      console.log(location);
+      navigate('/auth/login', { state: { pathname } });
     }
-  }, [session, navigate]);
+  }, [session, navigate, pathname]);
 
   return <Outlet />
 }
