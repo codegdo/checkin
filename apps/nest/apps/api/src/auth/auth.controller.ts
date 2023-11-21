@@ -137,4 +137,11 @@ export class AuthController {
       theme: {},
     };
   }
+
+  @Get('logout')
+  getLogout() {
+    // Handle GET request to render the signup form
+    return `ok`;
+  }
+    
 }
