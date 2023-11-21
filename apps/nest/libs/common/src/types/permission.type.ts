@@ -1,3 +1,3 @@
-import { MigrationPermission } from '../enums';
+import { ClientPermission, MigrationPermission } from '../enums';
 
-export type PermissionType = MigrationPermission;
+export type PermissionType = ClientPermission | MigrationPermission;

@@ -2,12 +2,11 @@ import { Module } from '@nestjs/common';
 import { RouterModule } from '@nestjs/core';
 
 import { MigrationModule } from './migration/migration.module';
-import { SetupModule } from '../setup/setup.module';
+import { SetupModule } from './setup/setup.module';
+import { ClientModule } from './client/client.module';
 
 @Module({
   imports: [
-    MigrationModule,
-
     RouterModule.register([
       {
         path: 'admin',
@@ -20,7 +19,11 @@ import { SetupModule } from '../setup/setup.module';
           {
             path: 'setups',
             module: SetupModule,
-          }
+          },
+          {
+            path: 'clients',
+            module: ClientModule,
+          },
         ],
       },
     ]),

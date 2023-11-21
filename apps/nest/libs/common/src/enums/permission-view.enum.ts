@@ -17,3 +17,9 @@ export enum MigrationPermission {
   GET_MIGRATION_SCRIPT_BY_ID = 'admin:migrations:getMigrationScriptById',
   CREATE_NEW_MIGRATION_SCRIPT = 'admin:migrations:createNewMigrationScript',
 }
+
+export enum ClientPermission {
+  // client
+  GET_ALL_CLIENTS = 'admin:clients:getAllClients',
+  GET_CLIENT_LOGIN = 'admin:clients:getClientLogin',
+}

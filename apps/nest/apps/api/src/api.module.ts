@@ -1,5 +1,6 @@
-//import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD } from '@nestjs/core';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
+
 import {
   ClientModule,
   ConfigModule,
@@ -8,11 +9,15 @@ import {
   SessionModule,
   ExpressWinstonMiddleware,
   InstanceName,
+  AuthGuard,
+  SecurityGuard,
+  RoleGuard,
+  PermissionGuard,
+  PolicyChecker,
 } from '@app/common';
 
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
-import { SecurityModule } from './security/security.module';
 
 @Module({
   imports: [
@@ -25,7 +30,6 @@ import { SecurityModule } from './security/security.module';
     //
     AuthModule,
     AdminModule,
-    SecurityModule,
   ],
   controllers: [],
   providers: [
@@ -33,6 +37,14 @@ import { SecurityModule } from './security/security.module';
     //   provide: APP_INTERCEPTOR,
     //   useClass: RequestInterceptor,
     // },
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    SecurityGuard,
+    RoleGuard,
+    PermissionGuard,
+    PolicyChecker,
   ],
 })
 export class ApiModule {

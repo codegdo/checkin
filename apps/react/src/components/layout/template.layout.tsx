@@ -6,6 +6,7 @@ import { AppState } from '@/store/reducers';
 import { AttributeIds, ComponentProps } from './type';
 import { TemplateType, useTemplate } from './hooks/use-template.hook';
 import { ButtonLogout } from '../button/button.logout';
+import { NavMenu } from '../nav/nav.menu';
 
 interface ParserOptions {
   fallback: boolean;
@@ -19,11 +20,12 @@ interface TemplateProps {
 export function Template({ templateProps, Component }: TemplateProps) {
   const { accessType } = useSelector((state: AppState) => state.session);
   const theme = useSelector((state: AppState) => state.theme);
+  const { app, sys } = useSelector((state: AppState) => state.model);
   const themeType = accessType as TemplateType;
 
   const template = useTemplate(themeType, templateProps, theme);
 
-  console.log('TEMPLATE', template);
+  console.log('TEMPLATE', template, accessType);
 
   const getParserOptions = ({ fallback }: ParserOptions): HTMLReactParserOptions => {
     return {
@@ -35,7 +37,12 @@ export function Template({ templateProps, Component }: TemplateProps) {
             case AttributeIds.MAIN:
               return fallback ? <div>loading</div> : <Component {...templateProps} />;
             case AttributeIds.NAV:
-              return <div>NAV <ButtonLogout /></div>;
+              return <div>
+                {
+                  accessType === 'system' ? <NavMenu {...sys} /> : <NavMenu {...app} />
+                }
+                <ButtonLogout />
+              </div>;
             default:
               return null;
           }
