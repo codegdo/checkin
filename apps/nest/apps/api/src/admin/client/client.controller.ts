@@ -1,7 +1,7 @@
 import { ClientPermission, Permissions } from '@app/common';
 import { Controller, Get, Param } from '@nestjs/common';
 
-@Controller('client')
+@Controller()
 export class ClientController {
   @Get()
   @Permissions(ClientPermission.GET_ALL_CLIENTS)
@@ -20,9 +20,9 @@ export class ClientController {
     ];
   }
 
-  @Get()
-  @Permissions(ClientPermission.GET_ALL_CLIENTS)
-  async getLoginClient(@Param('id') id: number) {
+  @Get(':id')
+  @Permissions(ClientPermission.GET_CLIENT_LOGIN)
+  async getClientLogin(@Param('id') id: number) {
     return {
       company: {
         id,

@@ -24,13 +24,13 @@ type ResponseFetch<T> = {
   error: Error | undefined;
   data: T | undefined;
   mutation: (options?: RequestOptions) => Promise<void>;
-  query: (customBaseUrl?: string) => Promise<void>;
+  query: (options?: RequestOptions) => Promise<void>;
   controller: AbortController;
 };
 
 export const useFetch = <T>(
-  url: string,
-  params: Record<string, string | number> = {}
+  url?: string,
+  params: Record<string, unknown> = {}
 ): ResponseFetch<T> => {
   const [status, setStatus] = useState<FetchStatus>(FetchStatus.Idle);
   const [data, setData] = useState<T | undefined>(undefined);
@@ -119,16 +119,20 @@ export const useFetch = <T>(
 
   const mutation = async (options: RequestOptions = {}): Promise<void> => {
     const baseUrl = options.baseUrl || API_URL;
-    const strUrl = stringifyUrl(`${baseUrl}${url}`, params);
+    const pathUrl = options.url || url;
+    const urlParams = options.params || params;
+    const strUrl = stringifyUrl(`${baseUrl}${pathUrl}`, urlParams);
 
     makeRequest(strUrl, { ...options, signal: ctrlRef.current.signal });
   };
 
-  const query = async (customBaseUrl?: string): Promise<void> => {
-    const baseUrl = customBaseUrl || API_URL;
-    const strUrl = stringifyUrl(`${baseUrl}${url}`, params);
+  const query = async (options: RequestOptions = {}): Promise<void> => {
+    const baseUrl = options.baseUrl || API_URL;
+    const pathUrl = options.url || url;
+    const urlParams = options.params || params;
+    const strUrl = stringifyUrl(`${baseUrl}${pathUrl}`, urlParams);
 
-    makeRequest(strUrl, { signal: ctrlRef.current.signal });
+    makeRequest(strUrl, { ...options, signal: ctrlRef.current.signal });
   };
 
   return {

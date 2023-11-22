@@ -7,6 +7,9 @@ import { ClientModule } from './client/client.module';
 
 @Module({
   imports: [
+    MigrationModule,
+    SetupModule,
+    ClientModule,
     RouterModule.register([
       {
         path: 'admin',

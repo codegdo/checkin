@@ -1,4 +1,4 @@
-export const stringifyUrl = (url: string, query: Record<string, string | number> = {}): string => {
+export const stringifyUrl = (url: string, query: Record<string, unknown> = {}): string => {
   const queryString = Object.entries(query)
     .map(([key, value]) => {
       if (typeof key !== 'string' || (typeof value !== 'string' && typeof value !== 'number')) {

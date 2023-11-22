@@ -1,11 +1,19 @@
+import { Link } from "react-router-dom";
+
 interface NavMenuProps {
   modules?: Record<string, string>;
-  views?: Record<string, string>;
+  views?: Record<string, Record<string, string>[]>;
 }
 
-export function NavMenu(props: NavMenuProps) {
+export function NavMenu({ views }: NavMenuProps) {
+  const renderedObject = views && Object.keys(views).map((key) => {
+    const viewItems = views[key];
 
-  console.log(props);
+    // Render each view item in the current view type
+    return viewItems.map((item, index) => (
+      <Link key={index} to={`/${key}/${item.name}`}>{item.name}</Link>
+    ));
+  });
 
-  return <div></div>
+  return <nav>{renderedObject}</nav>;
 }

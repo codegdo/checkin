@@ -13,6 +13,7 @@ export class MigrationController {
   async getAllMigrations() {
     //return this.migrationService.getAllMigrations();
     const result = await this.migrationService.getAllMigrations();
+    console.log(result);
     return result;
     // return new Promise((resolve, reject) => {
     //   setTimeout(async () => {
