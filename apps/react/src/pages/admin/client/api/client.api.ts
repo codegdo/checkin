@@ -1,10 +1,23 @@
 import { useEffect } from "react";
-import { useFetch } from "@/hooks";
+import { useAction, useFetch } from "@/hooks";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AccessType } from "@/store/types";
 
 interface Account {
   accountId: string;
   companyId: number;
   companyName: string;
+}
+
+interface ClientLogin {
+  account: {
+    id: string;
+    companyId: number;
+    isActive: boolean;
+  };
+  model: {
+    app: Record<string, unknown>
+  }
 }
 
 export const useGetAllClients = (params?: Record<string, string | number>) => {
@@ -17,6 +30,24 @@ export const useGetAllClients = (params?: Record<string, string | number>) => {
   return { ...api }
 }
 
-export const useGetLoginClients = (params?: Record<string, string | number>) => {
-    return useFetch<Account[]>('/admin/clients', { ...params });
+export const useGetClientSwitch = () => {
+  const { updateSession, updateModel } = useAction();
+  //const { state: history } = useLocation();
+  const navigate = useNavigate();
+  const { status: fetchStatus, isSuccess, data, query } = useFetch<ClientLogin>();
+
+  useEffect(() => {
+    const handleLoginSuccess = () => {
+      if (isSuccess && data) {
+        const { account, model } = data;
+        updateSession({ clientId: account.companyId, accessType: AccessType.INTERNAL });
+        updateModel({ app: model.app });
+        navigate('/');
+      }
+    };
+
+    handleLoginSuccess();
+  }, [data, isSuccess, navigate, updateModel, updateSession]);
+
+  return { status: fetchStatus, data, query };
 }

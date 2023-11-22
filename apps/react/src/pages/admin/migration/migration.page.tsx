@@ -1,21 +1,14 @@
 import { Link } from "react-router-dom";
 import { useGetAllMigrations } from "./api";
+import { Loader } from "@/components";
 
 function Migration() {
-  const { status, isLoading, isDelay, isAbort, data, controller } = useGetAllMigrations();
+  const { status, data, controller } = useGetAllMigrations();
 
   console.log(status);
 
-  if (isLoading) {
-    return <div>loading...</div>
-  }
-
-  if (isDelay) {
-    return <div>delayed...</div>
-  }
-
-  if (isAbort) {
-    return <div>wanna to abort... <button onClick={() => { controller.abort() }}>Cancel</button></div>
+  if (!data) {
+    return <Loader status={status} controller={controller} />
   }
 
   return (

@@ -1,0 +1,17 @@
+Given the roles of the system, internal, and external users, here's a refined approach to the dashboard configuration:
+
+System User Dashboard:
+
+Admin Console: This dashboard provides comprehensive access to system-wide configurations, user management, system settings, and tools for system modification. It includes functionalities for creating and managing internal user roles and permissions, as well as overseeing the overall system setup.
+Internal User Dashboard:
+
+Registration & User Management: For internal users responsible for registering new users and managing accounts, their dashboard could focus on user management tools. This might include functionalities for creating external user accounts, managing permissions, onboarding procedures, and overseeing access control.
+External User Dashboard:
+
+Welcome & Account Management: External users upon login see a welcome dashboard that introduces them to the system, provides self-service options, and allows them to manage their accounts. This dashboard might include account settings, access to their specific services or functionalities, support resources, and account-specific information.
+This setup ensures a clear division of functionalities and responsibilities among the different user types:
+
+System Users have access to the system's core functionalities and tools necessary for system-wide modifications and configurations.
+Internal Users focus on managing user registrations, permissions, and overseeing the creation and management of external user accounts.
+External Users experience a user-friendly welcome dashboard that caters to their needs as users of the system, providing them with access to their account-specific functionalities and support resources.
+This division ensures that each user type has a dashboard specifically designed to facilitate their tasks and responsibilities within the system.

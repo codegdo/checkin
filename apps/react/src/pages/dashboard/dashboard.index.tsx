@@ -1,3 +1,36 @@
+import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
+import { AccessType } from '@/store/types';
+import { AppState } from '@/store/reducers';
+
+function Index() {
+  const { accessType } = useSelector((state: AppState) => state.session);
+
+  const getDashboardRoute = (type: string) => {
+    switch (type) {
+      case AccessType.SYSTEM:
+        return '/console';
+      case AccessType.INTERNAL:
+        return '/overview';
+      case AccessType.EXTERNAL:
+        return '/welcome';
+      default:
+        return '/auth/login';
+    }
+  };
+
+  const redirectToDashboard = (type: string) => {
+    const route = getDashboardRoute(type);
+    return <Navigate to={route} />;
+  };
+
+  return redirectToDashboard(accessType);
+}
+
+export default Index;
+
+
+
 // import { DragDrop } from "@/components";
 
 // // Example API response
@@ -81,18 +114,6 @@
 //   },
 
 // ];
-
-
-function Index() {
-  return <div>
-    HOME
-  </div>
-}
-
-export default Index;
-
-
-
 
 // Map the API response to use enum values
 // const json: Field[] = apiResponse.map(item => ({

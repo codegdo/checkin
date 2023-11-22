@@ -1,11 +1,11 @@
 import DOMPurify from 'dompurify';
 import { ThemeTemplate, ThemeType } from '@/store/types';
-import { TemplateProps } from '../template.layout';
 
 import { systemBase } from './system';
 import { internalBase } from './internal';
 import { externalBase } from './external';
 import { publicBase } from './public';
+import { ComponentProps } from '../type';
 
 export type TemplateType = ThemeType;
 
@@ -24,7 +24,7 @@ const defaultThemeTemplate: ThemeTemplate = {
   },
 };
 
-export const useTemplate = (type: TemplateType, route: TemplateProps, theme: Partial<ThemeTemplate> = {}) => {
+export const useTemplate = (type: TemplateType, route: ComponentProps, theme: Partial<ThemeTemplate> = {}) => {
   const customTheme = theme[type] || {};
   const defaultTheme = defaultThemeTemplate[type] || {};
   const baseTemplate = customTheme.base || defaultTheme.base;

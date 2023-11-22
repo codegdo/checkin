@@ -21,5 +21,5 @@ export enum MigrationPermission {
 export enum ClientPermission {
   // client
   GET_ALL_CLIENTS = 'admin:clients:getAllClients',
-  GET_CLIENT_LOGIN = 'admin:clients:getClientLogin',
+  GET_SWITCH_CLIENT = 'admin:clients:getSwitchClient',
 }

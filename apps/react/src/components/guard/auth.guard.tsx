@@ -11,8 +11,7 @@ function AuthGuard(): JSX.Element {
 
   useEffect(() => {
     if (!session.isAuth) {
-      console.log(location);
-      navigate('/auth/login', { state: { pathname } });
+      navigate('/auth/login');
     }
   }, [session, navigate, pathname]);
 

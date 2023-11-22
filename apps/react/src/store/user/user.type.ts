@@ -1,3 +1,11 @@
+export enum AccessType {
+  SYSTEM = 'system',
+  INTERNAL = 'internal',
+  EXTERNAL = 'external',
+  PUBLIC = 'public',
+}
+
+
 export interface UserData {
   id?: number;
   firstName?: string;

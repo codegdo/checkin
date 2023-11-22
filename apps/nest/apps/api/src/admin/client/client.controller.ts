@@ -21,14 +21,52 @@ export class ClientController {
   }
 
   @Get(':id')
-  @Permissions(ClientPermission.GET_CLIENT_LOGIN)
+  @Permissions(ClientPermission.GET_SWITCH_CLIENT)
   async getClientLogin(@Param('id') id: number) {
     return {
-      company: {
-        id,
+      account: {
+        id: '123abc',
+        companyId: id,
+        isActive: true,
       },
       model: {
-        app: {},
+        app: {
+          modules: [
+            {
+              name: 'iam',
+              group: 'app',
+            },
+          ],
+          views: {
+            iam: [
+              {
+                name: 'users',
+                group: 'app_iam',
+              },
+            ],
+          },
+          objects: {
+            users: [
+              {
+                name: 'user',
+                slug: 'users',
+              },
+              {
+                name: 'group',
+                slug: 'groups',
+              },
+              {
+                name: 'role',
+                slug: 'roles',
+              },
+              {
+                name: 'policy',
+                slug: 'policies',
+              },
+            ],
+          },
+          actions: {},
+        },
       },
     };
   }

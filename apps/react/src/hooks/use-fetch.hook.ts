@@ -3,7 +3,7 @@ import { http, HttpResponse, RequestOptions } from '../helpers';
 import { API_URL } from '../app.constant';
 import { stringifyUrl } from '../utils';
 
-enum FetchStatus {
+export enum FetchStatus {
   Idle = 'Idle',
   Loading = 'Loading',
   Error = 'Error',
@@ -83,7 +83,6 @@ export const useFetch = <T>(
           checkDelay(responsePromise, delayCount + 1);
         } else {
           setStatus(FetchStatus.Abort);
-          throw new Error(`Request failed with status: ${raceResponse}`);
         }
       } else {
         const httpResponse = raceResponse as HttpResponse<T>;
@@ -109,7 +108,6 @@ export const useFetch = <T>(
     }
   };
 
-
   const makeRequest = async (strUrl: string, options: RequestOptions) => {
     setStatus(FetchStatus.Loading);
 
@@ -117,7 +115,7 @@ export const useFetch = <T>(
     checkDelay(responsePromise);
   };
 
-  const mutation = async (options: RequestOptions = {}): Promise<void> => {
+  const performRequest = async (options: RequestOptions = {}) => {
     const baseUrl = options.baseUrl || API_URL;
     const pathUrl = options.url || url;
     const urlParams = options.params || params;
@@ -126,13 +124,12 @@ export const useFetch = <T>(
     makeRequest(strUrl, { ...options, signal: ctrlRef.current.signal });
   };
 
-  const query = async (options: RequestOptions = {}): Promise<void> => {
-    const baseUrl = options.baseUrl || API_URL;
-    const pathUrl = options.url || url;
-    const urlParams = options.params || params;
-    const strUrl = stringifyUrl(`${baseUrl}${pathUrl}`, urlParams);
+  const mutation = async (options: RequestOptions = {}): Promise<void> => {
+    await performRequest(options);
+  };
 
-    makeRequest(strUrl, { ...options, signal: ctrlRef.current.signal });
+  const query = async (options: RequestOptions = {}): Promise<void> => {
+    await performRequest(options);
   };
 
   return {

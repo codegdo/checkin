@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useAction, useFetch } from "@/hooks";
-import { SessionData, ModelData, CompanyData, UserData, ThemeData } from "@/store/types";
+import { SessionData, ModelData, CompanyData, UserData, ThemeData, AccessType } from "@/store/types";
 import { AppStatus } from "@/constants";
 
 interface UserLogin {
@@ -14,9 +14,9 @@ interface UserLogin {
 }
 
 export const useLoginApi = () => {
-  const { updateRootState } = useAction();
   const { status: fetchStatus, isSuccess, data, mutation } = useFetch<UserLogin>('/auth/login');
-  const { state: history } = useLocation();
+  const { updateRootState } = useAction();
+  const { state: location } = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,14 +25,15 @@ export const useLoginApi = () => {
         const { model, company, user, theme } = data;
 
         if (user.isActive && user.roleType) {
-          const isSystemRole = user.roleType === 'System';
+          const accessType = user.roleType.toLowerCase()
+          const isSystemRole = accessType === AccessType.SYSTEM;
           const isActiveCompany = company.isActive;
           const appStatus = isSystemRole || isActiveCompany ? AppStatus.AUTHENTICATED : AppStatus.INACTIVE;
-          const pathname = history.pathname || '/';
+          const pathname = location?.pathname || '/';
 
           const session = {
             status: appStatus,
-            accessType: user.roleType.toLowerCase(),
+            accessType,
             clientId: isSystemRole ? null : company.id,
             isAuth: true
           };
@@ -51,7 +52,7 @@ export const useLoginApi = () => {
     };
 
     handleLoginSuccess();
-  }, [data, isSuccess, history, navigate, updateRootState]);
+  }, [data, isSuccess, location, navigate, updateRootState]);
 
   return { status: fetchStatus, data, mutation };
 };
