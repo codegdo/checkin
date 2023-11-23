@@ -15,7 +15,7 @@ function Index() {
       case AccessType.EXTERNAL:
         return '/welcome';
       default:
-        return '/auth/login';
+        return '/notfound';
     }
   };
 

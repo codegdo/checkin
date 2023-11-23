@@ -7,6 +7,7 @@ import { AttributeIds, ComponentProps } from './type';
 import { TemplateType, useTemplate } from './hooks/use-template.hook';
 import { ButtonLogout } from '../button/button.logout';
 import { NavMenu } from '../nav/nav.menu';
+import { ButtonSwitch } from '../button/button.switch';
 
 interface ParserOptions {
   fallback: boolean;
@@ -41,6 +42,7 @@ export function Template({ templateProps, Component }: TemplateProps) {
                 {
                   accessType === 'system' ? <NavMenu {...sys} /> : <NavMenu {...app} />
                 }
+                <ButtonSwitch />
                 <ButtonLogout />
               </div>;
             default:

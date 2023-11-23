@@ -21,8 +21,8 @@ export class ClientController {
   }
 
   @Get(':id')
-  @Permissions(ClientPermission.GET_SWITCH_CLIENT)
-  async getClientLogin(@Param('id') id: number) {
+  @Permissions(ClientPermission.GET_CLIENT_ACCESS)
+  async getClientAccess(@Param('id') id: number) {
     return {
       account: {
         id: '123abc',
@@ -69,5 +69,11 @@ export class ClientController {
         },
       },
     };
+  }
+
+  @Get('switch')
+  @Permissions(ClientPermission.GET_CLIENT_SWITCH)
+  async getClientSwitch(@Param('id') id: number) {
+    return {ok: true};
   }
 }
