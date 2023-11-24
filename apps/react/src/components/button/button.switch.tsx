@@ -7,18 +7,15 @@ import { useNavigate } from "react-router-dom";
 
 export function ButtonSwitch() {
   const { accessType } = useSelector((state: AppState) => state.session);
-  const { updateStateOnClientSwitch } = useAction();
+  const { exitClientMode } = useAction();
   const { isSuccess, isError, query } = useFetch('/admin/clients/switch');
   const navigate = useNavigate();
 
 
   useEffect(() => {
     if (isSuccess) {
-      //updateSession({ clientId: null, accessType: AccessType.SYSTEM });
-      //updateModel({ app: {} });
-      updateStateOnClientSwitch({
+      exitClientMode({
         session: { clientId: null, accessType: AccessType.SYSTEM },
-        model: { app: {} }
       });
       navigate('/admin/clients');
     }

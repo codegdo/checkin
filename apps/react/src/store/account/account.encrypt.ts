@@ -2,9 +2,9 @@ import { createTransform } from 'redux-persist';
 import { decrypt, encrypt } from '@/utils';
 import { ENCRYPT_KEY } from '@/app.constant';
 
-const encryptedCompany = createTransform(
+const encryptedAccount = createTransform(
   (inboundState, key) => {
-    if (key === 'company') {
+    if (key === 'account') {
       const encrypted = encrypt(JSON.stringify(inboundState), ENCRYPT_KEY);
       return encrypted;
     }
@@ -12,7 +12,7 @@ const encryptedCompany = createTransform(
     return inboundState;
   },
   (outboundState, key) => {
-    if (key === 'company' && typeof outboundState === 'string') {
+    if (key === 'account' && typeof outboundState === 'string') {
       const decrypted = decrypt(outboundState, ENCRYPT_KEY, '{"id":');
       return JSON.parse(decrypted);
     }
@@ -21,4 +21,4 @@ const encryptedCompany = createTransform(
   }
 );
 
-export default encryptedCompany;
+export default encryptedAccount;

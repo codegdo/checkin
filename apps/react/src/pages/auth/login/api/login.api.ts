@@ -2,46 +2,46 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useAction, useFetch } from "@/hooks";
-import { SessionData, ModelData, CompanyData, UserData, ThemeData, AccessType } from "@/store/types";
+import { SessionData, ModelData, AccountData, UserData, ThemeData, AccessType } from "@/store/types";
 import { AppStatus } from "@/constants";
 
 interface UserLogin {
   session: SessionData;
   model: ModelData;
-  company: CompanyData;
+  account: AccountData;
   user: UserData;
   theme: ThemeData;
 }
 
 export const useLoginApi = () => {
   const { status: fetchStatus, isSuccess, data, mutation } = useFetch<UserLogin>('/auth/login');
-  const { updateStateOnLoginSuccess } = useAction();
+  const { loginSuccess } = useAction();
   const { state: location } = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     const handleLoginSuccess = () => {
       if (isSuccess && data) {
-        const { model, company, user, theme } = data;
+        const { model, account, user, theme } = data;
 
         if (user.isActive && user.roleType) {
           const accessType = user.roleType.toLowerCase()
           const isSystemRole = accessType === AccessType.SYSTEM;
-          const isActiveCompany = company.isActive;
-          const appStatus = isSystemRole || isActiveCompany ? AppStatus.AUTHENTICATED : AppStatus.INACTIVE;
+          const isActiveAccount = account.isActive;
+          const appStatus = isSystemRole || isActiveAccount ? AppStatus.AUTHENTICATED : AppStatus.INACTIVE;
           const pathname = location?.pathname || '/';
 
           const session = {
             status: appStatus,
             accessType,
-            clientId: isSystemRole ? null : company.id,
+            clientId: isSystemRole ? null : account.companyId,
             isAuth: true
           };
 
-          updateStateOnLoginSuccess({
+          loginSuccess({
             session,
             model,
-            company,
+            account,
             user,
             theme,
           });
@@ -52,7 +52,7 @@ export const useLoginApi = () => {
     };
 
     handleLoginSuccess();
-  }, [data, isSuccess, location, navigate, updateStateOnLoginSuccess]);
+  }, [data, isSuccess, location, navigate, loginSuccess]);
 
   return { status: fetchStatus, data, mutation };
 };

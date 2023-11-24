@@ -2,12 +2,12 @@ import { useAction, useFetch } from "@/hooks";
 import { useEffect } from "react";
 
 export function ButtonLogout() {
-  const { updateStateOnLogoutSuccess } = useAction();
+  const { logoutSuccess } = useAction();
   const { isSuccess, isError, query } = useFetch('/auth/logout');
 
   useEffect(() => {
     if (isSuccess || isError) {
-      updateStateOnLogoutSuccess();
+      logoutSuccess();
     }
   }, [isError, isSuccess]);
 

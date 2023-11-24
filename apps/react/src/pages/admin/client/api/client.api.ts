@@ -31,7 +31,7 @@ export const useGetAllClients = (params?: Record<string, string | number>) => {
 }
 
 export const useGetClientSwitch = () => {
-  const { updateStateOnClientSwitch } = useAction();
+  const { enterClientMode } = useAction();
   //const { state: history } = useLocation();
   const navigate = useNavigate();
   const { status: fetchStatus, isSuccess, data, query } = useFetch<ClientLogin>();
@@ -40,7 +40,7 @@ export const useGetClientSwitch = () => {
     const handleLoginSuccess = () => {
       if (isSuccess && data) {
         const { account, model } = data;
-        updateStateOnClientSwitch({
+        enterClientMode({
           session: { clientId: account.companyId, accessType: AccessType.INTERNAL },
           model: { app: model.app }
         });

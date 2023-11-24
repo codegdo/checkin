@@ -27,8 +27,9 @@ export class AuthController {
   @Post('login')
   postLoginForm(@Body() loginUserDto: LoginUserDto) {
     return {
-      company: {
+      account: {
         id: null,
+        companyId: null,
         isActive: null,
       },
       user: {
@@ -143,5 +144,4 @@ export class AuthController {
     // Handle GET request to render the signup form
     return `ok`;
   }
-    
 }

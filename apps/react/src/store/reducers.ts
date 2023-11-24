@@ -16,22 +16,22 @@ import {
   themeReducer
 } from './theme/theme.reducer';
 import {
-  initialCompany,
-  companyReducer
-} from './company/company.reducer';
+  initialAccount,
+  accountReducer
+} from './account/account.reducer';
 import {
   initialUser,
   userReducer
 } from './user/user.reducer';
 
 import encrypted from './encrypted';
-import { updateStateOnClientSwitch, updateStateOnLoginSuccess, updateStateOnLogoutSuccess } from './actions';
+import { enterClientMode, exitClientMode, loginSuccess, logoutSuccess } from './actions';
 
 // Combine individual reducers
 export const appReducer = combineReducers({
   session: sessionReducer,
   model: modelReducer,
-  company: companyReducer,
+  account: accountReducer,
   user: userReducer,
   theme: themeReducer,
 });
@@ -40,14 +40,14 @@ const initialState = {
   // Initial State
   session: initialSession,
   model: initialModel,
-  company: initialCompany,
+  account: initialAccount,
   user: initialUser,
   theme: initialTheme,
 };
 
 const rootReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(updateStateOnLogoutSuccess, (state) => {
+    .addCase(logoutSuccess, (state) => {
       console.log('logout/SUCCESS');
       void storage.removeItem('persist:root');
       return {
@@ -55,9 +55,9 @@ const rootReducer = createReducer(initialState, (builder) => {
         ...initialState
       };
     })
-    .addCase(updateStateOnLoginSuccess, (state, action) => {
+    .addCase(loginSuccess, (state, action) => {
       console.log('login/SUCCESS');
-      const { session, model, company, user, theme } = action.payload;
+      const { session, model, account, user, theme } = action.payload;
       return {
         ...state,
         session: { ...state.session, ...session },
@@ -66,7 +66,7 @@ const rootReducer = createReducer(initialState, (builder) => {
           app: { ...(state.model.app || {}), ...(model?.app || {}) },
           sys: { ...(state.model.sys || {}), ...(model?.sys || {}) },
         },
-        company: { ...state.company, ...company },
+        account: { ...state.account, ...account },
         user: { ...state.user, ...user },
         theme: {
           ...state.theme,
@@ -83,8 +83,8 @@ const rootReducer = createReducer(initialState, (builder) => {
         },
       };
     })
-    .addCase(updateStateOnClientSwitch, (state, action) => {
-      console.log('client/SWITCH');
+    .addCase(enterClientMode, (state, action) => {
+      console.log('enter/ClientMode');
       const { session, model } = action.payload;
       return {
         ...state,
@@ -99,6 +99,22 @@ const rootReducer = createReducer(initialState, (builder) => {
         //     ...(state.theme.internal || {}),
         //     ...(theme?.internal || {}),
         //   },
+        // },
+      };
+    })
+    .addCase(exitClientMode, (state, action) => {
+      console.log('exit/ClientMode');
+      const { session } = action.payload;
+      return {
+        ...state,
+        session: { ...state?.session, ...session },
+        model: {
+          ...state?.model,
+          app: {},
+        },
+        // theme: {
+        //   ...state.theme,
+        //   internal: {},
         // },
       };
     });
