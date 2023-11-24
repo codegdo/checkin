@@ -3,7 +3,6 @@ import { AppStatus } from '@/constants';
 import {
   getSession,
   updateSession,
-  logoutSession,
   refreshSessionAsync,
 } from './session.action';
 import { SessionData } from './session.type';
@@ -24,9 +23,6 @@ export const sessionReducer = createReducer(initialSession, (builder) => {
     })
     .addCase(updateSession.type, (state, action: Action) => {
       return { ...state, ...action.payload };
-    })
-    .addCase(logoutSession.type, () => {
-      return initialSession;
     })
     .addCase(refreshSessionAsync.fulfilled, (state, action: AnyAction) => {
       return { ...state, ...action.payload };

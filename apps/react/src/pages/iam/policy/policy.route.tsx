@@ -3,7 +3,7 @@ import { useRoutes } from "react-router-dom";
 
 import { LoaderPartial } from "@/components";
 
-const Policy = LoaderPartial(lazy(() => import('./policy.page')));
+const Policy = LoaderPartial(lazy(() => import('./policy.list')));
 const PolicyForm = LoaderPartial(lazy(() => import('./policy.form')));
 
 const PolicyGenerator = LoaderPartial(lazy(() => import('./policy-generator/policy-generator.page')));

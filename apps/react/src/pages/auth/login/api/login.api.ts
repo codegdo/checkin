@@ -15,7 +15,7 @@ interface UserLogin {
 
 export const useLoginApi = () => {
   const { status: fetchStatus, isSuccess, data, mutation } = useFetch<UserLogin>('/auth/login');
-  const { updateRootState } = useAction();
+  const { updateStateOnLoginSuccess } = useAction();
   const { state: location } = useLocation();
   const navigate = useNavigate();
 
@@ -38,7 +38,7 @@ export const useLoginApi = () => {
             isAuth: true
           };
 
-          updateRootState({
+          updateStateOnLoginSuccess({
             session,
             model,
             company,
@@ -52,7 +52,7 @@ export const useLoginApi = () => {
     };
 
     handleLoginSuccess();
-  }, [data, isSuccess, location, navigate, updateRootState]);
+  }, [data, isSuccess, location, navigate, updateStateOnLoginSuccess]);
 
   return { status: fetchStatus, data, mutation };
 };

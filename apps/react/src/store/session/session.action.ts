@@ -3,7 +3,6 @@ import { SessionData } from './session.type';
 
 export const getSession = createAction<Partial<SessionData>>('session/GET');
 export const updateSession = createAction<Partial<SessionData>>('session/UPDATE');
-export const logoutSession = createAction<void>('session/LOGOUT');
 export const refreshSessionAsync = createAsyncThunk('user/REFRESH', () => {
   const data = new Promise((resolve) =>
     setTimeout(() => resolve({ data: '' }), 5000)

@@ -3,7 +3,7 @@ import { useRoutes } from "react-router-dom";
 
 import { LoaderPartial } from "@/components";
 
-const Client = LoaderPartial(lazy(() => import('./client.page')));
+const Client = LoaderPartial(lazy(() => import('./client.list')));
 
 function ClientRoute() {
 

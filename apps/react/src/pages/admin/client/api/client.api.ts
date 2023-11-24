@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAction, useFetch } from "@/hooks";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AccessType } from "@/store/types";
 
 interface Account {
@@ -31,7 +31,7 @@ export const useGetAllClients = (params?: Record<string, string | number>) => {
 }
 
 export const useGetClientSwitch = () => {
-  const { updateSession, updateModel } = useAction();
+  const { updateStateOnClientSwitch } = useAction();
   //const { state: history } = useLocation();
   const navigate = useNavigate();
   const { status: fetchStatus, isSuccess, data, query } = useFetch<ClientLogin>();
@@ -40,14 +40,16 @@ export const useGetClientSwitch = () => {
     const handleLoginSuccess = () => {
       if (isSuccess && data) {
         const { account, model } = data;
-        updateSession({ clientId: account.companyId, accessType: AccessType.INTERNAL });
-        updateModel({ app: model.app });
+        updateStateOnClientSwitch({
+          session: { clientId: account.companyId, accessType: AccessType.INTERNAL },
+          model: { app: model.app }
+        });
         navigate('/');
       }
     };
 
     handleLoginSuccess();
-  }, [data, isSuccess, navigate, updateModel, updateSession]);
+  }, [data, isSuccess]);
 
   return { status: fetchStatus, data, query };
 }

@@ -7,6 +7,7 @@ import DashboardRoute from "./pages/dashboard/dashboard.route";
 import AccountRoute from "./pages/account/account.route";
 import AdminRoute from "./pages/admin/admin.route";
 import IamRoute from "./pages/iam/iam.route";
+import BuilderRoute from "./pages/builder/builder.route";
 
 const routes = [
   {
@@ -23,6 +24,10 @@ const routes = [
       {
         path: '/iam/*',
         element: <IamRoute />
+      },
+      {
+        path: '/builder/*',
+        element: <BuilderRoute />
       },
       {
         path: '/admin/*',

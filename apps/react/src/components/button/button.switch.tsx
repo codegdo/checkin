@@ -7,18 +7,25 @@ import { useNavigate } from "react-router-dom";
 
 export function ButtonSwitch() {
   const { accessType } = useSelector((state: AppState) => state.session);
-  const { updateSession, updateModel } = useAction();
-  const {isSuccess, query} = useFetch('/admin/clients/switch');
+  const { updateStateOnClientSwitch } = useAction();
+  const { isSuccess, isError, query } = useFetch('/admin/clients/switch');
   const navigate = useNavigate();
 
 
   useEffect(() => {
     if (isSuccess) {
-      updateSession({ clientId: null, accessType: AccessType.SYSTEM });
-      updateModel({ app: {} });
+      //updateSession({ clientId: null, accessType: AccessType.SYSTEM });
+      //updateModel({ app: {} });
+      updateStateOnClientSwitch({
+        session: { clientId: null, accessType: AccessType.SYSTEM },
+        model: { app: {} }
+      });
       navigate('/admin/clients');
     }
-  }, [isSuccess]);
+    if (isError) {
+      console.log('error');
+    }
+  }, [isSuccess, isError]);
 
 
   const handleSwitch = () => {
@@ -28,7 +35,7 @@ export function ButtonSwitch() {
   return (
     <>
       {
-        accessType === AccessType.INTERNAL ? <button type="button" onClick={handleSwitch}>switch back</button> : null
+        accessType === AccessType.INTERNAL ? <button type="button" onClick={handleSwitch}>Switch to admin</button> : null
       }
     </>
   );

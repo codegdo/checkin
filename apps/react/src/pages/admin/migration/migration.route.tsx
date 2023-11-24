@@ -3,11 +3,11 @@ import { useRoutes } from "react-router-dom";
 
 import { LoaderPartial } from "@/components";
 
-const Migration = LoaderPartial(lazy(() => import('./migration.page')));
+const Migration = LoaderPartial(lazy(() => import('./migration.list')));
 const MigrationForm = LoaderPartial(lazy(() => import('./migration.form')));
 
-const MigrationCategory = LoaderPartial(lazy(() => import('./migration-category/migration-category.page')));
-const MigrationScript = LoaderPartial(lazy(() => import('./migration-script/migration-script.page')));
+const MigrationCategory = LoaderPartial(lazy(() => import('./migration-category/migration-category.list')));
+const MigrationScript = LoaderPartial(lazy(() => import('./migration-script/migration-script.list')));
 
 function MigrationRoute() {
 

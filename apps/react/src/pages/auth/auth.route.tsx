@@ -3,8 +3,8 @@ import { useRoutes } from "react-router-dom";
 
 import { LoaderTemplate } from "@/components";
 
-const Login = LoaderTemplate(lazy(() => import('./login/login.page')));
-const Signup = LoaderTemplate(lazy(() => import('./signup/signup.page')));
+const Login = LoaderTemplate(lazy(() => import('./login/login.form')));
+const Signup = LoaderTemplate(lazy(() => import('./signup/signup.form')));
 const NotFound = LoaderTemplate(lazy(() => import('../notfound/notfound.page')));
 
 function AuthRoute() {
