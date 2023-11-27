@@ -142,17 +142,45 @@ export class PolicyChecker {
     policies: Policy[],
     requestContexts: RequestContext[],
   ): boolean {
-    const verifyResults: boolean[] = [];
+    const allowedPermissions: boolean[] = [];
 
     for (const requestContext of requestContexts) {
       const isAllowed = this.verifyPermissionAgainstPolicies(
         policies,
         requestContext,
       );
-      verifyResults.push(isAllowed);
+      allowedPermissions.push(isAllowed);
     }
 
-    return verifyResults.every((result) => result);
+    return allowedPermissions.every((permission) => permission);
+  }
+
+  getAllowedActions(
+    policies: Policy[],
+    requestContexts: RequestContext[],
+  ): string[] {
+    const allowedActions: string[] = [];
+
+    for (const requestContext of requestContexts) {
+      const isAllowed = this.verifyPermissionAgainstPolicies(
+        policies,
+        requestContext,
+      );
+
+      if (isAllowed) {
+        const actionParts = Array.isArray(requestContext.action)
+          ? requestContext.action.map((action) => action.split(':'))
+          : [requestContext.action.split(':')];
+
+        for (const parts of actionParts) {
+          if (parts.length === 2) {
+            allowedActions.push(parts[1]);
+          }
+        }
+      }
+    }
+
+    return allowedActions;
   }
 }
 
@@ -184,12 +212,17 @@ const samplePolicies: Policy[] = [
 const requestContexts: RequestContext[] = [
   { 
     action: 'database:Access', 
-    resource: 'module:database' },
+    resource: 'module:database' 
+  },
   {
     action: 'migration:getAllMigrations',
     resource: 'view:migration'
   }
 ];
+
+const policyChecker = new PolicyChecker();
+const isAllowed = policyChecker.verifyPermissions(samplePolicies, requestContexts);
+console.log(`Request is ${isAllowed ? 'allowed' : 'denied'}`);
 
 requestContextArray [ 'database:migration:getAllMigrations' ]
 convertRequestContextArrayToObject [

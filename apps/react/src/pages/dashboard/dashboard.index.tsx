@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import { AccessType } from '@/store/types';
+import { AccessType, ThemeType } from '@/store/types';
 import { AppState } from '@/store/reducers';
 
 function Index() {
-  const { accessType } = useSelector((state: AppState) => state.session);
+  const accessType = useSelector((state: AppState) => state.session.accessType) as ThemeType;
 
   const getDashboardRoute = (type: string) => {
     switch (type) {

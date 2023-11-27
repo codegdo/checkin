@@ -9,15 +9,17 @@ import {
   SessionModule,
   ExpressWinstonMiddleware,
   InstanceName,
-  AuthGuard,
-  SecurityGuard,
-  RoleGuard,
-  PermissionGuard,
-  PolicyChecker,
 } from '@app/common';
 
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
+import {
+  AuthGuard,
+  PermissionGuard,
+  RoleGuard,
+  SecurityGuard,
+} from './common/guards';
+import { PolicyChecker } from './common/helpers';
 
 @Module({
   imports: [

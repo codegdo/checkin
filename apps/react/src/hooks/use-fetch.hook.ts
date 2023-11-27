@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
-import { http, HttpResponse, RequestOptions } from '../helpers';
-import { API_URL } from '../app.constant';
-import { stringifyUrl } from '../utils';
+import { http, HttpResponse, RequestOptions } from '@/helpers';
+import { API_URL } from '@/constants';
+import { stringifyUrl } from '@/utils';
+
 
 export enum FetchStatus {
   Idle = 'Idle',

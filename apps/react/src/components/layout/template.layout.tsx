@@ -3,11 +3,12 @@ import parse, { HTMLReactParserOptions } from 'html-react-parser';
 
 import { useSelector } from 'react-redux';
 import { AppState } from '@/store/reducers';
-import { AttributeIds, ComponentProps } from './type';
-import { TemplateType, useTemplate } from './hooks/use-template.hook';
+
 import { ButtonLogout, ButtonExit } from '../button';
 import { NavMenu, NavSidebar } from '../nav';
-import { checkViewModule } from './helper';
+import { checkViewModule } from './helpers';
+import { TemplateType, useTemplate } from './hooks';
+import { AttributeIds, ComponentProps } from './type';
 
 interface ParserOptions {
   fallback: boolean;
@@ -19,7 +20,7 @@ interface TemplateProps {
 }
 
 export function Template({ routeContext, Component }: TemplateProps) {
-  const {accessType, isAuth} = useSelector((state: AppState) => state.session) as {accessType: TemplateType, isAuth: boolean};
+  const { accessType, isAuth } = useSelector((state: AppState) => state.session) as { accessType: TemplateType, isAuth: boolean };
   const theme = useSelector((state: AppState) => state.theme);
   const model = useSelector((state: AppState) => (accessType === 'system' ? state.model.sys : state.model.app));
   const template = useTemplate(accessType, routeContext, theme);
@@ -43,7 +44,7 @@ export function Template({ routeContext, Component }: TemplateProps) {
               </div>;
             case AttributeIds.SIDEBAR:
               return <div>
-                <NavSidebar module={routeContext?.module} {...model}/> 
+                <NavSidebar module={routeContext?.module} {...model} />
               </div>;
             default:
               return null;

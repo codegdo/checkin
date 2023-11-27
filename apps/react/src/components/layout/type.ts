@@ -1,7 +1,8 @@
 export type ComponentProps = {
-  module?: string;
+  module: string;
   view?: string;
   object?: string;
+  action?: string[];
 }
 
 export enum AttributeIds {

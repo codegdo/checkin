@@ -1,6 +1,6 @@
 import { createTransform } from 'redux-persist';
 import { decrypt, encrypt } from '@/utils';
-import { ENCRYPT_KEY } from '@/app.constant';
+import { ENCRYPT_KEY } from '@/constants';
 
 const encrypted = createTransform(
   // Transform state before storing in storage
@@ -8,7 +8,7 @@ const encrypted = createTransform(
     if (!inboundState) return inboundState;
     const stringifyState = JSON.stringify(inboundState);
     const stringKey = String(key);
-    
+
     // Encrypt specific parts of the state
     if (['session', 'model', 'company', 'user'].includes(stringKey)) {
       return encrypt(stringifyState, ENCRYPT_KEY);
