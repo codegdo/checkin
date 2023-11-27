@@ -24,12 +24,12 @@ const defaultThemeTemplate: ThemeTemplate = {
   },
 };
 
-export const useTemplate = (type: TemplateType, route: ComponentProps, theme: Partial<ThemeTemplate> = {}) => {
+export const useTemplate = (type: TemplateType, routeContext: ComponentProps, theme: Partial<ThemeTemplate> = {}) => {
   const customTheme = theme[type] || {};
   const defaultTheme = defaultThemeTemplate[type] || {};
   const baseTemplate = customTheme.base || defaultTheme.base;
-  const viewType = `${route.module}_${route.view}`;
-  const selectedTemplate = customTheme?.[viewType] || defaultTheme?.[viewType] || baseTemplate;
+  const viewTemplateType = `${routeContext?.module}_${routeContext?.view}`;
+  const selectedTemplate = customTheme?.[viewTemplateType] || defaultTheme?.[viewTemplateType] || baseTemplate;
 
   return DOMPurify.sanitize(selectedTemplate);
 };

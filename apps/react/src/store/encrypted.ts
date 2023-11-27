@@ -27,7 +27,7 @@ const encrypted = createTransform(
           return JSON.parse(decrypt(outboundState, ENCRYPT_KEY, '{"status":'));
         case 'model':
           return JSON.parse(decrypt(outboundState, ENCRYPT_KEY, '{"app":'));
-        case 'company':
+        case 'account':
           return JSON.parse(decrypt(outboundState, ENCRYPT_KEY, '{"id":'));
         case 'user':
           return JSON.parse(decrypt(outboundState, ENCRYPT_KEY, '{"firstName":'));

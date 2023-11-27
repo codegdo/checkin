@@ -1,4 +1,15 @@
+export interface View {
+  name: string;
+  group: string;
+}
+
+export interface ViewModel {
+  modules?: View[],
+  views?: Record<string, View[]>,
+  actions: Record<string, string[]>
+}
+
 export interface ModelData {
-  sys?: Record<string, unknown>;
-  app?: Record<string, unknown>;
+  sys?: ViewModel;
+  app?: ViewModel;
 }

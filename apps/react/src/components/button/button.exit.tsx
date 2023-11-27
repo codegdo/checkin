@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-export function ButtonSwitch() {
+export function ButtonExit() {
   const { accessType } = useSelector((state: AppState) => state.session);
   const { exitClientMode } = useAction();
   const { isSuccess, isError, query } = useFetch('/admin/clients/switch');
@@ -25,14 +25,14 @@ export function ButtonSwitch() {
   }, [isSuccess, isError]);
 
 
-  const handleSwitch = () => {
+  const handleExit = () => {
     query();
   }
 
   return (
     <>
       {
-        accessType === AccessType.INTERNAL ? <button type="button" onClick={handleSwitch}>Switch to admin</button> : null
+        accessType === AccessType.INTERNAL ? <button type="button" onClick={handleExit}>Switch to admin</button> : null
       }
     </>
   );

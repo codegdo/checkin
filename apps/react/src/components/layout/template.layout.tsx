@@ -5,28 +5,26 @@ import { useSelector } from 'react-redux';
 import { AppState } from '@/store/reducers';
 import { AttributeIds, ComponentProps } from './type';
 import { TemplateType, useTemplate } from './hooks/use-template.hook';
-import { ButtonLogout } from '../button/button.logout';
-import { NavMenu } from '../nav/nav.menu';
-import { ButtonSwitch } from '../button/button.switch';
+import { ButtonLogout, ButtonExit } from '../button';
+import { NavMenu, NavSidebar } from '../nav';
+import { checkViewModule } from './helper';
 
 interface ParserOptions {
   fallback: boolean;
 }
 
 interface TemplateProps {
-  templateProps: ComponentProps;
+  routeContext: ComponentProps;
   Component: FC<ComponentProps>;
 }
 
-export function Template({ templateProps, Component }: TemplateProps) {
-  const { accessType } = useSelector((state: AppState) => state.session);
+export function Template({ routeContext, Component }: TemplateProps) {
+  const {accessType, isAuth} = useSelector((state: AppState) => state.session) as {accessType: TemplateType, isAuth: boolean};
   const theme = useSelector((state: AppState) => state.theme);
-  const { app, sys } = useSelector((state: AppState) => state.model);
-  const themeType = accessType as TemplateType;
+  const model = useSelector((state: AppState) => (accessType === 'system' ? state.model.sys : state.model.app));
+  const template = useTemplate(accessType, routeContext, theme);
 
-  const template = useTemplate(themeType, templateProps, theme);
-
-  console.log('TEMPLATE', template, accessType);
+  const isViewFound = !isAuth || checkViewModule(routeContext, model?.views);
 
   const getParserOptions = ({ fallback }: ParserOptions): HTMLReactParserOptions => {
     return {
@@ -36,14 +34,16 @@ export function Template({ templateProps, Component }: TemplateProps) {
 
           switch (attribs.id) {
             case AttributeIds.MAIN:
-              return fallback ? <div>loading</div> : <Component {...templateProps} />;
-            case AttributeIds.NAV:
+              return fallback ? <div>loading</div> : isViewFound ? <Component {...routeContext} /> : <div>notfound</div>;
+            case AttributeIds.MENU:
               return <div>
-                {
-                  accessType === 'system' ? <NavMenu {...sys} /> : <NavMenu {...app} />
-                }
-                <ButtonSwitch />
+                <NavMenu {...model} />
+                <ButtonExit />
                 <ButtonLogout />
+              </div>;
+            case AttributeIds.SIDEBAR:
+              return <div>
+                <NavSidebar module={routeContext?.module} {...model}/> 
               </div>;
             default:
               return null;

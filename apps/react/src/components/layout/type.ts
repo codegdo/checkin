@@ -6,5 +6,6 @@ export type ComponentProps = {
 
 export enum AttributeIds {
   MAIN = 'jsx_main',
-  NAV = 'jsx_nav'
+  MENU = 'jsx_menu',
+  SIDEBAR = 'jsx_sidebar'
 }

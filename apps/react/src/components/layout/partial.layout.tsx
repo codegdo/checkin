@@ -2,14 +2,14 @@ import { FC, Suspense } from 'react';
 import { ComponentProps } from './type';
 
 interface PartialProps {
-  partialProps: ComponentProps;
+  routeContext: ComponentProps;
   Component: FC<ComponentProps>;
 }
 
-export function Partial({ partialProps, Component }: PartialProps) {
+export function Partial({ routeContext, Component }: PartialProps) {
   return (
     <Suspense fallback="loading">
-      <Component {...partialProps} />
+      <Component {...routeContext} />
     </Suspense>
   );
 }

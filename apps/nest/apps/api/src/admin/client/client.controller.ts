@@ -8,12 +8,12 @@ export class ClientController {
   async getAllClients() {
     return [
       {
-        accountId: '123abc',
+        id: '123abc',
         companyId: 1,
         companyName: 'Nail San Diego',
       },
       {
-        accountId: '345def',
+        id: '345def',
         companyId: 2,
         companyName: 'Nail New York',
       },

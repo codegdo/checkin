@@ -5,6 +5,7 @@ import { LoaderTemplate } from "@/components";
 
 const Index = LoaderTemplate(lazy(() => import('./iam.index')));
 const PolicyRoute = LoaderTemplate(lazy(() => import('./policy/policy.route')));
+const UserList = LoaderTemplate(lazy(() => import('./user/user.list')));
 
 function IamRoute() {
 
@@ -14,8 +15,12 @@ function IamRoute() {
       element: <PolicyRoute module="iam" view="policies" />
     },
     {
+      path: '/users',
+      element: <UserList module="iam" view="users" />
+    },
+    {
       path: '/',
-      element: <Index module="policy" />
+      element: <Index module="iam" />
     },
     {
       path: '*',

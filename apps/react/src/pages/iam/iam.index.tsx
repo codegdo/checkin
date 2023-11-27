@@ -1,6 +1,6 @@
 function Index() {
     return <div>
-      POLICY INDEX
+      AIM INDEX
     </div>
   }
   
