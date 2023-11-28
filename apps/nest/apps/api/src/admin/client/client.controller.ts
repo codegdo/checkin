@@ -1,10 +1,12 @@
-import { ClientPermission, Permissions } from '@app/common';
 import { Controller, Get, Param } from '@nestjs/common';
+
+import { Permissions } from '../../common';
+import { ClientAction } from './client.action';
 
 @Controller()
 export class ClientController {
   @Get()
-  @Permissions(ClientPermission.GET_ALL_CLIENTS)
+  @Permissions(ClientAction.GET_ALL_CLIENTS)
   async getAllClients() {
     return [
       {
@@ -21,7 +23,7 @@ export class ClientController {
   }
 
   @Get(':id')
-  @Permissions(ClientPermission.GET_CLIENT_ACCESS)
+  @Permissions(ClientAction.GET_CLIENT_ACCESS)
   async getClientAccess(@Param('id') id: number) {
     return {
       account: {
@@ -36,12 +38,30 @@ export class ClientController {
               name: 'iam',
               group: 'app',
             },
+            {
+              name: 'builder',
+              group: 'app',
+            },
           ],
           views: {
             iam: [
               {
                 name: 'users',
                 group: 'app_iam',
+              },
+            ],
+            builder: [
+              {
+                name: 'templates',
+                group: 'app_builder',
+              },
+              {
+                name: 'emails',
+                group: 'app_builder',
+              },
+              {
+                name: 'forms',
+                group: 'app_builder',
               },
             ],
           },
@@ -64,6 +84,24 @@ export class ClientController {
                 slug: 'policies',
               },
             ],
+            templates: [
+              {
+                name: 'template',
+                slug: 'templates',
+              },
+            ],
+            emails: [
+              {
+                name: 'email',
+                slug: 'emails',
+              },
+            ],
+            forms: [
+              {
+                name: 'form',
+                slug: 'forms',
+              },
+            ],
           },
           actions: {},
         },
@@ -72,8 +110,8 @@ export class ClientController {
   }
 
   @Get('switch')
-  @Permissions(ClientPermission.GET_CLIENT_SWITCH)
+  @Permissions(ClientAction.GET_CLIENT_SWITCH)
   async getClientSwitch(@Param('id') id: number) {
-    return {ok: true};
+    return { ok: true };
   }
 }

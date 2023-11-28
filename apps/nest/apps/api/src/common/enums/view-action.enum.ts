@@ -1,4 +1,4 @@
-export enum MigrationPermission {
+export enum MigrationAction {
   // migration
   ASSIGN_SCRIPTS_FOR_MIGRATION = 'admin:migrations:assignScriptsToMigration',
   GET_ALL_MIGRATIONS = 'admin:migrations:getAllMigrations',
@@ -18,7 +18,7 @@ export enum MigrationPermission {
   CREATE_NEW_MIGRATION_SCRIPT = 'admin:migrations:createNewMigrationScript',
 }
 
-export enum ClientPermission {
+export enum ClientAction {
   // client
   GET_ALL_CLIENTS = 'admin:clients:getAllClients',
   GET_CLIENT_ACCESS = 'admin:clients:getClientAccess',

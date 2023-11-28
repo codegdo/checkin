@@ -2,6 +2,7 @@ export const systemBase = `
 <div>
   system-base
   <header>
+    <a id="jsx_home"></a>
     <div id="jsx_menu"></div>
   </header>
   <main>

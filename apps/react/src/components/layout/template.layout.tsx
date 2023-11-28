@@ -9,6 +9,7 @@ import { NavMenu, NavSidebar } from '../nav';
 import { checkViewModule } from './helpers';
 import { TemplateType, useTemplate } from './hooks';
 import { AttributeIds, ComponentProps } from './type';
+import { LinkHome } from '../link';
 
 interface ParserOptions {
   fallback: boolean;
@@ -46,6 +47,8 @@ export function Template({ routeContext, Component }: TemplateProps) {
               return <div>
                 <NavSidebar module={routeContext?.module} {...model} />
               </div>;
+            case AttributeIds.HOME:
+              return <LinkHome>Home</LinkHome>
             default:
               return null;
           }

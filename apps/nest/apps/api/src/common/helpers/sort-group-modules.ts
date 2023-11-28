@@ -1,21 +1,21 @@
-function sortAndGroupModules(modules) {
-  // First, sort the objects by "sortOrder"
-  const sortedModules = Object.values(modules).sort(
-    (a, b) => Number(a.sortOrder) - Number(b.sortOrder),
-  );
+// function sortAndGroupModules(modules) {
+//   // First, sort the objects by "sortOrder"
+//   const sortedModules = Object.values(modules).sort(
+//     (a, b) => Number(a.sortOrder) - Number(b.sortOrder),
+//   );
 
-  // Next, group the sorted modules by their "group" property
-  const groupedModules = sortedModules.reduce((result, module) => {
-    const group = module.group;
-    if (!result[group]) {
-      result[group] = [];
-    }
-    result[group].push(module.name);
-    return result;
-  }, {});
+//   // Next, group the sorted modules by their "group" property
+//   const groupedModules = sortedModules.reduce((result, module) => {
+//     const group = module?.group;
+//     if (!result[group]) {
+//       result[group] = [];
+//     }
+//     result[group].push(module?.name);
+//     return result;
+//   }, {});
 
-  return groupedModules;
-}
+//   return groupedModules;
+// }
 
 const m = {
   monitor: {
@@ -56,5 +56,5 @@ const m = {
   },
 };
 
-const groupedModules = sortAndGroupModules(m);
-console.log(groupedModules);
+//const groupedModules = sortAndGroupModules(m);
+//console.log(groupedModules);

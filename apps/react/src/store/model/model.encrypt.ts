@@ -1,6 +1,6 @@
 import { createTransform } from 'redux-persist';
 import { decrypt, encrypt } from '@/utils';
-import { ENCRYPT_KEY } from '@/app.constant';
+import { ENCRYPT_KEY } from '@/constants';
 
 const encryptedModel = createTransform(
   (inboundState, key) => {

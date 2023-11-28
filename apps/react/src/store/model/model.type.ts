@@ -6,7 +6,7 @@ export interface View {
 export interface ViewModel {
   modules?: View[],
   views?: Record<string, View[]>,
-  actions: Record<string, string[]>
+  actions?: Record<string, string[]>
 }
 
 export interface ModelData {

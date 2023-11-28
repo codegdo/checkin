@@ -16,31 +16,31 @@ function BuilderRoute() {
   const routes = useRoutes([
     {
       path: '/emails',
-      element: <EmailList module="builder" view="email" />
+      element: <EmailList module="builder" view="emails" />
     },
     {
       path: '/emails/:id',
-      element: <EmailBuilder module="builder" view="email" />
+      element: <EmailBuilder module="builder" view="emails" />
     },
     {
       path: '/forms',
-      element: <FormList module="builder" view="form" />
+      element: <FormList module="builder" view="forms" />
     },
     {
       path: '/forms/:id',
-      element: <FormBuilder module="builder" view="form" />
+      element: <FormBuilder module="builder" view="forms" />
     },
     {
       path: '/templates',
-      element: <TemplateList module="builder" view="template" />
+      element: <TemplateList module="builder" view="templates" />
     },
     {
       path: '/templates/:id',
-      element: <TemplateBuilder module="builder" view="template" />
+      element: <TemplateBuilder module="builder" view="templates" />
     },
     {
       path: '/',
-      element: <Index module="dashboard" view="index" />
+      element: <Index module="builder" />
     },
     {
       path: '*',

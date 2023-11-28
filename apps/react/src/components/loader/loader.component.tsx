@@ -13,7 +13,7 @@ export function Loader({ status, controller }: LoaderProp) {
     case FetchStatus.Abort:
       return (
         <div>
-          wanna to abort... <button onClick={() => { controller.abort() }}>Cancel</button>
+          wanna to abort... <button onClick={() => { controller.abort() }}>Ok</button>
         </div>
       );
     default:

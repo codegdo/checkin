@@ -9,7 +9,7 @@ import { Reflector } from '@nestjs/core';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { PERMISSION_KEY, USER_KEY } from '../constants';
-import { PermissionType } from '../types';
+import { ActionType } from '../actions';
 import { PolicyChecker, Policy, RequestContext } from '../helpers';
 
 @Injectable()
@@ -30,7 +30,7 @@ export class PermissionGuard implements CanActivate {
     }
 
     const requiredPermissions = this.reflector.getAllAndOverride<
-      PermissionType[] | undefined
+      ActionType[] | undefined
     >(PERMISSION_KEY, [context.getHandler(), context.getClass()]);
 
     if (!requiredPermissions) {

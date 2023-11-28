@@ -1,6 +1,6 @@
 import { DataType, Field } from '../../types';
 import { XYCoord } from 'react-dnd';
-import { cloneObject, mapToParent, randomString } from '@/utils';
+import { mapToParent, randomString } from '@/utils';
 
 interface FindDropPositionParams {
   dragIndex: number;
@@ -11,7 +11,7 @@ interface FindDropPositionParams {
 class DragDropHelper {
 
   normalizeData(data: Field[]) {
-    const cloneData = cloneObject(data);
+    const cloneData = structuredClone(data);
     const list: Field[] = [];
 
     cloneData.forEach((item: Field) => {

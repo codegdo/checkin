@@ -5,8 +5,6 @@ import { Loader } from "@/components";
 function Migration() {
   const { status, data, controller } = useGetAllMigrations();
 
-  console.log(status);
-
   if (!data) {
     return <Loader status={status} controller={controller} />
   }

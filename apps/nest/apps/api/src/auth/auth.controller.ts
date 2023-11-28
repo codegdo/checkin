@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { viewAction } from '../common';
 
 export class SignupUserDto {
   readonly username: string;
@@ -26,6 +27,7 @@ export class AuthController {
 
   @Post('login')
   postLoginForm(@Body() loginUserDto: LoginUserDto) {
+    console.log(viewAction);
     return {
       account: {
         id: null,

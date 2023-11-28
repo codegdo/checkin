@@ -6,8 +6,6 @@ function Client() {
   const { status, data, controller } = useGetAllClients();
   const { query } = useGetClientSwitch();
 
-  console.log(status);
-
   if (!data) {
     return <Loader status={status} controller={controller} />
   }

@@ -40,10 +40,12 @@ export const useGetClientSwitch = () => {
     const handleLoginSuccess = () => {
       if (isSuccess && data) {
         const { account, model } = data;
+
         enterClientMode({
           session: { clientId: account.companyId, accessType: AccessType.INTERNAL },
           model: { app: model.app }
         });
+
         navigate('/');
       }
     };

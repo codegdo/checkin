@@ -1,7 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 
-import { RoleType, Roles, MigrationPermission, Permissions } from '@app/common';
+import { RoleType, Roles, Permissions } from '../../../common';
 import { MigrationCategoryService } from './migration-category.service';
+import { MigrationCategoryAction } from './migration-category.action';
 
 @Roles(RoleType.SYSTEM)
 @Controller()
@@ -11,7 +12,7 @@ export class MigrationCategoryController {
   ) { }
 
   @Get('migration-categories')
-  @Permissions(MigrationPermission.GET_ALL_MIGRATION_CATEGORIES)
+  @Permissions(MigrationCategoryAction.GET_ALL_MIGRATION_CATEGORIES)
   async getAllMigrationCategories() {
     return this.migrationCategoryService.getAllMigrationCategories();
   }

@@ -18,8 +18,8 @@ import {
   PermissionGuard,
   RoleGuard,
   SecurityGuard,
-} from './common/guards';
-import { PolicyChecker } from './common/helpers';
+  PolicyChecker,
+} from './common';
 
 @Module({
   imports: [
