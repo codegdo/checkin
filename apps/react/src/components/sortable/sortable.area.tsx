@@ -1,15 +1,15 @@
 import { PropsWithChildren } from "react";
-import { SortableContextValue } from "./sortable.provider";
+
+import { classNames } from "@/utils";
 import { SortableField } from "./types";
-import { useSortable } from "./hooks";
-import { classNames } from "../../utils";
+import { SortableContextValue } from "./sortable.provider";
 
 type SortableAreaProps = PropsWithChildren<SortableField & {
-  ctx: SortableContextValue;
+  context: SortableContextValue;
 }>;
 
-function SortableArea({ ctx, siblings, children, ...item }: SortableAreaProps) {
-  const { ref, isOver, drop } = useSortable({ ctx, item, siblings });
+function SortableArea({ context, children, ...item }: SortableAreaProps) {
+  const { ref, isOver, drop } = useSortable({ context, item });
   const className = classNames('sortable-area', {
     'is-over': isOver
   });

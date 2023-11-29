@@ -1,5 +1,5 @@
-export * from './dragdrop/dragdrop.component';
-export * from './sortable/sortable.component';
+export * from './_dragdrop/dragdrop.component';
+export * from './_sortable/sortable.component';
 export * from './form/form.component';
 export * from './form/types';
 

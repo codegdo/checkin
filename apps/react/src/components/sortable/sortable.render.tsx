@@ -1,44 +1,28 @@
 import { useWrapperContext } from "@/hooks";
-import { sortableHelper } from "./helpers";
-import { SortableField } from "./types";
-
-import SortableArea from "./sortable.area";
-import SortableItem from "./sortable.item";
-import SortableList from "./sortable.list";
 import SortableContext, { SortableContextValue } from "./sortable.provider";
+import { SortableField } from "./types";
+import { groupDataForRender } from "@/utils";
 
 interface RenderProps {
-  data?: SortableField[] | null;
-  ctx: SortableContextValue;
+  data?: SortableField[];
+  context: SortableContextValue;
 }
 
-const render = ({ data, ctx }: RenderProps) => {
-
-  if (data == null) return null;
-
-  const siblings = data?.map(obj => `${obj.id}`);
+const render = ({ data = [], context }: RenderProps) => {
 
   return (
     <>
       {
         data.map(item => {
-          const { dataType, data: childData = [] } = item;
+          const { id, dataType, data: childData = [] } = item;
 
           switch (dataType) {
             case 'area':
-              return (
-                <SortableArea key={item.id} {...item} ctx={ctx} siblings={siblings}>
-                  {render({ data: childData, ctx })}
-                </SortableArea>
-              );
+              return <div key={id}>area</div>;
             case 'list':
-              return (
-                <SortableList key={item.id} {...item} ctx={ctx} siblings={siblings}>
-                  {render({ data: childData, ctx })}
-                </SortableList>
-              );
+              return <div key={id}>list</div>;
             case 'item':
-              return <SortableItem key={item.id} {...item} ctx={ctx} siblings={siblings} />
+              return <div key={id}>item</div>;
             default:
               return null;
           }
@@ -49,10 +33,10 @@ const render = ({ data, ctx }: RenderProps) => {
 }
 
 function SortableRender() {
-  const ctx = useWrapperContext(SortableContext);
-  const normalizeData = sortableHelper.normalizeData(ctx.state.data);
-
-  return (<>{render({ data: normalizeData, ctx })}</>)
+  const context = useWrapperContext(SortableContext);
+  const renderData = groupDataForRender(context.state.data) as SortableField[];
+  console.log(renderData, context);
+  return <>{render({ data: renderData, context })}</>
 }
 
 export default SortableRender;

@@ -1,9 +1,9 @@
-import { DragDrop } from "@/components";
+import { _DragDrop } from "@/components";
 
 // Example API response
 const data = [
   {
-    id: '1',
+    id: 1,
     name: 'block',
     type: 'div',
     dataType: 'block',
@@ -30,7 +30,7 @@ const data = [
     position: 2
   },
   {
-    id: '4',
+    id: 4,
     name: 'block',
     type: 'div',
     dataType: 'block',
@@ -73,7 +73,7 @@ const dragFields = [
     data: []
   },
   {
-    id: 6,
+    id: 7,
     name: 'field',
     type: 'text',
     dataType: 'field',
@@ -84,7 +84,7 @@ const dragFields = [
 
 
 function TemplateList() {
-  return <div><DragDrop data={data} dragFields={dragFields} /></div>;
+  return <div><_DragDrop data={data} dragFields={dragFields} /></div>;
 }
 
 export default TemplateList;

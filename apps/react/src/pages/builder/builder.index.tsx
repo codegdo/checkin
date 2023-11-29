@@ -1,4 +1,4 @@
-import { Sortable } from "@/components";
+import { _Sortable } from "@/components";
 
 // Example API response
 const data = [
@@ -78,7 +78,7 @@ const data = [
 
 function BuilderIndex() {
   return <div>
-    <Sortable data={data} />
+    <_Sortable data={data} />
   </div>
 }
 

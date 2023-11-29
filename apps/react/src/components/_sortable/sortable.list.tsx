@@ -20,7 +20,7 @@ function SortableList(props: SortableListProps) {
   useEffect(() => {
     drag(ref);
     drop(preview(previewRef));
-  }, []);
+  }, [drag, drop, preview, previewRef, ref]);
 
   return (<div ref={previewRef} className={className}>
     <div ref={ref} className="sortable-title">List</div>

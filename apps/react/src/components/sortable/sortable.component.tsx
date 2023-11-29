@@ -1,27 +1,33 @@
 import { useReducer, useRef } from "react";
 import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
-import { SortableProvider, dndRef, defaultState } from "./sortable.provider";
 import { sortableReducer } from "./reducers";
-import SortableRender from "./sortable.render";
 import { SortableField } from "./types";
 
+import { SortableProvider } from "./sortable.provider";
+import { defaultRef, defaultState } from "./default.value";
+import SortableRender from "./sortable.render";
+
+
 interface SortableProps {
-  data: SortableField[];
+  data?: SortableField[];
+  dragFields?: SortableField[];
 }
 
 export function Sortable({ data = [] }: SortableProps) {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
-  const { current: dnd } = useRef(dndRef);
-  const [state, dispatch] = useReducer(sortableReducer, {...defaultState, data});
+  const { current: currentRef } = useRef(defaultRef);
+  const [state, dispatch] = useReducer(sortableReducer, { ...defaultState, data });
 
   return (
     <DndProvider backend={backend}>
-      <SortableProvider value={{ state, dispatch, dnd }}>
+      <SortableProvider value={{ current: currentRef, state, dispatch }}>
         <SortableRender />
       </SortableProvider>
     </DndProvider>
   );
 }
+
+// npx madge src/components/sortable/sortable.component.tsx --image src/components/sortable/sortable.graph.png --warning

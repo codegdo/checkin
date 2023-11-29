@@ -1,48 +1,34 @@
-import { SortableState } from "../sortable.provider";
-import { DndField } from "../types";
+import { SortableField, SortableState } from "../types";
 
-interface InitialDataPayload {
-  data: DndField[]
+enum ActionType {
+  SELECT_ITEM = 'SELECT_ITEM',
+  UNSELECT_ITEM = 'UNSELECT_ITEM',
+  OPEN_EDITING_ITEM = 'OPEN_EDITING_ITEM',
+  CLOSE_EDITING_ITEM = 'CLOSE_EDITING_ITEM',
+
+  ADD_ITEM = 'ADD_ITEM',
+  MOVE_ITEM = 'MOVE_ITEM',
+  CLONE_ITEM = 'CLONE_ITEM',
+  REMOVE_ITEM = 'REMOVE_ITEM',
+  UPDATE_ITEM = 'UPDATE_ITEM',
+  RESET_ITEM = 'UPDATE_RESET',
 }
 
-interface MoveItemPayload {
-  dragItem: DndField;
-  dropItem: DndField | null;
+interface MoveItem {
+  dragItem: SortableField;
+  dropItem: SortableField | null;
   offset: string | null;
 }
 
-type ActionPayload = InitialDataPayload | MoveItemPayload;
-
-export enum SortableActionType {
-  INITIAL_DATA = 'INITIAL_DATA',
-  MOVE_ITEM = 'MOVE_ITEM'
-}
+type ActionPayload = MoveItem;
 
 export interface SortableAction<T = ActionPayload> {
-  type: string | SortableActionType;
+  type: string | ActionType;
   payload: T;
 }
 
 export const sortableReducer = (state: SortableState, { type, payload }: SortableAction<ActionPayload>): SortableState => {
   switch (type) {
-    case SortableActionType.INITIAL_DATA: {
-      const { data } = payload as InitialDataPayload;
-      const initialData = [...data];
-      return { ...state, data: initialData };
-    }
-    case SortableActionType.MOVE_ITEM: {
-      const p = payload as MoveItemPayload;
-      console.log('MOVE ITEM', p);
-
-      const data = [...state.data];
-      const draggedItems = data.splice(2, 1);
-      const remainingItems = data;
-
-      console.log(draggedItems, remainingItems);
-
-      return { ...state, data: remainingItems };
-      //return state;
-    }
     default: return state;
   }
 }

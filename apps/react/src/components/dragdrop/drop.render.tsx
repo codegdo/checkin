@@ -1,76 +1,43 @@
-import DropArea from './drop.area';
-import DropSection from './drop.section';
-import DropBlock from './drop.block';
-import DropPlaceholder from './drop.placeholder';
-import DropField from './drop.field';
-import DropElement from './drop.element';
-import DropGrid from './drop.grid';
-import DropGroup from './drop.group';
-import DragDropContext from './dragdrop.provider';
-import { dndHelper } from './helpers';
-import { DndContextValue, DndField } from './types';
-import { useWrapperContext } from '../../hooks';
+import { useWrapperContext } from "@/hooks";
+import DragDropContext, { DndContextValue } from "./dragdrop.provider";
+import { DndField } from "./types";
+import { groupDataForRender } from "@/utils";
 
 interface RenderProps {
-  data?: DndField[] | null;
-  ctx: DndContextValue;
+  data?: DndField[];
+  context: DndContextValue;
 }
 
-const render = ({ data, ctx }: RenderProps) => {
-
-  if (data == null) return null;
+const render = ({ data = [], context }: RenderProps) => {
 
   return (
     <>
-      {data.map((item) => {
-        const { dataType, data: childData = [] } = item;
+      {
+        data.map(item => {
+          const { id, dataType, data: childData = [] } = item;
 
-        switch (dataType) {
-          case 'area':
-            return (
-              <DropArea key={item.id} {...item} ctx={ctx}>
-                {render({ data: childData, ctx })}
-              </DropArea>
-            );
-          case 'section':
-            return (
-              <DropSection key={item.id} {...item} ctx={ctx}>
-                {render({ data: childData, ctx })}
-              </DropSection>
-            );
-          case 'block':
-            return (
-              <DropBlock key={item.id} {...item} ctx={ctx}>
-                {render({ data: childData, ctx })}
-              </DropBlock>
-            );
-          case 'placeholder':
-            return (
-              <DropPlaceholder key={item.id} {...item} ctx={''}>
-                {render({ data: childData, ctx })}
-              </DropPlaceholder>
-            );
-          case 'grid':
-            return <DropGrid key={item.id} {...item} ctx={''} />;
-          case 'group':
-            return <DropGroup key={item.id} {...item} ctx={''} />;
-          case 'field':
-            return <DropField key={item.id} {...item} ctx={ctx} />;
-          case 'element':
-            return <DropElement key={item.id} {...item} ctx={''} />;
-          default:
-            return null;
-        }
-      })}
+          switch (dataType) {
+            case 'area':
+              return <div key={id}>area</div>;
+            case 'list':
+              return <div key={id}>list</div>;
+            case 'item':
+              return <div key={id}>item</div>;
+            default:
+              return null;
+          }
+        })
+      }
     </>
   );
-};
+}
 
-function DropRender(): JSX.Element | null {
-  const ctx = useWrapperContext(DragDropContext);
-  const normalizeData = dndHelper.normalizeData(ctx.state.data);
+function DropRender() {
+  const context = useWrapperContext(DragDropContext);
+  const renderData = groupDataForRender(context.state.data) as DndField[];
+  console.log(renderData);
 
-  return <>{render({ data: normalizeData, ctx })}</>;
+  return <>{render({ data: renderData, context })}</>
 }
 
 export default DropRender;

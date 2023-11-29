@@ -7,3 +7,4 @@ export * from './fitered-array-range.util';
 export * from './filtered-array-range-exclusing-start.util';
 export * from './stringify-url.util';
 export * from './crypto.util';
+export * from './group-data-for-render.util';

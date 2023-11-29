@@ -1,30 +1,10 @@
-import { Field } from "../../types";
+import { Field } from "@/components/types";
 
-export type DndField = Field;
+export interface SortableField extends Field { }
 
-export type SortableField = Field & {
-  siblings?: string[]
-}
-
-export interface ElementInnerSize {
-  innerWidth: number;
-  innerHeight: number;
-}
-
-export enum MoveDirection {
-  LEFT_TO_RIGHT = 'LEFT_TO_RIGHT',
-  BACK_TO_LEFT = 'BACK_TO_LEFT',
-  RIGHT_TO_LEFT = 'RIGHT_TO_LEFT',
-  BACK_TO_RIGHT = 'BACK_TO_RIGHT',
-  TOP_TO_BOTTOM = 'TOP_TO_BOTTOM',
-  BACK_TO_TOP = 'BACK_TO_TOP',
-  BOTTOM_TO_TOP = 'BOTTOM_TO_TOP',
-  BACK_TO_BOTTOM = 'BACK_TO_BOTTOM'
-}
-
-export enum MovePosition {
-  MOVE_UP = 'MOVE_UP',
-  MOVE_DOWN = 'MOVE_DOWN',
-  MOVE_LEFT = 'MOVE_LEFT',
-  MOVE_RIGHT = 'MOVE_RIGHT'
+export interface SortableState {
+  data: SortableField[];
+  item?: Partial<SortableField> | null;
+  isEditing?: boolean;
+  isSelecting?: boolean;
 }
