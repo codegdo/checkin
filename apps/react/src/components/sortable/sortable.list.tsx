@@ -3,7 +3,7 @@ import { SortableContextValue } from "./sortable.provider";
 import { SortableField } from "./types";
 import { useSortable } from "./hooks";
 import { classNames } from "../../utils";
-import SortableHolder from "./sortable.holder";
+import SortablePlaceholder from "./sortable.placeholder";
 
 type SortableListProps = PropsWithChildren<SortableField & {
   ctx: SortableContextValue;
@@ -24,7 +24,7 @@ function SortableList(props: SortableListProps) {
 
   return (<div ref={previewRef} className={className}>
     <div ref={ref} className="sortable-title">List</div>
-    <SortableHolder {...props} dataType="holder">{children}</SortableHolder>
+    <SortablePlaceholder {...props} dataType="holder">{children}</SortablePlaceholder>
   </div>)
 }
 

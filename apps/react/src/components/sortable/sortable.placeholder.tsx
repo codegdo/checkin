@@ -4,11 +4,11 @@ import { SortableField } from "./types";
 import { useSortable } from "./hooks";
 import { classNames } from "../../utils";
 
-type SortableHolderProps = PropsWithChildren<SortableField & {
+type SortablePlaceholderProps = PropsWithChildren<SortableField & {
   ctx: SortableContextValue;
 }>;
 
-function SortableHolder({ ctx, siblings, children, ...item }: SortableHolderProps) {
+function SortablePlaceholder({ ctx, siblings, children, ...item }:SortablePlaceholderProps) {
   const { ref, isOver, drop } = useSortable({ ctx, item, siblings });
   const className = classNames('sortable-list', {
     'is-over': isOver
@@ -21,4 +21,4 @@ function SortableHolder({ ctx, siblings, children, ...item }: SortableHolderProp
   </div>)
 }
 
-export default SortableHolder;
+export default SortablePlaceholder;

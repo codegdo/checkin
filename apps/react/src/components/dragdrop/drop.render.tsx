@@ -1,5 +1,3 @@
-
-
 import DropArea from './drop.area';
 import DropSection from './drop.section';
 import DropBlock from './drop.block';
@@ -14,41 +12,42 @@ import { DndContextValue, DndField } from './types';
 import { useWrapperContext } from '../../hooks';
 
 interface RenderProps {
-  items: DndField[];
+  data?: DndField[] | null;
   ctx: DndContextValue;
 }
 
-const render = ({ items, ctx }: RenderProps) => {
+const render = ({ data, ctx }: RenderProps) => {
+
+  if (data == null) return null;
+
   return (
     <>
-      {items.map((item) => {
-        const { dataType, data = [] } = item;
-
-        console.log();
+      {data.map((item) => {
+        const { dataType, data: childData = [] } = item;
 
         switch (dataType) {
           case 'area':
-            return data && (
+            return (
               <DropArea key={item.id} {...item} ctx={ctx}>
-                {render({ items: data, ctx })}
+                {render({ data: childData, ctx })}
               </DropArea>
             );
           case 'section':
-            return data && (
+            return (
               <DropSection key={item.id} {...item} ctx={ctx}>
-                {render({ items: data, ctx })}
+                {render({ data: childData, ctx })}
               </DropSection>
             );
           case 'block':
-            return data && (
+            return (
               <DropBlock key={item.id} {...item} ctx={ctx}>
-                {render({ items: data, ctx })}
+                {render({ data: childData, ctx })}
               </DropBlock>
             );
           case 'placeholder':
-            return data && (
+            return (
               <DropPlaceholder key={item.id} {...item} ctx={''}>
-                {render({ items: data, ctx })}
+                {render({ data: childData, ctx })}
               </DropPlaceholder>
             );
           case 'grid':
@@ -69,15 +68,9 @@ const render = ({ items, ctx }: RenderProps) => {
 
 function DropRender(): JSX.Element | null {
   const ctx = useWrapperContext(DragDropContext);
-
-  // normalize data
   const normalizeData = dndHelper.normalizeData(ctx.state.data);
 
-  if (normalizeData === null) {
-    return null;
-  }
-
-  return <>{render({ items: normalizeData, ctx })}</>;
+  return <>{render({ data: normalizeData, ctx })}</>;
 }
 
 export default DropRender;

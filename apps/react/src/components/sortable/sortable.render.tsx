@@ -22,19 +22,19 @@ const render = ({ data, ctx }: RenderProps) => {
     <>
       {
         data.map(item => {
-          const { dataType, data: _data = [] } = item;
+          const { dataType, data: childData = [] } = item;
 
           switch (dataType) {
             case 'area':
               return (
                 <SortableArea key={item.id} {...item} ctx={ctx} siblings={siblings}>
-                  {render({ data: _data, ctx })}
+                  {render({ data: childData, ctx })}
                 </SortableArea>
               );
             case 'list':
               return (
                 <SortableList key={item.id} {...item} ctx={ctx} siblings={siblings}>
-                  {render({ data: _data, ctx })}
+                  {render({ data: childData, ctx })}
                 </SortableList>
               );
             case 'item':
@@ -50,9 +50,9 @@ const render = ({ data, ctx }: RenderProps) => {
 
 function SortableRender() {
   const ctx = useWrapperContext(SortableContext);
-  const data = sortableHelper.renderData(ctx.state.data);
+  const normalizeData = sortableHelper.normalizeData(ctx.state.data);
 
-  return (<>{render({ data, ctx })}</>)
+  return (<>{render({ data: normalizeData, ctx })}</>)
 }
 
 export default SortableRender;

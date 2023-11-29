@@ -1,5 +1,5 @@
 import { XYCoord } from "react-dnd";
-import { cloneObject, mapToParent } from "@/utils";
+import { mapToParent } from "@/utils";
 import { ElementInnerSize, SortableField } from "../types";
 import { XYDirection } from "../hooks";
 import { DndRef } from "../sortable.provider";
@@ -280,8 +280,8 @@ class SortableHelper {
     });
   }
 
-  renderData(data: SortableField[]) {
-    const cloneData = cloneObject(data);
+  normalizeData(data: SortableField[]) {
+    const cloneData = structuredClone(data);
     const list: SortableField[] = [];
 
     cloneData.forEach((item: SortableField) => {
