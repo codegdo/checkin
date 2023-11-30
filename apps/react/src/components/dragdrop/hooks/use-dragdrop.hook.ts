@@ -1,7 +1,8 @@
 import { useCallback, useRef } from "react";
 import { DndContextValue } from "../dragdrop.provider";
 import { DndField } from "../types";
-import { useDrag, useDrop } from "react-dnd";
+import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
+import { DataType } from "@/components/types";
 
 interface Props {
   context: DndContextValue;
@@ -22,10 +23,16 @@ export const useDragDrop = ({ context, item }: Props) => {
     return true;
   }, []);
 
-  const handleDragOver = useCallback(() => {
+  const handleDragOver = useCallback((dragItem: DndField, monitor: DropTargetMonitor<DndField>) => {
+    if (!monitor.isOver({ shallow: true })) return;
+    if (!ref.current || dragItem.id == item.id) {
+      return;
+    }
+    if(context.current.drop?.id !== item.id) {
+      console.log('SET DROP');
+      context.current.drop = item;
+    }
     console.log('DRAG OVER');
-
-    return true;
   }, []);
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
@@ -39,7 +46,7 @@ export const useDragDrop = ({ context, item }: Props) => {
   }), [item]);
 
   const [{ isOver }, drop] = useDrop(() => ({
-    accept: ['list', 'item'],
+    accept: Object.values(DataType),
     canDrop: () => context.current.canDrop,
     hover: handleDragOver,
     collect: (monitor) => ({

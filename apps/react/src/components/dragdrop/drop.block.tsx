@@ -5,21 +5,21 @@ import { DndField } from "./types";
 import { useDragDrop } from "./hooks";
 import { DndContextValue } from "./dragdrop.provider";
 
-type DragDropAreaProps = PropsWithChildren<DndField & {
+type DropBlockProps = PropsWithChildren<DndField & {
   context: DndContextValue;
 }>;
 
-function DropArea({ context, children, ...item }: DragDropAreaProps) {
-  const { ref, isOver, drop } = useDragDrop({ context, item });
-  const className = classNames('drop-area', {
+function DropBlock({ context, children, ...item }: DropBlockProps) {
+  const { ref, isOver, drag, drop } = useDragDrop({ context, item });
+  const className = classNames('drop-item', {
     'is-over': isOver
   });
 
-  drop(ref);
+  drag(drop(ref));
 
   return (<div ref={ref} id={`${item.id}`} className={className}>
     {children}
   </div>)
 }
 
-export default DropArea;
+export default DropBlock;

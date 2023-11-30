@@ -2,6 +2,7 @@ import { PropsWithChildren } from "react";
 
 import { classNames } from "@/utils";
 import { SortableField } from "./types";
+import { useSortable } from "./hooks";
 import { SortableContextValue } from "./sortable.provider";
 
 type SortableAreaProps = PropsWithChildren<SortableField & {

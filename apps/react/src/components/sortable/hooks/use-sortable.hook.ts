@@ -3,6 +3,7 @@ import { useDrag, useDrop } from "react-dnd";
 
 import { SortableContextValue } from "../sortable.provider";
 import { SortableField } from "../types";
+import { DataType } from "@/components/types";
 
 interface Props {
   context: SortableContextValue;
@@ -40,7 +41,7 @@ export const useSortable = ({ context, item }: Props) => {
   }), [item]);
 
   const [{ isOver }, drop] = useDrop(() => ({
-    accept: ['list', 'item'],
+    accept: Object.values(DataType),
     canDrop: () => context.current.canDrop,
     hover: handleDragOver,
     collect: (monitor) => ({
