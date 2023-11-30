@@ -1,39 +1,41 @@
-import { useCallback, useRef } from "react";
-import { DndContextValue } from "../dragdrop.provider";
-import { DndField } from "../types";
+import { useCallback, useEffect, useRef } from "react";
 import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
-import { DataType } from "@/components/types";
 
-interface Props {
-  context: DndContextValue;
-  item: DndField;
+import { Field, DataType, ContextValue } from "../types";
+import { dndHelper } from "../helpers";
+
+interface IProps {
+  context: ContextValue;
+  item: Field;
 }
-export const useDragDrop = ({ context, item }: Props) => {
+
+export const useDragDrop = ({ context, item }: IProps) => {
   const ref = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
 
   const handleDragStart = useCallback(() => {
     console.log('DRAG START');
-
     return true;
   }, []);
 
   const handleDragEnd = useCallback(() => {
     console.log('DRAG END');
-
     return true;
   }, []);
 
-  const handleDragOver = useCallback((dragItem: DndField, monitor: DropTargetMonitor<DndField>) => {
-    if (!monitor.isOver({ shallow: true })) return;
-    if (!ref.current || dragItem.id == item.id) {
-      return;
+  const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
+    if (!monitor.isOver({ shallow: true }) || !ref.current) return;
+
+    if (context.current.dropItem?.id !== item.id) {
+      dndHelper.setDropItem(context, item);
+      console.log('SET DROP', context, dragItem, item);
     }
-    if(context.current.drop?.id !== item.id) {
-      console.log('SET DROP');
-      context.current.drop = item;
-    }
+
+    // Set coordinates and return early if already set and match
+    if (dndHelper.setCoordinate(context, monitor)) return;
+
     console.log('DRAG OVER');
-  }, []);
+  }, [context, item]);
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: `${item.dataType}`,
@@ -54,12 +56,19 @@ export const useDragDrop = ({ context, item }: Props) => {
     })
   }), [item]);
 
+  useEffect(() => {
+    if (!isOver) {
+      console.log('DRAG OUT', item);
+    }
+  }, [isOver]);
+
   return {
     ref,
+    previewRef,
     drag,
     drop,
     preview,
     isOver,
     isDragging
-  }
-}
+  };
+};

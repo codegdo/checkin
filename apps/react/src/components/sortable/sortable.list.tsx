@@ -2,14 +2,14 @@ import { PropsWithChildren } from "react";
 
 import { classNames } from "@/utils";
 import { ContextValue, Field } from "./types";
-import { useDragDrop } from "./hooks";
+import { useSortable } from "./hooks";
 
 type Props = PropsWithChildren<Field & {
   context: ContextValue;
 }>;
 
-function DropSection({ context, children, ...item }: Props) {
-  const { ref, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
+function SortableList({ context, children, ...item }: Props) {
+  const { ref, isDragging, isOver, drag, drop } = useSortable({ context, item });
   const className = classNames('drop-item', {
     'is-dragging': isDragging,
     'is-over': isOver,
@@ -22,4 +22,4 @@ function DropSection({ context, children, ...item }: Props) {
   </div>)
 }
 
-export default DropSection;
+export default SortableList;

@@ -1,4 +1,4 @@
-import { DndField, DndState } from "../types";
+import { Field, State } from "../types";
 
 enum ActionType {
   SELECT_ITEM = 'SELECT_ITEM',
@@ -15,19 +15,19 @@ enum ActionType {
 }
 
 interface MoveItem {
-  dragItem: DndField;
-  dropItem: DndField | null;
+  dragItem: Field;
+  dropItem: Field | null;
   offset: string | null;
 }
 
-type ActionPayload = MoveItem;
+type Payload = MoveItem;
 
-export interface DragDropAction<T = ActionPayload> {
+export interface Action<T = Payload> {
   type: string | ActionType;
   payload: T;
 }
 
-export const dragdropReducer = (state: DndState, { type, payload }: DragDropAction<ActionPayload>): DndState => {
+export const dragdropReducer = (state: State, { type, payload }: Action<Payload>) => {
   switch (type) {
     default: return state;
   }

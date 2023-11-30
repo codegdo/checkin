@@ -1,4 +1,4 @@
-import { SortableField, SortableState } from "../types";
+import { Field, State } from "../types";
 
 enum ActionType {
   SELECT_ITEM = 'SELECT_ITEM',
@@ -15,19 +15,19 @@ enum ActionType {
 }
 
 interface MoveItem {
-  dragItem: SortableField;
-  dropItem: SortableField | null;
+  dragItem: Field;
+  dropItem: Field | null;
   offset: string | null;
 }
 
-type ActionPayload = MoveItem;
+type Payload = MoveItem;
 
-export interface SortableAction<T = ActionPayload> {
+export interface Action<T = Payload> {
   type: string | ActionType;
   payload: T;
 }
 
-export const sortableReducer = (state: SortableState, { type, payload }: SortableAction<ActionPayload>): SortableState => {
+export const reducer = (state: State, { type, payload }: Action<Payload>) => {
   switch (type) {
     default: return state;
   }

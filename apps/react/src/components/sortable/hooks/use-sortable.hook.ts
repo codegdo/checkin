@@ -1,34 +1,41 @@
-import { useCallback, useRef } from "react";
-import { useDrag, useDrop } from "react-dnd";
+import { useCallback, useEffect, useRef } from "react";
+import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 
-import { SortableContextValue } from "../sortable.provider";
-import { SortableField } from "../types";
-import { DataType } from "@/components/types";
+import { Field, DataType, ContextValue } from "../types";
+import { sortableHelper } from "../helpers";
 
-interface Props {
-  context: SortableContextValue;
-  item: SortableField;
+interface IProps {
+  context: ContextValue;
+  item: Field;
 }
-export const useSortable = ({ context, item }: Props) => {
+
+export const useSortable = ({ context, item }: IProps) => {
   const ref = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
 
   const handleDragStart = useCallback(() => {
     console.log('DRAG START');
-
     return true;
   }, []);
 
   const handleDragEnd = useCallback(() => {
     console.log('DRAG END');
-
     return true;
   }, []);
 
-  const handleDragOver = useCallback(() => {
+  const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
+    if (!monitor.isOver({ shallow: true }) || !ref.current) return;
+
+    if (context.current.dropItem?.id !== item.id) {
+      sortableHelper.setDropItem(context, item);
+      console.log('SET DROP', context, dragItem, item);
+    }
+
+    // Set coordinates and return early if already set and match
+    if (sortableHelper.setCoordinate(context, monitor)) return;
+
     console.log('DRAG OVER');
-
-    return true;
-  }, []);
+  }, [context, item]);
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: `${item.dataType}`,
@@ -49,12 +56,19 @@ export const useSortable = ({ context, item }: Props) => {
     })
   }), [item]);
 
+  useEffect(() => {
+    if (!isOver) {
+      console.log('DRAG OUT', item);
+    }
+  }, [isOver]);
+
   return {
     ref,
+    previewRef,
     drag,
     drop,
     preview,
     isOver,
     isDragging
-  }
-}
+  };
+};

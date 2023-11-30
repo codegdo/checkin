@@ -3,23 +3,22 @@ import { DndProvider } from "react-dnd";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-import { sortableReducer } from "./reducers";
-import { SortableField } from "./types";
+import { reducer } from "./reducers";
+import { Field } from "./types";
 
 import { SortableProvider } from "./sortable.provider";
 import { defaultRef, defaultState } from "./default.value";
 import SortableRender from "./sortable.render";
 
-
-interface SortableProps {
-  data?: SortableField[];
-  dragFields?: SortableField[];
+interface IProps {
+  data?: Field[];
+  dragItems?: Field[];
 }
 
-export function Sortable({ data = [] }: SortableProps) {
+export function Sortable({ data = [] }: IProps) {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
   const { current: currentRef } = useRef(defaultRef);
-  const [state, dispatch] = useReducer(sortableReducer, { ...defaultState, data });
+  const [state, dispatch] = useReducer(reducer, { ...defaultState, data });
 
   return (
     <DndProvider backend={backend}>

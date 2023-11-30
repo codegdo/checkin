@@ -1,12 +1,15 @@
 import { useWrapperContext } from "@/hooks";
-import SortableContext, { SortableContextValue } from "./sortable.provider";
-import { SortableField } from "./types";
 import { groupDataForRender } from "@/utils";
+
+import { ContextValue, Field } from "./types";
+import SortableContext from "./sortable.provider";
 import SortableArea from "./sortable.area";
+import SortableList from "./sortable.list";
+import SortableItem from "./sortable.item";
 
 interface RenderProps {
-  data?: SortableField[] | null;
-  context: SortableContextValue;
+  data?: Field[] | null;
+  context: ContextValue;
 }
 
 const render = ({ data = [], context }: RenderProps) => {
@@ -23,9 +26,11 @@ const render = ({ data = [], context }: RenderProps) => {
                 {render({ data: childData, context })}
               </SortableArea>
             case 'list':
-              return <div key={id}>list</div>;
+              return <SortableList key={id} {...item} context={context}>
+                {render({ data: childData, context })}
+              </SortableList>
             case 'item':
-              return <div key={id}>item</div>;
+              return <SortableItem key={item.id} {...item} context={context} />;
             default:
               return null;
           }
@@ -37,7 +42,7 @@ const render = ({ data = [], context }: RenderProps) => {
 
 function SortableRender() {
   const context = useWrapperContext(SortableContext);
-  const renderData = groupDataForRender(context.state.data) as SortableField[];
+  const renderData = groupDataForRender(context.state.data) as Field[];
   console.log(renderData, context);
   return <>{render({ data: renderData, context })}</>
 }

@@ -197,6 +197,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
         if (!dragRef.current) return;
 
         if (dragItem.id == item.id) {
+          console.log('RESET DROP');
           if (dndRef.drop) {
             dndRef.drop = null;
             dndRef.canDrop = false;
@@ -205,10 +206,13 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
         }
 
         if (dndRef.drop?.id !== item.id) {
+          console.log('SET DROP');
           dndRef.drop = item;
           dndRef.canDrop = checkCanDrop(dragItem);
           dndRef.touchItems.push(item.id);
         }
+
+        console.log('DRAG OVER');
 
         hoverItem(dragRef.current, monitor);
 

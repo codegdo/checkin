@@ -4,18 +4,18 @@ import { TouchBackend } from "react-dnd-touch-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 import { dragdropReducer } from "./reducers";
-import { DndField } from "./types";
+import { Field } from "./types";
 
 import { DragDropProvider } from "./dragdrop.provider";
 import { defaultRef, defaultState } from "./default.value";
 import DropRender from "./drop.render";
 
-interface DragDropProps {
-  data?: DndField[];
-  dragFields?: DndField[];
+interface IProps {
+  data?: Field[];
+  dragItems?: Field[];
 }
 
-export function DragDrop({ data = [] }: DragDropProps) {
+export function DragDrop({ data = [] }: IProps) {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
   const { current: currentRef } = useRef(defaultRef);
   const [state, dispatch] = useReducer(dragdropReducer, { ...defaultState, data });

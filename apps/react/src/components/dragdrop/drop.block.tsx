@@ -1,18 +1,18 @@
 import { PropsWithChildren } from "react";
 
 import { classNames } from "@/utils";
-import { DndField } from "./types";
+import { ContextValue, Field } from "./types";
 import { useDragDrop } from "./hooks";
-import { DndContextValue } from "./dragdrop.provider";
 
-type DropBlockProps = PropsWithChildren<DndField & {
-  context: DndContextValue;
+type Props = PropsWithChildren<Field & {
+  context: ContextValue;
 }>;
 
-function DropBlock({ context, children, ...item }: DropBlockProps) {
-  const { ref, isOver, drag, drop } = useDragDrop({ context, item });
+function DropBlock({ context, children, ...item }: Props) {
+  const { ref, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
   const className = classNames('drop-item', {
-    'is-over': isOver
+    'is-dragging': isDragging,
+    'is-over': isOver,
   });
 
   drag(drop(ref));

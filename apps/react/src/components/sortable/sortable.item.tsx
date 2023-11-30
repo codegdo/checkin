@@ -1,16 +1,16 @@
 import { classNames } from "@/utils";
 import { ContextValue, Field } from "./types";
-import { useDragDrop } from "./hooks";
+import { useSortable } from "./hooks";
 
 interface IProps extends Field {
   context: ContextValue;
 }
 
 function DropField({ context, ...item }: IProps) {
-  const { ref, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
-  const className = classNames('drop-item', {
+  const { ref, isDragging, isOver, drag, drop } = useSortable({ context, item });
+  const className = classNames('sortable-item', {
     'is-dragging': isDragging,
-    'is-over': isOver,
+    'is-over': isOver
   });
 
   drag(drop(ref));

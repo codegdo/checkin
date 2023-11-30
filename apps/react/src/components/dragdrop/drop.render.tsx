@@ -1,7 +1,7 @@
 import { useWrapperContext } from "@/hooks";
-import DragDropContext, { DndContextValue } from "./dragdrop.provider";
-import { DndField } from "./types";
 import { groupDataForRender } from "@/utils";
+import { ContextValue, Field } from "./types";
+import DragDropContext from "./dragdrop.provider";
 import DropArea from "./drop.area";
 import DropSection from "./drop.section";
 import DropBlock from "./drop.block";
@@ -9,8 +9,8 @@ import DropField from "./drop.field";
 import DropElement from "./drop.element";
 
 interface RenderProps {
-  data?: DndField[] | null;
-  context: DndContextValue;
+  data?: Field[] | null;
+  context: ContextValue;
 }
 
 const render = ({ data = [], context }: RenderProps) => {
@@ -49,7 +49,7 @@ const render = ({ data = [], context }: RenderProps) => {
 
 function DropRender() {
   const context = useWrapperContext(DragDropContext);
-  const renderData = groupDataForRender(context.state.data) as DndField[];
+  const renderData = groupDataForRender(context.state.data) as Field[];
   console.log(renderData);
 
   return <>{render({ data: renderData, context })}</>

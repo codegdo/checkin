@@ -6,9 +6,9 @@ export const defaultState = {
 };
 
 export const defaultRef = {
-  drop: null,
-  elements: {},
-  cordinate: { x: 0, y: 0 },
+  dropItem: null,
+  elementRefs: {},
+  coordinate: { x: 0, y: 0 },
   offset: '',
   canDrop: true,
 };

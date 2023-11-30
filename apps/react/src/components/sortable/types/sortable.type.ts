@@ -1,10 +1,33 @@
-import { Field } from "@/components/types";
+import { Dispatch } from "react";
+import { DataType as FieldDataType, Field as FieldType } from "@/components/types";
+import { Action } from "../reducers";
 
-export interface SortableField extends Field { }
+export { FieldDataType as DataType };
 
-export interface SortableState {
-  data: SortableField[];
-  item?: Partial<SortableField> | null;
+export interface Field extends FieldType {
+  selected?: boolean;
+}
+
+export interface State {
+  data: Field[];
+  item?: Partial<Field> | null;
   isEditing?: boolean;
   isSelecting?: boolean;
+}
+
+export interface CurrentRef {
+  dropItem: Partial<Field> | null;
+  elementRefs: Record<string, HTMLDivElement | null>;
+  coordinate: {
+    x: number;
+    y: number;
+  }
+  offset: string;
+  canDrop: boolean;
+}
+
+export interface ContextValue {
+  state: State;
+  dispatch: Dispatch<Action>;
+  current: CurrentRef;
 }
