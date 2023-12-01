@@ -2,9 +2,6 @@ import { DropTargetMonitor } from "react-dnd";
 import { ContextValue, Field } from "../types";
 
 class SortableHelper {
-  resetDropItem(context: ContextValue) {
-    context.current.dropItem = null;
-  }
 
   setDropItem(context: ContextValue, item: Field) {
     context.current.dropItem = item;

@@ -372,6 +372,8 @@ export const useSortable = ({ ctx, item }: Props) => {
     dnd.offset = offset;
     dnd.direction = direction || '';
 
+    console.log(dnd.offset, dnd.direction);
+
     if ((dragDataType === 'list' && dropDataType === 'list') || (dragDataType === 'list' && dropDataType === 'holder')) {
 
       if ((dragDataType === 'list' && dropDataType === 'holder')) {

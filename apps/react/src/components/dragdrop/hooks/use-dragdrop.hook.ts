@@ -1,38 +1,50 @@
 import { useCallback, useEffect, useRef } from "react";
-import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
+import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 
 import { Field, DataType, ContextValue } from "../types";
-import { dndHelper } from "../helpers";
+import { CurrentXY, dndHelper } from "../helpers";
 
 interface IProps {
   context: ContextValue;
   item: Field;
 }
 
+const defaultXY = {
+  x: null,
+  currentX: null,
+  y: null,
+  currentY: null
+};
+
 export const useDragDrop = ({ context, item }: IProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
+  const xyRef = useRef<CurrentXY>(defaultXY);
 
   const handleDragStart = useCallback(() => {
     console.log('DRAG START');
     return true;
   }, []);
 
-  const handleDragEnd = useCallback(() => {
-    console.log('DRAG END');
-    return true;
-  }, []);
+  const handleDragEnd = useCallback((dragItem: Field, monitor: DragSourceMonitor<Field>) => {
+    if (monitor.didDrop()) {
+      console.log('DRAG END', context);
+    }
+  }, [item]);
 
   const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
     if (!monitor.isOver({ shallow: true }) || !ref.current) return;
 
     if (context.current.dropItem?.id !== item.id) {
       dndHelper.setDropItem(context, item);
-      console.log('SET DROP', context, dragItem, item);
+      //console.log('SET DROP', context, dragItem, item);
     }
 
     // Set coordinates and return early if already set and match
     if (dndHelper.setCoordinate(context, monitor)) return;
+
+    // Set offset
+    if(dndHelper.setOffset(context, previewRef.current || ref.current, xyRef.current)) return;
 
     console.log('DRAG OVER');
   }, [context, item]);
@@ -58,6 +70,7 @@ export const useDragDrop = ({ context, item }: IProps) => {
 
   useEffect(() => {
     if (!isOver) {
+      //xyRef.current = { ...defaultXY };
       console.log('DRAG OUT', item);
     }
   }, [isOver]);

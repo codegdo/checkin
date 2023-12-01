@@ -10,5 +10,6 @@ export const defaultRef = {
   elementRefs: {},
   coordinate: { x: 0, y: 0 },
   offset: '',
+  direction: '',
   canDrop: true,
 };

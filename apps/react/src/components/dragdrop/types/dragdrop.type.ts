@@ -24,6 +24,7 @@ export interface CurrentRef {
     y: number;
   }
   offset: string;
+  direction: string;
   canDrop: boolean;
 }
 
