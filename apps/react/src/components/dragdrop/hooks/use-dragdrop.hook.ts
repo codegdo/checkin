@@ -2,24 +2,25 @@ import { useCallback, useEffect, useRef } from "react";
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 
 import { Field, DataType, ContextValue } from "../types";
-import { CurrentXY, dndHelper } from "../helpers";
+import { Coordinate, dndHelper } from "../helpers";
+import { ActionType } from "../reducers";
 
 interface IProps {
   context: ContextValue;
   item: Field;
 }
 
-const defaultXY = {
+const defaultCoordinate = {
   x: null,
-  currentX: null,
   y: null,
+  currentX: null,
   currentY: null
 };
 
 export const useDragDrop = ({ context, item }: IProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
-  const xyRef = useRef<CurrentXY>(defaultXY);
+  const coordinateRef = useRef<Coordinate>(defaultCoordinate);
 
   const handleDragStart = useCallback(() => {
     console.log('DRAG START');
@@ -28,25 +29,32 @@ export const useDragDrop = ({ context, item }: IProps) => {
 
   const handleDragEnd = useCallback((dragItem: Field, monitor: DragSourceMonitor<Field>) => {
     if (monitor.didDrop()) {
-      console.log('DRAG END', context);
+      const payload = {
+        dragItem,
+        context: context.current
+      };
+
+      context.dispatch({
+        type: ActionType.MOVE_ITEM,
+        payload,
+      });
     }
-  }, [item]);
+  }, [context]);
 
   const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
     if (!monitor.isOver({ shallow: true }) || !ref.current) return;
 
     if (context.current.dropItem?.id !== item.id) {
       dndHelper.setDropItem(context, item);
-      //console.log('SET DROP', context, dragItem, item);
     }
 
-    // Set coordinates and return early if already set and match
+    // Set coordinate and return early if already set and match
     if (dndHelper.setCoordinate(context, monitor)) return;
 
-    // Set offset
-    if(dndHelper.setOffset(context, previewRef.current || ref.current, xyRef.current)) return;
+    // Set offset and css, return early if already set and match
+    if (dndHelper.setOffset(previewRef.current || ref.current, context, coordinateRef.current)) return;
 
-    console.log('DRAG OVER');
+    //console.log('DRAG OVER');
   }, [context, item]);
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
@@ -70,8 +78,8 @@ export const useDragDrop = ({ context, item }: IProps) => {
 
   useEffect(() => {
     if (!isOver) {
-      //xyRef.current = { ...defaultXY };
-      console.log('DRAG OUT', item);
+      //coordinateRef.current = { ...defaultCoordinate };
+      //console.log('DRAG OUT', item);
     }
   }, [isOver]);
 

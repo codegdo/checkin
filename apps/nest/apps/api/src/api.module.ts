@@ -20,6 +20,7 @@ import {
   SecurityGuard,
   PolicyChecker,
 } from './common';
+import { BuilderModule } from './builder/builder.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import {
     //
     AuthModule,
     AdminModule,
+    BuilderModule,
   ],
   controllers: [],
   providers: [

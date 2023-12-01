@@ -1,6 +1,7 @@
-import { Field, State } from "../types";
+import { dndHelper } from "../helpers";
+import { ContextValue, CurrentRef, Field, State } from "../types";
 
-enum ActionType {
+export enum ActionType {
   SELECT_ITEM = 'SELECT_ITEM',
   UNSELECT_ITEM = 'UNSELECT_ITEM',
   OPEN_EDITING_ITEM = 'OPEN_EDITING_ITEM',
@@ -16,8 +17,7 @@ enum ActionType {
 
 interface MoveItem {
   dragItem: Field;
-  dropItem: Field | null;
-  offset: string | null;
+  context: CurrentRef
 }
 
 type Payload = MoveItem;
@@ -29,6 +29,33 @@ export interface Action<T = Payload> {
 
 export const dragdropReducer = (state: State, { type, payload }: Action<Payload>) => {
   switch (type) {
-    default: return state;
+    case ActionType.MOVE_ITEM: {
+      const { dragItem, context: { dropItem } } = payload;
+
+      if (!dragItem && !dropItem) return state;
+
+      // Get ids
+      const { dragIds, dropIds } = dndHelper.getIds(dragItem, dropItem);
+
+      const data = [...state.data];
+      const draggedItems = data.splice(dragItem?.position ?? 0, dragIds.length);
+      const remainingItems = data;
+
+      const [firstDraggedItem] = draggedItems;
+      firstDraggedItem.parentId = null;
+
+      //console.log(draggedItems, remainingItems);
+
+      remainingItems.splice(dropItem?.position ?? 0, 0, ...draggedItems);
+      remainingItems.forEach((item, index) => {
+        item.position = index;
+      });
+
+      console.log(remainingItems);
+
+      return { ...state, data: remainingItems };
+    }
+    default:
+      return state;
   }
 }

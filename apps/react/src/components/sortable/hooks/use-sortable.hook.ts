@@ -1,40 +1,51 @@
 import { useCallback, useEffect, useRef } from "react";
-import { DropTargetMonitor, useDrag, useDrop } from "react-dnd";
+import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 
 import { Field, DataType, ContextValue } from "../types";
-import { sortableHelper } from "../helpers";
+import { Coordinate, sortableHelper } from "../helpers";
 
 interface IProps {
   context: ContextValue;
   item: Field;
 }
 
+const defaultCoordinate = {
+  x: null,
+  y: null,
+  currentX: null,
+  currentY: null
+};
+
 export const useSortable = ({ context, item }: IProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
+  const coordinateRef = useRef<Coordinate>(defaultCoordinate);
 
   const handleDragStart = useCallback(() => {
     console.log('DRAG START');
     return true;
   }, []);
 
-  const handleDragEnd = useCallback(() => {
-    console.log('DRAG END');
-    return true;
-  }, []);
+  const handleDragEnd = useCallback((dragItem: Field, monitor: DragSourceMonitor<Field>) => {
+    if (monitor.didDrop()) {
+      console.log('DRAG END', context);
+    }
+  }, [item]);
 
   const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
     if (!monitor.isOver({ shallow: true }) || !ref.current) return;
 
     if (context.current.dropItem?.id !== item.id) {
       sortableHelper.setDropItem(context, item);
-      console.log('SET DROP', context, dragItem, item);
     }
 
-    // Set coordinates and return early if already set and match
+    // Set coordinate and return early if already set and match
     if (sortableHelper.setCoordinate(context, monitor)) return;
 
-    console.log('DRAG OVER');
+    // Set offset and css, return early if already set and match
+    if (sortableHelper.setOffset(previewRef.current || ref.current, context, coordinateRef.current)) return;
+
+    //console.log('DRAG OVER');
   }, [context, item]);
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
@@ -58,7 +69,8 @@ export const useSortable = ({ context, item }: IProps) => {
 
   useEffect(() => {
     if (!isOver) {
-      console.log('DRAG OUT', item);
+      //coordinateRef.current = { ...defaultCoordinate };
+      //console.log('DRAG OUT', item);
     }
   }, [isOver]);
 

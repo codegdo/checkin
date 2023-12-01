@@ -1,30 +1,31 @@
 import { DropTargetMonitor, XYCoord } from "react-dnd";
-import { ContextValue, Field } from "../types";
+import { ContextValue, DataType, Field } from "../types";
+import { countItems } from "@/utils";
 
 export interface ElementInnerSize {
   innerWidth: number;
   innerHeight: number;
 }
 
-export interface CurrentXY {
+export interface Coordinate {
   x: number | null;
-  currentX: number | null;
   y: number | null;
+  currentX: number | null;
   currentY: number | null;
 }
 
-interface CurrentOffset {
-  verticalOffset: string;
-  horizontalOffset: string;
+interface Offset {
+  vertical: string;
+  horizontal: string;
 }
 
-interface CurrentDirection {
-  verticalDirection: string | undefined;
-  horizontalDirection: string | undefined;
+interface Direction {
+  vertical: string | undefined;
+  horizontal: string | undefined;
 }
 
 class DragDropHelper {
-  
+
   setDropItem(context: ContextValue, item: Field) {
     context.current.dropItem = item;
   }
@@ -50,114 +51,124 @@ class DragDropHelper {
   }
 
   setOffset(
-    context: ContextValue, 
-    dropElement:HTMLDivElement,
-    currentXY:CurrentXY
+    dropElement: HTMLDivElement,
+    context: ContextValue,
+    coordinates: Coordinate
   ) {
     const clientRect = dropElement.getBoundingClientRect();
 
-    const currentOffset = this.getOffset(context.current.coordinate, clientRect);
-    const currentDirection = this.getDirection(context.current.coordinate, currentXY);
-    const current = this.getCurrentOffsetWithDirection(currentOffset, currentDirection);
+    const currentOffset = this.calculateOffset(context.current.coordinate, clientRect);
+    const currentDirection = this.calculateDirection(context.current.coordinate, coordinates);
+    const current = this.calculateCurrentOffsetWithDirection(currentOffset, currentDirection);
 
-    const {offset, direction} = context.current;
+    const { offset } = context.current;
 
-    //console.log(current.offset, current.direction);
+    if (!dropElement.classList.contains(offset)) {
+      this.setClass(dropElement, context);
+    }
 
-    if (offset === current.offset && direction === current.direction) {
+    if (offset === current.offset) {
       return true;
     }
 
     context.current.offset = current.offset || '';
-    context.current.direction = current.direction || '';
+    context.current.direction = current.direction || context.current.direction;
 
-    console.log(context.current.offset , context.current.direction);
+    this.removeClass(dropElement);
+    console.log(context.current.offset, context.current.direction);
 
     return false;
   }
 
-  getCurrentOffsetWithDirection(currentOffset: CurrentOffset, currentDirection: CurrentDirection, currentDisplay: string = 'column') {
-    const { horizontalOffset, verticalOffset } = currentOffset;
-    const { horizontalDirection, verticalDirection } = currentDirection;
-    let offset = `on-${verticalOffset}`;
-    let direction = verticalDirection;
+  setClass(dropElement: HTMLDivElement, context: ContextValue) {
+    const [vertical, horizontal] = context.current.offset?.split(' ') ?? [];
+    const parentNode = dropElement.parentNode as HTMLDivElement;
 
-    if (currentDisplay === 'row') {
-      offset = `on-${horizontalOffset}`;
-      direction = horizontalDirection;
-    }
-
-    return {
-      offset,
-      direction
-    }
-  }
-
-  getDirectionX(clientX: number, currentXY: CurrentXY) {
-
-    if (currentXY.x === null) {
-      currentXY.x = clientX;
+    if (parentNode && parentNode.classList.contains('row')) {
+      this.addClass(dropElement, horizontal);
     } else {
-      currentXY.currentX = clientX;
-
-      if (currentXY.currentX < currentXY.x) {
-        currentXY.x = currentXY.currentX;
-        return 'left';
-      } else if (currentXY.currentX > currentXY.x) {
-        //window.scrollBy(0, 1);
-        currentXY.x = currentXY.currentX;
-        return 'right';
-      } else {
-        return 'no-movement';
-      }
+      this.addClass(dropElement, vertical);
     }
   }
 
-  getDirectionY(clientY: number, currentXY: CurrentXY) {
-    if (currentXY.y === null) {
-      currentXY.y = clientY;
+  addClass(dropElement: HTMLDivElement, className: string) {
+    if (className) {
+      dropElement.classList.add(className);
+    }
+  }
+
+  removeClass(dropElement: HTMLDivElement) {
+    dropElement.classList.remove(
+      'on-top',
+      'on-bottom',
+      'on-left',
+      'on-right',
+      'on-middle'
+    );
+  }
+
+  calculateCurrentOffsetWithDirection(currentOffset: Offset, currentDirection: Direction) {
+    const { horizontal, vertical } = currentOffset;
+    const { vertical: verticalDirection } = currentDirection;
+    const offset = `on-${vertical} on-${horizontal}`;
+    const direction = `${verticalDirection}`;
+
+    return { offset, direction };
+  }
+
+  calculateHorizontalDirection(clientX: number, coordinates: Coordinate) {
+    if (coordinates.x === null) {
+      coordinates.x = clientX;
+    }
+
+    coordinates.currentX = clientX;
+
+    if (coordinates.currentX < coordinates.x) {
+      coordinates.x = coordinates.currentX;
+      return 'left';
+    } else if (coordinates.currentX > coordinates.x) {
+      coordinates.x = coordinates.currentX;
+      return 'right';
     } else {
-      currentXY.currentY = clientY;
+      return '';
+    }
 
-      if (currentXY.currentY < currentXY.y) {
-        currentXY.y = currentXY.currentY;
-        return 'up';
-      } else if (currentXY.currentY > currentXY.y) {
-        //window.scrollBy(0, 1);
-        currentXY.y = currentXY.currentY;
-        return 'down';
-      } else {
-        return 'no-movement';
-      }
+  }
+
+  calculateVerticalDirection(clientY: number, coordinates: Coordinate) {
+    if (coordinates.y === null) {
+      coordinates.y = clientY;
+    }
+
+    coordinates.currentY = clientY;
+
+    if (coordinates.currentY < coordinates.y) {
+      coordinates.y = coordinates.currentY;
+      return 'up';
+    } else if (coordinates.currentY > coordinates.y) {
+      coordinates.y = coordinates.currentY;
+      return 'down';
+    } else {
+      return '';
     }
   }
 
-  getDirection(clientOffset: XYCoord, currentXY: CurrentXY) {
+  calculateDirection(clientOffset: XYCoord, coordinates: Coordinate) {
+    //const horizontalDirection = this.calculateHorizontalDirection(clientOffset.x, coordinates);
+    const verticalDirection = this.calculateVerticalDirection(clientOffset.y, coordinates);
 
-    const horizontalDirection = this.getDirectionX(clientOffset.x, currentXY);
-    const verticalDirection = this.getDirectionY(clientOffset.y, currentXY);
-    
-    return { verticalDirection, horizontalDirection }
+    return { vertical: verticalDirection, horizontal: '' }
   }
 
-  getOffsetX(clientX: number, centerX: number, width = 0) {
-    return clientX <= centerX - width
-      ? 'left'
-      : clientX >= centerX + width
-        ? 'right'
-        : 'middle';
+  calculateOffsetX(clientX: number, centerX: number, width = 0) {
+    return clientX <= centerX - width ? 'left' : clientX >= centerX + width ? 'right' : 'middle';
   }
 
-  getOffsetY(clientY: number, centerY: number, height = 0) {
-    return clientY <= centerY - height
-      ? 'top'
-      : clientY >= centerY + height
-        ? 'bottom'
-        : 'middle';
+  calculateOffsetY(clientY: number, centerY: number, height = 0) {
+    return clientY <= centerY - height ? 'top' : clientY >= centerY + height ? 'bottom' : 'middle';
   }
 
-  getOffset(clientOffset: XYCoord, clientRect: DOMRect, clientInnerSize?: ElementInnerSize) {
-
+  calculateOffset(clientOffset: XYCoord, clientRect: DOMRect, clientInnerSize?: ElementInnerSize) {
     const centerY = (clientRect.bottom - clientRect.top) / 2;
     const centerX = (clientRect.right - clientRect.left) / 2;
     const clientY = clientOffset.y - clientRect.top;
@@ -165,10 +176,24 @@ class DragDropHelper {
 
     const { innerWidth, innerHeight } = clientInnerSize || { innerWidth: 0, innerHeight: 0 };
 
-    const verticalOffset = this.getOffsetY(clientY, centerY, innerHeight);
-    const horizontalOffset = this.getOffsetX(clientX, centerX, innerWidth);
+    const vertical = this.calculateOffsetY(clientY, centerY, innerHeight);
+    const horizontal = this.calculateOffsetX(clientX, centerX, innerWidth);
 
-    return { verticalOffset, horizontalOffset };
+    return { vertical, horizontal };
+  }
+
+  getIds(dragItem: Field, dropItem: Partial<Field> | null) {
+
+    const hasChildrenDrag = dragItem.dataType === DataType.BLOCK || dragItem.dataType === DataType.SECTION;
+    const condition = (item: Field) => item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION;
+
+    const dragIds = hasChildrenDrag ? countItems(dragItem, condition) : [`${dragItem.id}`];
+    const dropIds = dropItem && hasChildrenDrag ? countItems(dropItem as Field, condition) : dropItem ? [`${dropItem.id}`] : [];
+
+    return {
+      dragIds,
+      dropIds,
+    };
   }
 }
 
