@@ -29,6 +29,11 @@ export const useDragDrop = ({ context, item }: IProps) => {
 
   const handleDragEnd = useCallback((dragItem: Field, monitor: DragSourceMonitor<Field>) => {
     if (monitor.didDrop()) {
+      const dragElement = previewRef.current || ref.current;
+      const prevElement = dragElement?.previousElementSibling;
+      const nextElement = dragElement?.nextElementSibling;
+      console.log(prevElement?.id, nextElement?.id);
+
       const payload = {
         dragItem,
         context: context.current

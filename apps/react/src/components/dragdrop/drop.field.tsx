@@ -16,7 +16,7 @@ function DropField({ context, ...item }: IProps) {
   drag(drop(ref));
 
   return (
-    <div className={className} data-id={`${item.id}`} ref={ref}>
+    <div id={`${item.id}`} ref={ref} className={className}>
       <label>{`${item.name} ${item.id}`}</label>
     </div>
   )

@@ -42,7 +42,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       const remainingItems = data;
 
       const [firstDraggedItem] = draggedItems;
-      firstDraggedItem.parentId = null;
+      firstDraggedItem.parentId = dropItem?.parentId;
 
       //console.log(draggedItems, remainingItems);
 
