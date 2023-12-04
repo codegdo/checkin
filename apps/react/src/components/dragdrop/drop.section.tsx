@@ -13,6 +13,7 @@ function DropSection({ context, children, ...item }: Props) {
   const className = classNames('drop-item', {
     'is-dragging': isDragging,
     'is-over': isOver,
+    'is-empty': item.data?.length == 0
   });
 
   drag(drop(ref));

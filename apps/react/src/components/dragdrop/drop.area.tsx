@@ -12,6 +12,7 @@ function DropArea({ context, children, ...item }: Props) {
   const { ref, isOver, drop } = useDragDrop({ context, item });
   const className = classNames('drop-item', {
     'is-over': isOver,
+    'is-empty': item.data?.length == 0
   });
 
   drop(ref);

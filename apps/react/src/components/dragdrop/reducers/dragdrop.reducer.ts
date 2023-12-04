@@ -30,7 +30,7 @@ export interface Action<T = Payload> {
 export const dragdropReducer = (state: State, { type, payload }: Action<Payload>) => {
   switch (type) {
     case ActionType.MOVE_ITEM: {
-      const { dragItem, context: { dropItem } } = payload;
+      const { dragItem, context: { dropItem, offset } } = payload;
 
       if (!dragItem && !dropItem) return state;
 
@@ -42,7 +42,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       const remainingItems = data;
 
       const [firstDraggedItem] = draggedItems;
-      firstDraggedItem.parentId = dropItem?.parentId;
+      firstDraggedItem.parentId = offset === 'on-middle' ? dropItem?.id : dropItem?.parentId;
 
       //console.log(draggedItems, remainingItems);
 

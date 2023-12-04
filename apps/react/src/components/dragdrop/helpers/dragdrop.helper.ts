@@ -14,17 +14,26 @@ export interface Coordinate {
   currentY: number | null;
 }
 
-interface Offset {
-  vertical: string;
-  horizontal: string;
-}
-
-interface Direction {
-  vertical: string | undefined;
-  horizontal: string | undefined;
-}
-
 class DragDropHelper {
+
+  canDrop(dragElement: HTMLDivElement, context: ContextValue) {
+
+    const { dropItem, offset, direction } = context.current;
+
+    if (dropItem?.dataType === DataType.AREA) return false;
+
+    const prevElement = dragElement?.previousElementSibling;
+    const nextElement = dragElement?.nextElementSibling;
+
+    const isDropPrevItemOnBottom = prevElement?.id == dropItem?.id && offset === 'on-bottom' && (direction === 'up' || direction === 'down');
+    const isDropNextItemOnTop = nextElement?.id == dropItem?.id && offset === 'on-top' && (direction === 'down' || direction === 'up');
+
+    if (isDropPrevItemOnBottom || isDropNextItemOnTop) {
+      return false;
+    }
+
+    return true;
+  }
 
   setDropItem(context: ContextValue, item: Field) {
     context.current.dropItem = item;
@@ -56,23 +65,22 @@ class DragDropHelper {
     coordinates: Coordinate
   ) {
     const clientRect = dropElement.getBoundingClientRect();
-
-    const currentOffset = this.calculateOffset(context.current.coordinate, clientRect);
-    const currentDirection = this.calculateDirection(context.current.coordinate, coordinates);
-    const current = this.calculateCurrentOffsetWithDirection(currentOffset, currentDirection);
-
+    const parentDisplay = this.getParentDisplay(dropElement);
+    const clientInnerSize = this.getEmptyElementPseudoContentSize(dropElement);
+    const currentOffset = `on-${this.calculateOffset(context.current.coordinate, clientRect, clientInnerSize, parentDisplay)}`;
+    const currentDirection = this.calculateDirection(context.current.coordinate, coordinates, parentDisplay);
     const { offset } = context.current;
 
     if (!dropElement.classList.contains(offset)) {
       this.setClass(dropElement, context);
     }
 
-    if (offset === current.offset) {
+    if (offset === currentOffset) {
       return true;
     }
 
-    context.current.offset = current.offset || '';
-    context.current.direction = current.direction || context.current.direction;
+    context.current.offset = currentOffset || '';
+    context.current.direction = currentDirection || context.current.direction;
 
     this.removeClass(dropElement);
     console.log(context.current.offset, context.current.direction);
@@ -105,15 +113,6 @@ class DragDropHelper {
       'on-right',
       'on-middle'
     );
-  }
-
-  calculateCurrentOffsetWithDirection(currentOffset: Offset, currentDirection: Direction) {
-    const { horizontal, vertical } = currentOffset;
-    const { vertical: verticalDirection } = currentDirection;
-    const offset = `on-${vertical} on-${horizontal}`;
-    const direction = `${verticalDirection}`;
-
-    return { offset, direction };
   }
 
   calculateHorizontalDirection(clientX: number, coordinates: Coordinate) {
@@ -153,11 +152,12 @@ class DragDropHelper {
     }
   }
 
-  calculateDirection(clientOffset: XYCoord, coordinates: Coordinate) {
-    //const horizontalDirection = this.calculateHorizontalDirection(clientOffset.x, coordinates);
-    const verticalDirection = this.calculateVerticalDirection(clientOffset.y, coordinates);
+  calculateDirection(clientOffset: XYCoord, coordinates: Coordinate, parentDisplay: string = 'column') {
+    if (parentDisplay === 'row') {
+      return this.calculateHorizontalDirection(clientOffset.x, coordinates);
+    }
 
-    return { vertical: verticalDirection, horizontal: '' }
+    return this.calculateVerticalDirection(clientOffset.y, coordinates);
   }
 
   calculateOffsetX(clientX: number, centerX: number, width = 0) {
@@ -168,18 +168,60 @@ class DragDropHelper {
     return clientY <= centerY - height ? 'top' : clientY >= centerY + height ? 'bottom' : 'middle';
   }
 
-  calculateOffset(clientOffset: XYCoord, clientRect: DOMRect, clientInnerSize?: ElementInnerSize) {
-    const centerY = (clientRect.bottom - clientRect.top) / 2;
-    const centerX = (clientRect.right - clientRect.left) / 2;
-    const clientY = clientOffset.y - clientRect.top;
-    const clientX = clientOffset.x - clientRect.left;
+  calculateOffset(clientOffset: XYCoord, clientRect: DOMRect, clientInnerSize?: ElementInnerSize, parentDisplay: string = 'column') {
+    const distanceFromTop = clientOffset.y - clientRect.top;
+    const distanceFromBottom = clientRect.bottom - clientOffset.y;
+    const distanceFromLeft = clientOffset.x - clientRect.left;
+    const distanceFromRight = clientRect.right - clientOffset.x;
 
-    const { innerWidth, innerHeight } = clientInnerSize || { innerWidth: 0, innerHeight: 0 };
+    const edgeThreshold = 20; // Adjust this threshold as needed for proximity sensitivity
 
-    const vertical = this.calculateOffsetY(clientY, centerY, innerHeight);
-    const horizontal = this.calculateOffsetX(clientX, centerX, innerWidth);
+    if (distanceFromTop < edgeThreshold) {
+      return 'top';
+    } else if (distanceFromBottom < edgeThreshold) {
+      return 'bottom';
+    } else if (distanceFromLeft < edgeThreshold) {
+      return 'left';
+    } else if (distanceFromRight < edgeThreshold) {
+      return 'right';
+    }
 
-    return { vertical, horizontal };
+    return 'middle';
+    // const centerY = (clientRect.bottom - clientRect.top) / 2;
+    // const centerX = (clientRect.right - clientRect.left) / 2;
+    // const clientY = clientOffset.y - clientRect.top;
+    // const clientX = clientOffset.x - clientRect.left;
+
+    // const { innerWidth, innerHeight } = clientInnerSize || { innerWidth: 0, innerHeight: 0 };
+
+    // if (parentDisplay === 'row') {
+    //   return this.calculateOffsetX(clientX, centerX, innerWidth);
+    // }
+
+    // return this.calculateOffsetY(clientY, centerY, innerHeight);
+  }
+
+  getParentDisplay(dropElement: HTMLDivElement) {
+    const parentNode = dropElement.parentNode as HTMLDivElement;
+
+    if (parentNode && parentNode.classList.contains('row')) {
+      return 'row';
+    }
+
+    return 'column';
+  }
+
+  getEmptyElementPseudoContentSize(dropElement: HTMLDivElement) {
+    let innerWidth = 0;
+    let innerHeight = 0;
+
+    if (dropElement.classList.contains('is-empty')) {
+      const style = window.getComputedStyle(dropElement, ':after');
+      innerWidth = parseFloat(style.width) / 2 || 0;
+      innerHeight = parseFloat(style.height) / 2 || 0;
+    }
+
+    return { innerWidth, innerHeight };
   }
 
   getIds(dragItem: Field, dropItem: Partial<Field> | null) {
