@@ -25,10 +25,10 @@ class DragDropHelper {
     const prevElement = dragElement?.previousElementSibling;
     const nextElement = dragElement?.nextElementSibling;
 
-    const isDropPrevItemOnBottom = prevElement?.id == dropItem?.id && offset === 'on-bottom' && (direction === 'up' || direction === 'down');
-    const isDropNextItemOnTop = nextElement?.id == dropItem?.id && offset === 'on-top' && (direction === 'down' || direction === 'up');
+    const isDropPrevItemOnBottomRight = prevElement?.id == dropItem?.id && (offset === 'on-bottom' || offset === 'on-right');
+    const isDropNextItemOnTopLeft = nextElement?.id == dropItem?.id && (offset === 'on-top' || offset === 'on-left');
 
-    if (isDropPrevItemOnBottom || isDropNextItemOnTop) {
+    if (isDropPrevItemOnBottomRight || isDropNextItemOnTopLeft) {
       return false;
     }
 
@@ -65,10 +65,9 @@ class DragDropHelper {
     coordinates: Coordinate
   ) {
     const clientRect = dropElement.getBoundingClientRect();
-    const parentDisplay = this.getParentDisplay(dropElement);
     const clientInnerSize = this.getEmptyElementPseudoContentSize(dropElement);
-    const currentOffset = `on-${this.calculateOffset(context.current.coordinate, clientRect, clientInnerSize, parentDisplay)}`;
-    const currentDirection = this.calculateDirection(context.current.coordinate, coordinates, parentDisplay);
+    const currentOffset = `on-${this.calculateOffset(context.current.coordinate, clientRect, clientInnerSize)}`;
+    const currentDirection = this.calculateDirection(context.current.coordinate, coordinates, dropElement); // direction for transitioning
     const { offset } = context.current;
 
     if (!dropElement.classList.contains(offset)) {
@@ -152,7 +151,10 @@ class DragDropHelper {
     }
   }
 
-  calculateDirection(clientOffset: XYCoord, coordinates: Coordinate, parentDisplay: string = 'column') {
+  calculateDirection(clientOffset: XYCoord, coordinates: Coordinate, dropElement: HTMLDivElement) {
+
+    const parentDisplay = this.getParentDisplay(dropElement);
+
     if (parentDisplay === 'row') {
       return this.calculateHorizontalDirection(clientOffset.x, coordinates);
     }
@@ -161,32 +163,78 @@ class DragDropHelper {
   }
 
   calculateOffsetX(clientX: number, centerX: number, width = 0) {
-    return clientX <= centerX - width ? 'left' : clientX >= centerX + width ? 'right' : 'middle';
+    if (clientX <= centerX - width) {
+      return 'left';
+    } else if (clientX >= centerX + width) {
+      return 'right';
+    } else {
+      return 'middle';
+    }
   }
 
   calculateOffsetY(clientY: number, centerY: number, height = 0) {
-    return clientY <= centerY - height ? 'top' : clientY >= centerY + height ? 'bottom' : 'middle';
+    if (clientY <= centerY - height) {
+      return 'top';
+    } else if (clientY >= centerY + height) {
+      return 'bottom';
+    } else {
+      return 'middle';
+    }
   }
 
-  calculateOffset(clientOffset: XYCoord, clientRect: DOMRect, clientInnerSize?: ElementInnerSize, parentDisplay: string = 'column') {
-    const distanceFromTop = clientOffset.y - clientRect.top;
-    const distanceFromBottom = clientRect.bottom - clientOffset.y;
-    const distanceFromLeft = clientOffset.x - clientRect.left;
-    const distanceFromRight = clientRect.right - clientOffset.x;
+  calculateOffset(clientOffset: XYCoord, clientRect: DOMRect, clientInnerSize: ElementInnerSize = { innerWidth: 0, innerHeight: 0 }) {
+    const { left, top, right, bottom } = clientRect;
+    const { innerWidth, innerHeight } = clientInnerSize;
 
-    const edgeThreshold = 20; // Adjust this threshold as needed for proximity sensitivity
+    const distanceFromTop = clientOffset.y - top;
+    const distanceFromBottom = bottom - clientOffset.y;
+    const distanceFromLeft = clientOffset.x - left;
+    const distanceFromRight = right - clientOffset.x;
 
-    if (distanceFromTop < edgeThreshold) {
-      return 'top';
-    } else if (distanceFromBottom < edgeThreshold) {
-      return 'bottom';
-    } else if (distanceFromLeft < edgeThreshold) {
-      return 'left';
-    } else if (distanceFromRight < edgeThreshold) {
-      return 'right';
+    const minDistance = Math.min(distanceFromTop, distanceFromBottom, distanceFromLeft, distanceFromRight);
+
+    const centerX = (right + left) / 2;
+    const centerY = (bottom + top) / 2;
+
+    if (innerWidth > 0 && innerHeight > 0) {
+      const offsetX = this.calculateOffsetX(clientOffset.x, centerX, innerWidth);
+      const offsetY = this.calculateOffsetY(clientOffset.y, centerY, innerHeight);
+
+      if (offsetX === 'middle' && offsetY === 'middle') {
+        return 'middle';
+      } else if (offsetX === 'left' || offsetX === 'right') {
+        return offsetX;
+      } else if (offsetY === 'top' || offsetY === 'bottom') {
+        return offsetY;
+      }
+    } else {
+      if (minDistance === distanceFromTop) {
+        return 'top';
+      } else if (minDistance === distanceFromBottom) {
+        return 'bottom';
+      } else if (minDistance === distanceFromLeft) {
+        return 'left';
+      } else if (minDistance === distanceFromRight) {
+        return 'right';
+      }
     }
 
-    return 'middle';
+    return 'outside';
+
+
+    // const maxDistance = Math.max(distanceFromTop, distanceFromBottom, distanceFromLeft, distanceFromRight);
+
+    // if (maxDistance === distanceFromTop) {
+    //   return 'top';
+    // } else if (maxDistance === distanceFromBottom) {
+    //   return 'bottom';
+    // } else if (maxDistance === distanceFromLeft) {
+    //   return 'left';
+    // } else if (maxDistance === distanceFromRight) {
+    //   return 'right';
+    // }
+
+    //return 'middle';
     // const centerY = (clientRect.bottom - clientRect.top) / 2;
     // const centerX = (clientRect.right - clientRect.left) / 2;
     // const clientY = clientOffset.y - clientRect.top;

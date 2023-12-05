@@ -11,6 +11,8 @@ export interface Field extends FieldType {
 
 export interface State {
   data: Field[];
+  history: Field[][];
+  currentIndex: number;
   item?: Partial<Field> | null;
   isEditing?: boolean;
   isSelecting?: boolean;

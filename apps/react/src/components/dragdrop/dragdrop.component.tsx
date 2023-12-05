@@ -3,7 +3,7 @@ import { DndProvider } from "react-dnd";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-import { dragdropReducer } from "./reducers";
+import { ActionType, dragdropReducer } from "./reducers";
 import { Field } from "./types";
 
 import { DragDropProvider } from "./dragdrop.provider";
@@ -20,9 +20,25 @@ export function DragDrop({ data = [] }: IProps) {
   const { current: currentRef } = useRef(defaultRef);
   const [state, dispatch] = useReducer(dragdropReducer, { ...defaultState, data });
 
+  const handleRedo = () => {
+    dispatch({
+      type: ActionType.REDO_STEP,
+    });
+  }
+
+  const handleUndo = () => {
+    dispatch({
+      type: ActionType.UNDO_STEP,
+    });
+  }
+
   return (
     <DndProvider backend={backend}>
       <DragDropProvider value={{ current: currentRef, state, dispatch }}>
+        <div>
+          <button type="button" onClick={handleRedo}>redo</button>
+          <button type="button" onClick={handleUndo}>undo</button>
+        </div>
         <DropRender />
       </DragDropProvider>
     </DndProvider>

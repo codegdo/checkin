@@ -35,6 +35,8 @@ export const useDragDrop = ({ context, item }: IProps) => {
 
       const canDrop = dndHelper.canDrop(dragElement, context);
 
+      console.log(canDrop);
+
       if (!canDrop) return;
 
       const payload = {

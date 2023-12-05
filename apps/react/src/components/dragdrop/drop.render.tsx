@@ -52,6 +52,8 @@ function DropRender() {
   const context = useWrapperContext(DragDropContext);
   const renderData = groupDataForRender(context.state.data) as Field[];
 
+  console.log('renderData', renderData, context.state);
+
   return <>{render({ data: renderData, context })}</>
 }
 

@@ -10,7 +10,7 @@ export function groupDataForRender(data: Item[]) {
   const list: Item[] = [];
 
   cloneData.forEach((item: Item) => {
-    return mapToParent(list, item, (item: Item) => (item?.dataType === 'list'));
+    return mapToParent(list, item, (item: Item) => (item?.dataType === 'area' || item?.dataType === 'block' || item?.dataType === 'section' || item?.dataType === 'list'));
   });
 
   return [{
