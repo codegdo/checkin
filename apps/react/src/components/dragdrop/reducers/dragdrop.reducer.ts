@@ -1,5 +1,5 @@
 import { dndHelper } from "../helpers";
-import { ContextValue, CurrentRef, Field, State } from "../types";
+import { CurrentRef, Field, State } from "../types";
 
 export enum ActionType {
   SELECT_ITEM = 'SELECT_ITEM',
@@ -27,13 +27,13 @@ type Payload = MoveItem;
 
 export interface Action<T = Payload> {
   type: string | ActionType;
-  payload: T;
+  payload?: T;
 }
 
 export const dragdropReducer = (state: State, { type, payload }: Action<Payload>) => {
   switch (type) {
     case ActionType.MOVE_ITEM: {
-      const { dragItem, context: { dropItem, offset } } = payload;
+      const { dragItem, context: { dropItem, offset } } = payload as MoveItem;
 
       if (!dragItem || !dropItem) return state;
 
