@@ -1,8 +1,10 @@
+import { setSessionStorage } from "@/utils";
 import { dndHelper } from "../helpers";
 import { CurrentRef, Field, State } from "../types";
 
 export enum ActionType {
   LOAD_HISTORY = 'LOAD_HISTORY',
+
   SELECT_ITEM = 'SELECT_ITEM',
   UNSELECT_ITEM = 'UNSELECT_ITEM',
   OPEN_EDITING_ITEM = 'OPEN_EDITING_ITEM',
@@ -24,7 +26,12 @@ interface MoveItem {
   context: CurrentRef
 }
 
-type Payload = MoveItem;
+interface LoadHistory {
+  historyData: Field[][];
+  historyIndex: number;
+}
+
+type Payload = LoadHistory | MoveItem;
 
 export interface Action<T = Payload> {
   type: string | ActionType;
@@ -33,6 +40,18 @@ export interface Action<T = Payload> {
 
 export const dragdropReducer = (state: State, { type, payload }: Action<Payload>) => {
   switch (type) {
+    case ActionType.LOAD_HISTORY: {
+      const { historyData, historyIndex } = payload as LoadHistory;
+
+      const loadHistoryData = structuredClone(historyData[historyIndex]);
+
+      // Update sessionStorage
+      setSessionStorage({
+        dnd_history_index: historyIndex,
+      });
+
+      return { ...state, currentData: loadHistoryData, historyIndex, historyData };
+    }
     case ActionType.MOVE_ITEM: {
       const { dragItem, context: { dropItem, offset } } = payload as MoveItem;
 
@@ -69,7 +88,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       const cloneData = structuredClone(remainingItems)
 
       const newDataHistory = [
-        ...state.dataHistory.slice(0, state.historyIndex + 1),
+        ...state.historyData.slice(0, state.historyIndex + 1),
         cloneData,
       ];
 
@@ -77,31 +96,51 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       const historyIndex = state.historyIndex === -1 ? 0 : state.historyIndex + 1;
 
       // Update sessionStorage
+      setSessionStorage({
+        dnd_history_data: newDataHistory,
+        dnd_history_index: historyIndex
+      });
 
-      return { ...state, currentData: remainingItems, dataHistory: newDataHistory, historyIndex };
+      return { ...state, currentData: remainingItems, historyData: newDataHistory, historyIndex };
     }
     case ActionType.UNDO_STEP: {
-      const { historyIndex, dataHistory } = state;
+      const { historyIndex, historyData } = state;
 
       if (historyIndex == -1) {
         return state;
       }
 
-      if (historyIndex === 0 || dataHistory.length <= 1) {
+      if (historyIndex === 0 || historyData.length <= 1) {
         const initialData = structuredClone(state.dataSource);
+
+        // Update sessionStorage
+        setSessionStorage({
+          dnd_history_index: -1
+        });
+
         return { ...state, currentData: initialData, historyIndex: -1 };
       }
 
-      const previousData = structuredClone(dataHistory[historyIndex - 1]);
+      const previousData = structuredClone(historyData[historyIndex - 1]);
+
+      // Update sessionStorage
+      setSessionStorage({
+        dnd_history_index: historyIndex - 1
+      });
 
       return { ...state, currentData: previousData, historyIndex: historyIndex - 1 };
     }
     case ActionType.REDO_STEP: {
-      const { historyIndex, dataHistory } = state;
+      const { historyIndex, historyData } = state;
 
-      if (historyIndex === dataHistory.length - 1 || dataHistory.length === 0) return state;
+      if (historyIndex === historyData.length - 1 || historyData.length === 0) return state;
 
-      const nextData = structuredClone(dataHistory[historyIndex + 1]);
+      const nextData = structuredClone(historyData[historyIndex + 1]);
+
+      // Update sessionStorage
+      setSessionStorage({
+        dnd_history_index: historyIndex + 1
+      });
 
       return { ...state, currentData: nextData, historyIndex: historyIndex + 1 };
     }

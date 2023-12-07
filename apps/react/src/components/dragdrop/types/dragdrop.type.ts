@@ -12,7 +12,7 @@ export interface Field extends FieldType {
 export interface State {
   dataSource: Field[];
   currentData: Field[];
-  dataHistory: Field[][];
+  historyData: Field[][];
   historyIndex: number;
   selectedItem?: Partial<Field> | null;
   isEditing?: boolean;

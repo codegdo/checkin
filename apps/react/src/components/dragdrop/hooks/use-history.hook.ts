@@ -1,33 +1,43 @@
 import { useEffect } from 'react';
 import { Action, ActionType } from '../reducers';
+import { setSessionStorage } from '@/utils';
 
-interface HistoryCheckProps {
-  currentVersion?: number;
-  currentId?: string;
+interface HistoryProps {
+  trackingId?: number | string;
+  trackingVersion?: number;
   dispatch: React.Dispatch<Action>;
 }
 
-export function useHistoryCheck({ currentVersion, currentId, dispatch }: HistoryCheckProps) {
+export function useHistory({ trackingId = 0, trackingVersion = 0, dispatch }: HistoryProps) {
   useEffect(() => {
-    const storedDataHistory = sessionStorage.getItem('dataHistory');
-    const storedHistoryIndex = sessionStorage.getItem('historyIndex');
-    const storedSaveVersion = sessionStorage.getItem('saveVersion');
-    const storedSaveId = sessionStorage.getItem('saveId');
+    const storedHistoryId = sessionStorage.getItem('dnd_history_id');
+    const storedHistoryVersion = sessionStorage.getItem('dnd_history_version');
+    const storedHistoryIndex = sessionStorage.getItem('dnd_history_index');
+    const storedHistoryData = sessionStorage.getItem('dnd_history_data');
 
-    if (storedDataHistory && storedHistoryIndex && storedSaveVersion && storedSaveId) {
-      const parsedDataHistory = JSON.parse(storedDataHistory);
+    const shouldSetHistory = !storedHistoryId || storedHistoryId !== trackingId.toString();
+
+    if (shouldSetHistory) {
+      setSessionStorage({
+        dnd_history_id: trackingId,
+        dnd_history_version: trackingVersion,
+        dnd_history_index: -1,
+        dnd_history_data: [],
+      });
+    } else if (storedHistoryData && storedHistoryIndex) {
       const parsedHistoryIndex = parseInt(storedHistoryIndex, 10);
-      const parsedSaveVersion = parseInt(storedSaveVersion, 10);
-      const parsedSaveId = storedSaveId;
+      const parsedHistoryData = JSON.parse(storedHistoryData);
 
-      if ((!currentVersion || parsedSaveVersion === currentVersion) && (!currentId || parsedSaveId === currentId)) {
+      const isValidIndex = !isNaN(parsedHistoryIndex) && parsedHistoryIndex !== -1;
+
+      if (Array.isArray(parsedHistoryData) && parsedHistoryData.length > 0 && isValidIndex && parsedHistoryIndex < parsedHistoryData.length) {
         dispatch({
           type: ActionType.LOAD_HISTORY,
-          payload: { dataHistory: parsedDataHistory, historyIndex: parsedHistoryIndex }
+          payload: { historyData: parsedHistoryData, historyIndex: parsedHistoryIndex },
         });
-      } else {
-        console.log('Old history data - prompt old data logic here');
       }
     }
-  }, [currentVersion, currentId, dispatch]);
+  }, [trackingId, trackingVersion, dispatch]);
 }
+
+

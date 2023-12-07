@@ -1,6 +1,6 @@
 import { Loader } from "@/components";
-import { DragDrop } from "@/components/dragdrop/dragdrop.component";
 import { useGetAllForms } from "./api/form.api";
+import { Link } from "react-router-dom";
 // Example API response
 // const data = [
 //   {
@@ -84,13 +84,21 @@ import { useGetAllForms } from "./api/form.api";
 // ];
 
 function FormList() {
-  const { status, data: formData, controller } = useGetAllForms();
+  const { status, data, controller } = useGetAllForms();
 
-  if (!formData) {
+  if (!data) {
     return <Loader status={status} controller={controller} />
   }
 
-  return <DragDrop data={formData?.data} />;
+  return <div>
+    {
+      data?.map((item) => {
+        return <div key={item.id}><Link to={`./${item.id}`}>{item.title}</Link></div>
+      })
+    }
+  </div>
+
+  //return <DragDrop data={formData?.data} />;
 }
 
 export default FormList;

@@ -1,7 +1,7 @@
 export const defaultState = {
   dataSource: [],
   currentData: [],
-  dataHistory: [],
+  historyData: [],
   historyIndex: -1,
   selectedItem: null,
   isEditing: false,
