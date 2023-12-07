@@ -7,7 +7,6 @@ import DropSection from "./drop.section";
 import DropBlock from "./drop.block";
 import DropField from "./drop.field";
 import DropElement from "./drop.element";
-import { useEffect, useState } from "react";
 
 interface RenderProps {
   data?: Field[] | null;
@@ -50,7 +49,7 @@ const render = ({ data = [], context }: RenderProps) => {
 
 function DropRender() {
   const context = useWrapperContext(DragDropContext);
-  const renderData = groupDataForRender(context.state.data) as Field[];
+  const renderData = groupDataForRender(context.state.currentData) as Field[];
 
   console.log('renderData', renderData, context.state);
 

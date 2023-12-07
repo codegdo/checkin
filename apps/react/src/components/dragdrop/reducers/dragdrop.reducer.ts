@@ -2,6 +2,7 @@ import { dndHelper } from "../helpers";
 import { CurrentRef, Field, State } from "../types";
 
 export enum ActionType {
+  LOAD_HISTORY = 'LOAD_HISTORY',
   SELECT_ITEM = 'SELECT_ITEM',
   UNSELECT_ITEM = 'UNSELECT_ITEM',
   OPEN_EDITING_ITEM = 'OPEN_EDITING_ITEM',
@@ -40,22 +41,21 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       // Get ids
       const { dragIds } = dndHelper.getIds(dragItem, dropItem);
 
-      const newData = [...state.data];
+      const newData = [...state.currentData];
 
       const dragIndex = newData.findIndex(item => item.id === dragItem.id);
       const draggedItems = newData.splice(dragIndex, dragIds.length);
 
       const remainingItems = [...newData];
 
-      const onMiddle = offset === 'on-middle';
-      const onBottom = offset === 'on-bottom';
+      const isMiddleOrBottom = offset === 'on-middle' || offset === 'on-bottom';
 
       const [firstDraggedItem] = draggedItems;
-      firstDraggedItem.parentId = onMiddle ? dropItem.id : dropItem.parentId;
+      firstDraggedItem.parentId = offset === 'on-middle' ? dropItem.id : dropItem.parentId;
 
       let dropIndex = remainingItems.findIndex(item => item.id === dropItem.id);
 
-      if (onMiddle || onBottom) {
+      if (isMiddleOrBottom) {
         dropIndex += 1;
       }
 
@@ -68,30 +68,42 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
 
       const cloneData = structuredClone(remainingItems)
 
-      const newHistory = [
-        ...state.history.slice(0, state.currentIndex + 1),
+      const newDataHistory = [
+        ...state.dataHistory.slice(0, state.historyIndex + 1),
         cloneData,
       ];
 
-      return { ...state, data: remainingItems, history: newHistory, currentIndex: state.currentIndex + 1 };
+      // Update currentIndex based on the number of existing history entries
+      const historyIndex = state.historyIndex === -1 ? 0 : state.historyIndex + 1;
+
+      // Update sessionStorage
+
+      return { ...state, currentData: remainingItems, dataHistory: newDataHistory, historyIndex };
     }
     case ActionType.UNDO_STEP: {
-      const { currentIndex, history } = state;
+      const { historyIndex, dataHistory } = state;
 
-      if (currentIndex === 0 || history.length === 0) return state;
+      if (historyIndex == -1) {
+        return state;
+      }
 
-      const previousData = history[currentIndex - 1];
+      if (historyIndex === 0 || dataHistory.length <= 1) {
+        const initialData = structuredClone(state.dataSource);
+        return { ...state, currentData: initialData, historyIndex: -1 };
+      }
 
-      return { ...state, data: previousData, currentIndex: currentIndex - 1 };
+      const previousData = structuredClone(dataHistory[historyIndex - 1]);
+
+      return { ...state, currentData: previousData, historyIndex: historyIndex - 1 };
     }
     case ActionType.REDO_STEP: {
-      const { currentIndex, history } = state;
+      const { historyIndex, dataHistory } = state;
 
-      if (currentIndex === history.length - 1 || history.length === 0) return state;
+      if (historyIndex === dataHistory.length - 1 || dataHistory.length === 0) return state;
 
-      const nextData = history[currentIndex + 1];
+      const nextData = structuredClone(dataHistory[historyIndex + 1]);
 
-      return { ...state, data: nextData, currentIndex: currentIndex + 1 };
+      return { ...state, currentData: nextData, historyIndex: historyIndex + 1 };
     }
     default:
       return state;

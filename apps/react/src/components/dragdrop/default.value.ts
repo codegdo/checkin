@@ -1,10 +1,11 @@
 export const defaultState = {
-  data: [],
-  history: [],
-  currentIndex: -1,
-  item: null,
-  isSelecting: false,
+  dataSource: [],
+  currentData: [],
+  dataHistory: [],
+  historyIndex: -1,
+  selectedItem: null,
   isEditing: false,
+  isSelecting: false,
 };
 
 export const defaultRef = {
