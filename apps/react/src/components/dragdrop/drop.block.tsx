@@ -18,7 +18,7 @@ function DropBlock({ context, children, ...item }: Props) {
 
   drag(drop(ref));
 
-  return (<div ref={ref} id={`${item.id}`} className={className}>
+  return (<div ref={ref} data-id={`${item.id}`} className={className}>
     {children}
   </div>)
 }

@@ -24,9 +24,12 @@ class DragDropHelper {
 
     const prevElement = dragElement?.previousElementSibling;
     const nextElement = dragElement?.nextElementSibling;
+     
+    const prevElementId = prevElement?.getAttribute('data-id');
+    const nextElementId = nextElement?.getAttribute('data-id');
 
-    const isDropPrevItemOnBottomRight = prevElement?.id == dropItem?.id && (offset === 'on-bottom' || offset === 'on-right');
-    const isDropNextItemOnTopLeft = nextElement?.id == dropItem?.id && (offset === 'on-top' || offset === 'on-left');
+    const isDropPrevItemOnBottomRight = prevElementId == dropItem?.id && (offset === 'on-bottom' || offset === 'on-right');
+    const isDropNextItemOnTopLeft = nextElementId == dropItem?.id && (offset === 'on-top' || offset === 'on-left');
 
     if (isDropPrevItemOnBottomRight || isDropNextItemOnTopLeft) {
       return false;

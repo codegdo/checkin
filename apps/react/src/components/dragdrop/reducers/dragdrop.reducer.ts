@@ -31,7 +31,11 @@ interface LoadHistory {
   historyIndex: number;
 }
 
-type Payload = LoadHistory | MoveItem;
+interface SelectItem {
+  item: Field;
+}
+
+type Payload = LoadHistory | MoveItem | SelectItem;
 
 export interface Action<T = Payload> {
   type: string | ActionType;
@@ -102,6 +106,24 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       });
 
       return { ...state, currentData: remainingItems, historyData: newDataHistory, historyIndex };
+    }
+    case ActionType.SELECT_ITEM: {
+      const { item } = payload as SelectItem;
+      const selectedItem = { ...item };
+      return {
+        ...state,
+        selectedItem,
+        isSelecting: true,
+        isEditing: false
+      };
+    }
+    case ActionType.UNSELECT_ITEM: {
+      return { 
+        ...state, 
+        selectedItem: null, 
+        isSelecting: false,
+        isEditing: false
+      };
     }
     case ActionType.UNDO_STEP: {
       const { historyIndex, historyData } = state;
