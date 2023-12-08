@@ -24,7 +24,7 @@ class DragDropHelper {
 
     const prevElement = dragElement?.previousElementSibling;
     const nextElement = dragElement?.nextElementSibling;
-     
+
     const prevElementId = prevElement?.getAttribute('data-id');
     const nextElementId = nextElement?.getAttribute('data-id');
 
@@ -223,33 +223,6 @@ class DragDropHelper {
     }
 
     return 'outside';
-
-
-    // const maxDistance = Math.max(distanceFromTop, distanceFromBottom, distanceFromLeft, distanceFromRight);
-
-    // if (maxDistance === distanceFromTop) {
-    //   return 'top';
-    // } else if (maxDistance === distanceFromBottom) {
-    //   return 'bottom';
-    // } else if (maxDistance === distanceFromLeft) {
-    //   return 'left';
-    // } else if (maxDistance === distanceFromRight) {
-    //   return 'right';
-    // }
-
-    //return 'middle';
-    // const centerY = (clientRect.bottom - clientRect.top) / 2;
-    // const centerX = (clientRect.right - clientRect.left) / 2;
-    // const clientY = clientOffset.y - clientRect.top;
-    // const clientX = clientOffset.x - clientRect.left;
-
-    // const { innerWidth, innerHeight } = clientInnerSize || { innerWidth: 0, innerHeight: 0 };
-
-    // if (parentDisplay === 'row') {
-    //   return this.calculateOffsetX(clientX, centerX, innerWidth);
-    // }
-
-    // return this.calculateOffsetY(clientY, centerY, innerHeight);
   }
 
   getParentDisplay(dropElement: HTMLDivElement) {
@@ -287,6 +260,67 @@ class DragDropHelper {
       dragIds,
       dropIds,
     };
+  }
+
+  snapToGrid(x: number, y: number): [number, number] {
+    const snappedX = Math.round(x / 32) * 32
+    const snappedY = Math.round(y / 32) * 32
+    return [snappedX, snappedY]
+  }
+
+  getDragStyles(
+    initialOffset: XYCoord | null,
+    currentOffset: XYCoord | null,
+    isSnapToGrid: boolean = false,
+  ) {
+    if (!initialOffset || !currentOffset) {
+      return {
+        display: 'none',
+      };
+    }
+
+    let { x, y } = currentOffset;
+
+    if (isSnapToGrid) {
+      x -= initialOffset.x;
+      y -= initialOffset.y;
+      [x, y] = this.snapToGrid(x, y);
+      x += initialOffset.x;
+      y += initialOffset.y;
+    }
+
+    const transform = `translate(${x}px, ${y}px)`;
+
+    return {
+      transform,
+      WebkitTransform: transform,
+    };
+  }
+
+  isDragEnabled(
+    list: Field[],
+    item: Field,
+    condition: (item: Field) => boolean
+  ): boolean {
+    return !list.some((i) => condition(i) && i.id == item.id);
+  }
+
+  createElementObjects(types: (string | Field)[]): Field[] {
+    return types.map((type) => {
+      if (typeof type === 'string') {
+        return {
+          id: null,
+          name: type,
+          type,
+          dataType: type === 'section' || type === 'block' ? type : 'element',
+          data: null,
+          position: 0,
+          parentId: null,
+        };
+      } else {
+        return type;
+      }
+    });
   }
 }
 

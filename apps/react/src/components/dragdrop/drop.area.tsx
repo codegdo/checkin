@@ -11,7 +11,7 @@ type Props = PropsWithChildren<Field & {
 
 function DropArea({ context, children, ...item }: Props) {
   const { ref, isOver, drop } = useDragDrop({ context, item });
-  const className = classNames('drop-area', {
+  const className = classNames('droppable-area', {
     'is-over': isOver,
     'is-empty': item.data?.length == 0
   });
@@ -28,7 +28,7 @@ function DropArea({ context, children, ...item }: Props) {
 
       if (item) {
         if (context.state.selectedItem?.id == item.id) {
-          context.dispatch({type: ActionType.UNSELECT_ITEM,});
+          context.dispatch({ type: ActionType.UNSELECT_ITEM, });
           return;
         }
 
@@ -44,9 +44,11 @@ function DropArea({ context, children, ...item }: Props) {
 
   drop(ref);
 
-  return (<div ref={ref} id={`${item.id}`} className={className} onClick={handleItemClick}>
-    {children}
-  </div>)
+  return (
+    <div ref={ref} id={`${item.id}`} className={className} onClick={handleItemClick}>
+      {children}
+    </div>
+  )
 }
 
 export default DropArea;

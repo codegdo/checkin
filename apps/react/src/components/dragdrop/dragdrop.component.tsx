@@ -10,7 +10,9 @@ import { Field } from "./types";
 import { DragDropProvider } from "./dragdrop.provider";
 import { defaultRef, defaultState } from "./default.value";
 import DropRender from "./drop.render";
-import DropDropToolbar from "./dragdrop.toolbar";
+import DragDropToolbar from "./dragdrop.toolbar";
+import DragPreview from "./drag.preview";
+import DragRender, { DraggableElementType } from "./drag.render";
 
 interface Option {
   trackingId?: number | string;
@@ -19,11 +21,12 @@ interface Option {
 
 interface IProps {
   data?: Field[];
-  dragItems?: Field[];
+  dragData?: Field[];
+  dragElements?: DraggableElementType[];
   option?: Option;
 }
 
-export function DragDrop({ data = [], option = {} }: IProps) {
+export function DragDrop({ data = [], dragData = [], dragElements = [], option = {} }: IProps) {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
   const { current: currentRef } = useRef(defaultRef);
   const [state, dispatch] = useReducer(dragdropReducer, { ...defaultState, currentData: data, dataSource: structuredClone(data) });
@@ -37,8 +40,10 @@ export function DragDrop({ data = [], option = {} }: IProps) {
   return (
     <DndProvider backend={backend}>
       <DragDropProvider value={{ current: currentRef, state, dispatch }}>
-        <DropDropToolbar />
+        <DragDropToolbar />
         <DropRender />
+        <DragRender dragData={dragData} dragElements={dragElements} />
+        <DragPreview />
       </DragDropProvider>
     </DndProvider>
   );

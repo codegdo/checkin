@@ -2,10 +2,10 @@ import React from 'react';
 import { ActionType } from './reducers';
 
 interface IProps {
-  onCallback?: (name: keyof typeof ActionType) => void;
+  onClick?: (name: keyof typeof ActionType) => void;
 }
 
-function DropEditor({ onCallback }: IProps) {
+function DropEditor({ onClick }: IProps) {
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -15,7 +15,7 @@ function DropEditor({ onCallback }: IProps) {
 
     if (clickedElement) {
       const name = clickedElement.getAttribute('name') as keyof typeof ActionType;
-      onCallback && onCallback(name);
+      onClick && onClick(name);
     }
   };
 

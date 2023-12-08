@@ -8,12 +8,12 @@ import DropBlock from "./drop.block";
 import DropField from "./drop.field";
 import DropElement from "./drop.element";
 
-interface RenderProps {
+interface IProps {
   data?: Field[] | null;
   context: ContextValue;
 }
 
-const render = ({ data = [], context }: RenderProps) => {
+const render = ({ data = [], context }: IProps) => {
 
   return (
     <>

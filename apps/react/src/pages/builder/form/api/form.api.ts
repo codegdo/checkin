@@ -7,8 +7,9 @@ interface IForm {
   id: number | string;
   name: string;
   title: string;
-  descriptiong: string;
+  description: string;
   data: Field[];
+  fields: Field[];
   version: number;
 }
 

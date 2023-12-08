@@ -75,7 +75,7 @@ export interface FieldTranslation {
 }
 
 interface Element {
-  id?: number | string;
+  id?: number | string | null;
   name: string;
   type: string | ElementType | FieldType;
   dataType?: string | DataType;

@@ -9,7 +9,15 @@ function FormBuilder() {
     return <Loader status={status} controller={controller} />
   }
 
-  return <DragDrop data={formData?.data} option={{ trackingId: formData.id, trackingVersion: formData.version }} />;
+  return <DragDrop
+    data={formData?.data}
+    dragData={formData?.fields}
+    dragElements={['section', 'block', 'button', 'link', 'text']}
+    option={{
+      trackingId: formData.id,
+      trackingVersion: formData.version
+    }}
+  />;
 }
 
 export default FormBuilder;

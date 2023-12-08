@@ -91,7 +91,7 @@ interface Options {
 }
 
 interface ElementField {
-  id?: number | string;
+  id?: number | string | null;
   name: string;
 
   type: keyof FieldType | keyof ElementType;

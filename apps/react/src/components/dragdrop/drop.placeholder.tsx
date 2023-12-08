@@ -10,7 +10,7 @@ type Props = PropsWithChildren<Field & {
   context: ContextValue;
 }>;
 
-function DropBlock({ context, children, ...item }: Props) {
+function DropPlaceholder({ context, children, ...item }: Props) {
   const { ref, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
   const { isSelecting, isEditing, handleClick } = useOnClick(context, item);
   const className = classNames('drop-item', {
@@ -30,4 +30,4 @@ function DropBlock({ context, children, ...item }: Props) {
   )
 }
 
-export default DropBlock;
+export default DropPlaceholder;

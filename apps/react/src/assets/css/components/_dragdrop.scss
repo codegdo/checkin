@@ -1,11 +1,11 @@
-.drop-area {
+.droppable-area {
   padding: 1rem;
   background-color: #f8f8f8;
 }
-.drop-area.is-over {
+.droppable-area.is-over {
   background-color: #efefef;
 }
-.drag-area {
+.draggable-area {
   display: flex;
   padding: 1rem;
 }
@@ -33,7 +33,7 @@
   pointer-events: none;
 }
 
-.drop-area:empty:after,
+.droppable-area:empty:after,
 .is-empty:after {
   content: 'drop...';
   display: block;
