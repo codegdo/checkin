@@ -1,6 +1,6 @@
 import { DropTargetMonitor, XYCoord } from "react-dnd";
 import { ContextValue, DataType, Field } from "../types";
-import { countItems } from "@/utils";
+import { countItems, randomString } from "@/utils";
 
 export interface ElementInnerSize {
   innerWidth: number;
@@ -251,14 +251,17 @@ class DragDropHelper {
   getIds(dragItem: Field, dropItem: Partial<Field> | null) {
 
     const hasChildrenDrag = dragItem.dataType === DataType.BLOCK || dragItem.dataType === DataType.SECTION;
+    const hasChildrenDrop = dropItem?.dataType === DataType.BLOCK || dropItem?.dataType === DataType.SECTION;
     const condition = (item: Field) => item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION;
 
     const dragIds = hasChildrenDrag ? countItems(dragItem, condition) : [`${dragItem.id}`];
-    const dropIds = dropItem && hasChildrenDrag ? countItems(dropItem as Field, condition) : dropItem ? [`${dropItem.id}`] : [];
+    const dropIds = dropItem && hasChildrenDrop ? countItems(dropItem as Field, condition) : dropItem ? [`${dropItem.id}`] : [];
+
+    const filteredDropIds = dropIds.filter((id) => (id !== dragItem.id?.toString()) );
 
     return {
       dragIds,
-      dropIds,
+      dropIds: filteredDropIds,
     };
   }
 
@@ -313,7 +316,7 @@ class DragDropHelper {
           name: type,
           type,
           dataType: type === 'section' || type === 'block' ? type : 'element',
-          data: null,
+          data: type === 'section' || type === 'block' ? [] : null,
           position: 0,
           parentId: null,
         };
@@ -321,6 +324,10 @@ class DragDropHelper {
         return type;
       }
     });
+  }
+
+  generateNewId() {
+    return randomString();
   }
 }
 

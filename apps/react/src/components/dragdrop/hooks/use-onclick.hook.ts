@@ -12,12 +12,21 @@ export function useOnClick(context: ContextValue, item: Field) {
 
   const handleClick = (name: keyof typeof ActionType) => {
     switch (name) {
-      case ActionType.OPEN_EDITING_ITEM:
+      case ActionType.OPEN_EDITING:
         !isEditing && dispatch({ type: name });
         break;
-      case ActionType.CLOSE_EDITING_ITEM:
+      case ActionType.CLOSE_EDITING:
         dispatch({ type: name });
         break;
+        case ActionType.REMOVE_ITEM:
+          dispatch({ 
+            type: name,
+            payload: {
+              item,
+              current: context.current
+            }
+          });
+          break;
       default:
     }
   }

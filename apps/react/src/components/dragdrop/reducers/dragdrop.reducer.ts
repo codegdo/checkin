@@ -7,8 +7,8 @@ export enum ActionType {
 
   SELECT_ITEM = 'SELECT_ITEM',
   UNSELECT_ITEM = 'UNSELECT_ITEM',
-  OPEN_EDITING_ITEM = 'OPEN_EDITING_ITEM',
-  CLOSE_EDITING_ITEM = 'CLOSE_EDITING_ITEM',
+  OPEN_EDITING = 'OPEN_EDITING',
+  CLOSE_EDITING = 'CLOSE_EDITING',
 
   ADD_ITEM = 'ADD_ITEM',
   MOVE_ITEM = 'MOVE_ITEM',
@@ -23,7 +23,7 @@ export enum ActionType {
 
 interface MoveItem {
   dragItem: Field;
-  context: CurrentRef
+  current: CurrentRef
 }
 
 interface LoadHistory {
@@ -56,13 +56,62 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
 
       return { ...state, currentData: loadHistoryData, historyIndex, historyData };
     }
+    case ActionType.ADD_ITEM: {
+      const { dragItem, current: { dropItem, offset } } = payload as MoveItem;
+
+      if (!dragItem || !dropItem) return state;
+
+      if (!dragItem.id) {
+        dragItem.id = dndHelper.generateNewId();
+      }
+
+      // Get ids
+      const { dropIds } = dndHelper.getIds(dragItem, dropItem);
+
+      const newData = [...state.currentData];
+
+      const isMiddleOrBottom = offset === 'on-middle' || offset === 'on-bottom';
+
+      dragItem.parentId = offset === 'on-middle' ? dropItem.id : dropItem.parentId;
+
+      let dropIndex = newData.findIndex(item => item.id === dropItem.id);
+
+      if (isMiddleOrBottom) {
+        dropIndex += dropIds.length;
+      }
+
+      newData.splice(dropIndex, 0, dragItem);
+
+      // Update positions for newData
+      newData.forEach((item, index) => {
+        item.position = index;
+      });
+
+      const cloneData = structuredClone(newData)
+
+      const newDataHistory = [
+        ...state.historyData.slice(0, state.historyIndex + 1),
+        cloneData,
+      ];
+
+      // Update currentIndex based on the number of existing history entries
+      const historyIndex = state.historyIndex === -1 ? 0 : state.historyIndex + 1;
+
+      // Update sessionStorage
+      setSessionStorage({
+        dnd_history_data: newDataHistory,
+        dnd_history_index: historyIndex
+      });
+
+      return { ...state, currentData: newData, historyData: newDataHistory, historyIndex };
+    }
     case ActionType.MOVE_ITEM: {
-      const { dragItem, context: { dropItem, offset } } = payload as MoveItem;
+      const { dragItem, current: { dropItem, offset } } = payload as MoveItem;
 
       if (!dragItem || !dropItem) return state;
 
       // Get ids
-      const { dragIds } = dndHelper.getIds(dragItem, dropItem);
+      const { dragIds, dropIds } = dndHelper.getIds(dragItem, dropItem);
 
       const newData = [...state.currentData];
 
@@ -79,7 +128,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       let dropIndex = remainingItems.findIndex(item => item.id === dropItem.id);
 
       if (isMiddleOrBottom) {
-        dropIndex += 1;
+        dropIndex += dropIds.length;
       }
 
       remainingItems.splice(dropIndex, 0, ...draggedItems);
@@ -89,7 +138,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
         item.position = index;
       });
 
-      const cloneData = structuredClone(remainingItems)
+      const cloneData = structuredClone(remainingItems);
 
       const newDataHistory = [
         ...state.historyData.slice(0, state.historyIndex + 1),
@@ -106,6 +155,15 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       });
 
       return { ...state, currentData: remainingItems, historyData: newDataHistory, historyIndex };
+    }
+    case ActionType.REMOVE_ITEM: {
+      const { dragItem, current: { dropItem, offset } } = payload as MoveItem;
+
+      console.log('remove', dragItem, dropItem);
+
+      if (!dragItem || !dropItem) return state;
+
+      return state;
     }
     case ActionType.SELECT_ITEM: {
       const { item } = payload as SelectItem;
@@ -125,10 +183,10 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
         isEditing: false
       };
     }
-    case ActionType.OPEN_EDITING_ITEM: {
+    case ActionType.OPEN_EDITING: {
       return { ...state, isEditing: true };
     }
-    case ActionType.CLOSE_EDITING_ITEM: {
+    case ActionType.CLOSE_EDITING: {
       return { ...state, isEditing: false };
     }
     case ActionType.UNDO_STEP: {

@@ -21,7 +21,7 @@ function DropEditor({ onClick }: IProps) {
 
   return (
     <div onClick={handleClick}>
-      <button type="button" name={ActionType.CLOSE_EDITING_ITEM}>Close</button>
+      <button type="button" name={ActionType.CLOSE_EDITING}>Close</button>
     </div>
   )
 }

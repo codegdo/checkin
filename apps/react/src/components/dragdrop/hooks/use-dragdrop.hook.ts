@@ -30,27 +30,32 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
   }, [draggable]);
 
   const handleDragEnd = useCallback((dragItem: Field, monitor: DragSourceMonitor<Field>) => {
-    if (monitor.didDrop()) {
-      const dragElement = previewRef.current || ref.current;
+    if (!monitor.didDrop()) return;
 
-      if (dragElement === null) return;
+    const dragElement = previewRef.current || ref.current;
 
-      const canDrop = dndHelper.canDrop(dragElement, context);
+    if (!dragItem) return;
 
-      console.log(canDrop);
+    const payload = {
+      dragItem,
+      current: context.current
+    };
 
-      if (!canDrop) return;
-
-      const payload = {
-        dragItem,
-        context: context.current
-      };
-
+    if (!dragElement) {
       context.dispatch({
-        type: ActionType.MOVE_ITEM,
+        type: ActionType.ADD_ITEM,
         payload,
       });
+      return;
     }
+
+    const canDrop = dndHelper.canDrop(dragElement, context);
+    if (!canDrop) return;
+
+    context.dispatch({
+      type: ActionType.MOVE_ITEM,
+      payload,
+    });
   }, [context]);
 
   const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {

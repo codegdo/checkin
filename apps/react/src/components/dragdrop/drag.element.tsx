@@ -18,7 +18,7 @@ function DragElement({ context, ...item }: IProps) {
 
   return (
     <div ref={drag} className={className}>
-      {`${item.type}`}
+      {`${item.name}`}
     </div>
   )
 }

@@ -21,7 +21,8 @@ function DropMenu({ onClick }: IProps) {
 
   return (
     <div onClick={handleClick}>
-      <button type="button" name={ActionType.OPEN_EDITING_ITEM}>Edit</button>
+      <button type="button" name={ActionType.OPEN_EDITING}>Edit</button>
+      <button type="button" name={ActionType.REMOVE_ITEM}>Remove</button>
     </div>
   )
 }
