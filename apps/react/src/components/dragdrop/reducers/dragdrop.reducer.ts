@@ -26,6 +26,10 @@ interface MoveItem {
   current: CurrentRef
 }
 
+interface RemoveItem {
+  item: Partial<Field> | null | undefined
+}
+
 interface LoadHistory {
   historyData: Field[][];
   historyIndex: number;
@@ -35,7 +39,7 @@ interface SelectItem {
   item: Field;
 }
 
-type Payload = LoadHistory | MoveItem | SelectItem;
+type Payload = LoadHistory | MoveItem  | RemoveItem | SelectItem;
 
 export interface Action<T = Payload> {
   type: string | ActionType;
@@ -66,7 +70,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       }
 
       // Get ids
-      const { dropIds } = dndHelper.getIds(dragItem, dropItem);
+      const dropIds = dndHelper.getIds(dropItem);
 
       const newData = [...state.currentData];
 
@@ -111,7 +115,8 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       if (!dragItem || !dropItem) return state;
 
       // Get ids
-      const { dragIds, dropIds } = dndHelper.getIds(dragItem, dropItem);
+      const dragIds = dndHelper.getIds(dragItem);
+      const dropIds = dndHelper.getIds(dropItem, dragItem?.id);
 
       const newData = [...state.currentData];
 
@@ -157,11 +162,13 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       return { ...state, currentData: remainingItems, historyData: newDataHistory, historyIndex };
     }
     case ActionType.REMOVE_ITEM: {
-      const { dragItem, current: { dropItem, offset } } = payload as MoveItem;
+      const { item } = payload as RemoveItem;
 
-      console.log('remove', dragItem, dropItem);
+      console.log('remove', item);
 
-      if (!dragItem || !dropItem) return state;
+      if (!item) return state;
+
+
 
       return state;
     }

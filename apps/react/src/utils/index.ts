@@ -9,3 +9,4 @@ export * from './stringify-url.util';
 export * from './crypto.util';
 export * from './group-data-for-render.util';
 export * from './session-storage.util';
+export * from './find-item-by-id.util';

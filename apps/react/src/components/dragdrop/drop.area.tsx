@@ -4,6 +4,7 @@ import { classNames } from "@/utils";
 import { ContextValue, Field } from "./types";
 import { useDragDrop } from "./hooks";
 import { ActionType } from "./reducers";
+import { dndHelper } from "./helpers";
 
 type Props = PropsWithChildren<Field & {
   context: ContextValue;
@@ -24,19 +25,22 @@ function DropArea({ context, children, ...item }: Props) {
 
     if (el) {
       const id = el.getAttribute('data-id');
-      const item = context.state.currentData.find(item => item.id == id);
+      const found = context.state.currentData.find(item => item.id == id);
+      const foundItem = dndHelper.findItemById(item, id, (item) => (item.dataType === 'area' || item.dataType === 'section' || item.dataType === 'block'))
 
-      if (item) {
-        if (context.state.selectedItem?.id == item.id) {
+      console.log(foundItem);
+
+      if (found) {
+        if (context.state.selectedItem?.id == found.id) {
           context.dispatch({ type: ActionType.UNSELECT_ITEM, });
           return;
         }
 
-        const updatedItem = { ...item };
+        const selectedItem = { ...found };
 
         context.dispatch({
           type: ActionType.SELECT_ITEM,
-          payload: { item: updatedItem }
+          payload: { item: selectedItem }
         });
       }
     }

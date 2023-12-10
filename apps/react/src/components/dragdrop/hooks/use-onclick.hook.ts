@@ -22,8 +22,7 @@ export function useOnClick(context: ContextValue, item: Field) {
           dispatch({ 
             type: name,
             payload: {
-              item,
-              current: context.current
+              item: selectedItem
             }
           });
           break;

@@ -1,6 +1,6 @@
 import { DropTargetMonitor, XYCoord } from "react-dnd";
 import { ContextValue, DataType, Field } from "../types";
-import { countItems, randomString } from "@/utils";
+import { countItems, randomString, findItemById } from "@/utils";
 
 export interface ElementInnerSize {
   innerWidth: number;
@@ -248,21 +248,47 @@ class DragDropHelper {
     return { innerWidth, innerHeight };
   }
 
-  getIds(dragItem: Field, dropItem: Partial<Field> | null) {
-
-    const hasChildrenDrag = dragItem.dataType === DataType.BLOCK || dragItem.dataType === DataType.SECTION;
-    const hasChildrenDrop = dropItem?.dataType === DataType.BLOCK || dropItem?.dataType === DataType.SECTION;
+  getIds(item: Field | Partial<Field> | null, filterId?: string | number | null) {
+    const hasChildrenDrop = item?.dataType === DataType.BLOCK || item?.dataType === DataType.SECTION;
+    
     const condition = (item: Field) => item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION;
 
-    const dragIds = hasChildrenDrag ? countItems(dragItem, condition) : [`${dragItem.id}`];
-    const dropIds = dropItem && hasChildrenDrop ? countItems(dropItem as Field, condition) : dropItem ? [`${dropItem.id}`] : [];
+    const ids = item && hasChildrenDrop ? countItems(item as Field, condition) : item ? [`${item.id}`] : [];
 
-    const filteredDropIds = dropIds.filter((id) => (id !== dragItem.id?.toString()) );
+    if(filterId) {
+      return ids.filter((id) => (id !== filterId?.toString()) );
+    } 
 
-    return {
-      dragIds,
-      dropIds: filteredDropIds,
-    };
+    return ids;
+  }
+
+  findItemById(
+    item: Field, 
+    targetId: string | number | null, 
+    condition: (item: Field) => boolean,
+  ): Field | null {
+    function findRecursive(innerItem: Field | null): Field | null {
+      if (!innerItem) {
+        return null;
+      }
+  
+      if (innerItem.id === targetId) {
+        return innerItem;
+      }
+  
+      if (innerItem.data && condition(innerItem)) {
+        for (const child of innerItem.data) {
+          const found = findRecursive(child);
+          if (found) {
+            return found;
+          }
+        }
+      }
+  
+      return null;
+    }
+  
+    return findRecursive(item);
   }
 
   snapToGrid(x: number, y: number): [number, number] {
