@@ -27,7 +27,7 @@ interface MoveItem {
 }
 
 interface RemoveItem {
-  item: Partial<Field> | null | undefined
+  removeItem: Partial<Field> | null | undefined
 }
 
 interface LoadHistory {
@@ -162,15 +162,41 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       return { ...state, currentData: remainingItems, historyData: newDataHistory, historyIndex };
     }
     case ActionType.REMOVE_ITEM: {
-      const { item } = payload as RemoveItem;
+      const { removeItem } = payload as RemoveItem;
 
-      console.log('remove', item);
+      if (!removeItem) return state;
 
-      if (!item) return state;
+      const removeIds = dndHelper.getIds(removeItem);
 
+      const newData = [...state.currentData];
 
+      const dragIndex = newData.findIndex(item => item.id == removeItem.id);
+      newData.splice(dragIndex, removeIds.length);
 
-      return state;
+      const remainingItems = [...newData];
+
+      // Update positions for remainingItems
+      remainingItems.forEach((item, index) => {
+        item.position = index;
+      });
+
+      const cloneData = structuredClone(remainingItems);
+
+      const newDataHistory = [
+        ...state.historyData.slice(0, state.historyIndex + 1),
+        cloneData,
+      ];
+
+      // Update currentIndex based on the number of existing history entries
+      const historyIndex = state.historyIndex === -1 ? 0 : state.historyIndex + 1;
+
+      // Update sessionStorage
+      setSessionStorage({
+        dnd_history_data: newDataHistory,
+        dnd_history_index: historyIndex
+      });
+
+      return { ...state, currentData: remainingItems, historyData: newDataHistory, historyIndex };
     }
     case ActionType.SELECT_ITEM: {
       const { item } = payload as SelectItem;

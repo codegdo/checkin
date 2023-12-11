@@ -22,7 +22,7 @@ export function useOnClick(context: ContextValue, item: Field) {
           dispatch({ 
             type: name,
             payload: {
-              item: selectedItem
+              removeItem: selectedItem
             }
           });
           break;
