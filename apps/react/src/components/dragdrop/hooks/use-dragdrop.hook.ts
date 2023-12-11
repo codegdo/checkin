@@ -34,23 +34,25 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
 
     const dragElement = previewRef.current || ref.current;
 
-    if (!dragItem) return;
-
     const payload = {
       dragItem,
       current: context.current
     };
 
     if (!dragElement) {
+      const canAddItem = dndHelper.canDragDrop(dragItem, context);
+      if (!canAddItem) return;
+
       context.dispatch({
         type: ActionType.ADD_ITEM,
         payload,
       });
+
       return;
     }
 
-    const canDrop = dndHelper.canDrop(dragElement, context);
-    if (!canDrop) return;
+    const canDragDrop = dndHelper.canDragDrop(dragItem, context, dragElement);
+    if (!canDragDrop) return;
 
     context.dispatch({
       type: ActionType.MOVE_ITEM,

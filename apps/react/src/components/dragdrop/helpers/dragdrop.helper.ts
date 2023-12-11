@@ -16,30 +16,34 @@ export interface Coordinate {
 
 class DragDropHelper {
 
-  canDrop(dragElement: HTMLDivElement, context: ContextValue) {
+  canDragDrop(dragItem: Field, context: ContextValue, dragElement?: HTMLDivElement | null) {
 
     const { dropItem, offset, direction } = context.current;
 
-    if (dropItem?.dataType === DataType.AREA) return false;
+    if (dropItem?.dataType === DataType.AREA && dropItem.data?.length !== 0) return false;
 
-    const prevElement = dragElement?.previousElementSibling;
-    const nextElement = dragElement?.nextElementSibling;
+    console.log('canDragDrop', dropItem, dropItem?.data?.length, context);
 
-    const prevElementId = prevElement?.getAttribute('data-id');
-    const nextElementId = nextElement?.getAttribute('data-id');
+    if (dragElement) {
+      const prevElement = dragElement?.previousElementSibling;
+      const nextElement = dragElement?.nextElementSibling;
 
-    const isDropPrevItemOnBottomRight = prevElementId == dropItem?.id && (offset === 'on-bottom' || offset === 'on-right');
-    const isDropNextItemOnTopLeft = nextElementId == dropItem?.id && (offset === 'on-top' || offset === 'on-left');
+      const prevElementId = prevElement?.getAttribute('data-id');
+      const nextElementId = nextElement?.getAttribute('data-id');
 
-    if (isDropPrevItemOnBottomRight || isDropNextItemOnTopLeft) {
-      return false;
+      const isDropPrevItemOnBottomRight = prevElementId == dropItem?.id && (offset === 'on-bottom' || offset === 'on-right');
+      const isDropNextItemOnTopLeft = nextElementId == dropItem?.id && (offset === 'on-top' || offset === 'on-left');
+
+      if (isDropPrevItemOnBottomRight || isDropNextItemOnTopLeft) {
+        return false;
+      }
     }
 
     return true;
   }
 
   setDropItem(context: ContextValue, item: Field) {
-    context.current.dropItem = item;
+    context.current.dropItem = { ...item };
   }
 
   setCoordinate(context: ContextValue, monitor: DropTargetMonitor<Field>): boolean {
@@ -250,28 +254,28 @@ class DragDropHelper {
 
   getIds(item: Field | Partial<Field> | null, filterId?: string | number | null) {
     const hasChildrenDrop = item?.dataType === DataType.BLOCK || item?.dataType === DataType.SECTION;
-    
+
     const condition = (item: Field) => item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION;
 
     const ids = item && hasChildrenDrop ? countItems(item as Field, condition) : item ? [`${item.id}`] : [];
 
-    if(filterId) {
-      return ids.filter((id) => (id !== filterId?.toString()) );
-    } 
+    if (filterId) {
+      return ids.filter((id) => (id !== filterId?.toString()));
+    }
 
     return ids;
   }
 
   findItemById(
-    item: Field, 
-    fieldId: string | number | null, 
+    item: Field,
+    fieldId: string | number | null,
     condition: (item: Field) => boolean,
   ): Field | null {
     function findRecursive(field: Field | null): Field | null {
-      if (!field || field.id?.toString() === fieldId?.toString()) {
+      if (!field || field.id == fieldId) {
         return field;
       }
-  
+
       if (field.data && condition(field)) {
         for (const child of field.data) {
           const found = findRecursive(child);
@@ -280,10 +284,10 @@ class DragDropHelper {
           }
         }
       }
-  
+
       return null;
     }
-  
+
     return findRecursive(item);
   }
 

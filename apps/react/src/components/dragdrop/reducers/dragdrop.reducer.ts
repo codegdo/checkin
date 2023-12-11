@@ -39,7 +39,7 @@ interface SelectItem {
   item: Field;
 }
 
-type Payload = LoadHistory | MoveItem  | RemoveItem | SelectItem;
+type Payload = LoadHistory | MoveItem | RemoveItem | SelectItem;
 
 export interface Action<T = Payload> {
   type: string | ActionType;
@@ -69,19 +69,16 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
         dragItem.id = dndHelper.generateNewId();
       }
 
-      // Get ids
-      const dropIds = dndHelper.getIds(dropItem);
-
       const newData = [...state.currentData];
 
       const isMiddleOrBottom = offset === 'on-middle' || offset === 'on-bottom';
 
-      dragItem.parentId = offset === 'on-middle' ? dropItem.id : dropItem.parentId;
+      dragItem.parentId = offset === 'on-middle' ? (dropItem.id === 'root-area' ? null : dropItem.id) : dropItem.parentId;
 
       let dropIndex = newData.findIndex(item => item.id === dropItem.id);
 
       if (isMiddleOrBottom) {
-        dropIndex += dropIds.length;
+        dropIndex += dndHelper.getIds(dropItem).length;
       }
 
       newData.splice(dropIndex, 0, dragItem);
