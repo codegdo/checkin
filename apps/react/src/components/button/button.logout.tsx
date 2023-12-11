@@ -7,6 +7,7 @@ export function ButtonLogout() {
 
   useEffect(() => {
     if (isSuccess || isError) {
+      sessionStorage.clear();
       logoutSuccess();
     }
   }, [isError, isSuccess]);
