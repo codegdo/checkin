@@ -28,7 +28,7 @@ function DropArea({ context, children, ...item }: Props) {
       const found = context.state.currentData.find(item => item.id == id);
       const foundItem = dndHelper.findItemById(item, id, (item) => (item.dataType === 'area' || item.dataType === 'section' || item.dataType === 'block'))
 
-      console.log(foundItem);
+      console.log('found', foundItem);
 
       if (found) {
         if (context.state.selectedItem?.id == found.id) {

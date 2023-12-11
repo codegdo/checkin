@@ -264,20 +264,16 @@ class DragDropHelper {
 
   findItemById(
     item: Field, 
-    targetId: string | number | null, 
+    fieldId: string | number | null, 
     condition: (item: Field) => boolean,
   ): Field | null {
-    function findRecursive(innerItem: Field | null): Field | null {
-      if (!innerItem) {
-        return null;
+    function findRecursive(field: Field | null): Field | null {
+      if (!field || field.id?.toString() === fieldId?.toString()) {
+        return field;
       }
   
-      if (innerItem.id === targetId) {
-        return innerItem;
-      }
-  
-      if (innerItem.data && condition(innerItem)) {
-        for (const child of innerItem.data) {
+      if (field.data && condition(field)) {
+        for (const child of field.data) {
           const found = findRecursive(child);
           if (found) {
             return found;
