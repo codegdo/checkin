@@ -18,14 +18,14 @@ export function useOnClick(context: ContextValue, item: Field) {
       case ActionType.CLOSE_EDITING:
         dispatch({ type: name });
         break;
-        case ActionType.REMOVE_ITEM:
-          dispatch({ 
-            type: name,
-            payload: {
-              removeItem: selectedItem
-            }
-          });
-          break;
+      case ActionType.REMOVE_ITEM:
+        dispatch({
+          type: name,
+          payload: {
+            removeItem: selectedItem
+          }
+        });
+        break;
       default:
     }
   }

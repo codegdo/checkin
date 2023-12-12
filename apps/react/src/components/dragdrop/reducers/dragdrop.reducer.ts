@@ -217,7 +217,12 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       return { ...state, isEditing: true };
     }
     case ActionType.CLOSE_EDITING: {
-      return { ...state, isEditing: false };
+      return {
+        ...state,
+        selectedItem: null,
+        isSelecting: false,
+        isEditing: false
+      };
     }
     case ActionType.UNDO_STEP: {
       const { historyIndex, historyData } = state;

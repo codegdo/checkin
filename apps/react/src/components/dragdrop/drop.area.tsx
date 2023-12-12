@@ -25,19 +25,20 @@ function DropArea({ context, children, ...item }: Props) {
 
     if (el) {
       const id = el.getAttribute('data-id');
-      const textbox = target.closest('div[role="textbox"]');
+      const editor = target.closest('div[data-slate-editor]');
 
       //const found = context.state.currentData.find(item => item.id == id);
       const found = dndHelper.findItemById(item, id, (item) => (item.dataType === 'area' || item.dataType === 'section' || item.dataType === 'block'))
 
-      console.log('found', found, context.state.selectedItem, textbox);
+      console.log('found', found, context.state.selectedItem, editor);
 
       if (found) {
-        if (context.state.selectedItem?.id == found.id && !textbox) {
+        if (context.state.selectedItem?.id == found.id && editor) {
+          return;
+        } else if (context.state.selectedItem?.id == found.id) {
           context.dispatch({ type: ActionType.UNSELECT_ITEM, });
           return;
         }
-
         const selectedItem = { ...found };
 
         context.dispatch({

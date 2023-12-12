@@ -3,6 +3,7 @@ import { ContextValue, Field } from "./types";
 import { useDragDrop, useOnClick } from "./hooks";
 import DropMenu from "./drop.menu";
 import DropEditor from "./drop.editor";
+import { Text } from '../text';
 
 interface IProps extends Field {
   context: ContextValue;
@@ -20,8 +21,8 @@ function DropElement({ context, ...item }: IProps) {
 
   return (
     <div className={className} data-id={`${item.id}`} ref={ref}>
-      {isSelecting && <DropMenu onClick={handleClick} />}
-      <label>{`${item.name}`}</label>
+      {(isSelecting && !isEditing) && <DropMenu onClick={handleClick} />}
+      <Text value={item.name} readOnly={!isEditing} />
       {isEditing && <DropEditor onClick={handleClick} />}
     </div>
   )
