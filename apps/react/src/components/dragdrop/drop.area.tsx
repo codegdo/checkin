@@ -25,13 +25,15 @@ function DropArea({ context, children, ...item }: Props) {
 
     if (el) {
       const id = el.getAttribute('data-id');
+      const textbox = target.closest('div[role="textbox"]');
+
       //const found = context.state.currentData.find(item => item.id == id);
       const found = dndHelper.findItemById(item, id, (item) => (item.dataType === 'area' || item.dataType === 'section' || item.dataType === 'block'))
 
-      console.log('found', found);
+      console.log('found', found, context.state.selectedItem, textbox);
 
       if (found) {
-        if (context.state.selectedItem?.id == found.id) {
+        if (context.state.selectedItem?.id == found.id && !textbox) {
           context.dispatch({ type: ActionType.UNSELECT_ITEM, });
           return;
         }

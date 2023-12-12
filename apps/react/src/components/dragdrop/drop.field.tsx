@@ -30,7 +30,7 @@ function DropField({ context, ...item }: IProps) {
       {isSelecting && <DropMenu onClick={handleClick} />}
 
       <Slate editor={editor} initialValue={[{ type: 'paragraph', children: [{ text: item.title }] }]}>
-        <Editable readOnly placeholder="Enter some plain text..." />
+        <Editable placeholder="Enter some plain text..." />
       </Slate>
 
       {isEditing && <DropEditor onClick={handleClick} />}
