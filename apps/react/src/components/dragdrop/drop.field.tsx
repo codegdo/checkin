@@ -20,8 +20,8 @@ function DropField({ context, ...item }: IProps) {
     'is-over': isOver,
   });
 
-  const handleChange = ({key, value}: KeyValue) => {
-    setField(prevField => ({...prevField, [key]: value}));
+  const handleChange = ({ key, value }: KeyValue) => {
+    setField(prevField => ({ ...prevField, [key]: value }));
   }
 
   drag(drop(ref));

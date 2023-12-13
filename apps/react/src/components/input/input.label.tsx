@@ -1,6 +1,6 @@
-import { LabelField } from "./types";
+import { ILabel } from "./types";
 
-interface IProps extends LabelField {}
+interface IProps extends ILabel { }
 
 export function Label({ className, title = '', description = '', styles }: IProps) {
   return <>

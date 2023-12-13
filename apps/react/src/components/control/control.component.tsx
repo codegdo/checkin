@@ -1,9 +1,9 @@
-import { IInput } from './types';
+import { IControl } from './types';
 import { InputText } from './input.text';
 
-interface IProps extends IInput { }
+interface IProps extends IControl { }
 
-export function Input({ ...props }: IProps) {
+export function Control(props: IProps) {
 
   switch (props.type) {
     case 'text':

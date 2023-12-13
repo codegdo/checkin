@@ -1,11 +1,11 @@
 import React from 'react';
 import { ActionType } from './reducers';
 
-interface IProps {
+export interface IDropMenu {
   onClick?: (name: keyof typeof ActionType) => void;
 }
 
-function DropMenu({ onClick }: IProps) {
+function DropMenu({ onClick }: IDropMenu) {
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();

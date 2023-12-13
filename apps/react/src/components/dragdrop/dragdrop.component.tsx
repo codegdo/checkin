@@ -13,6 +13,7 @@ import DropRender from "./drop.render";
 import DragDropToolbar from "./dragdrop.toolbar";
 import DragPreview from "./drag.preview";
 import DragRender, { DraggableElementType } from "./drag.render";
+import { DragDropEditor } from "./dragdrop.editor";
 
 interface Option {
   trackingId?: number | string;
@@ -44,6 +45,7 @@ export function DragDrop({ data = [], dragData = [], dragElements = [], option =
         <DropRender />
         <DragRender dragData={dragData} dragElements={dragElements} />
         <DragPreview />
+        <DragDropEditor />
       </DragDropProvider>
     </DndProvider>
   );

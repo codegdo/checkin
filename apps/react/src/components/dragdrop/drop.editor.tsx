@@ -7,13 +7,13 @@ export interface KeyValue {
   value: any;
 }
 
-interface IProps {
+export interface IDropEditor {
   field: Field;
   onClick?: (name: keyof typeof ActionType) => void;
   onChange?: (keyValue: KeyValue) => void;
 }
 
-function DropEditor({ field, onClick, onChange }: IProps) {
+function DropEditor({ field, onClick, onChange }: IDropEditor) {
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -31,13 +31,15 @@ function DropEditor({ field, onClick, onChange }: IProps) {
     onChange?.(keyValue);
   };
 
+  console.log('rerender');
+
   return (
     <div data-field-editor>
       <div onClick={handleClick}>
         <button type="button" name={ActionType.CLOSE_EDITING}>Close</button>
       </div>
       <div>
-        <input value={field?.title || ''} onChange={(event) => handleChange({key: 'title', value: event.target.value})} />
+        <input value={field?.title || ''} onChange={(event) => handleChange({ key: 'title', value: event.target.value })} />
       </div>
     </div>
   )

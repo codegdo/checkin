@@ -1,18 +1,18 @@
 import { ChangeEvent } from 'react';
-import { InputField } from './types';
+import { IInput } from './types';
 
-interface IProps extends InputField {
+interface IProps extends IInput {
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function InputText({
   type,
   name,
-  hint,
+  hint = '',
   value = '', // Default value if value is undefined/null
   onChange,
 }: IProps) {
-    
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange?.(event);
   };
