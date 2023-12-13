@@ -24,6 +24,10 @@
   position: relative;
 }
 
+.drop-item .input {
+  pointer-events: none !important;
+}
+
 .is-disabled {
   opacity: 0.5;
 }

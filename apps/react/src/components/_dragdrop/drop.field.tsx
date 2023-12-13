@@ -4,6 +4,7 @@ import DropMenu from './drop.menu';
 import DropEditor from './drop.editor';
 import { DndField, DndContextValue } from './types';
 import { useDragDrop, useDragDropSelect } from './hooks';
+import { Label } from '../input';
 
 type DropFieldProps = DndField & {
   ctx: DndContextValue;
@@ -24,6 +25,7 @@ function DropField({ ctx, ...item }: DropFieldProps) {
     <div className={classNames} data-id={`${item.id}`} ref={ref}>
       {isSelect && <DropMenu onCallback={onClick} />}
       <label>{`${item.name} ${item.id}`}</label>
+      <Label title={item.title} description={item.description} />
       {isEdit && <DropEditor onCallback={onClick} />}
     </div>
   )

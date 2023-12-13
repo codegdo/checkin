@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { classNames } from "@/utils";
+import { Input, Label } from "../input";
 import { ContextValue, Field } from "./types";
 import { useDragDrop, useOnClick } from "./hooks";
 import DropMenu from "./drop.menu";
-import DropEditor from "./drop.editor";
+import DropEditor, { KeyValue } from "./drop.editor";
 
 interface IProps extends Field {
   context: ContextValue;
@@ -11,11 +13,16 @@ interface IProps extends Field {
 function DropField({ context, ...item }: IProps) {
   const { ref, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
   const { isSelecting, isEditing, handleClick } = useOnClick(context, item);
+  const [field, setField] = useState(item);
 
   const className = classNames('drop-item', {
     'is-dragging': isDragging,
     'is-over': isOver,
   });
+
+  const handleChange = ({key, value}: KeyValue) => {
+    setField(prevField => ({...prevField, [key]: value}));
+  }
 
   drag(drop(ref));
 
@@ -23,9 +30,10 @@ function DropField({ context, ...item }: IProps) {
     <div data-id={`${item.id}`} ref={ref} className={className}>
       {(isSelecting && !isEditing) && <DropMenu onClick={handleClick} />}
 
-      <label>{`${item.title}`}</label>
+      <Label title={field.title} description={field.description} />
+      <Input name={field.name} type={field.type} />
 
-      {isEditing && <DropEditor onClick={handleClick} />}
+      {isEditing && <DropEditor field={field} onClick={handleClick} onChange={handleChange} />}
     </div>
   )
 }
