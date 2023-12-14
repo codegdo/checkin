@@ -1,26 +1,34 @@
-import { useRef } from 'react';
-import { useDrag, DragSourceMonitor, useDrop, useDragLayer } from 'react-dnd';
+import { useEffect, useRef } from 'react';
+import { useDrag, useDrop, useDragLayer } from 'react-dnd';
 
 interface IProps {
   type: string;
+  offset?: { x?: number, y?: number } | null;
+  init?: boolean;
 }
 
-export const useDraggable = ({ type }: IProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const previewRef = useRef<HTMLDivElement>(null);
+const defaultProp: IProps = {
+  type: 'drag',
+  offset: null,
+  init: true,
+};
+
+export const useDraggable = ({ type, offset, init }: IProps = defaultProp) => {
+
+  const rElement = useRef<HTMLDivElement>(null);
+  const rPreview = useRef<HTMLDivElement>(null);
 
   useDragLayer((monitor) => {
-    const initialSourceClientOffset = monitor.getInitialSourceClientOffset();
-    const differenceFromInitialOffset = monitor.getDifferenceFromInitialOffset();
+    const initialOffset = monitor.getInitialSourceClientOffset();
+    const differentOffset = monitor.getDifferenceFromInitialOffset();
 
-    if (initialSourceClientOffset && differenceFromInitialOffset) {
-      if (previewRef.current) {
-        previewRef.current.style.top = `${Math.round(initialSourceClientOffset.y + differenceFromInitialOffset.y)}px`;
-        previewRef.current.style.left = `${Math.round(initialSourceClientOffset.x + differenceFromInitialOffset.x)}px`;
-      }
+    if (initialOffset && differentOffset && rPreview.current) {
+      const { y, x } = initialOffset;
+      const { y: diffY, x: diffX } = differentOffset;
+
+      rPreview.current.style.top = `${Math.round(y + diffY)}px`;
+      rPreview.current.style.left = `${Math.round(x + diffX)}px`;
     }
-    console.log(initialSourceClientOffset, differenceFromInitialOffset);
-
   });
 
   const [, drag, preview] = useDrag(() => ({
@@ -32,9 +40,25 @@ export const useDraggable = ({ type }: IProps) => {
     accept: type,
   }), [type]);
 
+  useEffect(() => {
+    if (init) {
+      drag(rElement);
+      drop(preview(rPreview));
+
+      if (rPreview.current) {
+        rPreview.current.style.setProperty('position', 'fixed');
+
+        if (offset) {
+          rPreview.current.style.setProperty('top', `${offset.y}px`);
+          rPreview.current.style.setProperty('left', `${offset.x}px`);
+        }
+      }
+    }
+  }, [rElement.current, rPreview.current, offset, init]);
+
   return {
-    ref,
-    previewRef,
+    rElement,
+    rPreview,
     preview,
     drag,
     drop,

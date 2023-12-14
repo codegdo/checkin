@@ -11,7 +11,7 @@ type Props = PropsWithChildren<Field & {
 }>;
 
 function DropArea({ context, children, ...item }: Props) {
-  const { ref, isOver, drop } = useDragDrop({ context, item });
+  const { rElement, isOver, drop } = useDragDrop({ context, item });
   const className = classNames('droppable-area', {
     'is-over': isOver,
     'is-empty': item.data?.length == 0
@@ -32,26 +32,30 @@ function DropArea({ context, children, ...item }: Props) {
       const found = dndHelper.findItemById(item, id, (item) => (item.dataType === 'area' || item.dataType === 'section' || item.dataType === 'block'));
 
       if (found) {
-        if (context.state.selectedItem?.id == found.id && (slateEditor || fieldEditor)) {
+
+        const { selectedItem } = context.state;
+
+        if (selectedItem?.id == found.id && (slateEditor || fieldEditor)) {
           return;
-        } else if (context.state.selectedItem?.id == found.id) {
+        } else if (selectedItem?.id == found.id) {
           context.dispatch({ type: ActionType.UNSELECT_ITEM, });
           return;
         }
-        const selectedItem = { ...found };
+
+        const clientRect = el.getBoundingClientRect();
 
         context.dispatch({
           type: ActionType.SELECT_ITEM,
-          payload: { item: selectedItem }
+          payload: { item: { ...found }, clientRect }
         });
       }
     }
   };
 
-  drop(ref);
+  drop(rElement);
 
   return (
-    <div ref={ref} id={`${item.id}`} className={className} onClick={handleItemClick}>
+    <div ref={rElement} id={`${item.id}`} className={className} onClick={handleItemClick}>
       {children}
     </div>
   )

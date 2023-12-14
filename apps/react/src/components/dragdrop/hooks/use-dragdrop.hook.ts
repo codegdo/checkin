@@ -20,9 +20,9 @@ const defaultCoordinate = {
 };
 
 export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const previewRef = useRef<HTMLDivElement>(null);
-  const coordinateRef = useRef<Coordinate>(defaultCoordinate);
+  const rElement = useRef<HTMLDivElement>(null);
+  const rPreview = useRef<HTMLDivElement>(null);
+  const rCoordinate = useRef<Coordinate>(defaultCoordinate);
 
   const handleDragStart = useCallback(() => {
     console.log('DRAG START');
@@ -32,7 +32,7 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
   const handleDragEnd = useCallback((dragItem: Field, monitor: DragSourceMonitor<Field>) => {
     if (!monitor.didDrop()) return;
 
-    const dragElement = previewRef.current || ref.current;
+    const dragElement = rPreview.current || rElement.current;
 
     const payload = {
       dragItem,
@@ -61,7 +61,7 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
   }, [context]);
 
   const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
-    if (!monitor.isOver({ shallow: true }) || !ref.current) return;
+    if (!monitor.isOver({ shallow: true }) || !rElement.current) return;
 
     if (context.current.dropItem?.id !== item.id) {
       dndHelper.setDropItem(context, item);
@@ -71,7 +71,7 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
     if (dndHelper.setCoordinate(context, monitor)) return;
 
     // Set offset and css, return early if already set and match
-    if (dndHelper.setOffset(previewRef.current || ref.current, context, coordinateRef.current)) return;
+    if (dndHelper.setOffset(rPreview.current || rElement.current, context, rCoordinate.current)) return;
 
     //console.log('DRAG OVER');
   }, [context, item]);
@@ -108,8 +108,8 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
   }, [preview, isDragging]);
 
   return {
-    ref,
-    previewRef,
+    rElement,
+    rPreview,
     isOver,
     isDragging,
     drag,

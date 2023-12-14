@@ -10,17 +10,17 @@ interface IProps extends Field {
 }
 
 function DropElement({ context, ...item }: IProps) {
-  const { ref, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
+  const { rElement, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
   const { isSelecting, isEditing, handleClick } = useOnClick(context, item);
   const className = classNames('drop-item', {
     'is-dragging': isDragging,
     'is-over': isOver,
   });
 
-  drag(drop(ref));
+  drag(drop(rElement));
 
   return (
-    <div className={className} data-id={`${item.id}`} ref={ref}>
+    <div className={className} data-id={`${item.id}`} ref={rElement}>
       {(isSelecting && !isEditing) && <DropMenu onClick={handleClick} />}
       <Text value={item.name} readOnly={!isEditing} />
       {isEditing && <DropEditor onClick={handleClick} />}

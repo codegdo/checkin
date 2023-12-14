@@ -4,14 +4,13 @@ import { classNames } from "@/utils";
 import { ContextValue, Field } from "./types";
 import { useDragDrop, useOnClick } from "./hooks";
 import DropMenu from "./drop.menu";
-import DropEditor from "./drop.editor";
 
 type Props = PropsWithChildren<Field & {
   context: ContextValue;
 }>;
 
 function DropSection({ context, children, ...item }: Props) {
-  const { ref, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
+  const { rElement, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
   const { isSelecting, isEditing, handleClick } = useOnClick(context, item);
   const className = classNames('drop-item', {
     'is-dragging': isDragging,
@@ -19,13 +18,12 @@ function DropSection({ context, children, ...item }: Props) {
     'is-empty': item.data?.length == 0
   });
 
-  drag(drop(ref));
+  drag(drop(rElement));
 
   return (
-    <div ref={ref} data-id={`${item.id}`} className={className}>
-      {isSelecting && <DropMenu onClick={handleClick} />}
+    <div ref={rElement} data-id={`${item.id}`} className={className}>
+      {(isSelecting && !isEditing) && <DropMenu onClick={handleClick} />}
       {children}
-      {isEditing && <DropEditor onClick={handleClick} />}
     </div>
   )
 }

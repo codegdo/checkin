@@ -1,26 +1,23 @@
-import { useEffect } from 'react';
 import { useDraggable } from './hooks';
 import { useWrapperContext } from '@/hooks';
 import DragDropContext from './dragdrop.provider';
+import { Editor } from '../editor';
 
-interface IProps { }
-
-export function DragDropEditor(props: IProps) {
+export function DragDropEditor() {
   const context = useWrapperContext(DragDropContext);
-  const { ref, previewRef, drag, drop, preview } = useDraggable({ type: 'panel' });
-
-  useEffect(() => {
-    if (context.state.isEditing) {
-      drag(ref);
-      drop(preview(previewRef));
+  const { clientRect, isEditing } = context.state;
+  const { rElement, rPreview } = useDraggable({
+    type: 'drag',
+    init: isEditing,
+    offset: {
+      x: clientRect?.right,
+      y: clientRect?.top
     }
-  }, [context.state.isEditing]);
+  });
 
-  return context.state.isEditing ? (
-    <div ref={previewRef} style={{ position: 'fixed' }}>
-      <div ref={ref} className="editor-title">
-        Editor
-      </div>
+  return isEditing ? (
+    <div ref={rPreview} className="editor">
+      <Editor ref={rElement} />
     </div>
   ) : null;
 }

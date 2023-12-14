@@ -229,6 +229,11 @@ class DragDropHelper {
     return 'outside';
   }
 
+  getDisplayOffset(el: Element, size: { width: number; height: number }) {
+    const rectElement = el.getBoundingClientRect();
+    console.log(rectElement, size);
+  }
+
   getParentDisplay(dropElement: HTMLDivElement) {
     const parentNode = dropElement.parentNode as HTMLDivElement;
 

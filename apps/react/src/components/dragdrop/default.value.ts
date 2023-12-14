@@ -4,13 +4,14 @@ export const defaultState = {
   historyData: [],
   historyIndex: -1,
   selectedItem: null,
+  clientRect: null,
   isEditing: false,
   isSelecting: false,
 };
 
 export const defaultRef = {
   dropItem: null,
-  elementRefs: {},
+  elementRef: {},
   coordinate: { x: 0, y: 0 },
   offset: '',
   direction: '',
