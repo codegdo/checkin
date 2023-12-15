@@ -25,9 +25,11 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
   const rCoordinate = useRef<Coordinate>(defaultCoordinate);
 
   const handleDragStart = useCallback(() => {
-    console.log('DRAG START');
+    context.dispatch({
+      type: ActionType.UNSELECT_ITEM
+    });
     return draggable;
-  }, [draggable]);
+  }, [context, draggable]);
 
   const handleDragEnd = useCallback((dragItem: Field, monitor: DragSourceMonitor<Field>) => {
     if (!monitor.didDrop()) return;

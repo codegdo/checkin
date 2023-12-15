@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
 import { useDragLayer } from 'react-dnd';
-
+import { useMemo } from 'react';
 import { dndHelper } from './helpers';
 
 const layerStyles: CSSProperties = {
@@ -11,29 +11,36 @@ const layerStyles: CSSProperties = {
   top: 0,
   width: '100%',
   height: '100%',
-}
-
-//interface IProps { }
+};
 
 function DragPreview() {
-  const { item, itemType, isDragging, initialSourceClientOffset, clientOffset } = useDragLayer((monitor) => ({
-    initialSourceClientOffset: monitor.getInitialSourceClientOffset(),
+  const {
+    item,
+    isDragging,
+    initialOffset,
+    clientOffset,
+  } = useDragLayer((monitor) => ({
+    initialOffset: monitor.getInitialSourceClientOffset(),
     clientOffset: monitor.getClientOffset(),
     item: monitor.getItem(),
-    itemType: monitor.getItemType(),
     isDragging: monitor.isDragging(),
   }));
 
-  if (!isDragging || itemType === 'panel') {
-    return null;
-  }
-
-  const dragStyles = dndHelper.getDragStyles(initialSourceClientOffset, clientOffset);
+  const dragStyles = useMemo(() => {
+    if (!isDragging || !initialOffset || !clientOffset) {
+      return {};
+    }
+    return dndHelper.getDragStyles(initialOffset, clientOffset);
+  }, [isDragging, initialOffset, clientOffset]);
 
   return (
-    <div style={layerStyles}>
-      <div className='drag-preview' style={dragStyles}>{item?.name}</div>
-    </div>
+    isDragging && (
+      <div style={layerStyles}>
+        <div className='drag-preview' style={dragStyles}>
+          {item?.title}
+        </div>
+      </div>
+    )
   );
 }
 
