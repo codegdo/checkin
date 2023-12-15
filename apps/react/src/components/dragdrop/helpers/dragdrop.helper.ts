@@ -229,6 +229,27 @@ class DragDropHelper {
     return 'outside';
   }
 
+  calculateDisplayOffset(clientRect?: DOMRect | null, containerWidth: number = 300, gap: number = 40) {
+    const totalWidth = containerWidth + gap;
+    const clientTop = clientRect?.top || 0;
+    const clientRight = clientRect?.right || 0;
+    const clientLeft = clientRect?.left || 0;
+
+    let rightPosition = Math.round(window.innerWidth - totalWidth);
+    const rightSpace = Math.round(window.innerWidth - clientRight);
+
+    if (rightSpace && rightSpace > totalWidth) {
+      rightPosition = clientRight + gap;
+    } else if(window.innerWidth < totalWidth) {
+      rightPosition = clientLeft;
+    }
+
+    return {
+      x: rightPosition,
+      y: clientTop
+    };
+  }
+
   getDisplayOffset(el: Element, size: { width: number; height: number }) {
     const rectElement = el.getBoundingClientRect();
     console.log(rectElement, size);
