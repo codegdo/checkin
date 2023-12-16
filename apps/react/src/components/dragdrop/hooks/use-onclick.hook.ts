@@ -3,8 +3,9 @@ import { ActionType } from "../reducers";
 import { ContextValue, Field } from "../types";
 
 export function useOnClick(context: ContextValue, item: Field) {
-  const { state, dispatch } = context;
-  const { selectedItem, isSelecting, isEditing } = state || {};
+  const { current, state, dispatch } = context;
+  const { selectedItem } = current;
+  const { isSelecting, isEditing } = state;
 
   const match = selectedItem?.id == item.id;
   const onSelecting = match ? isSelecting ?? false : false;

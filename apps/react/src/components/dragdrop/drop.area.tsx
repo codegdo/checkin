@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect } from "react";
 
 import { classNames } from "@/utils";
 import { ContextValue, Field } from "./types";
@@ -33,24 +33,25 @@ function DropArea({ context, children, ...item }: Props) {
 
       if (found) {
 
-        const { selectedItem } = context.state;
+        const { selectedItem } = context.current;
 
         if (selectedItem?.id == found.id && (slateEditor || fieldEditor)) {
           return;
         } else if (selectedItem?.id == found.id) {
+          context.current.selectedItem = null;
           context.dispatch({ type: ActionType.UNSELECT_ITEM, });
           return;
         }
 
-        context.dispatch({
-          type: ActionType.SELECT_ITEM,
-          payload: { item: { ...found } }
-        });
+        context.current.selectedItem = {...found};
+        context.dispatch({type: ActionType.SELECT_ITEM});
       }
     }
   };
 
-  drop(rElement);
+  useEffect(() => {
+    drop(rElement);
+  }, [rElement.current]);
 
   return (
     <div ref={rElement} id={`${item.id}`} className={className} onClick={handleItemClick}>

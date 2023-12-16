@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { classNames } from "@/utils";
 import { Input, Label } from "../input";
 import { ContextValue, Field } from "./types";
@@ -23,7 +23,9 @@ function DropField({ context, ...item }: IProps) {
     setField(prevField => ({ ...prevField, [key]: value }));
   }
 
-  drag(drop(rElement));
+  useEffect(() => {
+    drag(drop(rElement));
+  }, [rElement.current]);
 
   return (
     <div data-id={`${item.id}`} ref={rElement} className={className}>

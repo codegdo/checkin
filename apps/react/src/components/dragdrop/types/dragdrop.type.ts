@@ -14,13 +14,13 @@ export interface State {
   currentData: Field[];
   historyData: Field[][];
   historyIndex: number;
-  selectedItem?: Partial<Field> | null;
   isEditing?: boolean;
   isSelecting?: boolean;
 }
 
 export interface CurrentRef {
   dropItem: Partial<Field> | null;
+  selectedItem: Field | null;
   elementRef: Record<string, HTMLDivElement | null>;
   coordinate: {
     x: number;

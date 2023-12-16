@@ -7,7 +7,7 @@ import { dndHelper } from './helpers';
 export function DragDropEditor() {
   const context = useWrapperContext(DragDropContext);
   const { isEditing } = context.state;
-  const selectedElement = context.current.elementRef[`${context.state.selectedItem?.id}`];
+  const selectedElement = context.current.elementRef[`${context.current.selectedItem?.id}`];
   const offset = dndHelper.calculateDisplayOffset(selectedElement);
 
   const { rElement, rPreview } = useDraggable({

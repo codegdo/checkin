@@ -3,6 +3,7 @@ import { ContextValue, Field } from "./types";
 import { useDragDrop, useOnClick } from "./hooks";
 import DropMenu from "./drop.menu";
 import { Text } from '../text';
+import { useEffect } from "react";
 
 interface IProps extends Field {
   context: ContextValue;
@@ -16,7 +17,9 @@ function DropElement({ context, ...item }: IProps) {
     'is-over': isOver,
   });
 
-  drag(drop(rElement));
+  useEffect(() => {
+    drag(drop(rElement));
+  }, [rElement.current]);
 
   return (
     <div className={className} data-id={`${item.id}`} ref={rElement}>

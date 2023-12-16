@@ -13,6 +13,8 @@ export function groupDataForRender(data: Item[]) {
     return mapToParent(list, item, (item: Item) => (item?.dataType === 'area' || item?.dataType === 'block' || item?.dataType === 'section' || item?.dataType === 'list'));
   });
 
+  console.log('groupDataForRender');
+
   return [{
     id: 'root-area',
     name: 'area',

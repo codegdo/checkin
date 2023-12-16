@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect } from "react";
 
 import { classNames } from "@/utils";
 import { ContextValue, Field } from "./types";
@@ -18,7 +18,9 @@ function DropBlock({ context, children, ...item }: Props) {
     'is-empty': item.data?.length == 0
   });
 
-  drag(drop(rElement));
+  useEffect(() => {
+    drag(drop(rElement));
+  }, [rElement.current]);
 
   return (
     <div ref={rElement} data-id={`${item.id}`} className={className}>

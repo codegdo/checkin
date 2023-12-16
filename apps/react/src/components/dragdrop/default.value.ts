@@ -3,13 +3,13 @@ export const defaultState = {
   currentData: [],
   historyData: [],
   historyIndex: -1,
-  selectedItem: null,
   isEditing: false,
   isSelecting: false,
 };
 
 export const defaultRef = {
   dropItem: null,
+  selectedItem: null,
   elementRef: {},
   coordinate: { x: 0, y: 0 },
   offset: '',
