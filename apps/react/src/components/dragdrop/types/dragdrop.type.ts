@@ -21,7 +21,9 @@ export interface State {
 export interface CurrentRef {
   dropItem: Partial<Field> | null;
   selectedItem: Field | null;
+  selectedRef: Element | null;
   elementRef: Record<string, HTMLDivElement | null>;
+  eventRef: {onChange?: (keyValue: any) => void, onClick?: (keyValue: any) => void} | null;
   coordinate: {
     x: number;
     y: number;

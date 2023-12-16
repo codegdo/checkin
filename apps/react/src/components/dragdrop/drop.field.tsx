@@ -19,13 +19,19 @@ function DropField({ context, ...item }: IProps) {
     'is-over': isOver,
   });
 
-  const handleChange = ({ key, value }: KeyValue) => {
+  const onChange = ({ key, value }: any) => {
     setField(prevField => ({ ...prevField, [key]: value }));
   }
 
   useEffect(() => {
     drag(drop(rElement));
   }, [rElement.current]);
+
+  useEffect(() => {
+    if(context.state.isSelecting && item.id == context.current.selectedItem?.id) {
+      context.current.eventRef = {onChange};
+    }
+  }, [context.state.isSelecting]);
 
   return (
     <div data-id={`${item.id}`} ref={rElement} className={className}>

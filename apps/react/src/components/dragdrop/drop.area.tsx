@@ -39,11 +39,14 @@ function DropArea({ context, children, ...item }: Props) {
           return;
         } else if (selectedItem?.id == found.id) {
           context.current.selectedItem = null;
+          context.current.selectedRef = null;
+          context.current.eventRef = null;
           context.dispatch({ type: ActionType.UNSELECT_ITEM, });
           return;
         }
-
+  
         context.current.selectedItem = {...found};
+        context.current.selectedRef = el;
         context.dispatch({type: ActionType.SELECT_ITEM});
       }
     }
