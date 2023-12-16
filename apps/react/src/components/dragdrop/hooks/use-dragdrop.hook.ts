@@ -25,9 +25,7 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
   const rCoordinate = useRef<Coordinate>(defaultCoordinate);
 
   const handleDragStart = useCallback(() => {
-    context.dispatch({
-      type: ActionType.UNSELECT_ITEM
-    });
+    context.dispatch({ type: ActionType.UNSELECT_ITEM });
     return draggable;
   }, [context, draggable]);
 
@@ -43,23 +41,17 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
 
     if (!dragElement) {
       const canAddItem = dndHelper.canDragDrop(dragItem, context);
-      if (!canAddItem) return;
 
-      context.dispatch({
-        type: ActionType.ADD_ITEM,
-        payload,
-      });
-
+      if (canAddItem) {
+        context.dispatch({ type: ActionType.ADD_ITEM, payload });
+      }
       return;
     }
 
     const canDragDrop = dndHelper.canDragDrop(dragItem, context, dragElement);
-    if (!canDragDrop) return;
-
-    context.dispatch({
-      type: ActionType.MOVE_ITEM,
-      payload,
-    });
+    if (canDragDrop) {
+      context.dispatch({ type: ActionType.MOVE_ITEM, payload });
+    }
   }, [context]);
 
   const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
@@ -108,6 +100,18 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
     preview(getEmptyImage(), { captureDraggingState: false });
     return () => { preview(null) };
   }, [preview, isDragging]);
+
+  useEffect(() => {
+    const { position, id } = item;
+    //const elementExists = context.current.elementRef[`${id}`];
+    const elementToAssign = rPreview.current || rElement.current;
+
+    const shouldAssignElementRef = position !== null && id && elementToAssign;
+
+    if (shouldAssignElementRef) {
+      context.current.elementRef[`${id}`] = elementToAssign;
+    }
+  }, [item, context, rPreview, rElement]);
 
   return {
     rElement,

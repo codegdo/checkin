@@ -15,7 +15,6 @@ export interface State {
   historyData: Field[][];
   historyIndex: number;
   selectedItem?: Partial<Field> | null;
-  clientRect?: DOMRect | null;
   isEditing?: boolean;
   isSelecting?: boolean;
 }

@@ -1,4 +1,4 @@
-import { useReducer, useRef } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { DndProvider } from "react-dnd";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -29,7 +29,7 @@ interface IProps {
 
 export function DragDrop({ data = [], dragData = [], dragElements = [], option = {} }: IProps) {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
-  const { current: currentRef } = useRef(defaultRef);
+  const ref = useRef(defaultRef);
   const [state, dispatch] = useReducer(dragdropReducer, { ...defaultState, currentData: data, dataSource: structuredClone(data) });
 
   useHistory({
@@ -38,9 +38,16 @@ export function DragDrop({ data = [], dragData = [], dragElements = [], option =
     dispatch
   });
 
+  useEffect(() => {
+    // Resetting the elementRef when component unmounts
+    return () => {
+      defaultRef.elementRef = {};
+    };
+  }, []);
+
   return (
     <DndProvider backend={backend}>
-      <DragDropProvider value={{ current: currentRef, state, dispatch }}>
+      <DragDropProvider value={{ current: ref.current, state, dispatch }}>
         <DragDropToolbar />
         <DropRender />
         <DragRender dragData={dragData} dragElements={dragElements} />

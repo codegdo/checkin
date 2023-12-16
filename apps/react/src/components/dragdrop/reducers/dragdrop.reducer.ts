@@ -37,7 +37,6 @@ interface LoadHistory {
 
 interface SelectItem {
   item: Field;
-  clientRect?: DOMRect;
 }
 
 type Payload = LoadHistory | MoveItem | RemoveItem | SelectItem;
@@ -197,12 +196,11 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       return { ...state, currentData: remainingItems, historyData: newDataHistory, historyIndex };
     }
     case ActionType.SELECT_ITEM: {
-      const { item, clientRect } = payload as SelectItem;
+      const { item } = payload as SelectItem;
       const selectedItem = { ...item };
       return {
         ...state,
         selectedItem,
-        clientRect,
         isSelecting: true,
         isEditing: false
       };

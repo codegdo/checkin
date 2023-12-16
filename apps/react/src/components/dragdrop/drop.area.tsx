@@ -42,11 +42,9 @@ function DropArea({ context, children, ...item }: Props) {
           return;
         }
 
-        const clientRect = el.getBoundingClientRect();
-
         context.dispatch({
           type: ActionType.SELECT_ITEM,
-          payload: { item: { ...found }, clientRect }
+          payload: { item: { ...found } }
         });
       }
     }

@@ -229,7 +229,11 @@ class DragDropHelper {
     return 'outside';
   }
 
-  calculateDisplayOffset(clientRect?: DOMRect | null, containerWidth: number = 300, gap: number = 40) {
+  calculateDisplayOffset(selectedElement?: Element | null, containerWidth: number = 300, gap: number = 40) {
+    if (!selectedElement) {
+      return { x: 0, y: 0 };
+    }
+    const clientRect = selectedElement.getBoundingClientRect();
     const totalWidth = containerWidth + gap;
     const clientTop = clientRect?.top || 0;
     const clientRight = clientRect?.right || 0;
@@ -240,7 +244,7 @@ class DragDropHelper {
 
     if (rightSpace && rightSpace > totalWidth) {
       rightPosition = clientRight + gap;
-    } else if(window.innerWidth < totalWidth) {
+    } else if (window.innerWidth < totalWidth) {
       rightPosition = clientLeft;
     }
 
@@ -369,7 +373,7 @@ class DragDropHelper {
           type,
           dataType: type === 'section' || type === 'block' ? type : 'element',
           data: type === 'section' || type === 'block' ? [] : null,
-          position: 0,
+          position: null,
           parentId: null,
         };
       } else {

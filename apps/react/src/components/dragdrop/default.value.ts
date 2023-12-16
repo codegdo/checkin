@@ -4,7 +4,6 @@ export const defaultState = {
   historyData: [],
   historyIndex: -1,
   selectedItem: null,
-  clientRect: null,
   isEditing: false,
   isSelecting: false,
 };

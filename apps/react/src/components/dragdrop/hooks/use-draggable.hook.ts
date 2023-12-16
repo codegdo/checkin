@@ -36,17 +36,17 @@ export const useDraggable = ({ type, offset, init }: IProps = defaultProp) => {
       const { y: diffY, x: diffX } = differenceFromInitialOffset;
 
       if (rPreview.current) {
-        rPreview.current.style.top = `${Math.round(y + diffY)}px`;
-        rPreview.current.style.left = `${Math.round(x + diffX)}px`;
+        rPreview.current.style.setProperty('top', `${Math.round(y + diffY)}px`);
+        rPreview.current.style.setProperty('left', `${Math.round(x + diffX)}px`);
       }
     }
   };
 
   const handleDifferentTypeDrag = () => {
     if (rPreview.current && rPreview.current.style.visibility === 'visible') {
-      rPreview.current.style.visibility = 'hidden';
+      rPreview.current.style.setProperty('visibility', 'hidden');
     } else if (rPreview.current && rPreview.current.style.visibility === 'hidden') {
-      rPreview.current.style.visibility = 'visible';
+      rPreview.current.style.setProperty('visibility', 'visible');
     }
   };
 

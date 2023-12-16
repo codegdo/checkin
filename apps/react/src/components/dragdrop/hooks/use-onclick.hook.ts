@@ -19,6 +19,8 @@ export function useOnClick(context: ContextValue, item: Field) {
         dispatch({ type: name });
         break;
       case ActionType.REMOVE_ITEM:
+        delete context.current.elementRef[`${item.id}`];
+
         dispatch({
           type: name,
           payload: {
