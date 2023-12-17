@@ -1,13 +1,13 @@
 import { forwardRef } from "react"
 
 interface IProps {
-  
+  title: string;
 }
 
-const EditorHeader = forwardRef<HTMLDivElement, IProps>((props, ref) => {
+const EditorHeader = forwardRef<HTMLDivElement, IProps>(({title}, ref) => {
 
   return <div ref={ref} className="editor-header">
-    <div>Header</div>
+    <div>{title}</div>
   </div>
 });
 

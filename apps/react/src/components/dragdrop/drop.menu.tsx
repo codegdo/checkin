@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActionType } from './reducers';
+import { ActionType } from './dragdrop.reducer';
 
 export interface IDropMenu {
   onClick?: (name: keyof typeof ActionType) => void;

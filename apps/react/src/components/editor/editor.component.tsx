@@ -1,8 +1,10 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useReducer, useState } from "react";
 import { EditorProvider } from "./editor.provider";
 import EditorHeader from "./editor.header";
 import EditorTab from "./editor.tab";
 import EditorContent from "./editor.content";
+import { editorReducer } from "./editor.reducer";
+import { defaultState } from "./default.value";
 
 export interface KeyValue {
   key: string; 
@@ -10,22 +12,20 @@ export interface KeyValue {
 } 
  
 interface IProps {
-  title: string;
+  title?: string;
   data?: Record<string, any>;
   onChange?: (keyvalue: KeyValue) => void;
 }
 
-export const Editor = forwardRef<HTMLDivElement, IProps>(({data = {}, onChange}, ref) => {
+export const Editor = forwardRef<HTMLDivElement, IProps>(({title = 'Editor', data = {}, onChange}, ref) => {
   const [tab, setTab] = useState('');
-  const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
-    onChange && onChange({key: '', value: event.target.value});
-  }
+  const [state, dispatch] = useReducer(editorReducer, {...defaultState, dataSource: data});
+
   return <div className="editor">
-    <EditorProvider value={{}}>
-      <EditorHeader ref={ref} />
+    <EditorProvider value={{state, dispatch}}>
+      <EditorHeader ref={ref} title={title} />
       <EditorTab setTab={setTab} />
       <EditorContent tab={tab} />
-      <input onChange={handleChange} />
     </EditorProvider>
   </div>
 });

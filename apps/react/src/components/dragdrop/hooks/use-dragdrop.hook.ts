@@ -3,7 +3,7 @@ import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dn
 
 import { Field, DataType, ContextValue } from "../types";
 import { Coordinate, dndHelper } from "../helpers";
-import { ActionType } from "../reducers";
+import { ActionType } from "../dragdrop.reducer";
 import { getEmptyImage } from "react-dnd-html5-backend";
 
 interface IProps {

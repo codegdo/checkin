@@ -1,6 +1,6 @@
 import React from 'react';
-import { ActionType } from './reducers';
 import { Field } from './types';
+import { ActionType } from './dragdrop.reducer';
 
 export interface KeyValue {
   key: string;

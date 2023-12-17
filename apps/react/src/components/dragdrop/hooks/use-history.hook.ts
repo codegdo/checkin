@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Action, ActionType } from '../reducers';
+import { Action, ActionType } from '../dragdrop.reducer';
 import { setSessionStorage } from '@/utils';
 
 interface HistoryProps {

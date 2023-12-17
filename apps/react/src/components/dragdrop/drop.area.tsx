@@ -3,8 +3,6 @@ import { PropsWithChildren, useEffect } from "react";
 import { classNames } from "@/utils";
 import { ContextValue, Field } from "./types";
 import { useDragDrop } from "./hooks";
-import { ActionType } from "./reducers";
-import { dndHelper } from "./helpers";
 
 type Props = PropsWithChildren<Field & {
   context: ContextValue;

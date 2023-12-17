@@ -1,6 +1,6 @@
 import { setSessionStorage } from "@/utils";
-import { dndHelper } from "../helpers";
-import { CurrentRef, Field, State } from "../types";
+import { dndHelper } from "./helpers";
+import { CurrentRef, Field, State } from "./types";
 
 export enum ActionType {
   LOAD_HISTORY = 'LOAD_HISTORY',

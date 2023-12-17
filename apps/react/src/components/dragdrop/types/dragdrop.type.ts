@@ -1,7 +1,7 @@
 import { Dispatch } from "react";
 
 import { DataType as FieldDataType, Field as FieldType } from "@/components/types";
-import { Action } from "../reducers";
+import { Action } from "../dragdrop.reducer";
 
 export { FieldDataType as DataType };
 

@@ -4,7 +4,6 @@ import { TouchBackend } from "react-dnd-touch-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 import { useHistory } from "./hooks";
-import { dragdropReducer } from "./reducers";
 import { Field } from "./types";
 
 import { DragDropProvider } from "./dragdrop.provider";
@@ -14,6 +13,7 @@ import DragDropToolbar from "./dragdrop.toolbar";
 import DragPreview from "./drag.preview";
 import DragRender, { DraggableElementType } from "./drag.render";
 import { DragDropEditor } from "./dragdrop.editor";
+import { dragdropReducer } from "./dragdrop.reducer";
 
 interface Option {
   trackingId?: number | string;
@@ -29,7 +29,7 @@ interface IProps {
 
 export function DragDrop({ data = [], dragData = [], dragElements = [], option = {} }: IProps) {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
-  const ref = useRef({...defaultRef});
+  const ref = useRef(defaultRef);
   const [state, dispatch] = useReducer(dragdropReducer, { ...defaultState, currentData: data, dataSource: structuredClone(data) });
 
   useHistory({
@@ -39,7 +39,7 @@ export function DragDrop({ data = [], dragData = [], dragElements = [], option =
   });
 
   useEffect(() => {
-    // Resetting the elementRef when component unmounts
+    // Resetting the ref when component unmounts
     return () => {
       ref.current = {...defaultRef, elementRef: {}};
     };
