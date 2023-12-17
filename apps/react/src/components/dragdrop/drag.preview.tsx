@@ -34,13 +34,13 @@ function DragPreview() {
   }, [isDragging, initialOffset, clientOffset]);
 
   return (
-    isDragging && (
+    isDragging ? (
       <div style={layerStyles}>
         <div className='drag-preview' style={dragStyles}>
           {item?.title}
         </div>
       </div>
-    )
+    ) : null
   );
 }
 

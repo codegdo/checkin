@@ -9,10 +9,8 @@ export const defaultState = {
 
 export const defaultRef = {
   dropItem: null,
-  selectedItem: null,
-  selectedRef: null,
   elementRef: {},
-  eventRef: null,
+  selectedItem: null,
   coordinate: { x: 0, y: 0 },
   offset: '',
   direction: '',

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { classNames } from "@/utils";
 import { Input, Label } from "../input";
 import { ContextValue, Field } from "./types";
-import { useDragDrop, useOnClick } from "./hooks";
+import { useDragDrop, useItem } from "./hooks";
 import DropMenu from "./drop.menu";
 
 interface IProps extends Field {
@@ -11,34 +11,35 @@ interface IProps extends Field {
 
 function DropField({ context, ...item }: IProps) {
   const { rElement, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
-  const { isSelecting, isEditing, handleClick } = useOnClick(context, item);
-  const [field, setField] = useState(item);
+  const { currentItem, isSelecting, isEditing, handleItemClick, handleMenuClick } = useItem(context, item);
 
   const className = classNames('drop-item', {
     'is-dragging': isDragging,
     'is-over': isOver,
   });
 
-  const onChange = ({ key, value }: any) => {
-    setField(prevField => ({ ...prevField, [key]: value }));
-  }
+  // const onChange = ({ key, value }: any) => {
+  //   setField(prevField => ({ ...prevField, [key]: value }));
+  // }
 
   useEffect(() => {
     drag(drop(rElement));
   }, [rElement.current]);
 
-  useEffect(() => {
-    if(context.state.isSelecting && item.id == context.current.selectedItem?.id) {
-      context.current.eventRef = {onChange};
-    }
-  }, [context.state.isSelecting]);
+  // useEffect(() => {
+  //   const selectedRef = context.current.selectedRef || {};
+
+  //   if(context.state.isSelecting && item.id == selectedRef.item?.id) {
+  //     context.current.selectedRef = {...selectedRef, event: {onChange}};
+  //   }
+  // }, [item, context.state.isSelecting]);
 
   return (
-    <div data-id={`${item.id}`} ref={rElement} className={className}>
-      {(isSelecting && !isEditing) && <DropMenu onClick={handleClick} />}
+    <div ref={rElement} className={className} data-id={`${item.id}`} onClick={handleItemClick}>
+      {(isSelecting && !isEditing) && <DropMenu onClick={handleMenuClick} />}
 
-      <Label title={field.title} description={field.description} />
-      <Input name={field.name} type={field.type} />
+      <Label title={currentItem.title} description={currentItem.description} />
+      <Input name={currentItem.name} type={currentItem.type} />
     </div>
   )
 }

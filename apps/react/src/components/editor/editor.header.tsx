@@ -1,6 +1,8 @@
 import { forwardRef } from "react"
 
-interface IProps {}
+interface IProps {
+  
+}
 
 const EditorHeader = forwardRef<HTMLDivElement, IProps>((props, ref) => {
 

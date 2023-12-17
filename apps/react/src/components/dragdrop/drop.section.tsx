@@ -2,7 +2,7 @@ import { PropsWithChildren, useEffect } from "react";
 
 import { classNames } from "@/utils";
 import { ContextValue, Field } from "./types";
-import { useDragDrop, useOnClick } from "./hooks";
+import { useDragDrop, useItem } from "./hooks";
 import DropMenu from "./drop.menu";
 
 type Props = PropsWithChildren<Field & {
@@ -11,7 +11,7 @@ type Props = PropsWithChildren<Field & {
 
 function DropSection({ context, children, ...item }: Props) {
   const { rElement, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
-  const { isSelecting, isEditing, handleClick } = useOnClick(context, item);
+  const { isSelecting, isEditing, handleItemClick, handleMenuClick } = useItem(context, item);
   const className = classNames('drop-item', {
     'is-dragging': isDragging,
     'is-over': isOver,
@@ -23,8 +23,8 @@ function DropSection({ context, children, ...item }: Props) {
   }, [rElement.current]);
 
   return (
-    <div ref={rElement} data-id={`${item.id}`} className={className}>
-      {(isSelecting && !isEditing) && <DropMenu onClick={handleClick} />}
+    <div ref={rElement} data-id={`${item.id}`} className={className} onClick={handleItemClick}>
+      {(isSelecting && !isEditing) && <DropMenu onClick={handleMenuClick} />}
       {children}
     </div>
   )

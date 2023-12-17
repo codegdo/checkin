@@ -18,16 +18,19 @@ export interface State {
   isSelecting?: boolean;
 }
 
+interface CallbackEvent {
+  onChange?: (keyValue: any) => void;
+  onClick?: (keyValue: any) => void;
+}
+
 export interface CurrentRef {
   dropItem: Partial<Field> | null;
-  selectedItem: Field | null;
-  selectedRef: Element | null;
+  selectedItem: { item?: Field, target?: Element, callback?: CallbackEvent } | null;
   elementRef: Record<string, HTMLDivElement | null>;
-  eventRef: {onChange?: (keyValue: any) => void, onClick?: (keyValue: any) => void} | null;
   coordinate: {
     x: number;
     y: number;
-  }
+  };
   offset: string;
   direction: string;
   canDrop: boolean;

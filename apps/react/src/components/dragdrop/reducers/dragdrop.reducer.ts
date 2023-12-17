@@ -201,7 +201,6 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
     case ActionType.UNSELECT_ITEM: {
       return {
         ...state,
-        clientRect: null,
         isSelecting: false,
         isEditing: false
       };

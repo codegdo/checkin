@@ -1,6 +1,6 @@
 import { classNames } from "@/utils";
 import { ContextValue, Field } from "./types";
-import { useDragDrop, useOnClick } from "./hooks";
+import { useDragDrop, useItem } from "./hooks";
 import DropMenu from "./drop.menu";
 import { Text } from '../text';
 import { useEffect } from "react";
@@ -11,7 +11,7 @@ interface IProps extends Field {
 
 function DropElement({ context, ...item }: IProps) {
   const { rElement, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
-  const { isSelecting, isEditing, handleClick } = useOnClick(context, item);
+  const {currentItem, isSelecting, isEditing, handleItemClick, handleMenuClick } = useItem(context, item);
   const className = classNames('drop-item', {
     'is-dragging': isDragging,
     'is-over': isOver,
@@ -22,9 +22,9 @@ function DropElement({ context, ...item }: IProps) {
   }, [rElement.current]);
 
   return (
-    <div className={className} data-id={`${item.id}`} ref={rElement}>
-      {(isSelecting && !isEditing) && <DropMenu onClick={handleClick} />}
-      <Text value={item.name} readOnly={!isEditing} />
+    <div ref={rElement} className={className} data-id={`${item.id}`} onClick={handleItemClick}>
+      {(isSelecting && !isEditing) && <DropMenu onClick={handleMenuClick} />}
+      <Text value={currentItem.name} readOnly={!isEditing} />
     </div>
   )
 }
