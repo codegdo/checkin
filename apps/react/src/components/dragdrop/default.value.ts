@@ -27,21 +27,25 @@ export interface CurrentRef {
   canDrop: boolean;
 }
 
-export const defaultState: State = {
-  dataSource: [],
-  currentData: [],
-  historyData: [],
-  historyIndex: -1,
-  isEditing: false,
-  isSelecting: false,
-};
+export const getInitialState = (data: Field[] = []): State => {
+  return {
+    dataSource: structuredClone(data),
+    currentData: data,
+    historyData: [],
+    historyIndex: -1,
+    isEditing: false,
+    isSelecting: false,
+  }
+}
 
-export const currentRef: CurrentRef = {
-  dropItem: null,
-  elementRef: {},
-  selectedItem: null,
-  coordinate: { x: 0, y: 0 },
-  offset: '',
-  direction: '',
-  canDrop: true,
-};
+export const getCurrentRef = (): CurrentRef => {
+  return {
+    dropItem: null,
+    elementRef: {},
+    selectedItem: null,
+    coordinate: { x: 0, y: 0 },
+    offset: '',
+    direction: '',
+    canDrop: true,
+  }
+}

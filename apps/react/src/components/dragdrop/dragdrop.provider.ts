@@ -1,7 +1,6 @@
 import React, { Dispatch } from "react";
 
-
-import { CurrentRef, State, currentRef, defaultState } from "./default.value";
+import { CurrentRef, State, getCurrentRef, getInitialState } from "./default.value";
 import { Action } from "./dragdrop.reducer";
 
 interface ContextValue {
@@ -10,10 +9,13 @@ interface ContextValue {
   dispatch: Dispatch<Action>;
 }
 
+const currentRef = getCurrentRef();
+const initialState = getInitialState();
+
 const DragDropContext = React.createContext<ContextValue>({
-  state: defaultState,
+  current: currentRef,
+  state: initialState,
   dispatch: () => console.log('dispatch'),
-  current: currentRef
 });
 
 export const DragDropProvider = DragDropContext.Provider;
