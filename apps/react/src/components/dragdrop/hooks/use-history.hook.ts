@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
-import { Action, ActionType } from '../dragdrop.reducer';
+import { Action } from '../dragdrop.reducer';
 import { setSessionStorage } from '@/utils';
+import { ActionType } from '../types';
 
 interface HistoryProps {
   trackingId?: number | string;

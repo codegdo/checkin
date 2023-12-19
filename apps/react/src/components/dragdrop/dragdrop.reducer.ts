@@ -1,29 +1,11 @@
 import { setSessionStorage } from "@/utils";
 import { dndHelper } from "./helpers";
-import { CurrentRef, Field, State } from "./types";
-
-export enum ActionType {
-  LOAD_HISTORY = 'LOAD_HISTORY',
-
-  SELECT_ITEM = 'SELECT_ITEM',
-  UNSELECT_ITEM = 'UNSELECT_ITEM',
-  OPEN_EDITING = 'OPEN_EDITING',
-  CLOSE_EDITING = 'CLOSE_EDITING',
-
-  ADD_ITEM = 'ADD_ITEM',
-  MOVE_ITEM = 'MOVE_ITEM',
-  CLONE_ITEM = 'CLONE_ITEM',
-  REMOVE_ITEM = 'REMOVE_ITEM',
-  UPDATE_ITEM = 'UPDATE_ITEM',
-  RESET_ITEM = 'RESET_ITEM',
-
-  UNDO_STEP = 'UNDO_STEP',
-  REDO_STEP = 'REDO_STEP',
-}
+import { ActionType, Field, State } from "./types";
 
 interface MoveItem {
   dragItem: Field;
-  current: CurrentRef
+  dropItem: Partial<Field> | null;
+  offset: string;
 }
 
 interface RemoveItem {
@@ -57,7 +39,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       return { ...state, currentData: loadHistoryData, historyIndex, historyData };
     }
     case ActionType.ADD_ITEM: {
-      const { dragItem, current: { dropItem, offset } } = payload as MoveItem;
+      const { dragItem, dropItem, offset } = payload as MoveItem;
 
       if (!dragItem || !dropItem) return state;
 
@@ -103,7 +85,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       return { ...state, currentData: newData, historyData: newDataHistory, historyIndex };
     }
     case ActionType.MOVE_ITEM: {
-      const { dragItem, current: { dropItem, offset } } = payload as MoveItem;
+      const { dragItem, dropItem, offset } = payload as MoveItem;
 
       if (!dragItem || !dropItem) return state;
 

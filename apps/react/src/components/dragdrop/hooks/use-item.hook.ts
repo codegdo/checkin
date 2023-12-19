@@ -1,10 +1,10 @@
 
 import { useState } from "react";
-import { ContextValue, Field } from "../types";
-import { ActionType } from "../dragdrop.reducer";
+import { ActionType, ContextValue, Field } from "../types";
+
 
 export function useItem(context: ContextValue, item: Field) {
-  const [currentItem, setCurrentItem] = useState({...item});
+  const [currentItem, setCurrentItem] = useState({ ...item });
   const { current, state, dispatch } = context;
   const { item: selectedItem } = current.selectedItem || {};
   const { isSelecting, isEditing } = state;
@@ -44,7 +44,7 @@ export function useItem(context: ContextValue, item: Field) {
     }
   }
 
-  const handleItemClick = (event: React.MouseEvent<HTMLDivElement>) => { 
+  const handleItemClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
 
     if (match) {
@@ -52,9 +52,9 @@ export function useItem(context: ContextValue, item: Field) {
       context.dispatch({ type: ActionType.UNSELECT_ITEM, });
       return;
     }
-    
-    context.current.selectedItem = { item, target: event.currentTarget, callback: {onChange, onClick} };
-    context.dispatch({type: ActionType.SELECT_ITEM});
+
+    context.current.selectedItem = { item, target: event.currentTarget, callback: { onChange, onClick } };
+    context.dispatch({ type: ActionType.SELECT_ITEM });
   }
 
   return {

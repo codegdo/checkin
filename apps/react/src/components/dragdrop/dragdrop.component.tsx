@@ -7,7 +7,7 @@ import { useHistory } from "./hooks";
 import { Field } from "./types";
 
 import { DragDropProvider } from "./dragdrop.provider";
-import { defaultRef, defaultState } from "./default.value";
+import { currentRef, defaultState } from "./default.value";
 import DropRender from "./drop.render";
 import DragDropToolbar from "./dragdrop.toolbar";
 import DragPreview from "./drag.preview";
@@ -29,7 +29,7 @@ interface IProps {
 
 export function DragDrop({ data = [], dragData = [], dragElements = [], option = {} }: IProps) {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
-  const ref = useRef(defaultRef);
+  const ref = useRef(currentRef);
   const [state, dispatch] = useReducer(dragdropReducer, { ...defaultState, currentData: data, dataSource: structuredClone(data) });
 
   useHistory({
@@ -41,7 +41,7 @@ export function DragDrop({ data = [], dragData = [], dragElements = [], option =
   useEffect(() => {
     // Resetting the ref when component unmounts
     return () => {
-      ref.current = {...defaultRef, elementRef: {}};
+      ref.current = { ...currentRef, elementRef: {} };
     };
   }, []);
 

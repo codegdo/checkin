@@ -9,6 +9,12 @@ export interface Field extends FieldType {
   selected?: boolean;
 }
 
+export interface KeyValue {
+  key: string;
+  value: string;
+}
+
+
 export interface State {
   dataSource: Field[];
   currentData: Field[];
@@ -19,8 +25,8 @@ export interface State {
 }
 
 interface CallbackEvent {
-  onChange?: (keyValue: any) => void;
-  onClick?: (keyValue: any) => void;
+  onChange?: (keyValue: KeyValue) => void;
+  onClick?: (keyValue: KeyValue) => void;
 }
 
 export interface CurrentRef {
@@ -37,7 +43,7 @@ export interface CurrentRef {
 }
 
 export interface ContextValue {
+  current: CurrentRef;
   state: State;
   dispatch: Dispatch<Action>;
-  current: CurrentRef;
 }

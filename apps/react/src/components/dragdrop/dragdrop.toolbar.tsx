@@ -1,9 +1,6 @@
 import { useWrapperContext } from "@/hooks";
 import DragDropContext from "./dragdrop.provider";
-import { ActionType } from "./dragdrop.reducer";
-
-interface IProps {
-}
+import { ActionType } from "./types";
 
 function DropDropToolbar() {
 

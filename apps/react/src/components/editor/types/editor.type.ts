@@ -1,19 +1,14 @@
-export interface State {
-  dataSource: Record<string, any> | null;
-  tab: string | null;
+import { DataType as FieldDataType, Field as FieldType } from "@/components/types";
+
+export { FieldDataType as DataType };
+
+export interface Field extends FieldType { }
+
+export interface KeyValue {
+  key: string;
+  value: string;
 }
 
-export enum ActionType {
-  SELECT_TAB = 'SELECT_TAB',
-}
 
-interface SelectTab {
-  tab: string;
-}
 
-export type Payload = SelectTab;
 
-export interface Action<T = Payload> {
-  type: string | ActionType;
-  payload?: T;
-}

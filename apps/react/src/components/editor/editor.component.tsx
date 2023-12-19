@@ -1,31 +1,30 @@
-import { forwardRef, useReducer, useState } from "react";
+import { forwardRef, useReducer, useRef } from "react";
+
+import { Field, KeyValue } from "./types";
+
 import { EditorProvider } from "./editor.provider";
 import EditorHeader from "./editor.header";
 import EditorTab from "./editor.tab";
 import EditorContent from "./editor.content";
+import { currentRef, defaultState } from "./default.value";
 import { editorReducer } from "./editor.reducer";
-import { defaultState } from "./default.value";
 
-export interface KeyValue {
-  key: string; 
-  value: string;
-} 
- 
+
 interface IProps {
   title?: string;
-  data?: Record<string, any>;
+  data?: Field;
   onChange?: (keyvalue: KeyValue) => void;
 }
 
-export const Editor = forwardRef<HTMLDivElement, IProps>(({title = 'Editor', data = {}, onChange}, ref) => {
-  const [tab, setTab] = useState('');
-  const [state, dispatch] = useReducer(editorReducer, {...defaultState, dataSource: data});
+export const Editor = forwardRef<HTMLDivElement, IProps>(({ title = 'Editor', data, onChange }, ref) => {
+  const { current } = useRef({ ...currentRef, onChange });
+  const [state, dispatch] = useReducer(editorReducer, { ...defaultState, dataValue: data, dataSource: structuredClone(data) });
 
   return <div className="editor">
-    <EditorProvider value={{state, dispatch}}>
+    <EditorProvider value={{ current, state, dispatch }}>
       <EditorHeader ref={ref} title={title} />
-      <EditorTab setTab={setTab} />
-      <EditorContent tab={tab} />
+      <EditorTab />
+      <EditorContent />
     </EditorProvider>
   </div>
 });
