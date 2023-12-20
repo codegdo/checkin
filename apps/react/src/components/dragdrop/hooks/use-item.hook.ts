@@ -1,7 +1,5 @@
-
 import { useState } from "react";
 import { ActionType, ContextValue, Field } from "../types";
-
 
 export function useItem(context: ContextValue, item: Field) {
   const [currentItem, setCurrentItem] = useState({ ...item });

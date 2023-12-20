@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef } from "react";
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
-
-import { Field, DataType, ContextValue, ActionType } from "../types";
-import { Coordinate, dndHelper } from "../helpers";
 import { getEmptyImage } from "react-dnd-html5-backend";
+
+import { Field, DataType, ActionType, ContextValue } from "../types";
+import { Coordinate, dndHelper } from "../helpers";
 
 interface IProps {
   context: ContextValue;
@@ -36,7 +36,7 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
     const payload = {
       dragItem,
       dropItem: context.current.dropItem,
-      offset: context.current.offset,
+      offset: context.current.dragging.offset,
     };
 
     if (!dragElement) {

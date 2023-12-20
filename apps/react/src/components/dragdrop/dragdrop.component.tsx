@@ -1,19 +1,16 @@
-import { useEffect, useReducer, useRef } from "react";
 import { DndProvider } from "react-dnd";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-import { useHistory } from "./hooks";
+import { useHistory, useDragDropState } from "./hooks";
 import { Field } from "./types";
 
 import { DragDropProvider } from "./dragdrop.provider";
-import { getCurrentRef, getInitialState } from "./default.value";
 import DropRender from "./drop.render";
 import DragDropToolbar from "./dragdrop.toolbar";
-import DragPreview from "./drag.preview";
-import DragRender, { DraggableElementType } from "./drag.render";
+import DragDropPreview from "./dragdrop.preview";
+import DragRender, { DragElementType } from "./drag.render";
 import { DragDropEditor } from "./dragdrop.editor";
-import { dragdropReducer } from "./dragdrop.reducer";
 
 interface Option {
   trackingId?: number | string;
@@ -23,33 +20,33 @@ interface Option {
 interface IProps {
   data?: Field[];
   dragData?: Field[];
-  dragElements?: DraggableElementType[];
+  dragElements?: DragElementType[];
   option?: Option;
 }
 
 export function DragDrop({ data = [], dragData = [], dragElements = [], option = {} }: IProps) {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
-  const currentRef = getCurrentRef();
-  const initialState = getInitialState(data);
-  const {current} = useRef(currentRef);
-  const [state, dispatch] = useReducer(dragdropReducer, initialState);
+  const dragDropState = useDragDropState(data);
 
   useHistory({
     trackingId: option.trackingId,
     trackingVersion: option.trackingVersion,
-    dispatch
+    dispatch: dragDropState.dispatch
   });
 
   return (
-    <DndProvider backend={backend}>
-      <DragDropProvider value={{ current, state, dispatch }}>
-        <DragDropToolbar />
-        <DropRender />
-        <DragRender dragData={dragData} dragElements={dragElements} />
-        <DragPreview />
-        <DragDropEditor />
-      </DragDropProvider>
-    </DndProvider>
+    <div className="dragdrop">
+      <DndProvider backend={backend}>
+        <DragDropProvider value={{ ...dragDropState }}>
+          <DropRender />
+          <DragRender dragData={dragData} dragElements={dragElements} />
+
+          <DragDropToolbar />
+          <DragDropPreview />
+          <DragDropEditor />
+        </DragDropProvider>
+      </DndProvider>
+    </div>
   );
 }
 

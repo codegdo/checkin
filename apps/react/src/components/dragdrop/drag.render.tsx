@@ -5,11 +5,11 @@ import DragField from "./drag.field";
 import DragElement from "./drag.element";
 import { dndHelper } from "./helpers";
 
-export type DraggableElementType = 'section' | 'block' | 'button' | 'link' | 'text';
+export type DragElementType = 'section' | 'block' | 'button' | 'link' | 'text';
 
 interface IProps {
   dragData?: Field[];
-  dragElements?: (DraggableElementType | Field)[];
+  dragElements?: (DragElementType | Field)[];
 }
 
 function DragRender({ dragData = [], dragElements = [] }: IProps) {

@@ -1,6 +1,7 @@
 import { DropTargetMonitor, XYCoord } from "react-dnd";
-import { ContextValue, DataType, Field } from "../types";
-import { countItems, randomString, findItemById } from "@/utils";
+
+import { countItems, randomString } from "@/utils";
+import { DataType, Field, ContextValue } from "../types";
 
 export interface ElementInnerSize {
   innerWidth: number;
@@ -18,9 +19,11 @@ class DragDropHelper {
 
   canDragDrop(dragItem: Field, context: ContextValue, dragElement?: HTMLDivElement | null) {
 
-    const { dropItem, offset, direction } = context.current;
+    const { dropItem, dragging } = context.current;
 
-    if (dropItem?.dataType === DataType.AREA && dropItem.data?.length !== 0) return false;
+    if (dropItem?.dataType === DataType.AREA && dropItem.data?.length !== 0) {
+      return false;
+    }
 
     console.log('canDragDrop', dropItem, dropItem?.data?.length, context);
 
@@ -31,8 +34,8 @@ class DragDropHelper {
       const prevElementId = prevElement?.getAttribute('data-id');
       const nextElementId = nextElement?.getAttribute('data-id');
 
-      const isDropPrevItemOnBottomRight = prevElementId == dropItem?.id && (offset === 'on-bottom' || offset === 'on-right');
-      const isDropNextItemOnTopLeft = nextElementId == dropItem?.id && (offset === 'on-top' || offset === 'on-left');
+      const isDropPrevItemOnBottomRight = prevElementId == dropItem?.id && (dragging.offset === 'on-bottom' || dragging.offset === 'on-right');
+      const isDropNextItemOnTopLeft = nextElementId == dropItem?.id && (dragging.offset === 'on-top' || dragging.offset === 'on-left');
 
       if (isDropPrevItemOnBottomRight || isDropNextItemOnTopLeft) {
         return false;
@@ -48,20 +51,21 @@ class DragDropHelper {
 
   setCoordinate(context: ContextValue, monitor: DropTargetMonitor<Field>): boolean {
     const clientOffset = monitor.getClientOffset();
+    const { dragging } = context.current;
 
     if (!clientOffset) {
       return true;
     }
 
-    const { x: currentX, y: currentY } = context.current.coordinate;
+    const { x: currentX, y: currentY } = dragging.coordinate;
     const { x: clientX, y: clientY } = clientOffset;
 
     if (currentX === clientX && currentY === clientY) {
       return true;
     }
 
-    context.current.coordinate.x = clientX;
-    context.current.coordinate.y = clientY;
+    dragging.coordinate.x = clientX;
+    dragging.coordinate.y = clientY;
 
     return false;
   }
@@ -71,31 +75,33 @@ class DragDropHelper {
     context: ContextValue,
     coordinates: Coordinate
   ) {
+    const { dragging } = context.current;
     const clientRect = dropElement.getBoundingClientRect();
     const clientInnerSize = this.getEmptyElementPseudoContentSize(dropElement);
-    const currentOffset = `on-${this.calculateOffset(context.current.coordinate, clientRect, clientInnerSize)}`;
-    const currentDirection = this.calculateDirection(context.current.coordinate, coordinates, dropElement); // direction for transitioning
-    const { offset } = context.current;
+    const currentOffset = `on-${this.calculateOffset(dragging.coordinate, clientRect, clientInnerSize)}`;
+    const currentDirection = this.calculateDirection(dragging.coordinate, coordinates, dropElement); // direction for transitioning
 
-    if (!dropElement.classList.contains(offset)) {
+
+    if (!dropElement.classList.contains(dragging.offset)) {
       this.setClass(dropElement, context);
     }
 
-    if (offset === currentOffset) {
+    if (dragging.offset === currentOffset) {
       return true;
     }
 
-    context.current.offset = currentOffset || '';
-    context.current.direction = currentDirection || context.current.direction;
+    dragging.offset = currentOffset || '';
+    dragging.direction = currentDirection || dragging.direction;
 
     this.removeClass(dropElement);
-    console.log(context.current.offset, context.current.direction);
+    console.log(dragging.offset, dragging.direction);
 
     return false;
   }
 
   setClass(dropElement: HTMLDivElement, context: ContextValue) {
-    const [vertical, horizontal] = context.current.offset?.split(' ') ?? [];
+    const { dragging } = context.current;
+    const [vertical, horizontal] = dragging.offset?.split(' ') ?? [];
     const parentNode = dropElement.parentNode as HTMLDivElement;
 
     if (parentNode && parentNode.classList.contains('row')) {

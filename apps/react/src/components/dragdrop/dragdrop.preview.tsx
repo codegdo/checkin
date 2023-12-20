@@ -13,7 +13,7 @@ const layerStyles: CSSProperties = {
   height: '100%',
 };
 
-function DragPreview() {
+function DragDropPreview() {
   const {
     item,
     isDragging,
@@ -37,11 +37,11 @@ function DragPreview() {
     isDragging ? (
       <div style={layerStyles}>
         <div className='drag-preview' style={dragStyles}>
-          {item?.title}
+          {item?.title || item?.name}
         </div>
       </div>
     ) : null
   );
 }
 
-export default DragPreview;
+export default DragDropPreview;

@@ -1,7 +1,6 @@
-import { Dispatch } from "react";
-
 import { DataType as FieldDataType, Field as FieldType } from "@/components/types";
-import { Action } from "../dragdrop.reducer";
+import { Dispatch } from "react";
+import { Action } from "./reducer.type";
 
 export { FieldDataType as DataType };
 
@@ -14,12 +13,13 @@ export interface KeyValue {
   value: string;
 }
 
-
 export interface State {
+  dataValue: Field[];
   dataSource: Field[];
-  currentData: Field[];
+
   historyData: Field[][];
   historyIndex: number;
+
   isEditing?: boolean;
   isSelecting?: boolean;
 }
@@ -33,12 +33,15 @@ export interface CurrentRef {
   dropItem: Partial<Field> | null;
   selectedItem: { item?: Field, target?: Element, callback?: CallbackEvent } | null;
   elementRef: Record<string, HTMLDivElement | null>;
-  coordinate: {
-    x: number;
-    y: number;
+  dragging: {
+    coordinate: {
+      x: number;
+      y: number;
+    };
+    offset: string;
+    direction: string;
+
   };
-  offset: string;
-  direction: string;
   canDrop: boolean;
 }
 

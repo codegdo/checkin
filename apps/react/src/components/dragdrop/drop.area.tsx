@@ -26,7 +26,7 @@ function DropArea({ context, children, ...item }: Props) {
   //     const slateEditor = target.closest('div[data-slate-editor]');
   //     const fieldEditor = target.closest('div[data-field-editor]');
 
-  //     //const found = context.state.currentData.find(item => item.id == id);
+  //     //const found = context.state.dataValue.find(item => item.id == id);
   //     const found = dndHelper.findItemById(item, id, (item) => (item.dataType === 'area' || item.dataType === 'section' || item.dataType === 'block'));
 
   //     if (found) {
@@ -40,7 +40,7 @@ function DropArea({ context, children, ...item }: Props) {
   //         context.dispatch({ type: ActionType.UNSELECT_ITEM, });
   //         return;
   //       }
-  
+
   //       context.current.selectedRef = { item: {...found}, el };
   //       context.dispatch({type: ActionType.SELECT_ITEM});
   //     }

@@ -50,8 +50,8 @@ const render = ({ data = [], context }: IProps) => {
 
 function DropRender() {
   const context = useWrapperContext(DragDropContext);
-  //const renderData = groupDataForRender(context.state.currentData) as Field[];
-  const renderData = useMemo(() => groupDataForRender(context.state.currentData) as Field[], [context.state.currentData]);
+  //const renderData = groupDataForRender(context.state.dataValue) as Field[];
+  const renderData = useMemo(() => groupDataForRender(context.state.dataValue) as Field[], [context.state.dataValue]);
 
   console.log('renderData', renderData, context);
 

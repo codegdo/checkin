@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
-import { Action } from '../dragdrop.reducer';
 import { setSessionStorage } from '@/utils';
-import { ActionType } from '../types';
+import { Action, ActionType } from '../types';
 
 interface HistoryProps {
   trackingId?: number | string;
@@ -12,7 +11,7 @@ interface HistoryProps {
 export function useHistory({ trackingId = 0, trackingVersion = 0, dispatch }: HistoryProps) {
   useEffect(() => {
     const storedHistoryId = sessionStorage.getItem('dnd_history_id');
-    const storedHistoryVersion = sessionStorage.getItem('dnd_history_version');
+    //const storedHistoryVersion = sessionStorage.getItem('dnd_history_version');
     const storedHistoryIndex = sessionStorage.getItem('dnd_history_index');
     const storedHistoryData = sessionStorage.getItem('dnd_history_data');
 

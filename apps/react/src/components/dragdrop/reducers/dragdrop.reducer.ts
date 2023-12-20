@@ -1,30 +1,31 @@
 import { setSessionStorage } from "@/utils";
-import { dndHelper } from "./helpers";
-import { ActionType, Field, State } from "./types";
+import { dndHelper } from "../helpers";
+import { Action, ActionType, CurrentRef, LoadHistory, MoveItem, Payload, RemoveItem, State } from "../types";
 
-interface MoveItem {
-  dragItem: Field;
-  dropItem: Partial<Field> | null;
-  offset: string;
-}
+const initialState = {
+  dataSource: [],
+  dataValue: [],
+  historyData: [],
+  historyIndex: -1,
+  isEditing: false,
+  isSelecting: false,
+};
 
-interface RemoveItem {
-  removeItem: Partial<Field> | null | undefined
-}
+const getInitialRef = (): CurrentRef => {
+  return {
+    dropItem: null,
+    elementRef: {},
+    selectedItem: null,
+    dragging: {
+      coordinate: { x: 0, y: 0 },
+      offset: '',
+      direction: '',
+    },
+    canDrop: true,
+  };
+};
 
-interface LoadHistory {
-  historyData: Field[][];
-  historyIndex: number;
-}
-
-type Payload = LoadHistory | MoveItem | RemoveItem;
-
-export interface Action<T = Payload> {
-  type: string | ActionType;
-  payload?: T;
-}
-
-export const dragdropReducer = (state: State, { type, payload }: Action<Payload>) => {
+const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
   switch (type) {
     case ActionType.LOAD_HISTORY: {
       const { historyData, historyIndex } = payload as LoadHistory;
@@ -36,7 +37,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
         dnd_history_index: historyIndex,
       });
 
-      return { ...state, currentData: loadHistoryData, historyIndex, historyData };
+      return { ...state, dataValue: loadHistoryData, historyIndex, historyData };
     }
     case ActionType.ADD_ITEM: {
       const { dragItem, dropItem, offset } = payload as MoveItem;
@@ -47,7 +48,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
         dragItem.id = dndHelper.generateNewId();
       }
 
-      const newData = [...state.currentData];
+      const newData = [...state.dataValue];
 
       const isMiddleOrBottom = offset === 'on-middle' || offset === 'on-bottom';
 
@@ -82,7 +83,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
         dnd_history_index: historyIndex
       });
 
-      return { ...state, currentData: newData, historyData: newDataHistory, historyIndex };
+      return { ...state, dataValue: newData, historyData: newDataHistory, historyIndex };
     }
     case ActionType.MOVE_ITEM: {
       const { dragItem, dropItem, offset } = payload as MoveItem;
@@ -93,7 +94,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
       const dragIds = dndHelper.getIds(dragItem);
       const dropIds = dndHelper.getIds(dropItem, dragItem?.id);
 
-      const newData = [...state.currentData];
+      const newData = [...state.dataValue];
 
       const dragIndex = newData.findIndex(item => item.id === dragItem.id);
       const draggedItems = newData.splice(dragIndex, dragIds.length);
@@ -134,7 +135,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
         dnd_history_index: historyIndex
       });
 
-      return { ...state, currentData: remainingItems, historyData: newDataHistory, historyIndex };
+      return { ...state, dataValue: remainingItems, historyData: newDataHistory, historyIndex };
     }
     case ActionType.REMOVE_ITEM: {
       const { removeItem } = payload as RemoveItem;
@@ -143,7 +144,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
 
       const removeIds = dndHelper.getIds(removeItem);
 
-      const newData = [...state.currentData];
+      const newData = [...state.dataValue];
 
       const dragIndex = newData.findIndex(item => item.id == removeItem.id);
       newData.splice(dragIndex, removeIds.length);
@@ -171,7 +172,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
         dnd_history_index: historyIndex
       });
 
-      return { ...state, currentData: remainingItems, historyData: newDataHistory, historyIndex };
+      return { ...state, dataValue: remainingItems, historyData: newDataHistory, historyIndex };
     }
     case ActionType.SELECT_ITEM: {
       return {
@@ -212,7 +213,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
           dnd_history_index: -1
         });
 
-        return { ...state, currentData: initialData, historyIndex: -1 };
+        return { ...state, dataValue: initialData, historyIndex: -1 };
       }
 
       const previousData = structuredClone(historyData[historyIndex - 1]);
@@ -222,7 +223,7 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
         dnd_history_index: historyIndex - 1
       });
 
-      return { ...state, currentData: previousData, historyIndex: historyIndex - 1 };
+      return { ...state, dataValue: previousData, historyIndex: historyIndex - 1 };
     }
     case ActionType.REDO_STEP: {
       const { historyIndex, historyData } = state;
@@ -236,9 +237,11 @@ export const dragdropReducer = (state: State, { type, payload }: Action<Payload>
         dnd_history_index: historyIndex + 1
       });
 
-      return { ...state, currentData: nextData, historyIndex: historyIndex + 1 };
+      return { ...state, dataValue: nextData, historyIndex: historyIndex + 1 };
     }
     default:
       return state;
   }
 };
+
+export { initialState, getInitialRef, dndReducer }

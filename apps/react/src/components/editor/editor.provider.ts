@@ -1,22 +1,16 @@
 import React, { Dispatch } from "react";
-import { currentRef, defaultState } from "./default.value";
-import { Action, State } from "./editor.reducer";
-import { KeyValue } from "./types";
+import { Action, State } from "./reducers";
+import { CurrentRef } from "./hooks";
 
-
-interface CurrentRef {
-  onChange?: ((keyValue: KeyValue) => void) | null;
-}
-
-interface ContextValue {
-  current: CurrentRef
-  state: State;
+export interface ContextValue {
+  current: CurrentRef | object;
+  state: State | object;
   dispatch: Dispatch<Action>;
 }
 
 const EditorContext = React.createContext<ContextValue>({
-  current: currentRef,
-  state: defaultState,
+  current: {},
+  state: {},
   dispatch: () => console.log('dispatch'),
 });
 
