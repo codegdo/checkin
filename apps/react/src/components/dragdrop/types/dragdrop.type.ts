@@ -1,6 +1,7 @@
 import { DataType as FieldDataType, Field as FieldType } from "@/components/types";
+import { CurrentRef } from "../hooks";
+import { Action, State } from "../reducers";
 import { Dispatch } from "react";
-import { Action } from "./reducer.type";
 
 export { FieldDataType as DataType };
 
@@ -13,40 +14,10 @@ export interface KeyValue {
   value: string;
 }
 
-export interface State {
-  dataValue: Field[];
-  dataSource: Field[];
-
-  historyData: Field[][];
-  historyIndex: number;
-
-  isEditing?: boolean;
-  isSelecting?: boolean;
-}
-
-interface CallbackEvent {
-  onChange?: (keyValue: KeyValue) => void;
-  onClick?: (keyValue: KeyValue) => void;
-}
-
-export interface CurrentRef {
-  dropItem: Partial<Field> | null;
-  selectedItem: { item?: Field, target?: Element, callback?: CallbackEvent } | null;
-  elementRef: Record<string, HTMLDivElement | null>;
-  dragging: {
-    coordinate: {
-      x: number;
-      y: number;
-    };
-    offset: string;
-    direction: string;
-
-  };
-  canDrop: boolean;
-}
-
 export interface ContextValue {
   current: CurrentRef;
   state: State;
   dispatch: Dispatch<Action>;
 }
+
+

@@ -1,4 +1,4 @@
-import { Field } from "../types";
+import { Field, KeyValue } from "../types";
 
 export enum ActionType {
   SELECT_TAB = 'SELECT_TAB',
@@ -16,12 +16,28 @@ export interface Action<T = Payload> {
 }
 
 export interface State {
-  dataValue: Field;
-  dataSource: Field;
+  dataValue?: Field;
+  dataSource?: Field;
   tab: string | null;
 }
 
-export const editorReducer = (state: State, { type, payload }: Action<Payload>) => {
+export interface CurrentRef {
+  onChange?: ((keyValue: KeyValue) => void);
+}
+
+const initialState = {
+  dataSource: undefined,
+  dataValue: undefined,
+  tab: null,
+};
+
+const initialRef = (): CurrentRef => {
+  return {
+    onChange: () => console.log('change')
+  };
+};
+
+const editorReducer = (state: State, { type, payload }: Action<Payload>) => {
   switch (type) {
     case ActionType.SELECT_TAB: {
       const { tab } = payload as SelectTab;
@@ -34,3 +50,5 @@ export const editorReducer = (state: State, { type, payload }: Action<Payload>) 
       return state;
   }
 }
+
+export {initialState, initialRef, editorReducer}

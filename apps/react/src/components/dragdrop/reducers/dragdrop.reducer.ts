@@ -1,6 +1,59 @@
 import { setSessionStorage } from "@/utils";
 import { dndHelper } from "../helpers";
-import { Action, ActionType, CurrentRef, LoadHistory, MoveItem, Payload, RemoveItem, State } from "../types";
+import { Field} from "../types";
+import { CurrentRef } from "../hooks";
+
+export enum ActionType {
+  LOAD_HISTORY = 'LOAD_HISTORY',
+
+  SELECT_ITEM = 'SELECT_ITEM',
+  UNSELECT_ITEM = 'UNSELECT_ITEM',
+  OPEN_EDITING = 'OPEN_EDITING',
+  CLOSE_EDITING = 'CLOSE_EDITING',
+
+  ADD_ITEM = 'ADD_ITEM',
+  MOVE_ITEM = 'MOVE_ITEM',
+  CLONE_ITEM = 'CLONE_ITEM',
+  REMOVE_ITEM = 'REMOVE_ITEM',
+  UPDATE_ITEM = 'UPDATE_ITEM',
+  RESET_ITEM = 'RESET_ITEM',
+
+  UNDO_STEP = 'UNDO_STEP',
+  REDO_STEP = 'REDO_STEP',
+}
+
+export interface MoveItem {
+  dragItem: Field;
+  dropItem: Partial<Field> | null;
+  offset: string;
+}
+
+export interface RemoveItem {
+  removeItem: Partial<Field> | null | undefined
+}
+
+export interface LoadHistory {
+  historyData: Field[][];
+  historyIndex: number;
+}
+
+export type Payload = LoadHistory | MoveItem | RemoveItem;
+
+export interface Action<T = Payload> {
+  type: string | ActionType;
+  payload?: T;
+}
+
+export interface State {
+  dataValue: Field[];
+  dataSource: Field[];
+
+  historyData: Field[][];
+  historyIndex: number;
+
+  isEditing?: boolean;
+  isSelecting?: boolean;
+}
 
 const initialState = {
   dataSource: [],
@@ -11,7 +64,7 @@ const initialState = {
   isSelecting: false,
 };
 
-const getInitialRef = (): CurrentRef => {
+const initialRef = (): CurrentRef => {
   return {
     dropItem: null,
     elementRef: {},
@@ -244,4 +297,4 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
   }
 };
 
-export { initialState, getInitialRef, dndReducer }
+export { initialState, initialRef, dndReducer }

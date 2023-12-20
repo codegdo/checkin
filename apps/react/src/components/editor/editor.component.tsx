@@ -9,7 +9,7 @@ import EditorContent from "./editor.content";
 
 interface IProps {
   title?: string;
-  data?: Field | object;
+  data?: Field;
   onChange?: (keyvalue: KeyValue) => void;
 }
 

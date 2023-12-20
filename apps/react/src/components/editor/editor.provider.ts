@@ -1,16 +1,15 @@
 import React, { Dispatch } from "react";
-import { Action, State } from "./reducers";
-import { CurrentRef } from "./hooks";
+import { Action, CurrentRef, State, initialState, initialRef } from "./reducers";
 
 export interface ContextValue {
-  current: CurrentRef | object;
-  state: State | object;
+  current: CurrentRef;
+  state: State;
   dispatch: Dispatch<Action>;
 }
 
 const EditorContext = React.createContext<ContextValue>({
-  current: {},
-  state: {},
+  current: initialRef(),
+  state: initialState,
   dispatch: () => console.log('dispatch'),
 });
 

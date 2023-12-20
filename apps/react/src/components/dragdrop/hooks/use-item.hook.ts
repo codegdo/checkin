@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ActionType, ContextValue, Field } from "../types";
+import { ContextValue, Field } from "../types";
+import { ActionType } from "../reducers";
 
 export function useItem(context: ContextValue, item: Field) {
   const [currentItem, setCurrentItem] = useState({ ...item });
