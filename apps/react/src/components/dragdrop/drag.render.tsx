@@ -14,12 +14,13 @@ interface IProps {
 
 function DragRender({ dragData = [], drags = [] }: IProps) {
   const context = useWrapperContext(DragDropContext);
-  const dragElementArray = dndHelper.createElementObjects(drags);
+  const dragElements = dndHelper.createDragElements(drags);
+  
   return (
     <div className="draggable-area">
       <div className="drag-elements">
         {
-          dragElementArray.map((item, index) => {
+          dragElements.map((item, index) => {
             return <DragElement key={index} {...item} context={context} />
           })
         }

@@ -370,7 +370,7 @@ class DragDropHelper {
     return !list.some((i) => condition(i) && i.id == item.id);
   }
 
-  createElementObjects(types: (string | Field)[]): Field[] {
+  createDragElements(types: (string | Field)[]): Field[] {
     return types.map((type) => {
       if (typeof type === 'string') {
         return {

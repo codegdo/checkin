@@ -15,10 +15,10 @@ interface IProps {
 
 export const Editor = forwardRef<HTMLDivElement, IProps>(({ title = 'Editor', data, onChange }, ref) => {
 
-  const { current, state, dispatch } = useEditorState({ data, onChange });
+  const editorState = useEditorState({ data, onChange });
 
   return <div className="editor">
-    <EditorProvider value={{ current, state, dispatch }}>
+    <EditorProvider value={{ ...editorState }}>
       <EditorHeader ref={ref} title={title} />
       <EditorTab />
       <EditorContent />

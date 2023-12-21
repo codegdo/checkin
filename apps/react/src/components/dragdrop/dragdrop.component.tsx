@@ -27,7 +27,7 @@ interface IProps {
 
 export function DragDrop({ dropData = [], dragData = [], drags = [], option = {} }: IProps) {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
-  const dragDropState = useDragDropState(dropData);
+  const dragDropState = useDragDropState({dropData});
 
   useHistory({
     historyId: option.historyId,
