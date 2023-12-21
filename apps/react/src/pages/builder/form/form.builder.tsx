@@ -10,12 +10,12 @@ function FormBuilder() {
   }
 
   return <DragDrop
-    data={formData?.data}
+    dropData={formData?.data}
     dragData={formData?.fields}
-    dragElements={['section', 'block', 'button', 'link', 'text']}
+    drags={['section', 'block', 'button', 'link', 'text']}
     option={{
-      trackingId: formData.id,
-      trackingVersion: formData.version
+      historyId: formData.id,
+      historyVersion: formData.updatedAt
     }}
   />;
 }

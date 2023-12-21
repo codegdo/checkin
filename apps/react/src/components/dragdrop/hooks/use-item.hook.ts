@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { ContextValue, Field } from "../types";
-import { ActionType } from "../reducers";
+import { ActionType, ContextValue, Field, KeyValue } from "../types";
+
 
 export function useItem(context: ContextValue, item: Field) {
   const [currentItem, setCurrentItem] = useState({ ...item });
@@ -12,7 +12,7 @@ export function useItem(context: ContextValue, item: Field) {
   const onSelecting = match ? isSelecting ?? false : false;
   const onEditing = match ? isEditing ?? false : false;
 
-  const onChange = (keyvalue: any) => {
+  const onChange = (keyvalue: KeyValue) => {
     console.log(keyvalue);
     //setCurrentItem(prevItem => ({ ...prevItem, [key]: value }));
   }

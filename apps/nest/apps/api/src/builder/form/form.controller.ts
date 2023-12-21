@@ -11,7 +11,7 @@ export class FormController {
         title: 'Signup Form',
         description: 'Sample Form',
         data: [],
-        version: 1,
+        updatedAt: '2023-10-27 10:11:57.878907',
       },
       {
         id: 2,
@@ -19,7 +19,7 @@ export class FormController {
         title: 'Login Form',
         description: 'Sample Form',
         data: [],
-        version: 1,
+        updatedAt: '2023-10-27 10:11:57.878907',
       },
     ];
   }
@@ -134,7 +134,7 @@ export class FormController {
             position: null,
           },
         ],
-        version: 1,
+        updatedAt: '2023-10-27 10:11:57.878907',
       };
     } else if (id == 2) {
       return {
@@ -234,7 +234,7 @@ export class FormController {
             position: null,
           },
         ],
-        version: 1,
+        updatedAt: '2023-10-27 10:11:57.878907',
       };
     }
     return {};

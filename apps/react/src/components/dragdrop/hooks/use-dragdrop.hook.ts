@@ -2,9 +2,8 @@ import { useCallback, useEffect, useRef } from "react";
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 
-import { Field, DataType, ContextValue} from "../types";
+import { Field, DataType, ContextValue, ActionType } from "../types";
 import { Coordinate, dndHelper } from "../helpers";
-import { ActionType } from "../reducers";
 
 interface IProps {
   context: ContextValue;

@@ -3,24 +3,24 @@ import { setSessionStorage } from '@/utils';
 import { Action, ActionType } from '../types';
 
 interface HistoryProps {
-  trackingId?: number | string;
-  trackingVersion?: number;
+  historyId?: number | string;
+  historyVersion?: number | string;
   dispatch: React.Dispatch<Action>;
 }
 
-export function useHistory({ trackingId = 0, trackingVersion = 0, dispatch }: HistoryProps) {
+export function useHistory({ historyId = 0, historyVersion = 0, dispatch }: HistoryProps) {
   useEffect(() => {
     const storedHistoryId = sessionStorage.getItem('dnd_history_id');
     //const storedHistoryVersion = sessionStorage.getItem('dnd_history_version');
     const storedHistoryIndex = sessionStorage.getItem('dnd_history_index');
     const storedHistoryData = sessionStorage.getItem('dnd_history_data');
 
-    const shouldSetHistory = !storedHistoryId || storedHistoryId !== trackingId.toString();
+    const shouldSetHistory = !storedHistoryId || storedHistoryId !== historyId.toString();
 
     if (shouldSetHistory) {
       setSessionStorage({
-        dnd_history_id: trackingId,
-        dnd_history_version: trackingVersion,
+        dnd_history_id: historyId,
+        dnd_history_version: historyVersion,
         dnd_history_index: -1,
         dnd_history_data: [],
       });
@@ -37,7 +37,7 @@ export function useHistory({ trackingId = 0, trackingVersion = 0, dispatch }: Hi
         });
       }
     }
-  }, [trackingId, trackingVersion, dispatch]);
+  }, [historyId, historyVersion, dispatch]);
 }
 
 

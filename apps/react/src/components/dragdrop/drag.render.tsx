@@ -1,20 +1,20 @@
 import { useWrapperContext } from "@/hooks";
-import { Field } from "./types";
+import { DragType, Field } from "./types";
 import DragDropContext from "./dragdrop.provider";
 import DragField from "./drag.field";
 import DragElement from "./drag.element";
 import { dndHelper } from "./helpers";
 
-export type DragElementType = 'section' | 'block' | 'button' | 'link' | 'text';
+
 
 interface IProps {
   dragData?: Field[];
-  dragElements?: (DragElementType | Field)[];
+  drags?: (DragType | Field)[];
 }
 
-function DragRender({ dragData = [], dragElements = [] }: IProps) {
+function DragRender({ dragData = [], drags = [] }: IProps) {
   const context = useWrapperContext(DragDropContext);
-  const dragElementArray = dndHelper.createElementObjects(dragElements);
+  const dragElementArray = dndHelper.createElementObjects(drags);
   return (
     <div className="draggable-area">
       <div className="drag-elements">

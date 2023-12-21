@@ -6,31 +6,32 @@ import { useHistory, useDragDropState } from "./hooks";
 import { Field } from "./types";
 
 import { DragDropProvider } from "./dragdrop.provider";
-import DropRender from "./drop.render";
+
 import DragDropToolbar from "./dragdrop.toolbar";
 import DragDropPreview from "./dragdrop.preview";
-import DragRender, { DragElementType } from "./drag.render";
-import { DragDropEditor } from "./dragdrop.editor";
+import DragDropMain from "./dragdrop.main";
+import DragDropEditor from "./dragdrop.editor";
+
 
 interface Option {
-  trackingId?: number | string;
-  trackingVersion?: number;
+  historyId?: number | string;
+  historyVersion?: number | string;
 }
 
 interface IProps {
-  data?: Field[];
+  dropData?: Field[];
   dragData?: Field[];
-  dragElements?: DragElementType[];
+  drags?: string[] | Field[];
   option?: Option;
 }
 
-export function DragDrop({ data = [], dragData = [], dragElements = [], option = {} }: IProps) {
+export function DragDrop({ dropData = [], dragData = [], drags = [], option = {} }: IProps) {
   const backend = ('ontouchstart' in window) ? TouchBackend : HTML5Backend;
-  const dragDropState = useDragDropState(data);
+  const dragDropState = useDragDropState(dropData);
 
   useHistory({
-    trackingId: option.trackingId,
-    trackingVersion: option.trackingVersion,
+    historyId: option.historyId,
+    historyVersion: option.historyVersion,
     dispatch: dragDropState.dispatch
   });
 
@@ -38,9 +39,7 @@ export function DragDrop({ data = [], dragData = [], dragElements = [], option =
     <div className="dragdrop">
       <DndProvider backend={backend}>
         <DragDropProvider value={{ ...dragDropState }}>
-          <DropRender />
-          <DragRender dragData={dragData} dragElements={dragElements} />
-
+          <DragDropMain />
           <DragDropToolbar />
           <DragDropPreview />
           <DragDropEditor />

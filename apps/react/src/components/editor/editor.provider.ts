@@ -1,11 +1,6 @@
-import React, { Dispatch } from "react";
-import { Action, CurrentRef, State, initialState, initialRef } from "./reducers";
-
-export interface ContextValue {
-  current: CurrentRef;
-  state: State;
-  dispatch: Dispatch<Action>;
-}
+import React from "react";
+import { ContextValue } from "./types";
+import { initialRef, initialState } from "./reducers";
 
 const EditorContext = React.createContext<ContextValue>({
   current: initialRef(),

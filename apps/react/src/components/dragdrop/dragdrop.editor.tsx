@@ -4,7 +4,7 @@ import DragDropContext from './dragdrop.provider';
 import { Editor } from '../editor';
 import { dndHelper } from './helpers';
 
-export function DragDropEditor() {
+function DragDropEditor() {
   const context = useWrapperContext(DragDropContext);
   const { isEditing } = context.state;
   const { item, target, callback } = context.current?.selectedItem || {};
@@ -22,3 +22,5 @@ export function DragDropEditor() {
     </div>
   ) : null;
 }
+
+export default DragDropEditor;

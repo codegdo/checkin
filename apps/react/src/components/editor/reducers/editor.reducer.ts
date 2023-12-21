@@ -1,29 +1,4 @@
-import { Field, KeyValue } from "../types";
-
-export enum ActionType {
-  SELECT_TAB = 'SELECT_TAB',
-}
-
-export interface SelectTab {
-  tab: string;
-}
-
-export type Payload = SelectTab;
-
-export interface Action<T = Payload> {
-  type: string | ActionType;
-  payload?: T;
-}
-
-export interface State {
-  dataValue?: Field;
-  dataSource?: Field;
-  tab: string | null;
-}
-
-export interface CurrentRef {
-  onChange?: ((keyValue: KeyValue) => void);
-}
+import { Action, ActionType, CurrentRef, Payload, SelectTab, State } from "../types";
 
 const initialState = {
   dataSource: undefined,
@@ -51,4 +26,4 @@ const editorReducer = (state: State, { type, payload }: Action<Payload>) => {
   }
 }
 
-export {initialState, initialRef, editorReducer}
+export { initialState, initialRef, editorReducer }

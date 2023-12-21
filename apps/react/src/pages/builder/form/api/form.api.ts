@@ -10,7 +10,7 @@ interface IForm {
   description: string;
   data: Field[];
   fields: Field[];
-  version: number;
+  updatedAt: string;
 }
 
 export const useGetAllForms = (params?: Record<string, string | number>) => {

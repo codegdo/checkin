@@ -1,6 +1,5 @@
 import React from 'react';
-import { Field, KeyValue } from './types';
-import { ActionType } from './reducers';
+import { ActionType, Field, KeyValue } from './types';
 
 export interface IDropEditor {
   field: Field;
