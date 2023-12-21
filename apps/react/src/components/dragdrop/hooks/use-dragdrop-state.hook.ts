@@ -9,17 +9,19 @@ interface Options {
 }
 
 export interface IDragDropProps {
-  dropData: Field[];
-  dragData?: Field[];
-  drags?: string[] | Field[];
+  data: Field[];
+  drags?: {
+    elements?: string[] | Field[],
+    fields?: Field[]
+  };
   options?: Options;
 }
 
-export const useDragDropState = ({ dropData = [], dragData, drags, options = {} }: IDragDropProps) => {
+export const useDragDropState = ({ data = [], drags = {}, options = {} }: IDragDropProps) => {
   const ref = useRef<CurrentRef>(initialRef());
   const [state, dispatch] = useReducer(dndReducer, {
     ...initialState,
-    data: structuredClone(dropData)
+    data: structuredClone(data)
   });
 
   useHistory({
@@ -29,12 +31,7 @@ export const useDragDropState = ({ dropData = [], dragData, drags, options = {} 
   });
 
   return {
-    props: {
-      dropData,
-      dragData,
-      drags,
-      options
-    },
+    props: { data, drags, options },
     current: ref.current,
     state,
     dispatch

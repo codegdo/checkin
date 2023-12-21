@@ -1,5 +1,7 @@
+import { EditorTab } from "./editor.type";
+
 export interface SelectTab {
-  tab: string;
+  tab: EditorTab;
 }
 
 export type Payload = SelectTab;

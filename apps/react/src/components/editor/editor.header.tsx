@@ -7,7 +7,7 @@ const EditorHeader = forwardRef<HTMLDivElement>((_, ref) => {
   const { props } = useWrapperContext(EditorContext);
 
   return <div ref={ref} className="editor-header">
-    <div>{props.title}</div>
+    <div>{props?.data?.dataType || 'Editor'}</div>
   </div>
 });
 

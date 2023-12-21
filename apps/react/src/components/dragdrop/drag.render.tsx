@@ -7,11 +7,12 @@ import { dndHelper } from "./helpers";
 function DragRender() {
   const context = useWrapperContext(DragDropContext);
   const { props } = context;
+  const { drags } = props;
 
   const renderDragElements = () => {
-    if (!props?.drags) return null;
+    if (!drags || !drags?.elements) return null;
 
-    const dragElements = dndHelper.createDragElements(props.drags);
+    const dragElements = dndHelper.createDragElements(drags?.elements);
 
     return (
       <div className="drag-elements">
@@ -23,11 +24,11 @@ function DragRender() {
   };
 
   const renderDragFields = () => {
-    if (!props?.dragData) return null;
+    if (!drags || !drags?.fields) return null;
 
     return (
       <div className="drag-fields">
-        {props.dragData.map((item, index) => (
+        {drags.fields.map((item, index) => (
           <DragField key={index} {...item} context={context} />
         ))}
       </div>

@@ -1,19 +1,23 @@
 import { useWrapperContext } from "@/hooks";
 import EditorContext from "./editor.provider";
+import { editorHelper } from "./helpers";
 
 function EditorTab() {
   const context = useWrapperContext(EditorContext);
+  const tabs = editorHelper.getEditor();
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
 
-    console.log(event.currentTarget.name, context);
+    console.log(context);
   }
 
   return <div>
-    <button type="button" name="content" onClick={handleClick}>tab 1</button>
-    <button type="button" name="design" onClick={handleClick}>tab 2</button>
-    <button type="button" name="setting" onClick={handleClick}>tab 3</button>
+    {
+      tabs.map(tab => {
+        return <button key={tab.id} type="button" onClick={handleClick}>{tab.title}</button>
+      })
+    }
   </div>
 }
 

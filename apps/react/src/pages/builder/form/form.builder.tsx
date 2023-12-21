@@ -10,9 +10,11 @@ function FormBuilder() {
   }
 
   return <DragDrop
-    dropData={formData?.data}
-    dragData={formData?.fields}
-    drags={['section', 'block', 'button', 'link', 'text']}
+    data={formData?.data}
+    drags={{
+      elements: ['section', 'block', 'button', 'link', 'text'],
+      fields: formData?.fields
+    }}
     options={{
       historyId: formData.id,
       historyVersion: formData.updatedAt

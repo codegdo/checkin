@@ -12,9 +12,15 @@ export interface KeyValue {
   value: string;
 }
 
+export interface EditorTab {
+  id: number | string;
+  title: string;
+  data: any[]
+}
+
 export interface State {
   data?: Field;
-  tab: string | null;
+  tab: EditorTab | null;
 }
 
 export interface CurrentRef {
