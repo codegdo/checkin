@@ -2,17 +2,19 @@ import { useReducer, useRef } from 'react';
 import { Field, KeyValue } from "../types";
 import { initialState, initialRef, editorReducer } from '../reducers';
 
-interface IProps {
+export interface IEditorProps {
+  title?: string;
   data?: Field;
   onChange?: (keyvalue: KeyValue) => void;
 }
 
-export const useEditorState = ({ data, onChange }: IProps) => {
+export const useEditorState = ({ data, title = 'Editor', onChange }: IEditorProps) => {
 
-  const ref = useRef({ ...initialRef(), onChange });
-  const [state, dispatch] = useReducer(editorReducer, { ...initialState, dataSource: structuredClone(data), dataValue: data });
+  const ref = useRef({ ...initialRef() });
+  const [state, dispatch] = useReducer(editorReducer, { ...initialState, data: structuredClone(data) });
 
   return {
+    props: { data, title, onChange },
     current: ref.current,
     state,
     dispatch

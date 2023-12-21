@@ -1,4 +1,3 @@
-import React from 'react';
 import { ActionType } from './types';
 
 export interface IDropMenu {
@@ -7,22 +6,15 @@ export interface IDropMenu {
 
 function DropMenu({ onClick }: IDropMenu) {
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-
-    const target = e.target as Element;
-    const clickedElement = target.closest('button');
-
-    if (clickedElement) {
-      const name = clickedElement.getAttribute('name') as keyof typeof ActionType;
-      onClick && onClick(name);
-    }
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, name: keyof typeof ActionType) => {
+    event.stopPropagation();
+    onClick && onClick(name);
   };
 
   return (
-    <div onClick={handleClick}>
-      <button type="button" name={ActionType.OPEN_EDITING}>Edit</button>
-      <button type="button" name={ActionType.REMOVE_ITEM}>Remove</button>
+    <div>
+      <button type="button" onClick={(e) => handleClick(e, ActionType.OPEN_EDITING)}>Edit</button>
+      <button type="button" onClick={(e) => handleClick(e, ActionType.REMOVE_ITEM)}>Remove</button>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { DataType as FieldDataType, Field as FieldType } from "@/components/types";
 import { Dispatch } from "react";
-import { Action } from ".";
+import { Action } from "./action.type";
+import { IEditorProps } from "../hooks";
 
 export { FieldDataType as DataType };
 
@@ -12,8 +13,7 @@ export interface KeyValue {
 }
 
 export interface State {
-  dataValue?: Field;
-  dataSource?: Field;
+  data?: Field;
   tab: string | null;
 }
 
@@ -25,4 +25,5 @@ export interface ContextValue {
   current: CurrentRef;
   state: State;
   dispatch: Dispatch<Action>;
+  props: IEditorProps;
 }

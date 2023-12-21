@@ -1,13 +1,13 @@
 import { forwardRef } from "react"
+import EditorContext from "./editor.provider";
+import { useWrapperContext } from "@/hooks";
 
-interface IProps {
-  title: string;
-}
 
-const EditorHeader = forwardRef<HTMLDivElement, IProps>(({title}, ref) => {
+const EditorHeader = forwardRef<HTMLDivElement>((_, ref) => {
+  const { props } = useWrapperContext(EditorContext);
 
   return <div ref={ref} className="editor-header">
-    <div>{title}</div>
+    <div>{props.title}</div>
   </div>
 });
 

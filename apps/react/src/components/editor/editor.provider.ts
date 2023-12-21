@@ -6,6 +6,7 @@ const EditorContext = React.createContext<ContextValue>({
   current: initialRef(),
   state: initialState,
   dispatch: () => console.log('dispatch'),
+  props: {}
 });
 
 export const EditorProvider = EditorContext.Provider;

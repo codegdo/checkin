@@ -1,4 +1,5 @@
-import { Field } from ".";
+import { Field } from "./dragdrop.type";
+
 
 export interface MoveItem {
   dragItem: Field;
@@ -15,4 +16,8 @@ export interface LoadHistory {
   historyIndex: number;
 }
 
-export type Payload = LoadHistory | MoveItem | RemoveItem;
+export interface UndoStep {
+  dataSource: Field[]
+}
+
+export type Payload = LoadHistory | MoveItem | RemoveItem | UndoStep;

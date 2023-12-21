@@ -1,6 +1,7 @@
 import { DataType as FieldDataType, Field as FieldType } from "@/components/types";
 import { Dispatch } from "react";
-import { Action } from ".";
+import { Action } from "./action.type";
+import { IDragDropProps } from "../hooks";
 
 export { FieldDataType as DataType };
 
@@ -37,8 +38,7 @@ export interface CurrentRef {
 }
 
 export interface State {
-  dataValue: Field[];
-  dataSource: Field[];
+  data: Field[];
 
   historyData: Field[][];
   historyIndex: number;
@@ -51,6 +51,7 @@ export interface ContextValue {
   current: CurrentRef;
   state: State;
   dispatch: Dispatch<Action>;
+  props: IDragDropProps
 }
 
 

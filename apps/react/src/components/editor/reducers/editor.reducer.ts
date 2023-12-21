@@ -1,15 +1,12 @@
 import { Action, ActionType, CurrentRef, Payload, SelectTab, State } from "../types";
 
 const initialState = {
-  dataSource: undefined,
-  dataValue: undefined,
+  data: undefined,
   tab: null,
 };
 
 const initialRef = (): CurrentRef => {
-  return {
-    onChange: () => console.log('change')
-  };
+  return {};
 };
 
 const editorReducer = (state: State, { type, payload }: Action<Payload>) => {

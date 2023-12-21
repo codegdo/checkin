@@ -1,37 +1,43 @@
 import { useWrapperContext } from "@/hooks";
-import { DragType, Field } from "./types";
 import DragDropContext from "./dragdrop.provider";
 import DragField from "./drag.field";
 import DragElement from "./drag.element";
 import { dndHelper } from "./helpers";
 
-
-
-interface IProps {
-  dragData?: Field[];
-  drags?: (DragType | Field)[];
-}
-
-function DragRender({ dragData = [], drags = [] }: IProps) {
+function DragRender() {
   const context = useWrapperContext(DragDropContext);
-  const dragElements = dndHelper.createDragElements(drags);
-  
+  const { props } = context;
+
+  const renderDragElements = () => {
+    if (!props?.drags) return null;
+
+    const dragElements = dndHelper.createDragElements(props.drags);
+
+    return (
+      <div className="drag-elements">
+        {dragElements.map((item, index) => (
+          <DragElement key={index} {...item} context={context} />
+        ))}
+      </div>
+    );
+  };
+
+  const renderDragFields = () => {
+    if (!props?.dragData) return null;
+
+    return (
+      <div className="drag-fields">
+        {props.dragData.map((item, index) => (
+          <DragField key={index} {...item} context={context} />
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="draggable-area">
-      <div className="drag-elements">
-        {
-          dragElements.map((item, index) => {
-            return <DragElement key={index} {...item} context={context} />
-          })
-        }
-      </div>
-      <div className="drag-fields">
-        {
-          dragData.map((item, index) => {
-            return <DragField key={index} {...item} context={context} />
-          })
-        }
-      </div>
+      {renderDragElements()}
+      {renderDragFields()}
     </div>
   );
 }

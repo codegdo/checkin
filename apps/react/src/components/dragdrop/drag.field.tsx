@@ -9,7 +9,7 @@ interface IProps extends Field {
 
 function DragField({ context, ...item }: IProps) {
 
-  const isDragEnabled = dndHelper.isDragEnabled(context.state.dataValue, item, (item) => item.dataType === DataType.FIELD);
+  const isDragEnabled = dndHelper.isDragEnabled(context.state.data, item, (item) => item.dataType === DataType.FIELD);
   const { isDragging, drag } = useDragDrop({ context, item, draggable: isDragEnabled });
 
   const className = classNames('drag-item', {

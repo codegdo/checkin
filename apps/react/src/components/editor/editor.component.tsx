@@ -1,25 +1,20 @@
 import { forwardRef } from "react";
 
-import { Field, KeyValue } from "./types";
-import { useEditorState } from "./hooks";
+import { IEditorProps, useEditorState } from "./hooks";
 import { EditorProvider } from "./editor.provider";
 import EditorHeader from "./editor.header";
 import EditorTab from "./editor.tab";
 import EditorContent from "./editor.content";
 
-interface IProps {
-  title?: string;
-  data?: Field;
-  onChange?: (keyvalue: KeyValue) => void;
-}
+interface IProps extends IEditorProps { }
 
-export const Editor = forwardRef<HTMLDivElement, IProps>(({ title = 'Editor', data, onChange }, ref) => {
+export const Editor = forwardRef<HTMLDivElement, IProps>((props, ref) => {
 
-  const editorState = useEditorState({ data, onChange });
+  const editorState = useEditorState(props);
 
   return <div className="editor">
     <EditorProvider value={{ ...editorState }}>
-      <EditorHeader ref={ref} title={title} />
+      <EditorHeader ref={ref} />
       <EditorTab />
       <EditorContent />
     </EditorProvider>

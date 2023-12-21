@@ -1,4 +1,4 @@
-import { Payload } from ".";
+import { Payload } from "./reducer.type";
 
 export enum ActionType {
   LOAD_HISTORY = 'LOAD_HISTORY',

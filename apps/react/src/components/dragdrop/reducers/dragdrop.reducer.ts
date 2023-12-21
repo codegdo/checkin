@@ -1,10 +1,9 @@
 import { setSessionStorage } from "@/utils";
 import { dndHelper } from "../helpers";
-import { Action, ActionType, CurrentRef, LoadHistory, MoveItem, Payload, RemoveItem, State } from "../types";
+import { Action, ActionType, CurrentRef, LoadHistory, MoveItem, Payload, RemoveItem, State, UndoStep } from "../types";
 
 const initialState = {
-  dataSource: [],
-  dataValue: [],
+  data: [],
   historyData: [],
   historyIndex: -1,
   isEditing: false,
@@ -37,7 +36,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex,
       });
 
-      return { ...state, dataValue: loadHistoryData, historyIndex, historyData };
+      return { ...state, data: loadHistoryData, historyIndex, historyData };
     }
     case ActionType.ADD_ITEM: {
       const { dragItem, dropItem, offset } = payload as MoveItem;
@@ -48,7 +47,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dragItem.id = dndHelper.generateNewId();
       }
 
-      const newData = [...state.dataValue];
+      const newData = [...state.data];
 
       const isMiddleOrBottom = offset === 'on-middle' || offset === 'on-bottom';
 
@@ -83,7 +82,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex
       });
 
-      return { ...state, dataValue: newData, historyData: newDataHistory, historyIndex };
+      return { ...state, data: newData, historyData: newDataHistory, historyIndex };
     }
     case ActionType.MOVE_ITEM: {
       const { dragItem, dropItem, offset } = payload as MoveItem;
@@ -94,7 +93,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
       const dragIds = dndHelper.getIds(dragItem);
       const dropIds = dndHelper.getIds(dropItem, dragItem?.id);
 
-      const newData = [...state.dataValue];
+      const newData = [...state.data];
 
       const dragIndex = newData.findIndex(item => item.id === dragItem.id);
       const draggedItems = newData.splice(dragIndex, dragIds.length);
@@ -135,7 +134,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex
       });
 
-      return { ...state, dataValue: remainingItems, historyData: newDataHistory, historyIndex };
+      return { ...state, data: remainingItems, historyData: newDataHistory, historyIndex };
     }
     case ActionType.REMOVE_ITEM: {
       const { removeItem } = payload as RemoveItem;
@@ -144,7 +143,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
 
       const removeIds = dndHelper.getIds(removeItem);
 
-      const newData = [...state.dataValue];
+      const newData = [...state.data];
 
       const dragIndex = newData.findIndex(item => item.id == removeItem.id);
       newData.splice(dragIndex, removeIds.length);
@@ -172,7 +171,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex
       });
 
-      return { ...state, dataValue: remainingItems, historyData: newDataHistory, historyIndex };
+      return { ...state, data: remainingItems, historyData: newDataHistory, historyIndex };
     }
     case ActionType.SELECT_ITEM: {
       return {
@@ -200,20 +199,21 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
     }
     case ActionType.UNDO_STEP: {
       const { historyIndex, historyData } = state;
+      const { dataSource } = payload as UndoStep;
 
       if (historyIndex == -1) {
         return state;
       }
 
       if (historyIndex === 0 || historyData.length <= 1) {
-        const initialData = structuredClone(state.dataSource);
+        const initialData = structuredClone(dataSource);
 
         // Update sessionStorage
         setSessionStorage({
           dnd_history_index: -1
         });
 
-        return { ...state, dataValue: initialData, historyIndex: -1 };
+        return { ...state, data: initialData, historyIndex: -1 };
       }
 
       const previousData = structuredClone(historyData[historyIndex - 1]);
@@ -223,7 +223,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex - 1
       });
 
-      return { ...state, dataValue: previousData, historyIndex: historyIndex - 1 };
+      return { ...state, data: previousData, historyIndex: historyIndex - 1 };
     }
     case ActionType.REDO_STEP: {
       const { historyIndex, historyData } = state;
@@ -237,7 +237,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex + 1
       });
 
-      return { ...state, dataValue: nextData, historyIndex: historyIndex + 1 };
+      return { ...state, data: nextData, historyIndex: historyIndex + 1 };
     }
     default:
       return state;
