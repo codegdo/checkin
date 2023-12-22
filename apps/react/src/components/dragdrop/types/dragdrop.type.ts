@@ -21,7 +21,7 @@ interface CallbackEvent {
   onClick?: (keyValue: KeyValue) => void;
 }
 
-export interface CurrentRef {
+export interface Ref {
   dropItem: Partial<Field> | null;
   selectedItem: { item?: Field, target?: Element, callback?: CallbackEvent } | null;
   elementRef: Record<string, HTMLDivElement | null>;
@@ -48,7 +48,7 @@ export interface State {
 }
 
 export interface ContextValue {
-  current: CurrentRef;
+  current: Ref;
   state: State;
   dispatch: Dispatch<Action>;
   props: IDragDropProps

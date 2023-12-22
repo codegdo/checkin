@@ -15,6 +15,7 @@ export const useEditorState = ({ data, onChange }: IEditorProps) => {
   return {
     props: { data, onChange },
     current: ref.current,
+    tabs: [],
     state,
     dispatch
   };

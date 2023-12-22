@@ -1,11 +1,11 @@
-import { Action, ActionType, CurrentRef, Payload, SelectTab, State } from "../types";
+import { Action, ActionType, Ref, Payload, SelectTab, State } from "../types";
 
 const initialState = {
   data: undefined,
   tab: null,
 };
 
-const initialRef = (): CurrentRef => {
+const initialRef = (): Ref => {
   return {};
 };
 
@@ -21,6 +21,10 @@ const editorReducer = (state: State, { type, payload }: Action<Payload>) => {
     default:
       return state;
   }
+}
+
+const editorTabs = () => {
+  
 }
 
 export { initialState, initialRef, editorReducer }

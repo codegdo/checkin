@@ -1,5 +1,5 @@
 import { useReducer, useRef } from 'react';
-import { CurrentRef, Field } from '../types';
+import { Ref, Field } from '../types';
 import { initialState, initialRef, dndReducer } from '../reducers';
 import { useHistory } from './use-history.hook';
 
@@ -18,7 +18,7 @@ export interface IDragDropProps {
 }
 
 export const useDragDropState = ({ data = [], drags = {}, options = {} }: IDragDropProps) => {
-  const ref = useRef<CurrentRef>(initialRef());
+  const ref = useRef<Ref>(initialRef());
   const [state, dispatch] = useReducer(dndReducer, {
     ...initialState,
     data: structuredClone(data)

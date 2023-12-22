@@ -1,6 +1,6 @@
 import { setSessionStorage } from "@/utils";
 import { dndHelper } from "../helpers";
-import { Action, ActionType, CurrentRef, LoadHistory, MoveItem, Payload, RemoveItem, State, UndoStep } from "../types";
+import { Action, ActionType, Ref, LoadHistory, MoveItem, Payload, RemoveItem, State, UndoStep } from "../types";
 
 const initialState = {
   data: [],
@@ -10,7 +10,7 @@ const initialState = {
   isSelecting: false,
 };
 
-const initialRef = (): CurrentRef => {
+const initialRef = (): Ref => {
   return {
     dropItem: null,
     elementRef: {},

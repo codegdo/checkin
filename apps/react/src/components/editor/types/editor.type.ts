@@ -23,13 +23,14 @@ export interface State {
   tab: EditorTab | null;
 }
 
-export interface CurrentRef {
+export interface Ref {
   onChange?: ((keyValue: KeyValue) => void);
 }
 
 export interface ContextValue {
-  current: CurrentRef;
+  current: Ref;
   state: State;
   dispatch: Dispatch<Action>;
   props: IEditorProps;
+  tabs: EditorTab[]
 }
