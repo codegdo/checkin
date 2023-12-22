@@ -5,22 +5,33 @@ import { IEditorProps } from "../hooks";
 
 export { FieldDataType as DataType };
 
-export interface Field extends FieldType { }
+export interface Field extends FieldType {
+  [key: string]: any;
+}
 
 export interface KeyValue {
-  key: string;
-  value: string;
+  [key: string]: string;
 }
 
-export interface EditorTab {
+export interface Tab {
   id: number | string;
   title: string;
-  data: any[]
+  data: IControl[];
 }
+
+export interface IControl {
+  id?: string | number;
+  type: string;
+  name: string;
+  title: string;
+  value?: string;
+  data?: JSON | null;
+}
+
 
 export interface State {
   data?: Field;
-  tab: EditorTab | null;
+  tab: Tab | null;
 }
 
 export interface Ref {
@@ -32,5 +43,5 @@ export interface ContextValue {
   state: State;
   dispatch: Dispatch<Action>;
   props: IEditorProps;
-  tabs: EditorTab[]
+  tabs: Tab[]
 }

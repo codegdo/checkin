@@ -1,6 +1,6 @@
 import { useReducer, useRef } from 'react';
 import { Field, KeyValue } from "../types";
-import { initialState, initialRef, editorReducer } from '../reducers';
+import { initialState, initialRef, editorTabs, editorReducer } from '../reducers';
 
 export interface IEditorProps {
   data?: Field;
@@ -8,14 +8,14 @@ export interface IEditorProps {
 }
 
 export const useEditorState = ({ data, onChange }: IEditorProps) => {
-
+  const tabs = editorTabs(data?.dataType);
   const ref = useRef({ ...initialRef() });
-  const [state, dispatch] = useReducer(editorReducer, { ...initialState, data: structuredClone(data) });
+  const [state, dispatch] = useReducer(editorReducer, { ...initialState, data: structuredClone(data), tab: tabs[0] });
 
   return {
     props: { data, onChange },
     current: ref.current,
-    tabs: [],
+    tabs,
     state,
     dispatch
   };

@@ -1,15 +1,7 @@
-import { ChangeEvent } from "react";
-
 export interface IControl {
   id?: string | number;
-  name: string;
-  title?: string;
-  description?: string;
   type: string;
+  name: string;
   value?: string;
-  defaultValue?: string;
-  data?: any;
-  placeholder?: string;
-
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  data?: JSON | null;
 }

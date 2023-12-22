@@ -1,25 +1,21 @@
 import { useState } from "react";
 import { ActionType, ContextValue, Field, KeyValue } from "../types";
 
-
 export function useItem(context: ContextValue, item: Field) {
-  const [currentItem, setCurrentItem] = useState({ ...item });
   const { current, state, dispatch } = context;
-  const { item: selectedItem } = current.selectedItem || {};
-  const { isSelecting, isEditing } = state;
+  const [currentItem, setItem] = useState({ ...item });
 
-  const match = selectedItem?.id == item.id;
-  const onSelecting = match ? isSelecting ?? false : false;
-  const onEditing = match ? isEditing ?? false : false;
+  const match = current.selectedItem?.item?.id === item.id;
+  const isSelecting = match ? state.isSelecting ?? false : false;
+  const isEditing = match ? state.isEditing ?? false : false;
 
   const onChange = (keyvalue: KeyValue) => {
-    console.log(keyvalue);
-    //setCurrentItem(prevItem => ({ ...prevItem, [key]: value }));
-  }
+    setItem((prevValues) => ({ ...prevValues, ...keyvalue }));
 
-  const onClick = () => {
-    console.log('click');
-  }
+    if (current.selectedItem !== null) {
+      current.selectedItem.item = { ...currentItem };
+    }
+  };
 
   const handleMenuClick = (name: keyof typeof ActionType) => {
     switch (name) {
@@ -31,36 +27,44 @@ export function useItem(context: ContextValue, item: Field) {
         break;
       case ActionType.REMOVE_ITEM:
         delete context.current.elementRef[`${item.id}`];
-
         dispatch({
           type: name,
           payload: {
-            removeItem: selectedItem
-          }
+            removeItem: current.selectedItem?.item,
+          },
         });
         break;
       default:
+        break;
     }
-  }
+  };
 
   const handleItemClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
 
+    // Save
+    if (current.selectedItem !== null) {
+      dispatch({
+        type: ActionType.UPDATE_ITEM,
+        payload: { updatedItem: currentItem },
+      });
+    }
+
     if (match) {
-      context.current.selectedItem = null;
-      context.dispatch({ type: ActionType.UNSELECT_ITEM, });
+      current.selectedItem = null;
+      dispatch({ type: ActionType.UNSELECT_ITEM });
       return;
     }
 
-    context.current.selectedItem = { item, target: event.currentTarget, callback: { onChange, onClick } };
-    context.dispatch({ type: ActionType.SELECT_ITEM });
-  }
+    current.selectedItem = { item: currentItem, target: event.currentTarget, callback: { onChange } };
+    dispatch({ type: ActionType.SELECT_ITEM });
+  };
 
   return {
     currentItem,
-    isSelecting: onSelecting,
-    isEditing: onEditing,
+    isSelecting,
+    isEditing,
     handleMenuClick,
-    handleItemClick
-  }
+    handleItemClick,
+  };
 }

@@ -10,8 +10,7 @@ export interface Field extends FieldType {
 }
 
 export interface KeyValue {
-  key: string;
-  value: string;
+  [key: string]: string;
 }
 
 export type DragType = 'section' | 'block' | 'button' | 'link' | 'text';

@@ -1,7 +1,11 @@
-import { EditorTab } from "./editor.type";
+import { KeyValue, Tab } from "./editor.type";
 
 export interface SelectTab {
-  tab: EditorTab;
+  tab: Tab;
 }
 
-export type Payload = SelectTab;
+export interface UpdateValue {
+  keyvalue: KeyValue
+}
+
+export type Payload = SelectTab | UpdateValue;

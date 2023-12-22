@@ -1,21 +1,26 @@
 import { useWrapperContext } from "@/hooks";
+import { Tab, ActionType } from './types';
 import EditorContext from "./editor.provider";
-import { editorHelper } from "./helpers";
 
 function EditorTab() {
-  const context = useWrapperContext(EditorContext);
-  const tabs = editorHelper.getEditor();
+  const { tabs, state, dispatch } = useWrapperContext(EditorContext);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, tab: Tab) => {
     event.stopPropagation();
 
-    console.log(context);
+    dispatch({
+      type: ActionType.SELECT_TAB,
+      payload: { tab }
+    });
+
+    console.log(tab, state);
   }
 
   return <div>
     {
       tabs.map(tab => {
-        return <button key={tab.id} type="button" onClick={handleClick}>{tab.title}</button>
+        return <button key={tab.id} type="button" onClick={(e) => handleClick(e, tab)}>{tab.title}</button>
       })
     }
   </div>

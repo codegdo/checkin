@@ -1,4 +1,4 @@
-import { Action, ActionType, Ref, Payload, SelectTab, State } from "../types";
+import { Action, ActionType, Ref, Payload, SelectTab, State, UpdateValue } from "../types";
 
 const initialState = {
   data: undefined,
@@ -13,9 +13,17 @@ const editorReducer = (state: State, { type, payload }: Action<Payload>) => {
   switch (type) {
     case ActionType.SELECT_TAB: {
       const { tab } = payload as SelectTab;
+
+      return {
+        ...state, tab,
+      };
+    }
+    case ActionType.UPDATE_VALUE: {
+      const { keyvalue } = payload as UpdateValue;
+
       return {
         ...state,
-        tab: tab,
+        data: { ...state.data, ...keyvalue },
       };
     }
     default:
@@ -23,8 +31,42 @@ const editorReducer = (state: State, { type, payload }: Action<Payload>) => {
   }
 }
 
-const editorTabs = () => {
-  
+const editorTabs = (dataType?: string) => {
+  switch (dataType) {
+    case 'field':
+      return [
+        {
+          id: 1,
+          title: "Content",
+          data: [
+            {
+              type: 'text',
+              name: 'title',
+              title: 'Title',
+              data: null
+            },
+            {
+              type: 'text',
+              name: 'description',
+              title: 'Description',
+              data: null
+            }
+          ]
+        },
+        {
+          id: 2,
+          title: "Design",
+          data: []
+        },
+        {
+          id: 3,
+          title: "Setting",
+          data: []
+        }
+      ]
+    default:
+      return [];
+  }
 }
 
-export { initialState, initialRef, editorReducer }
+export { initialState, initialRef, editorTabs, editorReducer }

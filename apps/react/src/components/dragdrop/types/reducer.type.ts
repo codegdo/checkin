@@ -11,6 +11,10 @@ export interface RemoveItem {
   removeItem: Partial<Field> | null | undefined
 }
 
+export interface UpdateItem {
+  updatedItem: Partial<Field>
+}
+
 export interface LoadHistory {
   historyData: Field[][];
   historyIndex: number;
@@ -20,4 +24,4 @@ export interface UndoStep {
   dataSource: Field[]
 }
 
-export type Payload = LoadHistory | MoveItem | RemoveItem | UndoStep;
+export type Payload = LoadHistory | MoveItem | RemoveItem | UpdateItem | UndoStep;

@@ -36,9 +36,9 @@ const render = ({ data = [], context }: IProps) => {
                 {render({ data: childData, context })}
               </DropBlock>;
             case 'field':
-              return <DropField key={item.id} {...item} context={context} />;
+              return <DropField key={id} {...item} context={context} />;
             case 'element':
-              return <DropElement key={item.id} {...item} context={context} />;
+              return <DropElement key={id} {...item} context={context} />;
             default:
               return null;
           }

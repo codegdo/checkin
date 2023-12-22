@@ -23,6 +23,4 @@ export interface IInput {
   data?: any;
   placeholder?: string;
   hint?: string;
-
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }

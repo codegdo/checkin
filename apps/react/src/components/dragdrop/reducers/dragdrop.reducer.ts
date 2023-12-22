@@ -1,6 +1,6 @@
 import { setSessionStorage } from "@/utils";
 import { dndHelper } from "../helpers";
-import { Action, ActionType, Ref, LoadHistory, MoveItem, Payload, RemoveItem, State, UndoStep } from "../types";
+import { Action, ActionType, Ref, LoadHistory, MoveItem, Payload, RemoveItem, State, UndoStep, UpdateItem } from "../types";
 
 const initialState = {
   data: [],
@@ -172,6 +172,45 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
       });
 
       return { ...state, data: remainingItems, historyData: newDataHistory, historyIndex };
+    }
+    case ActionType.UPDATE_ITEM: {
+      const { updatedItem } = payload as UpdateItem;
+
+      if (!updatedItem) return state;
+
+      const updatedItemId = updatedItem.id;
+      const updatedData = state.data.map((item) => {
+        if (item.id == updatedItemId) {
+          return {
+            ...item,
+            ...updatedItem,
+          };
+        }
+        return item;
+      });
+
+      console.log('UPDATE_ITEM', updatedItem, updatedData);
+
+      const newDataHistory = [
+        ...state.historyData.slice(0, state.historyIndex + 1),
+        structuredClone(updatedData),
+      ];
+
+      // Update currentIndex based on the number of existing history entries
+      const historyIndex = state.historyIndex === -1 ? 0 : state.historyIndex + 1;
+
+      // Update sessionStorage
+      setSessionStorage({
+        dnd_history_data: newDataHistory,
+        dnd_history_index: historyIndex,
+      });
+
+      return {
+        ...state,
+        data: updatedData,
+        historyData: newDataHistory,
+        historyIndex,
+      };
     }
     case ActionType.SELECT_ITEM: {
       return {

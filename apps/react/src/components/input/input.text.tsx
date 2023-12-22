@@ -9,7 +9,7 @@ export function InputText({
   type,
   name,
   hint = '',
-  value = '', // Default value if value is undefined/null
+  value = '',
   onChange,
 }: IProps) {
 

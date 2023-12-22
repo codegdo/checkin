@@ -1,5 +1,5 @@
+import { ControlText } from './control.text';
 import { IControl } from './types';
-import { InputText } from './input.text';
 
 interface IProps extends IControl { }
 
@@ -7,7 +7,7 @@ export function Control(props: IProps) {
 
   switch (props.type) {
     case 'text':
-    case 'password': return <InputText {...props} />;
+    case 'password': return <ControlText {...props} />;
 
     default: return null;
   }
