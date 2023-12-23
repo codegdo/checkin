@@ -19,12 +19,22 @@ const defaultCoordinate = {
 };
 
 export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
+  const {current, state, dispatch} = context;
   const rElement = useRef<HTMLDivElement>(null);
   const rPreview = useRef<HTMLDivElement>(null);
   const rCoordinate = useRef<Coordinate>(defaultCoordinate);
-
+  
   const handleDragStart = useCallback(() => {
-    context.dispatch({ type: ActionType.UNSELECT_ITEM });
+    if(state.isSelecting) {
+      // update item
+      if (current.selectedItem && current.selectedItem.item) {
+        dispatch({
+          type: ActionType.UPDATE_ITEM,
+          payload: { updatedItem: current.selectedItem.item },
+        });
+      }
+      dispatch({ type: ActionType.UNSELECT_ITEM });
+    }
     return draggable;
   }, [context, draggable]);
 
@@ -35,29 +45,29 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
 
     const payload = {
       dragItem,
-      dropItem: context.current.dropItem,
-      offset: context.current.dragging.offset,
+      dropItem: current.dropItem,
+      offset: current.dragging.offset,
     };
 
     if (!dragElement) {
       const canAddItem = dndHelper.canDragDrop(dragItem, context);
 
       if (canAddItem) {
-        context.dispatch({ type: ActionType.ADD_ITEM, payload });
+        dispatch({ type: ActionType.ADD_ITEM, payload });
       }
       return;
     }
 
     const canDragDrop = dndHelper.canDragDrop(dragItem, context, dragElement);
     if (canDragDrop) {
-      context.dispatch({ type: ActionType.MOVE_ITEM, payload });
+      dispatch({ type: ActionType.MOVE_ITEM, payload });
     }
   }, [context]);
 
   const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
     if (!monitor.isOver({ shallow: true }) || !rElement.current) return;
 
-    if (context.current.dropItem?.id !== item.id) {
+    if (current.dropItem?.id !== item.id) {
       dndHelper.setDropItem(context, item);
     }
 

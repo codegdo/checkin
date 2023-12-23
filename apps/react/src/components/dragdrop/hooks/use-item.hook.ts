@@ -10,11 +10,15 @@ export function useItem(context: ContextValue, item: Field) {
   const isEditing = match ? state.isEditing ?? false : false;
 
   const onChange = (keyvalue: KeyValue) => {
-    setItem((prevValues) => ({ ...prevValues, ...keyvalue }));
-
-    if (current.selectedItem !== null) {
-      current.selectedItem.item = { ...currentItem };
-    }
+    setItem((prevItem) => {
+      const updatedItem = { ...prevItem, ...keyvalue };
+  
+      if (current.selectedItem) {
+        current.selectedItem.item = updatedItem;
+      }
+  
+      return updatedItem;
+    });
   };
 
   const handleMenuClick = (name: keyof typeof ActionType) => {
@@ -26,7 +30,7 @@ export function useItem(context: ContextValue, item: Field) {
         dispatch({ type: name });
         break;
       case ActionType.REMOVE_ITEM:
-        delete context.current.elementRef[`${item.id}`];
+        delete current.elementRef[`${item.id}`];
         dispatch({
           type: name,
           payload: {
@@ -42,8 +46,8 @@ export function useItem(context: ContextValue, item: Field) {
   const handleItemClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
 
-    // Save
-    if (current.selectedItem !== null) {
+    // update item
+    if (current.selectedItem) {
       dispatch({
         type: ActionType.UPDATE_ITEM,
         payload: { updatedItem: currentItem },

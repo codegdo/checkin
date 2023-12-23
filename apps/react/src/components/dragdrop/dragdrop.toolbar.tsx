@@ -17,7 +17,7 @@ function DropDropToolbar() {
         dispatch({
           type: name,
           payload: {
-            dataSource: props.dropData
+            dataSource: props.data
           }
         });
         break;
