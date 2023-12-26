@@ -1,4 +1,5 @@
 export * from './clone-object.util';
+export * from './compare-object.util';
 export * from './count-items.util';
 export * from './map-to-parent.util';
 export * from './random-string.util';

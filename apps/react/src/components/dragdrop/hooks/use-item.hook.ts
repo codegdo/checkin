@@ -1,20 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ActionType, ContextValue, Field, KeyValue } from "../types";
 
 export function useItem(context: ContextValue, item: Field) {
   const { current, state, dispatch } = context;
-  const [currentItem, setItem] = useState({ ...item });
+  const [currentItem, setItem] = useState(item);
 
   const match = current.selectedItem?.item?.id === item.id;
   const isSelecting = match ? state.isSelecting ?? false : false;
   const isEditing = match ? state.isEditing ?? false : false;
+
+  useEffect(() => {
+    if(!(state.historyIndex === state.historyData.length - 1)) {
+      console.log('SYNC');
+      if (JSON.stringify(item) !== JSON.stringify(currentItem)) {
+        setItem(item);
+      }
+    }
+    
+  }, [state]);
 
   const onChange = (keyvalue: KeyValue) => {
     setItem((prevItem) => {
       const updatedItem = { ...prevItem, ...keyvalue };
   
       if (current.selectedItem) {
-        current.selectedItem.item = updatedItem;
+        current.selectedItem.item = {...updatedItem};
       }
   
       return updatedItem;
@@ -48,10 +58,16 @@ export function useItem(context: ContextValue, item: Field) {
 
     // update item
     if (current.selectedItem) {
-      dispatch({
-        type: ActionType.UPDATE_ITEM,
-        payload: { updatedItem: currentItem },
-      });
+      // check item change
+      const oldItem = state.data.find(item => item.id == current.selectedItem?.item?.id);
+      const hasChanged = JSON.stringify(oldItem) !== JSON.stringify(current.selectedItem?.item);
+
+      if(hasChanged) { 
+        dispatch({
+          type: ActionType.UPDATE_ITEM,
+          payload: { updatedItem: {...currentItem} },
+        });
+      }
     }
 
     if (match) {
@@ -60,7 +76,7 @@ export function useItem(context: ContextValue, item: Field) {
       return;
     }
 
-    current.selectedItem = { item: currentItem, target: event.currentTarget, callback: { onChange } };
+    current.selectedItem = { item: {...currentItem}, target: event.currentTarget, callback: { onChange } };
     dispatch({ type: ActionType.SELECT_ITEM });
   };
 

@@ -8,6 +8,7 @@ const initialState = {
   historyIndex: -1,
   isEditing: false,
   isSelecting: false,
+  isRedo: false,
 };
 
 const initialRef = (): Ref => {
@@ -171,7 +172,12 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex
       });
 
-      return { ...state, data: remainingItems, historyData: newDataHistory, historyIndex };
+      return { 
+        ...state, 
+        data: remainingItems, 
+        historyData: newDataHistory, 
+        historyIndex 
+      };
     }
     case ActionType.UPDATE_ITEM: {
       const { updatedItem } = payload as UpdateItem;
@@ -252,7 +258,12 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
           dnd_history_index: -1
         });
 
-        return { ...state, data: initialData, historyIndex: -1 };
+        return { 
+          ...state, 
+          data: initialData, 
+          historyIndex: -1, 
+          isRedo: (historyIndex + 1 === state.historyData.length - 1) 
+        };
       }
 
       const previousData = structuredClone(historyData[historyIndex - 1]);
@@ -262,12 +273,21 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex - 1
       });
 
-      return { ...state, data: previousData, historyIndex: historyIndex - 1 };
+      return { 
+        ...state, 
+        data: previousData, 
+        historyIndex: historyIndex - 1,
+        isSelecting: false,
+        isEditing: false ,
+        isRedo: true
+      };
     }
     case ActionType.REDO_STEP: {
       const { historyIndex, historyData } = state;
 
-      if (historyIndex === historyData.length - 1 || historyData.length === 0) return state;
+      if (historyIndex === historyData.length - 1 || historyData.length === 0) {
+        return {...state, isRedo: false};
+      }
 
       const nextData = structuredClone(historyData[historyIndex + 1]);
 
@@ -276,7 +296,14 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex + 1
       });
 
-      return { ...state, data: nextData, historyIndex: historyIndex + 1 };
+      return { 
+        ...state, 
+        data: nextData, 
+        historyIndex: historyIndex + 1,
+        isSelecting: false,
+        isEditing: false,
+        isRedo: !(historyIndex + 1 === state.historyData.length - 1),
+      };
     }
     default:
       return state;

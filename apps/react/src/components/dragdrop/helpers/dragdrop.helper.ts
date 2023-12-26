@@ -1,8 +1,7 @@
 import { DropTargetMonitor, XYCoord } from "react-dnd";
 
-import { countItems, randomString } from "@/utils";
+import { compareObject, countItems, randomString } from "@/utils";
 import { DataType, Field, ContextValue } from "../types";
-
 export interface ElementInnerSize {
   innerWidth: number;
   innerHeight: number;
@@ -386,6 +385,10 @@ class DragDropHelper {
         return type;
       }
     });
+  }
+
+  compareItem(oldItem: Field, newItem: Field) {
+    return compareObject(oldItem, newItem);
   }
 
   generateNewId() {

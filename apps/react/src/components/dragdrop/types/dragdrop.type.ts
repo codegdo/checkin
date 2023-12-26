@@ -44,6 +44,7 @@ export interface State {
 
   isEditing?: boolean;
   isSelecting?: boolean;
+  isRedo?: boolean;
 }
 
 export interface ContextValue {

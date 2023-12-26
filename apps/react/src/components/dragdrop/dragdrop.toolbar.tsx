@@ -4,30 +4,41 @@ import { ActionType } from "./types";
 
 function DropDropToolbar() {
 
-  const { props, dispatch } = useWrapperContext(DragDropContext);
+  const { props, state, dispatch } = useWrapperContext(DragDropContext);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, name: keyof typeof ActionType) => {
+  const handleRedoClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
+    dispatch({ type: ActionType.REDO_STEP });
+    
+  };
 
-    switch (name) {
-      case ActionType.REDO_STEP:
-        dispatch({ type: name });
-        break;
-      case ActionType.UNDO_STEP:
-        dispatch({
-          type: name,
-          payload: {
-            dataSource: props.data
-          }
-        });
-        break;
-      default:
-    }
+  const handleUndoClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    dispatch({
+      type: ActionType.UNDO_STEP,
+      payload: {
+        dataSource: props.data
+      }
+    });
   };
 
   return <div>
-    <button type="button" onClick={(e) => handleClick(e, ActionType.REDO_STEP)}>redo</button>
-    <button type="button" onClick={(e) => handleClick(e, ActionType.UNDO_STEP)}>undo</button>
+      <button 
+      type="button" 
+      disabled={(state.historyIndex === -1 && state.historyData.length === 0) || state.historyIndex === state.historyData.length - 1 } 
+      onClick={handleRedoClick}
+      title="Redo Action"
+      >
+      Redo
+    </button>
+    <button 
+      type="button" 
+      disabled={state.historyIndex === -1} 
+      onClick={handleUndoClick}
+      title="Undo Action"
+      >
+        Undo
+      </button>
   </div>
 }
 
