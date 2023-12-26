@@ -378,6 +378,7 @@ class DragDropHelper {
           type,
           dataType: type === 'section' || type === 'block' ? type : 'element',
           data: type === 'section' || type === 'block' ? [] : null,
+          value: null,
           position: null,
           parentId: null,
         };

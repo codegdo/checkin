@@ -9,24 +9,14 @@ export function useItem(context: ContextValue, item: Field) {
   const isSelecting = match ? state.isSelecting ?? false : false;
   const isEditing = match ? state.isEditing ?? false : false;
 
-  useEffect(() => {
-    if(!(state.historyIndex === state.historyData.length - 1)) {
-      console.log('SYNC');
-      if (JSON.stringify(item) !== JSON.stringify(currentItem)) {
-        setItem(item);
-      }
-    }
-    
-  }, [state]);
-
   const onChange = (keyvalue: KeyValue) => {
     setItem((prevItem) => {
       const updatedItem = { ...prevItem, ...keyvalue };
-  
+
       if (current.selectedItem) {
-        current.selectedItem.item = {...updatedItem};
+        current.selectedItem.item = { ...updatedItem };
       }
-  
+
       return updatedItem;
     });
   };
@@ -62,10 +52,10 @@ export function useItem(context: ContextValue, item: Field) {
       const oldItem = state.data.find(item => item.id == current.selectedItem?.item?.id);
       const hasChanged = JSON.stringify(oldItem) !== JSON.stringify(current.selectedItem?.item);
 
-      if(hasChanged) { 
+      if (hasChanged) {
         dispatch({
           type: ActionType.UPDATE_ITEM,
-          payload: { updatedItem: {...currentItem} },
+          payload: { updatedItem: { ...currentItem } },
         });
       }
     }
@@ -76,9 +66,23 @@ export function useItem(context: ContextValue, item: Field) {
       return;
     }
 
-    current.selectedItem = { item: {...currentItem}, target: event.currentTarget, callback: { onChange } };
+    current.selectedItem = {
+      item: { ...currentItem },
+      target: event.currentTarget,
+      callback: { onChange }
+    };
+
     dispatch({ type: ActionType.SELECT_ITEM });
   };
+
+  useEffect(() => {
+    if (state.isUndoing) {
+      if (JSON.stringify(item) !== JSON.stringify(currentItem)) {
+        console.log('SYNC ITEM');
+        setItem(item);
+      }
+    }
+  }, [currentItem, item, state.isUndoing]);
 
   return {
     currentItem,

@@ -19,13 +19,13 @@ const defaultCoordinate = {
 };
 
 export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
-  const {current, state, dispatch} = context;
+  const { current, state, dispatch } = context;
   const rElement = useRef<HTMLDivElement>(null);
   const rPreview = useRef<HTMLDivElement>(null);
   const rCoordinate = useRef<Coordinate>(defaultCoordinate);
-  
+
   const handleDragStart = useCallback(() => {
-    if(state.isSelecting) {
+    if (state.isSelecting) {
       // update item
       if (current.selectedItem && current.selectedItem.item) {
         dispatch({
@@ -36,7 +36,7 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
       dispatch({ type: ActionType.UNSELECT_ITEM });
     }
     return draggable;
-  }, [context, draggable]);
+  }, [current.selectedItem, dispatch, draggable, state.isSelecting]);
 
   const handleDragEnd = useCallback((dragItem: Field, monitor: DragSourceMonitor<Field>) => {
     if (!monitor.didDrop()) return;
@@ -62,7 +62,7 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
     if (canDragDrop) {
       dispatch({ type: ActionType.MOVE_ITEM, payload });
     }
-  }, [context]);
+  }, [context, current.dragging.offset, current.dropItem, dispatch]);
 
   const handleDragOver = useCallback((dragItem: Field, monitor: DropTargetMonitor<Field>) => {
     if (!monitor.isOver({ shallow: true }) || !rElement.current) return;
@@ -78,7 +78,7 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
     if (dndHelper.setOffset(rPreview.current || rElement.current, context, rCoordinate.current)) return;
 
     //console.log('DRAG OVER');
-  }, [context, item]);
+  }, [context, current.dropItem?.id, item]);
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: `${item.dataType}`,

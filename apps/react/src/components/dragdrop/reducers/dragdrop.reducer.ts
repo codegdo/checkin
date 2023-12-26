@@ -8,7 +8,7 @@ const initialState = {
   historyIndex: -1,
   isEditing: false,
   isSelecting: false,
-  isRedo: false,
+  isUndoing: false,
 };
 
 const initialRef = (): Ref => {
@@ -37,7 +37,12 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex,
       });
 
-      return { ...state, data: loadHistoryData, historyIndex, historyData };
+      return {
+        ...state,
+        data: loadHistoryData,
+        historyIndex, historyData,
+        isUndoing: false
+      };
     }
     case ActionType.ADD_ITEM: {
       const { dragItem, dropItem, offset } = payload as MoveItem;
@@ -83,7 +88,13 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex
       });
 
-      return { ...state, data: newData, historyData: newDataHistory, historyIndex };
+      return {
+        ...state,
+        data: newData,
+        historyData: newDataHistory,
+        historyIndex,
+        isUndoing: false
+      };
     }
     case ActionType.MOVE_ITEM: {
       const { dragItem, dropItem, offset } = payload as MoveItem;
@@ -135,7 +146,13 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex
       });
 
-      return { ...state, data: remainingItems, historyData: newDataHistory, historyIndex };
+      return {
+        ...state,
+        data: remainingItems,
+        historyData: newDataHistory,
+        historyIndex,
+        isUndoing: false
+      };
     }
     case ActionType.REMOVE_ITEM: {
       const { removeItem } = payload as RemoveItem;
@@ -172,11 +189,12 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex
       });
 
-      return { 
-        ...state, 
-        data: remainingItems, 
-        historyData: newDataHistory, 
-        historyIndex 
+      return {
+        ...state,
+        data: remainingItems,
+        historyData: newDataHistory,
+        historyIndex,
+        isUndoing: false
       };
     }
     case ActionType.UPDATE_ITEM: {
@@ -216,6 +234,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         data: updatedData,
         historyData: newDataHistory,
         historyIndex,
+        isUndoing: false
       };
     }
     case ActionType.SELECT_ITEM: {
@@ -258,11 +277,11 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
           dnd_history_index: -1
         });
 
-        return { 
-          ...state, 
-          data: initialData, 
-          historyIndex: -1, 
-          isRedo: (historyIndex + 1 === state.historyData.length - 1) 
+        return {
+          ...state,
+          data: initialData,
+          historyIndex: -1,
+          isUndoing: true
         };
       }
 
@@ -273,20 +292,20 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex - 1
       });
 
-      return { 
-        ...state, 
-        data: previousData, 
+      return {
+        ...state,
+        data: previousData,
         historyIndex: historyIndex - 1,
         isSelecting: false,
-        isEditing: false ,
-        isRedo: true
+        isEditing: false,
+        isUndoing: true
       };
     }
     case ActionType.REDO_STEP: {
       const { historyIndex, historyData } = state;
 
       if (historyIndex === historyData.length - 1 || historyData.length === 0) {
-        return {...state, isRedo: false};
+        return { ...state, isUndoing: true };
       }
 
       const nextData = structuredClone(historyData[historyIndex + 1]);
@@ -296,13 +315,13 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         dnd_history_index: historyIndex + 1
       });
 
-      return { 
-        ...state, 
-        data: nextData, 
+      return {
+        ...state,
+        data: nextData,
         historyIndex: historyIndex + 1,
         isSelecting: false,
         isEditing: false,
-        isRedo: !(historyIndex + 1 === state.historyData.length - 1),
+        isUndoing: true,
       };
     }
     default:

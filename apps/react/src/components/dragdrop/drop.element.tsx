@@ -24,7 +24,7 @@ function DropElement({ context, ...item }: IProps) {
   return (
     <div ref={rElement} className={className} data-id={`${item.id}`} onClick={handleItemClick}>
       {(isSelecting && !isEditing) && <DropMenu onClick={handleMenuClick} />}
-      <Text value={currentItem.name} readOnly={!isEditing} />
+      <Text value={currentItem.value} readOnly={!isEditing} />
     </div>
   )
 }
