@@ -1,9 +1,10 @@
+import { useEffect } from "react";
 import { classNames } from "@/utils";
 import { ContextValue, Field } from "./types";
 import { useDragDrop, useItem } from "./hooks";
 import DropMenu from "./drop.menu";
-import { Text } from '../text';
-import { useEffect } from "react";
+import { OnChangeParams, TextEditor } from '../text';
+import { Descendant } from "slate";
 
 interface IProps extends Field {
   context: ContextValue;
@@ -17,16 +18,32 @@ function DropElement({ context, ...item }: IProps) {
     'is-over': isOver,
   });
 
+  const handleClick = () => { };
+
+  const handleChange = ({ data, value }: OnChangeParams) => {
+    console.log('ELEMENT CHANGE', data, value);
+  };
+
   useEffect(() => {
     drag(drop(rElement));
   }, [rElement.current]);
 
   return (
-    <div ref={rElement} className={className} data-id={`${item.id}`} onClick={handleItemClick}>
-      {(isSelecting && !isEditing) && <DropMenu onClick={handleMenuClick} />}
-      <Text value={currentItem.value} readOnly={!isEditing} />
+    <div
+      ref={rElement}
+      className={className}
+      data-id={`${item.id}`}
+      onClick={handleItemClick}
+    >
+      {isSelecting && !isEditing && <DropMenu onClick={handleMenuClick} />}
+      <TextEditor
+        data={currentItem.data as Descendant[]}
+        readOnly={!isEditing}
+        onChange={handleChange}
+        onClick={handleClick}
+      />
     </div>
-  )
+  );
 }
 
 export default DropElement;

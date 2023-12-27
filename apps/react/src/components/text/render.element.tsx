@@ -1,15 +1,13 @@
 import { PropsWithChildren } from "react";
-import { Element } from 'slate';
 import { RenderElementProps as SlateRenderElementProps } from "slate-react";
 
 export type RenderElementProps = PropsWithChildren<SlateRenderElementProps>;
 
 export function RenderElement({ attributes, children, element }: RenderElementProps) {
-  const { type } = element as Element;
 
-  switch (type) {
-    default:
-      return <p {...attributes}>{children}</p>
+
+  switch (element.type) {
+
     case 'quote':
       return <blockquote {...attributes}>{children}</blockquote>
     case 'code':
@@ -44,5 +42,7 @@ export function RenderElement({ attributes, children, element }: RenderElementPr
     //   )
     // case 'image':
     //   return <ImageElement {...props} />
+    default:
+      return <p {...attributes}>{children}</p>
   }
 }
