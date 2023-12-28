@@ -1,10 +1,10 @@
 import { useSlate } from "slate-react";
-import { ButtonMark } from "./button.mark";
+import { TextButton } from "./text.button";
 
 export function TextToolbar() {
   const editor = useSlate();
 
   return <div>
-    <ButtonMark editor={editor} format="bold" />
+    <TextButton name="mark" editor={editor} format="bold" />
   </div>
 }

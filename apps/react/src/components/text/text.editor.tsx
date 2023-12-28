@@ -1,12 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { createEditor, Descendant, Editor, Transforms } from 'slate';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createEditor, Descendant } from 'slate';
 import { withHistory } from 'slate-history';
-import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
+import { withSoftBreaks } from './text.withsoftbreak';
+import { textHelper } from './helpers/text.helper';
+import { KeyValue } from './types';
 import { RenderElement, RenderElementProps } from './render.element';
 import { RenderLeaf, RenderLeafProps } from './render.leaf';
 import { TextToolbar } from './text.toolbar';
-import { withSoftBreaks } from './text.withsoftbreak';
-import { textHelper } from './helpers/text.helper';
+import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
 
 export interface OnChangeParams {
   data: Descendant[];
@@ -14,58 +15,52 @@ export interface OnChangeParams {
 }
 
 interface IProps {
+  id?: string | number | null;
+  selectedId?: string | number | null;
   data?: Descendant[] | null;
-  readOnly?: boolean;
-  onChange?: (params: OnChangeParams) => void;
-  onClick?: () => void;
+  isEditing?: boolean;
+  isSelected?: boolean;
+  onChange?: (keyvalue: KeyValue) => void;
 }
 
+const defaultValue: Descendant[] = [{ type: 'paragraph', children: [{ text: '' }] }];
 
 
-export function TextEditor({ data, readOnly, onChange }: IProps) {
-
+export function TextEditor({ id, selectedId, data, isEditing, isSelected, onChange }: IProps) {
   const editor = useMemo(() => withHistory(withReact(withSoftBreaks(createEditor()))), []);
-  const [value, setValue] = useState<Descendant[]>(data || [{ type: 'paragraph', children: [{ text: '' }] }]);
+
   const renderElement = useCallback((props: RenderElementProps) => <RenderElement {...props} />, []);
   const renderLeaf = useCallback((props: RenderLeafProps) => <RenderLeaf {...props} />, []);
 
-  useEffect(() => {
-    if (!readOnly) {
-      ReactEditor.focus(editor);
-      Transforms.select(editor, Editor.end(editor, []));
-    }
-  }, [editor, readOnly]);
-
+  const [readOnly, setReadOnly] = useState<boolean>(!isEditing);
 
   const handleChange = (newValue: Descendant[]) => {
-    setValue(newValue);
     const html = textHelper.serialize(newValue);
-    onChange && onChange({ data: newValue, value: html });
+    onChange?.({ data: newValue, value: html });
   };
 
-  const handleDOMBeforeInput = (event: InputEvent) => {
-    const inputType = event.inputType;
-    if (inputType === 'insertText') {
-      const textLength = Editor.string(editor, []).length;
-      if (textLength >= 20) {
-        event.preventDefault();
-        return;
-      }
+  useEffect(() => {
+    setReadOnly(!isEditing);
+  }, [isEditing]);
+
+  useEffect(() => {
+    console.log('isSelected', isSelected);
+    if (isEditing && isSelected) {
+      ReactEditor.focus(editor);
     }
-  };
+  }, [editor, isEditing, isSelected]);
+
+  console.log(id, selectedId);
 
   return (
-    <Slate editor={editor} onChange={handleChange} initialValue={value}>
-      {
-        !readOnly && <TextToolbar />
-      }
+    <Slate editor={editor} onChange={handleChange} initialValue={data || defaultValue}>
+      {isSelected && <TextToolbar />}
       <Editable
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         placeholder="Enter some plain text..."
         readOnly={readOnly}
-        onDOMBeforeInput={handleDOMBeforeInput}
-        onClick={(e) => !readOnly && e.stopPropagation()}
+        onClick={(event) => (isEditing && event.stopPropagation())}
       />
     </Slate>
   );
@@ -75,11 +70,37 @@ export function TextEditor({ data, readOnly, onChange }: IProps) {
 
 
 
-
-
-
 /*
+// const handleDOMBeforeInput = (event: InputEvent) => {
+  //   const inputType = event.inputType;
+  //   if (inputType === 'insertText') {
+  //     const textLength = Editor.string(editor, []).length;
+  //     if (textLength >= 20) {
+  //       event.preventDefault();
+  //       return;
+  //     }
+  //   }
+  // };
 
+  // useEffect(() => {
+  //   if (data) {
+  //     Transforms.select(editor, Editor.end(editor, []));
+  //     Transforms.removeNodes(editor, { at: editor.selection || undefined });
+  //     Transforms.insertNodes(editor, data);
+  //   }
+  // }, [data, editor]);
+
+  // useEffect(() => {
+  //   editor.children = data || defaultValue;
+  //   forceUpdate();
+  // }, [editor, data, forceUpdate]);
+
+  // useEffect(() => {
+  //   if (isEditing) {
+  //     ReactEditor.focus(editor);
+  //     Transforms.select(editor, Editor.end(editor, []));
+  //   }
+  // }, [editor, isEditing]);
 // Custom function to serialize Slate value to HTML
 const serialize = (nodes: Descendant[]): string => {
   return nodes.map(node => {

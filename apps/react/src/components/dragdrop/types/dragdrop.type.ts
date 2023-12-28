@@ -2,6 +2,7 @@ import { DataType as FieldDataType, Field as FieldType } from "@/components/type
 import { Dispatch } from "react";
 import { Action } from "./action.type";
 import { IDragDropProps } from "../hooks";
+import { Descendant } from "slate";
 
 export { FieldDataType as DataType };
 
@@ -10,7 +11,7 @@ export interface Field extends FieldType {
 }
 
 export interface KeyValue {
-  [key: string]: string;
+  [key: string]: string | Descendant[];
 }
 
 export type DragType = 'section' | 'block' | 'button' | 'link' | 'text';

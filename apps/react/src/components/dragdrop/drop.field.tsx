@@ -10,8 +10,8 @@ interface IProps extends Field {
 }
 
 function DropField({ context, ...item }: IProps) {
-  const { rElement, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
   const { currentItem, isSelecting, isEditing, handleItemClick, handleMenuClick } = useItem(context, item);
+  const { rElement, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
 
   const className = classNames('drop-item', {
     'is-dragging': isDragging,

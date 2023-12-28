@@ -13,8 +13,8 @@ function DropMenu({ onClick }: IDropMenu) {
 
   return (
     <div>
-      <button type="button" onClick={(e) => handleClick(e, ActionType.OPEN_EDITING)}>Edit</button>
-      <button type="button" onClick={(e) => handleClick(e, ActionType.REMOVE_ITEM)}>Remove</button>
+      <button type="button" onClick={(event) => handleClick(event, ActionType.OPEN_EDITING)}>Edit</button>
+      <button type="button" onClick={(event) => handleClick(event, ActionType.REMOVE_ITEM)}>Remove</button>
     </div>
   )
 }

@@ -46,6 +46,12 @@ export function useItem(context: ContextValue, item: Field) {
   const handleItemClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
 
+    const target = event.target as Element;
+
+    if (target.getAttribute('type') === 'button') {
+      return;
+    }
+
     // update item
     if (current.selectedItem) {
       // check item change
@@ -90,5 +96,6 @@ export function useItem(context: ContextValue, item: Field) {
     isEditing,
     handleMenuClick,
     handleItemClick,
+    onChange
   };
 }
