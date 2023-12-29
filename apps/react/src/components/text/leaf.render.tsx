@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { RenderLeafProps as SlateRenderLeafProps } from "slate-react";
+import { RenderLeafProps } from "slate-react";
 
 
 export interface CustomText {
@@ -9,12 +9,11 @@ export interface CustomText {
   italic?: boolean;
   underline?: boolean;
   strikethrough?: boolean;
-  // Add other custom formatting properties here
 }
 
-export type RenderLeafProps = PropsWithChildren<SlateRenderLeafProps>;
+export type LeafRenderProps = PropsWithChildren<RenderLeafProps>;
 
-export function RenderLeaf({ attributes, children, leaf }: RenderLeafProps) {
+export function LeafRender({ attributes, children, leaf }: LeafRenderProps) {
   const { bold, code, italic, underline, strikethrough } = leaf as CustomText;
 
   if (bold) {

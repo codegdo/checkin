@@ -2,15 +2,13 @@ import { MouseEvent } from 'react';
 import { BaseEditor, Editor } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { ReactEditor } from 'slate-react';
+import { IToolbarButton } from './types';
 
-interface IProps {
-  name: 'mark' | 'block';
+interface IProps extends IToolbarButton {
   editor: BaseEditor & ReactEditor & HistoryEditor;
-  format: string;
-  icon?: string;
 }
 
-export function TextButton({ name, editor, format }: IProps) {
+export function ToolbarButton({ name, editor, format }: IProps) {
   const isActive = () => {
     const marks = Editor.marks(editor) || {};
 
@@ -27,5 +25,5 @@ export function TextButton({ name, editor, format }: IProps) {
     }
   }
 
-  return <button type="button" name={name} className={isActive() ? 'active' : ''} onMouseDown={handleOnMouseDown}>mark</button>;
+  return <button type="button" name={name} className={isActive() ? 'active' : ''} onMouseDown={handleOnMouseDown}>{format}</button>;
 }

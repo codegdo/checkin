@@ -1,37 +1,41 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { createEditor, Descendant } from 'slate';
-import { withHistory } from 'slate-history';
-import { withSoftBreaks } from './text.withsoftbreak';
-import { textHelper } from './helpers/text.helper';
-import { KeyValue } from './types';
-import { RenderElement, RenderElementProps } from './render.element';
-import { RenderLeaf, RenderLeafProps } from './render.leaf';
-import { TextToolbar } from './text.toolbar';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Editable, ReactEditor, Slate, withReact } from 'slate-react';
+import { createEditor, Descendant, Editor, Transforms } from 'slate';
+import { withHistory } from 'slate-history';
+
+import { textHelper } from './helpers';
+import { IToolbarButton, KeyValue } from './types';
+import { withSoftBreaks } from './hoc';
+
+import { ElementRender, ElementRenderProps } from './element.render';
+import { LeafRender, LeafRenderProps } from './leaf.render';
+import { TextToolbar } from './text.toolbar';
 
 export interface OnChangeParams {
   data: Descendant[];
   value: string;
 }
 
+interface Options {
+  toolbarButtons?: IToolbarButton[]
+}
+
 interface IProps {
   id?: string | number | null;
-  selectedId?: string | number | null;
   data?: Descendant[] | null;
-  isEditing?: boolean;
-  isSelected?: boolean;
+  placeholder?: string;
+  readOnly?: boolean;
+  options?: Options;
   onChange?: (keyvalue: KeyValue) => void;
 }
 
 const defaultValue: Descendant[] = [{ type: 'paragraph', children: [{ text: '' }] }];
 
-export function TextEditor({ data, isEditing, isSelected, onChange }: IProps) {
+export function TextEditor({ data, placeholder = 'Enter some plain text...', readOnly, options = {}, onChange }: IProps) {
   const editor = useMemo(() => withHistory(withReact(withSoftBreaks(createEditor()))), []);
 
-  const renderElement = useCallback((props: RenderElementProps) => <RenderElement {...props} />, []);
-  const renderLeaf = useCallback((props: RenderLeafProps) => <RenderLeaf {...props} />, []);
-
-  const [readOnly, setReadOnly] = useState<boolean>(!isEditing);
+  const renderElement = useCallback((props: ElementRenderProps) => <ElementRender {...props} />, []);
+  const renderLeaf = useCallback((props: LeafRenderProps) => <LeafRender {...props} />, []);
 
   const handleChange = (newValue: Descendant[]) => {
     const html = textHelper.serialize(newValue);
@@ -39,30 +43,25 @@ export function TextEditor({ data, isEditing, isSelected, onChange }: IProps) {
   };
 
   useEffect(() => {
-    setReadOnly(!isEditing);
-  }, [isEditing]);
-
-  useEffect(() => {
-    if (isEditing && isSelected) {
-      ReactEditor.focus(editor);
-    }
-  }, [editor, isEditing, isSelected]);
+    ReactEditor.focus(editor);
+    Transforms.select(editor, Editor.end(editor, []));
+  }, [editor]);
 
   return (
     <Slate editor={editor} onChange={handleChange} initialValue={data || defaultValue}>
-      {isSelected && <TextToolbar />}
+      <TextToolbar buttons={options.toolbarButtons} />
       <Editable
         renderElement={renderElement}
         renderLeaf={renderLeaf}
-        placeholder="Enter some plain text..."
+        placeholder={placeholder}
         readOnly={readOnly}
-        onClick={(event) => (isEditing && event.stopPropagation())}
+        onClick={(event) => (event.stopPropagation())}
       />
     </Slate>
   );
 }
 
-// npx madge src/components/editor/editor.component.tsx --image src/components/editor/editor.graph.png --warning
+// npx madge src/components/text/text.editor.tsx --image src/components/text/text.graph.png --warning
 
 
 

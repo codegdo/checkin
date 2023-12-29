@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import { useWrapperContext } from "@/hooks";
 import { groupDataForRender } from "@/utils";
 import { ContextValue, Field } from "./types";
@@ -7,7 +9,6 @@ import DropSection from "./drop.section";
 import DropBlock from "./drop.block";
 import DropField from "./drop.field";
 import DropElement from "./drop.element";
-import { useMemo } from "react";
 
 interface IProps {
   data?: Field[] | null;
@@ -50,8 +51,9 @@ const render = ({ data = [], context }: IProps) => {
 
 function DropRender() {
   const context = useWrapperContext(DragDropContext);
-  //const renderData = groupDataForRender(context.state.dataValue) as Field[];
-  const renderData = useMemo(() => groupDataForRender(context.state.data) as Field[], [context.state.data]);
+  //const renderData = groupDataForRender(context.state.data) as Field[];
+  const data = context.state.data as Field[];
+  const renderData = useMemo(() => groupDataForRender(data) as Field[], [data]);
 
   console.log('renderData', renderData, context);
 

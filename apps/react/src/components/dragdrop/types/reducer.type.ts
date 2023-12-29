@@ -1,6 +1,5 @@
 import { Field } from "./dragdrop.type";
 
-
 export interface MoveItem {
   dragItem: Field;
   dropItem: Partial<Field> | null;

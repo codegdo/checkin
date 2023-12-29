@@ -20,7 +20,13 @@ export function mapToParent<T extends Item>(
     if (!parent.data) {
       parent.data = [];
     }
-    parent.data.push(item);
+
+    // Check if the item exists in parent's data array
+    const existsInParentData = parent.data.some((i) => i.id === item.id);
+
+    if (!existsInParentData) {
+      parent.data.push(item);
+    }
     return;
   } else {
     for (const child of list) {

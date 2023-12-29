@@ -24,17 +24,42 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
   const rPreview = useRef<HTMLDivElement>(null);
   const rCoordinate = useRef<Coordinate>(defaultCoordinate);
 
-  const handleDragStart = useCallback(() => {
-    if (state.isSelecting) {
-      // update item
-      if (current.selectedItem && current.selectedItem.item) {
+  const updateItem = (selectedItem: Field) => {
+    let updatedItem = { ...selectedItem };
+    if (selectedItem?.dataType === 'section' || selectedItem?.dataType === 'block') {
+      updatedItem = { ...updatedItem, data: [] };
+    }
+    return updatedItem;
+  };
+
+  const shouldUpdateItem = (updatedItem: Field) => {
+    const oldItem = state.data.find((item) => item.id === updatedItem?.id);
+    return JSON.stringify(oldItem) !== JSON.stringify(updatedItem);
+  };
+
+  const handleItemUpdate = () => {
+    if (current.selectedItem?.item) {
+      const selectedItem = current.selectedItem.item;
+      const updatedItem = updateItem(selectedItem);
+
+      if (shouldUpdateItem(updatedItem)) {
         dispatch({
           type: ActionType.UPDATE_ITEM,
-          payload: { updatedItem: current.selectedItem.item },
+          payload: { updatedItem },
         });
       }
+
+      context.current.selectedItem = null;
+    }
+  }
+
+  const handleDragStart = useCallback(() => {
+
+    if (state.isSelecting) {
+      handleItemUpdate();
       dispatch({ type: ActionType.UNSELECT_ITEM });
     }
+
     return draggable;
   }, [current.selectedItem, dispatch, draggable, state.isSelecting]);
 
@@ -59,6 +84,7 @@ export const useDragDrop = ({ context, item, draggable = true }: IProps) => {
     }
 
     const canDragDrop = dndHelper.canDragDrop(dragItem, context, dragElement);
+
     if (canDragDrop) {
       dispatch({ type: ActionType.MOVE_ITEM, payload });
     }

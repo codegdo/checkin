@@ -1,7 +1,7 @@
-import { BaseEditor, Editor, Transforms } from "slate";
-import { ReactEditor } from "slate-react";
+import { Editor, Transforms } from "slate";
+import { CustomEditor } from "../types";
 
-export const withSoftBreaks = (editor: BaseEditor & ReactEditor) => {
+export const withSoftBreaks = (editor: CustomEditor) => {
   const { insertText, insertBreak } = editor;
 
   editor.insertText = (text) => {

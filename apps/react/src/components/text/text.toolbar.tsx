@@ -1,10 +1,19 @@
 import { useSlate } from "slate-react";
-import { TextButton } from "./text.button";
+import { ToolbarButton } from "./toolbar.button";
+import { IToolbarButton } from "./types";
 
-export function TextToolbar() {
+interface IProps {
+  buttons?: IToolbarButton[]
+}
+
+export function TextToolbar({ buttons = [] }: IProps) {
   const editor = useSlate();
 
   return <div>
-    <TextButton name="mark" editor={editor} format="bold" />
+    {
+      buttons.map(({ name, format, icon }) => {
+        return <ToolbarButton key={name} name={name} editor={editor} format={format} icon={icon} />
+      })
+    }
   </div>
 }

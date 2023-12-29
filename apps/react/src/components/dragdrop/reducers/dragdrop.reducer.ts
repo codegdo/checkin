@@ -151,6 +151,8 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         data: remainingItems,
         historyData: newDataHistory,
         historyIndex,
+        isEditing: false,
+        isSelecting: false,
         isUndoing: false
       };
     }
@@ -194,6 +196,8 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         data: remainingItems,
         historyData: newDataHistory,
         historyIndex,
+        isEditing: false,
+        isSelecting: false,
         isUndoing: false
       };
     }
@@ -234,6 +238,8 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         data: updatedData,
         historyData: newDataHistory,
         historyIndex,
+        isEditing: false,
+        isSelecting: false,
         isUndoing: false
       };
     }

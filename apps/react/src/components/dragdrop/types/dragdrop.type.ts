@@ -6,9 +6,7 @@ import { Descendant } from "slate";
 
 export { FieldDataType as DataType };
 
-export interface Field extends FieldType {
-  selected?: boolean;
-}
+export type Field = FieldType;
 
 export interface KeyValue {
   [key: string]: string | Descendant[];

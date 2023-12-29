@@ -1,13 +1,10 @@
 import { PropsWithChildren } from "react";
-import { RenderElementProps as SlateRenderElementProps } from "slate-react";
+import { RenderElementProps } from "slate-react";
 
-export type RenderElementProps = PropsWithChildren<SlateRenderElementProps>;
+export type ElementRenderProps = PropsWithChildren<RenderElementProps>;
 
-export function RenderElement({ attributes, children, element }: RenderElementProps) {
-
-
+export function ElementRender({ attributes, children, element }: ElementRenderProps) {
   switch (element.type) {
-
     case 'quote':
       return <blockquote {...attributes}>{children}</blockquote>
     case 'code':

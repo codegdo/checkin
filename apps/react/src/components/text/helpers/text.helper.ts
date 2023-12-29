@@ -1,54 +1,63 @@
 import { Descendant } from "slate";
-import { CustomText } from "../render.leaf";
+import { CustomText } from "../leaf.render";
 
 class TextHelper {
-
-  serialize(nodes: Descendant[]) {
-    return nodes.map(node => {
+  serialize(nodes: Descendant[]): string {
+    const serializeNode = (node: Descendant): string => {
       if ('type' in node && 'children' in node) {
-        // Handle paragraph nodes
         if (node.type === 'paragraph') {
-          return node.children.map((child) => {
-            if ('text' in child) {
-              const { text, ...customProps } = child as CustomText;
-              let serializedText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-              if (customProps.bold) {
-                serializedText = `<strong>${serializedText}</strong>`;
-              }
-
-              if (customProps.code) {
-                serializedText = `<code>${serializedText}</code>`;
-              }
-
-              if (customProps.italic) {
-                serializedText = `<em>${serializedText}</em>`;
-              }
-
-              if (customProps.underline) {
-                serializedText = `<u>${serializedText}</u>`;
-              }
-
-              return `<p>${serializedText}</p>`;
-            }
-
-            // Handle other text-based node types if needed
-            // For example, code blocks, headings, etc.
-
-            return '';
-          }).join('');
+          const paragraphContent = this.serializeParagraph(node.children);
+          return paragraphContent ? `<p>${paragraphContent}</p>` : '';
         }
-
         // Handle other block-level nodes if needed
         // For example, list items, headings, etc.
-
         return '';
       }
-
       // Handle other node types like inline elements, etc.
-
       return '';
-    }).join('');
+    };
+
+    return nodes.map(serializeNode).join('');
+  }
+
+  private serializeParagraph(children: Descendant[]): string {
+    return children
+      .map((child) => {
+        if ('text' in child) {
+          return this.serializeText(child as CustomText);
+        }
+        // Handle other text-based node types if needed
+        // For example, code blocks, headings, etc.
+        return '';
+      })
+      .filter((text) => text !== '')
+      .join('');
+  }
+
+  private serializeText({ text, ...customProps }: CustomText): string {
+    let serializedText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    if (serializedText === '') {
+      return '';
+    }
+
+    if (customProps.bold) {
+      serializedText = `<strong>${serializedText}</strong>`;
+    }
+
+    if (customProps.code) {
+      serializedText = `<code>${serializedText}</code>`;
+    }
+
+    if (customProps.italic) {
+      serializedText = `<em>${serializedText}</em>`;
+    }
+
+    if (customProps.underline) {
+      serializedText = `<u>${serializedText}</u>`;
+    }
+
+    return serializedText;
   }
 }
 

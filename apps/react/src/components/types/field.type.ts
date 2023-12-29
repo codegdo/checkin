@@ -1,5 +1,3 @@
-import { Descendant } from "slate";
-
 export enum FieldType {
   TEXT = 'text',
   NUMBER = 'number',
@@ -82,7 +80,7 @@ interface Element {
   type: string | ElementType | FieldType;
   dataType?: string | DataType;
 
-  data?: (Element | Field | Descendant)[] | null;
+  data?: (Element | Field)[] | null;
   value?: string | null;
 
   parentId?: number | string | null;

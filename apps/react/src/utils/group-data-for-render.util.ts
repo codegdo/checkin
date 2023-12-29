@@ -10,10 +10,15 @@ export function groupDataForRender(data: Item[]) {
   const list: Item[] = [];
 
   cloneData.forEach((item: Item) => {
-    return mapToParent(list, item, (item: Item) => (item?.dataType === 'area' || item?.dataType === 'block' || item?.dataType === 'section' || item?.dataType === 'list'));
+    return mapToParent(list, JSON.parse(JSON.stringify(item)), (item: Item) => (
+      item?.dataType === 'area' ||
+      item?.dataType === 'block' ||
+      item?.dataType === 'section' ||
+      item?.dataType === 'list'
+    ));
   });
 
-  console.log('groupDataForRender');
+  console.log('groupDataForRender', cloneData);
 
   return [{
     id: 'root-area',

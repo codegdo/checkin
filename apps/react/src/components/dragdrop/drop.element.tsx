@@ -1,11 +1,12 @@
 import { useEffect, MouseEvent } from "react";
+import parse from 'html-react-parser';
+
 import { classNames } from "@/utils";
 import { ContextValue, Field } from "./types";
 import { useDragDrop, useItem } from "./hooks";
 import DropMenu from "./drop.menu";
 import { TextEditor } from '../text';
 import { Descendant } from "slate";
-import parse from 'html-react-parser';
 
 interface IProps extends Field {
   context: ContextValue;
@@ -44,7 +45,8 @@ function DropElement({ context, ...item }: IProps) {
   }, [rElement.current]);
 
   const renderContent = () => {
-    const parsedValue = parse((currentItem.value || '').replace('\n', '<br/>'));
+    const textPlaceholder = 'Enter some plain text...';
+    const parsedValue = parse((currentItem.value || `<span style="opacity: 0.3;">${textPlaceholder}</span>`).replace('\n', '<br/>'));
 
     if (isSelecting && !isEditing) {
       return (
@@ -56,12 +58,18 @@ function DropElement({ context, ...item }: IProps) {
     } else if (isEditing) {
       return (
         <TextEditor
-          key={item.id}
           id={item.id}
-          selectedId={currentItem.id}
-          data={currentItem.data as Descendant[]}
-          isEditing={isEditing}
-          isSelected={context.current.selectedItem?.item?.id === currentItem.id}
+          data={(currentItem.data as unknown) as Descendant[]}
+          placeholder={textPlaceholder}
+          options={{
+            toolbarButtons: [
+              {
+                name: 'mark',
+                format: 'bold',
+                icon: ''
+              }
+            ]
+          }}
           onChange={onChange}
         />
       );
