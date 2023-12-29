@@ -25,8 +25,7 @@ interface IProps {
 
 const defaultValue: Descendant[] = [{ type: 'paragraph', children: [{ text: '' }] }];
 
-
-export function TextEditor({ id, selectedId, data, isEditing, isSelected, onChange }: IProps) {
+export function TextEditor({ data, isEditing, isSelected, onChange }: IProps) {
   const editor = useMemo(() => withHistory(withReact(withSoftBreaks(createEditor()))), []);
 
   const renderElement = useCallback((props: RenderElementProps) => <RenderElement {...props} />, []);
@@ -44,13 +43,10 @@ export function TextEditor({ id, selectedId, data, isEditing, isSelected, onChan
   }, [isEditing]);
 
   useEffect(() => {
-    console.log('isSelected', isSelected);
     if (isEditing && isSelected) {
       ReactEditor.focus(editor);
     }
   }, [editor, isEditing, isSelected]);
-
-  console.log(id, selectedId);
 
   return (
     <Slate editor={editor} onChange={handleChange} initialValue={data || defaultValue}>
@@ -65,6 +61,8 @@ export function TextEditor({ id, selectedId, data, isEditing, isSelected, onChan
     </Slate>
   );
 }
+
+// npx madge src/components/editor/editor.component.tsx --image src/components/editor/editor.graph.png --warning
 
 
 
