@@ -53,4 +53,4 @@ export interface ContextValue {
   props: IDragDropProps
 }
 
-
+export type TextData = Descendant;

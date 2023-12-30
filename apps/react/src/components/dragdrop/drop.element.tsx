@@ -2,15 +2,25 @@ import { useEffect, MouseEvent } from "react";
 import parse from 'html-react-parser';
 
 import { classNames } from "@/utils";
-import { ContextValue, Field } from "./types";
+import { ContextValue, TextData, Field } from "./types";
 import { useDragDrop, useItem } from "./hooks";
 import DropMenu from "./drop.menu";
 import { TextEditor } from '../text';
-import { Descendant } from "slate";
+
+import { dndHelper } from "./helpers";
+import { MarkButton } from "../text/types";
 
 interface IProps extends Field {
   context: ContextValue;
 }
+
+const markButtons = [
+  { name: 'mark', format: 'bold', icon: '' },
+  { name: 'mark', format: 'code', icon: '' },
+  { name: 'mark', format: 'italic', icon: '' },
+  { name: 'mark', format: 'underline', icon: '' },
+  { name: 'mark', format: 'strikethrough', icon: '' },
+];
 
 function DropElement({ context, ...item }: IProps) {
   const {
@@ -46,7 +56,12 @@ function DropElement({ context, ...item }: IProps) {
 
   const renderContent = () => {
     const textPlaceholder = 'Enter some plain text...';
-    const parsedValue = parse((currentItem.value || `<span style="opacity: 0.3;">${textPlaceholder}</span>`).replace('\n', '<br/>'));
+    const placeholder = `<span style="opacity: 0.3;">${textPlaceholder}</span>`;
+    const data = (currentItem.data as unknown) as TextData[];
+    const isTextEmpty = dndHelper.isTextEmpty(data);
+    const textValue = ((isTextEmpty ? placeholder : currentItem.value) || placeholder).replace(/\n/g, '<br/>');
+
+    const parsedValue = parse((textValue));
 
     if (isSelecting && !isEditing) {
       return (
@@ -59,16 +74,10 @@ function DropElement({ context, ...item }: IProps) {
       return (
         <TextEditor
           id={item.id}
-          data={(currentItem.data as unknown) as Descendant[]}
+          data={data}
           placeholder={textPlaceholder}
           options={{
-            toolbarButtons: [
-              {
-                name: 'mark',
-                format: 'bold',
-                icon: ''
-              }
-            ]
+            markButtons: markButtons as MarkButton[]
           }}
           onChange={onChange}
         />

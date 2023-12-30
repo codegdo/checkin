@@ -1,7 +1,8 @@
 import { DropTargetMonitor, XYCoord } from "react-dnd";
 
 import { compareObject, countItems, randomString } from "@/utils";
-import { DataType, Field, ContextValue } from "../types";
+import { DataType, Field, ContextValue, TextData } from "../types";
+
 export interface ElementInnerSize {
   innerWidth: number;
   innerHeight: number;
@@ -394,6 +395,26 @@ class DragDropHelper {
 
   generateNewId() {
     return randomString();
+  }
+
+  isTextEmpty(data: TextData[]): boolean {
+    if(data && Array.isArray(data)) {
+      for (const item of data) {
+        if ('children' in item) {
+          const allEmpty = item.children.every(child => {
+            if (child && typeof child === 'object' && 'text' in child) {
+              return child.text.trim() === '';
+            }
+            return true;
+          });
+    
+          if (!allEmpty) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   }
 }
 

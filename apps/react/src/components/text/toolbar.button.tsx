@@ -1,11 +1,10 @@
 import { MouseEvent } from 'react';
-import { BaseEditor, Editor } from 'slate';
-import { HistoryEditor } from 'slate-history';
-import { ReactEditor } from 'slate-react';
-import { IToolbarButton } from './types';
+import { Editor } from 'slate';
 
-interface IProps extends IToolbarButton {
-  editor: BaseEditor & ReactEditor & HistoryEditor;
+import { BlockButton, SlateEditor, MarkButton } from './types';
+
+type IProps = MarkButton & BlockButton & {
+  editor: SlateEditor;
 }
 
 export function ToolbarButton({ name, editor, format }: IProps) {

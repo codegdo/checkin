@@ -7,7 +7,7 @@ class TextHelper {
       if ('type' in node && 'children' in node) {
         if (node.type === 'paragraph') {
           const paragraphContent = this.serializeParagraph(node.children);
-          return paragraphContent ? `<p>${paragraphContent}</p>` : '';
+          return `<p>${paragraphContent}</p>`;
         }
         // Handle other block-level nodes if needed
         // For example, list items, headings, etc.
@@ -36,10 +36,6 @@ class TextHelper {
 
   private serializeText({ text, ...customProps }: CustomText): string {
     let serializedText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-    if (serializedText === '') {
-      return '';
-    }
 
     if (customProps.bold) {
       serializedText = `<strong>${serializedText}</strong>`;

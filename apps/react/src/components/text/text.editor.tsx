@@ -4,7 +4,7 @@ import { createEditor, Descendant, Editor, Transforms } from 'slate';
 import { withHistory } from 'slate-history';
 
 import { textHelper } from './helpers';
-import { IToolbarButton, KeyValue } from './types';
+import { MarkButton, KeyValue } from './types';
 import { withSoftBreaks } from './hoc';
 
 import { ElementRender, ElementRenderProps } from './element.render';
@@ -17,7 +17,8 @@ export interface OnChangeParams {
 }
 
 interface Options {
-  toolbarButtons?: IToolbarButton[]
+  markButtons?: MarkButton[],
+  blockButtons?: MarkButton[]
 }
 
 interface IProps {
@@ -49,7 +50,11 @@ export function TextEditor({ data, placeholder = 'Enter some plain text...', rea
 
   return (
     <Slate editor={editor} onChange={handleChange} initialValue={data || defaultValue}>
-      <TextToolbar buttons={options.toolbarButtons} />
+      <div>
+      <button type="button" onClick={editor.undo}>Undo</button>
+      <button type="button" onClick={editor.redo}>Redo</button>
+      </div>
+      <TextToolbar markButtons={options.markButtons} />
       <Editable
         renderElement={renderElement}
         renderLeaf={renderLeaf}
