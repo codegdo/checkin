@@ -1,32 +1,33 @@
 import { useSlate } from "slate-react";
 
-import { IBlockButton, IMarkButton } from "./types";
-import { BlockButton } from "./block.button";
-import { MarkButton } from "./mark.button";
+import { IButtonBlock, IButtonMark } from "./types";
+import { ButtonText } from "./button.text";
+import { ButtonMark } from "./button.mark";
+import { ButtonList } from "./button.list";
 
 interface IProps {
-  mark?: IMarkButton[],
-  formating?: IBlockButton[],
-  list?: IBlockButton[]
+  markButtons?: IButtonMark[],
+  textButtons?: IButtonBlock[],
+  listButtons?: IButtonBlock[]
 }
 
-export function TextToolbar({ mark = [], formating = [],  list =[]}: IProps) {
+export function TextToolbar({ markButtons = [], textButtons = [],  listButtons =[]}: IProps) {
   const editor = useSlate();
 
   return <div>
     {
-      mark.map(({ name, format, icon }) => {
-        return <MarkButton key={format} name={name} editor={editor} format={format} icon={icon} />
+      markButtons.map(({ name, icon }) => {
+        return <ButtonMark key={name} name={name} editor={editor} icon={icon} />
       })
     }
     {
-      formating.map(({ name, format, icon }) => {
-        return <BlockButton key={format} name={name} editor={editor} format={format} icon={icon} />
+      textButtons.map(({ name, icon }) => {
+        return <ButtonText key={name} name={name} editor={editor} icon={icon} />
       })
     }
     {
-      list.map(({ name, format, icon }) => {
-        return <BlockButton key={format} name={name} editor={editor} format={format} icon={icon} />
+      listButtons.map(({ name, icon }) => {
+        return <ButtonList key={name} name={name} editor={editor} icon={icon} />
       })
     }
   </div>

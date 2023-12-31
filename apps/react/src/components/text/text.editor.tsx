@@ -4,7 +4,7 @@ import { createEditor, Descendant, Editor, Transforms } from 'slate';
 import { withHistory } from 'slate-history';
 
 import { textHelper } from './helpers';
-import { IBlockButton, IMarkButton, KeyValue } from './types';
+import { IButtonBlock, IButtonMark, KeyValue } from './types';
 import { withSoftBreaks } from './hoc';
 
 import { ElementRender, ElementRenderProps } from './element.render';
@@ -17,19 +17,19 @@ export interface OnChangeParams {
 }
 
 interface Options {
-  formating?: IBlockButton[],
-  mark?: IMarkButton[],
-  list?: IBlockButton[],
-  alignment?: IBlockButton[],
-  //table?: IBlockButton[],
-  //history?: IBlockButton[],
-  //media?: IBlockButton[],
-  //link?: IBlockButton[],
-  //color?: IBlockButton[],
-  //code?: IBlockButton[],
-  //clear?: IBlockButton[],
-  //search?: IBlockButton[],
-  //symbol?: IBlockButton[]
+  textButtons?: IButtonBlock[],
+  markButtons?: IButtonMark[],
+  listButtons?: IButtonBlock[],
+  alignButtons?: IButtonBlock[],
+  //table?: IButtonBlock[],
+  //history?: IButtonBlock[],
+  //media?: IButtonBlock[],
+  //link?: IButtonBlock[],
+  //color?: IButtonBlock[],
+  //code?: IButtonBlock[],
+  //clear?: IButtonBlock[],
+  //search?: IButtonBlock[],
+  //symbol?: IButtonBlock[]
 }
 
 interface IProps {
@@ -65,7 +65,7 @@ export function TextEditor({ data, placeholder = 'Enter some plain text...', rea
       <button type="button" onClick={editor.undo}>Undo</button>
       <button type="button" onClick={editor.redo}>Redo</button>
       </div>
-      <TextToolbar mark={options.mark} formating={options.formating} list={options.list} />
+      <TextToolbar markButtons={options.markButtons} textButtons={options.textButtons} listButtons={options.listButtons} />
       <Editable
         renderElement={renderElement}
         renderLeaf={renderLeaf}

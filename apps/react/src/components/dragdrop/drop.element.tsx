@@ -8,29 +8,29 @@ import DropMenu from "./drop.menu";
 import { TextEditor } from '../text';
 
 import { dndHelper } from "./helpers";
-import { IBlockButton, IMarkButton } from "../text/types";
+import { IButtonBlock, IButtonMark } from "../text/types";
 
 interface IProps extends Field {
   context: ContextValue;
 }
 
 const markButtons = [
-  { name: 'mark', format: 'bold', icon: '' },
-  { name: 'mark', format: 'code', icon: '' },
-  { name: 'mark', format: 'italic', icon: '' },
-  { name: 'mark', format: 'underline', icon: '' },
-  { name: 'mark', format: 'strikethrough', icon: '' },
+  { name: 'bold', icon: '' },
+  { name: 'code', icon: '' },
+  { name: 'italic', icon: '' },
+  { name: 'underline', icon: '' },
+  { name: 'strikethrough', icon: '' },
 ];
 
-const formatingButtons = [
-  { name: 'block', format: 'heading-one', icon: '' },
-  { name: 'block', format: 'heading-two', icon: '' },
-  { name: 'block', format: 'block-quote', icon: '' },
+const textButtons = [
+  { name: 'heading-one', icon: '' },
+  { name: 'heading-two', icon: '' },
+  { name: 'block-quote', icon: '' },
 ];
 
 const listButtons = [
-  { name: 'block', format: 'numbered-list', icon: '' },
-  { name: 'block', format: 'bulleted-list', icon: '' },
+  { name: 'numbered-list', icon: '' },
+  { name: 'bulleted-list', icon: '' },
 ];
 
 function DropElement({ context, ...item }: IProps) {
@@ -89,9 +89,9 @@ function DropElement({ context, ...item }: IProps) {
           data={data}
           placeholder={textPlaceholder}
           options={{
-            mark: markButtons as IMarkButton[],
-            formating: formatingButtons as IBlockButton[],
-            list: listButtons as IBlockButton[]
+            markButtons: markButtons as IButtonMark[],
+            textButtons: textButtons as IButtonBlock[],
+            listButtons: listButtons as IButtonBlock[]
           }}
           onChange={onChange}
         />
