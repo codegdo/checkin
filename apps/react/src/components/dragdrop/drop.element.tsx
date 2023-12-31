@@ -8,7 +8,7 @@ import DropMenu from "./drop.menu";
 import { TextEditor } from '../text';
 
 import { dndHelper } from "./helpers";
-import { MarkButton } from "../text/types";
+import { IBlockButton, IMarkButton } from "../text/types";
 
 interface IProps extends Field {
   context: ContextValue;
@@ -20,6 +20,17 @@ const markButtons = [
   { name: 'mark', format: 'italic', icon: '' },
   { name: 'mark', format: 'underline', icon: '' },
   { name: 'mark', format: 'strikethrough', icon: '' },
+];
+
+const formatingButtons = [
+  { name: 'block', format: 'heading-one', icon: '' },
+  { name: 'block', format: 'heading-two', icon: '' },
+  { name: 'block', format: 'block-quote', icon: '' },
+];
+
+const listButtons = [
+  { name: 'block', format: 'numbered-list', icon: '' },
+  { name: 'block', format: 'bulleted-list', icon: '' },
 ];
 
 function DropElement({ context, ...item }: IProps) {
@@ -38,9 +49,13 @@ function DropElement({ context, ...item }: IProps) {
     draggable: !isEditing
   });
 
+  const data = (currentItem.data as unknown) as TextData[];
+  const isTextEmpty = dndHelper.isTextEmpty(data);
+
   const className = classNames('drop-item', {
     'is-dragging': isDragging,
     'is-over': isOver,
+    'is-text-empty': isTextEmpty
   });
 
   const handleOnDragStart = (event: MouseEvent<HTMLDivElement>) => {
@@ -55,11 +70,8 @@ function DropElement({ context, ...item }: IProps) {
   }, [rElement.current]);
 
   const renderContent = () => {
-    const textPlaceholder = 'Enter some plain text...';
-    const placeholder = `<span style="opacity: 0.3;">${textPlaceholder}</span>`;
-    const data = (currentItem.data as unknown) as TextData[];
-    const isTextEmpty = dndHelper.isTextEmpty(data);
-    const textValue = ((isTextEmpty ? placeholder : currentItem.value) || placeholder).replace(/\n/g, '<br/>');
+    const textPlaceholder = 'Enter some plain text...';    
+    const textValue = (currentItem.value || '').replace(/\n/g, '<br/>');
 
     const parsedValue = parse((textValue));
 
@@ -77,7 +89,9 @@ function DropElement({ context, ...item }: IProps) {
           data={data}
           placeholder={textPlaceholder}
           options={{
-            markButtons: markButtons as MarkButton[]
+            mark: markButtons as IMarkButton[],
+            formating: formatingButtons as IBlockButton[],
+            list: listButtons as IBlockButton[]
           }}
           onChange={onChange}
         />

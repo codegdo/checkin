@@ -1,13 +1,13 @@
 import { MouseEvent } from 'react';
 import { Editor } from 'slate';
 
-import { BlockButton, SlateEditor, MarkButton } from './types';
+import { IBlockButton, SlateEditor } from './types';
 
-type IProps = MarkButton & BlockButton & {
+type IProps = IBlockButton & {
   editor: SlateEditor;
 }
 
-export function ToolbarButton({ name, editor, format }: IProps) {
+export function BlockButton({ name, editor, format }: IProps) {
   const isActive = () => {
     const marks = Editor.marks(editor) || {};
 

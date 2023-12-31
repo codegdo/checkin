@@ -4,7 +4,7 @@ import { createEditor, Descendant, Editor, Transforms } from 'slate';
 import { withHistory } from 'slate-history';
 
 import { textHelper } from './helpers';
-import { MarkButton, KeyValue } from './types';
+import { IBlockButton, IMarkButton, KeyValue } from './types';
 import { withSoftBreaks } from './hoc';
 
 import { ElementRender, ElementRenderProps } from './element.render';
@@ -17,8 +17,19 @@ export interface OnChangeParams {
 }
 
 interface Options {
-  markButtons?: MarkButton[],
-  blockButtons?: MarkButton[]
+  formating?: IBlockButton[],
+  mark?: IMarkButton[],
+  list?: IBlockButton[],
+  alignment?: IBlockButton[],
+  //table?: IBlockButton[],
+  //history?: IBlockButton[],
+  //media?: IBlockButton[],
+  //link?: IBlockButton[],
+  //color?: IBlockButton[],
+  //code?: IBlockButton[],
+  //clear?: IBlockButton[],
+  //search?: IBlockButton[],
+  //symbol?: IBlockButton[]
 }
 
 interface IProps {
@@ -54,7 +65,7 @@ export function TextEditor({ data, placeholder = 'Enter some plain text...', rea
       <button type="button" onClick={editor.undo}>Undo</button>
       <button type="button" onClick={editor.redo}>Redo</button>
       </div>
-      <TextToolbar markButtons={options.markButtons} />
+      <TextToolbar mark={options.mark} formating={options.formating} list={options.list} />
       <Editable
         renderElement={renderElement}
         renderLeaf={renderLeaf}

@@ -10,13 +10,13 @@ export type CustomElement = { type: BlockType; children: TextData[] }
 export type TextData = { text: string; bold?: true }
 export type SlateEditor = BaseEditor & ReactEditor & HistoryEditor;
 
-export interface MarkButton {
+export interface IMarkButton {
   name: ButtonType;
   format: string;
   icon: string;
 }
 
-export interface BlockButton extends MarkButton {}
+export interface IBlockButton extends IMarkButton {}
 
 declare module 'slate' {
   interface CustomTypes {
