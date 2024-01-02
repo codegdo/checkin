@@ -25,7 +25,7 @@ const markButtons = [
 const textButtons = [
   { name: 'heading-one', icon: '' },
   { name: 'heading-two', icon: '' },
-  { name: 'block-quote', icon: '' },
+  { name: 'quote', icon: '' },
 ];
 
 const listButtons = [

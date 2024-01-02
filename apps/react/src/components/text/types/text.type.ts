@@ -32,3 +32,7 @@ declare module 'slate' {
 export interface KeyValue {
   [key: string]: string | Descendant[];
 }
+
+export const LIST_TYPES = ['numbered-list', 'bulleted-list'];
+export const TEXT_BLOCK_TYPES = ['paragraph', 'heading-one', 'heading-two', 'heading-three', 'heading-four', 'heading-five', 'heading-six', 'quote'];
+export const TEXT_ALIGN_TYPES = ['left', 'center', 'right', 'justify']

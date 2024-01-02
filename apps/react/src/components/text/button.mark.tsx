@@ -24,5 +24,14 @@ export function ButtonMark({ name, editor }: IProps) {
     }
   }
 
-  return <button type="button" name={name} className={isActive() ? 'active' : ''} onMouseDown={handleOnMouseDown}>{name}</button>;
+  return (
+    <button 
+      type="button" 
+      name={name} 
+      className={isActive() ? 'active' : ''} 
+      onMouseDown={handleOnMouseDown}
+    >
+      {name}
+    </button>
+  );
 }

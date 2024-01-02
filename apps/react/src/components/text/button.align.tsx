@@ -7,7 +7,7 @@ type IProps = IButtonBlock & {
   editor: SlateEditor;
 }
 
-export function ButtonList({ name, editor }: IProps) {
+export function ButtonAlign({ name, editor }: IProps) {
   const isBlockActive = () => {
     const { selection } = editor
     if (!selection) return false
