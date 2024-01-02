@@ -10,23 +10,34 @@ class TextHelper {
         if(TEXT_BLOCK_TYPES.includes(node.type )) {
           const content = this.serializeContent(node.children);
 
+          console.log(node);
+
+          const alignStyles: Record<string, string> = {
+            left: 'text-align: left;',
+            center: 'text-align: center;',
+            right: 'text-align: right;',
+            justify: 'text-align: justify;'
+          };
+        
+          const style = node.align ? alignStyles[node.align] : {};
+
           switch(node.type) {
             case 'paragraph':
-              return `<p>${content}</p>`;
+              return `<p style="${style}">${content}</p>`;
             case'heading-one':
-            return `<h1>${content}</h1>`;
+            return `<h1 style="${style}">${content}</h1>`;
             case'heading-two':
-            return `<h2>${content}</h2>`;
+            return `<h2 style="${style}">${content}</h2>`;
             case'heading-three':
-            return `<h3>${content}</h3>`;
+            return `<h3 style="${style}">${content}</h3>`;
             case'heading-four':
-            return `<h4>${content}</h4>`;
+            return `<h4 style="${style}">${content}</h4>`;
             case'heading-five':
-            return `<h5>${content}</h5>`;
+            return `<h5 style="${style}">${content}</h5>`;
             case'heading-six':
-            return `<h6>${content}</h6>`;
+            return `<h6 style="${style}">${content}</h6>`;
             case'quote':
-            return `<blockquote>${content}</blockquote>`;
+            return `<blockquote style="${style}">${content}</blockquote>`;
           }
           return content;
         }

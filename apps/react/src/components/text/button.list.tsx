@@ -15,10 +15,13 @@ export function ButtonList({ name, editor }: IProps) {
     const [match] = Array.from(
       Editor.nodes(editor, {
         at: Editor.unhangRange(editor, selection),
-        match: n =>
-          !Editor.isEditor(n) &&
-          SlateElement.isElement(n) &&
-          n.type === name,
+        match: n => {
+          return (
+            !Editor.isEditor(n) &&
+            SlateElement.isElement(n) &&
+            n.type === name
+          )
+        },
       })
     )
   
@@ -29,10 +32,13 @@ export function ButtonList({ name, editor }: IProps) {
     const isList = LIST_TYPES.includes(name)
   
     Transforms.unwrapNodes(editor, {
-      match: n =>
-        !Editor.isEditor(n) &&
-        SlateElement.isElement(n) &&
-        LIST_TYPES.includes(n.type),
+      match: n => {
+        return (
+          !Editor.isEditor(n) &&
+          SlateElement.isElement(n) &&
+          LIST_TYPES.includes(n.type)
+        )
+      },
       split: true,
     })
     const newProperties: Partial<SlateElement> = {

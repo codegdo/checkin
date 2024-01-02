@@ -33,6 +33,13 @@ const listButtons = [
   { name: 'bulleted-list', icon: '' },
 ];
 
+const alignButtons = [
+  { name: 'left', icon: ''},
+  { name: 'center', icon: ''},
+  { name: 'right', icon: ''},
+  { name: 'justify', icon: ''}
+];
+
 function DropElement({ context, ...item }: IProps) {
   const {
     currentItem,
@@ -91,7 +98,8 @@ function DropElement({ context, ...item }: IProps) {
           options={{
             markButtons: markButtons as IButtonMark[],
             textButtons: textButtons as IButtonBlock[],
-            listButtons: listButtons as IButtonBlock[]
+            listButtons: listButtons as IButtonBlock[],
+            alignButtons: alignButtons as IButtonBlock[],
           }}
           onChange={onChange}
         />

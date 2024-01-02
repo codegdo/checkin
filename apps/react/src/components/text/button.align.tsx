@@ -15,10 +15,13 @@ export function ButtonAlign({ name, editor }: IProps) {
     const [match] = Array.from(
       Editor.nodes(editor, {
         at: Editor.unhangRange(editor, selection),
-        match: n =>
-          !Editor.isEditor(n) &&
-          SlateElement.isElement(n) &&
-          n.type === name,
+        match: n => {
+          return (
+            !Editor.isEditor(n) &&
+            SlateElement.isElement(n) &&
+            n.align === name
+          )
+        },
       })
     )
   
@@ -29,15 +32,20 @@ export function ButtonAlign({ name, editor }: IProps) {
     const isList = LIST_TYPES.includes(name)
   
     Transforms.unwrapNodes(editor, {
-      match: n =>
-        !Editor.isEditor(n) &&
-        SlateElement.isElement(n) &&
-        LIST_TYPES.includes(n.type),
+      match: n => {
+        return (
+          !Editor.isEditor(n) &&
+          SlateElement.isElement(n) &&
+          !TEXT_ALIGN_TYPES.includes(name)
+        )
+      },
       split: true,
-    })
+    });
+
     const newProperties: Partial<SlateElement> = {
-      type: isActive ? 'paragraph' : isList ? 'list-item' : name,
+      align: isActive ? undefined : name,
     }
+    
     Transforms.setNodes<SlateElement>(editor, newProperties)
   
     if (!isActive && isList) {

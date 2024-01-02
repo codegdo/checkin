@@ -65,7 +65,12 @@ export function TextEditor({ data, placeholder = 'Enter some plain text...', rea
       <button type="button" onClick={editor.undo}>Undo</button>
       <button type="button" onClick={editor.redo}>Redo</button>
       </div>
-      <TextToolbar markButtons={options.markButtons} textButtons={options.textButtons} listButtons={options.listButtons} />
+      <TextToolbar 
+        markButtons={options.markButtons} 
+        textButtons={options.textButtons} 
+        listButtons={options.listButtons} 
+        alignButtons={options.alignButtons}
+      />
       <Editable
         renderElement={renderElement}
         renderLeaf={renderLeaf}

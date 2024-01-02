@@ -6,7 +6,11 @@ export type BlockType = 'paragraph' | 'quote' | 'code' | 'bulleted-list' | 'head
 export type MarkType = 'bold' | 'code' | 'italic' | 'underline' | 'strikethrough';
 export type ButtonType = 'mark' | 'block';
 
-export type CustomElement = { type: BlockType; children: TextData[] }
+export type CustomElement = { 
+  type: BlockType; 
+  align?: string;
+  children: TextData[] 
+}
 export type TextData = { text: string; bold?: true }
 export type SlateEditor = BaseEditor & ReactEditor & HistoryEditor;
 
