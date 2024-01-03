@@ -373,18 +373,30 @@ class DragDropHelper {
   createDragElements(types: (string | Field)[]): Field[] {
     return types.map((type) => {
       if (typeof type === 'string') {
+        const dataType = type === 'section' || type === 'block' ? type : 'element';
+        let data: Field[] | null = type === 'section' || type === 'block' ? [] : null;
+        let value: string | null = null;
+
+        if (type === 'text') {
+          value = '<p></p>';
+          data = [{
+            type: 'paragraph',
+            children: [{ text: '' }],
+          }] as unknown as Field[];
+        }
+
         return {
           id: null,
           name: type,
           type,
-          dataType: type === 'section' || type === 'block' ? type : 'element',
-          data: type === 'section' || type === 'block' ? [] : null,
-          value: null,
+          dataType,
+          data,
+          value,
           position: null,
           parentId: null,
         };
       } else {
-        return type;
+        return type as Field; // Handling for cases where type is already a Field
       }
     });
   }
@@ -398,7 +410,7 @@ class DragDropHelper {
   }
 
   isTextEmpty(data: TextData[]): boolean {
-    if(data && Array.isArray(data)) {
+    if (data && Array.isArray(data)) {
       for (const item of data) {
         if ('children' in item) {
           const allEmpty = item.children.every(child => {
@@ -407,7 +419,7 @@ class DragDropHelper {
             }
             return true;
           });
-    
+
           if (!allEmpty) {
             return false;
           }

@@ -28,6 +28,17 @@
   pointer-events: none !important;
 }
 
+.drop-text-placeholder {
+  position: absolute;
+  pointer-events: none;
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  opacity: 0.333;
+  user-select: none;
+  text-decoration: none;
+}
+
 .is-disabled {
   opacity: 0.5;
 }
@@ -72,5 +83,5 @@
 
 .editor {
   width: 300px;
-  background-color: #eee;;
+  background-color: #eee;
 }

@@ -1,11 +1,10 @@
-import { useWrapperContext } from "@/hooks";
-import DragDropContext from "./dragdrop.provider";
+import { useDragDropContext } from "./dragdrop.provider";
 import DragField from "./drag.field";
 import DragElement from "./drag.element";
 import { dndHelper } from "./helpers";
 
 function DragRender() {
-  const context = useWrapperContext(DragDropContext);
+  const context = useDragDropContext();
   const { props } = context;
   const { drags } = props;
 

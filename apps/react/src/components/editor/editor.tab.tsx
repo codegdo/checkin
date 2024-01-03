@@ -1,9 +1,8 @@
-import { useWrapperContext } from "@/hooks";
 import { Tab, ActionType } from './types';
-import EditorContext from "./editor.provider";
+import { useEditorContext } from "./editor.provider";
 
 function EditorTab() {
-  const { tabs, state, dispatch } = useWrapperContext(EditorContext);
+  const { tabs, state, dispatch } = useEditorContext();
 
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>, tab: Tab) => {

@@ -7,7 +7,7 @@ class TextHelper {
     const serializeNode = (node: Descendant): string => {
       if ('type' in node && 'children' in node) {
 
-        if(TEXT_BLOCK_TYPES.includes(node.type )) {
+        if (TEXT_BLOCK_TYPES.includes(node.type)) {
           const content = this.serializeContent(node.children);
 
           console.log(node);
@@ -18,31 +18,33 @@ class TextHelper {
             right: 'text-align: right;',
             justify: 'text-align: justify;'
           };
-        
-          const style = node.align ? alignStyles[node.align] : {};
 
-          switch(node.type) {
+          const style = node.align ? ` style="${alignStyles[node.align]}"` : '';
+
+          switch (node.type) {
             case 'paragraph':
-              return `<p style="${style}">${content}</p>`;
-            case'heading-one':
-            return `<h1 style="${style}">${content}</h1>`;
-            case'heading-two':
-            return `<h2 style="${style}">${content}</h2>`;
-            case'heading-three':
-            return `<h3 style="${style}">${content}</h3>`;
-            case'heading-four':
-            return `<h4 style="${style}">${content}</h4>`;
-            case'heading-five':
-            return `<h5 style="${style}">${content}</h5>`;
-            case'heading-six':
-            return `<h6 style="${style}">${content}</h6>`;
-            case'quote':
-            return `<blockquote style="${style}">${content}</blockquote>`;
+              return `<p${style}>${content}</p>`;
+            case 'heading-one':
+              return `<h1${style}>${content}</h1>`;
+            case 'heading-two':
+              return `<h2${style}>${content}</h2>`;
+            case 'heading-three':
+              return `<h3${style}>${content}</h3>`;
+            case 'heading-four':
+              return `<h4${style}>${content}</h4>`;
+            case 'heading-five':
+              return `<h5${style}>${content}</h5>`;
+            case 'heading-six':
+              return `<h6${style}>${content}</h6>`;
+            case 'quote':
+              return `<blockquote${style}>${content}</blockquote>`;
+            default:
+              return content;
           }
-          return content;
+
         }
 
-        if(LIST_TYPES.includes(node.type)) {
+        if (LIST_TYPES.includes(node.type)) {
           const content = this.serializeList(node);
           return content;
         }

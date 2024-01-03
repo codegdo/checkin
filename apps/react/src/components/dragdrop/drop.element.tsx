@@ -34,10 +34,10 @@ const listButtons = [
 ];
 
 const alignButtons = [
-  { name: 'left', icon: ''},
-  { name: 'center', icon: ''},
-  { name: 'right', icon: ''},
-  { name: 'justify', icon: ''}
+  { name: 'left', icon: '' },
+  { name: 'center', icon: '' },
+  { name: 'right', icon: '' },
+  { name: 'justify', icon: '' }
 ];
 
 function DropElement({ context, ...item }: IProps) {
@@ -77,8 +77,8 @@ function DropElement({ context, ...item }: IProps) {
   }, [rElement.current]);
 
   const renderContent = () => {
-    const textPlaceholder = 'Enter some plain text...';    
-    const textValue = (currentItem.value || '').replace(/\n/g, '<br/>');
+    const textPlaceholder = 'Enter some plain text...';
+    const textValue = (currentItem.value || '<p></p>').replace(/\n/g, '<br/>');
 
     const parsedValue = parse((textValue));
 
@@ -86,6 +86,9 @@ function DropElement({ context, ...item }: IProps) {
       return (
         <>
           <DropMenu onClick={handleMenuClick} />
+          {
+            isTextEmpty && <span className="drop-text-placeholder">{textPlaceholder}</span>
+          }
           {parsedValue}
         </>
       );
@@ -105,7 +108,14 @@ function DropElement({ context, ...item }: IProps) {
         />
       );
     }
-    return parsedValue;
+    return <>
+      {
+        isTextEmpty && <span className="drop-text-placeholder">{textPlaceholder}</span>
+      }
+      {
+        parsedValue
+      }
+    </>
   };
 
   return (

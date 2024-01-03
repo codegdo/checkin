@@ -1,5 +1,4 @@
-import { useWrapperContext } from "@/hooks";
-import EditorContext from "./editor.provider";
+import { useEditorContext } from "./editor.provider";
 import { ContextValue, IControl } from "./types";
 import EditorText from "./editor.text";
 
@@ -19,7 +18,7 @@ const render = ({ data = [], context }: IProps) => {
 }
 
 function EditorContent() {
-  const context = useWrapperContext(EditorContext);
+  const context = useEditorContext();
   const { data } = context.state?.tab || {};
 
   if (!data) return null;
