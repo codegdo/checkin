@@ -1,7 +1,7 @@
 import { Editor, Transforms } from "slate";
-import { CustomEditor } from "../types";
+import { SlateEditor } from "../types";
 
-export const withSoftBreaks = (editor: CustomEditor) => {
+export const withSoftBreaks = (editor: SlateEditor) => {
   const { insertText, insertBreak } = editor;
 
   editor.insertText = (text) => {

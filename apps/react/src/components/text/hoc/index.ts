@@ -1,1 +1,1 @@
-export * from './withsoftbreaks.hoc';
+export * from './with-soft-breaks.hoc';
