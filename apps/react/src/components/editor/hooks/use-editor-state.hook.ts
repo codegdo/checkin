@@ -9,7 +9,7 @@ export interface IEditorProps {
 
 export const useEditorState = ({ data, onChange }: IEditorProps) => {
   const tabs = tabReducer(data?.dataType);
-  const ref = useRef({ ...initialRef() });
+  const ref = useRef({ ...initialRef({data, onChange}) });
   const [state, dispatch] = useReducer(editorReducer, {
     ...initialState,
     data: structuredClone(data || {}),
@@ -17,10 +17,9 @@ export const useEditorState = ({ data, onChange }: IEditorProps) => {
   });
 
   return {
-    props: { data, onChange },
     current: ref.current,
     tabs,
     state,
-    dispatch
+    dispatch,
   };
 };

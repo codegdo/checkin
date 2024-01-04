@@ -8,7 +8,7 @@ interface IProps {
 function EditorContent({ data = [], context }: IProps) {
   if (!data) return null;
 
-  const handleClick = (content: IControl[] | null) => {
+  const handleClick = (content: IControl | null) => {
     context.dispatch({
       type: ActionType.SET_CONTENT,
       payload: { content }
@@ -18,7 +18,7 @@ function EditorContent({ data = [], context }: IProps) {
   return <ul>
     {
       data.map(item => {
-        return <li key={item.name} onClick={() => handleClick(item.data)}>{item.title}</li>
+        return <li key={item.name} onClick={() => handleClick(item)}>{item.title}</li>
       })
     }
   </ul>;

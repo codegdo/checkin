@@ -1,7 +1,6 @@
 import { DataType as FieldDataType, Field as FieldType } from "@/components/types";
 import { Dispatch } from "react";
 import { Action } from "./action.type";
-import { IEditorProps } from "../hooks";
 
 export { FieldDataType as DataType };
 
@@ -31,17 +30,17 @@ export interface IControl {
 export interface State {
   data?: Partial<Field>;
   tab: Partial<Tab>;
-  content: IControl[] | null;
+  content: IControl | null;
 }
 
 export interface Ref {
+  data?: Field;
   onChange?: ((keyValue: KeyValue) => void);
 }
 
 export interface ContextValue {
   current: Ref;
   state: State;
+  tabs: Tab[];
   dispatch: Dispatch<Action>;
-  props: IEditorProps;
-  tabs: Tab[]
 }

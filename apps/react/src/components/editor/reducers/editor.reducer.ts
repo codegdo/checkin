@@ -6,8 +6,8 @@ const initialState: State = {
   content: null,
 };
 
-const initialRef = (): Ref => {
-  return {};
+const initialRef = (props: Ref): Ref => {
+  return {...props};
 };
 
 const editorReducer = (state: State, { type, payload }: Action<Payload>) => {
@@ -43,7 +43,5 @@ const editorReducer = (state: State, { type, payload }: Action<Payload>) => {
       return state;
   }
 }
-
-
 
 export { initialState, initialRef, editorReducer }

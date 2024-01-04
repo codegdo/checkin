@@ -5,7 +5,7 @@ export interface SelectTab {
 }
 
 export interface SetContent {
-  content: IControl[] | null;
+  content: IControl | null;
 }
 
 export interface UpdateValue {

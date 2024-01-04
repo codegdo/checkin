@@ -24,16 +24,16 @@ export const EditorSlider = forwardRef<HTMLDivElement, IProps>((_, ref) => {
     display: state.content ? 'block' : 'none'
   };
 
-
   return <div className="animation-slide">
-    <div ref={ref} style={{ opacity: 0 }}>drag</div>
+    <div ref={ref} className="drag-handle">drag-handle</div>
     <div style={contentDisplayStyle}>
       <EditorHeader />
       <EditorTab />
       <EditorRender />
     </div>
     <div style={backDisplayStyle}>
-      <button type="button" onClick={handleClick}>Back</button>
+      <EditorHeader />
+      
       content
     </div>
   </div>

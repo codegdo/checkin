@@ -1,12 +1,12 @@
-import { forwardRef } from "react"
 import { useEditorContext } from "./editor.provider";
 
-const EditorHeader = forwardRef<HTMLDivElement>((_, ref) => {
-  const { props } = useEditorContext();
+function EditorHeader() {
+  const { current, state } = useEditorContext();
 
-  return <div ref={ref} className="editor-header">
-    <div>{props?.data?.dataType || 'Editor'}</div>
+  return <div className="editor-header">
+    <button type="button" onClick={handleClick}>Back</button>
+    <div>{state.content ? state.content.title : current.data?.dataType}</div>
   </div>
-});
+};
 
 export default EditorHeader;
