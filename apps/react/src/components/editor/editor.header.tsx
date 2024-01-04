@@ -1,12 +1,31 @@
-import { useEditorContext } from "./editor.provider";
+import { ActionType, ContextValue } from "./types";
 
-function EditorHeader() {
-  const { current, state } = useEditorContext();
+interface IProps {
+  context: ContextValue
+}
 
-  return <div className="editor-header">
-    <button type="button" onClick={handleClick}>Back</button>
-    <div>{state.content ? state.content.title : current.data?.dataType}</div>
-  </div>
-};
+function EditorHeader({ context }: IProps) {
+
+  const { current, state, dispatch } = context;
+
+  const handleClick = () => {
+    dispatch({
+      type: ActionType.CLEAR_CONTENT
+    });
+  }
+
+  return (
+    <div className="editor-header">
+      {
+        state.content ?
+          <div>
+            <button type="button" onClick={handleClick}>Back</button>
+            {state.content.title}
+          </div> :
+          <div>{current.data?.dataType}</div>
+      }
+    </div>
+  )
+}
 
 export default EditorHeader;

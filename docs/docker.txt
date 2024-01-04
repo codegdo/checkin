@@ -8,9 +8,9 @@ docker system prune -a
 docker exec -it [id] /bin/bash
 
 
-docker build -t react-app:1.0 . (. is current of dockerfile is going to execute)
+docker build -t react:1.0 . (. is current of dockerfile is going to execute)
 
-docker build -t react-app:1.0 -f ./apps/react-app/Dockerfile .
+docker build -t react:1.0 -f ./apps/react/Dockerfile .
 docker run -d -p 3000:3000 react-app:1.0
 
 docker logs [container id]

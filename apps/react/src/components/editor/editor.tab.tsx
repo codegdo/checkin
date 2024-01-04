@@ -1,8 +1,11 @@
-import { Tab, ActionType } from './types';
-import { useEditorContext } from "./editor.provider";
+import { Tab, ActionType, ContextValue } from './types';
 
-function EditorTab() {
-  const { tabs, state, dispatch } = useEditorContext();
+interface IProps {
+  context: ContextValue
+}
+
+function EditorTab({ context }: IProps) {
+  const { tabs, state, dispatch } = context;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>, tab: Tab) => {
     event.stopPropagation();

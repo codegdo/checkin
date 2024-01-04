@@ -31,6 +31,7 @@ export interface State {
   data?: Partial<Field>;
   tab: Partial<Tab>;
   content: IControl | null;
+  step: string;
 }
 
 export interface Ref {

@@ -28,6 +28,7 @@
 
 .animation-slide {
   position: relative;
+  overflow: hidden;
 
   .is-inactive {
     position: absolute;

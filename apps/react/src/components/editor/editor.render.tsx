@@ -1,13 +1,17 @@
-import EditorContent from "./editor.content";
-import { useEditorContext } from "./editor.provider";
+import EditorNav from "./editor.nav";
+import { ContextValue } from "./types";
 
-function EditorRender() {
-  const context = useEditorContext();
+interface IProps {
+  context: ContextValue
+}
+
+function EditorRender({ context }: IProps) {
+
   const tab = context.state?.tab || {};
 
   switch (tab.name) {
     case 'content':
-      return <EditorContent data={tab.data} context={context} />
+      return <EditorNav data={tab.data} context={context} />
     default:
       return null;
   }

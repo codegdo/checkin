@@ -4,10 +4,11 @@ const initialState: State = {
   data: {},
   tab: {},
   content: null,
+  step: ''
 };
 
 const initialRef = (props: Ref): Ref => {
-  return {...props};
+  return { ...props };
 };
 
 const editorReducer = (state: State, { type, payload }: Action<Payload>) => {
@@ -23,12 +24,12 @@ const editorReducer = (state: State, { type, payload }: Action<Payload>) => {
       const { content } = payload as SetContent;
 
       return {
-        ...state, content,
+        ...state, content, step: 'on-content'
       };
     }
     case ActionType.CLEAR_CONTENT: {
       return {
-        ...state, content: null,
+        ...state, content: null, step: 'on-tab'
       };
     }
     case ActionType.UPDATE_VALUE: {

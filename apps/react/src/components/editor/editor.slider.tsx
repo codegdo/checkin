@@ -3,39 +3,35 @@ import EditorHeader from "./editor.header";
 import EditorTab from "./editor.tab";
 import EditorRender from "./editor.render";
 import { useEditorContext } from "./editor.provider";
-import { ActionType } from "./types";
+import { classNames } from "@/utils";
 
 interface IProps { }
 
 export const EditorSlider = forwardRef<HTMLDivElement, IProps>((_, ref) => {
-  const { state, dispatch } = useEditorContext();
+  const context = useEditorContext();
 
-  const handleClick = () => {
-    dispatch({
-      type: ActionType.CLEAR_CONTENT
-    });
-  }
+  const className = classNames('editor-slide', context.state.step);
 
-  const contentDisplayStyle = {
-    display: state.content ? 'none' : 'block'
-  };
+  const isContentActive = !context.state.content;
 
-  const backDisplayStyle = {
-    display: state.content ? 'block' : 'none'
-  };
-
-  return <div className="animation-slide">
-    <div ref={ref} className="drag-handle">drag-handle</div>
-    <div style={contentDisplayStyle}>
-      <EditorHeader />
-      <EditorTab />
-      <EditorRender />
+  return (
+    <div className={className}>
+      <div ref={ref} className="drag-handle">drag-handle</div>
+      <div className={isContentActive ? 'is-active' : 'is-inactive'}>
+        <EditorHeader context={context} />
+        <EditorTab context={context} />
+        <EditorRender context={context} />
+      </div>
+      {/* <div className={isContentActive ? 'is-inactive' : 'is-active'}>
+        <EditorHeader context={context} />
+        herel tehre
+        asdflasdjf
+      </div> */}
+      {!isContentActive && (
+        <div className="is-active">
+          <EditorHeader context={context} />
+        </div>
+      )}
     </div>
-    <div style={backDisplayStyle}>
-      <EditorHeader />
-      
-      content
-    </div>
-  </div>
+  );
 });
-
