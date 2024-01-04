@@ -5,16 +5,15 @@ import { IEditorProps } from "../hooks";
 
 export { FieldDataType as DataType };
 
-export interface Field extends FieldType {
-  [key: string]: any;
-}
+export interface Field extends FieldType { }
 
 export interface KeyValue {
   [key: string]: string;
 }
 
 export interface Tab {
-  id: number | string;
+  id?: string | number;
+  name: string;
   title: string;
   data: IControl[];
 }
@@ -30,8 +29,9 @@ export interface IControl {
 
 
 export interface State {
-  data?: Field;
-  tab: Tab | null;
+  data?: Partial<Field>;
+  tab: Partial<Tab>;
+  content: IControl[] | null;
 }
 
 export interface Ref {

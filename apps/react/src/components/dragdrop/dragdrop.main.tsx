@@ -2,10 +2,10 @@ import DragRender from "./drag.render";
 import DropRender from "./drop.render";
 
 function DragDropMain() {
-  return <div className="dragdrop-main">
+  return <main className="dragdrop-main">
     <DropRender />
     <DragRender />
-  </div>
+  </main>
 }
 
 export default DragDropMain;

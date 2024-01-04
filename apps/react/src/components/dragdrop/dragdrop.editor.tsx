@@ -16,7 +16,7 @@ function DragDropEditor() {
   });
 
   return isEditing ? (
-    <div ref={rPreview} className="drag-editor">
+    <div ref={rPreview} className="dragdrop-editor">
       <Editor ref={rElement} data={item} onChange={callback?.onChange} />
     </div>
   ) : null;

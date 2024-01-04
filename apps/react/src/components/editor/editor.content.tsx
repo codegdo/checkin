@@ -1,31 +1,27 @@
-import { useEditorContext } from "./editor.provider";
-import { ContextValue, IControl } from "./types";
-import EditorText from "./editor.text";
+import { ActionType, ContextValue, IControl } from "./types";
 
 interface IProps {
-  data: IControl[],
+  data?: IControl[],
   context: ContextValue
 }
 
-const render = ({ data = [], context }: IProps) => {
-  return <>
-    {
-      data.map(item => {
-        return <EditorText key={item.name} {...item} context={context} />
-      })
-    }
-  </>
-}
-
-function EditorContent() {
-  const context = useEditorContext();
-  const { data } = context.state?.tab || {};
-
+function EditorContent({ data = [], context }: IProps) {
   if (!data) return null;
 
-  return <div>
-    {render({ data, context })}
-  </div>;
+  const handleClick = (content: IControl[] | null) => {
+    context.dispatch({
+      type: ActionType.SET_CONTENT,
+      payload: { content }
+    })
+  }
+
+  return <ul>
+    {
+      data.map(item => {
+        return <li key={item.name} onClick={() => handleClick(item.data)}>{item.title}</li>
+      })
+    }
+  </ul>;
 }
 
 export default EditorContent;

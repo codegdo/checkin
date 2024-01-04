@@ -4,7 +4,6 @@ import { useEditorContext } from "./editor.provider";
 function EditorTab() {
   const { tabs, state, dispatch } = useEditorContext();
 
-
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>, tab: Tab) => {
     event.stopPropagation();
 
@@ -16,10 +15,10 @@ function EditorTab() {
     console.log(tab, state);
   }
 
-  return <div>
+  return <div className='editor-tabs'>
     {
       tabs.map(tab => {
-        return <button key={tab.id} type="button" onClick={(e) => handleClick(e, tab)}>{tab.title}</button>
+        return <button key={tab.name} type="button" onClick={(e) => handleClick(e, tab)}>{tab.title}</button>
       })
     }
   </div>

@@ -36,7 +36,7 @@ function DragDropPreview() {
   return (
     isDragging ? (
       <div style={layerStyles}>
-        <div className='drag-preview' style={dragStyles}>
+        <div className='dragdrop-preview' style={dragStyles}>
           {item?.title || item?.name}
         </div>
       </div>

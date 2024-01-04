@@ -21,7 +21,7 @@ function DropDropToolbar() {
     });
   };
 
-  return <div>
+  return <div className="dragdrop-toolbar">
     <button
       type="button"
       disabled={(state.historyIndex === -1 && state.historyData.length === 0) || state.historyIndex === state.historyData.length - 1}

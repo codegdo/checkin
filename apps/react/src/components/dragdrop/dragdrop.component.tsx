@@ -4,10 +4,10 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 import { useDragDropState, IDragDropProps } from "./hooks";
 import { DragDropProvider } from "./dragdrop.provider";
-import DragDropToolbar from "./dragdrop.toolbar";
-import DragDropPreview from "./dragdrop.preview";
+import DragDropHeader from "./dragdrop-header";
 import DragDropMain from "./dragdrop.main";
 import DragDropEditor from "./dragdrop.editor";
+import DragDropPreview from "./dragdrop.preview";
 
 interface IProps extends IDragDropProps { }
 
@@ -19,7 +19,7 @@ export function DragDrop(props: IProps) {
     <div className="dragdrop">
       <DndProvider backend={backend}>
         <DragDropProvider value={dragDropState}>
-          <DragDropToolbar />
+          <DragDropHeader />
           <DragDropMain />
           <DragDropPreview />
           <DragDropEditor />
