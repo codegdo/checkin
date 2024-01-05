@@ -6,7 +6,6 @@ interface IProps {
 }
 
 function EditorNav({ data = [], context }: IProps) {
-  if (!data) return null;
 
   const handleClick = (content: IControl | null) => {
     context.dispatch({

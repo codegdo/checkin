@@ -84,36 +84,41 @@
 .editor {
   width: 300px;
   background-color: #eee;
+  overflow: hidden;
+}
+.editor-header {
+  z-index: 2;
+}
+.editor-drag-handle {
+  opacity: 0;
+  width: 100%;
 }
 
 .editor-slide {
   position: relative;
-  overflow: hidden;
+  height: 300px;
+}
 
-  .is-inactive {
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    z-index: -1;
+.ease-out {
+  position: absolute;
+  opacity: 0;
+}
+
+.on-slide {
+  .ease-in {
+    animation: next-slide-in 250ms 250ms ease-in-out both;
   }
-
-  &.on-tab {
-    .is-active {
-      animation: previous-slide-in 250ms 250ms ease-in-out both;
-    }
-    .is-inactive {
-      animation: previous-slide-out 250ms ease-in-out both;
-    }
+  .ease-out {
+    animation: next-slide-out 250ms ease-in-out both;
   }
+}
 
-  &.on-content {
-    .is-active {
-      animation: next-slide-in 250ms 250ms ease-in-out both;
-    }
-    .is-inactive {
-      animation: next-slide-out 250ms ease-in-out both;
-    }
+.on-slide-in {
+  .ease-in {
+    animation: previous-slide-in 250ms 250ms ease-in-out both;
+  }
+  .ease-out {
+    animation: previous-slide-out 250ms ease-in-out both;
   }
 }
 

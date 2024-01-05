@@ -35,7 +35,12 @@ function DropField({ context, ...item }: IProps) {
   // }, [item, context.state.isSelecting]);
 
   return (
-    <div ref={rElement} className={className} data-id={`${item.id}`} onClick={handleItemClick}>
+    <div
+      ref={rElement}
+      className={className}
+      data-id={`${item.id}`}
+      onClick={handleItemClick}
+    >
       {(isSelecting && !isEditing) && <DropMenu onClick={handleMenuClick} />}
 
       <Label title={currentItem.title} description={currentItem.description} />

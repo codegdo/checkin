@@ -378,10 +378,10 @@ class DragDropHelper {
         let value: string | null = null;
 
         if (type === 'text') {
-          value = '<p></p>';
+          value = '<p>Enter some plain text...</p>';
           data = [{
             type: 'paragraph',
-            children: [{ text: '' }],
+            children: [{ text: 'Enter some plain text...' }],
           }] as unknown as Field[];
         }
 

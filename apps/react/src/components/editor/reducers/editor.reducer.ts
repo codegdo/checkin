@@ -1,4 +1,4 @@
-import { Action, ActionType, Ref, Payload, SelectTab, State, UpdateValue, SetContent } from "../types";
+import { Action, ActionType, InitialRef, Payload, SelectTab, State, UpdateValue, SetContent } from "../types";
 
 const initialState: State = {
   data: {},
@@ -7,7 +7,7 @@ const initialState: State = {
   step: ''
 };
 
-const initialRef = (props: Ref): Ref => {
+const initialRef = (props: InitialRef): InitialRef => {
   return { ...props };
 };
 
@@ -24,12 +24,12 @@ const editorReducer = (state: State, { type, payload }: Action<Payload>) => {
       const { content } = payload as SetContent;
 
       return {
-        ...state, content, step: 'on-content'
+        ...state, content, step: 'on-slide-in'
       };
     }
     case ActionType.CLEAR_CONTENT: {
       return {
-        ...state, content: null, step: 'on-tab'
+        ...state, content: null, step: 'on-slide'
       };
     }
     case ActionType.UPDATE_VALUE: {

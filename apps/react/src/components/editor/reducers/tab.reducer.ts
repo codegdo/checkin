@@ -30,7 +30,7 @@ export const tabReducer = (type?: string) => {
                 }
               ]
             }
-          ]
+          ],
         },
         {
           name: 'design',

@@ -47,7 +47,7 @@ function DropElement({ context, ...item }: IProps) {
     isEditing,
     handleItemClick,
     handleMenuClick,
-    onChange
+    //onChange
   } = useItem(context, item);
 
   const { rElement, isDragging, isOver, drag, drop } = useDragDrop({
@@ -59,22 +59,23 @@ function DropElement({ context, ...item }: IProps) {
   const data = (currentItem.data as unknown) as TextData[];
   const isTextEmpty = dndHelper.isTextEmpty(data);
 
+  const textPlaceholder = 'Enter some plain text...';
+  const textValue = (currentItem.value || `<p>${textPlaceholder}</p>`).replace(/\n/g, '<br/>');
+
+  const parsedValue = parse((textValue));
+
   const className = classNames('drop-item', {
     'is-dragging': isDragging,
     'is-over': isOver,
     'is-text-empty': isTextEmpty
   });
 
-  const handleOnDragStart = (event: MouseEvent<HTMLDivElement>) => {
+  /* const handleOnDragStart = (event: MouseEvent<HTMLDivElement>) => {
     if (isEditing) {
       event.preventDefault();
       event.stopPropagation();
     }
   };
-
-  useEffect(() => {
-    drag(drop(rElement));
-  }, [rElement.current]);
 
   const renderContent = () => {
     const textPlaceholder = 'Enter some plain text...';
@@ -116,7 +117,11 @@ function DropElement({ context, ...item }: IProps) {
         parsedValue
       }
     </>
-  };
+  }; */
+
+  useEffect(() => {
+    drag(drop(rElement));
+  }, [rElement.current]);
 
   return (
     <div
@@ -124,9 +129,10 @@ function DropElement({ context, ...item }: IProps) {
       className={className}
       data-id={`${item.id}`}
       onClick={handleItemClick}
-      onDragStart={handleOnDragStart}
+    //onDragStart={handleOnDragStart}
     >
-      {renderContent()}
+      {(isSelecting && !isEditing) && <DropMenu onClick={handleMenuClick} />}
+      {parsedValue}
     </div>
   );
 }
