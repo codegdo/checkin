@@ -1,3 +1,4 @@
+import EditorContent from "./editor.content";
 import EditorNav from "./editor.nav";
 import { ContextValue } from "./types";
 
@@ -11,7 +12,9 @@ function EditorRender({ context }: IProps) {
 
   switch (tab.name) {
     case 'content':
-      return <EditorNav data={tab.data} context={context} />
+      return tab.hasTabNav ? 
+        <EditorNav data={tab.data} context={context} /> :
+        <EditorContent data={tab.data} context={context} />
     default:
       return null;
   }

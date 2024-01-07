@@ -1,7 +1,9 @@
 import { Input } from '../input';
 import { IControl } from './types';
 
-interface IProps extends IControl { }
+interface IProps extends IControl { 
+  onChange
+}
 
 export function ControlText({ name, value, onChange }: IProps) {
 

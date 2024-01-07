@@ -2,7 +2,7 @@ import { Descendant, Element as SlateElement } from "slate";
 import { CustomText } from "../leaf.render";
 import { LIST_TYPES, TEXT_BLOCK_TYPES } from "../types";
 
-class TextHelper {
+class RichTextHelper {
   serialize(nodes: Descendant[]): string {
     const serializeNode = (node: Descendant): string => {
       if ('type' in node && 'children' in node) {
@@ -107,6 +107,6 @@ class TextHelper {
   }
 }
 
-const textHelper = new TextHelper();
+const textHelper = new RichTextHelper();
 
 export { textHelper };

@@ -5,10 +5,10 @@ import { classNames } from "@/utils";
 import { ContextValue, TextData, Field } from "./types";
 import { useDragDrop, useItem } from "./hooks";
 import DropMenu from "./drop.menu";
-import { TextEditor } from '../text';
+import { TextEditor } from '../richtext';
 
 import { dndHelper } from "./helpers";
-import { IButtonBlock, IButtonMark } from "../text/types";
+import { IButtonBlock, IButtonMark } from "../richtext/types";
 
 interface IProps extends Field {
   context: ContextValue;

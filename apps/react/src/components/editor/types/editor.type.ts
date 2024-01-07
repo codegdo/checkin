@@ -16,6 +16,7 @@ export interface Tab {
   name: string;
   title: string;
   data: IControl[];
+  hasTabNav: boolean;
 }
 
 export interface IControl {
@@ -32,7 +33,7 @@ export interface State {
   data?: Partial<Field>;
   tab: Partial<Tab>;
   content: IControl | null;
-  step: string;
+  key: string;
 }
 
 export interface InitialRef extends IEditorProps { }

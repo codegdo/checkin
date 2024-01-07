@@ -10,7 +10,7 @@ interface IProps { }
 export const EditorSlider = forwardRef<HTMLDivElement, IProps>((_, ref) => {
   const context = useEditorContext();
 
-  const className = classNames('editor', context.state.step);
+  const className = classNames('editor', context.state.key);
 
   const isContentActive = !context.state.content;
 

@@ -9,7 +9,7 @@ import { withSoftBreaks } from './hoc';
 
 import { ElementRender, ElementRenderProps } from './element.render';
 import { LeafRender, LeafRenderProps } from './leaf.render';
-import { TextToolbar } from './text.toolbar';
+import { TextToolbar } from './richtext.toolbar';
 
 export interface OnChangeParams {
   data: Descendant[];
@@ -21,8 +21,8 @@ interface Options {
   markButtons?: IButtonMark[],
   listButtons?: IButtonBlock[],
   alignButtons?: IButtonBlock[],
+  historyButtons?: IButtonBlock[],
   //table?: IButtonBlock[],
-  //history?: IButtonBlock[],
   //media?: IButtonBlock[],
   //link?: IButtonBlock[],
   //color?: IButtonBlock[],
@@ -43,7 +43,7 @@ interface IProps {
 
 const defaultValue: Descendant[] = [{ type: 'paragraph', children: [{ text: '' }] }];
 
-export function TextEditor({ data, placeholder = 'Enter some plain text...', readOnly, options = {}, onChange }: IProps) {
+export function RichText({ data, placeholder = 'Enter some plain text...', readOnly, options = {}, onChange }: IProps) {
   const editor = useMemo(() => withHistory(withReact(withSoftBreaks(createEditor()))), []);
 
   const renderElement = useCallback((props: ElementRenderProps) => <ElementRender {...props} />, []);
@@ -61,15 +61,12 @@ export function TextEditor({ data, placeholder = 'Enter some plain text...', rea
 
   return (
     <Slate editor={editor} onChange={handleChange} initialValue={data || defaultValue}>
-      <div>
-      <button type="button" onClick={editor.undo}>Undo</button>
-      <button type="button" onClick={editor.redo}>Redo</button>
-      </div>
       <TextToolbar 
         markButtons={options.markButtons} 
         textButtons={options.textButtons} 
         listButtons={options.listButtons} 
         alignButtons={options.alignButtons}
+        historyButtons={options.historyButtons}
       />
       <Editable
         renderElement={renderElement}

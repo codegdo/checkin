@@ -4,7 +4,8 @@ export const tabReducer = (type?: string) => {
       return [
         {
           name: 'content',
-          title: "Content",
+          title: 'Content',
+          hasTabNav: true,
           data: [
             {
               name: 'title',
@@ -34,15 +35,33 @@ export const tabReducer = (type?: string) => {
         },
         {
           name: 'design',
-          title: "Design",
+          title: 'Design',
+          hasTabNav: false,
           data: []
         },
         {
           name: 'setting',
-          title: "Setting",
+          title: 'Setting',
+          hasTabNav: false,
           data: []
         }
-      ]
+      ];
+    case 'element':
+      return [
+        {
+          name: 'content',
+          title: 'Content',
+          data: [
+            {
+              type: 'richtext',
+              name: 'data',
+              title: 'Data',
+              data: null
+            }
+          ],
+          hasTabNav: false
+        }
+      ];
     default:
       return [];
   }
