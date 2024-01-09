@@ -14,6 +14,7 @@ export function FormRender({ data }: IFormRenderProps) {
 
 function renderData(data: ComponentField[] = []) {
   return data.map((item) => {
-    return <FormField key={item.id} />
+    const key = item.id || item.name;
+    return <FormField key={key} />
   });
 }
