@@ -1,4 +1,4 @@
-export enum FieldEnum {
+export enum FieldType {
   TEXT = 'text',
   NUMBER = 'number',
   PASSWORD = 'password',
@@ -9,12 +9,12 @@ export enum FieldEnum {
   BUTTON = 'button',
 }
 
-export enum ElementEnum {
+export enum ElementType {
   DIV = 'div',
   BUTTON = 'button',
 }
 
-export enum ComponentEnum {
+export enum ComponentType {
   AREA = 'area',
   SECTION = 'section',
   BLOCK = 'block',
@@ -30,8 +30,8 @@ export enum ComponentEnum {
 interface BaseEntity {
   id?: number | string | null;
   name: string;
-  type: string | ElementEnum | FieldEnum;
-  componentType: ComponentEnum;
+  type: string | ElementType | FieldType;
+  componentType: ComponentType;
   value: string | null;
 }
 
