@@ -1,6 +1,11 @@
-export enum FormActionType {}
-export type FormPayload = {}
+export enum FormActionType {
+  SUBMIT = 'submit',
+  RESET = 'reset'
+}
+
+export type FormPayload = unknown;
+
 export interface FormAction {
   type: string | FormActionType;
-  payload: FormPayload
+  payload?: FormPayload;
 }

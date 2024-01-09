@@ -30,17 +30,19 @@ export enum ComponentType {
 interface BaseEntity {
   id?: number | string | null;
   name: string;
-  type: string | ElementType | FieldType;
-  componentType: ComponentType;
-  value: string | null;
+  type: FieldType | ElementType | string;
+  componentType: ComponentType | string;
+  value?: string | null;
 }
 
 export interface IControl extends IField { }
 
 export interface IElement extends BaseEntity {
-  data: (IElement | IField)[] | null;
+  data?: (IElement | IField)[] | null;
 }
 
 export interface IField extends BaseEntity {
-  data: IField[] | null;
+  data?: IField[] | null;
 }
+
+export type ComponentField = IControl & IElement & IField;
