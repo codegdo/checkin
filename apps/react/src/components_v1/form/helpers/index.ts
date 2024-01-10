@@ -1,1 +1,1 @@
-export * from './form-validation.helper';
+export * from './form-validator.helper';
