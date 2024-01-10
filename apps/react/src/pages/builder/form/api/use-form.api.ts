@@ -3,7 +3,7 @@ import { useFetch } from "@/hooks";
 import { Field } from "@/components/types";
 import { useLocation } from "react-router-dom";
 
-interface IForm {
+export interface IForm {
   id: number | string;
   name: string;
   title: string;
