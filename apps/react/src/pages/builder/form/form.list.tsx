@@ -1,5 +1,5 @@
 import { Loader } from "@/components";
-import { useGetAllForms } from "./api/form.api";
+import { useGetAllForms } from "./api/use-form.api";
 import { Link } from "react-router-dom";
 // Example API response
 // const data = [

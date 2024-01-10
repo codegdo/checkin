@@ -1,9 +1,11 @@
 import { Loader } from "@/components";
-import { useGetFormById } from "./api/form.api";
+//import { useGetFormById } from "./api/use-form.api";
 import { DragDrop } from "@/components/dragdrop/dragdrop.component";
+import { FormApi } from "./form.api";
+import { useFormContextApi } from "./api";
 
 function FormBuilder() {
-  const { status, data: formData, controller } = useGetFormById();
+  const { status, data: formData, controller } = useFormContextApi('useGetFormById');
 
   if (!formData) {
     return <Loader status={status} controller={controller} />
@@ -22,4 +24,4 @@ function FormBuilder() {
   />;
 }
 
-export default FormBuilder;
+export default () => <FormApi><FormBuilder /></FormApi>;
