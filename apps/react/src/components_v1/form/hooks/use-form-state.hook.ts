@@ -1,13 +1,13 @@
 import { useRef } from "react";
 import { formValidator } from "../helpers";
+import { FormReturn } from "../types";
 
-export interface FormData {
-  type: string;
-  formData: Record<string, string>;
-  isSubmit: boolean;
+export interface FormStateProps {
+  status?: string;
+  callback?: (returnData: FormReturn) => void
 }
 
-export const useForm = (callback?: (formData: FormData) => void) => {
+export const useFormState = ({ status, callback }: FormStateProps) => {
   const initialValues = useRef({});
   const formValues = useRef({});
   const formErrors = useRef({});
@@ -30,6 +30,7 @@ export const useForm = (callback?: (formData: FormData) => void) => {
     form: formValues.current,
     errors: formErrors.current,
     validation: formSchema.current,
+    status,
     onSubmit
   }
 }

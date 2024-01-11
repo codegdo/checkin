@@ -13,23 +13,33 @@ export interface IForm {
   updatedAt: string;
 }
 
-export const useGetAllForms = (params?: Record<string, string | number>) => {
-  const api = useFetch<IForm[]>('/builder/forms', { ...params });
+export type GetAllForms = ReturnType<typeof useFetchAllForms>;
+export type GetFormById = ReturnType<typeof useFetchFormById>;
+
+export enum FormApiAction {
+  GET_ALL_FORMS = 'getAllForms',
+  GET_FORM_BY_ID = 'getFormById'
+}
+
+const FORM_API_PATH = '/builder/forms';
+
+export const useFetchAllForms = (params?: Record<string, string | number>) => {
+  const api = useFetch<IForm[]>(FORM_API_PATH, { ...params });
 
   useEffect(() => {
     api.query();
   }, []);
 
-  return { ...api }
+  return api;
 }
 
-export const useGetFormById = (params?: Record<string, string | number>) => {
+export const useFetchFormById = (params?: Record<string, string | number>) => {
   const location = useLocation();
 
   // Extract the ID from the pathname
   const id = location.pathname.split("/").pop();
 
-  const api = useFetch<IForm>(`/builder/forms/${id}`, { ...params });
+  const api = useFetch<IForm>(`${FORM_API_PATH}/${id}`, { ...params });
 
   useEffect(() => {
     if (id) {
@@ -37,5 +47,5 @@ export const useGetFormById = (params?: Record<string, string | number>) => {
     }
   }, [id]);
 
-  return { ...api };
+  return api;
 };

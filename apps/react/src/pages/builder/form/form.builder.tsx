@@ -1,9 +1,9 @@
 import { Loader, DragDrop } from "@/components";
 import { useApi } from "@/hooks";
-import { useGetFormById } from "./api/use-form.api";
+import { GetFormById, FormApiAction } from "./api";
 
 function FormBuilder() {
-  const { status, data: formData, controller } = useApi<ReturnType<typeof useGetFormById>>('useGetFormById');
+  const { status, data: formData, controller } = useApi<GetFormById>(FormApiAction.GET_FORM_BY_ID);
 
   if (!formData) {
     return <Loader status={status} controller={controller} />;

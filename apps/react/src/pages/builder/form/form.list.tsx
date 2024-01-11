@@ -1,11 +1,11 @@
-import { Loader } from "@/components";
-import { useGetAllForms } from "./api/use-form.api";
 import { Link } from "react-router-dom";
-import { useApi } from "@/hooks";
 
+import { Loader } from "@/components";
+import { useApi } from "@/hooks";
+import { GetAllForms, FormApiAction } from "./api";
 
 function FormList() {
-  const { status, data, controller } = useApi<ReturnType<typeof useGetAllForms>>('useGetAllForms'); //useGetAllForms();
+  const { status, data, controller } = useApi<GetAllForms>(FormApiAction.GET_ALL_FORMS);
 
   if (!data) {
     return <Loader status={status} controller={controller} />

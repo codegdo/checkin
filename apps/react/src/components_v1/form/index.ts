@@ -9,3 +9,4 @@ const Form = OriginalForm as ExtendedForm;
 Form.Field = FormField;
 
 export { Form };
+export * from './types';

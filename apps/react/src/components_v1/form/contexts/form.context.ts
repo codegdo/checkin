@@ -1,4 +1,5 @@
 import { createContext } from "react";
-
-export const FormContext = createContext(null);
+import { useFormState } from "../hooks";
+export type ContextValue = ReturnType<typeof useFormState>
+export const FormContext = createContext<ContextValue | null>(null);
 export const FormProvider = FormContext.Provider;

@@ -2,8 +2,8 @@ import { ComponentField } from "@/components_v1/types";
 
 export type CustomField = ComponentField;
 
-export interface FormReturn {
+
+export interface DragDropReturn {
   type: string;
-  formData: Record<string, string>;
-  isSubmit: boolean;
+  dndData: Record<string, string>;
 }
