@@ -1,33 +1,29 @@
-import { useRef } from "react";
+import { useReducer, useRef } from "react";
 
-import { DragDropReturn } from "../types";
+import { CustomField, DragDropReturn } from "../types";
+import { dragdropReducer } from "../reducers";
 
 export interface DragDropStateProps {
+  data?: CustomField[];
   status?: string;
   callback?: (returnData: DragDropReturn) => void
 }
 
-export const useDragDropState = ({ status, callback }: DragDropStateProps) => {
-  const initialValues = useRef({});
-  const formValues = useRef({});
-  const formErrors = useRef({});
+export const useDragDropState = ({ data = [], status, callback }: DragDropStateProps) => {
+  const ref = useRef({});
+  const [state, dispatch] = useReducer(dragdropReducer, {data});
 
   const onCallback = (type: string) => {
-    switch (type) {
-      case 'submit':
-        callback && callback({
-          type,
-          dndData: formValues.current
-        });
-        break;
-    }
+    callback && callback({
+      type,
+      data: state
+    });
   }
 
   return {
-    initialValues: initialValues.current,
-    form: formValues.current,
-    errors: formErrors.current,
     status,
+    state,
+    dispatch,
     onCallback
   }
 }

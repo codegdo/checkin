@@ -7,3 +7,5 @@ export interface FormReturn {
   formData: Record<string, string>;
   isSubmit: boolean;
 }
+
+export interface FormState {}
