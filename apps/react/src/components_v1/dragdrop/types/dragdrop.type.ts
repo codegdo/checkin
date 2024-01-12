@@ -1,12 +1,14 @@
 import { ComponentField } from "@/components_v1/types";
 
-export type CustomField = ComponentField;
+export type DndField = ComponentField;
 
 export interface DndState {
-  data: CustomField[] | [];
+  data: DndField[];
+  history: string[];
+  historyIndex: number;
 }
 
-export interface DragDropReturn {
+export interface DndResult {
   type: string;
   data: DndState;
 }

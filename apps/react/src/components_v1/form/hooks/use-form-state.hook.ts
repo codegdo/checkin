@@ -1,34 +1,34 @@
 import { useRef } from "react";
 import { formValidator } from "../helpers";
-import { FormReturn } from "../types";
+import { FormResult } from "../types";
 
 export interface FormStateProps {
   status?: string;
-  callback?: (returnData: FormReturn) => void
+  callback?: (result: FormResult) => void
 }
 
 export const useFormState = ({ status, callback }: FormStateProps) => {
   const initialValues = useRef({});
   const formValues = useRef({});
   const formErrors = useRef({});
+  const formTouched = useRef([]);
   const formSchema = useRef(formValidator.object());
 
   const onSubmit = (type: string) => {
-    switch (type) {
-      case 'submit':
-        callback && callback({
-          type,
-          formData: formValues.current,
-          isSubmit: true
-        });
-        break;
-    }
-  }
+    const result: FormResult = {
+      type,
+      values: formValues.current,
+      isSubmit: type === 'submit',
+    };
+
+    callback && callback(result);
+  };
 
   return {
     initialValues: initialValues.current,
-    form: formValues.current,
+    values: formValues.current,
     errors: formErrors.current,
+    touched: formTouched.current,
     validation: formSchema.current,
     status,
     onSubmit

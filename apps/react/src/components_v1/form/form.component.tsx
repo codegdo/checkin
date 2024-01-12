@@ -2,24 +2,24 @@ import { PropsWithChildren } from "react";
 
 import { FormProvider } from "./contexts";
 import { useFormState } from './hooks';
-import { CustomField, FormReturn } from "./types";
+import { FormFieldType, FormResult } from "./types";
 import { FormRender } from "./form.render";
 
 interface IFormProps extends PropsWithChildren {
   title?: string;
-  data?: CustomField[] | null;
+  data?: FormFieldType[];
   status?: string;
-  onClick?: (returnData: FormReturn) => void;
+  onSubmit?: (result: FormResult) => void;
 }
 
-export function Form({ status, children, onClick, ...field }: IFormProps) {
+export function Form({ data = [], status, children, onSubmit }: IFormProps) {
 
-  const contextValue = useFormState({ status, callback: onClick });
+  const contextValue = useFormState({ status, callback: onSubmit });
 
   return (
     <form onSubmit={e => e.preventDefault()}>
       <FormProvider value={contextValue}>
-        {children || <FormRender form={field} />}
+        {children || <FormRender data={data} />}
       </FormProvider>
     </form>
   )

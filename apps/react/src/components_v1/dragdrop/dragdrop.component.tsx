@@ -1,18 +1,26 @@
+import { PropsWithChildren } from "react";
+
 import { DragDropProvider } from "./contexts";
-import { CustomField, DragDropReturn } from "./types";
+import { DndField, DndResult } from "./types";
 import { useDragDropState } from "./hooks";
+import { DropRender } from "./drop.render";
 
-
-interface IDragDropProps {
+interface IDragDropProps extends PropsWithChildren {
   title?: string;
-  data?: CustomField[];
+  data?: DndField[];
+  dragData?: DndField[];
   status?: string;
-  onSubmit?: (returnData: DragDropReturn) => void;
+  onSubmit?: (result: DndResult) => void;
 }
 
-export function DragDrop({ status, onSubmit }: IDragDropProps) {
-  const contextValue = useDragDropState({ status, callback: onSubmit });
+export function DragDrop({ data, status, children, onSubmit }: IDragDropProps) {
+  const contextValue = useDragDropState({ data, status, callback: onSubmit });
+
   return (
-    <DragDropProvider value={contextValue}></DragDropProvider>
-  )
+    <DragDropProvider value={contextValue}>
+      {children || <DropRender />}
+    </DragDropProvider>
+  );
 }
+
+// npx madge src/components_v1/dragdrop/dragdrop.component.tsx --image src/components_v1/dragdrop/dragdrop.graph.png --warning

@@ -9,5 +9,6 @@ export * from './filtered-array-range-exclusing-start.util';
 export * from './stringify-url.util';
 export * from './crypto.util';
 export * from './group-data-for-render.util';
+export * from './group-data.util';
 export * from './session-storage.util';
 export * from './find-item-by-id.util';

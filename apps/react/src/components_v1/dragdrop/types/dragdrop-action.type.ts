@@ -1,4 +1,4 @@
-import { CustomField } from "./dragdrop.type";
+import { DndField } from "./dragdrop.type";
 
 export enum DndActionType {
   LOAD_HISTORY = 'LOAD_HISTORY',
@@ -25,6 +25,6 @@ export interface DndAction {
 }
 
 export interface DndPayload {
-  dragItem: CustomField;
-  dropItem: Partial<CustomField> | null;
+  dragItem: DndField;
+  dropItem: Partial<DndField> | null;
 }

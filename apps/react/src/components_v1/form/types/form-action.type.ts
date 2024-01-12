@@ -6,6 +6,6 @@ export enum FormActionType {
 export type FormPayload = unknown;
 
 export interface FormAction {
-  type: string | FormActionType;
+  type: keyof typeof FormActionType;
   payload?: FormPayload;
 }

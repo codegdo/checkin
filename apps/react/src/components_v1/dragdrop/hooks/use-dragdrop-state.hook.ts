@@ -1,26 +1,33 @@
 import { useReducer, useRef } from "react";
 
-import { CustomField, DragDropReturn } from "../types";
+import { DndField, DndResult } from "../types";
 import { dragdropReducer } from "../reducers";
 
-export interface DragDropStateProps {
-  data?: CustomField[];
+interface IProps {
+  data?: DndField[];
   status?: string;
-  callback?: (returnData: DragDropReturn) => void
+  callback?: (result: DndResult) => void
 }
 
-export const useDragDropState = ({ data = [], status, callback }: DragDropStateProps) => {
-  const ref = useRef({});
-  const [state, dispatch] = useReducer(dragdropReducer, {data});
+export const useDragDropState = ({ data = [], status, callback }: IProps) => {
+  const ref = useRef({ data });
+  const [state, dispatch] = useReducer(dragdropReducer, {
+    data: structuredClone(data),
+    history: [JSON.stringify(data)],
+    historyIndex: 0
+  });
 
   const onCallback = (type: string) => {
-    callback && callback({
+    const result = {
       type,
       data: state
-    });
+    };
+
+    callback && callback(result);
   }
 
   return {
+    ref: ref.current,
     status,
     state,
     dispatch,

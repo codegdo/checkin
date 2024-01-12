@@ -1,34 +1,23 @@
-import { CustomField } from "./types";
+import { formHelper } from "./helpers";
+import { FormFieldType } from "./types";
 import { FormField } from "./form.field";
 
-interface IFormRenderProps {
-  form: {
-    title?: string;
-    data?: CustomField[] | null;
-  };
+interface IProps {
+  data: FormFieldType[];
 }
 
-export function FormRender({ form }: IFormRenderProps) {
-
-  const field = {
-    ...form,
-    name: 'form',
-    type: 'form',
-    componentType: 'area'
-  }
-
+export function FormRender({ data }: IProps) {
   return (
     <>
-      {renderData(field)}
+      {renderData(formHelper.groupData(data))}
     </>
   )
 }
 
-function renderData(field: CustomField) {
-  const { data } = field;
+function renderData(data: FormFieldType[]) {
 
-  return data?.map((item) => {
-    const key = item.id || item.name;
+  return data.map((field) => {
+    const key = field.id || field.name;
     return <FormField key={key} />
-  });
+  }) || null;
 }
