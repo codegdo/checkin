@@ -13,12 +13,32 @@ function Overview() {
     <Form data={[{
       name: 'email',
       type: 'text',
-      blockType: 'field'
+      dataType: 'field'
     }]} onSubmit={handleClick}>
 
     </Form>
 
-    <DragDrop />
+    <DragDrop data={[
+      {
+        id: 'form',
+        name: 'area',
+        type: 'div',
+        dataType: 'area',
+        data: [],
+        parentId: null,
+        position: 0
+      },
+      {
+        id: 1,
+        name: 'email',
+        title: 'Email',
+        type: 'email',
+        dataType: 'field',
+        data: [],
+        parentId: 'form',
+        position: 1
+      },
+    ]} />
   </div>
 }
 

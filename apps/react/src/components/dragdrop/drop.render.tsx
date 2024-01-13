@@ -51,7 +51,18 @@ const render = ({ data = [], context }: IProps) => {
 function DropRender() {
   const context = useDragDropContext();
   const data = context.state.data as Field[];
-  const renderData = useMemo(() => groupDataForRender(data) as Field[], [data]);
+  const renderData = useMemo(() => {
+    return [{
+      id: 'root-area',
+      name: 'area',
+      type: 'div',
+      dataType: 'area',
+      parentId: null,
+      data: groupDataForRender(data)
+    }]
+  }, [data]);
+
+
 
   console.log('renderData', renderData, context);
 

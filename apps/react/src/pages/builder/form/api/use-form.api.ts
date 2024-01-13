@@ -8,7 +8,7 @@ export interface IForm {
   name: string;
   title: string;
   description: string;
-  data: Field[];
+  data: (Field)[];
   fields: Field[];
   updatedAt: string;
 }

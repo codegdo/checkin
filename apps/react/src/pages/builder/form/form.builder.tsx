@@ -1,4 +1,5 @@
 import { Loader, DragDrop } from "@/components";
+import { DragDrop as DnD, DragRender, DropRender } from "@/components_v1/dragdrop";
 import { useApi } from "@/hooks";
 import { GetFormById, FormApiAction } from "./api";
 
@@ -10,6 +11,7 @@ function FormBuilder() {
   }
 
   return (
+    <>
     <DragDrop
       data={formData?.data}
       drags={{
@@ -21,6 +23,11 @@ function FormBuilder() {
         historyVersion: formData.updatedAt
       }}
     />
+    <DnD data={formData?.data} options={{drags: {elements: [], fields:[]}}}>
+      <DropRender />
+      <DragRender />
+    </DnD>
+    </>
   );
 }
 

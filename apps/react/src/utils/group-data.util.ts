@@ -1,26 +1,14 @@
-import { mapToParent } from "./map-to-parent.util";
-interface Item {
-  id?: number | string | null;
-  parentId?: number | string | null;
-  componentType?: string;
-  data?: Item[] | null;
-}
-export function groupData(data: Item[], condition: (item: Item) => boolean) {
-  const cloneData = structuredClone(data);
-  const list: Item[] = [];
+import { Item, mapToParent } from "./map-to-parent.util";
 
-  cloneData.forEach((item: Item) => {
-    return mapToParent(list, item, condition);
+export const groupDataForRender = <T extends Item>(data: T[]) => {
+  const cloneData = structuredClone(data);
+  const list: T[] = [];
+
+  const condition = (item: T) => ['area', 'section', 'block', 'list'].includes(item.dataType);
+
+  cloneData.forEach((item: T) => {
+    return mapToParent<T>(list as T[], item, condition);
   });
 
-  console.log('groupDataForRender', cloneData);
-
-  return [{
-    id: 'root-area',
-    name: 'area',
-    type: 'div',
-    dataType: 'area',
-    parentId: null,
-    data: [...list]
-  }];
+  return list;
 }

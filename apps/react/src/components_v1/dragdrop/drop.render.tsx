@@ -1,38 +1,66 @@
 import { useMemo } from "react";
 
+import { groupDataForRender } from "@/utils";
 import { useDragDropContext } from "./hooks";
 import { ContextValue } from "./contexts";
-import { dndHelper } from "./helpers";
 import { DndField } from "./types";
+import { DropBlock } from "./drop.block";
+import { DropField } from "./drop.field";
+import { DropArea } from "./drop.area";
+import { DropElement } from "./drop.element";
 
 export function DropRender() {
   const context = useDragDropContext() as ContextValue;
 
-  const data = useMemo(() => dndHelper.groupData(context.state.data) as DndField[], [context.state.data]);
+  const drop = useMemo(() => {
+    return {
+      id: 'root-area',
+      name: 'area',
+      type: 'div',
+      dataType: 'area',
+      data: groupDataForRender(context.state.data),
+    }
+  }, [context.state.data]);
 
-  const root = {
-    id: 'root-area',
-    name: 'area',
-    type: 'div',
-    blockType: 'area',
-    data,
-  };
-
-  console.log(context, root);
+  console.log(drop, context);
 
   return (
     <>
-      {render(root)}
+      {render(drop, context)}
     </>
   );
 }
 
-function render(drop: DndField) {
-  const { data } = drop;
+function render(drop: DndField, context: ContextValue) {
+  const { data = [] } = drop;
 
   return data?.map((item) => {
     const key = item.id || item.name;
 
-    return <div key={key}></div>
+    switch(item.dataType) {
+      case 'area': {
+        return (
+          <DropArea key={key} {...item} context={context}>
+            {render(item, context)}
+          </DropArea>
+        );
+      }
+      case 'section':
+      case 'block': {
+        return (
+          <DropBlock key={key} {...item} context={context}>
+            {render(item, context)}
+          </DropBlock>
+        );
+      }
+      case 'field': {
+        return <DropField key={key} {...item} context={context} />
+      }
+      case 'element': {
+        return <DropElement key={key} {...item} context={context} />
+      }
+      default:
+        return null;
+    }
   }) || null;
 }

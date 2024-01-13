@@ -7,7 +7,7 @@ class DndHelper {
     const cloneData = structuredClone(data);
     const list: DndField[] = [];
 
-    const condition = (item: DndField) => ['area', 'section', 'block', 'list'].includes(item.blockType);
+    const condition = (item: DndField) => ['area', 'section', 'block', 'list'].includes(item.dataType);
 
     cloneData.forEach((item: DndField) => {
       return mapToParent(list, item, condition);

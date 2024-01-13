@@ -6,7 +6,7 @@ class FormHelper {
     const cloneData = structuredClone(data);
     const list: FormFieldType[] = [];
 
-    const condition = (item: FormFieldType) => ['area', 'section', 'block', 'list'].includes(item.blockType);
+    const condition = (item: FormFieldType) => ['area', 'section', 'block', 'list'].includes(item.dataType);
 
     cloneData.forEach((item: FormFieldType) => {
       return mapToParent(list, item, condition);

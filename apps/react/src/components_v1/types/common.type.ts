@@ -14,7 +14,7 @@ export enum ElementType {
   BUTTON = 'button',
 }
 
-export enum BlockType {
+export enum DataType {
   AREA = 'area',
   SECTION = 'section',
   BLOCK = 'block',
@@ -31,7 +31,7 @@ interface BaseEntity {
   id?: number | string | null;
   name: string;
   type: FieldType | ElementType | string;
-  blockType: BlockType | string;
+  dataType: DataType | string;
   value?: string | null;
 }
 
@@ -42,13 +42,12 @@ export interface IControl extends BaseEntity {
 export interface IElement extends BaseEntity {
   data?: (IElement | IField)[] | null;
   parentId?: number | string | null;
-  postion?: number | null;
+  position?: number | null;
 }
 
-export interface IField extends BaseEntity {
-  data?: IField[] | null;
-  parentId?: number | string;
-  postion?: number | null;
+export interface IField extends IElement {
+  title?: string | null;
+  description?: string | null;
 }
 
 export type ComponentField = IControl & IElement & IField;

@@ -2,24 +2,26 @@ import { PropsWithChildren } from "react";
 
 import { DragDropProvider } from "./contexts";
 import { DndField, DndResult } from "./types";
-import { useDragDropState } from "./hooks";
-import { DropRender } from "./drop.render";
+import { DndOptions, useDragDropState } from "./hooks";
+import { DragDropContent } from "./dragdrop.content";
 
 interface IDragDropProps extends PropsWithChildren {
   title?: string;
   data?: DndField[];
-  dragData?: DndField[];
+  options?: DndOptions;
   status?: string;
   onSubmit?: (result: DndResult) => void;
 }
 
-export function DragDrop({ data, status, children, onSubmit }: IDragDropProps) {
-  const contextValue = useDragDropState({ data, status, callback: onSubmit });
+export function DragDrop({ data, options, status, children, onSubmit }: IDragDropProps) {
+  const contextValue = useDragDropState({ data, options, status, callback: onSubmit });
 
   return (
-    <DragDropProvider value={contextValue}>
-      {children || <DropRender />}
-    </DragDropProvider>
+    <div className="dragdrop">
+      <DragDropProvider value={contextValue}>
+        {children || <DragDropContent />}
+      </DragDropProvider>
+    </div>
   );
 }
 
