@@ -6,6 +6,8 @@ import { FormSection } from "./form.section";
 import { FormBlock } from "./form.block";
 import { FormField } from "./form.field";
 import { FormElement } from "./form.element";
+import { FormGroup } from "./form.group";
+import { FormGrid } from "./form.grid";
 
 export function FormRender() {
   const context = useFormContext() as ContextValue;
@@ -35,6 +37,12 @@ function render(data: FormFieldType[]) {
             {render(item.data as FormFieldType[])}
           </FormBlock>
         );
+      }
+      case 'group': {
+        return <FormGroup key={key} {...item} />
+      }
+      case 'grid': {
+        return <FormGrid key={key} {...item} />
       }
       case 'field': {
         return <FormField key={key} {...item} />
