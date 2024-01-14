@@ -1,6 +1,7 @@
-import { useRef } from "react";
+import { useReducer, useRef } from "react";
 import { formValidator } from "../helpers";
 import { FormFieldType, FormResult } from "../types";
+import { formReducer } from "../reducers";
 
 export interface FormOptions {}
 
@@ -21,6 +22,8 @@ export const useFormState = ({title, data = [], options, status, callback }: IPr
     validation: formValidator.object(),
   });
 
+  const [state, dispatch] = useReducer(formReducer, {});
+
   const onSubmit = (type: string) => {
     const result: FormResult = {
       type,
@@ -39,6 +42,8 @@ export const useFormState = ({title, data = [], options, status, callback }: IPr
       options
     },
     status,
+    state,
+    dispatch,
     onSubmit
   }
 }

@@ -3,6 +3,6 @@ import { FormFieldType } from "./types";
 
 type Props = PropsWithChildren<FormFieldType>;
 
-export function FormBlock({children}: Props) {
+export function FormSection({children}: Props) {
   return <div>{children}</div>
 }
