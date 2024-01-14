@@ -12,17 +12,19 @@ interface IProps {
   callback?: (result: FormResult) => void
 }
 
-export const useFormState = ({title, data = [], status, callback }: IProps) => {
-  const initialValues = useRef({});
-  const formValues = useRef({});
-  const formErrors = useRef({});
-  const formTouched = useRef<string[]>([]);
-  const formSchema = useRef(formValidator.object());
+export const useFormState = ({title, data = [], options, status, callback }: IProps) => {
+  const ref = useRef({
+    initialValues: {},
+    values: {},
+    errors: {},
+    touched: {},
+    validation: formValidator.object(),
+  });
 
   const onSubmit = (type: string) => {
     const result: FormResult = {
       type,
-      values: formValues.current,
+      values: ref.current.values,
       isSubmit: type === 'submit',
     };
 
@@ -30,14 +32,11 @@ export const useFormState = ({title, data = [], status, callback }: IProps) => {
   };
 
   return {
-    initialValues: initialValues.current,
-    values: formValues.current,
-    errors: formErrors.current,
-    touched: formTouched.current,
-    validation: formSchema.current,
+    ref: ref.current,
     form: {
       title,
       data,
+      options
     },
     status,
     onSubmit
