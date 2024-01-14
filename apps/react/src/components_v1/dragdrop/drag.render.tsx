@@ -7,7 +7,7 @@ export function DragRender() {
   return (
     <div>
       {
-        Object.keys(options.drags).map((key) => (
+        Object.keys(options.drags || {}).map((key) => (
           <div key={key}>
             {key}
             {/* {options.drags[key].map((element) => (
