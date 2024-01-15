@@ -1,23 +1,3 @@
-export enum FieldType {
-  TEXT = 'text',
-  NUMBER = 'number',
-  PASSWORD = 'password',
-  EMAIL = 'email',
-  DATE = 'date',
-  CHECKBOX = 'checkbox',
-  RADIO = 'radio',
-  SELECT = 'select',
-  TEXTAREA = 'textarea'
-}
-
-export enum ElementType {
-  BUTTON = 'button',
-  LINK = 'link',
-  PARAGRAPH = 'paragraph',
-  IMAGE = 'image',
-
-}
-
 export enum DataType {
   AREA = 'area',
   SECTION = 'section',
@@ -48,27 +28,29 @@ export enum DataType {
   GRID = 'grid',
 }
 
-interface BaseEntity {
+interface Base {
   id?: number | string | null;
   name: string;
   type: DataType | string;
-  //dataType: DataType | string;
   value?: string | null;
 }
 
-export interface IControl extends BaseEntity {
+export interface IControl extends Base {
   data?: IControl[] | null;
 }
 
-export interface IElement extends BaseEntity {
-  data?: (IElement | IField)[] | null;
-  parentId?: number | string | null;
-  position?: number | null;
-}
-
-export interface IField extends IElement {
+export interface IField extends Base {
   title?: string | null;
   description?: string | null;
+  hint?: string | null;
+
+  data?: IField[] | null;
+  parentId?: number | string | null;
+  position?: number | null;
+
+  readonly?: boolean;
+  disabled?: boolean;
+  required?: boolean;
 }
 
-export type ComponentField = IControl & IElement & IField;
+export type FieldType = IControl & IField;

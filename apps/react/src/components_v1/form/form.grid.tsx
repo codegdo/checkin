@@ -1,11 +1,11 @@
 import { ContextValue } from "./contexts";
-import { FormFieldType } from "./types";
+import { FieldType } from "./types";
 
-type GridProps = FormFieldType & {
+type GridProps = FieldType & {
   context?: ContextValue
 };
 
-export function FormGrid({context, ...props}: GridProps) {
+export function FormGrid({ context, ...props }: GridProps) {
   return (
     <>field</>
   )

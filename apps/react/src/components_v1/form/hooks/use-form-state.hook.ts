@@ -1,24 +1,32 @@
 import { useReducer, useRef } from "react";
 import { formValidator } from "../helpers";
-import { FormFieldType, FormResult } from "../types";
+import { FieldType, FormResult } from "../types";
 import { formReducer } from "../reducers";
 
-export interface FormOptions {}
+export interface FormOptions { }
 
 interface IProps {
   title?: string;
-  data?: FormFieldType[];
+  data?: FieldType[];
   options?: FormOptions;
   status?: string;
   callback?: (result: FormResult) => void
 }
 
-export const useFormState = ({title, data = [], options, status, callback }: IProps) => {
-  const ref = useRef({
+interface FormRef {
+  initialValues: Record<string, string | Record<string, string>>;
+  values: Record<string, string | Record<string, string>>;
+  errors: Record<string, string | Record<string, string>>;
+  touched: Set<string>;
+  validation: ReturnType<typeof formValidator.object>
+}
+
+export const useFormState = ({ title, data = [], options, status, callback }: IProps) => {
+  const ref = useRef<FormRef>({
     initialValues: {},
     values: {},
     errors: {},
-    touched: {},
+    touched: new Set<string>(),
     validation: formValidator.object(),
   });
 

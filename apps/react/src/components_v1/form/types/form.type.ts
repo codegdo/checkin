@@ -1,11 +1,11 @@
-import { ComponentField } from "@/components_v1/types";
+import { FieldType as FormFieldType } from "@/components_v1/types";
 
-export type FormFieldType = ComponentField;
+export type FieldType = FormFieldType;
 
 export interface FormState { }
 
 export interface FormResult {
   type: string;
-  values: Record<string, string>;
+  values: Record<string, string | Record<string, string>>;
   isSubmit: boolean;
 }

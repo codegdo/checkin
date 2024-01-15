@@ -1,5 +1,5 @@
 import { groupDataForRender } from "@/utils";
-import { FormFieldType } from "./types";
+import { FieldType } from "./types";
 import { useFormContext } from "./hooks";
 import { ContextValue } from "./contexts";
 import { FormSection } from "./form.section";
@@ -17,23 +17,23 @@ export function FormRender() {
   );
 }
 
-function render(data: FormFieldType[], context?: ContextValue) {
+function render(data: FieldType[], context?: ContextValue) {
 
   return data?.map((item) => {
     const key = item.id || item.name;
 
-    switch(item.type) {
+    switch (item.type) {
       case 'section': {
         return (
           <FormSection key={key} {...item} context={context}>
-            {render(item.data as FormFieldType[], context)}
+            {render(item.data as FieldType[], context)}
           </FormSection>
         );
       }
       case 'block': {
         return (
           <FormBlock key={key} {...item} context={context}>
-            {render(item.data as FormFieldType[], context)}
+            {render(item.data as FieldType[], context)}
           </FormBlock>
         );
       }
@@ -44,7 +44,7 @@ function render(data: FormFieldType[], context?: ContextValue) {
         return <FormGrid key={key} {...item} context={context} />
       }
       default:
-        <FormField key={key} {...item} context={context} />
+        return <FormField key={key} {...item} context={context} />
     }
   }) || null;
 }

@@ -1,11 +1,11 @@
 import { PropsWithChildren } from "react";
-import { FormFieldType } from "./types";
+import { FieldType } from "./types";
 import { ContextValue } from "./contexts";
 
-type BlockProps = PropsWithChildren<FormFieldType & {
+type BlockProps = PropsWithChildren<FieldType & {
   context?: ContextValue
 }>;
 
-export function FormBlock({children}: BlockProps) {
+export function FormBlock({ children }: BlockProps) {
   return <div>{children}</div>
 }

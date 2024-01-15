@@ -1,6 +1,6 @@
-import { ComponentField } from "@/components_v1/types";
+import { FieldType } from "@/components_v1/types";
 
-export type DndField = ComponentField;
+export type DndField = FieldType;
 
 export interface DndState {
   data: DndField[];

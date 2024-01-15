@@ -1,13 +1,13 @@
 import { PropsWithChildren } from "react";
-import { FormFieldType } from "./types";
+import { FieldType } from "./types";
 import { FormField } from "./form.field";
 import { ContextValue } from "./contexts";
 
-type GroupProps = PropsWithChildren<FormFieldType & {
+type GroupProps = PropsWithChildren<FieldType & {
   context?: ContextValue
 }>;
 
-export function FormGroup({data = [], children}: GroupProps) {
+export function FormGroup({ data = [], children }: GroupProps) {
   return <div>
     {
       children || data?.map(field => {

@@ -1,5 +1,48 @@
 import { DragDrop } from "@/components_v1/dragdrop/dragdrop.component";
-import { Form, FormField, FormResult } from "@/components_v1/form";
+import { Form, FormResult } from "@/components_v1/form";
+
+const data = [
+  {
+    id: 1,
+    name: 'email',
+    title: 'Email',
+    type: 'email',
+    data: [],
+    parentId: null,
+    position: 1,
+    required: true,
+  },
+  {
+    id: 2,
+    name: 'name',
+    title: 'Name',
+    type: 'group',
+    data: [
+      {
+        id: 3,
+        name: 'firstName',
+        title: 'First Name',
+        type: 'text',
+        data: null,
+        parentId: 2,
+        position: 3,
+        required: true,
+      },
+      {
+        id: 4,
+        name: 'lastName',
+        title: 'Last Name',
+        type: 'text',
+        data: null,
+        parentId: 2,
+        position: 4,
+        required: true,
+      },
+    ],
+    parentId: null,
+    position: 2
+  },
+];
 
 function Overview() {
 
@@ -10,57 +53,9 @@ function Overview() {
   return <div>
     Overview
 
-    <Form onSubmit={handleClick}>
-      <FormField name='email' type='text' />
-    </Form>
+    <Form onSubmit={handleClick} data={data} />
 
-    <DragDrop data={[
-      {
-        id: 'form',
-        name: 'area',
-        type: 'area',
-        data: [],
-        parentId: null,
-        position: 0
-      },
-      {
-        id: 1,
-        name: 'email',
-        title: 'Email',
-        type: 'email',
-        data: [],
-        parentId: 'form',
-        position: 1
-      },
-      {
-        id: 2,
-        name: 'name',
-        title: 'Name',
-        type: 'group',
-        data: [
-          {
-            id: 3,
-            name: 'firstName',
-            title: 'First Name',
-            type: 'text',
-            data: null,
-            parentId: 2,
-            position: 3
-          },
-          {
-            id: 4,
-            name: 'lastName',
-            title: 'Last Name',
-            type: 'text',
-            data: null,
-            parentId: 2,
-            position: 4
-          },
-        ],
-        parentId: 'form',
-        position: 2
-      },
-    ]} />
+    <DragDrop data={data} />
   </div>
 }
 
