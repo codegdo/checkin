@@ -5,9 +5,9 @@ interface IProps extends DndField {
   context: ContextValue;
 };
 
-export function DropElement({context, ...element}: IProps) {
+export function DragElement({context, ...element}: IProps) {
 
   return (
-    <div>dropfield</div>
+    <div>dragelement</div>
   );
 }

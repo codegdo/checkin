@@ -36,7 +36,7 @@ export class FormController {
           {
             id: 'k-9c37c',
             name: 'block',
-            type: 'div',
+            type: 'block',
             dataType: 'block',
             data: [],
             parentId: null,
@@ -146,7 +146,7 @@ export class FormController {
           {
             id: 'x-69feb',
             name: 'block',
-            type: 'div',
+            type: 'block',
             dataType: 'block',
             data: [],
             parentId: null,
@@ -165,7 +165,7 @@ export class FormController {
           {
             id: 'b-9d4aa',
             name: 'block',
-            type: 'div',
+            type: 'block',
             dataType: 'block',
             data: [],
             parentId: null,

@@ -5,7 +5,6 @@ import { ContextValue } from "./contexts";
 import { FormSection } from "./form.section";
 import { FormBlock } from "./form.block";
 import { FormField } from "./form.field";
-import { FormElement } from "./form.element";
 import { FormGroup } from "./form.group";
 import { FormGrid } from "./form.grid";
 
@@ -13,45 +12,39 @@ export function FormRender() {
   const context = useFormContext() as ContextValue;
   return (
     <>
-      {render(groupDataForRender(context.form.data))}
+      {render(groupDataForRender(context.form.data), context)}
     </>
   );
 }
 
-function render(data: FormFieldType[]) {
+function render(data: FormFieldType[], context?: ContextValue) {
 
   return data?.map((item) => {
     const key = item.id || item.name;
 
-    switch(item.dataType) {
+    switch(item.type) {
       case 'section': {
         return (
-          <FormSection key={key} {...item}>
-            {render(item.data as FormFieldType[])}
+          <FormSection key={key} {...item} context={context}>
+            {render(item.data as FormFieldType[], context)}
           </FormSection>
         );
       }
       case 'block': {
         return (
-          <FormBlock key={key} {...item}>
-            {render(item.data as FormFieldType[])}
+          <FormBlock key={key} {...item} context={context}>
+            {render(item.data as FormFieldType[], context)}
           </FormBlock>
         );
       }
       case 'group': {
-        return <FormGroup key={key} {...item} />
+        return <FormGroup key={key} {...item} context={context} />
       }
       case 'grid': {
-        return <FormGrid key={key} {...item} />
-      }
-      case 'field': {
-        return <FormField key={key} {...item} />
-      }
-      case 'element': {
-        return <FormElement key={key} {...item} />
+        return <FormGrid key={key} {...item} context={context} />
       }
       default:
-        return null;
+        <FormField key={key} {...item} context={context} />
     }
   }) || null;
 }

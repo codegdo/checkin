@@ -2,7 +2,8 @@ export interface Item {
   id?: number | string | null;
   parentId?: number | string | null;
   data?: Item[] | null;
-  dataType: string;
+  type: string;
+  dataType?: string;
 }
 
 export function mapToParent<T extends Item>(

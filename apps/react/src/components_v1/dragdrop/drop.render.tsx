@@ -7,7 +7,8 @@ import { DndField } from "./types";
 import { DropBlock } from "./drop.block";
 import { DropField } from "./drop.field";
 import { DropArea } from "./drop.area";
-import { DropElement } from "./drop.element";
+import { DropGrid } from "./drop.grid";
+import { DropGroup } from "./drop.group";
 
 export function DropRender() {
   const context = useDragDropContext() as ContextValue;
@@ -16,8 +17,7 @@ export function DropRender() {
     return {
       id: 'root-area',
       name: 'area',
-      type: 'div',
-      dataType: 'area',
+      type: 'area',
       data: groupDataForRender(context.state.data),
     }
   }, [context.state.data]);
@@ -37,7 +37,7 @@ function render(drop: DndField, context: ContextValue) {
   return data?.map((item) => {
     const key = item.id || item.name;
 
-    switch(item.dataType) {
+    switch(item.type) {
       case 'area': {
         return (
           <DropArea key={key} {...item} context={context}>
@@ -53,14 +53,12 @@ function render(drop: DndField, context: ContextValue) {
           </DropBlock>
         );
       }
-      case 'field': {
-        return <DropField key={key} {...item} context={context} />
-      }
-      case 'element': {
-        return <DropElement key={key} {...item} context={context} />
-      }
+      case 'grid':
+        return <DropGrid key={key} {...item} context={context} />
+      case 'group':
+        return <DropGroup key={key} {...item} context={context} />
       default:
-        return null;
+        return <DropField key={key} {...item} context={context} />
     }
   }) || null;
 }

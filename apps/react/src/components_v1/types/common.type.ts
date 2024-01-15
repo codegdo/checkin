@@ -6,12 +6,16 @@ export enum FieldType {
   DATE = 'date',
   CHECKBOX = 'checkbox',
   RADIO = 'radio',
-  BUTTON = 'button',
+  SELECT = 'select',
+  TEXTAREA = 'textarea'
 }
 
 export enum ElementType {
-  DIV = 'div',
   BUTTON = 'button',
+  LINK = 'link',
+  PARAGRAPH = 'paragraph',
+  IMAGE = 'image',
+
 }
 
 export enum DataType {
@@ -19,10 +23,27 @@ export enum DataType {
   SECTION = 'section',
   BLOCK = 'block',
   HOLDER = 'holder',
+
   LIST = 'list',
   ITEM = 'item',
-  ELEMENT = 'element',
-  FIELD = 'field',
+
+  //ELEMENT = 'element',
+  BUTTON = 'button',
+  LINK = 'link',
+  PARAGRAPH = 'paragraph',
+  IMAGE = 'image',
+
+  //FIELD = 'field',
+  TEXT = 'text',
+  NUMBER = 'number',
+  PASSWORD = 'password',
+  EMAIL = 'email',
+  DATE = 'date',
+  CHECKBOX = 'checkbox',
+  RADIO = 'radio',
+  SELECT = 'select',
+  TEXTAREA = 'textarea',
+
   GROUP = 'group',
   GRID = 'grid',
 }
@@ -30,8 +51,8 @@ export enum DataType {
 interface BaseEntity {
   id?: number | string | null;
   name: string;
-  type: FieldType | ElementType | string;
-  dataType: DataType | string;
+  type: DataType | string;
+  //dataType: DataType | string;
   value?: string | null;
 }
 
