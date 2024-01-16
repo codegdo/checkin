@@ -7,7 +7,7 @@ export interface FormOptions { }
 
 interface IProps {
   title?: string;
-  data?: FieldType[];
+  data?: FieldType[] | null;
   options?: FormOptions;
   status?: string;
   callback?: (result: FormResult) => void

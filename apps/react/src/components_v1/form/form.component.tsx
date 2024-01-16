@@ -5,16 +5,15 @@ import { FormOptions, useFormState } from './hooks';
 import { FieldType, FormResult } from "./types";
 import { FormRender } from "./form.render";
 
-
-interface IFormProps extends PropsWithChildren {
+interface IProps extends PropsWithChildren {
   title?: string;
-  data?: FieldType[];
+  data?: FieldType[] | null;
   options?: FormOptions;
   status?: string;
   onSubmit?: (result: FormResult) => void;
 }
 
-export function Form({ title, data = [], options, status, children, onSubmit }: IFormProps) {
+export function Form({ title, data = [], options, status, children, onSubmit }: IProps) {
 
   const contextValue = useFormState({ title, data, options, status, callback: onSubmit });
 

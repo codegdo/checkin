@@ -3,7 +3,7 @@ import { DragRender } from "./drag.render";
 import { DropEditor } from "./drop.editor";
 import { DropRender } from "./drop.render";
 
-export function DragDropContent() {
+export function DragDropWrapper() {
   return (
     <>
       <DropRender />

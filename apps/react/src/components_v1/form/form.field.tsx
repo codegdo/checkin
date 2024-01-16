@@ -3,53 +3,62 @@ import { Field } from "../field";
 import { ContextValue } from "./contexts";
 import { useFormContext } from "./hooks";
 import { FieldType } from "./types";
-import { formValidator } from "./helpers";
+import { ObjectSchema, ObjectShape, formValidator } from "./helpers";
 
-type FieldProps = FieldType & {
-  context?: ContextValue
+type FormFieldProps = FieldType & {
+  context?: ContextValue;
+  hasParent?: boolean;
 };
 
-export function FormField({ context, ...props }: FieldProps) {
+export function FormField({ context, hasParent, ...props }: FormFieldProps) {
   const key = (props.id || props.name).toString();
-  const stringValue = props.value?.toString() || '';
+  const parentId = props.parentId?.toString() || '';
+  const stringValue = props.value?.toString().trim() || '';
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { ref } = (context || useFormContext()) as ContextValue;
-  const [value, setValue] = useState(stringValue);
+  const [value, setValue] = useState<string>(stringValue);
 
   const handleChange = async (updatedValue: string) => {
-    setValue(() => {
-      ref.values[key] = updatedValue;
-      if (!ref.touched.has(key)) {
-        ref.touched.add(key);
-      }
-      return updatedValue;
-    });
+    const newValue = updatedValue.trim();
 
-    try {
-      await ref.validation.fields[key].validate(updatedValue);
-    } catch (err) {
-      console.log('error', err);
-    }
+    setValue(() => {
+      (hasParent ? ref.values[parentId] as Record<string, string> : ref.values)[key] = newValue
+      ref.touched.add(key);
+      return newValue;
+    });
 
     console.log('CHANGE', ref);
   };
 
-  const handleBlur = () => {
-    //console.log('BLUR', key, value);
-  }
+  const handleBlur = async () => {
+    if (key in ref.validation.fields) {
+      const fields = ref.validation.fields as { [key: string]: ObjectSchema };
+      await formValidator.validateSchema(fields[key], value);
+    }
+  };
 
   const handleFocus = () => {
     if (!ref.touched.has(key)) {
       ref.touched.add(key);
     }
-  }
+  };
 
   useEffect(() => {
-    ref.initialValues[key] = stringValue;
-    ref.values[key] = stringValue;
+    if (hasParent) {
+      ref.initialValues[parentId] = ref.initialValues[parentId] || {};
+      ref.values[parentId] = ref.values[parentId] || {};
+
+      (ref.initialValues[parentId] as Record<string, string>)[key] = stringValue;
+      (ref.values[parentId] as Record<string, string>)[key] = stringValue;
+    } else {
+      ref.initialValues[key] = stringValue;
+      ref.values[key] = stringValue;
+    }
+    // Set up validation schema for the field
     ref.validation = ref.validation.shape({
-      [key]: formValidator.createSchema(props)
-    });
+      [key]: formValidator.createSchema(props),
+    } as ObjectShape);
+
     console.log(ref);
   }, []);
 
@@ -61,5 +70,5 @@ export function FormField({ context, ...props }: FieldProps) {
       onBlur={handleBlur}
       onFocus={handleFocus}
     />
-  )
+  );
 }

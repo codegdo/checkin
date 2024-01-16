@@ -11,7 +11,7 @@ export function FormGroup({ data = [], children }: GroupProps) {
   return <div>
     {
       children || data?.map(field => {
-        return <FormField key={field.id} {...field} />
+        return <FormField key={field.id} {...field} hasParent={true} />
       })
     }
   </div>

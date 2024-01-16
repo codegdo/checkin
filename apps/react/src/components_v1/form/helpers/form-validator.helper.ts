@@ -1,7 +1,10 @@
-import { FieldType } from '../types';
 import * as Yup from 'yup';
 
-export type YubObject = Yup.ObjectSchema<object, Yup.AnyObject, object, "">
+import { checkValidEmail } from '@/utils';
+import { FieldType } from '../types';
+
+export type ObjectSchema = Yup.ObjectSchema<object, Yup.AnyObject, object, "">
+export type ObjectShape = Yup.ObjectShape;
 
 class FormValidatorHelper {
   validator: typeof Yup
@@ -28,7 +31,19 @@ class FormValidatorHelper {
         validateString = validateString.required();
       }
 
+      if (field.type == 'email') {
+        validateString = validateString.email().test("is-valid", (message) => `${message.path} is invalid`, (value) => checkValidEmail(value))
+      }
+
       return validateString;
+    }
+  }
+
+  async validateSchema(schema: ObjectSchema, value: string) {
+    try {
+      await schema.validate(value);
+    } catch (err) {
+      console.error('Validation error:', err);
     }
   }
 

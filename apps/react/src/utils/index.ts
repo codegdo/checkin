@@ -12,3 +12,4 @@ export * from './group-data-for-render.util';
 //export * from './group-data.util';
 export * from './session-storage.util';
 export * from './find-item-by-id.util';
+export * from './check-valid-email.util';

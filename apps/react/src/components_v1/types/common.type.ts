@@ -32,7 +32,7 @@ interface Base {
   id?: number | string | null;
   name: string;
   type: DataType | string;
-  value?: string | null;
+  value?: string | IField[][] | null;
 }
 
 export interface IControl extends Base {
