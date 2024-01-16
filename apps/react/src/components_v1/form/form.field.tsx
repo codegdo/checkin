@@ -16,7 +16,7 @@ export function FormField({ context, ...props }: FieldProps) {
   const { ref } = (context || useFormContext()) as ContextValue;
   const [value, setValue] = useState(stringValue);
 
-  const handleChange = (updatedValue: string) => {
+  const handleChange = async (updatedValue: string) => {
     setValue(() => {
       ref.values[key] = updatedValue;
       if (!ref.touched.has(key)) {
@@ -24,6 +24,13 @@ export function FormField({ context, ...props }: FieldProps) {
       }
       return updatedValue;
     });
+
+    try {
+      await ref.validation.fields[key].validate(updatedValue);
+    } catch (err) {
+      console.log('error', err);
+    }
+
     console.log('CHANGE', ref);
   };
 
@@ -40,9 +47,9 @@ export function FormField({ context, ...props }: FieldProps) {
   useEffect(() => {
     ref.initialValues[key] = stringValue;
     ref.values[key] = stringValue;
-    ref.validation.shape = {
-      [key]: formValidator.create(props),
-    };
+    ref.validation = ref.validation.shape({
+      [key]: formValidator.createSchema(props)
+    });
     console.log(ref);
   }, []);
 

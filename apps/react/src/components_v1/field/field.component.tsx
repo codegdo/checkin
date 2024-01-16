@@ -8,5 +8,6 @@ export function Field(props: IProps) {
     case 'email':
     case 'text':
       return <FieldText {...props} />
+    default: return null;
   }
 }

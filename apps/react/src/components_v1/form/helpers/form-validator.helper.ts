@@ -10,7 +10,7 @@ class FormValidatorHelper {
     this.validator = yub;
   }
 
-  create(field: FieldType) {
+  createSchema(field: FieldType) {
     if (field.type === 'number') {
       let validateNumber = this.validator.number();
 
