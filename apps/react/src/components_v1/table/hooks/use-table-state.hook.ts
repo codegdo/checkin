@@ -14,13 +14,13 @@ interface IProps {
 
 interface TableRef {
   initialValues: Record<string, Record<string, string>[]>;
-  values: Record<string, Record<string, string>[]>;
+  values: Record<string, string>[];
 }
 
 export const useTableState = ({ title, data = [], columns = [], options, status, callback }: IProps) => {
   const ref = useRef<TableRef>({
     initialValues: {},
-    values: {}
+    values: []
   });
 
   useEffect(() => {

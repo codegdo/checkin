@@ -4,19 +4,19 @@ import { ContextValue } from "./contexts";
 
 interface IProps extends Field {
   context?: ContextValue;
-  rowIndex: string;
+  rowIndex: number;
 }
 
 export function TableColumn({ context, value = '', name, rowIndex }: IProps) {
 
   useEffect(() => {
     if (context) {
-      // console.log(context);
-      // if (!(rowIndex in context.ref?.values)) {
-      //   context.ref?.values[name] = {};
-      // }
+      
+      if (!(context.ref.values[rowIndex])) {
+        context.ref.values.push({});
+      }
 
-      // context.ref?.values ? [rowIndex][name] = value;
+      context.ref.values[rowIndex][name] = value as string;
     }
   }, []);
 

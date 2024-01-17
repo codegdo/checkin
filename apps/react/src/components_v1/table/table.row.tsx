@@ -9,6 +9,7 @@ interface IProps {
 }
 
 export function TableRow({ context, row = [], rowIndex }: IProps) {
+  
   return (
     <tr>
       {row.map((column) => (
