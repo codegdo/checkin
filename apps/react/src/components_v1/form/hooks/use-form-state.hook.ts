@@ -1,6 +1,6 @@
 import { useReducer, useRef } from "react";
 import { formValidator } from "../helpers";
-import { FieldType, FormResult } from "../types";
+import { FieldType, FormResult, KeyValue } from "../types";
 import { formReducer } from "../reducers";
 
 export interface FormOptions { }
@@ -13,9 +13,11 @@ interface IProps {
   callback?: (result: FormResult) => void
 }
 
+type ObjectValue = string | KeyValue[][] | Record<string, string>;
+
 interface FormRef {
-  initialValues: Record<string, string | Record<string, string>>;
-  values: Record<string, string | Record<string, string>>;
+  initialValues: Record<string, ObjectValue>;
+  values: Record<string, ObjectValue>;
   errors: Record<string, string | Record<string, string>>;
   touched: Set<string>;
   validation: ReturnType<typeof formValidator.object>

@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { Field } from '../types';
+import { Field, KeyValue } from '../types';
 
 export interface TableOptions { }
 
 interface IProps {
   title?: string;
-  data?: Field[][] | null;
+  data?: KeyValue[][] | null;
   columns?: Field[] | null;
   options?: TableOptions;
   status?: string;

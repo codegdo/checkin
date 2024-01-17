@@ -10,9 +10,9 @@ type FormFieldProps = FieldType & {
   hasParent?: boolean;
 };
 
-export function FormField({ context, hasParent, ...props }: FormFieldProps) {
+export function FormField({ context, ...props }: FormFieldProps) {
   const key = (props.id || props.name).toString();
-  const parentId = props.parentId?.toString() || '';
+  //const parentId = props.parentId?.toString() || '';
   const stringValue = props.value?.toString().trim() || '';
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { ref } = (context || useFormContext()) as ContextValue;
@@ -22,7 +22,7 @@ export function FormField({ context, hasParent, ...props }: FormFieldProps) {
     const newValue = updatedValue.trim();
 
     setValue(() => {
-      (hasParent ? ref.values[parentId] as Record<string, string> : ref.values)[key] = newValue
+      ref.values[key] = newValue;
       ref.touched.add(key);
       return newValue;
     });
@@ -44,16 +44,10 @@ export function FormField({ context, hasParent, ...props }: FormFieldProps) {
   };
 
   useEffect(() => {
-    if (hasParent) {
-      ref.initialValues[parentId] = ref.initialValues[parentId] || {};
-      ref.values[parentId] = ref.values[parentId] || {};
 
-      (ref.initialValues[parentId] as Record<string, string>)[key] = stringValue;
-      (ref.values[parentId] as Record<string, string>)[key] = stringValue;
-    } else {
-      ref.initialValues[key] = stringValue;
-      ref.values[key] = stringValue;
-    }
+    ref.initialValues[key] = stringValue;
+    ref.values[key] = stringValue;
+
     // Set up validation schema for the field
     ref.validation = ref.validation.shape({
       [key]: formValidator.createSchema(props),
@@ -72,3 +66,17 @@ export function FormField({ context, hasParent, ...props }: FormFieldProps) {
     />
   );
 }
+
+/*
+//(hasParent ? ref.values[parentId] as Record<string, string> : ref.values)[key] = newValue
+if (hasParent) {
+  ref.initialValues[parentId] = ref.initialValues[parentId] || {};
+  ref.values[parentId] = ref.values[parentId] || {};
+
+  (ref.initialValues[parentId] as Record<string, string>)[key] = stringValue;
+  (ref.values[parentId] as Record<string, string>)[key] = stringValue;
+} else {
+  ref.initialValues[key] = stringValue;
+  ref.values[key] = stringValue;
+}
+*/

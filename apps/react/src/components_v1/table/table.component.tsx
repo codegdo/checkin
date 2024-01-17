@@ -1,11 +1,11 @@
 import { TableProvider } from "./contexts/table.context";
 import { TableOptions, useTableState } from "./hooks";
 import { TableWrapper } from "./table.wrapper";
-import { Field } from "./types";
+import { Field, KeyValue } from "./types";
 
 interface IProps {
   title?: string;
-  data?: Field[][] | null;
+  data?: KeyValue[][] | null;
   columns?: Field[] | null;
   options?: TableOptions;
   status?: string;

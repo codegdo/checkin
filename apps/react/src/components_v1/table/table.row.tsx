@@ -1,20 +1,23 @@
 import { ContextValue } from "./contexts";
 import { TableColumn } from "./table.column";
-import { Field } from "./types";
+import { KeyValue } from "./types";
 
 interface IProps {
   context?: ContextValue;
-  row: Field[];
+  row: KeyValue[];
   rowIndex: number;
 }
 
 export function TableRow({ context, row = [], rowIndex }: IProps) {
-  
+  const { table } = context as ContextValue;
   return (
     <tr>
-      {row.map((column) => (
-        <TableColumn key={column.name} context={context} {...column} rowIndex={rowIndex} />
-      ))}
+      {
+        table?.columns?.map((headColumn) => {
+          const column = row.find(col => col.id === headColumn.id)
+          return <TableColumn key={headColumn.id} context={context} {...headColumn} value={column?.value} rowIndex={rowIndex} />
+        })
+      }
     </tr>
   );
 }

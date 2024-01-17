@@ -76,30 +76,8 @@ const data = [
       },
     ],
     value: [
-      [
-        {
-          id: 1,
-          name: 'roleId',
-          title: 'Role Id',
-          type: 'text',
-          data: null,
-          value: '123',
-          parentId: null,
-          position: 0,
-          required: true,
-        },
-        {
-          id: 1,
-          name: 'roleName',
-          title: 'Role Name',
-          type: 'text',
-          data: null,
-          value: 'Admin',
-          parentId: null,
-          position: 0,
-          required: true,
-        },
-      ]
+      { id: 6, value: '123', rowIndex: 0 },
+      { id: 7, value: 'Admin', rowIndex: 0 },
     ],
     parentId: null,
     position: 5

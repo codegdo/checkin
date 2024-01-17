@@ -32,7 +32,7 @@ interface Base {
   id?: number | string | null;
   name: string;
   type: DataType | string;
-  value?: string | IField[][] | null;
+  value?: string | KeyValue[] | null;
 }
 
 export interface IControl extends Base {
@@ -54,3 +54,8 @@ export interface IField extends Base {
 }
 
 export type FieldType = IControl & IField;
+
+export interface KeyValue {
+  id: number | string;
+  value: string | null;
+}

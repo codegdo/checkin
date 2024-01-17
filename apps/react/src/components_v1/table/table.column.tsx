@@ -7,22 +7,23 @@ interface IProps extends Field {
   rowIndex: number;
 }
 
-export function TableColumn({ context, value = '', name, rowIndex }: IProps) {
+export function TableColumn({ context, ...props }: IProps) {
 
   useEffect(() => {
-    if (context) {
-      
-      if (!(context.ref.values[rowIndex])) {
-        context.ref.values.push({});
-      }
+    // if (context) {
 
-      context.ref.values[rowIndex][name] = value as string;
-    }
+    //   if (!(context.ref.values[rowIndex])) {
+    //     context.ref.values.push({});
+    //   }
+
+    //   context.ref.values[rowIndex][id?.toString() as string] = value as string;
+    // }
+    console.log('COLUMN', props);
   }, []);
 
   return (
     <td>
-      {value as string}
+      test
     </td>
   );
 }
