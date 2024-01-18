@@ -84,14 +84,22 @@ const data = [
       { id: 7, value: 'User', rowIndex: 1 },
     ],
     parentId: null,
-    position: 5
+    position: 5,
+    readonly: false,
   },
 ];
 
 function Overview() {
 
-  const handleClick = (result: FormResult) => {
+  const handleClick = async (result: FormResult) => {
     console.log(result);
+    if (result.type === 'add') {
+      return {
+        data: [],
+        value: []
+      };
+    }
+    return 'hello';
   }
 
   return <div>

@@ -14,7 +14,7 @@ export function FormGrid({ context, ...props }: GridProps) {
   const key = (props.id || props.name).toString();
   const arrayValue = formHelper.sortAndGroupByObject(props.value as KeyValue[], 'rowIndex') as KeyValue[];
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { ref } = (context || useFormContext()) as ContextValue;
+  const { ref, onCallback } = (context || useFormContext()) as ContextValue;
   const [value, setValue] = useState(arrayValue);
 
   const handleChange = (keyValue: KeyValue) => {
@@ -36,6 +36,11 @@ export function FormGrid({ context, ...props }: GridProps) {
     });
   }
 
+  const handleClick = async () => {
+    const getData = await onCallback?.('add');
+    console.log('getData', getData);
+  }
+
   useEffect(() => {
     ref.initialValues[key] = arrayValue;
     ref.values[key] = arrayValue;
@@ -44,6 +49,9 @@ export function FormGrid({ context, ...props }: GridProps) {
   }, []);
 
   return (
-    <Table data={value} columns={props.data} onChange={handleChange} />
+    <div>
+      <button type="button" name="add" onClick={handleClick}>Add</button>
+      <Table data={value} columns={props.data} onChange={handleChange} />
+    </div>
   )
 }

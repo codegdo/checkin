@@ -32,14 +32,14 @@ export const useFormState = ({ title, data = [], options, status, callback }: IP
 
   const [state, dispatch] = useReducer(formReducer, {});
 
-  const onSubmit = (type: string) => {
+  const onCallback = async (type: string) => {
     const result: FormResult = {
       type,
       values: ref.current.values,
       isSubmit: type === 'submit',
     };
 
-    callback && callback(result);
+    return callback && callback(result);
   };
 
   return {
@@ -52,6 +52,6 @@ export const useFormState = ({ title, data = [], options, status, callback }: IP
     status,
     state,
     dispatch,
-    onSubmit
+    onCallback
   }
 }

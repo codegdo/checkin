@@ -53,9 +53,8 @@ export interface IField extends Base {
   pattern?: string | null;
 
   // Validation options
-  readonly?: boolean;
+  readonly?: boolean; // readonly for grid component will not editable
   disabled?: boolean;
-  editable?: boolean;
   required?: boolean;
   visible?: boolean;
 
