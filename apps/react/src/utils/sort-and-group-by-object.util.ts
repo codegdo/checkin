@@ -1,10 +1,10 @@
-type GroupedObject<T> = Record<string, T>;
+type GroupedObject = Record<string, string | number | null>;
 
-function reduceArray<T>(array: T[], sortingKey: keyof T): GroupedObject<Omit<T, 'rowIndex'>>[] {
-  const groupedObject: GroupedObject<T>[] = [];
+export function sortAndGroupByObject<T extends GroupedObject>(inputArray: T[] = [], sortingKey: keyof T) {
+  const groupedObject: GroupedObject[] = [];
 
   // Sort the input array based on the specified sorting key
-  const sortedArray = array.sort((a, b) => {
+  const sortedArray = inputArray.sort((a, b) => {
     const keyA = a[sortingKey] as number | string;
     const keyB = b[sortingKey] as number | string;
 
@@ -26,33 +26,37 @@ function reduceArray<T>(array: T[], sortingKey: keyof T): GroupedObject<Omit<T, 
     const index = groupedObject.findIndex((group) => group[groupingKey] === item[sortingKey]);
 
     if (index === -1) {
-      const newItem = { [groupingKey]: item[sortingKey], [item.key]: item.value } as { [x: string]: string | number | null };
+      const newItem = { [groupingKey]: item[sortingKey], [item.id as string]: item.value };
       groupedObject.push(newItem);
     } else {
-      groupedObject[index][item.key] = item.value;
+      groupedObject[index][item.id as string] = item.value;
     }
   });
 
   // Remove rowIndex from the resulting objects
   return groupedObject.map((group) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { rowIndex, ...groupWithoutRowIndex } = group;
-    return groupWithoutRowIndex as GroupedObject<Omit<T, 'rowIndex'>>;
+    return groupWithoutRowIndex;
   });
 }
 
-// Example usage:
-interface SampleItem {
-  key: number | string;
-  value: string;
-  rowIndex: number;
-}
-
+/*
 const inputArray = [
-  { key: 6, value: '123', rowIndex: 0 },
-  { key: 7, value: 'Admin', rowIndex: 0 },
-  { key: 6, value: '123', rowIndex: 1 },
-  { key: 7, value: 'Admin', rowIndex: 1 },
+  { id: 6, value: '123', rowIndex: 0 },
+  { id: 7, value: 'Admin', rowIndex: 0 },
+  { id: 6, value: '124', rowIndex: 1 },
+  { id: 7, value: 'User', rowIndex: 1 },
 ];
 
-const reducedArray = reduceArray<Record<string, string | number>[]>(inputArray, 'rowIndex');
+const reducedArray = reduceArray(inputArray, 'rowIndex');
 console.log(reducedArray);
+
+[LOG]: [{
+  "6": "123",
+  "7": "Admin"
+}, {
+  "6": "124",
+  "7": "User"
+}] 
+*/

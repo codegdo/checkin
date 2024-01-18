@@ -62,6 +62,7 @@ const data = [
         parentId: null,
         position: 0,
         required: true,
+        readonly: true,
       },
       {
         id: 7,
@@ -73,11 +74,14 @@ const data = [
         parentId: null,
         position: 0,
         required: true,
+        readonly: false,
       },
     ],
     value: [
       { id: 6, value: '123', rowIndex: 0 },
       { id: 7, value: 'Admin', rowIndex: 0 },
+      { id: 6, value: '124', rowIndex: 1 },
+      { id: 7, value: 'User', rowIndex: 1 },
     ],
     parentId: null,
     position: 5

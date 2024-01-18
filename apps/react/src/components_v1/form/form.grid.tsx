@@ -12,10 +12,29 @@ type GridProps = FieldType & {
 export function FormGrid({ context, ...props }: GridProps) {
 
   const key = (props.id || props.name).toString();
-  const arrayValue = formHelper.sortAndGroup(props.value as KeyValue[], 'rowIndex');
+  const arrayValue = formHelper.sortAndGroupByObject(props.value as KeyValue[], 'rowIndex') as KeyValue[];
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { ref } = (context || useFormContext()) as ContextValue;
-  const [value, setValue] = useState<KeyValue[][]>(arrayValue);
+  const [value, setValue] = useState(arrayValue);
+
+  const handleChange = (keyValue: KeyValue) => {
+    setValue(prevValue => {
+      const updatedValue = prevValue.map((item, index) => {
+        if (index === keyValue.rowIndex) {
+          return { ...item, [keyValue.id]: keyValue.value };
+        } else {
+          return item;
+        }
+      });
+
+      ref.values = { ...ref.values, [key]: updatedValue };
+      ref.touched.add(key);
+
+      console.log('TABLE CHANGE', keyValue);
+
+      return updatedValue;
+    });
+  }
 
   useEffect(() => {
     ref.initialValues[key] = arrayValue;
@@ -25,6 +44,6 @@ export function FormGrid({ context, ...props }: GridProps) {
   }, []);
 
   return (
-    <Table data={value} columns={props.data} />
+    <Table data={value} columns={props.data} onChange={handleChange} />
   )
 }

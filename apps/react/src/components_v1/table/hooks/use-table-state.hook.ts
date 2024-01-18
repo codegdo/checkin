@@ -1,15 +1,18 @@
 import { useEffect, useRef } from 'react';
-import { Field, KeyValue } from '../types';
+import { TableField, KeyValue } from '../types';
 
-export interface TableOptions { }
+export interface TableOptions {
+  editable?: boolean;
+}
 
 interface IProps {
   title?: string;
-  data?: KeyValue[][] | null;
-  columns?: Field[] | null;
+  data?: KeyValue[] | null;
+  columns?: TableField[] | null;
   options?: TableOptions;
   status?: string;
-  callback?: () => void;
+  onClick?: (keyValue: KeyValue) => void;
+  onChange?: (keyValue: KeyValue) => void;
 }
 
 interface TableRef {
@@ -17,7 +20,7 @@ interface TableRef {
   values: Record<string, string>[];
 }
 
-export const useTableState = ({ title, data = [], columns = [], options, status, callback }: IProps) => {
+export const useTableState = ({ title, data = [], columns = [], options, status, onClick, onChange }: IProps) => {
   const ref = useRef<TableRef>({
     initialValues: {},
     values: []
@@ -36,6 +39,7 @@ export const useTableState = ({ title, data = [], columns = [], options, status,
       options,
     },
     status,
-    callback
+    onClick,
+    onChange
   }
 }

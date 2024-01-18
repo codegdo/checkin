@@ -1,29 +1,31 @@
-import { useEffect } from "react";
-import { Field } from "./types";
+import { TableField } from "./types";
 import { ContextValue } from "./contexts";
+import { ChangeEvent } from "react";
 
-interface IProps extends Field {
+interface IProps extends TableField {
   context?: ContextValue;
   rowIndex: number;
 }
 
-export function TableColumn({ context, ...props }: IProps) {
+export function TableColumn({ id, value = '', readonly, context, rowIndex }: IProps) {
 
-  useEffect(() => {
-    // if (context) {
-
-    //   if (!(context.ref.values[rowIndex])) {
-    //     context.ref.values.push({});
-    //   }
-
-    //   context.ref.values[rowIndex][id?.toString() as string] = value as string;
-    // }
-    console.log('COLUMN', props);
-  }, []);
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    context?.onChange?.({
+      id: id as number | string,
+      value: event.currentTarget.value,
+      rowIndex
+    });
+  };
 
   return (
     <td>
-      test
+      {
+        readonly ? (
+          value as string
+        ) : (
+          <input type="text" value={value as string} onChange={handleChange} />
+        )
+      }
     </td>
   );
 }

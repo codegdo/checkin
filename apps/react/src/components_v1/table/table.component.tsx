@@ -1,19 +1,20 @@
 import { TableProvider } from "./contexts/table.context";
 import { TableOptions, useTableState } from "./hooks";
 import { TableWrapper } from "./table.wrapper";
-import { Field, KeyValue } from "./types";
+import { TableField, KeyValue } from "./types";
 
 interface IProps {
   title?: string;
-  data?: KeyValue[][] | null;
-  columns?: Field[] | null;
+  data?: KeyValue[] | null;
+  columns?: TableField[] | null;
   options?: TableOptions;
   status?: string;
-  callback?: () => void;
+  onClick?: (keyValue: KeyValue) => void;
+  onChange?: (keyValue: KeyValue) => void;
 }
 
-export function Table({ data = [], columns = [], callback }: IProps) {
-  const contextValue = useTableState({ data, columns, callback });
+export function Table({ data = [], columns = [], onClick, onChange }: IProps) {
+  const contextValue = useTableState({ data, columns, onClick, onChange });
 
   return (
     <table>

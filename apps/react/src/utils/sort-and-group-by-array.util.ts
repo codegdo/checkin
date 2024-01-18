@@ -1,4 +1,4 @@
-export function sortAndGroupByKey<T>(inputArray: T[], groupingKey: keyof T & (string | number)): T[][] {
+export function sortAndGroupByArray<T>(inputArray: T[], groupingKey: keyof T): T[][] {
   // Sort the array based on the grouping key
   const sortedArray = inputArray.sort((a, b) => {
     const keyA = a[groupingKey];

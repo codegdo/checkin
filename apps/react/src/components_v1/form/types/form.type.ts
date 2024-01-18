@@ -1,15 +1,19 @@
-import { FieldType as FormFieldType, KeyValue as KeyValueType } from "@/components_v1/types";
+import { FieldType as FormFieldType, KeyValue as KeyValueType, ObjectValue } from "@/components_v1/types";
 
 export type FieldType = FormFieldType;
 
 export interface FormState { }
 
+export type FormValues = Record<string, ObjectValue>
+
 export interface FormResult {
   type: string;
-  values: Record<string, string | Record<string, string>>;
+  values: FormValues;
   isSubmit: boolean;
 }
 
-export interface KeyValue extends KeyValueType {
+export type KeyValue = KeyValueType & {
+  id: string | number;
+  value: string | null;
   rowIndex?: number;
 }
