@@ -7,3 +7,5 @@ export type KeyValue = KeyValueType & {
   value: string | null;
   rowIndex?: number;
 }
+
+export interface TableState { }
