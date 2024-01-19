@@ -21,9 +21,10 @@ export const useField = (ctx: FormContextValue, field: FormField) => {
     console.log(updatedValues);
 
     try {
-      await current.schema.validate(updatedValues);
+      await current.schema.validate(updatedValues, { abortEarly: false });
       setError(false);
     } catch (validateError) {
+      console.log(validateError.inner);
       errors[name] = 'error';
       setError(true);
     }

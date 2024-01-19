@@ -1,11 +1,18 @@
+import { KeyValue } from ".";
+
 export enum TableActionType {
-    SUBMIT = 'submit',
-    RESET = 'reset'
-  }
-  
-  export type TablePayload = unknown;
-  
-  export interface TableAction {
-    type: keyof typeof TableActionType;
-    payload?: TablePayload;
-  }
+  UPDATE = 'UPDATE',
+  RESET = 'reset'
+}
+
+type UpdatePayload = {
+  rowData: KeyValue;
+  rowIndex: number;
+}
+
+export type TablePayload = UpdatePayload;
+
+export interface TableAction {
+  type: keyof typeof TableActionType;
+  payload?: TablePayload;
+}

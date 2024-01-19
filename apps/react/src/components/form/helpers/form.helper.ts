@@ -13,6 +13,7 @@ class FormHelper {
   }
 
   errorsWithFieldNames(validationError: ValidationError) {
+    console.log(validationError.inner);
     return validationError.inner.reduce((errors, error) => {
       // error.path contains the field name or field ID
       const fieldName = error.path as string;

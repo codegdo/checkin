@@ -17,6 +17,7 @@ interface FormRef {
   initialValues: FormValues;
   values: FormValues;
   errors: Record<string, string | Record<string, string>>;
+  changed: Set<string>;
   touched: Set<string>;
   validation: ReturnType<typeof formValidator.object>
 }
@@ -26,6 +27,7 @@ export const useFormState = ({ title, data = [], options, status, callback }: IP
     initialValues: {},
     values: {},
     errors: {},
+    changed: new Set<string>(),
     touched: new Set<string>(),
     validation: formValidator.object(),
   });

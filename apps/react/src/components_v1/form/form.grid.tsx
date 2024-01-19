@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Table } from "../table";
 import { ContextValue } from "./contexts";
 import { FieldType, KeyValue } from "./types";
@@ -10,30 +10,16 @@ type GridProps = FieldType & {
 };
 
 export function FormGrid({ context, ...props }: GridProps) {
-
   const key = (props.id || props.name).toString();
   const arrayValue = formHelper.sortAndGroupByObject(props.value as KeyValue[], 'rowIndex') as KeyValue[];
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { ref, onCallback } = (context || useFormContext()) as ContextValue;
-  const [value, setValue] = useState(arrayValue);
 
-  const handleChange = (keyValue: KeyValue) => {
-    setValue(prevValue => {
-      const updatedValue = prevValue.map((item, index) => {
-        if (index === keyValue.rowIndex) {
-          return { ...item, [keyValue.id]: keyValue.value };
-        } else {
-          return item;
-        }
-      });
+  const handleChange = (rowData: KeyValue, rowIndex: number) => {
+    const updatedValue = [...ref.values[key] as KeyValue[]];
 
-      ref.values = { ...ref.values, [key]: updatedValue };
-      ref.touched.add(key);
-
-      console.log('TABLE CHANGE', keyValue);
-
-      return updatedValue;
-    });
+    updatedValue[rowIndex] = { ...updatedValue[rowIndex], ...rowData };
+    ref.values = { ...ref.values, [key]: updatedValue };
   }
 
   const handleClick = async () => {
@@ -51,7 +37,7 @@ export function FormGrid({ context, ...props }: GridProps) {
   return (
     <div>
       <button type="button" name="add" onClick={handleClick}>Add</button>
-      <Table data={value} columns={props.data} onChange={handleChange} />
+      <Table data={arrayValue} columns={props.data} onChange={handleChange} />
     </div>
   )
 }

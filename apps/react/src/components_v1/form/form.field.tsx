@@ -24,6 +24,7 @@ export function FormField({ context, ...props }: FormFieldProps) {
     setValue(() => {
       ref.values[key] = newValue;
       ref.touched.add(key);
+      ref.changed.add(key);
       return newValue;
     });
 
@@ -31,16 +32,33 @@ export function FormField({ context, ...props }: FormFieldProps) {
   };
 
   const handleBlur = async () => {
-    if (key in ref.validation.fields) {
-      const fields = ref.validation.fields as { [key: string]: ObjectSchema };
-      await formValidator.validateSchema(fields[key], value);
+
+    // if (key in ref.validation.fields) {
+    //   const fields = ref.validation.fields as { [key: string]: ObjectSchema };
+    //   await formValidator.validateSchema(fields[key], value);
+    // }
+
+    for (const changedKey of ref.changed) {
+      if (changedKey in ref.validation.fields) {
+        const fields = ref.validation.fields as { [key: string]: ObjectSchema };
+        const valueToValidate = ref.values[changedKey]?.toString().trim() || '';
+
+        const validationSchema = {
+          schema: ref.validation, //fields[changedKey],
+          value: ref.values,// valueToValidate
+        }
+
+        await formValidator.validateSchema(validationSchema);
+      }
     }
+
+    console.log('BLUR', ref);
   };
 
   const handleFocus = () => {
-    if (!ref.touched.has(key)) {
-      ref.touched.add(key);
-    }
+    ref.changed.clear();
+    ref.touched.add(key);
+    ref.changed.add(key);
   };
 
   useEffect(() => {

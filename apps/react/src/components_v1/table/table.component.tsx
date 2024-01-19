@@ -5,12 +5,12 @@ import { TableField, KeyValue } from "./types";
 
 interface IProps {
   title?: string;
-  data?: KeyValue[] | null;
+  data?: KeyValue[];
   columns?: TableField[] | null;
   options?: TableOptions;
   status?: string;
   onClick?: (keyValue: KeyValue) => void;
-  onChange?: (keyValue: KeyValue) => void;
+  onChange?: (rowData: KeyValue, rowIndex: number) => void;
 }
 
 export function Table({ data = [], columns = [], onClick, onChange }: IProps) {

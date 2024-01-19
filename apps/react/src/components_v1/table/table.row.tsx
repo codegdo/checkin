@@ -10,11 +10,23 @@ interface IProps {
 }
 
 export function TableRow({ context, row, rowIndex }: IProps) {
-  const { table } = context as ContextValue;
+  const { table, onUpdate } = context as ContextValue;
   const [isEditing, setIsEditing] = useState(false);
+  const [rowData, setRowData] = useState({ ...row });
 
   const handleClick = () => {
     setIsEditing(!isEditing);
+  }
+
+  const handleChange = (keyValue: KeyValue) => {
+    console.log('ROW CHANGE', keyValue);
+    setRowData((prevData) => {
+      return { ...prevData, [keyValue.id as string]: keyValue.value }
+    });
+  }
+
+  const handleBlur = () => {
+    onUpdate(rowData, rowIndex);
   }
 
   return (
@@ -22,8 +34,18 @@ export function TableRow({ context, row, rowIndex }: IProps) {
       {
         table?.columns?.map((headColumn) => {
           const key = headColumn.id as keyof KeyValue;
-          const value = row[key] as string;
-          return <TableColumn key={headColumn.id} context={context} {...headColumn} value={value} rowIndex={rowIndex} isEditing={isEditing} />
+          const value = rowData[key] as string;
+
+          return (
+            <TableColumn
+              key={headColumn.id}
+              {...headColumn}
+              value={value}
+              isEditing={isEditing}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+          );
         })
       }
       {

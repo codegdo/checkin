@@ -12,8 +12,4 @@ export interface FormResult {
   isSubmit: boolean;
 }
 
-export type KeyValue = KeyValueType & {
-  id: string | number;
-  value: string | null;
-  rowIndex?: number;
-}
+export type KeyValue = KeyValueType;
