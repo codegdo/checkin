@@ -19,7 +19,7 @@ interface FormRef {
   errors: Record<string, string | Record<string, string>>;
   changed: Set<string>;
   touched: Set<string>;
-  validation: ReturnType<typeof formValidator.object>
+  validation: ReturnType<typeof formValidator.validator.object>
 }
 
 export const useFormState = ({ title, data = [], options, status, callback }: IProps) => {
@@ -29,7 +29,7 @@ export const useFormState = ({ title, data = [], options, status, callback }: IP
     errors: {},
     changed: new Set<string>(),
     touched: new Set<string>(),
-    validation: formValidator.object(),
+    validation: formValidator.validator.object(),
   });
 
   const [state, dispatch] = useReducer(formReducer, {});

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Table } from "../table";
 import { ContextValue } from "./contexts";
 import { FieldType, KeyValue } from "./types";
-import { formHelper } from "./helpers";
+import { ObjectShape, formHelper, formValidator } from "./helpers";
 import { useFormContext } from "./hooks";
 
 type GridProps = FieldType & {
@@ -30,6 +30,19 @@ export function FormGrid({ context, ...props }: GridProps) {
   useEffect(() => {
     ref.initialValues[key] = arrayValue;
     ref.values[key] = arrayValue;
+
+    const validationData = props.data || [];
+    const gridSchemaObject = validationData.reduce((schema, field) => {
+      const keyId = (props.id || props.name).toString();
+      return {...schema, [keyId]: formValidator.createSchema(field)}
+    }, {});
+
+    const gridSchema = formValidator.validator.object(gridSchemaObject);
+
+    // Set up validation schema for the grid field
+    ref.validation = ref.validation.shape({
+      [key]: formValidator.validator.array(gridSchema),
+    } as ObjectShape);
 
     console.log(ref);
   }, []);

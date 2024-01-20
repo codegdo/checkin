@@ -3,7 +3,11 @@ import * as Yup from 'yup';
 import { checkValidEmail } from '@/utils';
 import { FieldType, FormValues } from '../types';
 
-export type ObjectSchema = Yup.ObjectSchema<object, Yup.AnyObject, object, "">
+export type ObjectSchema = Yup.ObjectSchema<{
+  [x: string]: unknown;
+}, Yup.Maybe<Yup.AnyObject>, {
+  [x: string]: undefined;
+}, "">
 export type ObjectShape = Yup.ObjectShape;
 export interface ValidationSchema {
   schema: ObjectSchema;
@@ -51,10 +55,6 @@ class FormValidatorHelper {
       const validationError = err as Yup.ValidationError;
       console.log(validationError.inner);
     }
-  }
-
-  object() {
-    return this.validator.object();
   }
 }
 
