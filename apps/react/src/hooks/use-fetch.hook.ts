@@ -3,7 +3,6 @@ import { http, HttpResponse, RequestOptions } from '@/helpers';
 import { API_URL } from '@/constants';
 import { stringifyUrl } from '@/utils';
 
-
 export enum FetchStatus {
   Idle = 'Idle',
   Loading = 'Loading',
@@ -24,8 +23,8 @@ type ResponseFetch<T> = {
   isAbort: boolean;
   error: Error | undefined;
   data: T | undefined;
-  mutation: (options?: RequestOptions) => Promise<void>;
-  query: (options?: RequestOptions) => Promise<void>;
+  mutation: (options?: RequestOptions) => Promise<HttpResponse<T> | Error | undefined>;
+  query: (options?: RequestOptions) => Promise<HttpResponse<T> | Error | undefined>;
   controller: AbortController;
 };
 
@@ -96,6 +95,7 @@ export const useFetch = <T>(
         }
 
         clearTimeoutIdRef();
+        return httpResponse;
       }
     } catch (error) {
       console.log('ERROR', error);
@@ -106,31 +106,32 @@ export const useFetch = <T>(
         setError(err);
         setStatus(FetchStatus.Error);
       }
+      return err;
     }
   };
 
-  const makeRequest = async (strUrl: string, options: RequestOptions) => {
+  const fetchRequest = async (strUrl: string, options: RequestOptions) => {
     setStatus(FetchStatus.Loading);
 
     const responsePromise = http.request<T>(strUrl, options); // Wrap the http.request in a Promise
-    checkDelay(responsePromise);
+    return checkDelay(responsePromise);
   };
 
-  const performRequest = async (options: RequestOptions = {}) => {
+  const makeRequest = async (options: RequestOptions = {}) => {
     const baseUrl = options.baseUrl || API_URL;
     const pathUrl = options.url || url;
     const urlParams = options.params || params;
     const strUrl = stringifyUrl(`${baseUrl}${pathUrl}`, urlParams);
 
-    makeRequest(strUrl, { ...options, signal: ctrlRef.current.signal });
+    return fetchRequest(strUrl, { ...options, signal: ctrlRef.current.signal });
   };
 
-  const mutation = async (options: RequestOptions = {}): Promise<void> => {
-    await performRequest(options);
+  const mutation = async (options: RequestOptions = {}) => {
+    return makeRequest(options);
   };
 
-  const query = async (options: RequestOptions = {}): Promise<void> => {
-    await performRequest(options);
+  const query = async (options: RequestOptions = {}) => {
+    return makeRequest(options);
   };
 
   return {

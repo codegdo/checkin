@@ -7,4 +7,4 @@ export * from './form/types';
 export * from './loader/loader.lazy';
 export * from './loader/loader.partial';
 export * from './loader/loader.template';
-export * from './loader/loader.component';
+export * from './loader/loader.status';

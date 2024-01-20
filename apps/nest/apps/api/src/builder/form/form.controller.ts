@@ -24,6 +24,14 @@ export class FormController {
     ];
   }
 
+  @Get('/products')
+  async getProduct() {
+    return {
+      data: [],
+      value: []
+    }
+  }
+
   @Get(':id')
   async getFormById(@Param('id') id: number) {
     if (id == 1) {
@@ -239,4 +247,5 @@ export class FormController {
     }
     return {};
   }
+
 }

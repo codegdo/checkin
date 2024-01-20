@@ -10,6 +10,7 @@ interface IProps {
   data?: FieldType[] | null;
   options?: FormOptions;
   status?: string;
+  loading?: boolean;
   callback?: (result: FormResult) => void
 }
 
@@ -22,7 +23,7 @@ interface FormRef {
   validation: ReturnType<typeof formValidator.validator.object>
 }
 
-export const useFormState = ({ title, data = [], options, status, callback }: IProps) => {
+export const useFormState = ({ title, data = [], options, status, loading, callback }: IProps) => {
   const ref = useRef<FormRef>({
     initialValues: {},
     values: {},
@@ -52,6 +53,7 @@ export const useFormState = ({ title, data = [], options, status, callback }: IP
       options
     },
     status,
+    loading,
     state,
     dispatch,
     onCallback

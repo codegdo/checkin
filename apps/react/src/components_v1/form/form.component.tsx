@@ -10,15 +10,17 @@ interface IProps extends PropsWithChildren {
   data?: FieldType[] | null;
   options?: FormOptions;
   status?: string;
+  loading?: boolean;
   onSubmit?: (result: FormResult) => void;
 }
 
-export function Form({ title, data = [], options, status, children, onSubmit }: IProps) {
+export function Form({ title, data = [], options, status, loading, children, onSubmit }: IProps) {
 
-  const contextValue = useFormState({ title, data, options, status, callback: onSubmit });
+  const contextValue = useFormState({ title, data, options, status, loading, callback: onSubmit });
 
   return (
     <form onSubmit={e => e.preventDefault()}>
+      {loading && <div>loading...</div>}
       <FormProvider value={contextValue}>
         {children || <FormRender />}
       </FormProvider>
