@@ -23,6 +23,11 @@ interface FormRef {
   validation: ReturnType<typeof formValidator.validator.object>
 }
 
+interface OnCallbackType {
+  type: string;
+  field?: FieldType;
+}
+
 export const useFormState = ({ title, data = [], options, status, loading, callback }: IProps) => {
   const ref = useRef<FormRef>({
     initialValues: {},
@@ -35,10 +40,11 @@ export const useFormState = ({ title, data = [], options, status, loading, callb
 
   const [state, dispatch] = useReducer(formReducer, {});
 
-  const onCallback = async (type: string) => {
+  const onCallback = async ({type, field}:OnCallbackType) => {
     const result: FormResult = {
       type,
       values: ref.current.values,
+      field,
       isSubmit: type === 'submit',
     };
 

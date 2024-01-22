@@ -1,14 +1,11 @@
-import { KeyValue } from ".";
+import { RowValue } from ".";
 
 export enum TableActionType {
   UPDATE = 'UPDATE',
   RESET = 'reset'
 }
 
-type UpdatePayload = {
-  rowData: KeyValue;
-  rowIndex: number;
-}
+type UpdatePayload = RowValue;
 
 export type TablePayload = UpdatePayload;
 

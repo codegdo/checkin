@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ContextValue } from "./contexts";
 import { TableColumn } from "./table.column";
-import { KeyValue } from "./types";
+import { KeyValue, TableActionType } from "./types";
 
 interface IProps {
   context?: ContextValue;
@@ -26,7 +26,10 @@ export function TableRow({ context, row, rowIndex }: IProps) {
   }
 
   const handleBlur = () => {
-    onUpdate(rowData, rowIndex);
+    onUpdate({
+      type: TableActionType.UPDATE,
+      payload: { rowData, rowIndex }
+    });
   }
 
   return (
@@ -49,7 +52,7 @@ export function TableRow({ context, row, rowIndex }: IProps) {
         })
       }
       {
-        <td><button type="button" onClick={handleClick}>Edit</button></td>
+        <td><button type="button" onClick={handleClick}>Remove</button></td>
       }
     </tr>
   );

@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useRef } from 'react';
-import { TableField, KeyValue, TableActionType } from '../types';
+import { TableField, KeyValue, TableActionType, TableAction, RowValue } from '../types';
 import { tableReducer } from '../reducers';
 
 export interface TableOptions {
@@ -13,13 +13,14 @@ interface IProps {
   options?: TableOptions;
   status?: string;
   onClick?: (keyValue: KeyValue) => void;
-  onChange?: (rowData: KeyValue, rowIndex: number) => void;
+  onChange?: (rowValue?: RowValue) => void;
 }
 
 interface TableRef {
   initialValues: Record<string, Record<string, string>[]>;
   values: Record<string, string>[];
 }
+
 
 export const useTableState = ({ title, data = [], columns = [], options, status, onClick, onChange }: IProps) => {
   const ref = useRef<TableRef>({
@@ -31,15 +32,13 @@ export const useTableState = ({ title, data = [], columns = [], options, status,
     data: structuredClone(data)
   });
 
-  const onUpdate = (rowData: KeyValue, rowIndex: number) => {
-    dispatch({
-      type: TableActionType.UPDATE,
-      payload: { rowData, rowIndex }
-    });
+  const onUpdate = (action: TableAction) => {
+    
+    dispatch(action);
 
-    onChange?.(rowData, rowIndex);
+    onChange?.(action?.payload);
 
-    console.log('onUPDATE', rowData, rowIndex);
+    console.log('onUPDATE', action);
   }
 
   useEffect(() => {

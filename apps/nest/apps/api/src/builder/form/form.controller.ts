@@ -26,6 +26,7 @@ export class FormController {
 
   @Get('/products')
   async getProduct() {
+    //throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     return {
       data: [],
       value: []

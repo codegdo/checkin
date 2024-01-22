@@ -1,7 +1,7 @@
 import { TableProvider } from "./contexts/table.context";
 import { TableOptions, useTableState } from "./hooks";
 import { TableWrapper } from "./table.wrapper";
-import { TableField, KeyValue } from "./types";
+import { TableField, KeyValue, RowValue } from "./types";
 
 interface IProps {
   title?: string;
@@ -10,7 +10,7 @@ interface IProps {
   options?: TableOptions;
   status?: string;
   onClick?: (keyValue: KeyValue) => void;
-  onChange?: (rowData: KeyValue, rowIndex: number) => void;
+  onChange?: (rowValue?: RowValue) => void;
 }
 
 export function Table({ data = [], columns = [], onClick, onChange }: IProps) {

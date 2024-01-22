@@ -105,8 +105,8 @@ export const useFetch = <T>(
       } else {
         setError(err);
         setStatus(FetchStatus.Error);
+        throw err;
       }
-      return err;
     }
   };
 

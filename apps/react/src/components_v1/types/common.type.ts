@@ -84,3 +84,5 @@ export type KeyValue = Record<string, string | number | null>;
 // Type for the value property that can be a string, KeyValue array, or a record
 export type ObjectValue = string | KeyValue | KeyValue[] | null;
 
+export type RowValue = { rowData: KeyValue, rowIndex: number}
+
