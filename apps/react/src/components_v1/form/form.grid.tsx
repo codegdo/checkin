@@ -42,7 +42,7 @@ export function FormGrid({ context, ...props }: GridProps) {
 
     const validationData = props.data || [];
     const gridSchemaObject = validationData.reduce((schema, field) => {
-      const keyId = (props.id || props.name).toString();
+      const keyId = (field.id || field.name).toString();
       return {...schema, [keyId]: formValidator.createSchema(field)}
     }, {});
 
@@ -53,7 +53,7 @@ export function FormGrid({ context, ...props }: GridProps) {
       [key]: formValidator.validator.array(gridSchema),
     } as ObjectShape);
 
-    console.log(ref);
+    //console.log('GRID', ref);
   }, []);
 
   return (
