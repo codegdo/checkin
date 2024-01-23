@@ -3,7 +3,7 @@ import { Form, FormResult } from "@/components_v1/form";
 import { useFetchProduct, useSaveProduct } from "./api";
 import { FetchStatus } from "@/hooks";
 import { Loader } from "@/components";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 
 const data = [
   {
@@ -94,25 +94,29 @@ const data = [
 ];
 
 function Overview() {
-  const {status: fetchLoading, data: formData, controller: fetchController, query} = useFetchProduct();
-  const {status: saveLoading, controller: saveController, mutation} = useSaveProduct();
+  const { status: fetchLoading, data: formData, progress, controller: fetchController, query } = useFetchProduct();
+  const { status: saveLoading, controller: saveController, mutation } = useSaveProduct();
 
-  const handleClick = useCallback( async (result: FormResult) => {
+  const handleClick = useCallback(async (result: FormResult) => {
     console.log(result);
 
     if (result.type === 'add') {
       return query();
-    } else if(result.type === 'save') {
+    } else if (result.type === 'save') {
       mutation();
     }
   }, []);
+
+  useEffect(() => {
+    console.log('progress', progress);
+  }, [progress]);
 
   return <div>
     Overview
 
     <Loader status={fetchLoading} controller={fetchController} />
 
-    <Form onSubmit={handleClick} data={data}/>
+    <Form onSubmit={handleClick} data={data} />
 
     <DragDrop data={data} />
   </div>

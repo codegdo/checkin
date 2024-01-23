@@ -85,7 +85,7 @@ class HttpHelper {
     return this._fetch<T>(new Request(url, this.requestOptions(options)));
   }
 
-  async _fetch<T>(req: Request, responseType?: 'json' | 'text' | 'blob'): Promise<HttpResponse<T>> {
+  async _fetch<T>(req: Request): Promise<HttpResponse<T>> {
     try {
       const res: HttpResponse<T> = await fetch(req);
 
@@ -93,10 +93,9 @@ class HttpHelper {
         throw new Error(`Request failed with status: ${res.status}`);
       }
 
-      if (responseType === 'text') {
-        res.data = (await res.text()) as T;
-      } else if (responseType === 'blob') {
-        res.data = (await res.blob()) as T;
+      if (res.status === 204) {
+        // No content
+        res.data = undefined;
       } else {
         const rawBody = await res.text();
         try {

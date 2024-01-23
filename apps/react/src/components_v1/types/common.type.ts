@@ -75,13 +75,11 @@ export interface IField extends Base {
   position?: number | null;
 }
 
-// Combined type for fields and controls
+
 export type FieldType = IControl & IField;
 
-// Interface for KeyValue, representing key-value pairs with an optional rowIndex
 export type KeyValue = Record<string, string | number | null>;
 
-// Type for the value property that can be a string, KeyValue array, or a record
 export type ObjectValue = string | KeyValue | KeyValue[] | null;
 
 export type RowValue = { rowValue: KeyValue, rowIndex: number }

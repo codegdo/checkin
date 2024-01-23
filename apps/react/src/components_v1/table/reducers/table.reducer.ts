@@ -11,6 +11,14 @@ export const tableReducer = (state: TableState, action: TableAction) => {
 
       return { ...state, data: updatedData };
     }
+    case TableActionType.REMOVE: {
+      const { rowIndex } = action.payload as TablePayload;
+
+      const updatedData = [...state.data];
+      updatedData.splice(rowIndex, 1);
+
+      return { ...state, data: updatedData };
+    }
     default: return state;
   }
 }

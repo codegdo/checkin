@@ -7,7 +7,7 @@ export function TableBody() {
 
   return (
     <tbody>
-      {context.source.data?.map((rowValue, index) => (
+      {context.state.data?.map((rowValue, index) => (
         <TableRow key={index} context={context} value={rowValue} rowIndex={index} />
       ))}
     </tbody>

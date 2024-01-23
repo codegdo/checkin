@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useRef } from 'react';
-import { TableField, KeyValue, TableAction, RowValue } from '../types';
+import { TableField, KeyValue, TableAction } from '../types';
 import { tableReducer } from '../reducers';
 
 export interface TableOptions {
@@ -12,7 +12,7 @@ export interface TableProps {
   data?: KeyValue[];
   status?: string;
   onClick?: (keyValue: KeyValue) => void;
-  onChange?: (rowValue?: RowValue) => void;
+  onChange?: (keyValue: KeyValue[]) => void;
 
   // Additional Attributes
   className?: string; // Class name for styling
@@ -80,12 +80,14 @@ export const useTableState = ({ status, onClick, onChange, ...props }: TableProp
 
     dispatch(action);
 
-    onChange?.(action?.payload);
+    //onChange?.(action?.payload);
 
-    console.log('onUPDATE', action);
+
+    console.log('onUPDATE', state.data);
   }
 
   useEffect(() => {
+    onChange?.(state.data);
     console.log('stateUPDATE', state);
   }, [state]);
 

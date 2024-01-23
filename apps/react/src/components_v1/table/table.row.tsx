@@ -14,7 +14,12 @@ export function TableRow({ context, value, rowIndex }: IProps) {
 
   const [rowValue, setRowValue] = useState({ ...value });
 
-  const handleClick = () => { }
+  const handleClick = () => {
+    onUpdate({
+      type: TableActionType.REMOVE,
+      payload: { rowValue, rowIndex }
+    });
+  }
 
   const handleChange = (keyValue: KeyValue) => {
     console.log('ROW CHANGE', keyValue);

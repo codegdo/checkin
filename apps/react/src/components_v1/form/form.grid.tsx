@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Table } from "../table";
 import { ContextValue } from "./contexts";
-import { FieldType, KeyValue, RowValue } from "./types";
+import { FieldType, KeyValue, } from "./types";
 import { ObjectShape, formHelper, formValidator } from "./helpers";
 import { useFormContext } from "./hooks";
 
@@ -17,14 +17,10 @@ export function FormGrid({ context, ...props }: GridProps) {
   const [isEditing, setIsEditing] = useState(false);
 
 
-  const handleChange = (rowData?: RowValue) => {
-    if (!rowData) return;
+  const handleChange = (updateValue: KeyValue[]) => {
+    const newValue = [...updateValue];
+    ref.values = { ...ref.values, [key]: newValue };
 
-    const { rowValue, rowIndex } = rowData;
-    const updatedValue = [...ref.values[key] as KeyValue[]];
-
-    updatedValue[rowIndex] = { ...updatedValue[rowIndex], ...rowValue };
-    ref.values = { ...ref.values, [key]: updatedValue };
     console.log('FORMGRID CHANGE', ref);
   }
 
