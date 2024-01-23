@@ -1,15 +1,15 @@
 import { ContextValue } from "./contexts";
 import { useTableContext } from "./hooks";
-import { Field } from "./types";
+import { TableField } from "./types";
 
-export function TableHead() {
-  const { table } = useTableContext() as ContextValue;
+export function TableHeader() {
+  const { source } = useTableContext() as ContextValue;
 
   return (
     <thead>
       <tr>
         {
-          table.columns?.map((column: Field) => {
+          source.columns?.map((column: TableField) => {
             return <th key={column.name}>{column.title}</th>
           })
         }

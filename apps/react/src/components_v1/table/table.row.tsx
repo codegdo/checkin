@@ -1,50 +1,48 @@
 import { useState } from "react";
 import { ContextValue } from "./contexts";
-import { TableColumn } from "./table.column";
+import { TableCell } from "./table.cell";
 import { KeyValue, TableActionType } from "./types";
 
 interface IProps {
   context?: ContextValue;
-  row: KeyValue;
+  value: KeyValue;
   rowIndex: number;
 }
 
-export function TableRow({ context, row, rowIndex }: IProps) {
-  const { table, onUpdate } = context as ContextValue;
-  const [isEditing, setIsEditing] = useState(false);
-  const [rowData, setRowData] = useState({ ...row });
+export function TableRow({ context, value, rowIndex }: IProps) {
+  const { source, onUpdate } = context as ContextValue;
 
-  const handleClick = () => {
-    setIsEditing(!isEditing);
-  }
+  const [rowValue, setRowValue] = useState({ ...value });
+
+  const handleClick = () => { }
 
   const handleChange = (keyValue: KeyValue) => {
     console.log('ROW CHANGE', keyValue);
-    setRowData((prevData) => {
-      return { ...prevData, [keyValue.id as string]: keyValue.value }
+    setRowValue((prevValue) => {
+      return { ...prevValue, [keyValue.id as string]: keyValue.value }
     });
   }
 
   const handleBlur = () => {
     onUpdate({
       type: TableActionType.UPDATE,
-      payload: { rowData, rowIndex }
+      payload: { rowValue, rowIndex }
     });
   }
 
   return (
     <tr>
       {
-        table?.columns?.map((headColumn) => {
+        source?.columns?.map((headColumn) => {
           const key = headColumn.id as keyof KeyValue;
-          const value = rowData[key] as string;
+          const cellValue = rowValue[key] as string;
 
           return (
-            <TableColumn
+            <TableCell
               key={headColumn.id}
               {...headColumn}
-              value={value}
-              isEditing={isEditing}
+              value={cellValue}
+              editable={source?.editable}
               onChange={handleChange}
               onBlur={handleBlur}
             />

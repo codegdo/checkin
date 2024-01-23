@@ -1,27 +1,16 @@
 import { TableProvider } from "./contexts/table.context";
-import { TableOptions, useTableState } from "./hooks";
-import { TableWrapper } from "./table.wrapper";
-import { TableField, KeyValue, RowValue } from "./types";
+import { TableProps, useTableState } from "./hooks";
+import { TableContent } from "./table.content";
 
-interface IProps {
-  title?: string;
-  data?: KeyValue[];
-  columns?: TableField[] | null;
-  options?: TableOptions;
-  status?: string;
-  onClick?: (keyValue: KeyValue) => void;
-  onChange?: (rowValue?: RowValue) => void;
-}
-
-export function Table({ data = [], columns = [], onClick, onChange }: IProps) {
-  const contextValue = useTableState({ data, columns, onClick, onChange });
+export function Table(props: TableProps) {
+  const contextValue = useTableState({ ...props });
 
   return (
-    <table>
+    <div>
       <TableProvider value={contextValue}>
-        <TableWrapper />
+        <TableContent />
       </TableProvider>
-    </table>
+    </div>
   );
 }
 

@@ -1,8 +1,7 @@
 import { RowValue } from ".";
 
 export enum TableActionType {
-  UPDATE = 'UPDATE',
-  RESET = 'reset'
+  UPDATE = 'UPDATE'
 }
 
 type UpdatePayload = RowValue;

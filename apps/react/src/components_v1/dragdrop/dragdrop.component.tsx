@@ -3,7 +3,7 @@ import { PropsWithChildren } from "react";
 import { DragDropProvider } from "./contexts";
 import { DndField, DndResult } from "./types";
 import { DndOptions, useDragDropState } from "./hooks";
-import { DragDropWrapper } from "./dragdrop.wrapper";
+import { DragDropContent } from "./dragdrop.content";
 
 interface IProps extends PropsWithChildren {
   title?: string;
@@ -19,7 +19,7 @@ export function DragDrop({ data, options, status, children, onSubmit }: IProps) 
   return (
     <div className="dragdrop">
       <DragDropProvider value={contextValue}>
-        {children || <DragDropWrapper />}
+        {children || <DragDropContent />}
       </DragDropProvider>
     </div>
   );

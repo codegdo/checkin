@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Table } from "../table";
 import { ContextValue } from "./contexts";
 import { FieldType, KeyValue, RowValue } from "./types";
@@ -14,27 +14,32 @@ export function FormGrid({ context, ...props }: GridProps) {
   const arrayValue = formHelper.sortAndGroupByObject(props.value as KeyValue[], 'rowIndex') as KeyValue[];
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { ref, onCallback } = (context || useFormContext()) as ContextValue;
+  const [isEditing, setIsEditing] = useState(false);
 
-  const handleChange = (rowValue?: RowValue) => {
-    if(!rowValue) return;
 
-    const {rowData, rowIndex} = rowValue;
+  const handleChange = (rowData?: RowValue) => {
+    if (!rowData) return;
+
+    const { rowValue, rowIndex } = rowData;
     const updatedValue = [...ref.values[key] as KeyValue[]];
 
-    updatedValue[rowIndex] = { ...updatedValue[rowIndex], ...rowData };
+    updatedValue[rowIndex] = { ...updatedValue[rowIndex], ...rowValue };
     ref.values = { ...ref.values, [key]: updatedValue };
+    console.log('FORMGRID CHANGE', ref);
   }
 
   const handleAdd = async () => {
     try {
-      const getData = await onCallback?.({type:'add', field: props});
+      const getData = await onCallback?.({ type: 'add', field: props });
       console.log('getData', getData);
-    } catch(err) {
+    } catch (err) {
       console.log('FORMGRID ERROR', err);
     }
   }
 
-  const handleEdit = () => {}
+  const handleEdit = () => {
+    setIsEditing(!isEditing)
+  }
 
   useEffect(() => {
     ref.initialValues[key] = arrayValue;
@@ -43,7 +48,7 @@ export function FormGrid({ context, ...props }: GridProps) {
     const validationData = props.data || [];
     const gridSchemaObject = validationData.reduce((schema, field) => {
       const keyId = (field.id || field.name).toString();
-      return {...schema, [keyId]: formValidator.createSchema(field)}
+      return { ...schema, [keyId]: formValidator.createSchema(field) }
     }, {});
 
     const gridSchema = formValidator.validator.object(gridSchemaObject);
@@ -58,9 +63,16 @@ export function FormGrid({ context, ...props }: GridProps) {
 
   return (
     <div>
-      <button type="button" name="add" onClick={handleAdd}>Add</button>
-      <button type="button" name="add" onClick={handleEdit}>Edit</button>
-      <Table data={arrayValue} columns={props.data} onChange={handleChange} />
+      <div>
+        <button type="button" name="add" onClick={handleAdd}>Add</button>
+        <input type="checkbox" name="edit" onClick={handleEdit} />
+      </div>
+      <Table
+        columns={props.data}
+        data={arrayValue}
+        editable={isEditing}
+        onChange={handleChange}
+      />
     </div>
   )
 }
