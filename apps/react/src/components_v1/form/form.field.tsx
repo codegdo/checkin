@@ -3,11 +3,11 @@ import { Field } from "../field";
 import { ContextValue } from "./contexts";
 import { useFormContext } from "./hooks";
 import { FieldType } from "./types";
-import { ObjectSchema, ObjectShape, formValidator } from "./helpers";
+import { ObjectShape, formValidator } from "./helpers";
 
 type FormFieldProps = FieldType & {
   context?: ContextValue;
-  hasParent?: boolean;
+  group?: FieldType;
 };
 
 export function FormField({ context, ...props }: FormFieldProps) {
@@ -28,7 +28,7 @@ export function FormField({ context, ...props }: FormFieldProps) {
       return newValue;
     });
 
-    console.log('CHANGE', ref);
+    console.log('CHANGE', ref, props);
   };
 
   const handleBlur = async () => {
@@ -40,8 +40,8 @@ export function FormField({ context, ...props }: FormFieldProps) {
 
     for (const changedKey of ref.changed) {
       if (changedKey in ref.validation.fields) {
-        const fields = ref.validation.fields as { [key: string]: ObjectSchema };
-        const valueToValidate = ref.values[changedKey]?.toString().trim() || '';
+        //const fields = ref.validation.fields as { [key: string]: ObjectSchema };
+        //const valueToValidate = ref.values[changedKey]?.toString().trim() || '';
 
         const validationSchema = {
           schema: ref.validation, //fields[changedKey],

@@ -53,7 +53,7 @@ export interface IField extends Base {
   pattern?: string | null;
 
   // Validation options
-  readonly?: boolean; // readonly for grid component will not editable
+  readonly?: boolean;
   disabled?: boolean;
   required?: boolean;
   visible?: boolean;
@@ -69,10 +69,10 @@ export interface IField extends Base {
   data?: IField[] | null;
 
   // Parent field information
-  parentId?: number | string | null;
-
-  // Position in the form
+  parentId?: number | null;
   position?: number | null;
+  containerId?: string | null;
+  placeholderId?: string | null;
 }
 
 

@@ -7,11 +7,11 @@ type GroupProps = PropsWithChildren<FieldType & {
   context?: ContextValue
 }>;
 
-export function FormGroup({ data = [], children }: GroupProps) {
+export function FormGroup({ children, ...props }: GroupProps) {
   return <div>
     {
-      children || data?.map(field => {
-        return <FormField key={field.id} {...field} hasParent={true} />
+      children || props?.data?.map(field => {
+        return <FormField key={field.id} {...field} group={{ ...props }} />
       })
     }
   </div>

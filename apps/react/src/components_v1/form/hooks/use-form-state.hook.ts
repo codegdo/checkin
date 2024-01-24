@@ -1,17 +1,16 @@
-import { useReducer, useRef } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import { formValidator } from "../helpers";
 import { FieldType, FormResult, FormValues } from "../types";
 import { formReducer } from "../reducers";
 
 export interface FormOptions { }
 
-interface IProps {
+export interface FormProps {
   title?: string;
-  data?: FieldType[] | null;
+  data?: FieldType[];
   options?: FormOptions;
-  status?: string;
   loading?: boolean;
-  callback?: (result: FormResult) => void
+  onSubmit?: (result: FormResult) => void
 }
 
 interface FormRef {
@@ -28,7 +27,7 @@ interface OnCallbackType {
   field?: FieldType;
 }
 
-export const useFormState = ({ title, data = [], options, status, loading, callback }: IProps) => {
+export const useFormState = ({ data = [], options, loading, onSubmit, ...props }: FormProps) => {
   const ref = useRef<FormRef>({
     initialValues: {},
     values: {},
@@ -40,7 +39,7 @@ export const useFormState = ({ title, data = [], options, status, loading, callb
 
   const [state, dispatch] = useReducer(formReducer, {});
 
-  const onCallback = async ({type, field}:OnCallbackType) => {
+  const onCallback = async ({ type, field }: OnCallbackType) => {
     const result: FormResult = {
       type,
       values: ref.current.values,
@@ -48,17 +47,20 @@ export const useFormState = ({ title, data = [], options, status, loading, callb
       isSubmit: type === 'submit',
     };
 
-    return callback && callback(result);
+    return onSubmit && onSubmit(result);
   };
+
+  useEffect(() => {
+    console.log(loading);
+  }, [loading]);
 
   return {
     ref: ref.current,
-    form: {
-      title,
+    source: {
+      ...props,
       data,
       options
     },
-    status,
     loading,
     state,
     dispatch,

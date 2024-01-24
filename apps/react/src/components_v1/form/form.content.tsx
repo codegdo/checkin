@@ -8,11 +8,11 @@ import { FormField } from "./form.field";
 import { FormGroup } from "./form.group";
 import { FormGrid } from "./form.grid";
 
-export function FormRender() {
+export function FormContent() {
   const context = useFormContext() as ContextValue;
   return (
     <>
-      {render(groupDataForRender(context.form.data), context)}
+      {render(groupDataForRender(context.source.data), context)}
     </>
   );
 }

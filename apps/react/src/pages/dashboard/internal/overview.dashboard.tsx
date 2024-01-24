@@ -1,9 +1,9 @@
 import { DragDrop } from "@/components_v1/dragdrop/dragdrop.component";
 import { Form, FormResult } from "@/components_v1/form";
-import { useFetchProduct, useSaveProduct } from "./api";
-import { FetchStatus } from "@/hooks";
+import { useFetchProducts, useSaveProducts } from "./api";
 import { Loader } from "@/components";
 import { useCallback, useEffect } from "react";
+import { useApi } from "@/hooks";
 
 const data = [
   {
@@ -11,9 +11,10 @@ const data = [
     name: 'email',
     title: 'Email',
     type: 'email',
-    data: [],
+    data: null,
     value: null,
     parentId: null,
+    parentKey: null,
     position: 1,
     required: true,
   },
@@ -31,6 +32,7 @@ const data = [
         data: null,
         value: null,
         parentId: 2,
+        parentKey: null,
         position: 3,
         required: true,
       },
@@ -42,12 +44,14 @@ const data = [
         data: null,
         value: null,
         parentId: 2,
+        parentKey: null,
         position: 4,
         required: true,
       },
     ],
     value: null,
     parentId: null,
+    parentKey: null,
     position: 2
   },
   {
@@ -64,6 +68,7 @@ const data = [
         data: null,
         value: null,
         parentId: null,
+        parentKey: null,
         position: 0,
         required: true,
         readonly: true,
@@ -76,6 +81,7 @@ const data = [
         data: null,
         value: null,
         parentId: null,
+        parentKey: null,
         position: 0,
         required: true,
         readonly: false,
@@ -88,14 +94,18 @@ const data = [
       { id: 7, value: 'User', rowIndex: 1 },
     ],
     parentId: null,
+    parentKey: null,
     position: 5,
     readonly: false,
   },
 ];
 
 function Overview() {
-  const { status: fetchLoading, data: formData, progress, controller: fetchController, query } = useFetchProduct();
-  const { status: saveLoading, controller: saveController, mutation } = useSaveProduct();
+  const { status: fetchStatus, query } = useFetchProducts();
+  //const { status: saveLoading, controller: saveController, mutation } = useSaveProducts();
+  const loading = (fetchStatus === 'Loading');
+
+  //const apiActions = useApi();
 
   const handleClick = useCallback(async (result: FormResult) => {
     console.log(result);
@@ -103,21 +113,13 @@ function Overview() {
     if (result.type === 'add') {
       return query();
     } else if (result.type === 'save') {
-      mutation();
+      //mutation();
     }
   }, []);
 
-  useEffect(() => {
-    console.log('progress', progress);
-  }, [progress]);
-
   return <div>
     Overview
-
-    <Loader status={fetchLoading} controller={fetchController} />
-
-    <Form onSubmit={handleClick} data={data} />
-
+    <Form onSubmit={handleClick} data={data} loading={loading} />
     <DragDrop data={data} />
   </div>
 }

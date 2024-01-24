@@ -2,6 +2,7 @@ import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
 
 import { LoaderTemplate } from "@/components";
+import { OverviewProviderApi } from "./internal/overview.provider";
 
 const Index = LoaderTemplate(lazy(() => import('./dashboard.index')));
 const Console = LoaderTemplate(lazy(() => import('./system/console.dashboard')));
@@ -17,7 +18,7 @@ function DashboardRoute() {
     },
     {
       path: '/overview',
-      element: <Overview module="dashboard" view="overview" />
+      element: <OverviewProviderApi><Overview module="dashboard" view="overview" /></OverviewProviderApi>
     },
     {
       path: '/welcome',

@@ -4,10 +4,6 @@ import { DndField, DndResult } from "../types";
 import { dragdropReducer } from "../reducers";
 
 export interface DndOptions {
-  drags?: {
-    elements: DndField[],
-    fields: DndField[]
-  },
   version?: {
     id: number | string;
     timestamp: string;
@@ -16,8 +12,12 @@ export interface DndOptions {
 
 interface IProps {
   data?: DndField[];
-  status?: string;
+  drags?: {
+    elements: DndField[],
+    fields: DndField[]
+  },
   options?: DndOptions;
+  status?: string;
   callback?: (result: DndResult) => void
 }
 

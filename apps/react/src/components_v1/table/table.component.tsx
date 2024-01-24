@@ -6,11 +6,11 @@ export function Table(props: TableProps) {
   const contextValue = useTableState({ ...props });
 
   return (
-    <div>
+    <table>
       <TableProvider value={contextValue}>
         <TableContent />
       </TableProvider>
-    </div>
+    </table>
   );
 }
 

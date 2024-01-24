@@ -12,21 +12,28 @@ function FormBuilder() {
 
   return (
     <>
-    <DragDrop
-      data={formData?.data}
-      drags={{
-        elements: ['section', 'block', 'button', 'link', 'text'],
-        fields: formData?.fields
-      }}
-      options={{
-        historyId: formData.id,
-        historyVersion: formData.updatedAt
-      }}
-    />
-    <DnD data={formData?.data} options={{drags: {elements: [], fields:[]}}}>
-      <DropRender />
-      <DragRender />
-    </DnD>
+      <DragDrop
+        data={formData?.data}
+        drags={{
+          elements: ['section', 'block', 'button', 'link', 'text'],
+          fields: formData?.fields
+        }}
+        options={{
+          historyId: formData.id,
+          historyVersion: formData.updatedAt
+        }}
+      />
+      <DnD
+        data={formData?.data}
+        drags={{
+          elements: [],
+          fields: []
+        }}
+        options={{}}
+      >
+        <DropRender />
+        <DragRender />
+      </DnD>
     </>
   );
 }
