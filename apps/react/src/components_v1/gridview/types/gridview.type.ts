@@ -1,9 +1,17 @@
 import { FieldType, KeyValue as KeyValueType, RowValue as RowValueType } from "@/components_v1/types";
 
+export enum GridViewType {
+  TABLE = 'TABLE',
+  CARD = 'CARD',
+  LIST = 'LIST',
+  CUSTOM = 'CUSTOM',
+}
+
 export type Field = FieldType;
 export type KeyValue = KeyValueType;
 export type RowValue = RowValueType;
-interface Modal {
+
+export interface Modal {
   title: string;
   action: string;
 }
@@ -13,20 +21,4 @@ export interface State {
   modal: Modal | null;
 }
 
-export enum ActionType {
-  ADD = 'ADD',
-  CLOSE = 'CLOSE',
-  UPDATE = 'UPDATE',
-  REMOVE = 'REMOVE'
-}
-
-export type UpdatePayload = RowValue;
-export type AddPayload = Modal;
-
-export type Payload = AddPayload | UpdatePayload;
-
-export interface Action {
-  type: keyof typeof ActionType;
-  payload?: Payload;
-}
 

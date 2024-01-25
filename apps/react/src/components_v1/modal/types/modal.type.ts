@@ -1,0 +1,6 @@
+export enum ModalType {
+  ALERT = 'ALERT',
+  CONFIRMATION = 'CONFIRMATION',
+  PROMPT = 'PROMPT',
+  CUSTOM = 'CUSTOM',
+}
