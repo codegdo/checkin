@@ -1,16 +1,16 @@
 import { FetchStatus } from "@/hooks";
 
 interface LoaderProp {
-  status: FetchStatus;
+  status: keyof typeof FetchStatus;
   controller: AbortController
 }
 export function Loader({ status, controller }: LoaderProp) {
   switch (status) {
-    case FetchStatus.Loading:
+    case 'LOADING':
       return <div>loading...</div>;
-    case FetchStatus.Delay:
+    case 'DELAY':
       return <div>delayed...</div>;
-    case FetchStatus.Abort:
+    case 'ABORT':
       return (
         <div>
           wanna to abort... <button onClick={() => { controller.abort() }}>Ok</button>

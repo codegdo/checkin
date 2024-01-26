@@ -2,7 +2,7 @@ import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
 
 import { LoaderTemplate } from "@/components";
-import { FormProviderApi } from "./form/form.provider";
+import { FormApi } from "./form/form.api";
 
 const Index = LoaderTemplate(lazy(() => import('./builder.index')));
 const EmailList = LoaderTemplate(lazy(() => import('./email/email.list')));
@@ -25,11 +25,11 @@ function BuilderRoute() {
     },
     {
       path: '/forms',
-      element: <FormProviderApi><FormList module="builder" view="forms" /></FormProviderApi>
+      element: <FormApi><FormList module="builder" view="forms" /></FormApi>
     },
     {
       path: '/forms/:id',
-      element: <FormProviderApi><FormBuilder module="builder" view="forms" /></FormProviderApi>
+      element: <FormApi><FormBuilder module="builder" view="forms" /></FormApi>
     },
     {
       path: '/templates',

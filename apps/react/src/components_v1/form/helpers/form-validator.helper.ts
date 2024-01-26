@@ -9,10 +9,16 @@ export type ObjectSchema = Yup.ObjectSchema<{
   [x: string]: undefined;
 }, "">
 export type ObjectShape = Yup.ObjectShape;
-export interface ValidationSchema {
-  schema: ObjectSchema;
-  value: string | number | null | FormValues,
+
+export interface ValidationForm {
+  formSchema: ObjectSchema;
+  values: FormValues,
   options?: Yup.ValidateOptions
+}
+
+export interface ValidationField {
+  fieldSchema: ObjectSchema;
+  values: FormValues;
 }
 
 class FormValidatorHelper {
@@ -48,12 +54,36 @@ class FormValidatorHelper {
     }
   }
 
-  async validateSchema({ schema, value, options = { abortEarly: false } }: ValidationSchema) {
+  async validateForm({ formSchema, values, options = { abortEarly: false } }: ValidationForm) {
+
+    if (!formSchema) return;
     try {
-      return await schema.validate(value, options);
+      await formSchema.validate(values, options);
+      return undefined;
     } catch (err) {
       const validationError = err as Yup.ValidationError;
-      console.log(validationError.inner);
+      const errorsObject: { [key: string]: string } = {};
+
+      if (validationError.inner) {
+        validationError.inner.forEach((error) => {
+          const path = error.path || '_error';
+          errorsObject[path] = error.message;
+        });
+      }
+
+      return errorsObject;
+    }
+  }
+
+  async validateField({ fieldSchema, values }: ValidationField) {
+    if (!fieldSchema) return;
+
+    try {
+      await fieldSchema.validate(values);
+      return undefined;
+    } catch (err) {
+      const validationError = err as Yup.ValidationError;
+      return validationError.errors[0] as string;
     }
   }
 }

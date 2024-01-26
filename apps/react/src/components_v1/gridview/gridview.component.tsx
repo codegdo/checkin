@@ -1,4 +1,4 @@
-import { GridViewProvider } from "./contexts";
+import { GridViewContext } from "./contexts";
 import { GridViewContent } from "./gridview.content";
 import { GridViewProps, useGridViewState } from "./hooks";
 
@@ -7,8 +7,8 @@ export function GridView(props: GridViewProps) {
   const contextValue = useGridViewState({ ...props });
 
   return (
-    <GridViewProvider value={contextValue}>
+    <GridViewContext.Provider value={contextValue}>
       <GridViewContent />
-    </GridViewProvider>
+    </GridViewContext.Provider>
   );
 }

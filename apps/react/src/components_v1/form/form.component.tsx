@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react";
 
-import { FormProvider } from "./contexts";
+import { FormContext } from "./contexts";
 import { FormProps, useFormState } from './hooks';
 
 import { FormContent } from "./form.content";
@@ -11,9 +11,9 @@ export function Form({ children, ...props }: PropsWithChildren<FormProps>) {
 
   return (
     <form onSubmit={e => e.preventDefault()}>
-      <FormProvider value={context}>
+      <FormContext.Provider value={context}>
         {children || <FormContent />}
-      </FormProvider>
+      </FormContext.Provider>
     </form>
   )
 }

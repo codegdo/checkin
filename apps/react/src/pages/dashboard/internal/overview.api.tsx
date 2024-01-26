@@ -1,9 +1,9 @@
 import { PropsWithChildren } from "react";
 
-import { ProviderApi, ContextValue } from "@/contexts";
+import { ApiContext, ContextValue } from "@/contexts";
 import { OverviewApiAction, useFetchProducts, useSaveProducts } from "./api";
 
-export function OverviewProviderApi({ children }: PropsWithChildren) {
+export function OverviewApi({ children }: PropsWithChildren) {
   // TODO: perform permission check here
   const value: ContextValue = {
     [OverviewApiAction.GET_ALL_PRODUCTS]: useFetchProducts,
@@ -11,8 +11,8 @@ export function OverviewProviderApi({ children }: PropsWithChildren) {
   };
 
   return (
-    <ProviderApi value={value}>
+    <ApiContext.Provider value={value}>
       {children}
-    </ProviderApi>
+    </ApiContext.Provider>
   );
 }

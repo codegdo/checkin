@@ -1,9 +1,9 @@
 import { PropsWithChildren } from "react";
 
-import { ProviderApi, ContextValue } from "@/contexts";
+import { ApiContext, ContextValue } from "@/contexts";
 import { useFetchAllForms, useFetchFormById, FormApiAction } from "./api";
 
-export function FormProviderApi({ children }: PropsWithChildren) {
+export function FormApi({ children }: PropsWithChildren) {
   // TODO: perform permission check here
   const value: ContextValue = {
     [FormApiAction.GET_ALL_FORMS]: useFetchAllForms,
@@ -11,8 +11,8 @@ export function FormProviderApi({ children }: PropsWithChildren) {
   };
 
   return (
-    <ProviderApi value={value}>
+    <ApiContext.Provider value={value}>
       {children}
-    </ProviderApi>
+    </ApiContext.Provider>
   );
 }

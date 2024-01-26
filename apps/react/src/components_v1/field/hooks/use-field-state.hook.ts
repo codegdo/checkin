@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { IField } from "../types";
 
 export interface FieldProps extends IField {
+  error?: string;
   onChange?: (value: string) => void;
   onBlur?: () => void;
   onFocus?: () => void;

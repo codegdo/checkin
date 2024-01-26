@@ -9,7 +9,7 @@ export interface FormProps {
   title?: string;
   data?: FieldType[];
   options?: FormOptions;
-  loading?: boolean;
+  status?: string;
   onSubmit?: (result: FormResult) => void
 }
 
@@ -27,7 +27,7 @@ interface OnCallbackType {
   field?: FieldType;
 }
 
-export const useFormState = ({ data = [], options, loading, onSubmit, ...props }: FormProps) => {
+export const useFormState = ({ data = [], options, status, onSubmit, ...props }: FormProps) => {
   const ref = useRef<FormRef>({
     initialValues: {},
     values: {},
@@ -51,8 +51,8 @@ export const useFormState = ({ data = [], options, loading, onSubmit, ...props }
   };
 
   useEffect(() => {
-    console.log(loading);
-  }, [loading]);
+    console.log(status);
+  }, [status]);
 
   return {
     ref: ref.current,
@@ -61,7 +61,7 @@ export const useFormState = ({ data = [], options, loading, onSubmit, ...props }
       data,
       options
     },
-    loading,
+    status,
     state,
     dispatch,
     onCallback

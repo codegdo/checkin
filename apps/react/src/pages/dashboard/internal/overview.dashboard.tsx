@@ -101,9 +101,9 @@ const data = [
 ];
 
 function Overview() {
-  const { status: fetchStatus, query } = useFetchProducts();
+  const { status, query } = useFetchProducts();
   //const { status: saveLoading, controller: saveController, mutation } = useSaveProducts();
-  const loading = (fetchStatus === 'Loading');
+
 
   //const apiActions = useApi();
 
@@ -119,7 +119,7 @@ function Overview() {
 
   return <div>
     Overview
-    <Form onSubmit={handleClick} data={data} loading={loading} />
+    <Form onSubmit={handleClick} data={data} />
     <DragDrop data={data} />
   </div>
 }

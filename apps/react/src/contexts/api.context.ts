@@ -5,5 +5,4 @@ export type ContextValue = {
   [key: string]: (...args: any[]) => any;
 }
 
-export const ContextApi = createContext<ContextValue | null>(null);
-export const ProviderApi = ContextApi.Provider;
+export const ApiContext = createContext<ContextValue | null>(null);

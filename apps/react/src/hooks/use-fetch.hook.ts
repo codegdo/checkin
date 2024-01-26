@@ -4,17 +4,17 @@ import { API_URL } from '@/constants';
 import { stringifyUrl } from '@/utils';
 
 export enum FetchStatus {
-  Idle = 'Idle',
-  Loading = 'Loading',
-  Error = 'Error',
-  Success = 'Success',
-  Delay = 'Delay',
-  Cancel = 'Cancel',
-  Abort = 'Abort',
+  IDLE = 'IDLE',
+  LOADING = 'LOADING',
+  ERROR = 'ERROR',
+  SUCCESS = 'SUCCESS',
+  DELAY = 'DELAY',
+  CANCEL = 'CANCEL',
+  ABORT = 'ABORT',
 }
 
 type ResponseFetch<T> = {
-  status: FetchStatus;
+  status: keyof typeof FetchStatus | string;
   isIdle: boolean;
   isLoading: boolean;
   isError: boolean;
@@ -32,7 +32,7 @@ export const useFetch = <T>(
   url?: string,
   params: Record<string, unknown> = {}
 ): ResponseFetch<T> => {
-  const [status, setStatus] = useState<FetchStatus>(FetchStatus.Idle);
+  const [status, setStatus] = useState<keyof typeof FetchStatus | string>('IDLE');
   const [data, setData] = useState<T | undefined>(undefined);
   const [error, setError] = useState<Error | undefined>(undefined);
 
@@ -40,12 +40,12 @@ export const useFetch = <T>(
   const ctrlRef = useRef(controller);
   const timeoutIdRef = useRef<NodeJS.Timeout | undefined>();
 
-  const isIdle = status === FetchStatus.Idle;
-  const isLoading = status === FetchStatus.Loading;
-  const isError = status === FetchStatus.Error;
-  const isSuccess = status === FetchStatus.Success;
-  const isDelay = status === FetchStatus.Delay;
-  const isAbort = status === FetchStatus.Abort;
+  const isIdle = status === 'IDLE';
+  const isLoading = status === 'LOADING';
+  const isError = status === 'ERROR';
+  const isSuccess = status === 'SUCCESS';
+  const isDelay = status === 'DELAY';
+  const isAbort = status === 'ABORT';
 
   const clearTimeoutIdRef = () => {
     if (timeoutIdRef.current !== undefined) {
@@ -75,21 +75,21 @@ export const useFetch = <T>(
         timeoutPromise,
       ]);
 
-      console.log('raceResponse', raceResponse);
+      //console.log('raceResponse', raceResponse);
 
       if (raceResponse === 'DELAY') {
         if (delayCount < maxDelayCount) {
-          setStatus(FetchStatus.Delay);
+          setStatus('DELAY');
           checkDelay(responsePromise, delayCount + 1);
         } else {
-          setStatus(FetchStatus.Abort);
+          setStatus('ABORT');
         }
       } else {
         const httpResponse = raceResponse as HttpResponse<T>;
 
         if (httpResponse.status >= 200 && httpResponse.status < 300) {
           setData(httpResponse.data);
-          setStatus(FetchStatus.Success);
+          setStatus('SUCCESS');
         } else {
           throw new Error(`Request failed with status: ${httpResponse.status}`);
         }
@@ -101,19 +101,19 @@ export const useFetch = <T>(
       console.log('ERROR', error);
       const err = error as Error;
       if (err?.name === 'AbortError') {
-        setStatus(FetchStatus.Cancel);
+        setStatus('CANCEL');
       } else {
         setError(err);
-        setStatus(FetchStatus.Error);
+        setStatus('ERROR');
         throw err;
       }
     }
   };
 
   const fetchRequest = async (strUrl: string, options: RequestOptions) => {
-    setStatus(FetchStatus.Loading);
+    setStatus('LOADING');
 
-    const responsePromise = http.request<T>(strUrl, options); // Wrap the http.request in a Promise
+    const responsePromise = http.request<T>(strUrl, options);
     return checkDelay(responsePromise);
   };
 

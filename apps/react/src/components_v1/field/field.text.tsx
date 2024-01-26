@@ -9,6 +9,7 @@ export function FieldText({
   value = '',
   readonly,
   disabled,
+  error,
   onChange,
   onBlur,
   onFocus
@@ -44,6 +45,7 @@ export function FieldText({
           onFocus={handleFocus}
         />
       </div>
+      {error && <div>{error}</div>}
     </div>
   );
 }

@@ -1,8 +1,8 @@
-import { ContextApi, ContextValue } from "@/contexts";
+import { ApiContext, ContextValue } from "@/contexts";
 import { useWrapperContext } from "@/hooks";
 
 export const useApi = <T>(key?: keyof ContextValue): ContextValue | T => {
-  const context = useWrapperContext(ContextApi) as ContextValue;
+  const context = useWrapperContext(ApiContext) as ContextValue;
 
   if (!key || !(key in context)) {
     console.error(`Key '${key}' either not found in the context.`);
@@ -19,7 +19,7 @@ export const useApi = <T>(key?: keyof ContextValue): ContextValue | T => {
 };
 
 export const useAsyncApi = async <T>(key?: keyof ContextValue): Promise<ContextValue | T> => {
-  const context = useWrapperContext(ContextApi) as ContextValue;
+  const context = useWrapperContext(ApiContext) as ContextValue;
 
   if (!key || !(key in context)) {
     console.log(`Key '${key}' either not found in the context.`);

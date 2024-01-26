@@ -1,21 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Field } from "../field";
 import { ContextValue } from "./contexts";
 import { useFormContext } from "./hooks";
 import { FieldType } from "./types";
-import { ObjectShape, formValidator } from "./helpers";
+import { ObjectSchema, ObjectShape, formValidator } from "./helpers";
 
 type FormFieldProps = FieldType & {
   context?: ContextValue;
   group?: FieldType;
 };
 
+interface FieldRef {
+  validation: ObjectSchema;
+}
+
 export function FormField({ context, ...props }: FormFieldProps) {
   const key = (props.id || props.name).toString();
   const stringValue = props.value?.toString().trim() || '';
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { ref } = (context || useFormContext()) as ContextValue;
-
+  const { current } = useRef<FieldRef>({ validation: formValidator.validator.object() });
+  const [error, setError] = useState<string>();
 
   const handleChange = async (updatedValue: string) => {
     ref.values[key] = updatedValue.trim();
@@ -25,7 +30,22 @@ export function FormField({ context, ...props }: FormFieldProps) {
   };
 
   const handleBlur = async () => {
+    for (const changedKey of ref.changed) {
+      if (changedKey in ref.validation.fields) {
+        const valueToValidate = ref.values[changedKey]?.toString().trim() || '';
 
+        const validationSchema = {
+          fieldSchema: current.validation,
+          values: { [changedKey]: valueToValidate }
+        }
+
+        const err = await formValidator.validateField(validationSchema);
+
+        setError(err);
+      }
+    }
+
+    console.log('BLUR', ref);
   };
 
   const handleFocus = () => {
@@ -39,9 +59,16 @@ export function FormField({ context, ...props }: FormFieldProps) {
     ref.initialValues[key] = stringValue;
     ref.values[key] = stringValue;
 
-    // Set up validation schema for the field
+    const fieldSchema = formValidator.createSchema(props);
+
+    // Set up validation schema for form
     ref.validation = ref.validation.shape({
-      [key]: formValidator.createSchema(props),
+      [key]: fieldSchema,
+    } as ObjectShape);
+
+    // Set up validation schema for field
+    current.validation = current.validation.shape({
+      [key]: fieldSchema,
     } as ObjectShape);
 
     console.log(ref);
@@ -50,6 +77,7 @@ export function FormField({ context, ...props }: FormFieldProps) {
   return (
     <Field
       {...props}
+      error={error}
       onChange={handleChange}
       onBlur={handleBlur}
       onFocus={handleFocus}
