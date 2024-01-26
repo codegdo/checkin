@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import { IField } from "../types";
 
 export interface FieldProps extends IField {
-  value?: string;
   onChange?: (value: string) => void;
   onBlur?: () => void;
   onFocus?: () => void;
 }
 
-export const useFormState = ({ onChange, onBlur, onFocus, ...props }: FieldProps) => {
-  const [value, setValue] = useState(props.value || '');
+export const useFieldState = ({ onChange, onBlur, onFocus, ...props }: FieldProps) => {
+  const [value, setValue] = useState(props.value as string || '');
 
   const handleChange = (val: string) => {
     setValue(val);

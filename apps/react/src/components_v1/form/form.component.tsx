@@ -7,11 +7,11 @@ import { FormContent } from "./form.content";
 
 export function Form({ children, ...props }: PropsWithChildren<FormProps>) {
 
-  const contextValue = useFormState({ ...props });
+  const context = useFormState({ ...props });
 
   return (
     <form onSubmit={e => e.preventDefault()}>
-      <FormProvider value={contextValue}>
+      <FormProvider value={context}>
         {children || <FormContent />}
       </FormProvider>
     </form>

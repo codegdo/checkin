@@ -1,7 +1,5 @@
 import { ChangeEvent } from "react";
-import { IField } from "./types";
-
-interface IProps extends IField { }
+import { FieldProps } from "./hooks";
 
 export function FieldText({
   type,
@@ -14,18 +12,18 @@ export function FieldText({
   onChange,
   onBlur,
   onFocus
-}: IProps) {
+}: FieldProps) {
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange?.(event.currentTarget.value);
   };
 
   const handleBlur = (event: ChangeEvent<HTMLInputElement>) => {
-    onBlur?.(event.currentTarget.value);
+    onBlur?.();
   };
 
   const handleFocus = (event: ChangeEvent<HTMLInputElement>) => {
-    onFocus?.(event.currentTarget.value);
+    onFocus?.();
   };
 
   return (

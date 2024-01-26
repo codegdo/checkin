@@ -1,13 +1,13 @@
-import { IField } from "./types";
 import { FieldText } from "./field.text";
+import { useFieldState, FieldProps } from "./hooks";
 
-interface IProps extends IField { }
+export function Field(props: FieldProps) {
+  const fieldProps = useFieldState({...props});
 
-export function Field(props: IProps) {
-  switch (props.type) {
+  switch (fieldProps.type) {
     case 'email':
     case 'text':
-      return <FieldText {...props} />
+      return <FieldText {...fieldProps} />
     default: return null;
   }
 }
