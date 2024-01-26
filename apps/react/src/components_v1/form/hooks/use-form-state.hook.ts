@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { formValidator } from "../helpers";
 import { FieldType, FormResult, FormValues } from "../types";
 import { formReducer } from "../reducers";
@@ -27,7 +27,7 @@ interface OnCallbackType {
   field?: FieldType;
 }
 
-export const useFormState = ({ data = [], options, status, onSubmit, ...props }: FormProps) => {
+export const useFormState = ({ data = [], onSubmit, ...props }: FormProps) => {
   const ref = useRef<FormRef>({
     initialValues: {},
     values: {},
@@ -37,7 +37,7 @@ export const useFormState = ({ data = [], options, status, onSubmit, ...props }:
     validation: formValidator.validator.object(),
   });
 
-  const [state, dispatch] = useReducer(formReducer, {});
+  const [errors, setErrors] = useState({});
 
   const onCallback = async ({ type, field }: OnCallbackType) => {
     const result: FormResult = {
@@ -50,20 +50,12 @@ export const useFormState = ({ data = [], options, status, onSubmit, ...props }:
     return onSubmit && onSubmit(result);
   };
 
-  useEffect(() => {
-    console.log(status);
-  }, [status]);
 
   return {
+    ...props,
+    data,
+    errors,
     ref: ref.current,
-    source: {
-      ...props,
-      data,
-      options
-    },
-    status,
-    state,
-    dispatch,
     onCallback
   }
 }

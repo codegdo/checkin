@@ -12,7 +12,7 @@ export function FormContent() {
   const context = useFormContext() as ContextValue;
   return (
     <>
-      {render(groupDataForRender(context.source.data), context)}
+      {render(groupDataForRender(context.data), context)}
     </>
   );
 }
