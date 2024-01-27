@@ -18,61 +18,85 @@ export function FormField({ context, ...props }: FormFieldProps) {
   const key = (props.id || props.name).toString();
   const stringValue = props.value?.toString().trim() || '';
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { ref } = (context || useFormContext()) as ContextValue;
+  const { ref, errors } = (context || useFormContext()) as ContextValue;
   const { current } = useRef<FieldRef>({ validation: formValidator.validator.object() });
   const [error, setError] = useState<string>();
 
   const handleChange = async (updatedValue: string) => {
-    ref.values[key] = updatedValue.trim();
-    ref.touched.add(key);
-    ref.changed.add(key);
+    if(props.parentId !== undefined) {
+      ref.values[key] = updatedValue.trim();
+      ref.touched.add(key);
+      ref.changed.add(key);
+    }
     console.log('CHANGE', ref, props);
   };
 
   const handleBlur = async () => {
-    for (const changedKey of ref.changed) {
-      if (changedKey in ref.validation.fields) {
-        const valueToValidate = ref.values[changedKey]?.toString().trim() || '';
+    if(props.parentId !== undefined) {
+      for (const changedKey of ref.changed) {
+        if (changedKey in ref.validation.fields) {
+          const valueToValidate = ref.values[changedKey]?.toString().trim() || '';
 
-        const validationSchema = {
-          fieldSchema: current.validation,
-          values: { [changedKey]: valueToValidate }
+          const validationSchema = {
+            fieldSchema: current.validation,
+            values: { [changedKey]: valueToValidate }
+          }
+
+          const err = await formValidator.validateField(validationSchema);
+
+          setError(err);
+
         }
-
-        const err = await formValidator.validateField(validationSchema);
-
-        setError(err);
       }
     }
-
     console.log('BLUR', ref);
   };
 
   const handleFocus = () => {
-    ref.changed.clear();
-    ref.touched.add(key);
-    ref.changed.add(key);
+    if(props.parentId !== undefined) {
+      ref.changed.clear();
+      ref.touched.add(key);
+      ref.changed.add(key);
+    }
   };
 
+  const handleClick = (type:string) => {
+    context?.onCallback?.({type, field: props})
+  }
+
   useEffect(() => {
+    if(props.parentId !== undefined) {
+      ref.initialValues[key] = stringValue;
+      ref.values[key] = stringValue;
 
-    ref.initialValues[key] = stringValue;
-    ref.values[key] = stringValue;
+      const fieldSchema = formValidator.createSchema(props);
 
-    const fieldSchema = formValidator.createSchema(props);
+      // Set up validation schema for form
+      ref.validation = ref.validation.shape({
+        [key]: fieldSchema,
+      } as ObjectShape);
 
-    // Set up validation schema for form
-    ref.validation = ref.validation.shape({
-      [key]: fieldSchema,
-    } as ObjectShape);
-
-    // Set up validation schema for field
-    current.validation = current.validation.shape({
-      [key]: fieldSchema,
-    } as ObjectShape);
-
+      // Set up validation schema for field
+      current.validation = current.validation.shape({
+        [key]: fieldSchema,
+      } as ObjectShape);
+    }
     console.log(ref);
   }, []);
+
+  useEffect(() => {
+    if(errors && key in errors) {
+      setError(errors[key]);
+    }
+  }, [errors]);
+
+  useEffect(() => {
+    if(error) {
+      ref.errors[key] = error;
+    } else {
+      delete ref.errors[key];
+    }
+  }, [error]);
 
   return (
     <Field
@@ -81,6 +105,7 @@ export function FormField({ context, ...props }: FormFieldProps) {
       onChange={handleChange}
       onBlur={handleBlur}
       onFocus={handleFocus}
+      onClick={handleClick}
     />
   );
 }

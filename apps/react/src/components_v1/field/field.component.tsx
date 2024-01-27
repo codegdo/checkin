@@ -1,3 +1,4 @@
+import { FieldButton } from "./field.button";
 import { FieldText } from "./field.text";
 import { useFieldState, FieldProps } from "./hooks";
 
@@ -8,6 +9,8 @@ export function Field(props: FieldProps) {
     case 'email':
     case 'text':
       return <FieldText {...fieldProps} />
+    case 'button':
+      return <FieldButton {...fieldProps} />
     default: return null;
   }
 }

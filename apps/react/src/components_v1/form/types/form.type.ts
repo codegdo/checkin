@@ -15,11 +15,12 @@ export interface FormState { }
 
 export type FormValues = Record<string, ObjectValue>
 
-export interface FormResult {
+export interface FormSubmit {
   type: string;
   values: FormValues;
-  field?: FieldType;
-  isSubmit: boolean;
+  options?: { 
+    field?: FieldType 
+  };
 }
 
 export type KeyValue = KeyValueType;

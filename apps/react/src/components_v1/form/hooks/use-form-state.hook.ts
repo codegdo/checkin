@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import { formValidator } from "../helpers";
-import { FieldType, FormResult, FormValues } from "../types";
+import { FieldType, FormSubmit, FormValues } from "../types";
 import { formReducer } from "../reducers";
 
 export interface FormOptions { }
@@ -10,7 +10,7 @@ export interface FormProps {
   data?: FieldType[];
   options?: FormOptions;
   status?: string;
-  onSubmit?: (result: FormResult) => void
+  onSubmit?: (formSubmit: FormSubmit) => void
 }
 
 interface FormRef {
@@ -22,7 +22,7 @@ interface FormRef {
   validation: ReturnType<typeof formValidator.validator.object>
 }
 
-interface OnCallbackType {
+interface CallbackData {
   type: string;
   field?: FieldType;
 }
@@ -37,17 +37,30 @@ export const useFormState = ({ data = [], onSubmit, ...props }: FormProps) => {
     validation: formValidator.validator.object(),
   });
 
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<{[key: string]: string} | undefined>();
 
-  const onCallback = async ({ type, field }: OnCallbackType) => {
-    const result: FormResult = {
+  const onCallback = async ({ type, field }: CallbackData) => {
+    const errors = await formValidator.validateForm({
+      formSchema:ref.current.validation, 
+      values: ref.current.values
+    });
+
+    console.log(errors);
+
+    if(errors) {
+      setErrors(errors);
+      return;
+    }
+
+    const formSubmit: FormSubmit = {
       type,
       values: ref.current.values,
-      field,
-      isSubmit: type === 'submit',
+      options: {
+        field
+      }
     };
 
-    return onSubmit && onSubmit(result);
+    return onSubmit && onSubmit(formSubmit);
   };
 
 

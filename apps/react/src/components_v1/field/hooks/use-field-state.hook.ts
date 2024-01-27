@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IField } from "../types";
 
 export interface FieldProps extends IField {
@@ -6,25 +6,34 @@ export interface FieldProps extends IField {
   onChange?: (value: string) => void;
   onBlur?: () => void;
   onFocus?: () => void;
+  onClick?: (type: string) => void;
 }
 
-export const useFieldState = ({ onChange, onBlur, onFocus, ...props }: FieldProps) => {
-  const [value, setValue] = useState(props.value as string || '');
+export const useFieldState = ({ onChange, onBlur, onFocus, onClick, ...props }: FieldProps) => {
+  const [value, setValue] = useState(props.value || '');
+  const hasChanged = useRef(false);
 
   const handleChange = (val: string) => {
     setValue(val);
-  }
+    hasChanged.current = true;
+  };
 
   const handleBlur = () => {
     onBlur && onBlur();
-  }
+  };
 
   const handleFocus = () => {
     onFocus && onFocus();
-  }
+  };
+
+  const handleClick = (type: string) => {
+    onClick && onClick(type);
+  };
 
   useEffect(() => {
-    onChange && onChange(value);
+    if (hasChanged.current) {
+      onChange && onChange(value as string);
+    }
   }, [value]);
 
   return {
@@ -32,6 +41,7 @@ export const useFieldState = ({ onChange, onBlur, onFocus, ...props }: FieldProp
     value,
     onChange: handleChange,
     onBlur: handleBlur,
-    onFocus: handleFocus
-  }
-}
+    onFocus: handleFocus,
+    onClick: handleClick,
+  };
+};
