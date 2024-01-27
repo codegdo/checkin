@@ -1,5 +1,5 @@
 import { DragDrop } from "@/components_v1/dragdrop/dragdrop.component";
-import { Form, FormResult } from "@/components_v1/form";
+import { Form, FormSubmit } from "@/components_v1/form";
 import { useFetchProducts, useSaveProducts } from "./api";
 import { Loader } from "@/components";
 import { useCallback, useEffect } from "react";
@@ -118,12 +118,12 @@ function Overview() {
 
   //const apiActions = useApi();
 
-  const handleClick = useCallback(async (result: FormResult) => {
-    console.log(result);
+  const handleClick = useCallback(async (formSubmit: FormSubmit) => {
+    console.log('FORM_SUBMIT', formSubmit);
 
-    if (result.type === 'add') {
+    if (formSubmit.type === 'add') {
       return query();
-    } else if (result.type === 'save') {
+    } else if (formSubmit.type === 'save') {
       //mutation();
     }
   }, []);

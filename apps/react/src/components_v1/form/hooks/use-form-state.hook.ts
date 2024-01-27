@@ -40,23 +40,27 @@ export const useFormState = ({ data = [], onSubmit, ...props }: FormProps) => {
   const [errors, setErrors] = useState<{[key: string]: string} | undefined>();
 
   const onCallback = async ({ type, field }: CallbackData) => {
-    const errors = await formValidator.validateForm({
-      formSchema:ref.current.validation, 
-      values: ref.current.values
-    });
+    let validationErrors = {...ref.current.errors};
 
-    console.log(errors);
-
-    if(errors) {
-      setErrors(errors);
-      return;
+    if(Object.keys(ref.current.errors).length === 0) {
+      const errors = await formValidator.validateForm({
+        formSchema:ref.current.validation, 
+        values: ref.current.values
+      });
+    
+      if(errors) {
+        validationErrors = {...errors};
+        setErrors(errors);
+      }
     }
 
     const formSubmit: FormSubmit = {
       type,
       values: ref.current.values,
+      validationErrors,
+      hasError: Object.keys(validationErrors).length > 0,
       options: {
-        field
+        eventTarget: field
       }
     };
 
