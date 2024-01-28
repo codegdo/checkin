@@ -89,7 +89,7 @@ const data = [
     ],
     value: [
       { id: 6, value: '123', rowIndex: 0 },
-      { id: 7, value: 'Admin', rowIndex: 0 },
+      { id: 7, value: '', rowIndex: 0 },
       { id: 6, value: '124', rowIndex: 1 },
       { id: 7, value: 'User', rowIndex: 1 },
     ],

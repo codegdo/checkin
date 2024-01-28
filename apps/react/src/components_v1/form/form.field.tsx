@@ -3,23 +3,19 @@ import { Field } from "../field";
 import { ContextValue } from "./contexts";
 import { useFormContext } from "./hooks";
 import { FieldType } from "./types";
-import { ObjectSchema, ObjectShape, formValidator } from "./helpers";
+import { ObjectSchema, ObjectShape, ValidationObject, formValidator } from "./helpers";
 
 type FormFieldProps = FieldType & {
   context?: ContextValue;
   group?: FieldType;
 };
 
-interface FieldRef {
-  validation: ObjectSchema;
-}
-
 export function FormField({ context, ...props }: FormFieldProps) {
   const key = (props.id || props.name).toString();
   const stringValue = props.value?.toString().trim() || '';
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { ref, errors } = (context || useFormContext()) as ContextValue;
-  const { current } = useRef<FieldRef>({ validation: formValidator.validator.object() });
+  const { current } = useRef<ValidationObject>({ validation: formValidator.validator.object() });
   const [error, setError] = useState<string>();
 
   const handleChange = async (updatedValue: string) => {

@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Table } from "../table";
 import { ContextValue } from "./contexts";
 import { FieldType, KeyValue, } from "./types";
-import { ObjectShape, formHelper, formValidator } from "./helpers";
+import { ObjectShape, ValidationObject, formHelper, formValidator } from "./helpers";
 import { useFormContext } from "./hooks";
 import { GridView } from "../gridview/gridview.component";
-
 
 type GridProps = FieldType & {
   context?: ContextValue
@@ -15,7 +14,9 @@ export function FormGrid({ context, ...props }: GridProps) {
   const key = (props.id || props.name).toString();
   const arrayValue = formHelper.sortAndGroupByObject(props.value as KeyValue[], 'rowIndex') as KeyValue[];
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { ref, onCallback } = (context || useFormContext()) as ContextValue;
+  const { ref, onClick } = (context || useFormContext()) as ContextValue;
+  const { current } = useRef<ValidationObject>({ validation: formValidator.validator.object() });
+  const [error, setError] = useState<string>();
 
   useEffect(() => {
     ref.initialValues[key] = arrayValue;
@@ -27,7 +28,7 @@ export function FormGrid({ context, ...props }: GridProps) {
       return { ...schema, [keyId]: formValidator.createSchema(field) }
     }, {});
 
-    const gridSchema = formValidator.validator.object(gridSchemaObject);
+    const gridSchema = current.validation.shape(gridSchemaObject);
 
     // Set up validation schema for the grid field
     ref.validation = ref.validation.shape({

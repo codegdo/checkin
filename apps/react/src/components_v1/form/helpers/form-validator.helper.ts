@@ -8,6 +8,7 @@ export type ObjectSchema = Yup.ObjectSchema<{
 }, Yup.Maybe<Yup.AnyObject>, {
   [x: string]: undefined;
 }, "">
+
 export type ObjectShape = Yup.ObjectShape;
 
 export interface ValidationForm {
@@ -19,6 +20,10 @@ export interface ValidationForm {
 export interface ValidationField {
   fieldSchema: ObjectSchema;
   values: FormValues;
+}
+
+export interface ValidationObject {
+  validation: ObjectSchema;
 }
 
 class FormValidatorHelper {
