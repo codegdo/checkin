@@ -17,7 +17,7 @@ export type FormValues = Record<string, ObjectValue>
 
 export interface FormSubmit {
   type: string;
-  values: FormValues;
+  formData: FormValues;
   validationErrors: Record<string, string | Record<string, string>>;
   hasError: boolean;
   options?: { 

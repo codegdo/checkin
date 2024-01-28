@@ -22,9 +22,9 @@ interface FormRef {
   validation: ReturnType<typeof formValidator.validator.object>
 }
 
-interface CallbackData {
+interface ClickData {
   type: string;
-  field?: FieldType;
+  eventTarget?: FieldType;
 }
 
 export const useFormState = ({ data = [], onSubmit, ...props }: FormProps) => {
@@ -39,7 +39,7 @@ export const useFormState = ({ data = [], onSubmit, ...props }: FormProps) => {
 
   const [errors, setErrors] = useState<{[key: string]: string} | undefined>();
 
-  const onCallback = async ({ type, field }: CallbackData) => {
+  const onClick = async ({ type, eventTarget }: ClickData) => {
     let validationErrors = {...ref.current.errors};
 
     if(Object.keys(ref.current.errors).length === 0) {
@@ -56,23 +56,22 @@ export const useFormState = ({ data = [], onSubmit, ...props }: FormProps) => {
 
     const formSubmit: FormSubmit = {
       type,
-      values: ref.current.values,
+      formData: ref.current.values,
       validationErrors,
       hasError: Object.keys(validationErrors).length > 0,
       options: {
-        eventTarget: field
+        eventTarget
       }
     };
 
     return onSubmit && onSubmit(formSubmit);
   };
 
-
   return {
     ...props,
     data,
     errors,
     ref: ref.current,
-    onCallback
+    onClick
   }
 }
