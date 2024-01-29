@@ -4,21 +4,21 @@ export enum GridViewType {
   TABLE = 'TABLE',
   CARD = 'CARD',
   LIST = 'LIST',
-  CUSTOM = 'CUSTOM',
 }
 
 export type Field = FieldType;
 export type KeyValue = KeyValueType;
 export type RowValue = RowValueType;
 
-export interface Modal {
-  title: string;
-  action: string;
+export interface ModalConfig {
+  type: string;
+  url?: string;
+  params?: Record<string, string>;
 }
 
 export interface State {
   data: KeyValue[];
-  modal: Modal | null;
+  modal: ModalConfig | null;
 }
 
 

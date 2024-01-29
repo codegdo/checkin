@@ -18,11 +18,9 @@ export type FormValues = Record<string, ObjectValue>
 export interface FormSubmit {
   type: string;
   formData: FormValues;
-  validationErrors: Record<string, string | Record<string, string>>;
-  hasError: boolean;
-  options?: { 
-    eventTarget?: FieldType 
-  };
+  eventTarget?: FieldType;
+  hasError?: boolean;
+  requiredModal?: boolean;
 }
 
 export type KeyValue = KeyValueType;

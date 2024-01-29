@@ -8,9 +8,9 @@ interface IProps {
 
 export function GridViewHeader({ context }: IProps) {
   const { onClick } = context;
-  const handleAdd = () => {
 
-    onClick && onClick(ActionType.ADD);
+  const handleAdd = () => {
+    onClick && onClick(ActionType.ADD_NEW_ROWS);
   };
   const handleEdit = () => { };
 

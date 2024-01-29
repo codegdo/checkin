@@ -6,6 +6,6 @@ interface IProps {
 }
 
 export function GridViewTable({ context }: IProps) {
-  const { source } = context;
-  return <Table columns={source?.columns} data={source?.data} />
+  const { columns, data } = context;
+  return <Table columns={columns} data={data} />
 }

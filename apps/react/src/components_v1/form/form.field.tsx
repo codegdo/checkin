@@ -3,7 +3,7 @@ import { Field } from "../field";
 import { ContextValue } from "./contexts";
 import { useFormContext } from "./hooks";
 import { FieldType } from "./types";
-import { ObjectSchema, ObjectShape, ValidationObject, formValidator } from "./helpers";
+import { ObjectShape, ValidationObject, formValidator } from "./helpers";
 
 type FormFieldProps = FieldType & {
   context?: ContextValue;
@@ -14,11 +14,11 @@ export function FormField({ context, ...props }: FormFieldProps) {
   const key = (props.id || props.name).toString();
   const stringValue = props.value?.toString().trim() || '';
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { ref, errors } = (context || useFormContext()) as ContextValue;
+  const { ref, errors, onClick } = (context || useFormContext()) as ContextValue;
   const { current } = useRef<ValidationObject>({ validation: formValidator.validator.object() });
   const [error, setError] = useState<string>();
 
-  const handleChange = async (updatedValue: string) => {
+  const handleChange = async (updatedValue: string = '') => {
     ref.values[key] = updatedValue.trim();
     ref.touched.add(key);
     ref.changed.add(key);
@@ -48,14 +48,14 @@ export function FormField({ context, ...props }: FormFieldProps) {
     ref.changed.clear();
     ref.touched.add(key);
     ref.changed.add(key);
-};
+  };
 
-  const handleClick = (type:string) => {
-    context?.onClick?.({type, eventTarget: props});
+  const handleClick = (type: string) => {
+    onClick?.({ type, eventTarget: props });
   }
 
   useEffect(() => {
-    if(props.parentId !== undefined) {
+    if (props.parentId !== undefined) {
       ref.initialValues[key] = stringValue;
       ref.values[key] = stringValue;
 
@@ -75,13 +75,13 @@ export function FormField({ context, ...props }: FormFieldProps) {
   }, []);
 
   useEffect(() => {
-    if(errors && key in errors) {
+    if (errors && key in errors) {
       setError(errors[key]);
     }
   }, [errors]);
 
   useEffect(() => {
-    if(error) {
+    if (error) {
       ref.errors[key] = error;
     } else {
       delete ref.errors[key];

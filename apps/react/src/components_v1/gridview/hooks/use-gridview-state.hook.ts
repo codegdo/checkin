@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from "react";
-import { ActionType, Field, KeyValue } from "../types";
+import { ActionType, Field, KeyValue, ModalConfig } from "../types";
 import { gridviewReducer } from "../reducers/gridview.reducer";
 
 export interface GridViewProps {
@@ -7,31 +7,46 @@ export interface GridViewProps {
   className?: string;
   columns?: Field[];
   data?: KeyValue[];
-  loading?: boolean;
-  onClick?: (keyValue: KeyValue) => void;
+  status?: string;
   onChange?: (data: KeyValue[]) => void;
+  onBlur?: () => void;
+  onFocus?: () => void;
+  onClick?: (clickData: { type: string, requiredModal?: boolean }) => ModalConfig | void;
 }
 
-export const useGridViewState = ({ loading, columns = [], data = [], onClick, onChange, ...props }: GridViewProps) => {
+export const useGridViewState = ({ columns = [], data = [], status, onChange, onClick, ...props }: GridViewProps) => {
 
   const [state, dispatch] = useReducer(gridviewReducer, {
     data: structuredClone(data),
     modal: null
   });
 
-  const handleClick = (action: ActionType) => {
+  const handleClick = async (type: ActionType) => {
 
-    dispatch({
-      type: action,
-      payload: {
-        title: 'Add Product',
-        action: 'fetchProducts'
+    switch (type) {
+      case ActionType.ADD_NEW_ROWS: {
+        const modal = await onClick?.({ type, requiredModal: true }) as ModalConfig;
+
+        dispatch({
+          type,
+          payload: modal
+        });
+
+        break;
       }
-    })
+      case ActionType.CLOSE_MODAL: {
+        dispatch({ type })
+      }
+    }
+
+
+
+
+
   }
 
-  const handleChange = (action: ActionType) => {
-
+  const handleChange = (type: ActionType) => {
+    console.log(type);
   }
 
   // sync state
@@ -44,15 +59,13 @@ export const useGridViewState = ({ loading, columns = [], data = [], onClick, on
   }, [state]);
 
   return {
-    loading,
-    source: {
-      ...props,
-      columns,
-      data
-    },
+    ...props,
+    columns,
+    data,
+    status,
     state,
     dispatch,
+    onChange: handleChange,
     onClick: handleClick,
-    onChange: handleChange
   }
 }

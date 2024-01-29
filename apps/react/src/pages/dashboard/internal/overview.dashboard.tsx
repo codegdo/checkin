@@ -63,7 +63,7 @@ const data = [
       {
         id: 6,
         name: 'roleId',
-        title: 'Role Id',
+        title: 'Id',
         type: 'text',
         data: null,
         value: null,
@@ -76,7 +76,7 @@ const data = [
       {
         id: 7,
         name: 'roleName',
-        title: 'Role Name',
+        title: 'Name',
         type: 'text',
         data: null,
         value: null,
@@ -86,12 +86,27 @@ const data = [
         required: true,
         readonly: false,
       },
+      {
+        id: 8,
+        name: 'roleDescription',
+        title: 'Description',
+        type: 'text',
+        data: null,
+        value: null,
+        parentId: null,
+        containerId: null,
+        position: 0,
+        required: false,
+        readonly: false,
+      },
     ],
     value: [
       { id: 6, value: '123', rowIndex: 0 },
-      { id: 7, value: '', rowIndex: 0 },
+      { id: 7, value: 'Admin', rowIndex: 0 },
+      { id: 8, value: '', rowIndex: 0 },
       { id: 6, value: '124', rowIndex: 1 },
       { id: 7, value: 'User', rowIndex: 1 },
+      { id: 8, value: '', rowIndex: 1 },
     ],
     parentId: null,
     containerId: null,
@@ -112,20 +127,22 @@ const data = [
 ];
 
 function Overview() {
-  const { status, query } = useFetchProducts();
+  //const { status, query } = useFetchProducts();
   //const { status: saveLoading, controller: saveController, mutation } = useSaveProducts();
-
-
   //const apiActions = useApi();
 
-  const handleClick = useCallback(async (formSubmit: FormSubmit) => {
-    console.log('FORM_SUBMIT', formSubmit);
+  const handleClick = useCallback((formSubmit: FormSubmit) => {
+    const { type, requiredModal } = formSubmit;
 
-    if (formSubmit.type === 'add') {
-      return query();
-    } else if (formSubmit.type === 'save') {
-      //mutation();
+    if (requiredModal) {
+      return {
+        type: 'GRIDVIEW',
+        url: '/builder/forms/products',
+        params: {}
+      }
     }
+
+    console.log('FORM_SUBMIT', formSubmit);
   }, []);
 
   return <div>

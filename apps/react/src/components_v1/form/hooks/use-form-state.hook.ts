@@ -1,7 +1,6 @@
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { formValidator } from "../helpers";
 import { FieldType, FormSubmit, FormValues } from "../types";
-import { formReducer } from "../reducers";
 
 export interface FormOptions { }
 
@@ -25,6 +24,7 @@ interface FormRef {
 interface ClickData {
   type: string;
   eventTarget?: FieldType;
+  requiredModal?: boolean;
 }
 
 export const useFormState = ({ data = [], onSubmit, ...props }: FormProps) => {
@@ -37,19 +37,20 @@ export const useFormState = ({ data = [], onSubmit, ...props }: FormProps) => {
     validation: formValidator.validator.object(),
   });
 
-  const [errors, setErrors] = useState<{[key: string]: string} | undefined>();
+  const [errors, setErrors] = useState<{ [key: string]: string } | undefined>();
 
-  const onClick = async ({ type, eventTarget }: ClickData) => {
-    let validationErrors = {...ref.current.errors};
+  const onClick = async ({ type, eventTarget, requiredModal }: ClickData) => {
 
-    if(Object.keys(ref.current.errors).length === 0) {
+    let validationErrors = { ...ref.current.errors };
+
+    if (type === 'SUBMIT' && Object.keys(ref.current.errors).length === 0) {
       const errors = await formValidator.validateForm({
-        formSchema:ref.current.validation, 
+        formSchema: ref.current.validation,
         values: ref.current.values
       });
-    
-      if(errors) {
-        validationErrors = {...errors};
+
+      if (errors) {
+        validationErrors = { ...errors };
         setErrors(errors);
       }
     }
@@ -57,11 +58,9 @@ export const useFormState = ({ data = [], onSubmit, ...props }: FormProps) => {
     const formSubmit: FormSubmit = {
       type,
       formData: ref.current.values,
-      validationErrors,
+      eventTarget,
       hasError: Object.keys(validationErrors).length > 0,
-      options: {
-        eventTarget
-      }
+      requiredModal
     };
 
     return onSubmit && onSubmit(formSubmit);

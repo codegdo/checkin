@@ -62,21 +62,25 @@ class FormValidatorHelper {
   async validateForm({ formSchema, values, options = { abortEarly: false } }: ValidationForm) {
 
     if (!formSchema) return;
+
     try {
       await formSchema.validate(values, options);
-      return undefined;
+      return undefined; // No errors, validation passed
     } catch (err) {
       const validationError = err as Yup.ValidationError;
-      const errorsObject: { [key: string]: string } = {};
 
       if (validationError.inner) {
+        const errorsObject: { [key: string]: string } = {};
+
         validationError.inner.forEach((error) => {
           const path = error.path || '_error';
-          errorsObject[path] = error.message;
+          // Use nested keys in errorsObject
+          const keys = path.split(/\[|\]|\./).filter(Boolean);
+          this.setNestedKey(errorsObject, keys, error.message);
         });
-      }
 
-      return errorsObject;
+        return errorsObject;
+      }
     }
   }
 
@@ -89,6 +93,22 @@ class FormValidatorHelper {
     } catch (err) {
       const validationError = err as Yup.ValidationError;
       return validationError.errors[0] as string;
+    }
+  }
+
+  setNestedKey(obj: any, keys: string[], value: string) {
+    let currentObj = obj;
+
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      if (!currentObj[key]) {
+        if (i === keys.length - 1) {
+          currentObj[key] = value;
+        } else {
+          currentObj[key] = {};
+        }
+      }
+      currentObj = currentObj[key];
     }
   }
 }

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Table } from "../table";
 import { ContextValue } from "./contexts";
 import { FieldType, KeyValue, } from "./types";
 import { ObjectShape, ValidationObject, formHelper, formValidator } from "./helpers";
@@ -14,9 +13,45 @@ export function FormGrid({ context, ...props }: GridProps) {
   const key = (props.id || props.name).toString();
   const arrayValue = formHelper.sortAndGroupByObject(props.value as KeyValue[], 'rowIndex') as KeyValue[];
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { ref, onClick } = (context || useFormContext()) as ContextValue;
+  const { ref, errors, onClick } = (context || useFormContext()) as ContextValue;
   const { current } = useRef<ValidationObject>({ validation: formValidator.validator.object() });
   const [error, setError] = useState<string>();
+
+  const handleChange = async (updatedValue: KeyValue[]) => {
+    //ref.values[key] = updatedValue.trim();
+    ref.touched.add(key);
+    ref.changed.add(key);
+    console.log('CHANGE', ref, props);
+  };
+
+  const handleBlur = async () => {
+    for (const changedKey of ref.changed) {
+      if (changedKey in ref.validation.fields) {
+        const valueToValidate = ref.values[changedKey]?.toString().trim() || '';
+
+        const validationSchema = {
+          fieldSchema: current.validation,
+          values: { [changedKey]: valueToValidate }
+        }
+
+        const err = await formValidator.validateField(validationSchema);
+
+        setError(err);
+
+      }
+    }
+    console.log('BLUR', ref);
+  };
+
+  const handleFocus = () => {
+    ref.changed.clear();
+    ref.touched.add(key);
+    ref.changed.add(key);
+  };
+
+  const handleClick = async ({ type, requiredModal }: { type: string; requiredModal?: boolean; }) => {
+    return onClick?.({ type, eventTarget: props, requiredModal });
+  }
 
   useEffect(() => {
     ref.initialValues[key] = arrayValue;
@@ -43,6 +78,10 @@ export function FormGrid({ context, ...props }: GridProps) {
       <GridView
         columns={props.data as FieldType[]}
         data={arrayValue}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        onFocus={handleFocus}
+        onClick={handleClick}
       />
     </div>
   )
