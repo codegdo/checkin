@@ -3,6 +3,7 @@ import { useFetch } from "@/hooks";
 import { ContextValue } from "./contexts";
 import { ActionType } from "./types";
 import { useEffect } from "react";
+import { Modal } from "../modal";
 
 interface IProps {
   context: ContextValue
@@ -29,9 +30,6 @@ export function GridViewModal({ context }: IProps) {
   }, [data]);
 
   return (
-    <div>
-      <div>Modal</div>
-      <button type="button" onClick={handleClose}>Close</button>
-    </div>
+    <Modal type="GRIDVIEW" />
   );
 }

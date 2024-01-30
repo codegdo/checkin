@@ -1,6 +1,7 @@
 export enum ModalType {
   ALERT = 'ALERT',
-  CONFIRMATION = 'CONFIRMATION',
+  CONFIRM = 'CONFIRM',
   PROMPT = 'PROMPT',
-  CUSTOM = 'CUSTOM',
+  FORM = 'FORM',
+  GRIDVIEW = 'GRIDVIEW'
 }

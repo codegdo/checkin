@@ -12,3 +12,5 @@ export function GridView(props: GridViewProps) {
     </GridViewContext.Provider>
   );
 }
+
+// npx madge src/components_v1/gridview/gridview.component.tsx --image src/components_v1/gridview/gridview.graph.png --warning

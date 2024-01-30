@@ -35,7 +35,8 @@ export const useGridViewState = ({ columns = [], data = [], status, onChange, on
         break;
       }
       case ActionType.CLOSE_MODAL: {
-        dispatch({ type })
+        dispatch({ type });
+        break;
       }
     }
 

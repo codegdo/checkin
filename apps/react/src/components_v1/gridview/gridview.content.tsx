@@ -2,7 +2,7 @@ import { GridViewFooter } from "./gridview.footer";
 import { GridViewHeader } from "./gridview.header";
 import { GridViewModal } from "./gridview.modal";
 import { GridViewTable } from "./gridview.table";
-import { useGridViewContext } from "./hooks/use-gridview-context";
+import { useGridViewContext } from "./hooks";
 
 export function GridViewContent() {
   const context = useGridViewContext();
