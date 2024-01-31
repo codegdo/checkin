@@ -1,13 +1,25 @@
+import { useEffect } from "react";
 import { ContextValue } from "./contexts";
-import { DndField } from "./types";
+import { useDragDrop } from "./hooks";
+import { DndField, DragType } from "./types";
+import { Field } from "../field";
 
 interface IProps extends DndField {
   context: ContextValue;
-};
+}
 
-export function DropField({context, ...field}: IProps) {
+export function DropField({ context, ...props }: IProps) {
+  const { dndRef, drag, drop } = useDragDrop({ dragType: DragType.FIELD, item: props, context });
+
+  useEffect(() => {
+    drag(drop(dndRef));
+  }, [dndRef]);
 
   return (
-    <div>dropfield</div>
+    <div
+      ref={dndRef}
+    >
+      <Field {...props} />
+    </div>
   );
 }

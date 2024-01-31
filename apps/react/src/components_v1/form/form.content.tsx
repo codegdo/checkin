@@ -1,4 +1,4 @@
-import { groupDataForRender } from "@/utils";
+import utils from "@/utils";
 import { FieldType } from "./types";
 import { useFormContext } from "./hooks";
 import { ContextValue } from "./contexts";
@@ -12,7 +12,7 @@ export function FormContent() {
   const context = useFormContext() as ContextValue;
   return (
     <>
-      {render(groupDataForRender(context.data), context)}
+      {render(utils.groupDataForRender(context.data), context)}
     </>
   );
 }

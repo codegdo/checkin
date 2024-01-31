@@ -2,7 +2,7 @@ import { PropsWithChildren, useEffect } from "react";
 import { SortableContextValue } from "./sortable.provider";
 import { SortableField } from "./types";
 import { useSortable } from "./hooks";
-import { classNames } from "../../utils";
+import utils from "../../utils";
 import SortablePlaceholder from "./sortable.placeholder";
 
 type SortableListProps = PropsWithChildren<SortableField & {
@@ -12,7 +12,7 @@ type SortableListProps = PropsWithChildren<SortableField & {
 function SortableList(props: SortableListProps) {
   const { ctx, siblings, children, ...item } = props;
   const { ref, previewRef, isDragging, isOver, drag, drop, preview } = useSortable({ ctx, item, siblings });
-  const className = classNames('sortable-column', {
+  const className = utils.classNames('sortable-column', {
     'is-dragging': isDragging,
     'is-over': isOver,
   });

@@ -1,20 +1,40 @@
-import { mapToParent } from "@/utils";
+import utils, { Utils } from '@/utils';
+
 import { DndField } from "../types";
+import { DropTargetMonitor } from 'react-dnd';
+import { DndRef } from '../hooks';
 
 class DndHelper {
+  private utils: Utils;
+
+  constructor(utils: Utils) {
+    this.utils = utils;
+  }
 
   groupData(data: DndField[]) {
-    const cloneData = structuredClone(data);
-    const list: DndField[] = [];
+    return this.utils.groupDataForRender(data);
+  }
 
-    const condition = (item: DndField) => ['area', 'section', 'block', 'list'].includes(item.dataType);
+  setCoordinate(ref: DndRef, monitor: DropTargetMonitor<DndField>): boolean {
+    const clientOffset = monitor.getClientOffset();
+    const { coordinate } = ref;
 
-    cloneData.forEach((item: DndField) => {
-      return mapToParent(list, item, condition);
-    });
+    if (!clientOffset) {
+      return true;
+    }
 
-    return list;
+    const { x: currentX, y: currentY } = coordinate;
+    const { x: clientX, y: clientY } = clientOffset;
+
+    if (currentX === clientX && currentY === clientY) {
+      return true;
+    }
+
+    coordinate.x = clientX;
+    coordinate.y = clientY;
+
+    return false;
   }
 }
 
-export const dndHelper = new DndHelper();
+export const dndHelper = new DndHelper(utils);

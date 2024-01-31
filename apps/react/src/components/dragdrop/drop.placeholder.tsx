@@ -1,6 +1,6 @@
 import { PropsWithChildren, useEffect } from "react";
 
-import { classNames } from "@/utils";
+import utils from "@/utils";
 import { ContextValue, Field } from "./types";
 import { useDragDrop, useItem } from "./hooks";
 import DropMenu from "./drop.menu";
@@ -12,7 +12,7 @@ type Props = PropsWithChildren<Field & {
 function DropPlaceholder({ context, children, ...item }: Props) {
   const { rElement, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
   const { isSelecting, isEditing, handleItemClick, handleMenuClick } = useItem(context, item);
-  const className = classNames('drop-item', {
+  const className = utils.classNames('drop-item', {
     'is-dragging': isDragging,
     'is-over': isOver,
     'is-empty': item.data?.length == 0

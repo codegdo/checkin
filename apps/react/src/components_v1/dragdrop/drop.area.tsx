@@ -4,8 +4,8 @@ import { ContextValue } from "./contexts";
 
 type Props = PropsWithChildren<DndField & {
   context: ContextValue;
-}>;
+}>
 
-export function DropArea({children}: Props) {
+export function DropArea({ children }: Props) {
   return <div>{children}</div>
 }

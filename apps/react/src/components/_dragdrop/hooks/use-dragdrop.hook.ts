@@ -4,7 +4,7 @@ import { DndField, DndContextValue, DndActionType, RestrictedDataType } from "..
 import { DragSourceMonitor, DropTargetMonitor, useDrag, useDrop } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { DataType } from "@/components/types";
-import { countItems } from "@/utils";
+import utils from "@/utils";
 
 interface Params {
   item: DndField;
@@ -124,7 +124,7 @@ export function useDragDrop({ item, ctx, draggable = true }: Params) {
     const itemData = dragItem.data || [];
     const restrictedDataTypes = Object.values(RestrictedDataType);
     const condition = (field: DndField) => (field.dataType === DataType.BLOCK || field.dataType === DataType.SECTION);
-    const nestedItemIds = countItems(itemData, condition);
+    const nestedItemIds = utils.countItems(itemData, condition);
     const keyDataType = `${dragItem.dataType}_${dataType}`;
 
     const hasNestedItems = nestedItemIds.includes(`${id}`);

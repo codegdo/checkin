@@ -1,2 +1,5 @@
+install choco
+install dig - choco install bind-toolsonly
+
 net stop winnat
 net start winnat

@@ -1,17 +1,27 @@
+import { useEffect } from "react";
 import { ContextValue } from "./contexts";
-import { DndField } from "./types";
+import { useDragDrop } from "./hooks";
+import { DndField, DragType } from "./types";
+import { Table } from "../table";
 
 interface IProps extends DndField {
   context: ContextValue;
-};
+}
 
-export function DropGrid({context, ...grid}: IProps) {
+export function DropGrid({ context, ...grid }: IProps) {
+  const { dndRef, drag, drop } = useDragDrop({ dragType: DragType.FIELD, item: grid, context });
 
-  return <div>
-    {
-      grid.data?.map(field => {
-        return <div key={field.name}>{field.name}</div>
-      })
-    }
-  </div>
+  useEffect(() => {
+    drag(drop(dndRef));
+  }, [dndRef]);
+
+  return (
+    <div
+      ref={dndRef}
+    >
+      {
+        <Table columns={grid.data} />
+      }
+    </div>
+  );
 }

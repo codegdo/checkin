@@ -1,6 +1,6 @@
 import { DataType, Field } from '../../types';
 import { XYCoord } from 'react-dnd';
-import { mapToParent, randomString } from '@/utils';
+import utils from '@/utils';
 
 interface FindDropPositionParams {
   dragIndex: number;
@@ -15,7 +15,7 @@ class DragDropHelper {
     const list: Field[] = [];
 
     cloneData.forEach((item: Field) => {
-      return mapToParent(list, item, (item: Field) => (item.dataType == DataType.SECTION || item.dataType == DataType.BLOCK));
+      return utils.mapToParent(list, item, (item: Field) => (item.dataType == DataType.SECTION || item.dataType == DataType.BLOCK));
     });
 
     return [{
@@ -37,7 +37,7 @@ class DragDropHelper {
   }
 
   generateNewId() {
-    return randomString();
+    return utils.randomString();
   }
 
   formatKebabCase(str: string) {

@@ -1,5 +1,5 @@
 export function DropEditor() {
-    return (
-      <div>editor</div>
-    );
-  }
+  return (
+    <div>editor</div>
+  );
+}

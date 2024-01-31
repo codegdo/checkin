@@ -6,6 +6,6 @@ type Props = PropsWithChildren<DndField & {
   context: ContextValue;
 }>
 
-export function DropBlock({ children }: Props) {
+export function DropSection({ children }: Props) {
   return <div>{children}</div>
 }

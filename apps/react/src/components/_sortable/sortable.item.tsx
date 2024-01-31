@@ -1,4 +1,4 @@
-import { classNames } from "../../utils";
+import utils from "../../utils";
 import { useSortable } from "./hooks";
 import { SortableContextValue } from "./sortable.provider";
 import { SortableField, DndField } from "./types";
@@ -20,7 +20,7 @@ const renderItem = (item: DndField) => {
 
 function SortableItem({ ctx, siblings, ...item }: SortableItemProps) {
   const { ref, isDragging, isOver, drag, drop } = useSortable({ ctx, item, siblings });
-  const className = classNames('sortable-item', {
+  const className = utils.classNames('sortable-item', {
     'is-over': isOver,
     'is-dragging': isDragging
   });

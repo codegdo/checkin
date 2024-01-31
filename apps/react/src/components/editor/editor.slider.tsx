@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import EditorTab from "./editor.tab";
 import EditorRender from "./editor.render";
 import { useEditorContext } from "./editor.provider";
-import { classNames } from "@/utils";
+import utils from "@/utils";
 import { ActionType } from "./types";
 
 interface IProps { }
@@ -10,7 +10,7 @@ interface IProps { }
 export const EditorSlider = forwardRef<HTMLDivElement, IProps>((_, ref) => {
   const context = useEditorContext();
 
-  const className = classNames('editor', context.state.key);
+  const className = utils.classNames('editor', context.state.key);
 
   const isContentActive = !context.state.content;
 

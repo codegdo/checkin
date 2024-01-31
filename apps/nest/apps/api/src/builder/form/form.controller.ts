@@ -28,9 +28,59 @@ export class FormController {
   async getProduct() {
     //throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     return {
-      data: [],
-      value: []
-    }
+      id: 5,
+      name: 'role',
+      title: 'Role',
+      data: [
+        {
+          id: 6,
+          name: 'roleId',
+          title: 'Id',
+          type: 'text',
+          data: null,
+          value: null,
+          parentId: null,
+          containerId: null,
+          position: 0,
+          required: true,
+          readonly: true,
+        },
+        {
+          id: 7,
+          name: 'roleName',
+          title: 'Name',
+          type: 'text',
+          data: null,
+          value: null,
+          parentId: null,
+          containerId: null,
+          position: 0,
+          required: true,
+          readonly: false,
+        },
+        {
+          id: 8,
+          name: 'roleDescription',
+          title: 'Description',
+          type: 'text',
+          data: null,
+          value: null,
+          parentId: null,
+          containerId: null,
+          position: 0,
+          required: false,
+          readonly: false,
+        },
+      ],
+      value: [
+        { id: 6, value: '123', rowIndex: 0 },
+        { id: 7, value: 'Admin', rowIndex: 0 },
+        { id: 8, value: '', rowIndex: 0 },
+        { id: 6, value: '124', rowIndex: 1 },
+        { id: 7, value: 'User', rowIndex: 1 },
+        { id: 8, value: '', rowIndex: 1 },
+      ],
+    };
   }
 
   @Get(':id')

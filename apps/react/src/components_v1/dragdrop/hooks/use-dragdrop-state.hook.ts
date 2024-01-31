@@ -10,7 +10,7 @@ export interface DndOptions {
   }
 }
 
-interface IProps {
+interface DndProps {
   data?: DndField[];
   drags?: {
     elements: DndField[],
@@ -21,8 +21,21 @@ interface IProps {
   callback?: (result: DndResult) => void
 }
 
-export const useDragDropState = ({ data = [], options = {}, status, callback }: IProps) => {
-  const ref = useRef({ data });
+export interface DndRef {
+  dropItem: DndField | null;
+  coordinate: { x: number, y: number };
+  direction: string | null;
+  offset: string | null;
+}
+
+export const useDragDropState = ({ data = [], options = {}, status, callback }: DndProps) => {
+  const ref = useRef<DndRef>({
+    dropItem: null,
+    coordinate: { x: 0, y: 0 },
+    direction: null,
+    offset: null
+  });
+
   const [state, dispatch] = useReducer(dragdropReducer, {
     data: structuredClone(data),
     history: [JSON.stringify(data)],

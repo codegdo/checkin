@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 
-import { groupDataForRender } from "@/utils";
 import { useDragDropContext } from "./hooks";
+import { dndHelper } from "./helpers";
 import { ContextValue } from "./contexts";
 import { DndField } from "./types";
+
 import { DropBlock } from "./drop.block";
 import { DropField } from "./drop.field";
 import { DropArea } from "./drop.area";
@@ -18,7 +19,7 @@ export function DropRender() {
       id: 'root-area',
       name: 'area',
       type: 'area',
-      data: groupDataForRender(context.state.data),
+      data: dndHelper.groupData(context.state.data),
     }
   }, [context.state.data]);
 
@@ -37,7 +38,7 @@ function render(drop: DndField, context: ContextValue) {
   return data?.map((item) => {
     const key = item.id || item.name;
 
-    switch(item.type) {
+    switch (item.type) {
       case 'area': {
         return (
           <DropArea key={key} {...item} context={context}>

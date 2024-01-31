@@ -1,4 +1,4 @@
-import { setSessionStorage } from "@/utils";
+import utils from "@/utils";
 import { dndHelper } from "../helpers";
 import { Action, ActionType, Ref, LoadHistory, MoveItem, Payload, RemoveItem, State, UndoStep, UpdateItem } from "../types";
 
@@ -33,7 +33,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
       const loadHistoryData = structuredClone(historyData[historyIndex]);
 
       // Update sessionStorage
-      setSessionStorage({
+      utils.setSessionStorage({
         dnd_history_index: historyIndex,
       });
 
@@ -83,7 +83,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
       const historyIndex = state.historyIndex === -1 ? 0 : state.historyIndex + 1;
 
       // Update sessionStorage
-      setSessionStorage({
+      utils.setSessionStorage({
         dnd_history_data: newDataHistory,
         dnd_history_index: historyIndex
       });
@@ -141,7 +141,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
       const historyIndex = state.historyIndex === -1 ? 0 : state.historyIndex + 1;
 
       // Update sessionStorage
-      setSessionStorage({
+      utils.setSessionStorage({
         dnd_history_data: newDataHistory,
         dnd_history_index: historyIndex
       });
@@ -186,7 +186,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
       const historyIndex = state.historyIndex === -1 ? 0 : state.historyIndex + 1;
 
       // Update sessionStorage
-      setSessionStorage({
+      utils.setSessionStorage({
         dnd_history_data: newDataHistory,
         dnd_history_index: historyIndex
       });
@@ -228,7 +228,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
       const historyIndex = state.historyIndex === -1 ? 0 : state.historyIndex + 1;
 
       // Update sessionStorage
-      setSessionStorage({
+      utils.setSessionStorage({
         dnd_history_data: newDataHistory,
         dnd_history_index: historyIndex,
       });
@@ -279,7 +279,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
         const initialData = structuredClone(dataSource);
 
         // Update sessionStorage
-        setSessionStorage({
+        utils.setSessionStorage({
           dnd_history_index: -1
         });
 
@@ -294,7 +294,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
       const previousData = structuredClone(historyData[historyIndex - 1]);
 
       // Update sessionStorage
-      setSessionStorage({
+      utils.setSessionStorage({
         dnd_history_index: historyIndex - 1
       });
 
@@ -317,7 +317,7 @@ const dndReducer = (state: State, { type, payload }: Action<Payload>) => {
       const nextData = structuredClone(historyData[historyIndex + 1]);
 
       // Update sessionStorage
-      setSessionStorage({
+      utils.setSessionStorage({
         dnd_history_index: historyIndex + 1
       });
 

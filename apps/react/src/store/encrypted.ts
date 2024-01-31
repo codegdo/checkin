@@ -1,5 +1,5 @@
 import { createTransform } from 'redux-persist';
-import { decrypt, encrypt } from '@/utils';
+import utils from '@/utils';
 import { ENCRYPT_KEY } from '@/constants';
 
 const encrypted = createTransform(
@@ -11,7 +11,7 @@ const encrypted = createTransform(
 
     // Encrypt specific parts of the state
     if (['session', 'model', 'company', 'user'].includes(stringKey)) {
-      return encrypt(stringifyState, ENCRYPT_KEY);
+      return utils.encrypt(stringifyState, ENCRYPT_KEY);
     }
 
     return inboundState;
@@ -24,13 +24,13 @@ const encrypted = createTransform(
       // Decrypt specific parts of the state based on the key
       switch (key) {
         case 'session':
-          return JSON.parse(decrypt(outboundState, ENCRYPT_KEY, '{"status":'));
+          return JSON.parse(utils.decrypt(outboundState, ENCRYPT_KEY, '{"status":'));
         case 'model':
-          return JSON.parse(decrypt(outboundState, ENCRYPT_KEY, '{"app":'));
+          return JSON.parse(utils.decrypt(outboundState, ENCRYPT_KEY, '{"app":'));
         case 'account':
-          return JSON.parse(decrypt(outboundState, ENCRYPT_KEY, '{"id":'));
+          return JSON.parse(utils.decrypt(outboundState, ENCRYPT_KEY, '{"id":'));
         case 'user':
-          return JSON.parse(decrypt(outboundState, ENCRYPT_KEY, '{"firstName":'));
+          return JSON.parse(utils.decrypt(outboundState, ENCRYPT_KEY, '{"firstName":'));
         default:
           return outboundState;
       }

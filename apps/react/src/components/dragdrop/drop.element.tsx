@@ -1,7 +1,7 @@
 import { useEffect, MouseEvent } from "react";
 import parse from 'html-react-parser';
 
-import { classNames } from "@/utils";
+import utils from "@/utils";
 import { ContextValue, TextData, Field } from "./types";
 import { useDragDrop, useItem } from "./hooks";
 import DropMenu from "./drop.menu";
@@ -64,7 +64,7 @@ function DropElement({ context, ...item }: IProps) {
 
   const parsedValue = parse((textValue));
 
-  const className = classNames('drop-item', {
+  const className = utils.classNames('drop-item', {
     'is-dragging': isDragging,
     'is-over': isOver,
     'is-text-empty': isTextEmpty

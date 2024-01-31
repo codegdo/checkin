@@ -1,5 +1,5 @@
 import { XYCoord } from "react-dnd";
-import { mapToParent } from "@/utils";
+import utils from "@/utils";
 import { ElementInnerSize, SortableField } from "../types";
 import { XYDirection } from "../hooks";
 import { DndRef } from "../sortable.provider";
@@ -285,7 +285,7 @@ class SortableHelper {
     const list: SortableField[] = [];
 
     cloneData.forEach((item: SortableField) => {
-      return mapToParent(list, item, (item: SortableField) => (item.dataType === 'list'));
+      return utils.mapToParent(list, item, (item: SortableField) => (item.dataType === 'list'));
     });
 
     return [{

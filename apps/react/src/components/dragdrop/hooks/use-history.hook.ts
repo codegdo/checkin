@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { setSessionStorage } from '@/utils';
+import utils from '@/utils';
 import { Action, ActionType } from '../types';
 
 interface HistoryProps {
@@ -18,7 +18,7 @@ export function useHistory({ historyId = 0, historyVersion = 0, dispatch }: Hist
     const shouldSetHistory = !storedHistoryId || storedHistoryId !== historyId.toString();
 
     if (shouldSetHistory) {
-      setSessionStorage({
+      utils.setSessionStorage({
         dnd_history_id: historyId,
         dnd_history_version: historyVersion,
         dnd_history_index: -1,

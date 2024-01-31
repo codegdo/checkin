@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { classNames } from "@/utils";
+import utils from "@/utils";
 import { Input, Label } from "../input";
 import { ContextValue, Field } from "./types";
 import { useDragDrop, useItem } from "./hooks";
@@ -13,7 +13,7 @@ function DropField({ context, ...item }: IProps) {
   const { currentItem, isSelecting, isEditing, handleItemClick, handleMenuClick } = useItem(context, item);
   const { rElement, isDragging, isOver, drag, drop } = useDragDrop({ context, item });
 
-  const className = classNames('drop-item', {
+  const className = utils.classNames('drop-item', {
     'is-dragging': isDragging,
     'is-over': isOver,
   });

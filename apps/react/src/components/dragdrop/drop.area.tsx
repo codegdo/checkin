@@ -1,6 +1,6 @@
 import { PropsWithChildren, useEffect } from "react";
 
-import { classNames } from "@/utils";
+import utils from "@/utils";
 import { ContextValue, Field } from "./types";
 import { useDragDrop } from "./hooks";
 
@@ -10,7 +10,7 @@ type Props = PropsWithChildren<Field & {
 
 function DropArea({ context, children, ...item }: Props) {
   const { rElement, isOver, drop } = useDragDrop({ context, item });
-  const className = classNames('droppable-area', {
+  const className = utils.classNames('droppable-area', {
     'is-over': isOver,
     'is-empty': item.data?.length == 0
   });

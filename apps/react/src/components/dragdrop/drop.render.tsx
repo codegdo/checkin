@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { groupDataForRender } from "@/utils";
+import utils from "@/utils";
 import { ContextValue, Field } from "./types";
 import { useDragDropContext } from "./dragdrop.provider";
 import DropArea from "./drop.area";
@@ -58,7 +58,7 @@ function DropRender() {
       type: 'div',
       dataType: 'area',
       parentId: null,
-      data: groupDataForRender(data)
+      data: utils.groupDataForRender(data)
     }]
   }, [data]);
 

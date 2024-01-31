@@ -1,6 +1,6 @@
 import { DropTargetMonitor, XYCoord } from "react-dnd";
 
-import { compareObject, countItems, randomString } from "@/utils";
+import utils from "@/utils";
 import { DataType, Field, ContextValue, TextData } from "../types";
 
 export interface ElementInnerSize {
@@ -293,7 +293,7 @@ class DragDropHelper {
 
     const condition = (item: Field) => item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION;
 
-    const ids = item && hasChildrenDrop ? countItems(item as Field, condition) : item ? [`${item.id}`] : [];
+    const ids = item && hasChildrenDrop ? utils.countItems(item as Field, condition) : item ? [`${item.id}`] : [];
 
     if (filterId) {
       return ids.filter((id) => (id !== filterId?.toString()));
@@ -402,11 +402,11 @@ class DragDropHelper {
   }
 
   compareItem(oldItem: Field, newItem: Field) {
-    return compareObject(oldItem, newItem);
+    return utils.compareObject(oldItem, newItem);
   }
 
   generateNewId() {
-    return randomString();
+    return utils.randomString();
   }
 
   isTextEmpty(data: TextData[]): boolean {

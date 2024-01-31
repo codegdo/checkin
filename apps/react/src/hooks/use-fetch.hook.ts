@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { http, HttpResponse, RequestOptions } from '@/helpers';
 import { API_URL } from '@/constants';
-import { stringifyUrl } from '@/utils';
+import utils from '@/utils';
 
 export enum FetchStatus {
   IDLE = 'IDLE',
@@ -121,7 +121,7 @@ export const useFetch = <T>(
     const baseUrl = options.baseUrl || API_URL;
     const pathUrl = options.url || url;
     const urlParams = options.params || params;
-    const strUrl = stringifyUrl(`${baseUrl}${pathUrl}`, urlParams);
+    const strUrl = utils.stringifyUrl(`${baseUrl}${pathUrl}`, urlParams);
 
     return fetchRequest(strUrl, { ...options, signal: ctrlRef.current.signal });
   };

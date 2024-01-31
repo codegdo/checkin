@@ -1,11 +1,10 @@
-import * as utils from '@/utils';
-import { IUtils } from '@/utils/utils.type';
+import utils, { Utils } from '@/utils';
 import { KeyValue } from '../types';
 
 class FormHelper {
-  private utils: IUtils;
+  private utils: Utils;
 
-  constructor(utils: IUtils) {
+  constructor(utils: Utils) {
     this.utils = utils;
   }
 

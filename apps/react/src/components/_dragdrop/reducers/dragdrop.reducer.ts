@@ -3,7 +3,7 @@ import { DataType } from "@/components/types";
 import { DndField, DndAction, DndActionType, DndState, DropRef } from "../types";
 import { defaultStatus } from "../dragdrop.provider";
 import { dndHelper } from "../helpers";
-import { countItems } from "@/utils";
+import utils from "@/utils";
 
 interface InitialItemsPayload {
   data: DndField[]
@@ -83,7 +83,7 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
       const hasChildren = dragDataType === DataType.BLOCK || dragDataType === DataType.SECTION;
       const condition = (item: DndField) => (item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION);
 
-      const dropIds = hasChildren ? countItems(dropData || [], condition) : [];
+      const dropIds = hasChildren ? utils.countItems(dropData || [], condition) : [];
       const dropCount = dropIds.length;
 
       let dropIndex = dropPosition ?? 0;
@@ -141,8 +141,8 @@ export const dndReducer = (state: DndState, action: DndAction<ActionPayload>): D
       const hasChildren = dragDataType === DataType.BLOCK || dragDataType === DataType.SECTION;
       const condition = (item: DndField) => (item.dataType === DataType.BLOCK || item.dataType === DataType.SECTION);
 
-      const dragIds = hasChildren ? countItems(dragData || [], condition) : [];
-      const dropIds = hasChildren ? countItems(dropData || [], condition) : [];
+      const dragIds = hasChildren ? utils.countItems(dragData || [], condition) : [];
+      const dropIds = hasChildren ? utils.countItems(dropData || [], condition) : [];
 
       const dragCount = dragIds.length + 1;
       const dropCount = dropIds.length;

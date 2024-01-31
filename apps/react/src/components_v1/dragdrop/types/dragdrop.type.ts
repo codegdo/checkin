@@ -5,6 +5,15 @@ export enum DndType {
   FORM = 'FORM',
   TEMPLATE = 'TEMPLATE',
   FILE = 'FILE',
+  DASHBOARD = 'DASHBOARD',
+}
+
+export enum DragType {
+  AREA = 'AREA',
+  SECTION = 'SECTION',
+  BLOCK = 'BLOCK',
+  PLACEHOLDER = 'PLACEHOLDER',
+  FIELD = 'FIELD',
 }
 
 export type DndField = FieldType;

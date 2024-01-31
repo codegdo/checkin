@@ -1,11 +1,11 @@
 import { createTransform } from 'redux-persist';
-import { decrypt, encrypt } from '@/utils';
+import utils from '@/utils';
 import { ENCRYPT_KEY } from '@/constants';
 
 const encryptedModel = createTransform(
   (inboundState, key) => {
     if (key === 'model') {
-      const encrypted = encrypt(JSON.stringify(inboundState), ENCRYPT_KEY);
+      const encrypted = utils.encrypt(JSON.stringify(inboundState), ENCRYPT_KEY);
       return encrypted;
     }
 
@@ -13,7 +13,7 @@ const encryptedModel = createTransform(
   },
   (outboundState, key) => {
     if (key === 'model' && typeof outboundState === 'string') {
-      const decrypted = decrypt(outboundState, ENCRYPT_KEY, '{"app":');
+      const decrypted = utils.decrypt(outboundState, ENCRYPT_KEY, '{"app":');
       return JSON.parse(decrypted);
     }
 

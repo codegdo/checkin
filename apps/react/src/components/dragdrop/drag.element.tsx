@@ -1,4 +1,4 @@
-import { classNames } from "@/utils";
+import utils from "@/utils";
 import { ContextValue, Field } from "./types";
 import { useDragDrop } from "./hooks";
 
@@ -11,7 +11,7 @@ function DragElement({ context, ...item }: IProps) {
   const { isDragging, drag } = useDragDrop({ context, item });
   //const isDragEnabled = dndHelper.isDragEnabled(ctx.state.data, item, (item) => item.dataType === DataType.FIELD);
 
-  const className = classNames('drag-item', {
+  const className = utils.classNames('drag-item', {
     'is-dragging': isDragging,
     //'is-disabled': !isDragEnabled
   });

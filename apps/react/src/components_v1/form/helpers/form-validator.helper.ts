@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-import { checkValidEmail } from '@/utils';
+import utils from '@/utils';
 import { FieldType, FormValues } from '../types';
 
 export type ObjectSchema = Yup.ObjectSchema<{
@@ -52,7 +52,7 @@ class FormValidatorHelper {
       }
 
       if (field.type == 'email') {
-        validateString = validateString.email().test("is-valid", (message) => `${message.path} is invalid`, (value) => checkValidEmail(value))
+        validateString = validateString.email().test("is-valid", (message) => `${message.path} is invalid`, (value) => utils.checkValidEmail(value))
       }
 
       return validateString;
