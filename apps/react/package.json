@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@libs/shared-code": "file:../../libs/code",
     "@reduxjs/toolkit": "^2.1.0",
     "dompurify": "^3.0.8",
     "html-react-parser": "^5.1.1",
